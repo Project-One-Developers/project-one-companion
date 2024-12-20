@@ -12,7 +12,7 @@ export const CLASSES = [
   "Priest",
   "Monk",
   "Evoker",
-];
+].sort();
 
 export const classColors = new Map<string, string>([
   ["Demon Hunter", "#a330c9"],
