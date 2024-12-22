@@ -1,5 +1,6 @@
 import { BrowserWindow, BrowserWindowConstructorOptions, Rectangle, screen } from "electron";
 import Store from "electron-store";
+import path from "path";
 
 export const createWindow = (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
     const key = "window-state";
@@ -71,6 +72,8 @@ export const createWindow = (windowName: string, options: BrowserWindowConstruct
             ...options.webPreferences,
             webSecurity: false,
         },
+        title: "Project One Companion",
+        icon: path.join(__dirname, "../renderer/public/images/logo.png"),
     });
 
     win.on("close", saveState);
