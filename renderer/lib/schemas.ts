@@ -1,6 +1,17 @@
 import { z } from "zod";
 
-export const droptimizerCsvSchema = z.object({
-  name: z.string(),
-  dmg: z.string(),
-});
+export const wowClassSchema = z.enum([
+  "DeathKnight",
+  "DemonHunter",
+  "Druid",
+  "Evoker",
+  "Hunter",
+  "Mage",
+  "Monk",
+  "Paladin",
+  "Priest",
+  "Rogue",
+  "Shaman",
+  "Warlock",
+  "Warrior",
+]);
