@@ -49,6 +49,7 @@ export default function NewDroptimizerForm() {
       targets: data.targets,
       time: data.time,
       difficulty: data.difficulty,
+      droptimizerUrl: data.droptimizerUrl,
       upgrades: data.upgrade,
     };
     players = players.filter((p) => p.character !== data.playerName);
