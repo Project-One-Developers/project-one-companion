@@ -22,7 +22,6 @@ export const droptimizerItemSchema = z.object({
   name: z.string(),
   dmg: z.number(),
 });
-export type DroptimizerItem = z.infer<typeof droptimizerItemSchema>;
 
 export const simFightInfoSchema = z.object({
   fightStyle: z.string(),

@@ -12,7 +12,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { useToast } from "./hooks/use-toast";
-import { DroptimizerItem } from "@/lib/schemas";
+import { DroptimizerItem } from "@/lib/types";
 
 const newDroptimizerSchema = z.object({
   url: z.string().min(1),
