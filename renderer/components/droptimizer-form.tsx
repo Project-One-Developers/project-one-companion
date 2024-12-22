@@ -12,6 +12,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { useToast } from "./hooks/use-toast";
+import { DroptimizerItem } from "@/lib/schemas";
 
 const newDroptimizerSchema = z.object({
   url: z.string().min(1),
@@ -34,7 +35,7 @@ export default function NewDroptimizerForm() {
     time: number;
     difficulty: string;
     droptimizerUrl: string;
-    upgrade: { name: string; dmg: number }[];
+    upgrade: DroptimizerItem[];
   }) {
     // persiste in the local storage the upagrade of the player
     let players = JSON.parse(window.localStorage.getItem("players")) || [];
