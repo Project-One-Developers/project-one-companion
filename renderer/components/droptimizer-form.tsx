@@ -37,25 +37,25 @@ export default function NewDroptimizerForm() {
     droptimizerUrl: string;
     upgrade: DroptimizerItem[];
   }) {
-    // persiste in the local storage the upagrade of the player
-    let players = JSON.parse(window.localStorage.getItem("players")) || [];
-    let player = players.find((p) => p.character === data.playerName);
-    if (!player) {
-      console.log("Player not found");
-      return;
+    const players = JSON.parse(window.localStorage.getItem("players")) || [];
+    const playerIndex = players.findIndex((p) => p.character === data.playerName);
+
+    if (playerIndex === -1) {
+        console.log("Player not found");
+        return;
     }
-    player = {
-      ...player,
-      fightStyle: data.fightStyle,
-      targets: data.targets,
-      time: data.time,
-      difficulty: data.difficulty,
-      droptimizerUrl: data.droptimizerUrl,
-      upgrades: data.upgrade,
+
+    players[playerIndex] = {
+        ...players[playerIndex],
+        fightStyle: data.fightStyle,
+        targets: data.targets,
+        time: data.time,
+        difficulty: data.difficulty,
+        upgrades: data.upgrade,
     };
-    players = players.filter((p) => p.character !== data.playerName);
-    players.push(player);
+
     window.localStorage.setItem("players", JSON.stringify(players));
+
     toast({
       title: "Aggiunta droptimizer",
       description: `Il droptimizer per il pg ${data.playerName} è stato aggiunto con successo.`,

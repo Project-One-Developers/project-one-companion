@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Project One - Companion</title>
+        <title>Project One Companion</title>
       </Head>
       <SidebarProvider defaultOpen={true}>
         <ThemeProvider
