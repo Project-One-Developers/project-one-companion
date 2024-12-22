@@ -19,7 +19,7 @@ export const wowClassSchema = z.enum([
 export const wowRolesSchema = z.enum(["Tank", "Healer", "DPS"]);
 
 export const droptimizerItemSchema = z.object({
-    name: z.string(),
+    itemId: z.number(),
     dmg: z.number(),
 });
 
@@ -30,7 +30,6 @@ export const simFightInfoSchema = z.object({
 });
 
 export const droptimizerCsvSchema = z.object({
-    name: z.string(),
     difficulty: z.string(),
     dmg: z.string(),
     upgrades: z.array(droptimizerItemSchema),
@@ -38,14 +37,13 @@ export const droptimizerCsvSchema = z.object({
 });
 
 export const characterSchema = z.object({
-    name: z.string(),
+    characterName: z.string(),
     class: wowClassSchema,
     role: wowRolesSchema,
     droptimizer: z.array(droptimizerCsvSchema),
 });
 
 export const playerSchema = z.object({
-    name: z.string(),
-    main: characterSchema,
-    alt: z.array(characterSchema),
+    playerName: z.string(),
+    characters: z.array(characterSchema),
 });
