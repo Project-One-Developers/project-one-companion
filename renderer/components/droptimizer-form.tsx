@@ -4,7 +4,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "./hooks/use-toast";
 import { Button } from "./ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "./ui/form";
 import { Input } from "./ui/input";
 
 const newDroptimizerSchema = z.object({
@@ -30,8 +37,11 @@ export default function NewDroptimizerForm() {
         droptimizerUrl: string;
         upgrade: DroptimizerItem[];
     }) {
-        const players = JSON.parse(window.localStorage.getItem("players")) || [];
-        const playerIndex = players.findIndex((p) => p.character === data.playerName);
+        const players =
+            JSON.parse(window.localStorage.getItem("players")) || [];
+        const playerIndex = players.findIndex(
+            (p) => p.character === data.playerName,
+        );
 
         if (playerIndex === -1) {
             toast({
@@ -61,7 +71,12 @@ export default function NewDroptimizerForm() {
     async function onSubmit(values: z.infer<typeof newDroptimizerSchema>) {
         const response = await fetch(`${values.url}/data.csv`);
         const data = await response.text();
-        let csvData = data.split("\n").map((row) => ({ name: row.split(",")[0], dmg: row.split(",")[1] }));
+        let csvData = data
+            .split("\n")
+            .map((row) => ({
+                name: row.split(",")[0],
+                dmg: row.split(",")[1],
+            }));
         csvData = csvData.slice(1);
         const charName = csvData[0].name;
         const charBaseDmg = csvData[0].dmg;
@@ -94,7 +109,10 @@ export default function NewDroptimizerForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[600px]">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4 min-w-[600px]"
+            >
                 <FormField
                     control={form.control}
                     name="url"

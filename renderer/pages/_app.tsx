@@ -9,26 +9,26 @@ import ProjectOneSidebar from "@/components/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <Head>
-        <title>Project One Companion</title>
-      </Head>
-      <SidebarProvider defaultOpen={true}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          disableTransitionOnChange
-        >
-          <ProjectOneSidebar />
-          <SidebarTrigger />
-          <Component {...pageProps} />
-          <Toaster />
-        </ThemeProvider>
-      </SidebarProvider>
-    </>
-  );
+    return (
+        <>
+            <Head>
+                <title>Project One Companion</title>
+            </Head>
+            <SidebarProvider defaultOpen={true}>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="dark"
+                    forcedTheme="dark"
+                    disableTransitionOnChange
+                >
+                    <ProjectOneSidebar />
+                    <SidebarTrigger />
+                    <Component {...pageProps} />
+                    <Toaster />
+                </ThemeProvider>
+            </SidebarProvider>
+        </>
+    );
 }
 
 export default MyApp;
