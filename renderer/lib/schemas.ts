@@ -42,6 +42,8 @@ export const droptimizerSchema = z.object({
     fightInfo: simFightInfoSchema,
 });
 
+export const newDroptimizerSchema = droptimizerSchema.omit({ id: true });
+
 export const characterSchema = z.object({
     characterName: z.string(),
     class: wowClassSchema,
@@ -50,6 +52,12 @@ export const characterSchema = z.object({
 });
 
 export const playerSchema = z.object({
+    id: z.string(),
     playerName: z.string(),
-    characters: z.array(characterSchema),
+    characters: z.array(characterSchema).optional(),
+});
+
+export const newPlayerSchema = playerSchema.omit({
+    id: true,
+    characters: true,
 });

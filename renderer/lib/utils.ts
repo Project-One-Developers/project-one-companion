@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { v4 as uuid } from "uuid";
 import { CLASSES } from "./classes";
 
 export function cn(...inputs: ClassValue[]) {
@@ -21,3 +22,5 @@ export const isoToUnixTimestamp = (isoDateTime: string) =>
 
 export const isPresent = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined;
+
+export const newUUID = () => uuid();
