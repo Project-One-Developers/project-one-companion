@@ -44,3 +44,8 @@ export const characterSchema = z.object({
     role: wowRolesSchema,
     droptimizer: z.array(droptimizerCsvSchema),
 });
+
+export const playerSchema = z.object({
+    playerName: z.string(),
+    characters: z.array(characterSchema),
+});

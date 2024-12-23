@@ -2,8 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../storage.config";
 import { droptimizerTable } from "../storage.schema";
 import { parseAndValidate, takeFirstResult } from "../storage.utils";
-import { droptimizerSchema } from "./droptimizer.schemas";
-import { Droptimizer } from "./droptimizer.types";
+import { Droptimizer, droptimizerSchema } from "./droptimizer.schemas";
 
 export const getDroptimizer = async (
     droptimizerId: string,
