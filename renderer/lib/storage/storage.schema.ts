@@ -56,9 +56,9 @@ export const raidSessionRoster = pgTable(
       .references(() => char.id)
       .notNull(),
   },
-  (t) => ({
-    unq: unique("raid_partecipation").on(t.raidSessionId, t.charId), // un char può partecipare ad una sessione alla volta
-  }),
+  (t) => [
+    unique("raid_partecipation").on(t.raidSessionId, t.charId), // un char può partecipare ad una sessione alla volta
+  ],
 );
 
 export const boss = pgTable("boss", {
