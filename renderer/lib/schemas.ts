@@ -52,7 +52,10 @@ export const characterSchema = z.object({
     droptimizer: z.array(droptimizerSchema).optional(),
 });
 
-export const newCharacterSchema = characterSchema;
+export const newCharacterSchema = characterSchema.omit({
+    id: true,
+    droptimizer: true,
+});
 
 export const playerSchema = z.object({
     id: z.string().uuid(),
@@ -65,4 +68,4 @@ export const newPlayerSchema = playerSchema
         id: true,
         characters: true,
     })
-    .merge(characterSchema.omit({ id: true, droptimizer: true }));
+    .merge(newCharacterSchema);
