@@ -1,5 +1,6 @@
 import { addDroptimizer } from "@/lib/storage/droptimizer/droptimizer.storage";
 import { NewDroptimizer } from "@/lib/types";
+import { isPresent } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -77,12 +78,17 @@ export default function NewDroptimizerForm() {
 
     async function onSubmit(values: FormValues) {
         const parsedReport = await parseReport(values);
-        await addDroptimizer(parsedReport);
+        const droptimizer = await addDroptimizer(parsedReport);
 
-        toast({
-            title: "Aggiunta droptimizer",
-            description: `Il droptimizer per il pg ${parsedReport.characterName} è stato aggiunto con successo.`,
-        });
+        isPresent(droptimizer)
+            ? toast({
+                  title: "Aggiunta droptimizer",
+                  description: `Il droptimizer per il pg ${parsedReport.characterName} è stato aggiunto con successo.`,
+              })
+            : toast({
+                  title: "Errore",
+                  description: `Non è stato possibile aggiungere il droptimizer per il pg ${parsedReport.characterName}.`,
+              });
     }
 
     return (
