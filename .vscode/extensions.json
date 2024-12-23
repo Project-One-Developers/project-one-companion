@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "vivaxy.vscode-conventional-commits",
+        "yoavbls.pretty-ts-errors",
+        "redhat.vscode-yaml"
+    ]
+}
