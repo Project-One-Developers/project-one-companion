@@ -1,4 +1,4 @@
-import { Droptimizer } from "@/lib/types";
+import { Droptimizer, NewDroptimizer } from "@/lib/types";
 import { newUUID } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { db } from "../storage.config";
@@ -19,7 +19,7 @@ export const getDroptimizer = async (
 };
 
 export const addDroptimizer = async (
-    droptimizer: Droptimizer,
+    droptimizer: NewDroptimizer,
 ): Promise<Droptimizer | null> => {
     const result = await db
         .insert(droptimizerTable)

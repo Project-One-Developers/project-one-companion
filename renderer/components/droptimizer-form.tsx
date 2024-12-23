@@ -1,8 +1,8 @@
-import { newDroptimizerSchema } from "@/lib/schemas";
 import { addDroptimizer } from "@/lib/storage/droptimizer/droptimizer.storage";
-import { Droptimizer, NewDroptimizer } from "@/lib/types";
+import { NewDroptimizer } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { useToast } from "./hooks/use-toast";
 import { Button } from "./ui/button";
 import {
@@ -15,9 +15,14 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 
+const formSchema = z.object({
+    url: z.string().url(),
+});
+type FormValues = z.infer<typeof formSchema>;
+
 export default function NewDroptimizerForm() {
-    const form = useForm<NewDroptimizer>({
-        resolver: zodResolver(newDroptimizerSchema),
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
             url: "",
         },
@@ -25,9 +30,9 @@ export default function NewDroptimizerForm() {
 
     const { toast } = useToast();
 
-    async function parseReport(url: string): Promise<Droptimizer> {
-        const responseCsv = await fetch(`${url}/data.csv`);
-        const responseJson = await fetch(`${url}/data.json`);
+    async function parseReport(values: FormValues): Promise<NewDroptimizer> {
+        const responseCsv = await fetch(`${values.url}/data.csv`);
+        const responseJson = await fetch(`${values.url}/data.json`);
         const csvData = await responseCsv.text();
         const jsonData = await responseJson.json();
 
@@ -54,7 +59,7 @@ export default function NewDroptimizerForm() {
             .split("•")[2]
             .replaceAll(" ", "");
 
-        const res: Droptimizer = {
+        const res: NewDroptimizer = {
             characterName: charName,
             raidDifficulty: difficulty,
             fightInfo: {
@@ -62,7 +67,7 @@ export default function NewDroptimizerForm() {
                 duration: time,
                 nTargets: targets,
             },
-            url: url,
+            url: values.url,
             resultRaw: "",
             date: 0,
         };
@@ -70,9 +75,9 @@ export default function NewDroptimizerForm() {
         return res;
     }
 
-    async function onSubmit(values: NewDroptimizer) {
-        const parsedReport = await parseReport(values.url);
-        addDroptimizer(parsedReport);
+    async function onSubmit(values: FormValues) {
+        const parsedReport = await parseReport(values);
+        await addDroptimizer(parsedReport);
 
         toast({
             title: "Aggiunta droptimizer",

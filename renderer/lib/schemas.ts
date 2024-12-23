@@ -43,7 +43,7 @@ export const droptimizerSchema = z.object({
     fightInfo: simFightInfoSchema,
 });
 
-export const newDroptimizerSchema = droptimizerSchema.pick({ url: true });
+export const newDroptimizerSchema = droptimizerSchema.omit({ id: true });
 
 export const characterSchema = z.object({
     id: z.string().uuid(),
