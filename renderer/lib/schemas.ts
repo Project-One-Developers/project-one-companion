@@ -45,19 +45,24 @@ export const droptimizerSchema = z.object({
 export const newDroptimizerSchema = droptimizerSchema.omit({ id: true });
 
 export const characterSchema = z.object({
+    id: z.string().uuid(),
     characterName: z.string(),
     class: wowClassSchema,
     role: wowRolesSchema,
-    droptimizer: z.array(droptimizerSchema),
+    droptimizer: z.array(droptimizerSchema).optional(),
 });
 
+export const newCharacterSchema = characterSchema;
+
 export const playerSchema = z.object({
-    id: z.string(),
+    id: z.string().uuid(),
     playerName: z.string(),
     characters: z.array(characterSchema).optional(),
 });
 
-export const newPlayerSchema = playerSchema.omit({
-    id: true,
-    characters: true,
-});
+export const newPlayerSchema = playerSchema
+    .omit({
+        id: true,
+        characters: true,
+    })
+    .merge(characterSchema.omit({ id: true, droptimizer: true }));

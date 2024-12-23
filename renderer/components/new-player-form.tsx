@@ -1,7 +1,13 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command";
 import {
     Form,
     FormControl,
@@ -11,45 +17,28 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-} from "@/components/ui/command";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { cn } from "@/lib/utils";
 import { CLASSES, ROLES } from "@/lib/classes";
-import { useToast } from "@/components/hooks/use-toast";
-
-const newPlayerSchema = z.object({
-    playerName: z.string().min(1),
-    characterName: z.string().min(1),
-    playerClass: z.string().min(1),
-    playerRole: z.string().min(1),
-});
+import { newPlayerSchema } from "@/lib/schemas";
+import { NewPlayer } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function NewPlayerForm() {
-    const form = useForm<z.infer<typeof newPlayerSchema>>({
+    // TODO: readd default values?
+    const form = useForm<NewPlayer>({
         resolver: zodResolver(newPlayerSchema),
-        defaultValues: {
-            playerName: "",
-            characterName: "",
-            playerClass: "",
-            playerRole: "",
-        },
     });
 
-    function onSubmit(values: z.infer<typeof newPlayerSchema>) {
+    function onSubmit(values: NewPlayer) {
         const players =
             JSON.parse(window.localStorage.getItem("players")) || [];
         players.push({
             name: values.playerName,
-            class: values.playerClass,
-            role: values.playerRole,
+            class: values.class,
+            role: values.role,
             character: values.characterName,
         });
         window.localStorage.setItem("players", JSON.stringify(players));
@@ -93,7 +82,7 @@ export default function NewPlayerForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="playerClass"
+                    name="class"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Classe</FormLabel>
@@ -135,7 +124,7 @@ export default function NewPlayerForm() {
                                                         key={c}
                                                         onSelect={() => {
                                                             form.setValue(
-                                                                "playerClass",
+                                                                "class",
                                                                 c,
                                                             );
                                                         }}
@@ -163,7 +152,7 @@ export default function NewPlayerForm() {
                 />
                 <FormField
                     control={form.control}
-                    name="playerRole"
+                    name="role"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Ruolo</FormLabel>
@@ -205,7 +194,7 @@ export default function NewPlayerForm() {
                                                         key={c}
                                                         onSelect={() => {
                                                             form.setValue(
-                                                                "playerRole",
+                                                                "role",
                                                                 c,
                                                             );
                                                         }}
