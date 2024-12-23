@@ -1,4 +1,5 @@
 import { z, ZodTypeAny } from "zod";
+import { isPresent } from "../utils";
 
 // TODO: this should handle both zod objects with transform and normal schemas
 // if not this can be simplified to just zod objects
@@ -15,3 +16,6 @@ export const parseAndValidate = <Schema extends ZodTypeAny>(
 
     return parsedResult.data;
 };
+
+export const takeFirstResult = <T>(results: T[]): T | null =>
+    results.length > 0 && isPresent(results[0]) ? results[0] : null;

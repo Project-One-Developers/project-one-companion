@@ -18,3 +18,6 @@ export function getClassColor(className: string) {
 export const getUnixTimestamp = () => Math.floor(Date.now() / 1000);
 export const isoToUnixTimestamp = (isoDateTime: string) =>
     Math.floor(new Date(isoDateTime).getTime() / 1000);
+
+export const isPresent = <T>(value: T | null | undefined): value is T =>
+    value !== null && value !== undefined;
