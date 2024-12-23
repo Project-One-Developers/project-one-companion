@@ -15,12 +15,12 @@ export const pgRaidDiffEnum = pgEnum("raid_diff", RAID_DIFF);
 
 export const playerTable = pgTable("players", {
     id: varchar("id").primaryKey(),
-    name: varchar("name").notNull(),
+    name: varchar("name").notNull().unique(),
 });
 
 export const charTable = pgTable("chars", {
     id: varchar("id").primaryKey(),
-    name: varchar("name", { length: 24 }).notNull(), // wow charname limit == 24
+    name: varchar("name", { length: 24 }).notNull().unique(), // wow charname limit == 24
     class: pgClassEnum().notNull(),
     role: pgRoleEnum().notNull(),
     playerId: varchar("player_id")
