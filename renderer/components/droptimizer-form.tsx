@@ -38,9 +38,9 @@ export default function NewDroptimizerForm() {
         upgrade: DroptimizerItem[];
     }) {
         const players =
-            JSON.parse(window.localStorage.getItem("players")) || [];
+            JSON.parse(window.localStorage.getItem("players") ?? "") || [];
         const playerIndex = players.findIndex(
-            (p) => p.character === data.playerName,
+            (p: { character: string }) => p.character === data.playerName,
         );
 
         if (playerIndex === -1) {
@@ -71,12 +71,10 @@ export default function NewDroptimizerForm() {
     async function onSubmit(values: z.infer<typeof newDroptimizerSchema>) {
         const response = await fetch(`${values.url}/data.csv`);
         const data = await response.text();
-        let csvData = data
-            .split("\n")
-            .map((row) => ({
-                name: row.split(",")[0],
-                dmg: row.split(",")[1],
-            }));
+        let csvData = data.split("\n").map((row) => ({
+            name: row.split(",")[0],
+            dmg: row.split(",")[1],
+        }));
         csvData = csvData.slice(1);
         const charName = csvData[0].name;
         const charBaseDmg = csvData[0].dmg;
@@ -103,7 +101,7 @@ export default function NewDroptimizerForm() {
             time,
             droptimizerUrl: values.url,
             difficulty,
-            upgrade: parsedData,
+            upgrade: [],
         });
     }
 

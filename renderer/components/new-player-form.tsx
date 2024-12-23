@@ -1,30 +1,27 @@
-import { useToast } from "@/components/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import { CLASSES, ROLES } from "@/lib/classes";
+import { newCharacterSchema } from "@/lib/schemas";
+import { NewCharacter } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-    Command,
     CommandEmpty,
     CommandGroup,
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command";
+} from "cmdk";
+import { Check, ChevronsUpDown, Command } from "lucide-react";
+import { Form, useForm } from "react-hook-form";
+import { useToast } from "./hooks/use-toast";
+import { Button } from "./ui/button";
 import {
-    Form,
     FormControl,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { CLASSES, ROLES } from "@/lib/classes";
-import { newCharacterSchema } from "@/lib/schemas";
-import { addCharacter } from "@/lib/storage/players/players.storage";
-import { NewCharacter } from "@/lib/types";
-import { cn } from "@/lib/utils/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useForm } from "react-hook-form";
+} from "./ui/form";
+import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function NewPlayerForm() {
@@ -36,7 +33,7 @@ export default function NewPlayerForm() {
     // TODO: is async correct here? boh?
     async function onSubmit(values: NewCharacter) {
         const players =
-            JSON.parse(window.localStorage.getItem("players")) || [];
+            JSON.parse(window.localStorage.getItem("players") ?? "") || [];
         players.push({
             name: values.playerName,
             class: values.class,
@@ -45,7 +42,7 @@ export default function NewPlayerForm() {
         });
         window.localStorage.setItem("players", JSON.stringify(players));
 
-        await addCharacter(values);
+        await window.ipc.api.addPlayer(values.playerName);
 
         toast({
             title: "Aggiunta player",

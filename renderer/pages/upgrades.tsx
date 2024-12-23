@@ -1,20 +1,18 @@
-import React, { useEffect } from "react";
-import { classColors } from "../lib/classes";
 import {
+    Table,
+    TableBody,
+    TableHead,
     TableHeader,
     TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-    Table,
 } from "@/components/ui/table";
+import React, { useEffect } from "react";
 
 export default function RosterPage() {
     const [players, setPlayers] = React.useState([]);
 
     useEffect(() => {
         const players =
-            JSON.parse(window.localStorage.getItem("players")) || [];
+            JSON.parse(window.localStorage.getItem("players") ?? "") || [];
         setPlayers(players);
     }, []);
 
@@ -29,7 +27,7 @@ export default function RosterPage() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {players.map((player) => (
+                {/* {players.map((player) => (
                     <TableRow
                         key={player.name}
                         style={{
@@ -47,7 +45,7 @@ export default function RosterPage() {
                             {player.role}
                         </TableCell>
                     </TableRow>
-                ))}
+                ))} */}
             </TableBody>
         </Table>
     );

@@ -1,3 +1,4 @@
+import { CLASSES, RAID_DIFF, ROLES } from "@/lib/classes";
 import {
     boolean,
     integer,
@@ -7,7 +8,6 @@ import {
     unique,
     varchar,
 } from "drizzle-orm/pg-core";
-import { CLASSES, RAID_DIFF, ROLES } from "../classes";
 
 export const pgClassEnum = pgEnum("class", CLASSES);
 export const pgRoleEnum = pgEnum("role", ROLES);

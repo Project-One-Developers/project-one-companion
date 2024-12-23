@@ -1,10 +1,8 @@
 import { toast } from "@/components/hooks/use-toast";
-import NewPlayerForm from "@/components/new-player-form";
 import { Input } from "@/components/ui/input";
 import { downloadLocalStorageAsJSON } from "@/lib/download-config";
 import { handleFileUpload } from "@/lib/upload-config";
 import { Download, Trash, Upload } from "lucide-react";
-import { z } from "zod";
 
 export default function NextPage() {
     return (
