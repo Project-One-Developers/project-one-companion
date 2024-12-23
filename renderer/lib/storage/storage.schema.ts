@@ -4,7 +4,6 @@ import {
   pgEnum,
   pgTable,
   text,
-  timestamp,
   unique,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -32,7 +31,7 @@ export const droptimizer = pgTable("droptimizers", {
   id: varchar("id").primaryKey(),
   url: text("url").notNull(),
   resultRaw: text("result_raw").notNull(),
-  date: timestamp("date").notNull(),
+  date: integer("date").notNull(),
   fightstyle: varchar("fightstyle", { length: 50 }).notNull(),
   duration: integer("duration").notNull(),
   raidDifficulty: varchar("raid_difficulty", { length: 20 }).notNull(),
@@ -41,8 +40,8 @@ export const droptimizer = pgTable("droptimizers", {
 
 export const raidSession = pgTable("raid_sessions", {
   id: varchar("id").primaryKey(),
-  started_at: timestamp("date").notNull(),
-  completed_at: timestamp("date"),
+  started_at: integer("date").notNull(),
+  completed_at: integer("date"),
 });
 
 export const raidSessionRoster = pgTable(
@@ -77,7 +76,7 @@ export const item = pgTable("items", {
 
 export const loot = pgTable("loots", {
   id: varchar("id").primaryKey(),
-  dropDate: timestamp("drop_date").notNull(),
+  dropDate: integer("drop_date").notNull(),
   thirdStat: varchar("third_stat", { length: 255 }),
   socket: boolean("socket").notNull().default(false),
   // eligibility: text('eligibility').array(), // array of IDs referencing RaidSession.Chars
