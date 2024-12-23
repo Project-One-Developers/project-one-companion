@@ -94,7 +94,7 @@ export const itemTable = pgTable("items", {
     iconName: varchar("icon_name", { length: 255 }),
     iconUrl: text("icon_url"),
     bossName: varchar("boss_name", { length: 255 }), // ridondante ma utile
-    bossId: varchar("boss_id")
+    bossId: integer("boss_id")
         .references(() => bossTable.id)
         .notNull(),
 });
@@ -108,10 +108,10 @@ export const lootTable = pgTable("loots", {
     raidSessionId: varchar("raid_session_id")
         .references(() => raidSessionTable.id)
         .notNull(),
-    itemId: varchar("item_id")
+    itemId: integer("item_id")
         .references(() => itemTable.id)
         .notNull(),
-    bossId: varchar("boss_id")
+    bossId: integer("boss_id")
         .references(() => bossTable.id)
         .notNull(), // ridondato per comodità ma ricavabile da item.boss.id
 });
