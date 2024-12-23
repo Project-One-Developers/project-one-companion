@@ -13,22 +13,22 @@ export const pgClassEnum = pgEnum("class", CLASSES);
 export const pgRoleEnum = pgEnum("role", ROLES);
 export const pgRaidDiffEnum = pgEnum("raid_diff", RAID_DIFF);
 
-export const player = pgTable("players", {
+export const playerTable = pgTable("players", {
     id: varchar("id").primaryKey(),
     name: varchar("name").notNull(),
 });
 
-export const char = pgTable("chars", {
+export const charTable = pgTable("chars", {
     id: varchar("id").primaryKey(),
     name: varchar("name", { length: 24 }).notNull(), // wow charname limit == 24
     class: pgClassEnum().notNull(),
     role: pgRoleEnum().notNull(),
     playerId: varchar("player_id")
-        .references(() => player.id)
+        .references(() => playerTable.id)
         .notNull(),
 });
 
-export const droptimizer = pgTable("droptimizers", {
+export const droptimizerTable = pgTable("droptimizers", {
     id: varchar("id").primaryKey(),
     url: text("url").notNull(),
     resultRaw: text("result_raw").notNull(),
@@ -39,21 +39,21 @@ export const droptimizer = pgTable("droptimizers", {
     // charId: varchar("char_id").references(() => char.id),
 });
 
-export const raidSession = pgTable("raid_sessions", {
+export const raidSessionTable = pgTable("raid_sessions", {
     id: varchar("id").primaryKey(),
     started_at: integer("date").notNull(),
     completed_at: integer("date"),
 });
 
-export const raidSessionRoster = pgTable(
+export const raidSessionRosterTable = pgTable(
     "raid_sessions_roster",
     {
         id: varchar("id").primaryKey(),
         raidSessionId: varchar("raid_session_id")
-            .references(() => raidSession.id)
+            .references(() => raidSessionTable.id)
             .notNull(),
         charId: varchar("char_id")
-            .references(() => char.id)
+            .references(() => charTable.id)
             .notNull(),
     },
     (t) => [
@@ -61,52 +61,52 @@ export const raidSessionRoster = pgTable(
     ],
 );
 
-export const boss = pgTable("boss", {
+export const bossTable = pgTable("boss", {
     id: varchar("id").primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
 });
 
 // todo: item sarà la tabella che contiene l'import di public/items.csv
 // da definire
-export const item = pgTable("items", {
+export const itemTable = pgTable("items", {
     id: varchar("id").primaryKey(),
     bossId: varchar("boss_id")
-        .references(() => boss.id)
+        .references(() => bossTable.id)
         .notNull(),
 });
 
-export const loot = pgTable("loots", {
+export const lootTable = pgTable("loots", {
     id: varchar("id").primaryKey(),
     dropDate: integer("drop_date").notNull(),
     thirdStat: varchar("third_stat", { length: 255 }),
     socket: boolean("socket").notNull().default(false),
     // eligibility: text('eligibility').array(), // array of IDs referencing RaidSession.Chars
     raidSessionId: varchar("raid_session_id")
-        .references(() => raidSession.id)
+        .references(() => raidSessionTable.id)
         .notNull(),
     itemId: varchar("item_id")
-        .references(() => item.id)
+        .references(() => itemTable.id)
         .notNull(),
     bossId: varchar("boss_id")
-        .references(() => boss.id)
+        .references(() => bossTable.id)
         .notNull(), // ridondato per comodità ma ricavabile da item.boss.id
 });
 
-export const assignment = pgTable("assignments", {
+export const assignmentTable = pgTable("assignments", {
     id: varchar("id").primaryKey(),
     charId: varchar("char_id")
-        .references(() => char.id)
+        .references(() => charTable.id)
         .notNull(),
     lootId: varchar("loot_id")
-        .references(() => loot.id)
+        .references(() => lootTable.id)
         .unique("loot_assignment")
         .notNull(), // un loot può essere assegnato una sola volta
 });
 
-export const bisList = pgTable("bis_list", {
+export const bisListTable = pgTable("bis_list", {
     id: varchar("id").primaryKey(),
     charId: varchar("char_id")
-        .references(() => char.id)
+        .references(() => charTable.id)
         .notNull(),
     //itemList: text('item_list').array() // array of strings
 });
