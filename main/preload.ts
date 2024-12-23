@@ -1,5 +1,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
+require("dotenv").config();
+
 const handler = {
     send(channel: string, value: unknown) {
         ipcRenderer.send(channel, value);
@@ -15,6 +17,9 @@ const handler = {
     },
 };
 
-contextBridge.exposeInMainWorld("ipc", handler);
+contextBridge.exposeInMainWorld("ipc", {
+    ...handler,
+    getDatabaseUrl: () => process.env.DATABASE_URL,
+});
 
 export type IpcHandler = typeof handler;
