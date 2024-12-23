@@ -1,12 +1,10 @@
-import React from "react";
-import type { AppProps } from "next/app";
-
-import "../styles/globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import Head from "next/head";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import ProjectOneSidebar from "@/components/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/toaster";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (

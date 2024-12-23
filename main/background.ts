@@ -1,7 +1,8 @@
-import path from "path";
 import { app, ipcMain } from "electron";
 import serve from "electron-serve";
+import path from "path";
 import { createWindow } from "./helpers";
+import storage from "./storage";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -19,6 +20,7 @@ if (isProd) {
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
+            contextIsolation: true,
         },
     });
 
@@ -35,6 +37,10 @@ app.on("window-all-closed", () => {
     app.quit();
 });
 
-ipcMain.on("message", async (event, arg) => {
-    event.reply("message", `${arg} World!`);
+ipcMain.handle("get-player", async (event, args) => {
+    return await storage.getPlayerByName(args);
+});
+
+ipcMain.handle("add-character", async (event, args) => {
+    return await storage.addCharacter(args);
 });

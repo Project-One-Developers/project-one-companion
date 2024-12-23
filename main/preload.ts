@@ -1,7 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
-require("dotenv").config();
-
 const handler = {
     send(channel: string, value: unknown) {
         ipcRenderer.send(channel, value);
@@ -23,3 +21,18 @@ contextBridge.exposeInMainWorld("ipc", {
 });
 
 export type IpcHandler = typeof handler;
+
+contextBridge.exposeInMainWorld("ipc", {
+    send: (channel: string, ...args: any[]) =>
+        ipcRenderer.send(channel, ...args),
+    invoke: (channel: string, ...args: any[]) =>
+        ipcRenderer.invoke(channel, ...args),
+    api: {
+        getPlayer: (playerName: string) =>
+            ipcRenderer.invoke("get-player", { playerName }),
+        addPlayer: (playerName: string) =>
+            ipcRenderer.invoke("add-player", { playerName }),
+        getCharacter: (characterName: string) =>
+            ipcRenderer.invoke("get-character", { characterName }),
+    },
+});

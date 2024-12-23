@@ -1,5 +1,5 @@
 export function downloadLocalStorageAsJSON() {
-    const players = JSON.parse(window.localStorage.getItem("players")) || [];
+    const players = JSON.parse(window.localStorage.getItem("players") ?? "") || [];
     const dataStr =
         "data:text/json;charset=utf-8," +
         encodeURIComponent(JSON.stringify(players));
