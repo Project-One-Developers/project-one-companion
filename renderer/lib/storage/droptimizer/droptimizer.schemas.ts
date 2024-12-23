@@ -10,6 +10,7 @@ export const droptimizerModelSchema = z
         fightStyle: z.string(),
         duration: z.number().min(1),
         nTargets: z.number().min(1),
+        characterName: z.string(),
     })
     .transform((data) => {
         return {
@@ -18,6 +19,7 @@ export const droptimizerModelSchema = z
             resultRaw: data.resultRaw,
             date: data.date,
             raidDifficulty: data.raidDifficulty,
+            characterName: data.characterName,
             fightInfo: {
                 fightstyle: data.fightStyle,
                 duration: data.duration,

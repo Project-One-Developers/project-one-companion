@@ -37,7 +37,7 @@ export const droptimizerTable = pgTable("droptimizers", {
     duration: integer("duration").notNull(),
     nTargets: integer("n_targets").notNull(),
     raidDifficulty: varchar("raid_difficulty", { length: 20 }).notNull(),
-    // charId: varchar("char_id").references(() => char.id),
+    characterName: varchar("character_name", { length: 24 }).notNull(),
 });
 
 export const raidSessionTable = pgTable("raid_sessions", {
