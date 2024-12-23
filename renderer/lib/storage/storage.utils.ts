@@ -1,5 +1,5 @@
 import { z, ZodTypeAny } from "zod";
-import { isPresent } from "../utils";
+import { isPresent } from "../utils/utils";
 
 // TODO: this should handle both zod objects with transform and normal schemas
 // if not this can be simplified to just zod objects

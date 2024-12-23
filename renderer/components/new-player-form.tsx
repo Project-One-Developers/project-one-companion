@@ -21,7 +21,7 @@ import { CLASSES, ROLES } from "@/lib/classes";
 import { newCharacterSchema } from "@/lib/schemas";
 import { addCharacter } from "@/lib/storage/players/players.storage";
 import { NewCharacter } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useForm } from "react-hook-form";
