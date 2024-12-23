@@ -33,7 +33,7 @@ export const droptimizerTable = pgTable("droptimizers", {
     url: text("url").notNull(),
     resultRaw: text("result_raw").notNull(),
     date: integer("date").notNull(),
-    fightstyle: varchar("fightstyle", { length: 50 }).notNull(),
+    fightStyle: varchar("fight_style", { length: 50 }).notNull(),
     duration: integer("duration").notNull(),
     nTargets: integer("n_targets").notNull(),
     raidDifficulty: varchar("raid_difficulty", { length: 20 }).notNull(),

@@ -7,7 +7,7 @@ export const droptimizerSchema = z
         resultRaw: z.string(),
         date: z.number(),
         raidDifficulty: z.string(),
-        fightstyle: z.string(),
+        fightStyle: z.string(),
         duration: z.number().min(1),
         nTargets: z.number().min(1),
     })
@@ -19,7 +19,7 @@ export const droptimizerSchema = z
             date: data.date,
             raidDifficulty: data.raidDifficulty,
             fightInfo: {
-                fightstyle: data.fightstyle,
+                fightstyle: data.fightStyle,
                 duration: data.duration,
                 nTargets: data.nTargets,
             },
