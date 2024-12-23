@@ -18,8 +18,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CLASSES, ROLES } from "@/lib/classes";
-import { newPlayerSchema } from "@/lib/schemas";
-import { NewPlayer } from "@/lib/types";
+import { newCharacterSchema } from "@/lib/schemas";
+import { addCharacter } from "@/lib/storage/players/players.storage";
+import { NewCharacter } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -28,11 +29,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function NewPlayerForm() {
     // TODO: readd default values?
-    const form = useForm<NewPlayer>({
-        resolver: zodResolver(newPlayerSchema),
+    const form = useForm<NewCharacter>({
+        resolver: zodResolver(newCharacterSchema),
     });
 
-    function onSubmit(values: NewPlayer) {
+    // TODO: is async correct here? boh?
+    async function onSubmit(values: NewCharacter) {
         const players =
             JSON.parse(window.localStorage.getItem("players")) || [];
         players.push({
@@ -42,6 +44,9 @@ export default function NewPlayerForm() {
             character: values.characterName,
         });
         window.localStorage.setItem("players", JSON.stringify(players));
+
+        await addCharacter(values);
+
         toast({
             title: "Aggiunta player",
             description: `Il pg ${values.characterName} del player ${values.playerName} è stato aggiunto con successo.`,
