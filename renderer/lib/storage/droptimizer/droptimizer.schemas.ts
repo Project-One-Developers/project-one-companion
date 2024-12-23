@@ -25,5 +25,3 @@ export const droptimizerSchema = z
             },
         };
     });
-
-export type Droptimizer = z.infer<typeof droptimizerSchema>;
