@@ -18,6 +18,8 @@ export const wowClassSchema = z.enum([
 
 export const wowRolesSchema = z.enum(["Tank", "Healer", "DPS"]);
 
+export const wowRaidDiffSchema = z.enum(["Normal", "Heroic", "Mythic"]);
+
 export const droptimizerItemSchema = z.object({
     itemId: z.number(),
     dmg: z.number(),

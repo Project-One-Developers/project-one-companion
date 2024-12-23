@@ -7,10 +7,11 @@ import {
   unique,
   varchar,
 } from "drizzle-orm/pg-core";
-import { CLASSES, ROLES } from "../classes";
+import { CLASSES, RAID_DIFF, ROLES } from "../classes";
 
 export const pgClassEnum = pgEnum("class", CLASSES);
 export const pgRoleEnum = pgEnum("role", ROLES);
+export const pgRaidDiffEnum = pgEnum("raid_diff", RAID_DIFF);
 
 export const player = pgTable("players", {
   id: varchar("id").primaryKey(),

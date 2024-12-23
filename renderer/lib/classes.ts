@@ -1,9 +1,11 @@
-import { wowClassSchema, wowRolesSchema } from "./schemas";
+import { wowClassSchema, wowRaidDiffSchema, wowRolesSchema } from "./schemas";
 import { WowClass } from "./types";
 
 export const CLASSES = wowClassSchema.options;
 
 export const ROLES = wowRolesSchema.options;
+
+export const RAID_DIFF = wowRaidDiffSchema.options;
 
 export const classColors = new Map<WowClass, string>([
     ["Demon Hunter", "#a330c9"],
