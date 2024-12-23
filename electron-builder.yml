@@ -2,11 +2,11 @@ appId: com.example.nextron
 productName: Project One Companion
 icon: renderer/public/images/logo
 directories:
-    output: dist
-    buildResources: resources
+  output: dist
+  buildResources: resources
 files:
-    - from: .
-      filter:
-          - package.json
-          - app
+  - from: .
+    filter:
+      - package.json
+      - app
 publish: null
