@@ -13,7 +13,6 @@ export const addPlayer = async (playerName: string) => {
     });
 };
 
-// TODO: do we want to return null or can we throw error in the 'storage'?
 export const getPlayer = async (playerId: string): Promise<Player | null> => {
     const result = await db
         .select()
