@@ -20,29 +20,33 @@ export const wowRolesSchema = z.enum(["Tank", "Healer", "DPS"]);
 
 export const wowRaidDiffSchema = z.enum(["Normal", "Heroic", "Mythic"]);
 
+// TODO: probably move in separate folders/files
+
 export const droptimizerItemSchema = z.object({
     itemId: z.number(),
     dmg: z.number(),
 });
 
 export const simFightInfoSchema = z.object({
-    fightStyle: z.string(),
-    targets: z.number(),
-    duration: z.number(),
+    fightstyle: z.string(),
+    duration: z.number().min(1),
+    nTargets: z.number().min(1),
 });
 
-export const droptimizerCsvSchema = z.object({
-    difficulty: z.string(),
-    dmg: z.string(),
-    upgrades: z.array(droptimizerItemSchema),
-    simFightInfo: simFightInfoSchema,
+export const droptimizerSchema = z.object({
+    id: z.string(),
+    url: z.string().url(),
+    resultRaw: z.string(),
+    date: z.number(),
+    raidDifficulty: z.string(),
+    fightInfo: simFightInfoSchema,
 });
 
 export const characterSchema = z.object({
     characterName: z.string(),
     class: wowClassSchema,
     role: wowRolesSchema,
-    droptimizer: z.array(droptimizerCsvSchema),
+    droptimizer: z.array(droptimizerSchema),
 });
 
 export const playerSchema = z.object({

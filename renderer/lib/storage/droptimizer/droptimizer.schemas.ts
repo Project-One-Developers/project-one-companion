@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const droptimizerSchema = z
+export const droptimizerModelSchema = z
     .object({
         id: z.string(),
         url: z.string().url(),
@@ -25,5 +25,3 @@ export const droptimizerSchema = z
             },
         };
     });
-
-export type Droptimizer = z.infer<typeof droptimizerSchema>;
