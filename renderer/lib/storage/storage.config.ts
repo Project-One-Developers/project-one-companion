@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = window.ipc.getDatabaseUrl();
 
 if (!databaseUrl) {
     throw new Error("DATABASE_URL environment variable is not set");
