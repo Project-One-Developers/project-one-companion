@@ -1,10 +1,10 @@
+import { playerSchema } from "@/lib/schemas";
+import { Player } from "@/lib/types";
 import { eq } from "drizzle-orm";
 import { v4 as uuid } from "uuid";
-import { playerSchema } from "../schemas";
-import { Player } from "../types";
-import { db } from "./storage.config";
-import { playerTable } from "./storage.schema";
-import { parseAndValidate } from "./storage.utils";
+import { db } from "../storage.config";
+import { playerTable } from "../storage.schema";
+import { parseAndValidate } from "../storage.utils";
 
 export const addPlayer = async (playerName: string) => {
     await db.insert(playerTable).values({
