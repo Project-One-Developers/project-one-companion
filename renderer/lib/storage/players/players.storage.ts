@@ -1,6 +1,6 @@
 import { playerSchema } from "@/lib/schemas";
 import { NewCharacter, Player } from "@/lib/types";
-import { isPresent, newUUID } from "@/lib/utils";
+import { isPresent, newUUID } from "@/lib/utils/utils";
 import { eq } from "drizzle-orm";
 import { db } from "../storage.config";
 import { charTable, playerTable } from "../storage.schema";
