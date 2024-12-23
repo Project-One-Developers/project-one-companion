@@ -35,6 +35,7 @@ export const droptimizerTable = pgTable("droptimizers", {
     date: integer("date").notNull(),
     fightstyle: varchar("fightstyle", { length: 50 }).notNull(),
     duration: integer("duration").notNull(),
+    nTargets: integer("n_targets").notNull(),
     raidDifficulty: varchar("raid_difficulty", { length: 20 }).notNull(),
     // charId: varchar("char_id").references(() => char.id),
 });
