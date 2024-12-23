@@ -62,14 +62,37 @@ export const raidSessionRosterTable = pgTable(
 );
 
 export const bossTable = pgTable("boss", {
-    id: varchar("id").primaryKey(),
+    id: integer("id").primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
     name: varchar("name", { length: 255 }).notNull(),
+    raid: varchar("raid", { length: 255 }),
+    order: integer("order").notNull(),
 });
 
-// todo: item sarà la tabella che contiene l'import di public/items.csv
-// da definire
+// Sono gli item lootabili dal raid - contiene l'import di public/items.csv
 export const itemTable = pgTable("items", {
-    id: varchar("id").primaryKey(),
+    id: integer("id").primaryKey(), // ricicliamo id fornito da wow api
+    name: varchar("name", { length: 255 }).notNull(),
+    ilvlMythic: integer("ilvl_mythic"),
+    ilvlHeroic: integer("ilvl_heroic"),
+    ilvlNormal: integer("ilvl_normal"),
+    bonusID: varchar("bonus_id", { length: 50 }),
+    itemClass: varchar("item_class", { length: 50 }),
+    slot: varchar("slot", { length: 50 }),
+    itemSubclass: varchar("item_subclass", { length: 50 }),
+    tierPrefix: varchar("tier_prefix", { length: 50 }), // es: Dreadful
+    tier: boolean("tier").notNull().default(false), // se è un item tierser
+    veryRare: boolean("very_rare").notNull().default(false),
+    specs: text("specs"),
+    specIds: varchar("spec_ids", { length: 255 }),
+    classes: varchar("classes", { length: 255 }),
+    classesId: varchar("classes_id", { length: 50 }),
+    stats: text("stats"),
+    mainStats: varchar("main_stats", { length: 50 }),
+    secondaryStats: varchar("secondary_stats", { length: 50 }),
+    wowheadUrl: text("wowhead_url"),
+    iconName: varchar("icon_name", { length: 255 }),
+    iconUrl: text("icon_url"),
+    bossName: varchar("boss_name", { length: 255 }), // ridondante ma utile
     bossId: varchar("boss_id")
         .references(() => bossTable.id)
         .notNull(),
