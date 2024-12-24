@@ -1,8 +1,9 @@
 import { app } from "electron";
 import serve from "electron-serve";
 import path from "path";
-import { registerAllHandlers } from "./handlers";
+import { registerHandlers } from "./handlers/handlers.utils";
 import { createWindow } from "./helpers";
+import { allHandlers } from "./handlers";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -15,7 +16,7 @@ if (isProd) {
 (async () => {
     await app.whenReady();
 
-    registerAllHandlers();
+    registerHandlers(allHandlers);
 
     const mainWindow = createWindow("main", {
         width: 1000,
