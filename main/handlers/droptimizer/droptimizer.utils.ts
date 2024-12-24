@@ -1,3 +1,4 @@
+import { match } from "ts-pattern";
 import { z } from "zod";
 import { csvDataSchema, jsonDataSchema } from "./droptimizer.schemas";
 
@@ -9,19 +10,29 @@ export const fetchRaidbotsData = async (
         fetch(`${url}/data.json`),
     ]);
 
-    if (!responseCsv.ok || !responseJson.ok) {
-        const errors = [];
-        if (!responseCsv.ok) {
-            errors.push(
+    const errorMessage = match([responseCsv.ok, responseJson.ok])
+        .with(
+            [false, true],
+            () =>
                 `Failed to fetch CSV data: ${responseCsv.status} ${responseCsv.statusText}`,
-            );
-        }
-        if (!responseJson.ok) {
-            errors.push(
+        )
+        .with(
+            [true, false],
+            () =>
                 `Failed to fetch JSON data: ${responseJson.status} ${responseJson.statusText}`,
-            );
-        }
-        throw new Error(errors.join("\n"));
+        )
+        .with([false, false], () =>
+            [
+                `Failed to fetch CSV data: ${responseCsv.status} ${responseCsv.statusText}`,
+                `Failed to fetch JSON data: ${responseJson.status} ${responseJson.statusText}`,
+            ].join("\n"),
+        )
+        .with([true, true], () => null)
+        .exhaustive();
+
+    if (errorMessage) {
+        console.log(errorMessage);
+        throw new Error(errorMessage);
     }
 
     const [csvData, jsonData] = await Promise.all([
