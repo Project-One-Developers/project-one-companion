@@ -34,10 +34,9 @@ export const addDroptimizerHandler = async (
     const time = jsonData.sim.options.max_time;
     const difficulty = jsonData.simbot.title.split("•")[2].replaceAll(" ", "");
 
-    const simType = jsonData.simbot.symType;
+    const simType = jsonData.simbot.simType;
     if (simType !== "droptimizer") {
         console.log("Problemone");
-        console.log(simType);
         // todo: throw err?
     }
 
