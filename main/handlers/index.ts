@@ -1,4 +1,4 @@
-import { registerDroptimizerHandlers } from "./droptimizer";
+import { registerDroptimizerHandlers } from "./droptimizer.handlers";
 
 export const registerAllHandlers = () => {
     registerDroptimizerHandlers();

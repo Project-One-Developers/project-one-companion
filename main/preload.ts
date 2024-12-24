@@ -20,7 +20,7 @@ contextBridge.exposeInMainWorld("ipc", {
     ...handler,
     api: {
         addDroptimizer: (droptimizer: NewDroptimizer) =>
-            ipcRenderer.invoke("add-droptimizer", { droptimizer }),
+            ipcRenderer.invoke("add-droptimizer", droptimizer),
     },
 });
 
