@@ -1,4 +1,4 @@
-import { Droptimizer, NewDroptimizer } from "@/lib/types";
+import { Droptimizer } from "@/lib/types";
 import { ipcRenderer, IpcRendererEvent } from "electron";
 
 export const ipc = {
@@ -14,10 +14,8 @@ export const ipc = {
         };
     },
     api: {
-        addDroptimizer(
-            droptimizer: NewDroptimizer,
-        ): Promise<Droptimizer | null> {
-            return ipcRenderer.invoke("add-droptimizer", droptimizer);
+        addDroptimizer(url: string): Promise<Droptimizer | null> {
+            return ipcRenderer.invoke("add-droptimizer", url);
         },
     },
 };

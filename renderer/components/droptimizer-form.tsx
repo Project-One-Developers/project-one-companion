@@ -1,4 +1,3 @@
-import { NewDroptimizer } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,72 +28,17 @@ export default function NewDroptimizerForm() {
 
     const { toast } = useToast();
 
-    async function parseReport(values: FormValues): Promise<NewDroptimizer> {
-        const responseCsv = await fetch(`${values.url}/data.csv`);
-        const responseJson = await fetch(`${values.url}/data.json`);
-        // TODO: check if response is ok
-        const csvData = await responseCsv.text();
-        const jsonData = await responseJson.json();
-
-        let tmpData = csvData.split("\n").map((row) => ({
-            name: row.split(",")[0],
-            dmg: row.split(",")[1],
-        }));
-        tmpData = tmpData.slice(1);
-        const charName = tmpData[0].name;
-        const charBaseDmg = tmpData[0].dmg;
-
-        const upgrades = tmpData
-            .slice(1)
-            .map((d) => ({
-                itemId: d.name.split("/")[3],
-                dmg: Math.round(Number(d.dmg) - Number(charBaseDmg)),
-            }))
-            .filter((d) => d.dmg > 0);
-
-        const fightStyle = jsonData.sim.options.fight_style;
-        const targets = jsonData.sim.options.desired_targets;
-        const time = jsonData.sim.options.max_time;
-        const difficulty = jsonData.simbot.title
-            .split("•")[2]
-            .replaceAll(" ", "");
-
-        const simType = jsonData.simbot.symType;
-        if (simType !== "droptimizer") {
-            console.log("Problemone");
-            // todo: throw err?
-        }
-
-        // todo: salvare anche gli upgrades
-
-        const res: NewDroptimizer = {
-            characterName: charName,
-            raidDifficulty: difficulty,
-            fightInfo: {
-                fightstyle: fightStyle,
-                duration: time,
-                nTargets: targets,
-            },
-            url: values.url,
-            resultRaw: jsonData,
-            date: jsonData.timestamp,
-        };
-
-        return res;
-    }
-
     async function onSubmit(values: FormValues) {
-        const parsedReport = await parseReport(values);
-        const droptimizer = await window.ipc.api.addDroptimizer(parsedReport);
+        const droptimizer = await window.ipc.api.addDroptimizer(values.url);
 
         !!droptimizer
             ? toast({
                   title: "Aggiunta droptimizer",
-                  description: `Il droptimizer per il pg ${parsedReport.characterName} è stato aggiunto con successo.`,
+                  description: `Il droptimizer per il pg ${droptimizer.characterName} è stato aggiunto con successo.`,
               })
             : toast({
                   title: "Errore",
-                  description: `Non è stato possibile aggiungere il droptimizer per il pg ${parsedReport.characterName}.`,
+                  description: `Non è stato possibile aggiungere il droptimizer.`,
               });
     }
 

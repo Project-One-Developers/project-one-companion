@@ -1,9 +1,10 @@
-import { droptimizerHandlers } from "./droptimizer.handlers";
+import { addDroptimizerHandler } from "./droptimizer.handlers";
 import { registerHandlers } from "./handlers.utils";
 
 const allHandlers = [
-    ...droptimizerHandlers,
-    // Add more handler groups here
+    {
+        "add-droptimizer": addDroptimizerHandler,
+    },
 ];
 
 export const registerAllHandlers = () => {
