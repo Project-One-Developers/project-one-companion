@@ -1,9 +1,12 @@
-import { Droptimizer } from "@/lib/types";
+import { Droptimizer, NewCharacter, Player } from "@/lib/types";
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
 const api = {
     addDroptimizer(url: string): Promise<Droptimizer | null> {
         return ipcRenderer.invoke("add-droptimizer", url);
+    },
+    addCharacter(character: NewCharacter): Promise<Player | null> {
+        return ipcRenderer.invoke("add-character", character);
     },
 };
 

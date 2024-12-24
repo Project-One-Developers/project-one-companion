@@ -30,24 +30,18 @@ export default function NewPlayerForm() {
         resolver: zodResolver(newCharacterSchema),
     });
 
-    // TODO: is async correct here? boh?
     async function onSubmit(values: NewCharacter) {
-        const players =
-            JSON.parse(window.localStorage.getItem("players") ?? "") || [];
-        players.push({
-            name: values.playerName,
-            class: values.class,
-            role: values.role,
-            character: values.characterName,
-        });
-        window.localStorage.setItem("players", JSON.stringify(players));
+        const player = await window.ipc.api.addCharacter(values);
 
-        await window.ipc.api.addPlayer(values.playerName);
-
-        toast({
-            title: "Aggiunta player",
-            description: `Il pg ${values.characterName} del player ${values.playerName} è stato aggiunto con successo.`,
-        });
+        !!player
+            ? toast({
+                  title: "Aggiunta player",
+                  description: `Il pg ${values.characterName} del player ${player.playerName} è stato aggiunto con successo.`,
+              })
+            : toast({
+                  title: "Errore",
+                  description: `Non è stato possibile aggiungere il player.`,
+              });
         form.reset();
     }
 
