@@ -8,7 +8,7 @@ if (!connectionUrl) {
 
 export default defineConfig({
     dialect: "postgresql",
-    schema: "./renderer/lib/storage/storage.schema.ts",
+    schema: "./main/storage/storage.schema.ts",
     dbCredentials: {
         url: connectionUrl,
     },
