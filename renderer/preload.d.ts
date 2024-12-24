@@ -1,4 +1,4 @@
-import { ipc } from "../main/ipc";
+import { ipc } from "../main/preload";
 
 declare global {
     interface Window {
