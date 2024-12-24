@@ -1,4 +1,4 @@
-import { NewDroptimizer } from "@/lib/types";
+import { Droptimizer, NewDroptimizer } from "@/lib/types";
 import { IpcHandler } from "../main/preload";
 
 declare global {
@@ -9,6 +9,8 @@ declare global {
     }
 
     interface ApiHandler {
-        addDroptimizer: (droptimizer: NewDroptimizer) => Promise<any>;
+        addDroptimizer: (
+            droptimizer: NewDroptimizer,
+        ) => Promise<Droptimizer | null>;
     }
 }

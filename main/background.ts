@@ -1,9 +1,8 @@
-import { app, ipcMain } from "electron";
+import { app } from "electron";
 import serve from "electron-serve";
 import path from "path";
-import { createWindow } from "./helpers";
-import storage from "./storage";
 import { registerAllHandlers } from "./handlers";
+import { createWindow } from "./helpers";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -16,7 +15,7 @@ if (isProd) {
 (async () => {
     await app.whenReady();
 
-    registerAllHandlers()
+    registerAllHandlers();
 
     const mainWindow = createWindow("main", {
         width: 1000,
@@ -38,12 +37,4 @@ if (isProd) {
 
 app.on("window-all-closed", () => {
     app.quit();
-});
-
-ipcMain.handle("get-player", async (event, args) => {
-    return await storage.getPlayerByName(args);
-});
-
-ipcMain.handle("add-character", async (event, args) => {
-    return await storage.addCharacter(args);
 });
