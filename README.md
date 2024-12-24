@@ -1,38 +1,34 @@
-<p align="center"><img src="https://i.imgur.com/a9QWW0v.png"></p>
+# project-one-companion
 
-## Usage
+An Electron application with React and TypeScript
 
-### Create an App
+## Recommended IDE Setup
 
-```
-# with npx
-$ npx create-nextron-app my-app --example with-tailwindcss
+- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-# with yarn
-$ yarn create nextron-app my-app --example with-tailwindcss
+## Project Setup
 
-# with pnpm
-$ pnpm dlx create-nextron-app my-app --example with-tailwindcss
-```
+### Install
 
-### Install Dependencies
-
-```
-$ cd my-app
-
-# using yarn or npm
-$ yarn (or `npm install`)
-
-# using pnpm
-$ pnpm install --shamefully-hoist
+```bash
+$ pnpm install
 ```
 
-### Use it
+### Development
 
+```bash
+$ pnpm dev
 ```
-# development mode
-$ yarn dev (or `npm run dev` or `pnpm run dev`)
 
-# production build
-$ yarn build (or `npm run build` or `pnpm run build`)
+### Build
+
+```bash
+# For windows
+$ pnpm build:win
+
+# For macOS
+$ pnpm build:mac
+
+# For Linux
+$ pnpm build:linux
 ```
