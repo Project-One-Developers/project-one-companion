@@ -1,6 +1,6 @@
 import { Droptimizer, NewDroptimizer } from "@/lib/types";
 import { eq } from "drizzle-orm";
-import { newUUID } from "main/utils";
+import { newUUID } from "main/lib/utils";
 import { db } from "../storage.config";
 import { droptimizerTable } from "../storage.schema";
 import { parseAndValidate, takeFirstResult } from "../storage.utils";
