@@ -1,4 +1,4 @@
-import { NewDroptimizer } from "@/lib/types";
+import { Droptimizer, NewDroptimizer } from "@/lib/types";
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
 const handler = {
@@ -19,8 +19,11 @@ const handler = {
 contextBridge.exposeInMainWorld("ipc", {
     ...handler,
     api: {
-        addDroptimizer: (droptimizer: NewDroptimizer) =>
-            ipcRenderer.invoke("add-droptimizer", droptimizer),
+        addDroptimizer: (
+            droptimizer: NewDroptimizer,
+        ): Promise<Droptimizer | null> => (
+            ipcRenderer.invoke("add-droptimizer", droptimizer)
+        ),
     },
 });
 

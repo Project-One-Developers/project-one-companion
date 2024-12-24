@@ -1,7 +1,9 @@
-import { registerDroptimizerHandlers } from "./droptimizer.handlers";
+import { droptimizerHandlers } from "./droptimizer.handlers";
+import { registerHandlers } from "./handlers.utils";
 
 export const registerAllHandlers = () => {
-    registerDroptimizerHandlers();
-
-    // Register other handlers here
+    registerHandlers([
+        ...droptimizerHandlers,
+        // Add more handler groups here
+    ]);
 };
