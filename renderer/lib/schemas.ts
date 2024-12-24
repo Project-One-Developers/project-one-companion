@@ -39,6 +39,7 @@ export const droptimizerSchema = z.object({
     resultRaw: z.string(),
     date: z.number(),
     raidDifficulty: z.string(),
+    characterName: z.string(),
     fightInfo: simFightInfoSchema,
 });
 

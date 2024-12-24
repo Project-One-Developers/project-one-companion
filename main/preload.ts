@@ -1,3 +1,4 @@
+import { NewDroptimizer } from "@/lib/types";
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
 const handler = {
@@ -18,6 +19,10 @@ const handler = {
 contextBridge.exposeInMainWorld("ipc", {
     ...handler,
     getDatabaseUrl: () => process.env.DATABASE_URL,
+    api: {
+        addDroptimizer: (droptimizer: NewDroptimizer) =>
+            ipcRenderer.invoke("add-droptimizer", { droptimizer }),
+    },
 });
 
 export type IpcHandler = typeof handler;

@@ -32,6 +32,7 @@ export const addDroptimizer = async (
             fightStyle: droptimizer.fightInfo.fightstyle,
             duration: droptimizer.fightInfo.duration,
             nTargets: droptimizer.fightInfo.nTargets,
+            characterName: droptimizer.characterName,
         })
         .returning()
         .execute()
