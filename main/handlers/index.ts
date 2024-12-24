@@ -1,4 +1,4 @@
-import { addDroptimizerHandler } from "./droptimizer.handlers";
+import { addDroptimizerHandler } from "./droptimizer/droptimizer.handlers";
 
 export const allHandlers = [
     {
