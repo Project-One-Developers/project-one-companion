@@ -44,10 +44,10 @@ export default function NewDroptimizerForm() {
         const charName = tmpData[0].name;
         const charBaseDmg = tmpData[0].dmg;
 
-        const parsedData = tmpData
+        const upgrades = tmpData
             .slice(1)
             .map((d) => ({
-                name: d.name.split("/")[3],
+                itemId: d.name.split("/")[3],
                 dmg: Math.round(Number(d.dmg) - Number(charBaseDmg)),
             }))
             .filter((d) => d.dmg > 0);
@@ -59,6 +59,14 @@ export default function NewDroptimizerForm() {
             .split("•")[2]
             .replaceAll(" ", "");
 
+        const simType = jsonData.simbot.symType;
+        if (simType !== "droptimizer") {
+            console.log("Problemone");
+            // todo: throw err?
+        }
+
+        // todo: salvare anche gli upgrades
+
         const res: NewDroptimizer = {
             characterName: charName,
             raidDifficulty: difficulty,
@@ -68,8 +76,8 @@ export default function NewDroptimizerForm() {
                 nTargets: targets,
             },
             url: values.url,
-            resultRaw: "",
-            date: 0,
+            resultRaw: jsonData,
+            date: jsonData.timestamp,
         };
 
         return res;
