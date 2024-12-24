@@ -1,6 +1,12 @@
 import { Droptimizer } from "@/lib/types";
 import { ipcRenderer, IpcRendererEvent } from "electron";
 
+const api = {
+    addDroptimizer(url: string): Promise<Droptimizer | null> {
+        return ipcRenderer.invoke("add-droptimizer", url);
+    },
+};
+
 export const ipc = {
     send(channel: string, value: unknown) {
         ipcRenderer.send(channel, value);
@@ -13,9 +19,5 @@ export const ipc = {
             ipcRenderer.removeListener(channel, subscription);
         };
     },
-    api: {
-        addDroptimizer(url: string): Promise<Droptimizer | null> {
-            return ipcRenderer.invoke("add-droptimizer", url);
-        },
-    },
+    api,
 };
