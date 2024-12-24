@@ -1,6 +1,4 @@
-import { addDroptimizer } from "@/lib/storage/droptimizer/droptimizer.storage";
 import { NewDroptimizer } from "@/lib/types";
-import { isPresent } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,6 +32,7 @@ export default function NewDroptimizerForm() {
     async function parseReport(values: FormValues): Promise<NewDroptimizer> {
         const responseCsv = await fetch(`${values.url}/data.csv`);
         const responseJson = await fetch(`${values.url}/data.json`);
+        // TODO: check if response is ok
         const csvData = await responseCsv.text();
         const jsonData = await responseJson.json();
 
@@ -78,9 +77,9 @@ export default function NewDroptimizerForm() {
 
     async function onSubmit(values: FormValues) {
         const parsedReport = await parseReport(values);
-        const droptimizer = await addDroptimizer(parsedReport);
+        const droptimizer = await window.ipc.api.addDroptimizer(parsedReport);
 
-        isPresent(droptimizer)
+        !!droptimizer
             ? toast({
                   title: "Aggiunta droptimizer",
                   description: `Il droptimizer per il pg ${parsedReport.characterName} è stato aggiunto con successo.`,

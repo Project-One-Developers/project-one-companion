@@ -1,3 +1,4 @@
+import { NewDroptimizer } from "@/lib/types";
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
 const handler = {
@@ -18,21 +19,10 @@ const handler = {
 contextBridge.exposeInMainWorld("ipc", {
     ...handler,
     getDatabaseUrl: () => process.env.DATABASE_URL,
+    api: {
+        addDroptimizer: (droptimizer: NewDroptimizer) =>
+            ipcRenderer.invoke("add-droptimizer", { droptimizer }),
+    },
 });
 
 export type IpcHandler = typeof handler;
-
-contextBridge.exposeInMainWorld("ipc", {
-    send: (channel: string, ...args: any[]) =>
-        ipcRenderer.send(channel, ...args),
-    invoke: (channel: string, ...args: any[]) =>
-        ipcRenderer.invoke(channel, ...args),
-    api: {
-        getPlayer: (playerName: string) =>
-            ipcRenderer.invoke("get-player", { playerName }),
-        addPlayer: (playerName: string) =>
-            ipcRenderer.invoke("add-player", { playerName }),
-        getCharacter: (characterName: string) =>
-            ipcRenderer.invoke("get-character", { characterName }),
-    },
-});
