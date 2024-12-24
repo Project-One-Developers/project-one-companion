@@ -14,7 +14,8 @@
     "scripts": {
         "dev": "nextron",
         "build": "nextron build",
-        "postinstall": "electron-builder install-app-deps"
+        "postinstall": "electron-builder install-app-deps",
+        "migratedb": "drizzle-kit push"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.9.1",
