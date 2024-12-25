@@ -15,7 +15,7 @@ function App(): JSX.Element {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/add-player" element={<AddPlayer />} />
-                        <Route path="/" element={<DroptimizerForm />} />
+                        <Route path="/droptimizer" element={<DroptimizerForm />} />
                     </Routes>
                 </BrowserRouter>
                 <Toaster />
