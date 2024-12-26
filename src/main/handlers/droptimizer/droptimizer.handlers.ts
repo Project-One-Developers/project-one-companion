@@ -2,7 +2,7 @@ import { Droptimizer, NewDroptimizer } from '../../../../shared/types'
 import { addDroptimizer } from '../../lib/storage/droptimizer/droptimizer.storage'
 import { fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 
-export const addDroptimizerHandler = async (url: string): Promise<Droptimizer | null> => {
+export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> => {
     console.log('Adding droptimizer from url', url)
 
     const { csvData, jsonData } = await fetchRaidbotsData(url)
