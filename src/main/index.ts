@@ -59,7 +59,7 @@ app.whenReady().then(() => {
 
     registerHandlers(allHandlers)
 
-    //seedData()
+    seedData()
 
     createWindow()
 

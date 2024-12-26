@@ -3,7 +3,7 @@ import { Item } from '../../../../../shared/types'
 import { db } from '../storage.config'
 import { itemTable } from '../storage.schema'
 
-export const upsertItems = async (items: Item[]): Promise<null> => {
+export const upsertItems = async (items: Item[]): Promise<void> => {
     for await (const i of items) {
         const res = await db.select().from(itemTable).where(eq(itemTable.id, i.id)) // todo: ricavarli tutti in memoria senza fare ogni volta la query
         if (res.length === 0) {
@@ -14,5 +14,4 @@ export const upsertItems = async (items: Item[]): Promise<null> => {
             await db.update(itemTable).set(i).where(eq(itemTable.id, i.id))
         }
     }
-    return null
 }
