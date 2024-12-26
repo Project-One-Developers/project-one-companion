@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { bossSchema, itemSchema } from '../../../../shared/schemas'
 import { Boss, Item } from '../../../../shared/types'
 
-export const fetchRaidItems = async (): Promise<Item[]> => {
+export const fetchRaidItems = (): Item[] => {
     const jsonData = JSON.parse(
         readFileSync(path.join(__dirname, '../../resources/wow/items.json'), 'utf-8')
     )
@@ -42,7 +42,7 @@ export const fetchRaidItems = async (): Promise<Item[]> => {
     return z.array(itemSchema).parse(result)
 }
 
-export const fetchRaidBosses = async (): Promise<Boss[]> => {
+export const fetchRaidBosses = (): Boss[] => {
     const jsonData = JSON.parse(
         readFileSync(path.join(__dirname, '../../resources/wow/bosses.json'), 'utf-8')
     )

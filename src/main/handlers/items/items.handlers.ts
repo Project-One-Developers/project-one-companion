@@ -6,14 +6,8 @@ import { fetchRaidBosses, fetchRaidItems } from './items.utils'
 export const reloadItemsHandler = async (): Promise<void> => {
     console.log('Reloading resources/items.csv')
 
-    const [raidItems, raidBosses] = await Promise.all([
-        await fetchRaidItems(),
-        await fetchRaidBosses()
-    ])
+    const raidItems = fetchRaidItems()
+    const raidBosses = fetchRaidBosses()
 
-    // upsert bosses
-    await upsertBosses(raidBosses)
-
-    // upsert items
-    await upsertItems(raidItems)
+    await Promise.all([upsertItems(raidItems), upsertBosses(raidBosses)])
 }
