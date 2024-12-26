@@ -1,4 +1,5 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
+import * as schema from './storage.schema'
 
 require('dotenv').config()
 
@@ -8,4 +9,4 @@ if (!databaseUrl) {
     throw new Error('DATABASE_URL environment variable is not set')
 }
 
-export const db = drizzle(databaseUrl)
+export const db = drizzle({ connection: databaseUrl, casing: 'snake_case', schema: schema })
