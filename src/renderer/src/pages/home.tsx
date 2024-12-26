@@ -7,7 +7,7 @@ export default function HomePage(): JSX.Element {
                 <div>
                     <img
                         className="ml-auto mr-auto"
-                        src="/public/images/logo.png"
+                        src="/images/logo.png"
                         alt="Logo image"
                         width={256}
                         height={256}
