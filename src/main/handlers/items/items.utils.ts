@@ -1,10 +1,13 @@
+import { readFileSync } from 'fs'
 import * as path from 'path'
 import { z } from 'zod'
 import { bossSchema, itemSchema } from '../../../../shared/schemas'
 import { Boss, Item } from '../../../../shared/types'
 
 export const fetchRaidItems = async (): Promise<Item[]> => {
-    const jsonData = require(path.join(__dirname, '../../resources/wow/items.json'))
+    const jsonData = JSON.parse(
+        readFileSync(path.join(__dirname, '../../resources/wow/items.json'), 'utf-8')
+    )
 
     // cba validare qua
     const result = jsonData.map((itemRaw) => {
@@ -18,7 +21,7 @@ export const fetchRaidItems = async (): Promise<Item[]> => {
             itemClass: itemRaw.itemClass,
             slot: itemRaw.slot,
             itemSubclass: itemRaw.itemSubclass,
-            tierPrefix: itemRaw.tierPrefix,
+            tierPrefix: itemRaw.token,
             tier: 'Token' === itemRaw.itemSubclass,
             veryRare: 'Very Rare' === itemRaw.bonusId,
             specs: itemRaw.specs,
@@ -36,10 +39,13 @@ export const fetchRaidItems = async (): Promise<Item[]> => {
         })
     })
 
-    return result
+    return z.array(itemSchema).parse(result)
 }
 
 export const fetchRaidBosses = async (): Promise<Boss[]> => {
-    const jsonData = require(path.join(__dirname, '../../resources/wow/bosses.json'))
+    const jsonData = JSON.parse(
+        readFileSync(path.join(__dirname, '../../resources/wow/bosses.json'), 'utf-8')
+    )
+
     return z.array(bossSchema).parse(jsonData)
 }
