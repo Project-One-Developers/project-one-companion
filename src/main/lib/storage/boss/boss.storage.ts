@@ -1,17 +1,19 @@
 import { eq } from 'drizzle-orm'
+import { match } from 'ts-pattern'
 import { Boss } from '../../../../../shared/types'
 import { db } from '../storage.config'
 import { bossTable } from '../storage.schema'
 
 export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
-    for await (const b of bosses) {
-        const res = await db.select().from(bossTable).where(eq(bossTable.id, b.id)) // todo: ricavarli tutti in memoria senza fare ogni volta la query
-        if (res.length === 0) {
-            // insert boss
-            await db.insert(bossTable).values(b)
-        } else {
-            // update boss
-            await db.update(bossTable).set(b).where(eq(bossTable.id, b.id))
-        }
-    }
+    const bossesInDb = await db.query.bossTable.findMany()
+
+    const upserts = bosses.map((boss) => {
+        const isBossInDb = bossesInDb.find((b) => b.id === boss.id)
+
+        return match(isBossInDb)
+            .with(undefined, () => db.insert(bossTable).values(boss))
+            .otherwise(() => db.update(bossTable).set(boss).where(eq(bossTable.id, boss.id)))
+    })
+
+    await Promise.all(upserts)
 }
