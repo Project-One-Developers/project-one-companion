@@ -20,7 +20,8 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer | 
         },
         url,
         resultRaw: csvData,
-        date: parsedJson.date
+        date: parsedJson.date,
+        upgrades: parsedCsv.upgrades
     }
 
     return await addDroptimizer(droptimizer)

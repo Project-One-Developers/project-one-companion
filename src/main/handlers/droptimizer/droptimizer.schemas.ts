@@ -17,10 +17,10 @@ export const csvDataSchema = z.string().transform((data) => {
 
     const upgrades = itemRows
         .map((row) => ({
-            id: row.nameOrId.split('/')[3], // Item ID is the fourth element
-            dmg: Math.round(Number(row.dmg) - baseDmg)
+            dps: Math.round(Number(row.dmg) - baseDmg),
+            itemId: Number(row.nameOrId.split('/')[3]) // Item ID is the fourth element
         }))
-        .filter((item) => item.dmg > 0)
+        .filter((item) => item.dps > 0)
 
     return { characterName, baseDmg, upgrades }
 })

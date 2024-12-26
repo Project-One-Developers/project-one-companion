@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm'
 import { boolean, integer, pgEnum, pgTable, text, unique, varchar } from 'drizzle-orm/pg-core'
 import { CLASSES, RAID_DIFF, ROLES } from '../../../../shared/classes'
 
@@ -20,6 +21,24 @@ export const charTable = pgTable('chars', {
         .notNull()
 })
 
+export const droptimizerUpgradesTable = pgTable('droptimizer_upgrades', {
+    id: varchar('id').primaryKey(),
+    dps: varchar('dps').notNull(),
+    itemId: integer('item_id')
+        .references(() => itemTable.id)
+        .notNull(),
+    droptimizerId: varchar('droptimizer_id')
+        .references(() => droptimizerTable.id)
+        .notNull()
+})
+
+export const droptimizerUpgradesRelations = relations(droptimizerUpgradesTable, ({ one }) => ({
+    droptimizer: one(droptimizerTable, {
+        fields: [droptimizerUpgradesTable.droptimizerId],
+        references: [droptimizerTable.id]
+    })
+}))
+
 export const droptimizerTable = pgTable('droptimizers', {
     id: varchar('id').primaryKey(),
     url: text('url').notNull(),
@@ -31,6 +50,10 @@ export const droptimizerTable = pgTable('droptimizers', {
     raidDifficulty: varchar('raid_difficulty', { length: 20 }).notNull(),
     characterName: varchar('character_name', { length: 24 }).notNull()
 })
+
+export const droptimizerRelations = relations(droptimizerTable, ({ many }) => ({
+    upgrades: many(droptimizerUpgradesTable)
+}))
 
 export const raidSessionTable = pgTable('raid_sessions', {
     id: varchar('id').primaryKey(),

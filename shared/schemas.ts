@@ -22,15 +22,9 @@ export const wowRaidDiffSchema = z.enum(['Normal', 'Heroic', 'Mythic'])
 
 // TODO: probably move in separate folders/files
 
-export const droptimizerItemSchema = z.object({
-    itemId: z.number(),
-    dmg: z.number()
-})
-
-export const simFightInfoSchema = z.object({
-    fightstyle: z.string(),
-    duration: z.number().min(1),
-    nTargets: z.number().min(1)
+export const droptimizerUpgradeSchema = z.object({
+    dps: z.number(),
+    itemId: z.number()
 })
 
 export const droptimizerSchema = z.object({
@@ -40,10 +34,22 @@ export const droptimizerSchema = z.object({
     date: z.number(),
     raidDifficulty: z.string(),
     characterName: z.string(),
-    fightInfo: simFightInfoSchema
+    fightInfo: z.object({
+        fightstyle: z.string(),
+        duration: z.number().min(1),
+        nTargets: z.number().min(1)
+    }),
+    upgrades: z.array(droptimizerUpgradeSchema).nullable()
 })
 
-export const newDroptimizerSchema = droptimizerSchema.omit({ id: true })
+export const newDroptimizerSchema = droptimizerSchema.omit({ id: true, upgrades: true }).extend({
+    upgrades: z.array(
+        z.object({
+            itemId: z.number(),
+            dps: z.number()
+        })
+    )
+})
 
 export const characterSchema = z.object({
     id: z.string().uuid(),
