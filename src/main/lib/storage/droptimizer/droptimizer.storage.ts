@@ -1,24 +1,25 @@
-import { eq } from 'drizzle-orm'
-import { droptimizerSchema } from '../../../../../shared/schemas'
 import { Droptimizer, NewDroptimizer } from '../../../../../shared/types'
 import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '../storage.schema'
 import { parseAndValidate, takeFirstResult } from '../storage.utils'
+import { droptimizerModelSchema } from './droptimizer.schemas'
+import { UpgradesTableInsert } from './droptimizer.types'
 
 export const getDroptimizer = async (droptimizerId: string): Promise<Droptimizer | null> => {
-    const result = await db
-        .select()
-        .from(droptimizerTable)
-        .where(eq(droptimizerTable.id, droptimizerId))
-        .then(takeFirstResult)
+    const result = await db.query.droptimizerTable.findFirst({
+        where: (droptimizerTable, { eq }) => eq(droptimizerTable.id, droptimizerId),
+        with: {
+            upgrades: true
+        }
+    })
 
-    return parseAndValidate(droptimizerSchema, result)
+    return parseAndValidate(droptimizerModelSchema, result)
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer | null> => {
-    const insertedId = await db.transaction(async (tx) => {
-        const result = await tx
+    const droptimizerId = await db.transaction(async (tx) => {
+        const droptimizerRes = await tx
             .insert(droptimizerTable)
             .values({
                 id: newUUID(),
@@ -32,27 +33,30 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 characterName: droptimizer.characterName
             })
             .returning({ id: droptimizerTable.id })
+            .then(takeFirstResult)
 
-        // remap NewDroptimizer.upgrades
-        const upgradesArray = droptimizer.upgrades.map((up) => ({
+        if (!droptimizerRes) {
+            throw new Error('Failed to insert droptimizer')
+        }
+
+        const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => ({
             id: newUUID(),
-            droptimizerId: result[0].id,
+            droptimizerId: droptimizerRes.id,
             itemId: up.itemId,
-            dps: '' + up.dps // todo: fixare in float
+            dps: up.dps.toString()
         }))
 
-        await tx.insert(droptimizerUpgradesTable).values(upgradesArray).returning().execute()
+        await tx.insert(droptimizerUpgradesTable).values(upgradesArray).execute()
 
-        return result[0].id
+        return droptimizerRes.id
     })
 
-    // recupero il droptimizer appena inserito
     const result = await db.query.droptimizerTable.findFirst({
-        where: (droptimizerTable, { eq }) => eq(droptimizerTable.id, insertedId),
+        where: (droptimizerTable, { eq }) => eq(droptimizerTable.id, droptimizerId),
         with: {
             upgrades: true
         }
     })
 
-    return parseAndValidate(droptimizerSchema, result)
+    return parseAndValidate(droptimizerModelSchema, result)
 }
