@@ -36,7 +36,9 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             .then(takeFirstResult)
 
         if (!droptimizerRes) {
-            throw new Error('Failed to insert droptimizer')
+            tx.rollback()
+            console.log('Failed to insert droptimizer. Droptimizer:', droptimizer)
+            return null
         }
 
         const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => ({
@@ -50,6 +52,10 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
 
         return droptimizerRes.id
     })
+
+    if (!droptimizerId) {
+        return null
+    }
 
     const result = await db.query.droptimizerTable.findFirst({
         where: (droptimizerTable, { eq }) => eq(droptimizerTable.id, droptimizerId),
