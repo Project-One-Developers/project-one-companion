@@ -1,10 +1,5 @@
 {
-    "conventionalCommits.scopes": [
-        "roster",
-        "droptimizer",
-        "storage",
-        "schemas"
-    ],
+    "conventionalCommits.scopes": ["roster", "droptimizer", "storage", "schemas", "renderer"],
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },

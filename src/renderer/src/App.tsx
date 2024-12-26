@@ -4,7 +4,6 @@ import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar'
 import { Toaster } from './components/ui/toaster'
 import AddPlayer from './pages/add-player'
 import DroptimizerForm from './pages/droptimizer'
-import './styles/globals.css'
 
 function App(): JSX.Element {
     return (

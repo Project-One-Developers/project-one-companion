@@ -1,24 +1,14 @@
-import {
-    Table,
-    TableBody,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import React, { useEffect } from "react";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@renderer/components/ui/table'
+import React, { useEffect } from 'react'
 
-export default function RosterPage() {
-    const [players, setPlayers] = React.useState([]);
+export default function RosterPage(): JSX.Element {
+    const [players, setPlayers] = React.useState([])
 
     useEffect(() => {
-        const playersList: {
-            name: string;
-            class: string;
-            character: string;
-            role: string;
-        }[] = JSON.parse(window.localStorage.getItem("players") ?? "") || [];
-        setPlayers(players);
-    }, []);
+        // TODO: implement this
+        const tmp = players
+        setPlayers(tmp)
+    }, [])
 
     return (
         <Table>
@@ -52,5 +42,5 @@ export default function RosterPage() {
                 ))} */}
             </TableBody>
         </Table>
-    );
+    )
 }

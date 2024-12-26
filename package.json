@@ -25,6 +25,7 @@
         "@electron-toolkit/preload": "^3.0.1",
         "@electron-toolkit/utils": "^3.0.0",
         "@hookform/resolvers": "^3.9.1",
+        "autoprefixer": "^10.4.20",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.0.4",
@@ -33,6 +34,7 @@
         "electron-updater": "^6.1.7",
         "lucide-react": "^0.469.0",
         "pg": "^8.13.1",
+        "postcss": "^8.4.49",
         "radix-ui": "^1.0.1",
         "react-hook-form": "^7.54.2",
         "react-router": "^7.1.1",
@@ -40,6 +42,7 @@
         "shared": "file:./shared",
         "tailwind-merge": "^2.6.0",
         "tailwindcss": "^3.4.17",
+        "tailwindcss-animate": "^1.0.7",
         "ts-pattern": "^5.6.0",
         "uuid": "^11.0.3",
         "zod": "^3.24.1"
