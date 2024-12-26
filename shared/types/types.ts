@@ -1,15 +1,11 @@
 import { z } from 'zod'
+import { characterSchema, newCharacterSchema, playerSchema } from '../schemas/characters.schemas'
 import {
-    bossSchema,
-    characterSchema,
     droptimizerSchema,
-    itemSchema,
-    newCharacterSchema,
     newDroptimizerSchema,
-    playerSchema,
-    raidbotsURLSchema,
-    wowClassSchema
-} from './schemas'
+    raidbotsURLSchema
+} from '../schemas/simulations.schemas'
+import { bossSchema, itemSchema, wowClassSchema } from '../schemas/wow.schemas'
 
 export type WowClass = z.infer<typeof wowClassSchema>
 

@@ -1,4 +1,4 @@
-import { Droptimizer, NewDroptimizer } from '../../../../../shared/types'
+import { Droptimizer, NewDroptimizer } from '../../../../../shared/types/types'
 import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '../storage.schema'

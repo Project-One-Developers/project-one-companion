@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { CLASSES } from '../../../../shared/classes'
-import { WowClass } from '../../../../shared/types'
+import { CLASSES } from '../../../../shared/consts/wow.consts'
+import { WowClass } from '../../../../shared/types/types'
 
 export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs))

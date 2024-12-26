@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { match } from 'ts-pattern'
-import { Item } from '../../../../../shared/types'
+import { Item } from '../../../../../shared/types/types'
 import { db } from '../storage.config'
 import { itemTable } from '../storage.schema'
 

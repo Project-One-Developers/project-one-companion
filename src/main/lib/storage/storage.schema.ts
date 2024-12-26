@@ -9,7 +9,7 @@ import {
     unique,
     varchar
 } from 'drizzle-orm/pg-core'
-import { CLASSES, RAID_DIFF, ROLES } from '../../../../shared/classes'
+import { CLASSES, RAID_DIFF, ROLES } from '../../../../shared/consts/wow.consts'
 
 export const pgClassEnum = pgEnum('class', CLASSES)
 export const pgRoleEnum = pgEnum('role', ROLES)

@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { playerSchema } from '../../../../../shared/schemas'
-import { NewCharacter, Player } from '../../../../../shared/types'
+import { playerSchema } from '../../../../../shared/schemas/characters.schemas'
+import { NewCharacter, Player } from '../../../../../shared/types/types'
 import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { charTable, playerTable } from '../storage.schema'

@@ -1,4 +1,4 @@
-import { Boss } from '../../../../../shared/types'
+import { Boss } from '../../../../../shared/types/types'
 import { db } from '../storage.config'
 import { bossTable } from '../storage.schema'
 import { buildConflictUpdateColumns } from '../storage.utils'

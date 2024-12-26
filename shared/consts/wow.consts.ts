@@ -1,4 +1,4 @@
-import { wowClassSchema, wowRaidDiffSchema, wowRolesSchema } from './schemas'
+import { wowClassSchema, wowRaidDiffSchema, wowRolesSchema } from '../schemas/wow.schemas'
 
 export const CLASSES = wowClassSchema.options
 
