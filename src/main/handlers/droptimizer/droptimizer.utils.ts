@@ -1,9 +1,10 @@
 import { match } from 'ts-pattern'
 import { z } from 'zod'
+import { RaidbotsURL } from '../../../../shared/types'
 import { csvDataSchema, jsonDataSchema } from './droptimizer.schemas'
 
 export const fetchRaidbotsData = async (
-    url: string
+    url: RaidbotsURL
 ): Promise<{ csvData: string; jsonData: unknown }> => {
     const [responseCsv, responseJson] = await Promise.all([
         fetch(`${url}/data.csv`),

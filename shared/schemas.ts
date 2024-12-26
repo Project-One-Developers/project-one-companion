@@ -105,3 +105,11 @@ export const bossSchema = z.object({
     raid: z.string(),
     order: z.number()
 })
+
+export const raidbotsURLSchema = z
+    .string()
+    .url()
+    .refine((url) => url.includes('raidbots.com/simbot/report'), {
+        message: 'URL must be a raidbots.com report URL'
+    })
+    .brand('RaidbotsURL')

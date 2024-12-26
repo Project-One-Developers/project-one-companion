@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { raidbotsURLSchema } from '../../../../shared/schemas'
 import { useToast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 
 const formSchema = z.object({
-    url: z.string().url()
+    url: raidbotsURLSchema
 })
 type FormValues = z.infer<typeof formSchema>
 
