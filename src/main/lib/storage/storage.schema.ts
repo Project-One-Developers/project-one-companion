@@ -77,10 +77,10 @@ export const raidSessionRosterTable = pgTable(
     ]
 )
 
-export const bossTable = pgTable('boss', {
+export const bossTable = pgTable('bosses', {
     id: integer('id').primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
     name: varchar('name', { length: 255 }).notNull(),
-    raid: varchar('raid', { length: 255 }),
+    raid: varchar('raid', { length: 255 }).notNull(),
     order: integer('order').notNull()
 })
 

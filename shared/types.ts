@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import {
+    bossSchema,
     characterSchema,
     droptimizerSchema,
+    itemSchema,
     newCharacterSchema,
     newDroptimizerSchema,
     playerSchema,
@@ -17,3 +19,7 @@ export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 
 export type Character = z.infer<typeof characterSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
+
+export type Item = z.infer<typeof itemSchema>
+
+export type Boss = z.infer<typeof bossSchema>

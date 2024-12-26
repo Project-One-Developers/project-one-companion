@@ -71,3 +71,36 @@ export const newCharacterSchema = characterSchema
         droptimizer: true
     })
     .merge(playerSchema.omit({ id: true, characters: true }))
+
+export const itemSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    ilvlMythic: z.number(),
+    ilvlHeroic: z.number(),
+    ilvlNormal: z.number(),
+    bonusID: z.string().optional(),
+    itemClass: z.string(),
+    slot: z.string(),
+    itemSubclass: z.string(),
+    tierPrefix: z.string(),
+    tier: z.boolean(),
+    veryRare: z.boolean(),
+    specs: z.string(),
+    specIds: z.string(),
+    classes: z.string(),
+    classesId: z.string(),
+    stats: z.string(),
+    mainStats: z.string(),
+    secondaryStats: z.string(),
+    wowheadUrl: z.string(),
+    iconName: z.string(),
+    iconUrl: z.string(),
+    bossName: z.string() // ridondante ma utile
+})
+
+export const bossSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    raid: z.string(),
+    order: z.number()
+})
