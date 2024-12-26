@@ -2,7 +2,7 @@ import { Droptimizer, NewDroptimizer } from '../../../../../shared/types'
 import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '../storage.schema'
-import { parseAndValidate, takeFirstResult } from '../storage.utils'
+import { takeFirstResult } from '../storage.utils'
 import { droptimizerModelSchema } from './droptimizer.schemas'
 import { UpgradesTableInsert } from './droptimizer.types'
 
@@ -14,10 +14,14 @@ export const getDroptimizer = async (droptimizerId: string): Promise<Droptimizer
         }
     })
 
-    return parseAndValidate(droptimizerModelSchema, result)
+    if (!result) {
+        return null
+    }
+
+    return droptimizerModelSchema.parse(result)
 }
 
-export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer | null> => {
+export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
     const droptimizerId = await db.transaction(async (tx) => {
         const droptimizerRes = await tx
             .insert(droptimizerTable)
@@ -37,8 +41,9 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
 
         if (!droptimizerRes) {
             tx.rollback()
-            console.log('Failed to insert droptimizer. Droptimizer:', droptimizer)
-            return null
+            const errorMsg = `Failed to insert droptimizer. Droptimizer: ${JSON.stringify(droptimizer)}`
+            console.log(errorMsg)
+            throw new Error(errorMsg)
         }
 
         const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => ({
@@ -53,10 +58,6 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         return droptimizerRes.id
     })
 
-    if (!droptimizerId) {
-        return null
-    }
-
     const result = await db.query.droptimizerTable.findFirst({
         where: (droptimizerTable, { eq }) => eq(droptimizerTable.id, droptimizerId),
         with: {
@@ -64,5 +65,5 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         }
     })
 
-    return parseAndValidate(droptimizerModelSchema, result)
+    return droptimizerModelSchema.parse(result)
 }

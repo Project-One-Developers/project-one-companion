@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm'
 import { playerSchema } from '../../../../../shared/schemas'
 import { NewCharacter, Player } from '../../../../../shared/types'
-import { isPresent, newUUID } from '../../utils'
+import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { charTable, playerTable } from '../storage.schema'
-import { parseAndValidate, takeFirstResult } from '../storage.utils'
+import { takeFirstResult } from '../storage.utils'
 
 export const getPlayerById = async (playerId: string): Promise<Player | null> => {
     const result = await db
@@ -13,7 +13,11 @@ export const getPlayerById = async (playerId: string): Promise<Player | null> =>
         .where(eq(playerTable.id, playerId))
         .then(takeFirstResult)
 
-    return parseAndValidate(playerSchema, result)
+    if (!result) {
+        return null
+    }
+
+    return playerSchema.parse(result)
 }
 
 export const getPlayerByName = async (playerName: string): Promise<Player | null> => {
@@ -23,17 +27,16 @@ export const getPlayerByName = async (playerName: string): Promise<Player | null
         .where(eq(playerTable.name, playerName))
         .then(takeFirstResult)
 
-    return parseAndValidate(playerSchema, result)
-}
-
-export const addCharacter = async (character: NewCharacter): Promise<Player | null> => {
-    const player =
-        (await getPlayerByName(character.playerName)) ?? (await addPlayer(character.playerName))
-
-    if (!isPresent(player)) {
-        console.log('Failed to creating or finding player')
+    if (!result) {
         return null
     }
+
+    return playerSchema.parse(result)
+}
+
+export const addCharacter = async (character: NewCharacter): Promise<Player> => {
+    const player =
+        (await getPlayerByName(character.playerName)) ?? (await addPlayer(character.playerName))
 
     const result = await db
         .insert(charTable)
@@ -48,10 +51,10 @@ export const addCharacter = async (character: NewCharacter): Promise<Player | nu
         .execute()
         .then(takeFirstResult)
 
-    return parseAndValidate(playerSchema, result)
+    return playerSchema.parse(result)
 }
 
-const addPlayer = async (playerName: string): Promise<Player | null> => {
+const addPlayer = async (playerName: string): Promise<Player> => {
     const result = await db
         .insert(playerTable)
         .values({
@@ -62,5 +65,5 @@ const addPlayer = async (playerName: string): Promise<Player | null> => {
         .execute()
         .then(takeFirstResult)
 
-    return parseAndValidate(playerSchema, result)
+    return playerSchema.parse(result)
 }
