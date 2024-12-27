@@ -9,9 +9,8 @@ export const reloadItemsHandler = async (): Promise<void> => {
     const raidBosses = fetchRaidBosses()
     const raidItemsToTierset = fetchItemsToTierset()
 
-    await Promise.all([
-        upsertItems(raidItems),
-        upsertBosses(raidBosses),
-        upsertItemsToTierset(raidItemsToTierset)
-    ])
+    // non rendere concorrente: i value hanno relazioni
+    await upsertBosses(raidBosses)
+    await upsertItems(raidItems)
+    await upsertItemsToTierset(raidItemsToTierset)
 }
