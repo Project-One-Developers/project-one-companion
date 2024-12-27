@@ -68,17 +68,19 @@ export const getPlayerByName = async (playerName: string): Promise<Player | null
         return null
     }
 
-    return playerSchema.parse(result)
+    return playerSchema.parse({ id: result.id, playerName: result.name })
 }
 
 export const addCharacter = async (character: NewCharacter): Promise<Player> => {
     const player =
         (await getPlayerByName(character.playerName)) ?? (await addPlayer(character.playerName))
 
+    const id = newUUID()
+
     const result = await db
         .insert(charTable)
         .values({
-            id: newUUID(),
+            id,
             name: character.characterName,
             class: character.class,
             role: character.role,
@@ -88,7 +90,19 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
         .execute()
         .then(takeFirstResult)
 
-    return playerSchema.parse(result)
+    return playerSchema.parse({
+        id,
+        playerName: player.playerName,
+        characters: [
+            {
+                id,
+                characterName: result.name,
+                class: character.class,
+                role: character.role,
+                playerId: player.id
+            }
+        ]
+    })
 }
 
 const addPlayer = async (playerName: string): Promise<Player> => {

@@ -28,7 +28,7 @@ export const AnimatedTooltip = ({
             {items.map((item) => (
                 <div
                     className="-mr-4 relative group"
-                    key={item.name}
+                    key={item.id}
                     onMouseEnter={() => setHoveredIndex(item.id)}
                     onMouseLeave={() => setHoveredIndex(null)}
                 >
@@ -68,9 +68,14 @@ export const AnimatedTooltip = ({
                                         ).toLocaleDateString()}
                                     </div>
                                 ) : null}
-                                <div className="text-muted-foreground text-xs">
-                                    Last droptimizer: {new Date(Date.now()).toLocaleDateString()}
-                                </div>
+                                {item.droptimizer?.length ? (
+                                    <div className="text-muted-foreground text-xs">
+                                        Last droptimizer:{' '}
+                                        {new Date(
+                                            item.droptimizer[item.droptimizer.length - 1].date
+                                        ).toLocaleDateString()}
+                                    </div>
+                                ) : null}
                             </motion.div>
                         )}
                     </AnimatePresence>

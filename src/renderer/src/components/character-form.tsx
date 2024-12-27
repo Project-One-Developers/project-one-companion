@@ -1,8 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PlusIcon } from 'lucide-react'
+import { queryClient } from '@renderer/lib/tanstack-query/client'
+import { queryKeys } from '@renderer/lib/tanstack-query/keys'
+import { addCharacter } from '@renderer/lib/tanstack-query/players'
+import { useMutation } from '@tanstack/react-query'
+import { Loader2, PlusIcon } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { NewCharacter } from 'shared/types/types'
 import { z } from 'zod'
+import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
@@ -10,8 +16,7 @@ import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 const newCharacterSchema = z.object({
-    id: z.string().uuid(),
-    characterName: z.string(),
+    characterName: z.string().min(1),
     class: z.enum([
         'Death Knight',
         'Demon Hunter',
@@ -27,9 +32,9 @@ const newCharacterSchema = z.object({
         'Warlock',
         'Warrior'
     ]),
-    role: z.enum(['Tank', 'Healer', 'DPS'])
+    role: z.enum(['Tank', 'Healer', 'DPS']),
+    playerName: z.string().min(1)
 })
-
 const CLASSES = [
     'Death Knight',
     'Demon Hunter',
@@ -45,41 +50,46 @@ const CLASSES = [
     'Warlock',
     'Warrior'
 ]
-
 const ROLES = ['Tank', 'Healer', 'DPS']
 
 export function CharacterForm({ playerName }: { playerName: string }): JSX.Element {
+    const [open, setOpen] = useState(false)
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: addCharacter,
+        onSuccess: (_, arg) => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
+            form.reset()
+            setOpen(false)
+            toast({
+                title: 'Aggiunta player',
+                description: `Il pg ${arg.characterName} del player ${arg.playerName} è stato aggiunto con successo.`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Errore',
+                description: `Non è stato possibile aggiungere il pg. Errore: ${error.message}`
+            })
+        }
+    })
+
     const form = useForm<NewCharacter>({
         resolver: zodResolver(newCharacterSchema),
         defaultValues: {
-            playerName: playerName,
             characterName: '',
             class: 'Death Knight',
-            role: 'Tank'
+            role: 'Tank',
+            playerName
         }
     })
 
     function onSubmit(values: NewCharacter): void {
-        console.log(values)
-        // player
-        //     ? toast({
-        //           title: 'Aggiunta player',
-        //           description: `Il pg ${values.characterName} del player ${player.playerName} è stato aggiunto con successo.`
-        //       })
-        //     : toast({
-        //           title: 'Errore',
-        //           description: `Non è stato possibile aggiungere il player.`
-        //       })
-        // form.reset()
+        mutate(values)
     }
 
     return (
-        <Dialog
-            onOpenChange={() => {
-                form.reset()
-                form.setFocus('characterName')
-            }}
-        >
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <PlusIcon />
             </DialogTrigger>
@@ -160,7 +170,9 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Aggiungi</Button>
+                        <Button disabled={isPending} type="submit">
+                            {isPending ? <Loader2 className="animate-spin" /> : 'Aggiungi'}
+                        </Button>
                     </form>
                 </Form>
             </DialogContent>
