@@ -52,5 +52,11 @@
         "name": "Trash Drop",
         "id": -67,
         "raid": "Nerub-ar Palace"
+    },
+    {
+        "order": 99,
+        "name": "Catalyst - Season 1",
+        "id": -70,
+        "raid": "Nerub-ar Palace"
     }
 ]

@@ -22,6 +22,8 @@ export const getDroptimizer = async (droptimizerId: string): Promise<Droptimizer
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
+    const itemsToTiersetMapping = await db.query.itemToTiersetTable.findMany() // fare la lookup una volta e memorizzare tutto
+
     const droptimizerId = await db.transaction(async (tx) => {
         const droptimizerRes = await tx
             .insert(droptimizerTable)
@@ -46,12 +48,15 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             throw new Error(errorMsg)
         }
 
-        const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => ({
-            id: newUUID(),
-            droptimizerId: droptimizerRes.id,
-            itemId: up.itemId,
-            dps: up.dps.toString()
-        }))
+        const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => {
+            const itemMapping = itemsToTiersetMapping.find((i) => i.itemId === up.itemId)
+            return {
+                id: newUUID(),
+                droptimizerId: droptimizerRes.id,
+                itemId: itemMapping ? itemMapping.tokenId : up.itemId,
+                dps: up.dps
+            }
+        })
 
         await tx.insert(droptimizerUpgradesTable).values(upgradesArray).execute()
 

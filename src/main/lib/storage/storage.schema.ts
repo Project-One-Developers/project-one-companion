@@ -1,14 +1,5 @@
 import { relations } from 'drizzle-orm'
-import {
-    boolean,
-    integer,
-    numeric,
-    pgEnum,
-    pgTable,
-    text,
-    unique,
-    varchar
-} from 'drizzle-orm/pg-core'
+import { boolean, integer, pgEnum, pgTable, text, unique, varchar } from 'drizzle-orm/pg-core'
 import { CLASSES, RAID_DIFF, ROLES } from '../../../../shared/consts/wow.consts'
 
 export const pgClassEnum = pgEnum('class', CLASSES)
@@ -32,7 +23,7 @@ export const charTable = pgTable('chars', {
 
 export const droptimizerUpgradesTable = pgTable('droptimizer_upgrades', {
     id: varchar('id').primaryKey(),
-    dps: numeric('dps').notNull(),
+    dps: integer('dps').notNull(),
     itemId: integer('item_id')
         .references(() => itemTable.id)
         .notNull(),

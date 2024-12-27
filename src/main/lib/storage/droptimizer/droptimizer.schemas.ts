@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 const upgradesModelSchema = z.object({
     itemId: z.number(),
-    dps: z.string()
+    dps: z.number()
 })
 
 export const droptimizerModelSchema = z
@@ -33,7 +33,7 @@ export const droptimizerModelSchema = z
             },
             upgrades: data.upgrades.map((up) => ({
                 itemId: up.itemId,
-                dps: parseFloat(up.dps)
+                dps: up.dps
             }))
         }
     })
