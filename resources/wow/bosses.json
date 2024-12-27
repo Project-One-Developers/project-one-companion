@@ -46,5 +46,11 @@
         "name": "Queen Ansurek",
         "id": 2602,
         "raid": "Nerub-ar Palace"
+    },
+    {
+        "order": 99,
+        "name": "Trash Drop",
+        "id": -67,
+        "raid": "Nerub-ar Palace"
     }
 ]
