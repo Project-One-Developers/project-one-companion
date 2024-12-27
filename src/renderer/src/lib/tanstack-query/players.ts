@@ -9,3 +9,8 @@ export const addCharacter = async (character: NewCharacter): Promise<Player | nu
     const response = await window.api.addCharacter(character)
     return response
 }
+
+export const addPlayer = async (playerName: string): Promise<Player | null> => {
+    const response = await window.api.addPlayer(playerName)
+    return response
+}

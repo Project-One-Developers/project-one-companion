@@ -1,4 +1,5 @@
 import { CharacterForm } from '@renderer/components/character-form'
+import PlayerForm from '@renderer/components/new-player-form'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
 import {
     Table,
@@ -12,14 +13,13 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { useQuery } from '@tanstack/react-query'
 import { Edit, LoaderCircle, Trash } from 'lucide-react'
-import { useState } from 'react'
 
 export default function RosterPage(): JSX.Element {
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.players],
         queryFn: fetchPlayers
     })
-    const [displayAddCharacter, setDisplayAddCharacter] = useState(false)
+
     return (
         <>
             {isLoading ? (
@@ -32,9 +32,7 @@ export default function RosterPage(): JSX.Element {
                         <div></div>
                         <h1 className="mx-auto text-2xl font-bold">Roster</h1>
                         <div className="flex items-center justify-center">
-                            <button className="bg-primary text-background hover:bg-primary/80 rounded-md px-4 py-2">
-                                Add player
-                            </button>
+                            <PlayerForm />
                         </div>
                     </div>
                     <Table>

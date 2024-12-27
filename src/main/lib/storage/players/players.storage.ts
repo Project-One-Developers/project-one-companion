@@ -105,16 +105,21 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
     })
 }
 
-const addPlayer = async (playerName: string): Promise<Player> => {
+export const addPlayer = async (playerName: string): Promise<Player> => {
+    const id = newUUID()
+
     const result = await db
         .insert(playerTable)
         .values({
-            id: newUUID(),
+            id: id,
             name: playerName
         })
         .returning()
         .execute()
         .then(takeFirstResult)
 
-    return playerSchema.parse(result)
+    return playerSchema.parse({
+        id,
+        playerName: result.name
+    })
 }
