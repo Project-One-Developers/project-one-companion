@@ -1,4 +1,4 @@
-import { Code2Icon, LucideEye, PlusIcon, Settings } from 'lucide-react'
+import { Code2Icon, LucideEye } from 'lucide-react'
 import {
     Sidebar,
     SidebarContent,
@@ -12,17 +12,12 @@ import {
 
 const rosterItems = [
     {
-        title: 'Visualizza Roster',
+        title: 'Roster',
         url: '/roster',
         icon: LucideEye
     },
     {
-        title: 'Aggiungi player',
-        url: '/add-player',
-        icon: PlusIcon
-    },
-    {
-        title: 'Aggiungi droptimizer',
+        title: 'Droptimizer',
         url: '/droptimizer',
         icon: Code2Icon
     }
@@ -79,13 +74,6 @@ export default function ProjectOneSidebar(): JSX.Element {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                <div className="mt-auto p-4 flex justify-start items-center">
-                    {/* <ThemeSwitcher /> */}
-                    <a href="/config" className="flex items-center gap-2">
-                        <Settings />
-                        <span>Settings</span>
-                    </a>
-                </div>
             </SidebarContent>
         </Sidebar>
     )
