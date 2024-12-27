@@ -1,4 +1,5 @@
 import { CharacterForm } from '@renderer/components/character-form'
+import DeletePlayerDialog from '@renderer/components/delete-player-dialog'
 import PlayerForm from '@renderer/components/new-player-form'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
 import {
@@ -12,7 +13,7 @@ import {
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { useQuery } from '@tanstack/react-query'
-import { Edit, LoaderCircle, Trash } from 'lucide-react'
+import { Edit, LoaderCircle } from 'lucide-react'
 
 export default function RosterPage(): JSX.Element {
     const { data, isLoading } = useQuery({
@@ -56,7 +57,7 @@ export default function RosterPage(): JSX.Element {
                                     ) : null}
                                     <TableCell className="flex items-center gap-x-2 h-[100px]">
                                         <Edit className="cursor-pointer" />
-                                        <Trash className="cursor-pointer" />
+                                        <DeletePlayerDialog player={player} />
                                         <CharacterForm playerName={player.playerName} />
                                     </TableCell>
                                 </TableRow>

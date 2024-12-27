@@ -123,3 +123,14 @@ export const addPlayer = async (playerName: string): Promise<Player> => {
         playerName: result?.name
     })
 }
+
+export const deletePlayer = async (playerId: string): Promise<void> => {
+    await db
+        .delete(playerTable)
+        .where(eq(playerTable.id, playerId))
+        .returning()
+        .execute()
+        .then(takeFirstResult)
+
+    return
+}

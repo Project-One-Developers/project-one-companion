@@ -15,6 +15,9 @@ export const api = {
     },
     addPlayer(playerName: string): Promise<Player | null> {
         return ipcRenderer.invoke('add-player', playerName)
+    },
+    deletePlayer(playerId: string): Promise<void> {
+        return ipcRenderer.invoke('delete-player', playerId)
     }
 }
 

@@ -14,3 +14,8 @@ export const addPlayer = async (playerName: string): Promise<Player | null> => {
     const response = await window.api.addPlayer(playerName)
     return response
 }
+
+export const deletePlayer = async (playerId: string): Promise<void> => {
+    const response = await window.api.deletePlayer(playerId)
+    return response
+}
