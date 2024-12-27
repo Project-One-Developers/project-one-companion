@@ -96,7 +96,7 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
         characters: [
             {
                 id,
-                characterName: result.name,
+                characterName: result?.name,
                 class: character.class,
                 role: character.role,
                 playerId: player.id
@@ -120,6 +120,6 @@ export const addPlayer = async (playerName: string): Promise<Player> => {
 
     return playerSchema.parse({
         id,
-        playerName: result.name
+        playerName: result?.name
     })
 }
