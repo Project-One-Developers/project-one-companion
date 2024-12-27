@@ -1,8 +1,13 @@
 import { readFileSync } from 'fs'
 import * as path from 'path'
 import { z } from 'zod'
-import { bossSchema, itemSchema, itemToTiersetSchema } from '../../../../shared/schemas/wow.schemas'
-import { Boss, Item, ItemToTierset } from '../../../../shared/types/types'
+import {
+    bossSchema,
+    itemSchema,
+    itemToCatalystSchema,
+    itemToTiersetSchema
+} from '../../../../shared/schemas/wow.schemas'
+import { Boss, Item, ItemToCatalyst, ItemToTierset } from '../../../../shared/types/types'
 
 export const fetchRaidItems = (): Item[] => {
     const jsonData = JSON.parse(
@@ -57,4 +62,12 @@ export const fetchItemsToTierset = (): ItemToTierset[] => {
     )
 
     return z.array(itemToTiersetSchema).parse(jsonData)
+}
+
+export const fetchItemsToCatalyst = (): ItemToCatalyst[] => {
+    const jsonData = JSON.parse(
+        readFileSync(path.join(__dirname, '../../resources/wow/items_to_catalyst.json'), 'utf-8')
+    )
+
+    return z.array(itemToCatalystSchema).parse(jsonData)
 }

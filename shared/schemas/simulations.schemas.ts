@@ -23,6 +23,7 @@ export const droptimizerSchema = z.object({
 export const newDroptimizerSchema = droptimizerSchema.omit({ id: true, upgrades: true }).extend({
     upgrades: z.array(
         z.object({
+            encounterId: z.number(),
             itemId: z.number(),
             dps: z.number()
         })

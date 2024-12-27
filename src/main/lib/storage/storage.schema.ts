@@ -1,5 +1,14 @@
 import { relations } from 'drizzle-orm'
-import { boolean, integer, pgEnum, pgTable, text, unique, varchar } from 'drizzle-orm/pg-core'
+import {
+    boolean,
+    integer,
+    pgEnum,
+    pgTable,
+    primaryKey,
+    text,
+    unique,
+    varchar
+} from 'drizzle-orm/pg-core'
 import { CLASSES, RAID_DIFF, ROLES } from '../../../../shared/consts/wow.consts'
 
 export const pgClassEnum = pgEnum('class', CLASSES)
@@ -27,6 +36,7 @@ export const droptimizerUpgradesTable = pgTable('droptimizer_upgrades', {
     itemId: integer('item_id')
         .references(() => itemTable.id)
         .notNull(),
+    catalyzedItemId: integer('catalyzed_item_id').references(() => itemTable.id),
     droptimizerId: varchar('droptimizer_id')
         .references(() => droptimizerTable.id)
         .notNull()
@@ -117,11 +127,28 @@ export const itemTable = pgTable('items', {
 
 // Mapping tra itemId e Tier Token che lo genera - contiene l'import di public/items_to_tierset.csv
 export const itemToTiersetTable = pgTable('items_to_tierset', {
-    itemId: integer('itemId').primaryKey(),
-    tokenId: integer('tokenId')
+    itemId: integer('item_id').primaryKey(),
+    tokenId: integer('token_id')
         .references(() => itemTable.id)
         .notNull()
 })
+
+// Mapping tra itemId e relativi catalyst (preso da public/items_to_catalyst.json)
+// La logica è: catalyzedItemId è l'item id ottenuto se dovessi catalizzare l'itemId.
+// encounterId ci server per il reverse lookup: da catalyzedItemId + encounterId risalgo all'itemId originale
+export const itemToCatalystTable = pgTable(
+    'items_to_catalyst',
+    {
+        itemId: integer('item_id'),
+        encounterId: integer('encounter_id'),
+        catalyzedItemId: integer('catalyzed_item_id')
+    },
+    (t) => [
+        {
+            pk: primaryKey({ columns: [t.itemId, t.encounterId, t.catalyzedItemId] }) // todo: non va
+        }
+    ]
+)
 
 export const lootTable = pgTable('loots', {
     id: varchar('id').primaryKey(),
