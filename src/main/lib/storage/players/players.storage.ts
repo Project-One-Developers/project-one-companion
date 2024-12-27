@@ -1,10 +1,47 @@
 import { eq } from 'drizzle-orm'
-import { playerSchema } from '../../../../../shared/schemas/characters.schemas'
+import {
+    charactersListSchema,
+    playerSchema
+} from '../../../../../shared/schemas/characters.schemas'
 import { NewCharacter, Player } from '../../../../../shared/types/types'
 import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { charTable, playerTable } from '../storage.schema'
 import { takeFirstResult } from '../storage.utils'
+
+export const getCharactersList = async (): Promise<{ players: Player[] } | null> => {
+    const result = await db.select().from(playerTable)
+
+    if (!result) {
+        return null
+    }
+
+    const playersWithCharacters = await Promise.all(
+        result.map(async (player) => {
+            const charactersResult = await db
+                .select()
+                .from(charTable)
+                .where(eq(charTable.playerId, player.id))
+
+            const playerWithCharacters = {
+                id: player.id,
+                playerName: player.name,
+                characters: charactersListSchema.parse({
+                    characters: charactersResult.map((c) => ({
+                        id: c.id,
+                        characterName: c.name,
+                        class: c.class,
+                        role: c.role
+                    }))
+                }).characters
+            }
+
+            return playerWithCharacters
+        })
+    )
+
+    return { players: playersWithCharacters }
+}
 
 export const getPlayerById = async (playerId: string): Promise<Player | null> => {
     const result = await db

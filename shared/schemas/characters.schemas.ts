@@ -16,6 +16,14 @@ export const playerSchema = z.object({
     characters: z.array(characterSchema).optional()
 })
 
+export const charactersListSchema = z.object({
+    characters: z.array(characterSchema)
+})
+
+export const playersListSchema = z.object({
+    players: z.array(playerSchema)
+})
+
 export const newCharacterSchema = characterSchema
     .omit({
         id: true,
