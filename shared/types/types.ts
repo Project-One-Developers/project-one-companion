@@ -5,7 +5,7 @@ import {
     newDroptimizerSchema,
     raidbotsURLSchema
 } from '../schemas/simulations.schemas'
-import { bossSchema, itemSchema, wowClassSchema } from '../schemas/wow.schemas'
+import { bossSchema, itemSchema, itemToTiersetSchema, wowClassSchema } from '../schemas/wow.schemas'
 
 export type WowClass = z.infer<typeof wowClassSchema>
 
@@ -18,6 +18,7 @@ export type Character = z.infer<typeof characterSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
 
 export type Item = z.infer<typeof itemSchema>
+export type ItemToTierset = z.infer<typeof itemToTiersetSchema>
 
 export type Boss = z.infer<typeof bossSchema>
 

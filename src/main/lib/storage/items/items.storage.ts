@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm'
 import { match } from 'ts-pattern'
-import { Item } from '../../../../../shared/types/types'
+import { Item, ItemToTierset } from '../../../../../shared/types/types'
 import { db } from '../storage.config'
-import { itemTable } from '../storage.schema'
+import { itemTable, itemToTiersetTable } from '../storage.schema'
 
 export const upsertItems = async (items: Item[]): Promise<void> => {
     const itemsInDb = await db.query.itemTable.findMany()
@@ -16,4 +16,9 @@ export const upsertItems = async (items: Item[]): Promise<void> => {
     })
 
     await Promise.all(upserts)
+}
+
+export const upsertItemsToTierset = async (itemsToTierset: ItemToTierset[]): Promise<void> => {
+    await db.delete(itemToTiersetTable)
+    await db.insert(itemToTiersetTable).values(itemsToTierset)
 }

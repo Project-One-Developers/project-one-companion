@@ -88,7 +88,7 @@ export const raidSessionRosterTable = pgTable(
 
 export const bossTable = pgTable('bosses', {
     id: integer('id').primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
-    name: varchar('name', { length: 255 }).notNull(),
+    name: varchar('name', { length: 255 }).notNull().unique(),
     raid: varchar('raid', { length: 255 }).notNull(),
     order: integer('order').notNull()
 })
@@ -100,17 +100,17 @@ export const itemTable = pgTable('items', {
     ilvlMythic: integer('ilvl_mythic'),
     ilvlHeroic: integer('ilvl_heroic'),
     ilvlNormal: integer('ilvl_normal'),
-    bonusID: varchar('bonus_id', { length: 50 }),
     itemClass: varchar('item_class', { length: 50 }),
     slot: varchar('slot', { length: 50 }),
     itemSubclass: varchar('item_subclass', { length: 50 }),
     tierPrefix: varchar('tier_prefix', { length: 50 }), // es: Dreadful
     tier: boolean('tier').notNull().default(false), // se è un item tierser
     veryRare: boolean('very_rare').notNull().default(false),
-    specs: text('specs'),
-    specIds: varchar('spec_ids', { length: 255 }),
-    classes: varchar('classes', { length: 255 }),
-    classesId: varchar('classes_id', { length: 50 }),
+    boe: boolean('boe').notNull().default(false),
+    specs: text('specs').array(), // null == tutte le spec
+    specIds: text('spec_ids').array(),
+    classes: text('classes').array(),
+    classesId: text('classes_id').array(),
     stats: text('stats'),
     mainStats: varchar('main_stats', { length: 50 }),
     secondaryStats: varchar('secondary_stats', { length: 50 }),
@@ -120,6 +120,14 @@ export const itemTable = pgTable('items', {
     bossName: varchar('boss_name', { length: 255 }), // ridondante ma utile
     bossId: integer('boss_id')
         .references(() => bossTable.id)
+        .notNull()
+})
+
+// Mapping tra itemId e Tier Token che lo genera - contiene l'import di public/items_to_tierset.csv
+export const itemToTiersetTable = pgTable('items_to_tierset', {
+    itemId: integer('itemId').primaryKey(),
+    tokenId: integer('tokenId')
+        .references(() => itemTable.id)
         .notNull()
 })
 

@@ -33,10 +33,10 @@ export const itemSchema = z.object({
     tierPrefix: z.string().nullish(),
     tier: z.boolean().default(false),
     veryRare: z.boolean().default(false),
-    specs: z.string().nullish(),
-    specIds: z.string().nullish(),
-    classes: z.string().nullish(),
-    classesId: z.string().nullish(),
+    specs: z.string().array().nullish(),
+    specIds: z.string().array().nullish(),
+    classes: z.string().array().nullish(),
+    classesId: z.string().array().nullish(),
     stats: z.string().nullish(),
     mainStats: z.string().nullish(),
     secondaryStats: z.string().nullish(),
@@ -52,4 +52,9 @@ export const bossSchema = z.object({
     name: z.string(),
     raid: z.string(),
     order: z.number()
+})
+
+export const itemToTiersetSchema = z.object({
+    itemId: z.number(),
+    tokenId: z.number()
 })
