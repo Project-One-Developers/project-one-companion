@@ -97,11 +97,6 @@ export const addPlayer = async (playerName: string): Promise<Player> => {
 }
 
 export const deletePlayer = async (playerId: string): Promise<void> => {
-    await db
-        .delete(playerTable)
-        .where(eq(playerTable.id, playerId))
-        .returning()
-        .then(takeFirstResult)
-
-    return
+    await db.delete(charTable).where(eq(charTable.playerId, playerId))
+    await db.delete(playerTable).where(eq(playerTable.id, playerId))
 }
