@@ -34,6 +34,7 @@ export const itemSchema = z.object({
     tier: z.boolean().default(false),
     veryRare: z.boolean().default(false),
     catalyzed: z.boolean().default(false),
+    boe: z.boolean().default(false),
     specs: z.string().array().nullish(),
     specIds: z.string().array().nullish(),
     classes: z.string().array().nullish(),

@@ -12,7 +12,7 @@ import {
 } from './items.utils'
 
 export const reloadItemsHandler = async (): Promise<void> => {
-    console.log('Reloading resources/items.csv')
+    console.log('Reloading resources/wow/*.json')
 
     const raidItems = fetchRaidItems()
     const raidBosses = fetchRaidBosses()
