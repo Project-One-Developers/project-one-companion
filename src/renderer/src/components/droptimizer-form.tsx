@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { raidbotsURLSchema } from '../../../../shared/schemas/simulations.schemas'
 import { useToast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'

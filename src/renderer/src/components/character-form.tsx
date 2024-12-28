@@ -2,11 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addCharacter } from '@renderer/lib/tanstack-query/players'
+import { CLASSES, ROLES } from '@shared/consts/wow.consts'
+import { wowClassSchema, wowRolesSchema } from '@shared/schemas/wow.schemas'
+import { NewCharacter } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2, PlusIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { NewCharacter } from 'shared/types/types'
 import { z } from 'zod'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
@@ -17,40 +19,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 const newCharacterSchema = z.object({
     characterName: z.string().min(1),
-    class: z.enum([
-        'Death Knight',
-        'Demon Hunter',
-        'Druid',
-        'Evoker',
-        'Hunter',
-        'Mage',
-        'Monk',
-        'Paladin',
-        'Priest',
-        'Rogue',
-        'Shaman',
-        'Warlock',
-        'Warrior'
-    ]),
-    role: z.enum(['Tank', 'Healer', 'DPS']),
+    class: wowClassSchema,
+    role: wowRolesSchema,
     playerName: z.string().min(1)
 })
-const CLASSES = [
-    'Death Knight',
-    'Demon Hunter',
-    'Druid',
-    'Evoker',
-    'Hunter',
-    'Mage',
-    'Monk',
-    'Paladin',
-    'Priest',
-    'Rogue',
-    'Shaman',
-    'Warlock',
-    'Warrior'
-]
-const ROLES = ['Tank', 'Healer', 'DPS']
 
 export function CharacterForm({ playerName }: { playerName: string }): JSX.Element {
     const [open, setOpen] = useState(false)
