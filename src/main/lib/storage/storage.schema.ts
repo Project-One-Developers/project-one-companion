@@ -125,7 +125,7 @@ export const itemTable = pgTable('items', {
     wowheadUrl: text('wowhead_url'),
     iconName: varchar('icon_name', { length: 255 }),
     iconUrl: text('icon_url'),
-    catalyst: boolean('catalyzed').notNull().default(false), // se questo item è ottenibile solo tramite catalyst - todo: sul db viene messo sempre false.
+    catalyzed: boolean('catalyzed').notNull().default(false), // se questo item è ottenibile solo tramite catalyst - todo: sul db viene messo sempre false.
     bossName: varchar('boss_name', { length: 255 }), // ridondante ma utile
     bossId: integer('boss_id')
         .references(() => bossTable.id)
