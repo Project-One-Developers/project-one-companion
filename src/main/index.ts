@@ -6,7 +6,6 @@ import { z } from 'zod'
 import icon from '../../resources/icon.png?asset'
 import { allHandlers } from './handlers'
 import { registerHandlers } from './handlers/handlers.utils'
-import { reloadItemsHandler } from './handlers/items/items.handlers'
 
 const DEFAULT_WIDTH = 1920
 const DEFAULT_HEIGHT = 1080
@@ -76,11 +75,6 @@ function createWindow(): void {
     })
 }
 
-// This method will seed initial data into the app
-async function seedData(): Promise<void> {
-    await reloadItemsHandler()
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -96,8 +90,6 @@ app.whenReady().then(() => {
     })
 
     registerHandlers(allHandlers)
-
-    seedData()
 
     createWindow()
 

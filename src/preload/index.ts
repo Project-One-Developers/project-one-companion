@@ -18,6 +18,9 @@ export const api = {
     },
     deletePlayer(playerId: string): Promise<void> {
         return ipcRenderer.invoke('delete-player', playerId)
+    },
+    upsertJsonData(): Promise<void> {
+        return ipcRenderer.invoke('upsert-json-data')
     }
 }
 

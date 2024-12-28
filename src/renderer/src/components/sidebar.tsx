@@ -1,4 +1,5 @@
-import { Code2Icon, LucideEye } from 'lucide-react'
+import { Code2Icon, ListRestart, LucideEye } from 'lucide-react'
+import { toast } from './hooks/use-toast'
 import {
     Sidebar,
     SidebarContent,
@@ -37,6 +38,23 @@ const weakaurasItems = [
 ]
 
 export default function ProjectOneSidebar(): JSX.Element {
+    const upsertJsonData = async (): Promise<void> => {
+        await window.api
+            .upsertJsonData()
+            .then(() => {
+                toast({
+                    title: 'Resources updated',
+                    description: 'Data from JSON files has been updated in the database.'
+                })
+            })
+            .catch((error) => {
+                toast({
+                    title: 'Error',
+                    description: `Could not update resources. Error: ${error.message}`
+                })
+            })
+    }
+
     return (
         <Sidebar>
             <SidebarContent>
@@ -75,6 +93,14 @@ export default function ProjectOneSidebar(): JSX.Element {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <div className="absolute bottom-4 left-4">
+                <button
+                    onClick={upsertJsonData}
+                    className="p-2 rounded-full hover:bg-muted focus:outline-none"
+                >
+                    <ListRestart />
+                </button>
+            </div>
         </Sidebar>
     )
 }

@@ -9,9 +9,9 @@ import {
     fetchItemsToTierset,
     fetchRaidBosses,
     fetchRaidItems
-} from './items.utils'
+} from './json-data.utils'
 
-export const reloadItemsHandler = async (): Promise<void> => {
+export const upsertJsonDataHandler = async (): Promise<void> => {
     console.log('Reloading resources/wow/*.json')
 
     const raidItems = fetchRaidItems()
