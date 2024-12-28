@@ -1,10 +1,10 @@
+import { playerSchema } from '@shared/schemas/characters.schemas'
+import { NewCharacter, Player } from '@shared/types/types'
+import { db } from '@storage/storage.config'
+import { charTable, playerTable } from '@storage/storage.schema'
+import { takeFirstResult } from '@storage/storage.utils'
 import { eq } from 'drizzle-orm'
-import { playerSchema } from '../../../../../shared/schemas/characters.schemas'
-import { NewCharacter, Player } from '../../../../../shared/types/types'
 import { newUUID } from '../../utils'
-import { db } from '../storage.config'
-import { charTable, playerTable } from '../storage.schema'
-import { takeFirstResult } from '../storage.utils'
 import { playersListStorageSchema } from './players.schemas'
 
 export const getCharactersList = async (): Promise<Player[]> => {

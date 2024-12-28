@@ -1,8 +1,8 @@
-import { Droptimizer, NewDroptimizer } from '../../../../../shared/types/types'
+import { Droptimizer, NewDroptimizer } from '@shared/types/types'
+import { db } from '@storage/storage.config'
+import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
+import { takeFirstResult } from '@storage/storage.utils'
 import { newUUID } from '../../utils'
-import { db } from '../storage.config'
-import { droptimizerTable, droptimizerUpgradesTable } from '../storage.schema'
-import { takeFirstResult } from '../storage.utils'
 import { droptimizerStorageSchema } from './droptimizer.schemas'
 import { UpgradesTableInsert } from './droptimizer.types'
 

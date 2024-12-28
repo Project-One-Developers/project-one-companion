@@ -1,5 +1,5 @@
+import * as schema from '@storage/storage.schema'
 import { drizzle } from 'drizzle-orm/node-postgres'
-import * as schema from './storage.schema'
 
 require('dotenv').config()
 

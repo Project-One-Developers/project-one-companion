@@ -1,4 +1,4 @@
-import { Item, ItemToCatalyst, ItemToTierset } from '../../../../../shared/types/types'
+import { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { db } from '../storage.config'
 import { itemTable, itemToCatalystTable, itemToTiersetTable } from '../storage.schema'
 import { conflictUpdateAllExcept } from '../storage.utils'

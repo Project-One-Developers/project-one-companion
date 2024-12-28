@@ -1,5 +1,5 @@
+import { wowClassSchema, wowRolesSchema } from '@shared/schemas/wow.schemas'
 import { z } from 'zod'
-import { wowClassSchema, wowRolesSchema } from '../../../../../shared/schemas/wow.schemas'
 
 const playerStorageSchema = z
     .object({

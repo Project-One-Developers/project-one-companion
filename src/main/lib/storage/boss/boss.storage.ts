@@ -1,7 +1,7 @@
-import { Boss } from '../../../../../shared/types/types'
-import { db } from '../storage.config'
-import { bossTable } from '../storage.schema'
-import { conflictUpdateAllExcept } from '../storage.utils'
+import { Boss } from '@shared/types/types'
+import { db } from '@storage/storage.config'
+import { bossTable } from '@storage/storage.schema'
+import { conflictUpdateAllExcept } from '@storage/storage.utils'
 
 export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
     await db
