@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { wowClassSchema, wowRolesSchema } from '../../../../../shared/schemas/wow.schemas'
 
-const playerPGSchema = z
+const playerStorageSchema = z
     .object({
         id: z.string(),
         name: z.string(),
@@ -26,4 +26,4 @@ const playerPGSchema = z
         }))
     }))
 
-export const playersListPGSchema = z.array(playerPGSchema)
+export const playersListStorageSchema = z.array(playerStorageSchema)

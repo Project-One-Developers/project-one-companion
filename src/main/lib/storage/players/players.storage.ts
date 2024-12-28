@@ -5,7 +5,7 @@ import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { charTable, playerTable } from '../storage.schema'
 import { takeFirstResult } from '../storage.utils'
-import { playersListPGSchema } from './players.schemas'
+import { playersListStorageSchema } from './players.schemas'
 
 export const getCharactersList = async (): Promise<Player[]> => {
     const result = await db.query.playerTable.findMany({
@@ -14,7 +14,7 @@ export const getCharactersList = async (): Promise<Player[]> => {
         }
     })
 
-    return playersListPGSchema.parse(result)
+    return playersListStorageSchema.parse(result)
 }
 
 export const getPlayerById = async (playerId: string): Promise<Player | null> => {

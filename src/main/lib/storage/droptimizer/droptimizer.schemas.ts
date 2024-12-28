@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
-const upgradesModelSchema = z.object({
+const upgradesStorageSchema = z.object({
     itemId: z.number(),
     dps: z.number()
 })
 
-export const droptimizerModelSchema = z
+export const droptimizerStorageSchema = z
     .object({
         id: z.string(),
         url: z.string().url(),
@@ -16,7 +16,7 @@ export const droptimizerModelSchema = z
         duration: z.number().min(1),
         nTargets: z.number().min(1),
         characterName: z.string(),
-        upgrades: z.array(upgradesModelSchema)
+        upgrades: z.array(upgradesStorageSchema)
     })
     .transform((data) => {
         return {

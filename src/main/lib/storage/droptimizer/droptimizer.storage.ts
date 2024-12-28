@@ -3,7 +3,7 @@ import { newUUID } from '../../utils'
 import { db } from '../storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '../storage.schema'
 import { takeFirstResult } from '../storage.utils'
-import { droptimizerModelSchema } from './droptimizer.schemas'
+import { droptimizerStorageSchema } from './droptimizer.schemas'
 import { UpgradesTableInsert } from './droptimizer.types'
 
 /**
@@ -24,7 +24,7 @@ export const getDroptimizer = async (droptimizerId: string): Promise<Droptimizer
         return null
     }
 
-    return droptimizerModelSchema.parse(result)
+    return droptimizerStorageSchema.parse(result)
 }
 
 /**
@@ -58,7 +58,7 @@ export const getLatestDroptimizerByCharAndDiff = async (
         return null
     }
 
-    return droptimizerModelSchema.parse(result)
+    return droptimizerStorageSchema.parse(result)
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
@@ -124,5 +124,5 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         }
     })
 
-    return droptimizerModelSchema.parse(result)
+    return droptimizerStorageSchema.parse(result)
 }
