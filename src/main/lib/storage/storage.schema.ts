@@ -30,17 +30,24 @@ export const charTable = pgTable('chars', {
         .notNull()
 })
 
-export const droptimizerUpgradesTable = pgTable('droptimizer_upgrades', {
-    id: varchar('id').primaryKey(),
-    dps: integer('dps').notNull(),
-    itemId: integer('item_id')
-        .references(() => itemTable.id)
-        .notNull(),
-    catalyzedItemId: integer('catalyzed_item_id').references(() => itemTable.id),
-    droptimizerId: varchar('droptimizer_id')
-        .references(() => droptimizerTable.id)
-        .notNull()
-})
+export const droptimizerUpgradesTable = pgTable(
+    'droptimizer_upgrades',
+    {
+        id: varchar('id').primaryKey(),
+        dps: integer('dps').notNull(),
+        slot: varchar('slot').notNull(),
+        itemId: integer('item_id')
+            .references(() => itemTable.id)
+            .notNull(),
+        catalyzedItemId: integer('catalyzed_item_id').references(() => itemTable.id),
+        droptimizerId: varchar('droptimizer_id')
+            .references(() => droptimizerTable.id)
+            .notNull()
+    },
+    (t) => [
+        unique('item_upgrade_in_droptimizer').on(t.itemId, t.droptimizerId) // un itemid per droptimizer
+    ]
+)
 
 export const droptimizerUpgradesRelations = relations(droptimizerUpgradesTable, ({ one }) => ({
     droptimizer: one(droptimizerTable, {

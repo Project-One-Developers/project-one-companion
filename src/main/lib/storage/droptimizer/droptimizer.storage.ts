@@ -61,6 +61,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 id: newUUID(),
                 droptimizerId: droptimizerRes.id,
                 itemId: itemMapping ? itemMapping.tokenId : up.itemId, // itemId of the tier token looted by boss
+                slot: up.slot,
                 dps: up.dps,
                 ...(catalystMapping && {
                     itemId: catalystMapping.itemId, // itemId looted by boss

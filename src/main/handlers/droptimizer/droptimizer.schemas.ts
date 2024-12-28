@@ -10,6 +10,7 @@ export const csvDataSchema = z.string().transform((data) => {
             const [nameOrId, dmg] = row.split(',')
             return { nameOrId, dmg }
         })
+
     const [firstRow, ...itemRows] = rows
 
     const characterName = firstRow.nameOrId
@@ -19,11 +20,24 @@ export const csvDataSchema = z.string().transform((data) => {
         .map((row) => ({
             dps: Math.round(parseFloat(row.dmg) - baseDmg),
             encounterId: Number(row.nameOrId.split('/')[1]),
-            itemId: Number(row.nameOrId.split('/')[3])
+            itemId: Number(row.nameOrId.split('/')[3]),
+            slot: row.nameOrId.split('/')[6]
         }))
         .filter((item) => item.dps > 0)
+        .reduce((acc, item) => {
+            const existingItem = acc.get(item.itemId)
+            if (!existingItem || item.dps > existingItem.dps) {
+                acc.set(item.itemId, item)
+            }
+            return acc
+        }, new Map()) // Map to keep the maximum DPS per itemId
+        .values()
 
-    return { characterName, baseDmg, upgrades }
+    return {
+        characterName,
+        baseDmg,
+        upgrades: Array.from(upgrades)
+    }
 })
 
 export const jsonDataSchema = z

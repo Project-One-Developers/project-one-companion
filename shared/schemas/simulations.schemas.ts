@@ -25,7 +25,8 @@ export const newDroptimizerSchema = droptimizerSchema.omit({ id: true, upgrades:
         z.object({
             encounterId: z.number(),
             itemId: z.number(),
-            dps: z.number()
+            dps: z.number(),
+            slot: z.string()
         })
     )
 })
