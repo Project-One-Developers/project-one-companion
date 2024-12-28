@@ -20,7 +20,7 @@ export default defineConfig({
         resolve: {
             alias: {
                 '@renderer': resolve('src/renderer/src'),
-                shared: path.resolve(__dirname, '/shared')
+                '@shared': path.resolve(__dirname, 'shared')
             }
         },
         plugins: [react()]
