@@ -5,7 +5,8 @@
         "storage",
         "schemas",
         "renderer",
-        "items"
+        "items",
+        "players"
     ],
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"

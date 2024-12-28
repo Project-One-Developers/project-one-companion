@@ -30,6 +30,17 @@ export const charTable = pgTable('chars', {
         .notNull()
 })
 
+export const playerCharRelations = relations(playerTable, ({ many }) => ({
+    chars: many(charTable)
+}))
+
+export const charPlayerRelations = relations(charTable, ({ one }) => ({
+    player: one(playerTable, {
+        fields: [charTable.playerId],
+        references: [playerTable.id]
+    })
+}))
+
 export const droptimizerUpgradesTable = pgTable(
     'droptimizer_upgrades',
     {

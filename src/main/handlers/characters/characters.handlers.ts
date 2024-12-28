@@ -11,7 +11,8 @@ export const addCharacterHandler = async (character: NewCharacter): Promise<Play
 }
 
 export const getCharactersListHandler = async (): Promise<{ players: Player[] }> => {
-    return await getCharactersList()
+    const players = await getCharactersList()
+    return { players }
 }
 
 export const addPlayerHandler = async (playerName: string): Promise<Player> => {
