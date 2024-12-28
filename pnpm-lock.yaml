@@ -21,8 +21,8 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
-        specifier: ^5.62.10
-        version: 5.62.10(react@18.3.1)
+        specifier: ^5.62.11
+        version: 5.62.11(react@18.3.1)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
@@ -39,10 +39,10 @@ importers:
         specifier: ^0.30.1
         version: 0.30.1
       drizzle-orm:
-        specifier: ^0.38.2
+        specifier: ^0.38.3
         version: 0.38.3(@types/react@18.3.18)(pg@8.13.1)(react@18.3.1)
       electron-updater:
-        specifier: ^6.1.7
+        specifier: ^6.3.9
         version: 6.3.9
       framer-motion:
         specifier: ^11.15.0
@@ -69,7 +69,7 @@ importers:
         specifier: ^7.1.1
         version: 7.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       shared:
-        specifier: file:./shared
+        specifier: file:shared
         version: file:shared
       tailwind-merge:
         specifier: ^2.6.0
@@ -100,19 +100,19 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(@types/node@20.17.10)
       '@types/node':
-        specifier: ^20.14.8
+        specifier: ^20.17.10
         version: 20.17.10
       '@types/react':
-        specifier: ^18.3.3
+        specifier: ^18.3.18
         version: 18.3.18
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.5
         version: 18.3.5(@types/react@18.3.18)
       '@vitejs/plugin-react':
-        specifier: ^4.3.1
+        specifier: ^4.3.4
         version: 4.3.4(vite@5.4.11(@types/node@20.17.10))
       electron:
-        specifier: ^31.0.2
+        specifier: ^31.7.6
         version: 31.7.6
       electron-builder:
         specifier: ^24.13.3
@@ -121,13 +121,13 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0(vite@5.4.11(@types/node@20.17.10))
       eslint:
-        specifier: ^8.57.0
+        specifier: ^8.57.1
         version: 8.57.1
       eslint-plugin-react:
-        specifier: ^7.34.3
+        specifier: ^7.37.3
         version: 7.37.3(eslint@8.57.1)
       prettier:
-        specifier: ^3.3.2
+        specifier: ^3.4.2
         version: 3.4.2
       react:
         specifier: ^18.3.1
@@ -136,10 +136,10 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       typescript:
-        specifier: ^5.5.2
+        specifier: ^5.7.2
         version: 5.7.2
       vite:
-        specifier: ^5.3.1
+        specifier: ^5.4.11
         version: 5.4.11(@types/node@20.17.10)
 
 packages:
@@ -1542,8 +1542,8 @@ packages:
   '@tanstack/query-core@5.62.9':
     resolution: {integrity: sha512-lwePd8hNYhyQ4nM/iRQ+Wz2cDtspGeZZHFZmCzHJ7mfKXt+9S301fULiY2IR2byJYY6Z03T427E5PoVfMexHjw==}
 
-  '@tanstack/react-query@5.62.10':
-    resolution: {integrity: sha512-1e1WpHM5oGf27nWM/NWLY62/X9pbMBWa6ErWYmeuK0OqB9/g9UzA59ogiWbxCmS2wtAFQRhOdHhfSofrkhPl2g==}
+  '@tanstack/react-query@5.62.11':
+    resolution: {integrity: sha512-Xb1nw0cYMdtFmwkvH9+y5yYFhXvLRCnXoqlzSw7UkqtCVFq3cG8q+rHZ2Yz1XrC+/ysUaTqbLKJqk95mCgC1oQ==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -5178,7 +5178,7 @@ snapshots:
 
   '@tanstack/query-core@5.62.9': {}
 
-  '@tanstack/react-query@5.62.10(react@18.3.1)':
+  '@tanstack/react-query@5.62.11(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.62.9
       react: 18.3.1
