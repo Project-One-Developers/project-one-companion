@@ -1,3 +1,4 @@
+import { CLASSES, RAID_DIFF, ROLES } from '@shared/consts/wow.consts'
 import { relations } from 'drizzle-orm'
 import {
     boolean,
@@ -9,7 +10,6 @@ import {
     unique,
     varchar
 } from 'drizzle-orm/pg-core'
-import { CLASSES, RAID_DIFF, ROLES } from '../../../../shared/consts/wow.consts'
 
 export const pgClassEnum = pgEnum('class', CLASSES)
 export const pgRoleEnum = pgEnum('role', ROLES)

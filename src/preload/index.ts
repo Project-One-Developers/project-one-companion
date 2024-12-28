@@ -1,6 +1,6 @@
 import { electronAPI } from '@electron-toolkit/preload'
+import { Droptimizer, NewCharacter, Player } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
-import { Droptimizer, NewCharacter, Player } from '../../shared/types/types'
 
 // Custom APIs for renderer
 export const api = {

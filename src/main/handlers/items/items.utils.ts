@@ -1,13 +1,13 @@
-import { readFileSync } from 'fs'
-import * as path from 'path'
-import { z } from 'zod'
 import {
     bossSchema,
     itemSchema,
     itemToCatalystSchema,
     itemToTiersetSchema
-} from '../../../../shared/schemas/wow.schemas'
-import { Boss, Item, ItemToCatalyst, ItemToTierset } from '../../../../shared/types/types'
+} from '@shared/schemas/wow.schemas'
+import { Boss, Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
+import { readFileSync } from 'fs'
+import * as path from 'path'
+import { z } from 'zod'
 
 export const fetchRaidItems = (): Item[] => {
     const jsonData = JSON.parse(

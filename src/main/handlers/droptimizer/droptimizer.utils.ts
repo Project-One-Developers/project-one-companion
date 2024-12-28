@@ -1,6 +1,6 @@
+import { RaidbotsURL } from '@shared/types/types'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
-import { RaidbotsURL } from '../../../../shared/types/types'
 import { csvDataSchema, jsonDataSchema } from './droptimizer.schemas'
 
 export const fetchRaidbotsData = async (

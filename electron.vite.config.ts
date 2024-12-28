@@ -5,7 +5,13 @@ import tailwindcss from 'tailwindcss'
 
 export default defineConfig({
     main: {
-        plugins: [externalizeDepsPlugin()]
+        plugins: [externalizeDepsPlugin()],
+        resolve: {
+            alias: {
+                '@shared': path.resolve(__dirname, 'shared'),
+                '@storage': path.resolve(__dirname, 'src/main/lib/storage')
+            }
+        }
     },
     preload: {
         plugins: [externalizeDepsPlugin()]

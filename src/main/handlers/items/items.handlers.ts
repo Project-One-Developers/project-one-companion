@@ -1,9 +1,9 @@
-import { upsertBosses } from '../../lib/storage/boss/boss.storage'
+import { upsertBosses } from '@storage/boss/boss.storage'
 import {
     upsertItems,
     upsertItemsToCatalyst,
     upsertItemsToTierset
-} from '../../lib/storage/items/items.storage'
+} from '@storage/items/items.storage'
 import {
     fetchItemsToCatalyst,
     fetchItemsToTierset,
