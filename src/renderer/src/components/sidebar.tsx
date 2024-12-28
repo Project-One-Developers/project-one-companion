@@ -92,15 +92,15 @@ export default function ProjectOneSidebar(): JSX.Element {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+                <SidebarGroup className="mt-auto">
+                    <button
+                        onClick={upsertJsonData}
+                        className="p-2 rounded-full hover:bg-muted w-fit focus:outline-none"
+                    >
+                        <ListRestart />
+                    </button>
+                </SidebarGroup>
             </SidebarContent>
-            <div className="absolute bottom-4 left-4">
-                <button
-                    onClick={upsertJsonData}
-                    className="p-2 rounded-full hover:bg-muted focus:outline-none"
-                >
-                    <ListRestart />
-                </button>
-            </div>
         </Sidebar>
     )
 }
