@@ -13,11 +13,11 @@ export const csvDataSchema = z.string().transform((data) => {
     const [firstRow, ...itemRows] = rows
 
     const characterName = firstRow.nameOrId
-    const baseDmg = Number(firstRow.dmg)
+    const baseDmg = parseFloat(firstRow.dmg)
 
     const upgrades = itemRows
         .map((row) => ({
-            dps: Math.round(Number(row.dmg) - baseDmg),
+            dps: Math.round(parseFloat(row.dmg) - baseDmg),
             encounterId: Number(row.nameOrId.split('/')[1]),
             itemId: Number(row.nameOrId.split('/')[3])
         }))

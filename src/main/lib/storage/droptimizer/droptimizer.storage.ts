@@ -22,7 +22,8 @@ export const getDroptimizer = async (droptimizerId: string): Promise<Droptimizer
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
-    const itemsToTiersetMapping = await db.query.itemToTiersetTable.findMany() // fare la lookup una volta e memorizzare tutto
+    const itemsToTiersetMapping = await db.query.itemToTiersetTable.findMany() // fare la lookup una volta e tenerla memorizzata in memoria
+    const itemsToCatalystMapping = await db.query.itemToCatalystTable.findMany()
 
     const droptimizerId = await db.transaction(async (tx) => {
         const droptimizerRes = await tx
@@ -50,12 +51,24 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
 
         const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => {
             const itemMapping = itemsToTiersetMapping.find((i) => i.itemId === up.itemId)
-            return {
+            const catalystMapping = !itemMapping
+                ? itemsToCatalystMapping.find(
+                      (i) => i.catalyzedItemId === up.itemId && i.encounterId === up.encounterId
+                  )
+                : null
+
+            const res: UpgradesTableInsert = {
                 id: newUUID(),
                 droptimizerId: droptimizerRes.id,
-                itemId: itemMapping ? itemMapping.tokenId : up.itemId,
-                dps: up.dps
+                itemId: itemMapping ? itemMapping.tokenId : up.itemId, // itemId of the tier token looted by boss
+                dps: up.dps,
+                ...(catalystMapping && {
+                    itemId: catalystMapping.itemId, // itemId looted by boss
+                    catalyzedItemId: up.itemId // itemId converted by catalyst
+                })
             }
+
+            return res
         })
 
         await tx.insert(droptimizerUpgradesTable).values(upgradesArray).execute()

@@ -139,9 +139,9 @@ export const itemToTiersetTable = pgTable('items_to_tierset', {
 export const itemToCatalystTable = pgTable(
     'items_to_catalyst',
     {
-        itemId: integer('item_id'),
-        encounterId: integer('encounter_id'),
-        catalyzedItemId: integer('catalyzed_item_id')
+        itemId: integer('item_id').notNull(),
+        encounterId: integer('encounter_id').notNull(),
+        catalyzedItemId: integer('catalyzed_item_id').notNull()
     },
     (t) => [
         {
