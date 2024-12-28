@@ -47,6 +47,78 @@
         --input: 217.2 32.6% 17.5%;
         --ring: 212.7 26.8% 83.9;
     }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 100;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-Thin.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 200;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-ExtraLight.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-Light.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-Regular.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-Medium.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-SemiBold.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-Bold.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-ExtraBold.ttf) format('ttf');
+    }
+
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+        src: url(../../assets/font/Geist/ttf/Geist-Black.ttf) format('ttf');
+    }
 }
 
 @layer components {
