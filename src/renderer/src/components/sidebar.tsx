@@ -47,10 +47,10 @@ export default function ProjectOneSidebar(): JSX.Element {
                     description: 'Data from JSON files has been updated in the database.'
                 })
             })
-            .catch((error) => {
+            .catch(() => {
                 toast({
-                    title: 'Error',
-                    description: `Could not update resources. Error: ${error.message}`
+                    title: 'Resources not updated',
+                    description: `Could not update resources.`
                 })
             })
     }
