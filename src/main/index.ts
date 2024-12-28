@@ -1,18 +1,50 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow, shell } from 'electron'
-import { join } from 'path'
+import fs from 'fs'
+import path, { join } from 'path'
+import { z } from 'zod'
 import icon from '../../resources/icon.png?asset'
 import { allHandlers } from './handlers'
 import { registerHandlers } from './handlers/handlers.utils'
 import { reloadItemsHandler } from './handlers/items/items.handlers'
 
+const DEFAULT_WIDTH = 1920
+const DEFAULT_HEIGHT = 1080
+
+const MIN_WIDTH = 1024
+const MIN_HEIGHT = 900
+
+const boundsSchema = z.object({
+    width: z.number().int().min(MIN_WIDTH).default(DEFAULT_WIDTH),
+    height: z.number().int().min(MIN_HEIGHT).default(DEFAULT_HEIGHT),
+    x: z.number().int().optional(),
+    y: z.number().int().optional()
+})
+
+const configPath = path.join(app.getPath('userData'), 'projectone-companion-config.json')
+
+function loadWindowSettings(): z.infer<typeof boundsSchema> {
+    try {
+        return boundsSchema.parse(JSON.parse(fs.readFileSync(configPath, 'utf-8')))
+    } catch (error) {
+        return { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT }
+    }
+}
+
+function saveWindowSettings(bounds: Electron.Rectangle): void {
+    fs.writeFileSync(configPath, JSON.stringify(bounds))
+}
+
 function createWindow(): void {
-    // Create the browser window.
+    const windowSettings = loadWindowSettings()
+
     const mainWindow = new BrowserWindow({
-        width: 1920,
-        height: 1080,
-        minWidth: 1024,
-        minHeight: 900,
+        width: windowSettings.width,
+        height: windowSettings.height,
+        minWidth: MIN_WIDTH,
+        minHeight: MIN_HEIGHT,
+        x: windowSettings.x,
+        y: windowSettings.y,
         show: false,
         autoHideMenuBar: true,
         ...(process.platform === 'linux' ? { icon } : {}),
@@ -38,6 +70,10 @@ function createWindow(): void {
     } else {
         mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
+
+    mainWindow.on('close', () => {
+        saveWindowSettings(mainWindow.getBounds())
+    })
 }
 
 // This method will seed initial data into the app
