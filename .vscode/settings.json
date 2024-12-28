@@ -6,7 +6,8 @@
         "schemas",
         "renderer",
         "items",
-        "players"
+        "players",
+        "preload"
     ],
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"

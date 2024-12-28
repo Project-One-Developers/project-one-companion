@@ -4,16 +4,16 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
 export const api = {
-    addDroptimizer(url: string): Promise<Droptimizer | null> {
+    addDroptimizer(url: string): Promise<Droptimizer> {
         return ipcRenderer.invoke('add-droptimizer', url)
     },
-    addCharacter(character: NewCharacter): Promise<Player | null> {
+    addCharacter(character: NewCharacter): Promise<Player> {
         return ipcRenderer.invoke('add-character', character)
     },
-    getCharactersList(): Promise<{ players: Player[] } | null> {
+    getCharactersList(): Promise<{ players: Player[] }> {
         return ipcRenderer.invoke('get-characters-list')
     },
-    addPlayer(playerName: string): Promise<Player | null> {
+    addPlayer(playerName: string): Promise<Player> {
         return ipcRenderer.invoke('add-player', playerName)
     },
     deletePlayer(playerId: string): Promise<void> {
