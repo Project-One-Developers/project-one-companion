@@ -91,7 +91,7 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <PlusIcon />
+                <PlusIcon className="w-5 h-5 cursor-pointer" />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

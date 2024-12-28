@@ -4,28 +4,31 @@ import { classIcon } from '@renderer/lib/class-icon'
 import { cn } from '@renderer/lib/utils'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useState } from 'react'
-import { Character } from 'shared/types/types'
+import { Character, Player } from 'shared/types/types'
+import { CharacterForm } from '../character-form'
 
 export const AnimatedTooltip = ({
     items,
+    player,
     className
 }: {
     items: Character[]
+    player: Player
     className?: string
 }): JSX.Element => {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+    const [hoveredIndex, setHoveredIndex] = useState<string | null>(null)
     const springConfig = { stiffness: 100, damping: 5 }
     const x = useMotionValue(0)
     const rotate = useSpring(useTransform(x, [-100, 100], [-45, 45]), springConfig)
     const translateX = useSpring(useTransform(x, [-100, 100], [-50, 50]), springConfig)
-    const handleMouseMove = (event: any) => {
+    const handleMouseMove = (event): void => {
         const halfWidth = event.target.offsetWidth / 2
         x.set(event.nativeEvent.offsetX - halfWidth)
     }
 
     return (
         <div className={cn('flex items-center gap-2', className)}>
-            {items.map((item) => (
+            {items.slice(0, 5).map((item) => (
                 <div
                     className="-mr-4 relative group"
                     key={item.id}
@@ -81,14 +84,17 @@ export const AnimatedTooltip = ({
                     </AnimatePresence>
                     <img
                         onMouseMove={handleMouseMove}
-                        height={100}
-                        width={100}
+                        height={50}
+                        width={50}
                         src={classIcon.get(item.class)}
                         alt={item.class}
-                        className="object-cover !m-0 !p-0 object-top rounded-full h-14 w-14 border-2 group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
+                        className="object-cover !m-0 !p-0 object-top rounded-full h-12 w-12 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
                     />
                 </div>
             ))}
+            <div className="ml-3">
+                <CharacterForm playerName={player.playerName} />
+            </div>
         </div>
     )
 }

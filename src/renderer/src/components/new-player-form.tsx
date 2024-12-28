@@ -3,7 +3,8 @@ import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addPlayer } from '@renderer/lib/tanstack-query/players'
 import { useMutation } from '@tanstack/react-query'
-import { Loader2 } from 'lucide-react'
+import clsx from 'clsx'
+import { Loader2, PlusIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { NewCharacter } from 'shared/types/types'
@@ -54,9 +55,11 @@ export default function PlayerForm(): JSX.Element {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <button className="bg-primary text-background hover:bg-primary/80 rounded-md px-4 py-2">
-                    Add player
-                </button>
+                <div className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer">
+                    <PlusIcon
+                        className={clsx('w-5 h-5 hover:rotate-45 ease-linear transition-transform')}
+                    />
+                </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

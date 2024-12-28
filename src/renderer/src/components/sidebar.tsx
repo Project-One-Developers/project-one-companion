@@ -45,7 +45,7 @@ export default function ProjectOneSidebar(): JSX.Element {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {rosterItems.map((item) => (
-                                <SidebarMenuItem key={item.title}>
+                                <SidebarMenuItem key={item.title} className="hover:bg-muted">
                                     <SidebarMenuButton asChild>
                                         <a href={item.url}>
                                             <item.icon />
@@ -62,7 +62,7 @@ export default function ProjectOneSidebar(): JSX.Element {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {weakaurasItems.map((item) => (
-                                <SidebarMenuItem key={item.title}>
+                                <SidebarMenuItem key={item.title} className="hover:bg-muted">
                                     <SidebarMenuButton asChild>
                                         <a href={item.url}>
                                             <item.icon />
