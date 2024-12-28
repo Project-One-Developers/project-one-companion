@@ -112,7 +112,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             return res
         })
 
-        await tx.insert(droptimizerUpgradesTable).values(upgradesArray).execute()
+        await tx.insert(droptimizerUpgradesTable).values(upgradesArray)
 
         return droptimizerRes.id
     })

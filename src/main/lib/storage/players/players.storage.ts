@@ -61,7 +61,6 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
             playerId: player.id
         })
         .returning()
-        .execute()
         .then(takeFirstResult)
 
     return playerSchema.parse({
@@ -89,7 +88,6 @@ export const addPlayer = async (playerName: string): Promise<Player> => {
             name: playerName
         })
         .returning()
-        .execute()
         .then(takeFirstResult)
 
     return playerSchema.parse({
@@ -103,7 +101,6 @@ export const deletePlayer = async (playerId: string): Promise<void> => {
         .delete(playerTable)
         .where(eq(playerTable.id, playerId))
         .returning()
-        .execute()
         .then(takeFirstResult)
 
     return
