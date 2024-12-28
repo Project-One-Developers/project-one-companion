@@ -44,34 +44,6 @@ export default function RosterPage(): JSX.Element {
                             </div>
                         ))}
                     </div>
-                    {/* <Table>
-                        <TableHeader>
-                            <TableRow className="">
-                                <TableHead>Players</TableHead>
-                                <TableHead>Chars</TableHead>
-                                <TableHead>Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {data?.players.map((player) => (
-                                <TableRow key={player.id} className="h-[100px]">
-                                    <TableCell className="font-bold text-xl">
-                                        {player.playerName}
-                                    </TableCell>
-                                    {player.characters ? (
-                                        <TableCell>
-                                            <AnimatedTooltip items={[...player.characters]} />
-                                        </TableCell>
-                                    ) : null}
-                                    <TableCell className="flex items-center gap-x-2 h-[100px]">
-                                        <Edit className="cursor-pointer" />
-                                        <DeletePlayerDialog player={player} />
-                                        <CharacterForm playerName={player.playerName} />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table> */}
                 </div>
             )}
         </>
