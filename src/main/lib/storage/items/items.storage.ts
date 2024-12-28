@@ -1,21 +1,16 @@
-import { eq } from 'drizzle-orm'
-import { match } from 'ts-pattern'
 import { Item, ItemToCatalyst, ItemToTierset } from '../../../../../shared/types/types'
 import { db } from '../storage.config'
 import { itemTable, itemToCatalystTable, itemToTiersetTable } from '../storage.schema'
+import { conflictUpdateAllExcept } from '../storage.utils'
 
 export const upsertItems = async (items: Item[]): Promise<void> => {
-    const itemsInDb = await db.query.itemTable.findMany()
-
-    const upserts = items.map((item) => {
-        const isItemInDb = itemsInDb.find((i) => i.id === item.id)
-
-        return match(isItemInDb)
-            .with(undefined, () => db.insert(itemTable).values(item))
-            .otherwise(() => db.update(itemTable).set(item).where(eq(itemTable.id, item.id)))
-    })
-
-    await Promise.all(upserts)
+    await db
+        .insert(itemTable)
+        .values(items)
+        .onConflictDoUpdate({
+            target: itemTable.id,
+            set: conflictUpdateAllExcept(itemTable, ['id'])
+        })
 }
 
 export const upsertItemsToTierset = async (itemsToTierset: ItemToTierset[]): Promise<void> => {

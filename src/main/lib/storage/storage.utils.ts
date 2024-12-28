@@ -26,3 +26,25 @@ export const buildConflictUpdateColumns = <
         {} as Record<Q, SQL>
     )
 }
+
+// https://github.com/drizzle-team/drizzle-orm/issues/1728#issuecomment-2160176330
+export const conflictUpdateAllExcept = <
+    T extends SQLiteTable,
+    E extends (keyof T['$inferInsert'])[]
+>(
+    table: T,
+    except: E
+): Omit<Record<keyof typeof table.$inferInsert, SQL>, E[number]> => {
+    const columns = getTableColumns(table)
+    const updateColumns = Object.entries(columns).filter(
+        ([col]) => !except.includes(col as keyof typeof table.$inferInsert)
+    )
+
+    return updateColumns.reduce(
+        (acc, [colName, table]) => ({
+            ...acc,
+            [colName]: sql.raw(`excluded.${table.name}`)
+        }),
+        {}
+    ) as Omit<Record<keyof typeof table.$inferInsert, SQL>, E[number]>
+}

@@ -1,7 +1,7 @@
 import { Boss } from '../../../../../shared/types/types'
 import { db } from '../storage.config'
 import { bossTable } from '../storage.schema'
-import { buildConflictUpdateColumns } from '../storage.utils'
+import { conflictUpdateAllExcept } from '../storage.utils'
 
 export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
     await db
@@ -9,7 +9,6 @@ export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
         .values(bosses)
         .onConflictDoUpdate({
             target: bossTable.id,
-            set: buildConflictUpdateColumns(bossTable, ['name', 'raid', 'order']) // TODO: generate columns dynamically
+            set: conflictUpdateAllExcept(bossTable, ['id'])
         })
-        .execute()
 }
