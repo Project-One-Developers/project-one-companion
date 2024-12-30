@@ -60,7 +60,7 @@
         "@types/react-dom": "^18.3.5",
         "@vitejs/plugin-react": "^4.3.4",
         "dotenv-cli": "8.0.0",
-        "electron": "^31.7.6",
+        "electron": "^33.2.1",
         "electron-builder": "^24.13.3",
         "electron-vite": "^2.3.0",
         "eslint": "^8.57.1",
@@ -71,5 +71,5 @@
         "typescript": "^5.7.2",
         "vite": "^5.4.11"
     },
-    "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
+    "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
 }
