@@ -5,7 +5,6 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
-    package-manager: 'pnpm'
     open-pull-requests-limit: 10
     target-branch: 'main'
     # Labels on pull requests for version updates
