@@ -5,7 +5,6 @@ import fs from 'fs'
 import { allHandlers } from '..'
 import { addDroptimizerHandler } from './droptimizer.handlers'
 
-// Mock the fetchRaidbotsData function
 jest.mock('./droptimizer.utils', () => {
     const originalModule = jest.requireActual('./droptimizer.utils')
     const fetchRaidbotsDataMock = jest.fn((url: string) => {
@@ -19,7 +18,6 @@ jest.mock('./droptimizer.utils', () => {
             jsonData: mockJsonData
         })
     })
-    //Mock the default export and named export 'foo'
     return {
         __esModule: true,
         ...(originalModule as object), // keep other function from the original module
@@ -27,7 +25,6 @@ jest.mock('./droptimizer.utils', () => {
     }
 })
 
-// Then, use it in the mock
 jest.mock('@storage/droptimizer/droptimizer.storage', () => ({
     __esModule: true,
     addDroptimizer: jest.fn()
