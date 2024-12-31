@@ -11,9 +11,17 @@ import {
     varchar
 } from 'drizzle-orm/pg-core'
 
+//////////////////////////////////////////////////////////
+//                      ENUMS                           //
+//////////////////////////////////////////////////////////
+
 export const pgClassEnum = pgEnum('class', CLASSES)
 export const pgRoleEnum = pgEnum('role', ROLES)
 export const pgRaidDiffEnum = pgEnum('raid_diff', RAID_DIFF)
+
+//////////////////////////////////////////////////////////
+//                   CHARACHTERS                        //
+//////////////////////////////////////////////////////////
 
 export const playerTable = pgTable('players', {
     id: varchar('id').primaryKey(),
@@ -30,16 +38,17 @@ export const charTable = pgTable('chars', {
         .notNull()
 })
 
-export const playerCharRelations = relations(playerTable, ({ many }) => ({
-    chars: many(charTable)
-}))
+export const bisListTable = pgTable('bis_list', {
+    id: varchar('id').primaryKey(),
+    charId: varchar('char_id')
+        .references(() => charTable.id)
+        .notNull()
+    //itemList: text('item_list').array() // array of strings
+})
 
-export const charPlayerRelations = relations(charTable, ({ one }) => ({
-    player: one(playerTable, {
-        fields: [charTable.playerId],
-        references: [playerTable.id]
-    })
-}))
+//////////////////////////////////////////////////////////
+//                   SIMULATIONS                        //
+//////////////////////////////////////////////////////////
 
 export const droptimizerUpgradesTable = pgTable(
     'droptimizer_upgrades',
@@ -60,13 +69,6 @@ export const droptimizerUpgradesTable = pgTable(
     ]
 )
 
-export const droptimizerUpgradesRelations = relations(droptimizerUpgradesTable, ({ one }) => ({
-    droptimizer: one(droptimizerTable, {
-        fields: [droptimizerUpgradesTable.droptimizerId],
-        references: [droptimizerTable.id]
-    })
-}))
-
 export const droptimizerTable = pgTable('droptimizers', {
     id: varchar('id').primaryKey(),
     url: text('url').notNull(),
@@ -79,9 +81,9 @@ export const droptimizerTable = pgTable('droptimizers', {
     characterName: varchar('character_name', { length: 24 }).notNull()
 })
 
-export const droptimizerRelations = relations(droptimizerTable, ({ many }) => ({
-    upgrades: many(droptimizerUpgradesTable)
-}))
+//////////////////////////////////////////////////////////
+//                   RAID SESSION                       //
+//////////////////////////////////////////////////////////
 
 export const raidSessionTable = pgTable('raid_sessions', {
     id: varchar('id').primaryKey(),
@@ -104,6 +106,38 @@ export const raidSessionRosterTable = pgTable(
         unique('raid_partecipation').on(t.raidSessionId, t.charId) // un char può partecipare ad una sessione alla volta
     ]
 )
+
+export const lootTable = pgTable('loots', {
+    id: varchar('id').primaryKey(),
+    dropDate: integer('drop_date').notNull(),
+    thirdStat: varchar('third_stat', { length: 255 }),
+    socket: boolean('socket').notNull().default(false),
+    // eligibility: text('eligibility').array(), // array of IDs referencing RaidSession.Chars
+    raidSessionId: varchar('raid_session_id')
+        .references(() => raidSessionTable.id)
+        .notNull(),
+    itemId: integer('item_id')
+        .references(() => itemTable.id)
+        .notNull(),
+    bossId: integer('boss_id')
+        .references(() => bossTable.id)
+        .notNull() // ridondato per comodità ma ricavabile da item.boss.id
+})
+
+export const assignmentTable = pgTable('assignments', {
+    id: varchar('id').primaryKey(),
+    charId: varchar('char_id')
+        .references(() => charTable.id)
+        .notNull(),
+    lootId: varchar('loot_id')
+        .references(() => lootTable.id)
+        .unique('loot_assignment')
+        .notNull() // un loot può essere assegnato una sola volta
+})
+
+//////////////////////////////////////////////////////////
+//                     JSON DATA                        //
+//////////////////////////////////////////////////////////
 
 export const bossTable = pgTable('bosses', {
     id: integer('id').primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
@@ -168,38 +202,28 @@ export const itemToCatalystTable = pgTable(
     ]
 )
 
-export const lootTable = pgTable('loots', {
-    id: varchar('id').primaryKey(),
-    dropDate: integer('drop_date').notNull(),
-    thirdStat: varchar('third_stat', { length: 255 }),
-    socket: boolean('socket').notNull().default(false),
-    // eligibility: text('eligibility').array(), // array of IDs referencing RaidSession.Chars
-    raidSessionId: varchar('raid_session_id')
-        .references(() => raidSessionTable.id)
-        .notNull(),
-    itemId: integer('item_id')
-        .references(() => itemTable.id)
-        .notNull(),
-    bossId: integer('boss_id')
-        .references(() => bossTable.id)
-        .notNull() // ridondato per comodità ma ricavabile da item.boss.id
-})
+//////////////////////////////////////////////////////////
+//                     RELATIONS                        //
+//////////////////////////////////////////////////////////
 
-export const assignmentTable = pgTable('assignments', {
-    id: varchar('id').primaryKey(),
-    charId: varchar('char_id')
-        .references(() => charTable.id)
-        .notNull(),
-    lootId: varchar('loot_id')
-        .references(() => lootTable.id)
-        .unique('loot_assignment')
-        .notNull() // un loot può essere assegnato una sola volta
-})
+export const playerCharRelations = relations(playerTable, ({ many }) => ({
+    chars: many(charTable)
+}))
 
-export const bisListTable = pgTable('bis_list', {
-    id: varchar('id').primaryKey(),
-    charId: varchar('char_id')
-        .references(() => charTable.id)
-        .notNull()
-    //itemList: text('item_list').array() // array of strings
-})
+export const charPlayerRelations = relations(charTable, ({ one }) => ({
+    player: one(playerTable, {
+        fields: [charTable.playerId],
+        references: [playerTable.id]
+    })
+}))
+
+export const droptimizerUpgradesRelations = relations(droptimizerUpgradesTable, ({ one }) => ({
+    droptimizer: one(droptimizerTable, {
+        fields: [droptimizerUpgradesTable.droptimizerId],
+        references: [droptimizerTable.id]
+    })
+}))
+
+export const droptimizerRelations = relations(droptimizerTable, ({ many }) => ({
+    upgrades: many(droptimizerUpgradesTable)
+}))
