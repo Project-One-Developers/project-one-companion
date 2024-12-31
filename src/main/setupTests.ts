@@ -2,11 +2,12 @@ import { jest } from '@jest/globals'
 import fs from 'fs'
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import path from 'path'
+import { logger } from './lib/logger/logger'
 
 // Create a mock for the db
 const dbMock: DeepMockProxy<typeof import('./lib/storage/storage.config').db> = mockDeep()
 const fetchRaidbotsDataMock = jest.fn((url: string) => {
-    console.log(`Mocking return value for ${url}`)
+    logger.info(`Mocking return value for ${url}`)
     const mockCsvData = fs.readFileSync(
         path.resolve(__dirname, '../../resources/raidbots/testData/data.csv'),
         'utf8'
