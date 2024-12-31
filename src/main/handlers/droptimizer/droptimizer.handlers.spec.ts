@@ -1,7 +1,37 @@
-import { describe, expect, it } from '@jest/globals'
+import { describe, expect, it, jest } from '@jest/globals'
+import { addDroptimizer } from '@storage/droptimizer/droptimizer.storage'
 import { db } from '@storage/storage.config'
+import fs from 'fs'
 import { allHandlers } from '..'
 import { addDroptimizerHandler } from './droptimizer.handlers'
+
+// Mock the fetchRaidbotsData function
+jest.mock('./droptimizer.utils', () => {
+    const originalModule = jest.requireActual('./droptimizer.utils')
+    const fetchRaidbotsDataMock = jest.fn((url: string) => {
+        console.log(`Mocking return value for ${url}`)
+        const mockCsvData = fs.readFileSync('resources/raidbots/testData/data.csv', 'utf8')
+        const mockJsonData = JSON.parse(
+            fs.readFileSync('resources/raidbots/testData/data.json', 'utf8')
+        )
+        return Promise.resolve({
+            csvData: mockCsvData,
+            jsonData: mockJsonData
+        })
+    })
+    //Mock the default export and named export 'foo'
+    return {
+        __esModule: true,
+        ...(originalModule as object), // keep other function from the original module
+        fetchRaidbotsData: fetchRaidbotsDataMock
+    }
+})
+
+// Then, use it in the mock
+jest.mock('@storage/droptimizer/droptimizer.storage', () => ({
+    __esModule: true,
+    addDroptimizer: jest.fn()
+}))
 
 describe('Droptimizer Handlers', () => {
     it('should have the add-droptimizer handler', () => {
@@ -11,19 +41,61 @@ describe('Droptimizer Handlers', () => {
     })
 
     it('should throw an error when URL is not provided', async () => {
-        await expect(allHandlers['add-droptimizer']('')).rejects.toThrow() // non mi interessa validare l'errore specifico
+        await expect(addDroptimizerHandler('')).rejects.toThrow() // non mi interessa validare l'errore specifico
         expect(db.insert).not.toHaveBeenCalled()
     })
 
     it('should call addDroptimizerHandler with correct arguments and insert into database', async () => {
         const testUrl = 'https://www.raidbots.com/simbot/report/cUt45Z5FcaxztdQF9Girzx'
 
-        // Mock the insert function to return our mock result
-        //db.insert.mockResolvedValue([mockInsertResult])
+        await addDroptimizerHandler(testUrl)
 
-        const result = await addDroptimizerHandler(testUrl)
+        const expectedData = {
+            characterName: 'Bubbledan',
+            date: 1734552471,
+            fightInfo: {
+                duration: 300,
+                fightstyle: 'Patchwerk',
+                nTargets: 1
+            },
+            raidDifficulty: 'Mythic',
+            resultRaw: expect.any(String),
+            upgrades: [
+                {
+                    dps: 10565,
+                    encounterId: 2601,
+                    itemId: 221023,
+                    slot: 'trinket2'
+                },
+                {
+                    dps: 4794,
+                    encounterId: 2612,
+                    itemId: 220305,
+                    slot: 'trinket1'
+                },
+                {
+                    dps: 490,
+                    encounterId: 2609,
+                    itemId: 212062,
+                    slot: 'waist'
+                },
+                {
+                    dps: 25,
+                    encounterId: 2611,
+                    itemId: 212061,
+                    slot: 'wrist'
+                },
+                {
+                    dps: 14306,
+                    encounterId: 2602,
+                    itemId: 225578,
+                    slot: 'finger2'
+                }
+            ],
+            url: 'https://www.raidbots.com/simbot/report/cUt45Z5FcaxztdQF9Girzx'
+        }
 
-        expect(db.transaction).toHaveBeenCalledTimes(1)
-        expect(result).toEqual({})
+        expect(addDroptimizer).toHaveBeenCalledTimes(1)
+        expect(addDroptimizer).toHaveBeenCalledWith(expectedData)
     })
 })
