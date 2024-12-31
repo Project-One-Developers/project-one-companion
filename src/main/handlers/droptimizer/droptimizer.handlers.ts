@@ -12,7 +12,6 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
 
     const { parsedCsv, parsedJson } = parseRaidbotsData(csvData, jsonData)
 
-    // todo: salvare anche gli upgrades
     const droptimizer: NewDroptimizer = {
         characterName: parsedCsv.characterName,
         raidDifficulty: parsedJson.difficulty,

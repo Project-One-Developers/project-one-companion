@@ -20,7 +20,8 @@
         "build:mac": "electron-vite build && electron-builder --mac",
         "build:linux": "electron-vite build && electron-builder --linux",
         "migratedb": "drizzle-kit push",
-        "migratedb-prod": "dotenv -e .env.production -- drizzle-kit push"
+        "migratedb-prod": "dotenv -e .env.production -- drizzle-kit push",
+        "test": "jest"
     },
     "dependencies": {
         "@electron-toolkit/preload": "^3.0.1",
@@ -65,9 +66,12 @@
         "electron-vite": "^2.3.0",
         "eslint": "^8.57.1",
         "eslint-plugin-react": "^7.37.3",
+        "jest": "29.7.0",
+        "jest-mock-extended": "4.0.0-beta1",
         "prettier": "^3.4.2",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
+        "ts-jest": "^29.2.5",
         "typescript": "^5.7.2",
         "vite": "^5.4.11"
     },
