@@ -21,7 +21,8 @@
         "build:linux": "electron-vite build && electron-builder --linux",
         "migratedb": "drizzle-kit push",
         "migratedb-prod": "dotenv -e .env.production -- drizzle-kit push",
-        "test": "jest"
+        "test": "jest",
+        "clean": "rm -rf ./out && rm -rf node_modules"
     },
     "dependencies": {
         "@electron-toolkit/preload": "3.0.1",
