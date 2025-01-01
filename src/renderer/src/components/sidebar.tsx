@@ -11,6 +11,8 @@ import {
     SidebarMenuItem
 } from './ui/sidebar'
 
+import type { JSX } from 'react'
+
 const rosterItems = [
     {
         title: 'Roster',

@@ -7,6 +7,8 @@ import { Button } from './ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 
+import type { JSX } from 'react'
+
 const formSchema = z.object({
     url: raidbotsURLSchema
 })

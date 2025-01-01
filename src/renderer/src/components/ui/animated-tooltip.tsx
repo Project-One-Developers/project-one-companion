@@ -3,7 +3,7 @@
 import { classIcon } from '@renderer/lib/class-icon'
 import { cn } from '@renderer/lib/utils'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useState } from 'react'
+import { useState, type JSX } from 'react'
 import { Character, Player } from 'shared/types/types'
 import { CharacterForm } from '../character-form'
 

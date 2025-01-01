@@ -4,6 +4,8 @@ import { downloadLocalStorageAsJSON } from '@renderer/lib/download-config'
 import { handleFileUpload } from '@renderer/lib/upload-config'
 import { Download, Trash, Upload } from 'lucide-react'
 
+import type { JSX } from 'react'
+
 export default function NextPage(): JSX.Element {
     return (
         <div className="flex flex-col gap-y-8 mt-10 text-2xl ">

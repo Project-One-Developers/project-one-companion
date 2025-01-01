@@ -10,6 +10,8 @@ import DroptimizerForm from './pages/droptimizer'
 import Home from './pages/home'
 import RosterPage from './pages/roster'
 
+import type { JSX } from 'react'
+
 function App(): JSX.Element {
     return (
         <QueryClientProvider client={queryClient}>

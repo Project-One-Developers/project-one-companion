@@ -1,5 +1,5 @@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@renderer/components/ui/table'
-import React, { useEffect } from 'react'
+import React, { useEffect, type JSX } from 'react'
 
 export default function RosterPage(): JSX.Element {
     const [players, setPlayers] = React.useState([])

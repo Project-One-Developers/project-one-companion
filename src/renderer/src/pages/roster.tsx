@@ -6,6 +6,8 @@ import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
+import type { JSX } from 'react'
+
 export default function RosterPage(): JSX.Element {
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.players],
