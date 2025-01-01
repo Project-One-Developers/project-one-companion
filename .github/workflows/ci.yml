@@ -1,4 +1,4 @@
-name: Run Jest Tests
+name: Run CI Checks
 
 on:
   push:
@@ -9,9 +9,8 @@ on:
       - main
 
 jobs:
-  test:
-    runs-on: ubuntu-24.04
-
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,7 +28,10 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
         run: pnpm test
+
+      - name: Build final package
+        run: pnpm build
