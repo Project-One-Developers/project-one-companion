@@ -1,27 +1,24 @@
 version: 2
 updates:
-  # Enable version updates for pnpm
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
     target-branch: 'main'
-    # Labels on pull requests for version updates
     labels:
       - 'dependencies'
-    # Assign pull requests to specific reviewers
-    # reviewers:
-    #   - "your-github-username"
-    # Ignore certain dependencies (optional)
-    # ignore:
-    #   - dependency-name: "express"
-    #     versions: ["4.x", "5.x"]
 
-  # Enable version updates for GitHub Actions
-  - package-ecosystem: 'github-actions'
-    # Workflow files stored in the default location of `.github/workflows`
+  - package-ecosystem: 'docker'
     directory: '/'
-    # Check for updates once a week
     schedule:
       interval: 'weekly'
+    labels:
+      - 'dependencies'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    labels:
+      - 'dependencies'
