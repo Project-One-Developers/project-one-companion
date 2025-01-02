@@ -1,12 +1,10 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { Droptimizer, NewCharacter, Player } from '@shared/types/types'
+import { Droptimizer, Item, NewCharacter, Player } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
 export const api = {
-    addDroptimizer(url: string): Promise<Droptimizer> {
-        return ipcRenderer.invoke('add-droptimizer', url)
-    },
+    // Characters
     addCharacter(character: NewCharacter): Promise<Player> {
         return ipcRenderer.invoke('add-character', character)
     },
@@ -18,6 +16,14 @@ export const api = {
     },
     deletePlayer(playerId: string): Promise<void> {
         return ipcRenderer.invoke('delete-player', playerId)
+    },
+    // Simulations
+    addDroptimizer(url: string): Promise<Droptimizer> {
+        return ipcRenderer.invoke('add-droptimizer', url)
+    },
+    // JSON Data
+    getItems(): Promise<Item[]> {
+        return ipcRenderer.invoke('get-items')
     },
     upsertJsonData(): Promise<void> {
         return ipcRenderer.invoke('upsert-json-data')
