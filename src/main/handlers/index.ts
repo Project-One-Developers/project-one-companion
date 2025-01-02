@@ -5,6 +5,7 @@ import {
     getCharactersListHandler
 } from './characters/characters.handlers'
 import { addDroptimizerHandler } from './droptimizer/droptimizer.handlers'
+import { getItemsHandler } from './items/items.handlers'
 import { upsertJsonDataHandler } from './json-data/json-data.handlers'
 
 export const allHandlers = {
@@ -13,5 +14,6 @@ export const allHandlers = {
     'get-characters-list': getCharactersListHandler,
     'add-player': addPlayerHandler,
     'delete-player': deletePlayerHandler,
-    'upsert-json-data': upsertJsonDataHandler
+    'upsert-json-data': upsertJsonDataHandler,
+    'get-items': getItemsHandler
 }
