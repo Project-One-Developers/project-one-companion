@@ -23,11 +23,11 @@ export const wowRaidDiffSchema = z.enum(['Normal', 'Heroic', 'Mythic'])
 export const itemSchema = z.object({
     id: z.number(),
     name: z.string(),
-    ilvlMythic: z.number(),
-    ilvlHeroic: z.number(),
-    ilvlNormal: z.number(),
+    ilvlMythic: z.number().nullish(),
+    ilvlHeroic: z.number().nullish(),
+    ilvlNormal: z.number().nullish(),
     bonusID: z.string().nullish(),
-    itemClass: z.string(),
+    itemClass: z.string().nullish(),
     slot: z.string().nullish(),
     itemSubclass: z.string().nullish(),
     tierPrefix: z.string().nullish(),
@@ -42,10 +42,10 @@ export const itemSchema = z.object({
     stats: z.string().nullish(),
     mainStats: z.string().nullish(),
     secondaryStats: z.string().nullish(),
-    wowheadUrl: z.string().url(),
-    iconName: z.string(),
-    iconUrl: z.string().url(),
-    bossName: z.string(), // ridondante ma utile
+    wowheadUrl: z.string().url().nullish(),
+    iconName: z.string().nullish(),
+    iconUrl: z.string().url().nullish(),
+    bossName: z.string().nullish(), // ridondante ma utile
     bossId: z.number()
 })
 
