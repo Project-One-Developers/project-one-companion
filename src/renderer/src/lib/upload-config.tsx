@@ -20,7 +20,7 @@ export function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>): vo
                     description: 'Il file JSON non è nel formato corretto.'
                 })
             }
-        } catch (error) {
+        } catch {
             toast({
                 title: 'Errore di caricamento',
                 description: "C'è stato un errore nella lettura del file JSON."

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { electronAPI } from '@electron-toolkit/preload'
 import type { Droptimizer, Item, NewCharacter, Player } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'

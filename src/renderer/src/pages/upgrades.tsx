@@ -8,7 +8,7 @@ export default function RosterPage(): JSX.Element {
         // TODO: implement this
         const tmp = players
         setPlayers(tmp)
-    }, [])
+    }, [players])
 
     return (
         <Table>

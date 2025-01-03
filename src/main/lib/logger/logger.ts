@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import isDev from 'electron-is-dev'
 import { createWinstonLogger } from './winston/winston'
 

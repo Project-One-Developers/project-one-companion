@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { app } from 'electron'
 import { join } from 'path'
 import winston, { type LoggerOptions } from 'winston'
