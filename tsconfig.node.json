@@ -29,6 +29,7 @@
         "electron.vite.config.*",
         "src/main/**/*",
         "src/preload/**/*",
-        "src/renderer/src/env.d.ts"
+        "src/renderer/src/env.d.ts",
+        "shared/**/*"
     ]
 }
