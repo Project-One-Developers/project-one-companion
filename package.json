@@ -64,7 +64,7 @@
         "@electron-toolkit/eslint-config-prettier": "2.0.0",
         "@electron-toolkit/eslint-config-ts": "2.0.0",
         "@electron-toolkit/tsconfig": "1.0.1",
-        "@types/node": "22.10.3",
+        "@types/node": "22.10.5",
         "@types/react": "19.0.2",
         "@types/react-dom": "19.0.2",
         "@vitejs/plugin-react": "4.3.4",
