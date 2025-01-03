@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  electron-vite>vite: ^6.0.7
+  electron-vite>vite: 6.0.7
 
 importers:
 
@@ -157,7 +157,7 @@ importers:
         specifier: 8.19.0
         version: 8.19.0(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
       vite:
-        specifier: ^6.0.7
+        specifier: 6.0.7
         version: 6.0.7(@types/node@22.10.5)(jiti@1.21.7)(yaml@2.7.0)
 
 packages:
@@ -2730,7 +2730,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@swc/core': ^1.0.0
-      vite: ^6.0.7
+      vite: 6.0.7
     peerDependenciesMeta:
       '@swc/core':
         optional: true
