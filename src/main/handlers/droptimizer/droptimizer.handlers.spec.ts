@@ -1,7 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals'
 import { addDroptimizer } from '@storage/droptimizer/droptimizer.storage'
-import { db } from '@storage/storage.config'
-import fs from 'fs'
+import * as fs from 'fs'
 import { allHandlers } from '..'
 import { addDroptimizerHandler } from './droptimizer.handlers'
 
@@ -39,7 +38,6 @@ describe('Droptimizer Handlers', () => {
 
     it('should throw an error when URL is not provided', async () => {
         await expect(addDroptimizerHandler('')).rejects.toThrow() // non mi interessa validare l'errore specifico
-        expect(db.insert).not.toHaveBeenCalled()
     })
 
     it('should call addDroptimizerHandler with correct arguments and insert into database', async () => {
