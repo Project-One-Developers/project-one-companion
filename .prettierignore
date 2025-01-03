@@ -1,6 +1,6 @@
-out
+build
 dist
+out
+resources
+assets
 pnpm-lock.yaml
-LICENSE.md
-tsconfig.json
-tsconfig.*.json

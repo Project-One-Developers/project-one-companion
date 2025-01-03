@@ -1,4 +1,4 @@
-import { WowClass } from 'shared/types/types'
+import type { WowClass } from 'shared/types/types'
 
 export const classIcon = new Map<WowClass, string>([
     ['Death Knight', 'https://wow.zamimg.com/images/wow/icons/medium/class_deathknight.jpg'],
