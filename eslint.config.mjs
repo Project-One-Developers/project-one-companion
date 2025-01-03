@@ -14,6 +14,16 @@ const config = tseslint.config(
         ignores: ['build', 'dist', 'out', 'resources', 'assets']
     },
     /**
+     * shared language options
+     */
+    {
+        languageOptions: {
+            globals: {
+                ...globals.node
+            }
+        }
+    },
+    /**
      * base
      */
     eslint.configs.recommended,
