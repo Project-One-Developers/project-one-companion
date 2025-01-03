@@ -1,5 +1,5 @@
 import { itemSchema } from '@shared/schemas/wow.schemas'
-import { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
+import type { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { z } from 'zod'
 import { db } from '../storage.config'
 import { itemTable, itemToCatalystTable, itemToTiersetTable } from '../storage.schema'

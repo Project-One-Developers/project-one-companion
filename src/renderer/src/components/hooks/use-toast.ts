@@ -2,7 +2,7 @@
 
 // Inspired by react-hot-toast library
 import * as React from 'react'
-import { ToastActionElement, ToastProps } from '../ui/toast'
+import type { ToastActionElement, ToastProps } from '../ui/toast'
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
@@ -14,13 +14,6 @@ type ToasterToast = ToastProps & {
     action?: ToastActionElement
 }
 
-const actionTypes = {
-    ADD_TOAST: 'ADD_TOAST',
-    UPDATE_TOAST: 'UPDATE_TOAST',
-    DISMISS_TOAST: 'DISMISS_TOAST',
-    REMOVE_TOAST: 'REMOVE_TOAST'
-} as const
-
 let count = 0
 
 function genId(): string {
@@ -28,7 +21,12 @@ function genId(): string {
     return count.toString()
 }
 
-type ActionType = typeof actionTypes
+type ActionType = {
+    ADD_TOAST: 'ADD_TOAST'
+    UPDATE_TOAST: 'UPDATE_TOAST'
+    DISMISS_TOAST: 'DISMISS_TOAST'
+    REMOVE_TOAST: 'REMOVE_TOAST'
+}
 
 type Action =
     | {

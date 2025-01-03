@@ -1,5 +1,5 @@
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
-import { Droptimizer, NewDroptimizer } from '@shared/types/types'
+import type { Droptimizer, NewDroptimizer } from '@shared/types/types'
 import { addDroptimizer } from '@storage/droptimizer/droptimizer.storage'
 import { fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 

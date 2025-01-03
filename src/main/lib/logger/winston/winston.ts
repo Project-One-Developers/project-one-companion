@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { app } from 'electron'
 import { join } from 'path'
-import winston, { LoggerOptions } from 'winston'
-import { Logger } from '../logger'
+import winston, { type LoggerOptions } from 'winston'
+import type { Logger } from '../logger'
 const { format, transports } = winston
 const { Console } = transports
 const { json } = format

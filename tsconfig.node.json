@@ -1,18 +1,35 @@
 {
-  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*", "shared/**/*"],
-  "compilerOptions": {
-    "composite": true,
-    "sourceMap": true,
-    "types": ["electron-vite/node"],
-    "paths": {
-      "@shared/*": [
-        "shared/*"
-      ],
-      "@storage/*": [
-        "src/main/lib/storage/*"
-      ]
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "composite": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "out",
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "esnext",
+        "types": ["electron-vite/node"],
+        "paths": {
+            "@shared/*": ["shared/*"],
+            "@storage/*": ["src/main/lib/storage/*"]
+        }
     },
-    "baseUrl": "."
-  }
+    "include": [
+        "electron.vite.config.*",
+        "src/main/**/*",
+        "src/preload/**/*",
+        "src/renderer/src/env.d.ts",
+        "shared/**/*"
+    ]
 }

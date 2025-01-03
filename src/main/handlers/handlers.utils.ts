@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { ipcMain } from 'electron'
 
 type HandlerFunction = (...args: any[]) => Promise<any>
