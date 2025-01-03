@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     darkMode: ['class'],
     content: [
         './src/renderer/src/pages/**/*.{js,ts,jsx,tsx}',
@@ -76,5 +76,5 @@ module.exports = {
             mono: ['"Geist"', 'monospace']
         }
     },
-    plugins: [require('tailwindcss-animate')]
+    plugins: [import('tailwindcss-animate')]
 }

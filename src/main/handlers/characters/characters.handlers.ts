@@ -1,4 +1,4 @@
-import { NewCharacter, Player } from '@shared/types/types'
+import type { NewCharacter, Player } from '@shared/types/types'
 import {
     addCharacter,
     addPlayer,

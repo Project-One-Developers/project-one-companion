@@ -25,7 +25,7 @@ const configPath = path.join(app.getPath('userData'), 'projectone-companion-conf
 function loadWindowSettings(): z.infer<typeof boundsSchema> {
     try {
         return boundsSchema.parse(JSON.parse(fs.readFileSync(configPath, 'utf-8')))
-    } catch (error) {
+    } catch {
         return { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT }
     }
 }

@@ -4,10 +4,10 @@ import { cn } from '@renderer/lib/utils'
 import * as React from 'react'
 import {
     Controller,
-    ControllerProps,
-    FieldError,
-    FieldPath,
-    FieldValues,
+    type ControllerProps,
+    type FieldError,
+    type FieldPath,
+    type FieldValues,
     FormProvider,
     useFormContext
 } from 'react-hook-form'

@@ -1,7 +1,7 @@
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { deletePlayer } from '@renderer/lib/tanstack-query/players'
-import { Player } from '@shared/types/types'
+import type { Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2, X } from 'lucide-react'
 import { useState, type JSX } from 'react'

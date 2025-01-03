@@ -1,5 +1,5 @@
 import { playerSchema } from '@shared/schemas/characters.schemas'
-import { NewCharacter, Player } from '@shared/types/types'
+import type { NewCharacter, Player } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charTable, playerTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'

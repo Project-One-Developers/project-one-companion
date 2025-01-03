@@ -1,7 +1,8 @@
 import * as schema from '@storage/storage.schema'
+import { config } from 'dotenv'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
-require('dotenv').config()
+config()
 
 const databaseUrl = process.env.DATABASE_URL
 

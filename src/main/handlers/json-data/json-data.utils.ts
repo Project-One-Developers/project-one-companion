@@ -4,7 +4,7 @@ import {
     itemToCatalystSchema,
     itemToTiersetSchema
 } from '@shared/schemas/wow.schemas'
-import { Boss, Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
+import type { Boss, Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { readFileSync } from 'fs'
 import * as path from 'path'
 import { z } from 'zod'
@@ -19,9 +19,9 @@ export const fetchRaidItems = (): Item[] => {
         return itemSchema.parse({
             id: Number(itemRaw.itemId),
             name: itemRaw.name,
-            ilvlMythic: Number(itemRaw.mythicLevel) ?? null,
-            ilvlHeroic: Number(itemRaw.heroicLevel) ?? null,
-            ilvlNormal: Number(itemRaw.normalLevel) ?? null,
+            ilvlMythic: itemRaw.mythicLevel ? Number(itemRaw.mythicLevel) : null,
+            ilvlHeroic: itemRaw.heroicLevel ? Number(itemRaw.heroicLevel) : null,
+            ilvlNormal: itemRaw.normalLevel ? Number(itemRaw.normalLevel) : null,
             boe: itemRaw.boe,
             itemClass: itemRaw.itemClass,
             slot: itemRaw.slot,

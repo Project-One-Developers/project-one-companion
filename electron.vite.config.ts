@@ -1,32 +1,47 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import path, { resolve } from 'path'
-import tailwindcss from 'tailwindcss'
+import { rmSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+if (process.env.NODE_ENV === 'production') {
+    rmSync('out', { recursive: true, force: true })
+    rmSync('dist', { recursive: true, force: true })
+}
 
 export default defineConfig({
     main: {
         plugins: [externalizeDepsPlugin()],
         resolve: {
             alias: {
-                '@shared': path.resolve(__dirname, 'shared'),
-                '@storage': path.resolve(__dirname, 'src/main/lib/storage')
+                '@shared': resolve(__dirname, 'shared'),
+                '@storage': resolve(__dirname, 'src/main/lib/storage')
             }
         }
     },
     preload: {
-        plugins: [externalizeDepsPlugin()]
+        plugins: [externalizeDepsPlugin()],
+        build: {
+            rollupOptions: {
+                output: {
+                    format: 'cjs',
+                    entryFileNames: 'index.js'
+                }
+            }
+        }
     },
     renderer: {
-        // TODO: is this needed?
-        css: {
-            postcss: {
-                plugins: [tailwindcss()]
+        build: {
+            rollupOptions: {
+                input: {
+                    main: resolve('src/renderer/index.html')
+                }
             }
         },
         resolve: {
             alias: {
                 '@renderer': resolve('src/renderer/src'),
-                '@shared': path.resolve(__dirname, 'shared')
+                '@shared': resolve('shared'),
+                '@resources': resolve('resources')
             }
         },
         plugins: [react()]

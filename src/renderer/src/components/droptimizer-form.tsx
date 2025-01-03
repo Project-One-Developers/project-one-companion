@@ -27,15 +27,17 @@ export default function NewDroptimizerForm(): JSX.Element {
     async function onSubmit(values: FormValues): Promise<void> {
         const droptimizer = await window.api.addDroptimizer(values.url)
 
-        droptimizer
-            ? toast({
-                  title: 'Aggiunta droptimizer',
-                  description: `Il droptimizer per il pg ${droptimizer.characterName} è stato aggiunto con successo.`
-              })
-            : toast({
-                  title: 'Errore',
-                  description: `Non è stato possibile aggiungere il droptimizer.`
-              })
+        if (droptimizer) {
+            toast({
+                title: 'Aggiunta droptimizer',
+                description: `Il droptimizer per il pg ${droptimizer.characterName} è stato aggiunto con successo.`
+            })
+        } else {
+            toast({
+                title: 'Errore',
+                description: `Non è stato possibile aggiungere il droptimizer.`
+            })
+        }
     }
 
     return (

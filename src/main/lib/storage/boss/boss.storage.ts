@@ -1,4 +1,4 @@
-import { Boss } from '@shared/types/types'
+import type { Boss } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { bossTable } from '@storage/storage.schema'
 import { conflictUpdateAllExcept } from '@storage/storage.utils'
