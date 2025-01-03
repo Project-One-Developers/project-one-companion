@@ -16,11 +16,10 @@
         "outDir": "out",
         "resolveJsonModule": true,
         "skipLibCheck": true,
-        "sourceMap": false,
+        "sourceMap": true,
         "strict": true,
         "target": "esnext",
         "types": ["electron-vite/node"],
-        "verbatimModuleSyntax": true,
         "paths": {
             "@shared/*": ["shared/*"],
             "@storage/*": ["src/main/lib/storage/*"]

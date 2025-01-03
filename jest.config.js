@@ -6,6 +6,7 @@ export default {
     testEnvironment: 'node',
     preset: 'ts-jest',
     clearMocks: true,
+    transformIgnorePatterns: ['node_modules/(?!variables/.*)'],
     transform: {
         '^.+\\.tsx?$': [
             'ts-jest',
@@ -14,9 +15,9 @@ export default {
             }
         ]
     },
-    transformIgnorePatterns: ['node_modules/(?!variables/.*)'],
     setupFilesAfterEnv: ['<rootDir>/src/main/setupTests.ts'],
     testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/?(*.)+(spec|test).+(ts|tsx|js)'],
+    testPathIgnorePatterns: ['<rootDir>/node_modules/'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     collectCoverageFrom: ['**/*.(t|j)s'],
     coverageDirectory: '../coverage',
