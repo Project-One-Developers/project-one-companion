@@ -14,3 +14,13 @@ export function getClassColor(className: WowClass): string {
     }
     return 'bg-deathknight'
 }
+
+export function getDpsHumanReadable(dps: number): string {
+    const formatter = Intl.NumberFormat('en', { notation: 'compact' })
+    return formatter.format(dps)
+}
+
+export function unitTimestampToRelativeDays(unixTimestamp: number): string {
+    const daysAgo = Math.floor((Date.now() - unixTimestamp * 1000) / 86400000)
+    return daysAgo ? `${daysAgo} days ago` : 'Today'
+}

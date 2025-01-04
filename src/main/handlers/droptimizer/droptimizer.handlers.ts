@@ -1,6 +1,6 @@
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import type { Droptimizer, NewDroptimizer } from '@shared/types/types'
-import { addDroptimizer } from '@storage/droptimizer/droptimizer.storage'
+import { addDroptimizer, getDroptimizerList } from '@storage/droptimizer/droptimizer.storage'
 import { fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 
 export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> => {
@@ -27,4 +27,8 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
     }
 
     return await addDroptimizer(droptimizer)
+}
+
+export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
+    return await getDroptimizerList()
 }

@@ -37,3 +37,5 @@ export const droptimizerStorageSchema = z
             }))
         }
     })
+
+export const droptimizerListStorageSchema = z.array(droptimizerStorageSchema)

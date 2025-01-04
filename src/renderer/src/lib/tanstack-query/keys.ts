@@ -1,3 +1,4 @@
 export const queryKeys = {
-    players: 'players-list'
+    players: 'players-list',
+    droptimizers: 'droptimizers-list'
 }

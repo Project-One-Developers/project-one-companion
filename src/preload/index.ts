@@ -22,6 +22,9 @@ export const api = {
     addDroptimizer(url: string): Promise<Droptimizer> {
         return ipcRenderer.invoke('add-droptimizer', url)
     },
+    getDroptimizerList(): Promise<Droptimizer[]> {
+        return ipcRenderer.invoke('get-droptimizer-list')
+    },
     // JSON Data
     getItems(): Promise<Item[]> {
         return ipcRenderer.invoke('get-items')

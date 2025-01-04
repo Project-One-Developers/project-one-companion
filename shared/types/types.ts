@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { characterSchema, newCharacterSchema, playerSchema } from '../schemas/characters.schemas'
 import {
     droptimizerSchema,
+    droptimizerUpgradeSchema,
     newDroptimizerSchema,
     raidbotsURLSchema
 } from '../schemas/simulations.schemas'
@@ -18,6 +19,7 @@ export type WowClass = z.infer<typeof wowClassSchema>
 export type Player = z.infer<typeof playerSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
+export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 
 export type Character = z.infer<typeof characterSchema>

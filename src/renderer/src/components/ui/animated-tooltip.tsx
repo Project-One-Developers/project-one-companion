@@ -1,7 +1,7 @@
 'use client'
 
-import { classIcon } from '@renderer/lib/class-icon'
 import { cn } from '@renderer/lib/utils'
+import { classIcon } from '@renderer/lib/wow-icon'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useState } from 'react'
 import type { Character, Player } from 'shared/types/types'

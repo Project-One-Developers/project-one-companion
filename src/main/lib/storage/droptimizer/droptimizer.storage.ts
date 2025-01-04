@@ -3,7 +3,7 @@ import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
 import { newUUID } from '../../utils'
-import { droptimizerStorageSchema } from './droptimizer.schemas'
+import { droptimizerListStorageSchema, droptimizerStorageSchema } from './droptimizer.schemas'
 import type { UpgradesTableInsert } from './droptimizer.types'
 
 /**
@@ -59,6 +59,16 @@ export const getLatestDroptimizerByCharAndDiff = async (
     }
 
     return droptimizerStorageSchema.parse(result)
+}
+
+export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
+    const result = await db.query.droptimizerTable.findMany({
+        with: {
+            upgrades: true
+        }
+    })
+
+    return droptimizerListStorageSchema.parse(result)
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
