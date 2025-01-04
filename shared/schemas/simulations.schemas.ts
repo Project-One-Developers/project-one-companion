@@ -1,8 +1,17 @@
 import { z } from 'zod'
 
 export const droptimizerUpgradeSchema = z.object({
+    id: z.string(),
     dps: z.number(),
-    itemId: z.number()
+    itemId: z.number(),
+    slot: z.string(),
+    catalyzedItemId: z.number().nullable(),
+    droptimizerId: z.string()
+})
+
+export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema.omit({
+    id: true,
+    droptimizerId: true
 })
 
 export const droptimizerSchema = z.object({
@@ -21,14 +30,7 @@ export const droptimizerSchema = z.object({
 })
 
 export const newDroptimizerSchema = droptimizerSchema.omit({ id: true, upgrades: true }).extend({
-    upgrades: z.array(
-        z.object({
-            encounterId: z.number(),
-            itemId: z.number(),
-            dps: z.number(),
-            slot: z.string()
-        })
-    )
+    upgrades: z.array(newDroptimizerUpgradeSchema)
 })
 
 export const raidbotsURLSchema = z

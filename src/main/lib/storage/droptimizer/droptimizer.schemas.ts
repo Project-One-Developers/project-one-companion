@@ -1,9 +1,5 @@
+import { droptimizerUpgradeSchema } from '@shared/schemas/simulations.schemas'
 import { z } from 'zod'
-
-const upgradesStorageSchema = z.object({
-    itemId: z.number(),
-    dps: z.number()
-})
 
 export const droptimizerStorageSchema = z
     .object({
@@ -16,7 +12,7 @@ export const droptimizerStorageSchema = z
         duration: z.number().min(1),
         nTargets: z.number().min(1),
         characterName: z.string(),
-        upgrades: z.array(upgradesStorageSchema)
+        upgrades: z.array(droptimizerUpgradeSchema)
     })
     .transform((data) => {
         return {
@@ -32,8 +28,12 @@ export const droptimizerStorageSchema = z
                 nTargets: data.nTargets
             },
             upgrades: data.upgrades.map((up) => ({
+                id: up.id,
                 itemId: up.itemId,
-                dps: up.dps
+                dps: up.dps,
+                slot: up.slot,
+                catalyzedItemId: up.catalyzedItemId,
+                droptimizerId: up.droptimizerId
             }))
         }
     })

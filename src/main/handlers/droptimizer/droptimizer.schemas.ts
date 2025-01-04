@@ -1,5 +1,12 @@
 import { z } from 'zod'
 
+export const csvItemUpgradeSchema = z.object({
+    encounterId: z.number(),
+    itemId: z.number(),
+    dps: z.number(),
+    slot: z.string()
+})
+
 export const csvDataSchema = z.string().transform((data) => {
     // Remove first and last row (header and empty row)
     const rows = data
@@ -16,27 +23,17 @@ export const csvDataSchema = z.string().transform((data) => {
     const characterName = firstRow.nameOrId
     const baseDmg = parseFloat(firstRow.dmg)
 
-    const upgrades = itemRows
-        .map((row) => ({
-            dps: Math.round(parseFloat(row.dmg) - baseDmg),
-            encounterId: Number(row.nameOrId.split('/')[1]),
-            itemId: Number(row.nameOrId.split('/')[3]),
-            slot: row.nameOrId.split('/')[6]
-        }))
-        .filter((item) => item.dps > 0)
-        .reduce((acc, item) => {
-            const existingItem = acc.get(item.itemId)
-            if (!existingItem || item.dps > existingItem.dps) {
-                acc.set(item.itemId, item)
-            }
-            return acc
-        }, new Map()) // Map to keep the maximum DPS per itemId
-        .values()
+    const upgrades = itemRows.map((row) => ({
+        dps: Math.round(parseFloat(row.dmg) - baseDmg),
+        encounterId: Number(row.nameOrId.split('/')[1]),
+        itemId: Number(row.nameOrId.split('/')[3]),
+        slot: row.nameOrId.split('/')[6]
+    }))
 
     return {
         characterName,
         baseDmg,
-        upgrades: Array.from(upgrades)
+        upgrades
     }
 })
 

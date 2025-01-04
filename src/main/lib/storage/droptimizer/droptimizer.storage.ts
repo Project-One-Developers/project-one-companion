@@ -1,4 +1,10 @@
-import type { Droptimizer, NewDroptimizer } from '@shared/types/types'
+import { itemToCatalystArraySchema, itemToTiersetArraySchema } from '@shared/schemas/wow.schemas'
+import type {
+    Droptimizer,
+    ItemToCatalyst,
+    ItemToTierset,
+    NewDroptimizer
+} from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
@@ -25,6 +31,15 @@ export const getDroptimizer = async (droptimizerId: string): Promise<Droptimizer
     }
 
     return droptimizerStorageSchema.parse(result)
+}
+
+export const getItemToTiersetMapping = async (): Promise<ItemToTierset[]> => {
+    const result = await db.query.itemToTiersetTable.findMany()
+    return itemToTiersetArraySchema.parse(result)
+}
+export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
+    const result = await db.query.itemToCatalystTable.findMany()
+    return itemToCatalystArraySchema.parse(result)
 }
 
 /**
@@ -72,9 +87,6 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
-    const itemsToTiersetMapping = await db.query.itemToTiersetTable.findMany() // fare la lookup una volta e tenerla memorizzata in memoria
-    const itemsToCatalystMapping = await db.query.itemToCatalystTable.findMany()
-
     const droptimizerId = await db.transaction(async (tx) => {
         const droptimizerRes = await tx
             .insert(droptimizerTable)
@@ -100,25 +112,14 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         }
 
         const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => {
-            const itemMapping = itemsToTiersetMapping.find((i) => i.itemId === up.itemId)
-            const catalystMapping = !itemMapping
-                ? itemsToCatalystMapping.find(
-                      (i) => i.catalyzedItemId === up.itemId && i.encounterId === up.encounterId
-                  )
-                : null
-
             const res: UpgradesTableInsert = {
                 id: newUUID(),
                 droptimizerId: droptimizerRes.id,
-                itemId: itemMapping ? itemMapping.tokenId : up.itemId, // itemId of the tier token looted by boss
+                itemId: up.itemId,
                 slot: up.slot,
                 dps: up.dps,
-                ...(catalystMapping && {
-                    itemId: catalystMapping.itemId, // itemId looted by boss
-                    catalyzedItemId: up.itemId // itemId converted by catalyst
-                })
+                catalyzedItemId: up.catalyzedItemId
             }
-
             return res
         })
 

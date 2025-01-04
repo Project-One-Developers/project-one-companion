@@ -84,9 +84,11 @@ export const itemToTiersetSchema = z.object({
     itemId: z.number(),
     tokenId: z.number()
 })
+export const itemToTiersetArraySchema = z.array(itemToTiersetSchema)
 
 export const itemToCatalystSchema = z.object({
     itemId: z.number(),
     encounterId: z.number(),
     catalyzedItemId: z.number()
 })
+export const itemToCatalystArraySchema = z.array(itemToCatalystSchema)

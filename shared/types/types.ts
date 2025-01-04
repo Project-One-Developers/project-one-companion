@@ -4,6 +4,7 @@ import {
     droptimizerSchema,
     droptimizerUpgradeSchema,
     newDroptimizerSchema,
+    newDroptimizerUpgradeSchema,
     raidbotsURLSchema
 } from '../schemas/simulations.schemas'
 import {
@@ -21,6 +22,7 @@ export type Player = z.infer<typeof playerSchema>
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
+export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
 
 export type Character = z.infer<typeof characterSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
