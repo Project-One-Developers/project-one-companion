@@ -1,4 +1,3 @@
-import isDev from 'electron-is-dev'
 import { createWinstonLogger } from './winston/winston'
 
 export interface LogFunction {
@@ -21,6 +20,6 @@ export interface Logger {
     child(): Logger
 }
 
-export const createLogger = (): Logger => createWinstonLogger(isDev)
+export const createLogger = (): Logger => createWinstonLogger(true)
 
 export const logger = createLogger()
