@@ -26,6 +26,9 @@ export default function DroptimizerPage(): JSX.Element {
     const filteredDroptimizers = useMemo(() => {
         if (!data?.droptimizers) return []
 
+        // Using a Map to track the latest droptimizer for each characterName
+        const latestDroptimizersMap = new Map()
+
         return data.droptimizers.filter((dropt) => {
             // Filter by raid difficulty
             if (selectedRaidDiff !== 'all' && dropt.raidDifficulty !== selectedRaidDiff) {
@@ -45,7 +48,14 @@ export default function DroptimizerPage(): JSX.Element {
                 return false
             }
 
-            return true
+            // Worka solo se l'array di droptimizer è ordinato per dropt.date desc
+            const existingDropt = latestDroptimizersMap.get(dropt.characterName)
+            if (!existingDropt || dropt.date > existingDropt.date) {
+                latestDroptimizersMap.set(dropt.characterName, dropt)
+                return true
+            }
+
+            return false
         })
     }, [data, selectedRaidDiff, filterByCurrentWeek, onlyWithUpgrades])
 
