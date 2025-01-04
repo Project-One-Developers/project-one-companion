@@ -1,15 +1,53 @@
 import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { getDpsHumanReadable, unitTimestampToRelativeDays } from '@renderer/lib/utils'
+import {
+    formatWowWeek,
+    getDpsHumanReadable,
+    unitTimestampToRelativeDays,
+    unixTimestampToWowWeek
+} from '@renderer/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
+import { useMemo, useState } from 'react'
 
-export default function RosterPage(): JSX.Element {
+export default function DroptimizerPage(): JSX.Element {
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.droptimizers],
         queryFn: fetchDroptimizers
     })
+
+    // Filters state
+    const [selectedRaidDiff, setSelectedRaidDiff] = useState('all')
+    const [filterByCurrentWeek, setFilterByCurrentWeek] = useState(false)
+    const [onlyWithUpgrades, setOnlyWithUpgrades] = useState(false)
+
+    // Compute filtered data
+    const filteredDroptimizers = useMemo(() => {
+        if (!data?.droptimizers) return []
+
+        return data.droptimizers.filter((dropt) => {
+            // Filter by raid difficulty
+            if (selectedRaidDiff !== 'all' && dropt.raidDifficulty !== selectedRaidDiff) {
+                return false
+            }
+
+            // Filter by current week
+            if (
+                filterByCurrentWeek &&
+                unixTimestampToWowWeek(dropt.date) !== unixTimestampToWowWeek()
+            ) {
+                return false
+            }
+
+            // Filter by upgrades
+            if (onlyWithUpgrades && (!dropt.upgrades || dropt.upgrades.length === 0)) {
+                return false
+            }
+
+            return true
+        })
+    }, [data, selectedRaidDiff, filterByCurrentWeek, onlyWithUpgrades])
 
     return (
         <>
@@ -26,67 +64,110 @@ export default function RosterPage(): JSX.Element {
                             <NewDroptimizerForm />
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-4">
-                        {data?.droptimizers.map((dropt) => {
-                            // const topUpgrade = dropt.upgrades?.sort((a, b) => b.dps - a.dps)[0]
-                            return (
-                                <div
-                                    key={dropt.id}
-                                    className="flex flex-col justify-between p-6 bg-muted h-[200px] w-[300px] rounded-lg relative"
-                                >
-                                    {/* <DeletePlayerDialog player={player} /> */}
-                                    <h2 className="font-black text-2xl">{dropt.characterName}</h2>
-                                    <div className="text-sm text-gray-600">
-                                        <p>
-                                            <strong>Raid Difficulty:</strong> {dropt.raidDifficulty}
-                                        </p>
-                                        <p>
-                                            <strong>Fight Style:</strong>{' '}
-                                            {dropt.fightInfo.fightstyle}({dropt.fightInfo.nTargets}){' '}
-                                            {dropt.fightInfo.duration} sec
-                                        </p>
-                                        <p title={new Date(dropt.date * 1000).toLocaleString()}>
-                                            <strong>Date: </strong>
-                                            {unitTimestampToRelativeDays(dropt.date)}
-                                        </p>
-                                        <p>
-                                            <strong>Upgrades:</strong> {dropt.upgrades?.length}
-                                        </p>
-                                    </div>
 
-                                    {dropt.upgrades ? (
-                                        <div className={'flex items-center gap-3 mt-3'}>
-                                            {dropt.upgrades.slice(0, 6).map((item) => (
-                                                <div
-                                                    className="-mr-4 relative group"
-                                                    key={item.itemId}
-                                                >
-                                                    {/* todo: wowhead tooltips? */}
-                                                    <img
-                                                        height={50}
-                                                        width={50}
-                                                        src={
-                                                            'https://wow.zamimg.com/images/wow/icons/large/inv_nerubian_ring_01_color3.jpg'
-                                                        }
-                                                        alt={String(item.itemId)}
-                                                        className="object-cover !m-0 !p-0 object-top rounded-full h-10 w-10 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
-                                                    />
-                                                    <p className="text-xs text-gray-600 text-center">
-                                                        <strong>
-                                                            {getDpsHumanReadable(item.dps)}
-                                                        </strong>
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <p className="text-sm text-gray-600">
-                                            No upgrades available.
-                                        </p>
-                                    )}
+                    {/* Info Bar */}
+                    <div className="flex flex-wrap gap-4 items-center bg-gray-800 text-white p-4 rounded-lg w-full">
+                        {/* WoW Reset Info */}
+                        <div>
+                            <div>
+                                <p className="font-semibold">
+                                    <strong>WoW Reset:</strong> {formatWowWeek()} (
+                                    {unixTimestampToWowWeek()})
+                                </p>
+                            </div>
+                        </div>
+                        {/* Filters Section */}
+                        <div className="flex flex-wrap gap-4">
+                            <div className="flex flex-col">
+                                <label htmlFor="raid-diff" className="font-semibold">
+                                    Raid Difficulty:
+                                </label>
+                                {/* TODO: bindare alle raid diff di wow enum */}
+                                <select
+                                    id="raid-diff"
+                                    value={selectedRaidDiff}
+                                    onChange={(e) => setSelectedRaidDiff(e.target.value)}
+                                    className="border rounded-md p-2 bg-gray-700 text-white"
+                                >
+                                    <option value="all">All</option>
+                                    <option value="Heroic">Heroic</option>
+                                    <option value="Mythic">Mythic</option>
+                                </select>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <label htmlFor="current-week" className="font-semibold">
+                                    Current Reset:
+                                </label>
+                                <input
+                                    id="current-week"
+                                    type="checkbox"
+                                    checked={filterByCurrentWeek}
+                                    onChange={(e) => setFilterByCurrentWeek(e.target.checked)}
+                                    className="w-4 h-4"
+                                />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <label htmlFor="only-upgrades" className="font-semibold">
+                                    Upgrades only:
+                                </label>
+                                <input
+                                    id="only-upgrades"
+                                    type="checkbox"
+                                    checked={onlyWithUpgrades}
+                                    onChange={(e) => setOnlyWithUpgrades(e.target.checked)}
+                                    className="w-4 h-4"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-x-4 gap-y-4">
+                        {filteredDroptimizers.map((dropt) => (
+                            <div
+                                key={dropt.id}
+                                className="flex flex-col justify-between p-6 bg-muted h-[220px] w-[300px] rounded-lg relative"
+                            >
+                                <h2 className="font-black text-2xl">{dropt.characterName}</h2>
+                                <div className="text-sm text-gray-600">
+                                    <p>
+                                        <strong>Raid Difficulty:</strong> {dropt.raidDifficulty}
+                                    </p>
+                                    <p>
+                                        <strong>Fight Style:</strong> {dropt.fightInfo.fightstyle}(
+                                        {dropt.fightInfo.nTargets}) {dropt.fightInfo.duration} sec
+                                    </p>
+                                    <p title={new Date(dropt.date * 1000).toLocaleString()}>
+                                        <strong>Date: </strong>
+                                        {unitTimestampToRelativeDays(dropt.date)}
+                                    </p>
+                                    <p>
+                                        <strong>Upgrades:</strong> {dropt.upgrades?.length}
+                                    </p>
                                 </div>
-                            )
-                        })}
+                                {dropt.upgrades ? (
+                                    <div className={'flex items-center gap-3 mt-3'}>
+                                        {dropt.upgrades.slice(0, 6).map((item) => (
+                                            <div className="-mr-4 relative group" key={item.itemId}>
+                                                <img
+                                                    height={50}
+                                                    width={50}
+                                                    src={
+                                                        'https://wow.zamimg.com/images/wow/icons/large/inv_nerubian_ring_01_color3.jpg'
+                                                    }
+                                                    alt={String(item.itemId)}
+                                                    className="object-cover !m-0 !p-0 object-top rounded-full h-10 w-10 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
+                                                />
+                                                <p className="text-xs text-gray-600 text-center">
+                                                    <strong>{getDpsHumanReadable(item.dps)}</strong>
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-600">No upgrades available.</p>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}

@@ -24,3 +24,43 @@ export function unitTimestampToRelativeDays(unixTimestamp: number): string {
     const daysAgo = Math.floor((Date.now() - unixTimestamp * 1000) / 86400000)
     return daysAgo ? `${daysAgo} days ago` : 'Today'
 }
+
+export function unixTimestampToWowWeek(unixTimestamp?: number): number {
+    if (unixTimestamp == null) {
+        unixTimestamp = Math.floor(Date.now() / 1000) // current unix timestamp
+    }
+
+    const startTimestamp = 1101254400 // WoW launch date (Wednesday) Unix timestamp
+
+    // Days difference adjusted for the WoW week starting on Wednesday
+    const daysDifference = Math.floor((unixTimestamp - startTimestamp) / 86400)
+    const adjustedDays = (daysDifference + 3) % 7 // Align week start to Wednesday
+
+    // Calculate the week number
+    return Math.floor((daysDifference - adjustedDays) / 7) + 1
+}
+
+export function formatWowWeek(wowWeek?: number): string {
+    if (wowWeek == null) {
+        wowWeek = unixTimestampToWowWeek()
+    }
+
+    const WOW_START_DATE = new Date('2004-11-24T00:00:00Z') // WoW start date (Wednesday)
+
+    // Calculate the start date of the given WoW week
+    const weekStartDate = new Date(WOW_START_DATE.getTime() + wowWeek * 7 * 86400000)
+
+    // Calculate the end date (Tuesday of the same week)
+    const weekEndDate = new Date(weekStartDate.getTime() + 6 * 86400000)
+
+    // Format the date range to DD/MM/YYYY
+    const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    }
+    const startDateString = weekStartDate.toLocaleDateString('it-IT', options)
+    const endDateString = weekEndDate.toLocaleDateString('it-IT', options)
+
+    return `${startDateString} - ${endDateString}`
+}
