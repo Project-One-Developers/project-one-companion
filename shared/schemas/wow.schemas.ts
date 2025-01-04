@@ -16,9 +16,33 @@ export const wowClassSchema = z.enum([
     'Warrior'
 ])
 
+export const wowClassTankSchema = z.enum([
+    'Death Knight',
+    'Paladin',
+    'Warrior',
+    'Druid',
+    'Monk',
+    'Demon Hunter'
+])
+
+export const wowClassHealerSchema = z.enum([
+    'Paladin',
+    'Shaman',
+    'Druid',
+    'Priest',
+    'Monk',
+    'Evoker'
+])
+
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
 
 export const wowRaidDiffSchema = z.enum(['Normal', 'Heroic', 'Mythic'])
+
+export const wowRoleClassSchema = z.object({
+    Tank: wowClassTankSchema,
+    Healer: wowClassHealerSchema,
+    DPS: wowClassSchema
+})
 
 export const itemSchema = z.object({
     id: z.number(),

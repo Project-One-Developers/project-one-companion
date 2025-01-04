@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addCharacter } from '@renderer/lib/tanstack-query/players'
-import { CLASSES, ROLES } from '@shared/consts/wow.consts'
+import { ROLES, ROLES_CLASSES_MAP } from '@shared/consts/wow.consts'
 import { wowClassSchema, wowRolesSchema } from '@shared/schemas/wow.schemas'
 import type { NewCharacter } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
@@ -63,6 +63,9 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
         }
     })
 
+    const selectedRole = form.watch('role')
+    const filteredClasses = ROLES_CLASSES_MAP[selectedRole] || []
+
     function onSubmit(values: NewCharacter): void {
         mutate(values)
     }
@@ -96,35 +99,6 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
                         />
                         <FormField
                             control={form.control}
-                            name="class"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Classe</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Seleziona una classe" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {CLASSES.map((c) => (
-                                                    <SelectItem key={c} value={c}>
-                                                        {c}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
                             name="role"
                             render={({ field }) => (
                                 <FormItem>
@@ -143,6 +117,36 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
                                                 {ROLES.map((r) => (
                                                     <SelectItem key={r} value={r}>
                                                         {r}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="class"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Classe</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Seleziona una classe" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {filteredClasses.map((c) => (
+                                                    <SelectItem key={c} value={c}>
+                                                        {c}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
