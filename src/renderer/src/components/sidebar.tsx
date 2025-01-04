@@ -59,7 +59,7 @@ export default function ProjectOneSidebar(): JSX.Element {
         <Sidebar>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Roster</SidebarGroupLabel>
+                    <SidebarGroupLabel>Raid</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {rosterItems.map((item) => (
