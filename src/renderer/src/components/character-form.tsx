@@ -12,7 +12,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from './ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
@@ -68,6 +75,9 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Nuovo pg per {playerName}</DialogTitle>
+                    <DialogDescription>
+                        Inserisci il nome corretto del personaggio in game
+                    </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">

@@ -11,7 +11,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from './ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 
@@ -64,6 +71,11 @@ export default function PlayerForm(): JSX.Element {
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Nuovo player</DialogTitle>
+                    <DialogDescription>
+                        Inserisci solo il nickname del giocatore. I personaggi giocati andranno
+                        aggiunti successivamente e dovranno essere chiamati come il personaggio in
+                        game.
+                    </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">

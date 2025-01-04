@@ -7,7 +7,14 @@ import { Loader2, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from './ui/dialog'
 
 export default function DeletePlayerDialog({ player }: { player: Player }): JSX.Element {
     const [open, setOpen] = useState(false)
@@ -30,11 +37,11 @@ export default function DeletePlayerDialog({ player }: { player: Player }): JSX.
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Cancellazione player</DialogTitle>
+                    <DialogDescription>
+                        Il player {player.playerName} e i relativi personaggi verranno
+                        definitivamente cancellati dal database.
+                    </DialogDescription>
                 </DialogHeader>
-                <p>
-                    Il player {player.playerName} e i relativi personaggi verranno definitivamente
-                    cancellati dal database.
-                </p>
                 <img
                     src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2w4YzhldHo5OGtnc29raXAzN2k0YnA4am5seWdleDJlZTdwcHlmdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4DvP1HK8UviaOuRcCY/giphy.gif"
                     alt="Be Careful"
