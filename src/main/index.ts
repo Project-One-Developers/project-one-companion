@@ -10,8 +10,8 @@ import { registerHandlers } from './handlers/handlers.utils'
 const DEFAULT_WIDTH = 1920
 const DEFAULT_HEIGHT = 1080
 
-const MIN_WIDTH = 1024
-const MIN_HEIGHT = 900
+const MIN_WIDTH = 500
+const MIN_HEIGHT = 500
 
 const boundsSchema = z.object({
     width: z.number().int().min(MIN_WIDTH).default(DEFAULT_WIDTH),
@@ -25,7 +25,8 @@ const configPath = path.join(app.getPath('userData'), 'projectone-companion-conf
 function loadWindowSettings(): z.infer<typeof boundsSchema> {
     try {
         return boundsSchema.parse(JSON.parse(fs.readFileSync(configPath, 'utf-8')))
-    } catch {
+    } catch (e) {
+        console.log('Cannot parse projectone-companion-config.json: ' + e)
         return { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT }
     }
 }
