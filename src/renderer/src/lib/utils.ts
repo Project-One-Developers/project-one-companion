@@ -34,10 +34,9 @@ export function unixTimestampToWowWeek(unixTimestamp?: number): number {
 
     // Days difference adjusted for the WoW week starting on Wednesday
     const daysDifference = Math.floor((unixTimestamp - startTimestamp) / 86400)
-    const adjustedDays = (daysDifference + 3) % 7 // Align week start to Wednesday
 
     // Calculate the week number
-    return Math.floor((daysDifference - adjustedDays) / 7) + 1
+    return Math.floor(daysDifference / 7)
 }
 
 export function formatWowWeek(wowWeek?: number): string {
