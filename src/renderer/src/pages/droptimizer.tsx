@@ -19,6 +19,7 @@ export default function DroptimizerPage(): JSX.Element {
 
     // Filters state
     const [selectedRaidDiff, setSelectedRaidDiff] = useState('all')
+    const [onlyLatest, setOnlyLatest] = useState(true)
     const [filterByCurrentWeek, setFilterByCurrentWeek] = useState(false)
     const [onlyWithUpgrades, setOnlyWithUpgrades] = useState(false)
 
@@ -29,35 +30,40 @@ export default function DroptimizerPage(): JSX.Element {
         // Using a Map to track the latest droptimizer for each characterName
         const latestDroptimizersMap = new Map()
 
-        return data.droptimizers.filter((dropt) => {
-            // Filter by raid difficulty
-            if (selectedRaidDiff !== 'all' && dropt.raidDifficulty !== selectedRaidDiff) {
-                return false
-            }
+        return data.droptimizers
+            .sort((a, b) => b.date - a.date)
+            .filter((dropt) => {
+                // Filter by raid difficulty
+                if (selectedRaidDiff !== 'all' && dropt.raidDifficulty !== selectedRaidDiff) {
+                    return false
+                }
 
-            // Filter by current week
-            if (
-                filterByCurrentWeek &&
-                unixTimestampToWowWeek(dropt.date) !== unixTimestampToWowWeek()
-            ) {
-                return false
-            }
+                // Filter by current week
+                if (
+                    filterByCurrentWeek &&
+                    unixTimestampToWowWeek(dropt.date) !== unixTimestampToWowWeek()
+                ) {
+                    return false
+                }
 
-            // Filter by upgrades
-            if (onlyWithUpgrades && (!dropt.upgrades || dropt.upgrades.length === 0)) {
-                return false
-            }
+                // Filter by upgrades
+                if (onlyWithUpgrades && (!dropt.upgrades || dropt.upgrades.length === 0)) {
+                    return false
+                }
 
-            // Worka solo se l'array di droptimizer è ordinato per dropt.date desc
-            const existingDropt = latestDroptimizersMap.get(dropt.characterName)
-            if (!existingDropt || dropt.date > existingDropt.date) {
-                latestDroptimizersMap.set(dropt.characterName, dropt)
+                // Worka solo se l'array di droptimizer è ordinato per dropt.date desc
+                if (onlyLatest) {
+                    const existingDropt = latestDroptimizersMap.get(dropt.characterName)
+                    if (!existingDropt || dropt.date > existingDropt.date) {
+                        latestDroptimizersMap.set(dropt.characterName, dropt)
+                    } else {
+                        return false
+                    }
+                }
+
                 return true
-            }
-
-            return false
-        })
-    }, [data, selectedRaidDiff, filterByCurrentWeek, onlyWithUpgrades])
+            })
+    }, [data, selectedRaidDiff, filterByCurrentWeek, onlyWithUpgrades, onlyLatest])
 
     return (
         <>
@@ -103,6 +109,18 @@ export default function DroptimizerPage(): JSX.Element {
                                     <option value="Heroic">Heroic</option>
                                     <option value="Mythic">Mythic</option>
                                 </select>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <label htmlFor="only-latest" className="font-semibold">
+                                    Latest only:
+                                </label>
+                                <input
+                                    id="only-latest"
+                                    type="checkbox"
+                                    checked={onlyLatest}
+                                    onChange={(e) => setOnlyLatest(e.target.checked)}
+                                    className="w-4 h-4"
+                                />
                             </div>
                             <div className="flex items-center gap-2">
                                 <label htmlFor="current-week" className="font-semibold">
@@ -156,22 +174,30 @@ export default function DroptimizerPage(): JSX.Element {
                                 </div>
                                 {dropt.upgrades ? (
                                     <div className={'flex items-center gap-3 mt-3'}>
-                                        {dropt.upgrades.slice(0, 6).map((item) => (
-                                            <div className="-mr-4 relative group" key={item.itemId}>
-                                                <img
-                                                    height={50}
-                                                    width={50}
-                                                    src={
-                                                        'https://wow.zamimg.com/images/wow/icons/large/inv_nerubian_ring_01_color3.jpg'
-                                                    }
-                                                    alt={String(item.itemId)}
-                                                    className="object-cover !m-0 !p-0 object-top rounded-full h-10 w-10 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
-                                                />
-                                                <p className="text-xs text-gray-600 text-center">
-                                                    <strong>{getDpsHumanReadable(item.dps)}</strong>
-                                                </p>
-                                            </div>
-                                        ))}
+                                        {dropt.upgrades
+                                            .sort((a, b) => b.dps - a.dps)
+                                            .slice(0, 6)
+                                            .map((item) => (
+                                                <div
+                                                    className="-mr-4 relative group"
+                                                    key={item.itemId}
+                                                >
+                                                    <img
+                                                        height={50}
+                                                        width={50}
+                                                        src={
+                                                            'https://wow.zamimg.com/images/wow/icons/large/inv_nerubian_ring_01_color3.jpg'
+                                                        }
+                                                        alt={String(item.itemId)}
+                                                        className="object-cover !m-0 !p-0 object-top rounded-full h-10 w-10 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
+                                                    />
+                                                    <p className="text-xs text-gray-600 text-center">
+                                                        <strong>
+                                                            {getDpsHumanReadable(item.dps)}
+                                                        </strong>
+                                                    </p>
+                                                </div>
+                                            ))}
                                     </div>
                                 ) : (
                                     <p className="text-sm text-gray-600">No upgrades available.</p>
