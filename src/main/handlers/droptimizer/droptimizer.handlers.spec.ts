@@ -1,4 +1,5 @@
 import { describe, expect, it, jest } from '@jest/globals'
+import { ItemToCatalyst } from '@shared/types/types'
 import { addDroptimizer } from '@storage/droptimizer/droptimizer.storage'
 import * as fs from 'fs'
 import { allHandlers } from '..'
@@ -24,10 +25,23 @@ jest.mock('./droptimizer.utils', () => {
     }
 })
 
-jest.mock('@storage/droptimizer/droptimizer.storage', () => ({
-    __esModule: true,
-    addDroptimizer: jest.fn()
-}))
+jest.mock('@storage/droptimizer/droptimizer.storage', () => {
+    const originalModule = jest.requireActual('./droptimizer.utils')
+    const getItemToTiersetMappingMock = jest.fn() // il droptimizer sotto test non ha tierset di upgrade
+    const getItemToCatalystMappingMock = jest.fn((): Promise<ItemToCatalyst[]> => {
+        return Promise.resolve([
+            { raidItemId: 212438, catalyzedItemId: 212061, encounterId: 2611 },
+            { raidItemId: 225583, catalyzedItemId: 212062, encounterId: 2609 }
+        ])
+    })
+    return {
+        __esModule: true,
+        ...(originalModule as object), // keep other function from the original module
+        addDroptimizer: jest.fn(),
+        getItemToTiersetMapping: getItemToTiersetMappingMock,
+        getItemToCatalystMapping: getItemToCatalystMappingMock
+    }
+})
 
 describe('Droptimizer Handlers', () => {
     it('should have the add-droptimizer handler', () => {
@@ -58,31 +72,31 @@ describe('Droptimizer Handlers', () => {
             upgrades: [
                 {
                     dps: 10565,
-                    encounterId: 2601,
+                    catalyzedItemId: null,
                     itemId: 221023,
                     slot: 'trinket2'
                 },
                 {
                     dps: 4794,
-                    encounterId: 2612,
+                    catalyzedItemId: null,
                     itemId: 220305,
                     slot: 'trinket1'
                 },
                 {
                     dps: 490,
-                    encounterId: 2609,
-                    itemId: 212062,
+                    catalyzedItemId: 212062,
+                    itemId: 225583,
                     slot: 'waist'
                 },
                 {
                     dps: 25,
-                    encounterId: 2611,
-                    itemId: 212061,
+                    catalyzedItemId: 212061,
+                    itemId: 212438,
                     slot: 'wrist'
                 },
                 {
                     dps: 14306,
-                    encounterId: 2602,
+                    catalyzedItemId: null,
                     itemId: 225578,
                     slot: 'finger2'
                 }

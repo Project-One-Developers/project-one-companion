@@ -186,18 +186,18 @@ export const itemToTiersetTable = pgTable('items_to_tierset', {
 })
 
 // Mapping tra itemId e relativi catalyst (preso da public/items_to_catalyst.json)
-// La logica è: catalyzedItemId è l'item id ottenuto se dovessi catalizzare l'itemId.
+// La logica è: catalyzedItemId è l'item id ottenuto se dovessi catalizzare l'itemId lootato da un certo boss (encounter id)
 // encounterId ci server per il reverse lookup: da catalyzedItemId + encounterId risalgo all'itemId originale
 export const itemToCatalystTable = pgTable(
     'items_to_catalyst',
     {
-        itemId: integer('item_id').notNull(),
+        raidItemId: integer('raid_item_id').notNull(),
         encounterId: integer('encounter_id').notNull(),
         catalyzedItemId: integer('catalyzed_item_id').notNull()
     },
     (t) => [
         {
-            pk: primaryKey({ columns: [t.itemId, t.encounterId, t.catalyzedItemId] }) // todo: non va
+            pk: primaryKey({ columns: [t.raidItemId, t.encounterId, t.catalyzedItemId] }) // todo: non va
         }
     ]
 )

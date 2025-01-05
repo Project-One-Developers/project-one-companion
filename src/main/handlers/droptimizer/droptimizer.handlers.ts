@@ -41,9 +41,16 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         .filter((item) => item.dps > 0)
         // remap itemid to tierset & catalyst
         .map((up) => {
-            const tiersetMapping = cachedItemsToTiersetMapping.find((i) => i.itemId === up.itemId)
+            // ci serve questo mapping perchè in data.csv è presente l'upgrade per l'itemid del pezzo del tierset finale (es: guanti warlock)
+            // ma questo itemid non appartiene alla loot table del boss, che può lootare solo token per gruppi di classi
+            const tiersetMapping = cachedItemsToTiersetMapping?.find((i) => i.itemId === up.itemId)
+
+            // ci serve questo reverse lookup perchè in data.csv di droptimizer per un upgrade di tipo catalizzato è presente:
+            // 1. l'item id finale dopo la trasformazione catalyst (che non appartiene alla loot table del boss)
+            // 2. il boss encounter id dove esce l'item da catalizzare
+            // tramite la tabella di mapping ItemToCatalyst riusciamo a ricavare l'item id "originale" della loot table del boss
             const catalystMapping = !tiersetMapping
-                ? cachedItemsToCatalystMapping.find(
+                ? cachedItemsToCatalystMapping?.find(
                       (i) => i.catalyzedItemId === up.itemId && i.encounterId === up.encounterId
                   )
                 : null
@@ -54,8 +61,8 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
                 dps: up.dps,
                 catalyzedItemId: null,
                 ...(catalystMapping && {
-                    itemId: catalystMapping.itemId, // itemId looted by boss
-                    catalyzedItemId: up.itemId // itemId converted by catalyst
+                    itemId: catalystMapping.raidItemId, // itemId looted by boss
+                    catalyzedItemId: catalystMapping.catalyzedItemId // itemId converted by catalyst
                 })
             }
 
@@ -63,9 +70,12 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         })
         // for a given itemid upgrade, keep the max dps gain
         .reduce((acc, item) => {
-            const existingItem = acc.get(item.itemId)
+            // se posso prendo il catalyzed id perchè il gain ce l'ho sull'item risultante del catalyst
+            const itemRealId = item.catalyzedItemId ?? item.itemId
+
+            const existingItem = acc.get(itemRealId)
             if (!existingItem || item.dps > existingItem.dps) {
-                acc.set(item.itemId, item)
+                acc.set(itemRealId, item)
             }
             return acc
         }, new Map<number, NewDroptimizerUpgrade>())
