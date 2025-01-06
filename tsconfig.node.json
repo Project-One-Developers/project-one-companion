@@ -22,7 +22,8 @@
         "types": ["electron-vite/node"],
         "paths": {
             "@shared/*": ["shared/*"],
-            "@storage/*": ["src/main/lib/storage/*"]
+            "@storage/*": ["src/main/lib/storage/*"],
+            "@utils": ["src/main/lib/utils"]
         }
     },
     "include": [

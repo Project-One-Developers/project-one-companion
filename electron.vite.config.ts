@@ -14,7 +14,8 @@ export default defineConfig({
         resolve: {
             alias: {
                 '@shared': resolve(__dirname, 'shared'),
-                '@storage': resolve(__dirname, 'src/main/lib/storage')
+                '@storage': resolve(__dirname, 'src/main/lib/storage'),
+                '@utils': resolve(__dirname, 'src/main/lib/utils')
             }
         }
     },
