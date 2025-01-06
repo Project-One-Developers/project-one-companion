@@ -3,10 +3,10 @@ import { z } from 'zod'
 
 export const droptimizerStorageSchema = z
     .object({
-        id: z.string(),
         url: z.string().url(),
         resultRaw: z.string(),
         date: z.number(),
+        dateImported: z.number(),
         raidDifficulty: z.string(),
         fightStyle: z.string(),
         duration: z.number().min(1),
@@ -16,10 +16,10 @@ export const droptimizerStorageSchema = z
     })
     .transform((data) => {
         return {
-            id: data.id,
             url: data.url,
             resultRaw: data.resultRaw,
             date: data.date,
+            dateImported: data.dateImported,
             raidDifficulty: data.raidDifficulty,
             characterName: data.characterName,
             fightInfo: {

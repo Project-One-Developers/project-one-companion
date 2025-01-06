@@ -19,9 +19,9 @@ import type { UpgradesTableInsert } from './droptimizer.types'
  * @param droptimizerId - The unique identifier of the Droptimizer to retrieve.
  * @returns A Promise that resolves to the Droptimizer object if found, or null if not found.
  */
-export const getDroptimizer = async (droptimizerId: string): Promise<Droptimizer | null> => {
+export const getDroptimizer = async (url: string): Promise<Droptimizer | null> => {
     const result = await db.query.droptimizerTable.findFirst({
-        where: (droptimizerTable, { eq }) => eq(droptimizerTable.id, droptimizerId),
+        where: (droptimizerTable, { eq }) => eq(droptimizerTable.url, url),
         with: {
             upgrades: true
         }
@@ -89,20 +89,23 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
     const droptimizerId = await db.transaction(async (tx) => {
+        // se è già stato importato, per ora sovrascrivo poi vedremo
+        await tx.delete(droptimizerTable).where(eq(droptimizerTable.url, droptimizer.url))
+
         const droptimizerRes = await tx
             .insert(droptimizerTable)
             .values({
-                id: newUUID(),
                 url: droptimizer.url,
                 resultRaw: droptimizer.resultRaw,
                 date: droptimizer.date,
+                dateImported: droptimizer.dateImported,
                 raidDifficulty: droptimizer.raidDifficulty,
                 fightStyle: droptimizer.fightInfo.fightstyle,
                 duration: droptimizer.fightInfo.duration,
                 nTargets: droptimizer.fightInfo.nTargets,
                 characterName: droptimizer.characterName
             })
-            .returning({ id: droptimizerTable.id })
+            .returning({ url: droptimizerTable.url })
             .then(takeFirstResult)
 
         if (!droptimizerRes) {
@@ -115,7 +118,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => {
             const res: UpgradesTableInsert = {
                 id: newUUID(),
-                droptimizerId: droptimizerRes.id,
+                droptimizerId: droptimizerRes.url,
                 itemId: up.itemId,
                 slot: up.slot,
                 dps: up.dps,
@@ -126,11 +129,11 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
 
         await tx.insert(droptimizerUpgradesTable).values(upgradesArray)
 
-        return droptimizerRes.id
+        return droptimizerRes.url
     })
 
     const result = await db.query.droptimizerTable.findFirst({
-        where: (droptimizerTable, { eq }) => eq(droptimizerTable.id, droptimizerId),
+        where: (droptimizerTable, { eq }) => eq(droptimizerTable.url, droptimizerId),
         with: {
             upgrades: true
         }
@@ -139,7 +142,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
     return droptimizerStorageSchema.parse(result)
 }
 
-export const deleteDroptimizer = async (id: string): Promise<void> => {
+export const deleteDroptimizer = async (url: string): Promise<void> => {
     // droptimizerUpgradesTable will be deleted on "cascade"
-    await db.delete(droptimizerTable).where(eq(droptimizerTable.id, id))
+    await db.delete(droptimizerTable).where(eq(droptimizerTable.url, url))
 }

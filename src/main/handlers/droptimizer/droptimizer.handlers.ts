@@ -82,6 +82,7 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         }, new Map<number, NewDroptimizerUpgrade>())
 
     const droptimizer: NewDroptimizer = {
+        url,
         characterName: parsedCsv.characterName,
         raidDifficulty: parsedJson.difficulty,
         fightInfo: {
@@ -89,9 +90,9 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
             duration: parsedJson.duration,
             nTargets: parsedJson.targets
         },
-        url,
         resultRaw: csvData,
         date: parsedJson.date,
+        dateImported: Math.floor(Date.now() / 1000),
         upgrades: Array.from(upgradesMap.values())
     }
 
@@ -102,6 +103,6 @@ export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
     return await getDroptimizerList()
 }
 
-export const deleteDroptimizerHandler = async (id: string): Promise<void> => {
-    return await deleteDroptimizer(id)
+export const deleteDroptimizerHandler = async (url: string): Promise<void> => {
+    return await deleteDroptimizer(url)
 }

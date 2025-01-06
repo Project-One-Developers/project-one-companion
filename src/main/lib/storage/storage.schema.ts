@@ -61,7 +61,7 @@ export const droptimizerUpgradesTable = pgTable(
             .notNull(),
         catalyzedItemId: integer('catalyzed_item_id').references(() => itemTable.id),
         droptimizerId: varchar('droptimizer_id')
-            .references(() => droptimizerTable.id, { onDelete: 'cascade' })
+            .references(() => droptimizerTable.url, { onDelete: 'cascade' })
             .notNull()
     },
     (t) => [
@@ -70,10 +70,10 @@ export const droptimizerUpgradesTable = pgTable(
 )
 
 export const droptimizerTable = pgTable('droptimizers', {
-    id: varchar('id').primaryKey(),
-    url: text('url').notNull(),
+    url: text('url').primaryKey(),
     resultRaw: text('result_raw').notNull(),
-    date: integer('date').notNull(),
+    date: integer('date').notNull(), // droptimizer execution unix timestamp
+    dateImported: integer('date_imported').notNull(), // imported unix timestamp in this app
     fightStyle: varchar('fight_style', { length: 50 }).notNull(),
     duration: integer('duration').notNull(),
     nTargets: integer('n_targets').notNull(),
@@ -220,7 +220,7 @@ export const charPlayerRelations = relations(charTable, ({ one }) => ({
 export const droptimizerUpgradesRelations = relations(droptimizerUpgradesTable, ({ one }) => ({
     droptimizer: one(droptimizerTable, {
         fields: [droptimizerUpgradesTable.droptimizerId],
-        references: [droptimizerTable.id]
+        references: [droptimizerTable.url]
     })
 }))
 

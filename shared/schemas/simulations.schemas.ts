@@ -15,10 +15,10 @@ export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema.omit({
 })
 
 export const droptimizerSchema = z.object({
-    id: z.string(),
     url: z.string().url(),
     resultRaw: z.string(),
     date: z.number(),
+    dateImported: z.number(),
     raidDifficulty: z.string(),
     characterName: z.string(),
     fightInfo: z.object({
@@ -29,7 +29,7 @@ export const droptimizerSchema = z.object({
     upgrades: z.array(droptimizerUpgradeSchema).nullable()
 })
 
-export const newDroptimizerSchema = droptimizerSchema.omit({ id: true, upgrades: true }).extend({
+export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).extend({
     upgrades: z.array(newDroptimizerUpgradeSchema)
 })
 

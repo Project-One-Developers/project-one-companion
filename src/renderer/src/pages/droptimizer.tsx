@@ -152,7 +152,7 @@ export default function DroptimizerPage(): JSX.Element {
                     <div className="flex flex-wrap gap-x-4 gap-y-4">
                         {filteredDroptimizers.map((dropt) => (
                             <div
-                                key={dropt.id}
+                                key={dropt.url}
                                 className="flex flex-col justify-between p-6 bg-muted h-[220px] w-[300px] rounded-lg relative"
                             >
                                 <h2 className="font-black text-2xl">{dropt.characterName}</h2>

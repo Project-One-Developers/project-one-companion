@@ -62,6 +62,7 @@ describe('Droptimizer Handlers', () => {
         const expectedData = {
             characterName: 'Bubbledan',
             date: 1734552471,
+            dateImported: expect.any(Number),
             fightInfo: {
                 duration: 300,
                 fightstyle: 'Patchwerk',
