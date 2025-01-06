@@ -20,19 +20,17 @@ export const csvDataSchema = z.string().transform((data) => {
 
     const [firstRow, ...itemRows] = rows
 
-    const characterName = firstRow.nameOrId
-    const baseDmg = parseFloat(firstRow.dmg)
-
+    const raidId = Number(itemRows[0].nameOrId.split('/')[0])
+    const dpsMean = parseFloat(firstRow.dmg)
     const upgrades = itemRows.map((row) => ({
-        dps: Math.round(parseFloat(row.dmg) - baseDmg),
+        dps: Math.round(parseFloat(row.dmg) - dpsMean),
         encounterId: Number(row.nameOrId.split('/')[1]),
         itemId: Number(row.nameOrId.split('/')[3]),
         slot: row.nameOrId.split('/')[6]
     }))
 
     return {
-        characterName,
-        baseDmg,
+        raidId,
         upgrades
     }
 })
@@ -44,10 +42,18 @@ export const jsonDataSchema = z
                 fight_style: z.string(),
                 desired_targets: z.number(),
                 max_time: z.number()
-            })
+            }),
+            players: z.array(
+                z.object({
+                    name: z.string(),
+                    talents: z.string()
+                })
+            )
         }),
         simbot: z.object({
             title: z.string(),
+            charClass: z.string(),
+            spec: z.string(),
             simType: z.literal('droptimizer') // At the moment, we only support droptimizer sims
         }),
         timestamp: z.number()
@@ -58,6 +64,10 @@ export const jsonDataSchema = z
             targets: data.sim.options.desired_targets,
             duration: data.sim.options.max_time,
             difficulty: data.simbot.title.split('•')[2].replaceAll(' ', ''), // Difficulty is the third element
-            date: data.timestamp
+            date: data.timestamp,
+            charName: data.sim.players[0].name,
+            charClass: data.simbot.charClass,
+            charSpecialization: data.simbot.spec,
+            charTalents: data.sim.players[0].talents
         }
     })

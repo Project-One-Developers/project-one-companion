@@ -80,7 +80,7 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
 
     const droptimizer: NewDroptimizer = {
         url,
-        characterName: parsedCsv.characterName,
+        characterName: parsedJson.charName,
         raidDifficulty: parsedJson.difficulty,
         fightInfo: {
             fightstyle: parsedJson.fightStyle,
