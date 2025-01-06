@@ -13,6 +13,7 @@ import {
     getItemToCatalystMapping,
     getItemToTiersetMapping
 } from '@storage/droptimizer/droptimizer.storage'
+import { getUnixTimestamp } from 'src/main/lib/utils'
 import { fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 
 // Static cache variables
@@ -89,7 +90,7 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         },
         resultRaw: csvData,
         date: parsedJson.date,
-        dateImported: Math.floor(Date.now() / 1000),
+        dateImported: getUnixTimestamp(),
         upgrades: Array.from(upgradesMap.values())
     }
 
