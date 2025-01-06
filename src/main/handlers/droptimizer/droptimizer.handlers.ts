@@ -13,7 +13,7 @@ import {
     getItemToCatalystMapping,
     getItemToTiersetMapping
 } from '@storage/droptimizer/droptimizer.storage'
-import { getUnixTimestamp } from 'src/main/lib/utils'
+import { getUnixTimestamp } from '@utils'
 import { fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 
 // Static cache variables
@@ -62,6 +62,7 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
                 slot: up.slot,
                 dps: up.dps,
                 catalyzedItemId: null,
+
                 ...(catalystMapping && {
                     itemId: catalystMapping.raidItemId, // itemId looted by boss
                     catalyzedItemId: catalystMapping.catalyzedItemId // itemId converted by catalyst
