@@ -8,6 +8,7 @@ import type {
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
+import { eq } from 'drizzle-orm'
 import { newUUID } from '../../utils'
 import { droptimizerListStorageSchema, droptimizerStorageSchema } from './droptimizer.schemas'
 import type { UpgradesTableInsert } from './droptimizer.types'
@@ -136,4 +137,9 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
     })
 
     return droptimizerStorageSchema.parse(result)
+}
+
+export const deleteDroptimizer = async (id: string): Promise<void> => {
+    // droptimizerUpgradesTable will be deleted on "cascade"
+    await db.delete(droptimizerTable).where(eq(droptimizerTable.id, id))
 }

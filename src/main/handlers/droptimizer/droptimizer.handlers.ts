@@ -8,6 +8,7 @@ import type {
 } from '@shared/types/types'
 import {
     addDroptimizer,
+    deleteDroptimizer,
     getDroptimizerList,
     getItemToCatalystMapping,
     getItemToTiersetMapping
@@ -99,4 +100,8 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
 
 export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
     return await getDroptimizerList()
+}
+
+export const deleteDroptimizerHandler = async (id: string): Promise<void> => {
+    return await deleteDroptimizer(id)
 }
