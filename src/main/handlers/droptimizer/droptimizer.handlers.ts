@@ -71,12 +71,9 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         })
         // for a given itemid upgrade, keep the max dps gain
         .reduce((acc, item) => {
-            // se posso prendo il catalyzed id perchè il gain ce l'ho sull'item risultante del catalyst
-            const itemRealId = item.catalyzedItemId ?? item.itemId
-
-            const existingItem = acc.get(itemRealId)
+            const existingItem = acc.get(item.itemId)
             if (!existingItem || item.dps > existingItem.dps) {
-                acc.set(itemRealId, item)
+                acc.set(item.itemId, item)
             }
             return acc
         }, new Map<number, NewDroptimizerUpgrade>())
