@@ -43,40 +43,6 @@ export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
     return itemToCatalystArraySchema.parse(result)
 }
 
-/**
- * Retrieves the latest Droptimizer data for a specific character and raid difficulty.
- *
- * @param charName - The name of the character to retrieve Droptimizer data for.
- * @param raidDiff - The raid difficulty to filter the Droptimizer data.
- * @returns A Promise that resolves to a Droptimizer object if found, or null if no data is available.
- *
- * @description
- * This function queries the database to find the most recent Droptimizer entry for the specified character
- * and raid difficulty. It includes the associated upgrades.
- */
-export const getLatestDroptimizerByCharAndDiff = async (
-    charName: string,
-    raidDiff: string
-): Promise<Droptimizer | null> => {
-    const result = await db.query.droptimizerTable.findFirst({
-        where: (droptimizerTable, { eq, and }) =>
-            and(
-                eq(droptimizerTable.characterName, charName),
-                eq(droptimizerTable.raidDifficulty, raidDiff)
-            ),
-        orderBy: (droptimizerTable, { desc }) => [desc(droptimizerTable.date)],
-        with: {
-            upgrades: true
-        }
-    })
-
-    if (!result) {
-        return null
-    }
-
-    return droptimizerStorageSchema.parse(result)
-}
-
 export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
     const result = await db.query.droptimizerTable.findMany({
         with: {
@@ -96,14 +62,22 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             .insert(droptimizerTable)
             .values({
                 url: droptimizer.url,
-                resultRaw: droptimizer.resultRaw,
-                date: droptimizer.date,
+                ak: droptimizer.ak,
                 dateImported: droptimizer.dateImported,
-                raidDifficulty: droptimizer.raidDifficulty,
-                fightStyle: droptimizer.fightInfo.fightstyle,
-                duration: droptimizer.fightInfo.duration,
-                nTargets: droptimizer.fightInfo.nTargets,
-                characterName: droptimizer.characterName
+                simDate: droptimizer.simInfo.date,
+                simFightStyle: droptimizer.simInfo.fightstyle,
+                simDuration: droptimizer.simInfo.duration,
+                simNTargets: droptimizer.simInfo.nTargets,
+                simRaidbotInput: droptimizer.simInfo.raidbotInput,
+                raidId: droptimizer.raidInfo.id,
+                raidDifficulty: droptimizer.raidInfo.difficulty,
+                characterName: droptimizer.charInfo.name,
+                characterServer: droptimizer.charInfo.server,
+                characterClass: droptimizer.charInfo.class,
+                characterClassId: droptimizer.charInfo.classId,
+                characterSpec: droptimizer.charInfo.spec,
+                characterSpecId: droptimizer.charInfo.specId,
+                characterTalents: droptimizer.charInfo.talents
             })
             .returning({ url: droptimizerTable.url })
             .then(takeFirstResult)

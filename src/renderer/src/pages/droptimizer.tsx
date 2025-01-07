@@ -31,17 +31,17 @@ export default function DroptimizerPage(): JSX.Element {
         const latestDroptimizersMap = new Map()
 
         return data.droptimizers
-            .sort((a, b) => b.date - a.date)
+            .sort((a, b) => b.simInfo.date - a.simInfo.date)
             .filter((dropt) => {
                 // Filter by raid difficulty
-                if (selectedRaidDiff !== 'all' && dropt.raidDifficulty !== selectedRaidDiff) {
+                if (selectedRaidDiff !== 'all' && dropt.raidInfo.difficulty !== selectedRaidDiff) {
                     return false
                 }
 
                 // Filter by current week
                 if (
                     filterByCurrentWeek &&
-                    unixTimestampToWowWeek(dropt.date) !== unixTimestampToWowWeek()
+                    unixTimestampToWowWeek(dropt.simInfo.date) !== unixTimestampToWowWeek()
                 ) {
                     return false
                 }
@@ -53,9 +53,9 @@ export default function DroptimizerPage(): JSX.Element {
 
                 // Worka solo se l'array di droptimizer è ordinato per dropt.date desc
                 if (onlyLatest) {
-                    const existingDropt = latestDroptimizersMap.get(dropt.characterName)
-                    if (!existingDropt || dropt.date > existingDropt.date) {
-                        latestDroptimizersMap.set(dropt.characterName, dropt)
+                    const existingDropt = latestDroptimizersMap.get(dropt.ak)
+                    if (!existingDropt || dropt.simInfo.date > existingDropt.simInfo.date) {
+                        latestDroptimizersMap.set(dropt.ak, dropt)
                     } else {
                         return false
                     }
@@ -155,18 +155,19 @@ export default function DroptimizerPage(): JSX.Element {
                                 key={dropt.url}
                                 className="flex flex-col justify-between p-6 bg-muted h-[220px] w-[300px] rounded-lg relative"
                             >
-                                <h2 className="font-black text-2xl">{dropt.characterName}</h2>
+                                <h2 className="font-black text-2xl">{dropt.charInfo.name}</h2>
                                 <div className="text-sm text-gray-600">
                                     <p>
-                                        <strong>Raid Difficulty:</strong> {dropt.raidDifficulty}
+                                        <strong>Raid Difficulty:</strong>{' '}
+                                        {dropt.raidInfo.difficulty}
                                     </p>
                                     <p>
-                                        <strong>Fight Style:</strong> {dropt.fightInfo.fightstyle}(
-                                        {dropt.fightInfo.nTargets}) {dropt.fightInfo.duration} sec
+                                        <strong>Fight Style:</strong> {dropt.simInfo.fightstyle}(
+                                        {dropt.simInfo.nTargets}) {dropt.simInfo.duration} sec
                                     </p>
-                                    <p title={new Date(dropt.date * 1000).toLocaleString()}>
+                                    <p title={new Date(dropt.simInfo.date * 1000).toLocaleString()}>
                                         <strong>Date: </strong>
-                                        {unitTimestampToRelativeDays(dropt.date)}
+                                        {unitTimestampToRelativeDays(dropt.simInfo.date)}
                                     </p>
                                     <p>
                                         <strong>Upgrades:</strong> {dropt.upgrades?.length}

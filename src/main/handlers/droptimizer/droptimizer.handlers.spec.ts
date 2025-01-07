@@ -9,27 +9,20 @@ jest.mock('./droptimizer.utils', () => {
     const originalModule = jest.requireActual('./droptimizer.utils')
     const fetchRaidbotsDataMock = jest.fn((url: string) => {
         console.log(`Mocking return value for ${url}`)
-        let mockCsvData = {}
         let mockJsonData = {}
         // Bubbledan (dh)
         if (url === 'https://www.raidbots.com/simbot/report/cUt45Z5FcaxztdQF9Girzx') {
-            mockCsvData = fs.readFileSync('resources/raidbots/testData/bubble-data.csv', 'utf8')
             mockJsonData = JSON.parse(
                 fs.readFileSync('resources/raidbots/testData/bubble-data.json', 'utf8')
             )
         }
         // Shant (hunter)
         else if (url === 'https://www.raidbots.com/simbot/report/2pjCMq6FWPFiVoKajjyiuw') {
-            mockCsvData = fs.readFileSync('resources/raidbots/testData/shant-data.csv', 'utf8')
             mockJsonData = JSON.parse(
                 fs.readFileSync('resources/raidbots/testData/shant-data.json', 'utf8')
             )
         }
-
-        return Promise.resolve({
-            csvData: mockCsvData,
-            jsonData: mockJsonData
-        })
+        return Promise.resolve(mockJsonData)
     })
     return {
         __esModule: true,
@@ -78,16 +71,30 @@ describe('Droptimizer Handlers', () => {
         await addDroptimizerHandler(testUrl)
 
         const expectedData = {
-            characterName: 'Bubbledan',
-            date: 1734552471,
-            dateImported: expect.any(Number),
-            fightInfo: {
-                duration: 300,
-                fightstyle: 'Patchwerk',
-                nTargets: 1
+            ak: '1273,Mythic,Bubbledan,pozzo_delleternità,Havoc,Demon Hunter',
+            url: testUrl,
+            charInfo: {
+                name: 'Bubbledan',
+                server: 'pozzo_delleternità',
+                class: 'Demon Hunter',
+                classId: 12,
+                spec: 'Havoc',
+                specId: 577,
+                talents:
+                    'CEkAEDLOxe3SEPP2R8Hw6bhoSYGMzMzgZmZMmJmZGAAAAAAwsMmxMMGLzMz2sNLjZGmZBLbwysYGDzmmGMzMzgN'
             },
-            raidDifficulty: 'Mythic',
-            resultRaw: expect.any(String),
+            raidInfo: {
+                id: 1273,
+                difficulty: 'Mythic'
+            },
+            simInfo: {
+                date: 1734552471,
+                fightstyle: 'Patchwerk',
+                duration: 300,
+                nTargets: 1,
+                raidbotInput: expect.any(String)
+            },
+            dateImported: expect.any(Number),
             upgrades: [
                 {
                     dps: 10565,
@@ -131,8 +138,7 @@ describe('Droptimizer Handlers', () => {
                     itemId: 225578,
                     slot: 'finger2'
                 }
-            ],
-            url: testUrl
+            ]
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)
@@ -145,16 +151,30 @@ describe('Droptimizer Handlers', () => {
         await addDroptimizerHandler(testUrl)
 
         const expectedData = {
-            characterName: 'Shant',
-            date: 1736178842,
-            dateImported: expect.any(Number),
-            fightInfo: {
-                duration: 300,
-                fightstyle: 'Patchwerk',
-                nTargets: 1
+            ak: '1273,Mythic,Shant,nemesis,Beast Mastery,Hunter',
+            url: testUrl,
+            charInfo: {
+                name: 'Shant',
+                server: 'nemesis',
+                class: 'Hunter',
+                classId: 3,
+                spec: 'Beast Mastery',
+                specId: 253,
+                talents:
+                    'C0PAjWdaYGhrXhCioy+K0kCnACMmxGDZB2GN0wGAAAAAAGAAAAAAgZmtZMmZMYmxwMmZYGzMzMTmhxMzMzMmZYYMMzAzwsMzwC'
             },
-            raidDifficulty: 'Mythic',
-            resultRaw: expect.any(String),
+            raidInfo: {
+                id: 1273,
+                difficulty: 'Mythic'
+            },
+            simInfo: {
+                date: 1736178842,
+                fightstyle: 'Patchwerk',
+                duration: 300,
+                nTargets: 1,
+                raidbotInput: expect.any(String)
+            },
+            dateImported: expect.any(Number),
             upgrades: [
                 {
                     itemId: 212400,
@@ -288,8 +308,7 @@ describe('Droptimizer Handlers', () => {
                     dps: 5867,
                     catalyzedItemId: null
                 }
-            ],
-            url: testUrl
+            ]
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)
