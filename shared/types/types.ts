@@ -12,10 +12,12 @@ import {
     itemSchema,
     itemToCatalystSchema,
     itemToTiersetSchema,
-    wowClassSchema
+    wowClassSchema,
+    wowRaidDiffSchema
 } from '../schemas/wow.schemas'
 
 export type WowClass = z.infer<typeof wowClassSchema>
+export type WowRaidDifficulty = z.infer<typeof wowRaidDiffSchema>
 
 export type Player = z.infer<typeof playerSchema>
 

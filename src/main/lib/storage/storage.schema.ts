@@ -71,14 +71,23 @@ export const droptimizerUpgradesTable = pgTable(
 
 export const droptimizerTable = pgTable('droptimizers', {
     url: text('url').primaryKey(),
-    resultRaw: text('result_raw').notNull(),
-    date: integer('date').notNull(), // droptimizer execution unix timestamp
+    ak: varchar('ak').notNull(), // droptimizer identifier key eg: 1273,heroic,Tartesia,Nemesis,Devastation,Evoker
+    jsonRaw: text('json_raw').notNull(),
     dateImported: integer('date_imported').notNull(), // imported unix timestamp in this app
-    fightStyle: varchar('fight_style', { length: 50 }).notNull(),
-    duration: integer('duration').notNull(),
-    nTargets: integer('n_targets').notNull(),
-    raidDifficulty: varchar('raid_difficulty', { length: 20 }).notNull(),
-    characterName: varchar('character_name', { length: 24 }).notNull()
+    simDate: integer('sim_date').notNull(), // droptimizer execution unix timestamp
+    simFightStyle: varchar('sim_fight_style', { length: 50 }).notNull(),
+    simDuration: integer('sim_duration').notNull(),
+    simNTargets: integer('sim_n_targets').notNull(),
+    simRaidbotInput: text('sim_raidbot_input').notNull(),
+    raidId: integer('raid_id').notNull(),
+    raidDifficulty: pgRaidDiffEnum('raid_difficulty').notNull(),
+    characterName: varchar('character_name', { length: 24 }).notNull(),
+    characterServer: varchar('character_server').notNull(),
+    characterClass: pgClassEnum('character_class').notNull(),
+    characterClassId: integer('character_classId').notNull(),
+    characterSpec: varchar('character_spec').notNull(),
+    characterSpecId: integer('character_specId').notNull(),
+    characterTalents: varchar('character_talents').notNull()
 })
 
 //////////////////////////////////////////////////////////

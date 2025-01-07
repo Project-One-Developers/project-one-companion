@@ -67,7 +67,9 @@ export const AnimatedTooltip = ({
                                     <div className="text-muted-foreground text-xs">
                                         Last droptimizer:
                                         {new Date(
-                                            item.droptimizer[item.droptimizer.length - 1].date
+                                            item.droptimizer[
+                                                item.droptimizer.length - 1
+                                            ].simInfo.date
                                         ).toLocaleDateString()}
                                     </div>
                                 ) : null}
@@ -75,7 +77,9 @@ export const AnimatedTooltip = ({
                                     <div className="text-muted-foreground text-xs">
                                         Last droptimizer:{' '}
                                         {new Date(
-                                            item.droptimizer[item.droptimizer.length - 1].date
+                                            item.droptimizer[
+                                                item.droptimizer.length - 1
+                                            ].simInfo.date
                                         ).toLocaleDateString()}
                                     </div>
                                 ) : null}

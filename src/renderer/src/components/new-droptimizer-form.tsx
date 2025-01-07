@@ -38,7 +38,7 @@ export default function NewDroptimizerForm(): JSX.Element {
             setOpen(false)
             toast({
                 title: 'Aggiunta droptimizer',
-                description: `Il droptimizer per il pg ${response.characterName} è stato aggiunto con successo.`
+                description: `Il droptimizer per il pg ${response.charInfo.name} è stato aggiunto con successo.`
             })
         },
         onError: (error) => {

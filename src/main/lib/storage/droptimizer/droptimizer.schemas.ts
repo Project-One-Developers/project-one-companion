@@ -1,31 +1,54 @@
 import { droptimizerUpgradeSchema } from '@shared/schemas/simulations.schemas'
+import { wowClassSchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import { z } from 'zod'
 
 export const droptimizerStorageSchema = z
     .object({
         url: z.string().url(),
-        resultRaw: z.string(),
-        date: z.number(),
+        ak: z.string(),
+        jsonRaw: z.string(),
         dateImported: z.number(),
-        raidDifficulty: z.string(),
-        fightStyle: z.string(),
-        duration: z.number().min(1),
-        nTargets: z.number().min(1),
+        simDate: z.number(),
+        simFightStyle: z.string(),
+        simDuration: z.number().min(1),
+        simNTargets: z.number().min(1),
+        simRaidbotInput: z.string(),
+        raidId: z.number(),
+        raidDifficulty: wowRaidDiffSchema,
         characterName: z.string(),
+        characterServer: z.string(),
+        characterClass: wowClassSchema,
+        characterClassId: z.number(),
+        characterSpec: z.string(),
+        characterSpecId: z.number(),
+        characterTalents: z.string(),
         upgrades: z.array(droptimizerUpgradeSchema)
     })
     .transform((data) => {
         return {
             url: data.url,
-            resultRaw: data.resultRaw,
-            date: data.date,
+            ak: data.ak,
+            jsonRaw: data.jsonRaw,
             dateImported: data.dateImported,
-            raidDifficulty: data.raidDifficulty,
-            characterName: data.characterName,
-            fightInfo: {
-                fightstyle: data.fightStyle,
-                duration: data.duration,
-                nTargets: data.nTargets
+            simInfo: {
+                date: data.simDate,
+                fightstyle: data.simFightStyle,
+                duration: data.simDuration,
+                nTargets: data.simNTargets,
+                raidbotInput: data.simRaidbotInput
+            },
+            raidInfo: {
+                id: data.raidId,
+                difficulty: data.raidDifficulty
+            },
+            charInfo: {
+                name: data.characterName,
+                server: data.characterServer,
+                class: data.characterClass,
+                classId: data.characterClassId,
+                spec: data.characterSpec,
+                specId: data.characterSpecId,
+                talents: data.characterTalents
             },
             upgrades: data.upgrades.map((up) => ({
                 id: up.id,

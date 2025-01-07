@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { wowClassSchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const droptimizerUpgradeSchema = z.object({
     id: z.string(),
@@ -16,15 +17,28 @@ export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema.omit({
 
 export const droptimizerSchema = z.object({
     url: z.string().url(),
-    resultRaw: z.string(),
-    date: z.number(),
+    ak: z.string(),
+    jsonRaw: z.string(),
     dateImported: z.number(),
-    raidDifficulty: z.string(),
-    characterName: z.string(),
-    fightInfo: z.object({
+    simInfo: z.object({
+        date: z.number(),
         fightstyle: z.string(),
         duration: z.number().min(1),
-        nTargets: z.number().min(1)
+        nTargets: z.number().min(1),
+        raidbotInput: z.string()
+    }),
+    raidInfo: z.object({
+        id: z.number(),
+        difficulty: wowRaidDiffSchema
+    }),
+    charInfo: z.object({
+        name: z.string(),
+        server: z.string(),
+        class: wowClassSchema,
+        classId: z.number().min(1).max(13), // https://wowpedia.fandom.com/wiki/ClassId
+        spec: z.string(),
+        specId: z.number(), // https://wowpedia.fandom.com/wiki/SpecializationID
+        talents: z.string()
     }),
     upgrades: z.array(droptimizerUpgradeSchema).nullable()
 })

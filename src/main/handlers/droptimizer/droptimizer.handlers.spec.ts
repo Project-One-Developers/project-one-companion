@@ -9,27 +9,20 @@ jest.mock('./droptimizer.utils', () => {
     const originalModule = jest.requireActual('./droptimizer.utils')
     const fetchRaidbotsDataMock = jest.fn((url: string) => {
         console.log(`Mocking return value for ${url}`)
-        let mockCsvData = {}
         let mockJsonData = {}
         // Bubbledan (dh)
         if (url === 'https://www.raidbots.com/simbot/report/cUt45Z5FcaxztdQF9Girzx') {
-            mockCsvData = fs.readFileSync('resources/raidbots/testData/bubble-data.csv', 'utf8')
             mockJsonData = JSON.parse(
                 fs.readFileSync('resources/raidbots/testData/bubble-data.json', 'utf8')
             )
         }
         // Shant (hunter)
         else if (url === 'https://www.raidbots.com/simbot/report/2pjCMq6FWPFiVoKajjyiuw') {
-            mockCsvData = fs.readFileSync('resources/raidbots/testData/shant-data.csv', 'utf8')
             mockJsonData = JSON.parse(
                 fs.readFileSync('resources/raidbots/testData/shant-data.json', 'utf8')
             )
         }
-
-        return Promise.resolve({
-            csvData: mockCsvData,
-            jsonData: mockJsonData
-        })
+        return Promise.resolve(mockJsonData)
     })
     return {
         __esModule: true,
@@ -78,16 +71,32 @@ describe('Droptimizer Handlers', () => {
         await addDroptimizerHandler(testUrl)
 
         const expectedData = {
-            characterName: 'Bubbledan',
-            date: 1734552471,
-            dateImported: expect.any(Number),
-            fightInfo: {
-                duration: 300,
-                fightstyle: 'Patchwerk',
-                nTargets: 1
+            ak: '1273,Mythic,Bubbledan,pozzo_delleternità,Havoc,Demon Hunter',
+            url: testUrl,
+            charInfo: {
+                name: 'Bubbledan',
+                server: 'pozzo_delleternità',
+                class: 'Demon Hunter',
+                classId: 12,
+                spec: 'Havoc',
+                specId: 577,
+                talents:
+                    'CEkAEDLOxe3SEPP2R8Hw6bhoSYGMzMzgZmZMmJmZGAAAAAAwsMmxMMGLzMz2sNLjZGmZBLbwysYGDzmmGMzMzgN'
             },
-            raidDifficulty: 'Mythic',
-            resultRaw: expect.any(String),
+            raidInfo: {
+                id: 1273,
+                difficulty: 'Mythic'
+            },
+            simInfo: {
+                date: 1734552471,
+                fightstyle: 'Patchwerk',
+                duration: 300,
+                nTargets: 1,
+                raidbotInput:
+                    'demonhunter="Bubbledan"\nlevel=80\nrace=blood_elf\nregion=eu\nserver=pozzo_delleternità\nrole=attack\nprofessions=alchemy=100/enchanting=105\nspec=havoc\ntalents=CEkAEDLOxe3SEPP2R8Hw6bhoSYGMzMzgZmZMmJmZGAAAAAAwsMmxMMGLzMz2sNLjZGmZBLbwysYGDzmmGMzMzgN\nhead=,id=212065,gem_id=213491,bonus_id=6652/10356/8095/10371/10299/1540/10255/10397\nneck=,id=215136,gem_id=213467/213491,bonus_id=10421/9633/8902/10394/10879/9627/10222/8791/11144,crafted_stats=40/32,crafting_quality=5\nshoulder=,id=212063,bonus_id=10356/10369/6652/10299/1540/10255\nback=,id=212446,enchant_id=7403,bonus_id=10380/10356/10299/1540/10255\nchest=,id=212068,enchant_id=7364,bonus_id=40/10390/10373/10299/1540/10255\ntabard=,id=69210\nwrist=,id=212438,enchant_id=7385,gem_id=213458,bonus_id=6652/10380/10356/10299/1540/10255/10397\nhands=,id=219333,bonus_id=10421/9633/8902/9627/11144/11109/8960/8791/10222,crafted_stats=40/36,crafting_quality=5\nwaist=,id=225583,gem_id=213491,bonus_id=6652/10397/10380/10356/10299/1540/10255\nlegs=,id=212064,enchant_id=7601,bonus_id=6652/10356/8095/10370/10299/1540/10255\nfeet=,id=212445,enchant_id=7424,bonus_id=6652/10380/10356/10299/1540/10255\nfinger1=,id=133286,enchant_id=7340,gem_id=213482/213491,bonus_id=10390/6652/10383/10395/10879/10299/11342/10255\nfinger2=,id=225578,enchant_id=7346,gem_id=213743/213458,bonus_id=6652/10355/10256/1527/10255/10395/10879\ntrinket1=,id=212456,bonus_id=6652/10356/10299/1540/10255\ntrinket2=,id=212454,bonus_id=6652/10356/10299/1540/10255\nmain_hand=,id=219877,enchant_id=7463,bonus_id=40/10356/10299/1540/10255\noff_hand=,id=222440,enchant_id=7463,bonus_id=10421/9633/8902/9627/8791/10222/11144/11300/8960,crafted_stats=40/36,crafting_quality=5\nname=Bubbledan\ntemporary_enchant=\nthewarwithin.dawn_dusk_thread_lining_uptime=0.6\niterations=100000\ndesired_targets=1\nmax_time=300\ncalculate_scale_factors=0\nscale_only=strength,intellect,agility,crit,mastery,vers,haste,weapon_dps,weapon_offhand_dps\noverride.bloodlust=1\noverride.arcane_intellect=1\noverride.power_word_fortitude=1\noverride.battle_shout=1\noverride.mystic_touch=1\noverride.chaos_brand=1\noverride.skyfury=1\noverride.mark_of_the_wild=1\noverride.hunters_mark=1\noverride.bleeding=1\nreport_details=1\nsingle_actor_batch=1\noptimize_expressions=1\nprofileset."1273/2607/raid-mythic/212425/639/0/waist//"+=waist=,id=212425,bonus_id=4800/4786/523/1540/10299,gem_id=213491\nprofileset."1273/2607/raid-mythic/212062/639/0/waist//"+=waist=,id=212062,bonus_id=4800/4786/523/1540/10299,gem_id=213491\nprofileset."1273/2609/raid-mythic/212062/639/0/waist//"+=waist=,id=212062,bonus_id=4800/4786/523/1540/10299,gem_id=213491\nprofileset."1273/-67/raid-mythic/225723/639/0/waist//"+=waist=,id=225723,bonus_id=4800/4786/523/1540/10299,gem_id=213491\nprofileset."1273/-67/raid-mythic/212062/639/0/waist//"+=waist=,id=212062,bonus_id=4800/4786/523/1540/10299,gem_id=213491\nprofileset."1273/2599/raid-mythic/212067/639/7424/feet//"+=feet=,id=212067,enchant_id=7424,bonus_id=4800/4786/1540/10299\nprofileset."1273/2601/raid-mythic/225591/639/7424/feet//"+=feet=,id=225591,enchant_id=7424,bonus_id=4800/4786/1540/10299\ntarget_error=0.05'
+            },
+            dateImported: expect.any(Number),
+            jsonRaw: expect.any(String),
             upgrades: [
                 {
                     dps: 10565,
@@ -131,8 +140,7 @@ describe('Droptimizer Handlers', () => {
                     itemId: 225578,
                     slot: 'finger2'
                 }
-            ],
-            url: testUrl
+            ]
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)
@@ -145,16 +153,32 @@ describe('Droptimizer Handlers', () => {
         await addDroptimizerHandler(testUrl)
 
         const expectedData = {
-            characterName: 'Shant',
-            date: 1736178842,
-            dateImported: expect.any(Number),
-            fightInfo: {
-                duration: 300,
-                fightstyle: 'Patchwerk',
-                nTargets: 1
+            ak: '1273,Mythic,Shant,Nemesis,Beast Mastery,Hunter',
+            url: testUrl,
+            charInfo: {
+                name: 'Shant',
+                server: 'Nemesis',
+                class: 'Hunter',
+                classId: 3,
+                spec: 'Beast Mastery',
+                specId: 253,
+                talents:
+                    'C0PAjWdaYGhrXhCioy+K0kCnACMmxGDZB2GN0wGAAAAAAGAAAAAAgZmtZMmZMYmxwMmZYGzMzMTmhxMzMzMmZYYMMzAzwsMzwC'
             },
-            raidDifficulty: 'Mythic',
-            resultRaw: expect.any(String),
+            raidInfo: {
+                id: 1273,
+                difficulty: 'Mythic'
+            },
+            simInfo: {
+                date: 1736178842,
+                fightstyle: 'Patchwerk',
+                duration: 300,
+                nTargets: 1,
+                raidbotInput:
+                    'armory=eu,nemesis,Shant\nname=Shant\ntemporary_enchant=\nthewarwithin.dawn_dusk_thread_lining_uptime=0.6\niterations=100000\ndesired_targets=1\nmax_time=300\ncalculate_scale_factors=0\nscale_only=strength,intellect,agility,crit,mastery,vers,haste,weapon_dps,weapon_offhand_dps\noverride.bloodlust=1\noverride.arcane_intellect=1\noverride.power_word_fortitude=1\noverride.battle_shout=1\noverride.mystic_touch=1\noverride.chaos_brand=1\noverride.skyfury=1\noverride.mark_of_the_wild=1\noverride.hunters_mark=1\noverride.bleeding=1\nreport_details=1\nsingle_actor_batch=1\noptimize_expressions=1\nprofileset."1273/2609/raid-mythic/212448/639/0/neck//"+=neck=,id=212448,bonus_id=4800/4786/1540/10299/8781,gem_id=213470/213491\nprofileset."1273/2599/raid-mythic/225577/639/0/neck//"+=neck=,id=225577,bonus_id=4800/4786/1540/10299/8781,gem_id=213470/213491\nprofileset."1273/2608/raid-mythic/212429/639/0/shoulder//"+=shoulder=,id=212429,bonus_id=4800/4786/1540/10299\nprofileset."1273/-67/raid-mythic/225724/639/0/shoulder//"+=shoulder=,id=225724,bonus_id=4800/4786/1540/10299\nprofileset."1273/2611/raid-mythic/212414/639/0/waist//"+=waist=,id=212414,bonus_id=4800/4786/1540/10299\nprofileset."1273/2611/raid-mythic/212017/639/0/waist//"+=waist=,id=212017,bonus_id=4800/4786/1540/10299\nprofileset."1273/2612/raid-mythic/225580/639/0/waist//"+=waist=,id=225580,bonus_id=4800/4786/1540/10299\nprofileset."1273/2612/raid-mythic/212017/639/0/waist//"+=waist=,id=212017,bonus_id=4800/4786/1540/10299\ntarget_error=0.05'
+            },
+            dateImported: expect.any(Number),
+            jsonRaw: expect.any(String),
             upgrades: [
                 {
                     itemId: 212400,
@@ -288,8 +312,7 @@ describe('Droptimizer Handlers', () => {
                     dps: 5867,
                     catalyzedItemId: null
                 }
-            ],
-            url: testUrl
+            ]
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)

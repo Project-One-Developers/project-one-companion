@@ -33,12 +33,12 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
     console.log('Adding droptimizer from url', url)
 
     const raidbotsURL = raidbotsURLSchema.parse(url)
-    const { csvData, jsonData } = await fetchRaidbotsData(raidbotsURL)
-    const { parsedCsv, parsedJson } = parseRaidbotsData(csvData, jsonData)
+    const jsonData = await fetchRaidbotsData(raidbotsURL)
+    const parsedJson = parseRaidbotsData(jsonData)
 
     await ensureMappingsLoaded()
 
-    const upgradesMap = parsedCsv.upgrades
+    const upgradesMap = parsedJson.upgrades
         // filter out item without dps gain
         .filter((item) => item.dps > 0)
         // remap itemid to tierset & catalyst
@@ -81,16 +81,12 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         }, new Map<number, NewDroptimizerUpgrade>())
 
     const droptimizer: NewDroptimizer = {
+        ak: `${parsedJson.raidInfo.id},${parsedJson.raidInfo.difficulty},${parsedJson.charInfo.name},${parsedJson.charInfo.server},${parsedJson.charInfo.spec},${parsedJson.charInfo.class}`,
         url,
-        characterName: parsedJson.charName,
-        raidDifficulty: parsedJson.difficulty,
-        fightInfo: {
-            fightstyle: parsedJson.fightStyle,
-            duration: parsedJson.duration,
-            nTargets: parsedJson.targets
-        },
-        resultRaw: csvData,
-        date: parsedJson.date,
+        charInfo: parsedJson.charInfo,
+        raidInfo: parsedJson.raidInfo,
+        simInfo: parsedJson.simInfo,
+        jsonRaw: JSON.stringify(jsonData),
         dateImported: getUnixTimestamp(),
         upgrades: Array.from(upgradesMap.values())
     }
