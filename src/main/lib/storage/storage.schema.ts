@@ -150,7 +150,7 @@ export const assignmentTable = pgTable('assignments', {
 export const bossTable = pgTable('bosses', {
     id: integer('id').primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
     name: varchar('name', { length: 255 }).notNull().unique(),
-    raid: varchar('raid', { length: 255 }).notNull(),
+    raid: varchar('raid', { length: 255 }),
     order: integer('order').notNull()
 })
 
@@ -178,7 +178,7 @@ export const itemTable = pgTable('items', {
     wowheadUrl: text('wowhead_url'),
     iconName: varchar('icon_name', { length: 255 }),
     iconUrl: text('icon_url'),
-    catalyzed: boolean('catalyzed').notNull().default(false), // se questo item è ottenibile solo tramite catalyst - todo: sul db viene messo sempre false.
+    catalyzed: boolean('catalyzed').notNull().default(false), // se questo item è ottenibile solo tramite catalyst
     bossName: varchar('boss_name', { length: 255 }), // ridondante ma utile
     bossId: integer('boss_id')
         .references(() => bossTable.id)
@@ -214,8 +214,8 @@ export const itemToCatalystTable = pgTable(
 //                     RELATIONS                        //
 //////////////////////////////////////////////////////////
 
-export const playerCharRelations = relations(playerTable, ({ many }) => ({
-    chars: many(charTable)
+export const bossItemsRelations = relations(bossTable, ({ many }) => ({
+    items: many(itemTable)
 }))
 
 export const charPlayerRelations = relations(charTable, ({ one }) => ({
@@ -234,4 +234,8 @@ export const droptimizerUpgradesRelations = relations(droptimizerUpgradesTable, 
 
 export const droptimizerRelations = relations(droptimizerTable, ({ many }) => ({
     upgrades: many(droptimizerUpgradesTable)
+}))
+
+export const playerCharRelations = relations(playerTable, ({ many }) => ({
+    chars: many(charTable)
 }))

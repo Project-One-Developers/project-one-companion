@@ -8,6 +8,8 @@ import AddPlayer from './pages/add-player'
 import Config from './pages/config'
 import DroptimizerForm from './pages/droptimizer'
 import Home from './pages/home'
+import LootTable from './pages/loot-table'
+import RaidSession from './pages/raid-session'
 import RosterPage from './pages/roster'
 
 function App(): JSX.Element {
@@ -22,6 +24,8 @@ function App(): JSX.Element {
                         <Route path="/roster" element={<RosterPage />} />
                         <Route path="/add-player" element={<AddPlayer />} />
                         <Route path="/droptimizer" element={<DroptimizerForm />} />
+                        <Route path="/loot-table" element={<LootTable />} />
+                        <Route path="/raid-session" element={<RaidSession />} />
                         <Route path="/config" element={<Config />} />
                     </Routes>
                 </BrowserRouter>

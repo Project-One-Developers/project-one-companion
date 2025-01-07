@@ -1,4 +1,11 @@
-import { Code2Icon, ListRestart, LucideEye } from 'lucide-react'
+import {
+    Code2Icon,
+    ListRestart,
+    LucideEye,
+    LucideGauge,
+    LucideSkull,
+    LucideSwords
+} from 'lucide-react'
 import { toast } from './hooks/use-toast'
 import {
     Sidebar,
@@ -20,7 +27,17 @@ const rosterItems = [
     {
         title: 'Droptimizer',
         url: '/droptimizer',
-        icon: Code2Icon
+        icon: LucideGauge
+    },
+    {
+        title: 'Loot Table',
+        url: '/loot-table',
+        icon: LucideSkull
+    },
+    {
+        title: 'Raid Session',
+        url: '/raid-session',
+        icon: LucideSwords
     }
 ]
 
