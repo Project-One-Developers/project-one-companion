@@ -20,6 +20,6 @@ export interface Logger {
     child(): Logger
 }
 
-export const createLogger = (): Logger => createWinstonLogger(true)
+export const createLogger = (): Logger => createWinstonLogger(import.meta.env.DEV)
 
 export const logger = createLogger()

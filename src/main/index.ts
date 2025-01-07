@@ -1,50 +1,26 @@
-import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { app, BrowserWindow, shell } from 'electron'
-import fs from 'fs'
-import path, { join } from 'path'
-import { z } from 'zod'
+import { is, optimizer } from '@electron-toolkit/utils'
+import { BrowserWindow, Menu, app, screen, shell } from 'electron'
+import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
+import { menu } from './app/menu'
+import { store } from './app/store'
 import { allHandlers } from './handlers'
 import { registerHandlers } from './handlers/handlers.utils'
 
-const DEFAULT_WIDTH = 1920
-const DEFAULT_HEIGHT = 1080
-
-const MIN_WIDTH = 500
-const MIN_HEIGHT = 500
-
-const boundsSchema = z.object({
-    width: z.number().int().min(MIN_WIDTH).default(DEFAULT_WIDTH),
-    height: z.number().int().min(MIN_HEIGHT).default(DEFAULT_HEIGHT),
-    x: z.number().int().optional(),
-    y: z.number().int().optional()
-})
-
-const configPath = path.join(app.getPath('userData'), 'projectone-companion-config.json')
-
-function loadWindowSettings(): z.infer<typeof boundsSchema> {
-    try {
-        return boundsSchema.parse(JSON.parse(fs.readFileSync(configPath, 'utf-8')))
-    } catch (e) {
-        console.log('Cannot parse projectone-companion-config.json: ' + e)
-        return { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT }
-    }
-}
-
-function saveWindowSettings(bounds: Electron.Rectangle): void {
-    fs.writeFileSync(configPath, JSON.stringify(bounds))
-}
-
 function createWindow(): void {
-    const windowSettings = loadWindowSettings()
+    const savedBounds = store.getBounds()
+    const screenArea = screen.getDisplayMatching(savedBounds).workArea
+    const isWindowNotFitScreen =
+        savedBounds.x > screenArea.x + screenArea.width ||
+        savedBounds.x < screenArea.x ||
+        savedBounds.y < screenArea.y ||
+        savedBounds.y > screenArea.y + screenArea.height
 
     const mainWindow = new BrowserWindow({
-        width: windowSettings.width,
-        height: windowSettings.height,
-        minWidth: MIN_WIDTH,
-        minHeight: MIN_HEIGHT,
-        x: windowSettings.x,
-        y: windowSettings.y,
+        width: savedBounds.width,
+        height: savedBounds.height,
+        minWidth: 720,
+        minHeight: 320,
         show: false,
         autoHideMenuBar: true,
         ...(process.platform === 'linux' ? { icon } : {}),
@@ -54,8 +30,15 @@ function createWindow(): void {
         }
     })
 
+    mainWindow.setBounds(isWindowNotFitScreen ? store.DEFAULT_BOUNDS : savedBounds)
+
     mainWindow.on('ready-to-show', () => {
         mainWindow.show()
+    })
+
+    mainWindow.on('close', () => {
+        const bounds = mainWindow.getBounds()
+        store.setBounds(bounds)
     })
 
     mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -70,10 +53,6 @@ function createWindow(): void {
     } else {
         mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
-
-    mainWindow.on('close', () => {
-        saveWindowSettings(mainWindow.getBounds())
-    })
 }
 
 // This method will be called when Electron has finished
@@ -81,7 +60,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     // Set app user model id for windows
-    electronApp.setAppUserModelId('com.electron')
+    app.setAppUserModelId(import.meta.env.VITE_APPID)
 
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.
@@ -112,3 +91,4 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+Menu.setApplicationMenu(menu)

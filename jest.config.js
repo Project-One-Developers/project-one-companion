@@ -16,8 +16,8 @@ module.exports = {
             }
         ]
     },
-    setupFilesAfterEnv: ['<rootDir>/src/main/setupTests.ts'],
-    testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/?(*.)+(spec|test).+(ts|tsx|js)'],
+    setupFilesAfterEnv: ['<rootDir>/src/main/__tests__/setupTests.ts'],
+    testMatch: ['**/?(*.)+(spec|test).+(ts|tsx|js)'],
     testPathIgnorePatterns: ['<rootDir>/node_modules/'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     collectCoverageFrom: ['**/*.(t|j)s'],
