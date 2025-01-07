@@ -4,7 +4,7 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 
 config()
 
-const databaseUrl = process.env.DATABASE_URL
+const databaseUrl = import.meta.env.MAIN_VITE_DATABASE_URL
 
 if (!databaseUrl) {
     throw new Error('DATABASE_URL environment variable is not set')
