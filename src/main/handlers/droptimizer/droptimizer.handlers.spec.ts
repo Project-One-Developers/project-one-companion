@@ -152,11 +152,11 @@ describe('Droptimizer Handlers', () => {
         await addDroptimizerHandler(testUrl)
 
         const expectedData = {
-            ak: '1273,Mythic,Shant,Nemesis,Beast Mastery,Hunter',
+            ak: '1273,Mythic,Shant,nemesis,Beast Mastery,Hunter',
             url: testUrl,
             charInfo: {
                 name: 'Shant',
-                server: 'Nemesis',
+                server: 'nemesis',
                 class: 'Hunter',
                 classId: 3,
                 spec: 'Beast Mastery',
