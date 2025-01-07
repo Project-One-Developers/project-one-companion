@@ -86,7 +86,10 @@ export const jsonDataSchema = z
             },
             charInfo: {
                 name: data.simbot.meta.rawFormData.character.name,
-                server: data.simbot.meta.rawFormData.character.realm,
+                server: data.simbot.meta.rawFormData.character.realm
+                    .toLowerCase()
+                    .replaceAll(' ', '_')
+                    .replaceAll("'", ''),
                 class: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents
                     .className as WowClass,
                 classId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.classId,
