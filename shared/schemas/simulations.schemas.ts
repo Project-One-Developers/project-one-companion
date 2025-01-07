@@ -18,7 +18,6 @@ export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema.omit({
 export const droptimizerSchema = z.object({
     url: z.string().url(),
     ak: z.string(),
-    jsonRaw: z.string(),
     dateImported: z.number(),
     simInfo: z.object({
         date: z.number(),

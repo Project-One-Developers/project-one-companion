@@ -63,7 +63,6 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             .values({
                 url: droptimizer.url,
                 ak: droptimizer.ak,
-                jsonRaw: droptimizer.jsonRaw,
                 dateImported: droptimizer.dateImported,
                 simDate: droptimizer.simInfo.date,
                 simFightStyle: droptimizer.simInfo.fightstyle,

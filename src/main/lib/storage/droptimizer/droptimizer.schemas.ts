@@ -6,7 +6,6 @@ export const droptimizerStorageSchema = z
     .object({
         url: z.string().url(),
         ak: z.string(),
-        jsonRaw: z.string(),
         dateImported: z.number(),
         simDate: z.number(),
         simFightStyle: z.string(),
@@ -28,7 +27,6 @@ export const droptimizerStorageSchema = z
         return {
             url: data.url,
             ak: data.ak,
-            jsonRaw: data.jsonRaw,
             dateImported: data.dateImported,
             simInfo: {
                 date: data.simDate,

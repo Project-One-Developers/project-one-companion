@@ -86,7 +86,6 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         charInfo: parsedJson.charInfo,
         raidInfo: parsedJson.raidInfo,
         simInfo: parsedJson.simInfo,
-        jsonRaw: JSON.stringify(jsonData),
         dateImported: getUnixTimestamp(),
         upgrades: Array.from(upgradesMap.values())
     }
