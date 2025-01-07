@@ -150,7 +150,8 @@ export const assignmentTable = pgTable('assignments', {
 export const bossTable = pgTable('bosses', {
     id: integer('id').primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
     name: varchar('name', { length: 255 }).notNull().unique(),
-    raid: varchar('raid', { length: 255 }),
+    raidName: varchar('raid_name'),
+    raidId: integer('raid_id'),
     order: integer('order').notNull()
 })
 
@@ -216,6 +217,13 @@ export const itemToCatalystTable = pgTable(
 
 export const bossItemsRelations = relations(bossTable, ({ many }) => ({
     items: many(itemTable)
+}))
+
+export const itemBossRelations = relations(itemTable, ({ one }) => ({
+    boss: one(bossTable, {
+        fields: [itemTable.bossId],
+        references: [bossTable.id]
+    })
 }))
 
 export const charPlayerRelations = relations(charTable, ({ one }) => ({

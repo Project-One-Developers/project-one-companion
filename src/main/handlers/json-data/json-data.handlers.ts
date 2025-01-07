@@ -1,4 +1,4 @@
-import { upsertBosses } from '@storage/boss/boss.storage'
+import { upsertBosses } from '@storage/bosses/bosses.storage'
 import {
     upsertItems,
     upsertItemsToCatalyst,

@@ -10,6 +10,7 @@ import {
 } from './droptimizer/droptimizer.handlers'
 import { getItemsHandler } from './items/items.handlers'
 import { upsertJsonDataHandler } from './json-data/json-data.handlers'
+import { getRaidLootTableHanlder } from './raid/raid.handler'
 
 export const allHandlers = {
     'add-droptimizer': addDroptimizerHandler,
@@ -19,5 +20,6 @@ export const allHandlers = {
     'add-player': addPlayerHandler,
     'delete-player': deletePlayerHandler,
     'upsert-json-data': upsertJsonDataHandler,
-    'get-items': getItemsHandler
+    'get-items': getItemsHandler,
+    'get-raid-loot-table': getRaidLootTableHanlder
 }

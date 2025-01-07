@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { electronAPI } from '@electron-toolkit/preload'
-import type { Droptimizer, Item, NewCharacter, Player } from '@shared/types/types'
+import type { Boss, Droptimizer, Item, NewCharacter, Player } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
@@ -24,6 +24,10 @@ export const api = {
     },
     getDroptimizerList(): Promise<Droptimizer[]> {
         return ipcRenderer.invoke('get-droptimizer-list')
+    },
+    // Raid loot table
+    getRaidLootTable(raidId: number): Promise<Boss[]> {
+        return ipcRenderer.invoke('get-raid-loot-table', raidId)
     },
     // JSON Data
     getItems(): Promise<Item[]> {

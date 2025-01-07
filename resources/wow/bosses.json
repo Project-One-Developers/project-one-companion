@@ -3,60 +3,70 @@
         "order": 1,
         "name": "Ulgrax the Devourer",
         "id": 2607,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 2,
         "name": "The Bloodbound Horror",
         "id": 2611,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 3,
         "name": "Sikran, Captain of the Sureki",
         "id": 2599,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 4,
         "name": "Rasha'nan",
         "id": 2609,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 5,
         "name": "Broodtwister Ovi'nax",
         "id": 2612,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 6,
         "name": "Nexus-Princess Ky'veza",
         "id": 2601,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 7,
         "name": "The Silken Court",
         "id": 2608,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 8,
         "name": "Queen Ansurek",
         "id": 2602,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 99,
         "name": "Trash Drop",
         "id": -67,
-        "raid": "Nerub-ar Palace"
+        "raidName": "Nerub-ar Palace",
+		"raidId": 1273
     },
     {
         "order": 99,
         "name": "Catalyst - Season 1",
         "id": -70,
-        "raid": ""
+        "raidName": "",
+        "raidId": null
     }
 ]

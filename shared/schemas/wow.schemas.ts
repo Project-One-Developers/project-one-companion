@@ -76,8 +76,10 @@ export const itemSchema = z.object({
 export const bossSchema = z.object({
     id: z.number(),
     name: z.string(),
-    raid: z.string(),
-    order: z.number()
+    raidName: z.string().nullish(),
+    raidId: z.number().nullish(),
+    order: z.number(),
+    items: z.array(itemSchema)
 })
 
 export const itemToTiersetSchema = z.object({
