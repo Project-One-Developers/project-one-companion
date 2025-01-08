@@ -5,5 +5,9 @@ declare global {
     interface Window {
         electron: ElectronAPI
         api: typeof api
+        // coming from wowhead tooltip.js
+        $WowheadPower: {
+            refreshLinks: () => void
+        }
     }
 }

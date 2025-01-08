@@ -1,3 +1,4 @@
+import { WowheadLink } from '@renderer/components/ui/wowhead-link'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
 import { useQuery } from '@tanstack/react-query'
@@ -9,7 +10,6 @@ export default function LootTable(): JSX.Element {
         queryKey: [queryKeys.raidLootTable, currentRaid],
         queryFn: () => fetchRaidLootTable(currentRaid)
     })
-    $WowheadPower.refreshLinks()
     return (
         <>
             {isLoading ? (
@@ -27,22 +27,15 @@ export default function LootTable(): JSX.Element {
                                 <h2 className="font-black text-2xl">{boss.name}</h2>
                                 <ul>
                                     {boss.items.map((item) => (
-                                        // <li key={item.id}>
-                                        //     <WowheadLink
-                                        //         item={item.id}
-                                        //         className={'text-sm'}
-                                        //         data-wh-icon-size="medium"
-                                        //     />
-                                        // </li>
-                                        <a
-                                            target="_blank"
-                                            key={item.id}
-                                            href={'https://www.wowhead.com/item=' + item.id}
-                                            className="q3 text-sm icontinyl"
-                                            rel="noreferrer"
-                                        >
-                                            <li>{item.name}</li>
-                                        </a>
+                                        <li key={item.id}>
+                                            <WowheadLink
+                                                target="_blank"
+                                                itemId={item.id}
+                                                className={'text-xs'}
+                                                data-wh-icon-size="medium"
+                                                rel="noreferrer"
+                                            />
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
