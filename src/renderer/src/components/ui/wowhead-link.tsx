@@ -15,6 +15,8 @@ export const WowheadLink = ({
 
     return (
         <a
+            target="_blank"
+            rel="noreferrer"
             href={`/items/${itemId}`}
             data-wowhead={`item=${itemId}?ilvl=${itemLvl}&spec=${specId}`}
             data-wh-rename-link={iconOnly ? 'false' : 'true'}

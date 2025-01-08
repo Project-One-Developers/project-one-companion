@@ -1,23 +1,36 @@
 import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
 import { WowheadLink } from '@renderer/components/ui/wowhead-link'
+import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
+import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
 import {
     formatWowWeek,
     getDpsHumanReadable,
     unitTimestampToRelativeDays,
     unixTimestampToWowWeek
 } from '@renderer/lib/utils'
+import { Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 export default function DroptimizerPage(): JSX.Element {
-    const { data, isLoading } = useQuery({
+    const res = useQuery({
         queryKey: [queryKeys.droptimizers],
         queryFn: fetchDroptimizers
     })
+    const data = res.data
+    const isLoading = res.isLoading
+
+    const itemRes = useQuery({
+        queryKey: [queryKeys.raidLootTable, 1273],
+        queryFn: () => fetchRaidLootTable(1273)
+        //select: (data) => data.map((boss) => boss.items)
+    })
+    const raidItems: Item[] = itemRes.data?.flatMap((boss) => boss.items) ?? []
+    const raidItemsIsLoading = itemRes.isLoading
 
     // Filters state
     const [selectedRaidDiff, setSelectedRaidDiff] = useState('all')
@@ -181,34 +194,51 @@ export default function DroptimizerPage(): JSX.Element {
                                         <strong>Upgrades:</strong> {dropt.upgrades?.length}
                                     </p>
                                 </div>
-                                {dropt.upgrades ? (
-                                    <div className={'flex items-center gap-3 mt-3'}>
+                                {dropt.upgrades && !raidItemsIsLoading ? (
+                                    <div className={'flex items-center gap-3 mt-1'}>
                                         {dropt.upgrades
                                             .sort((a, b) => b.dps - a.dps)
                                             .slice(0, 6)
-                                            .map((item) => (
-                                                <div
-                                                    className="-mr-4 relative group"
-                                                    key={item.itemId}
-                                                >
-                                                    <WowheadLink
-                                                        target="_blank"
-                                                        itemId={item.itemId}
-                                                        specId={dropt.charInfo.specId}
-                                                        iconOnly={true}
-                                                        className={
-                                                            'object-cover object-top rounded-full h-10 w-10 border border-background'
-                                                        }
-                                                        data-wh-icon-size="medium"
-                                                        rel="noreferrer"
-                                                    />
-                                                    <p className="text-xs text-gray-600 text-center">
-                                                        <strong>
-                                                            {getDpsHumanReadable(item.dps)}
-                                                        </strong>
-                                                    </p>
-                                                </div>
-                                            ))}
+                                            .map((upgrade) => {
+                                                // Lookup the item in the raidItems array
+                                                const foundItem = raidItems.find(
+                                                    (item) => item.id === upgrade.itemId
+                                                )
+                                                return (
+                                                    <div
+                                                        className="-mr-4 relative group"
+                                                        key={upgrade.itemId}
+                                                    >
+                                                        {foundItem ? (
+                                                            <WowItemIcon
+                                                                item={foundItem}
+                                                                iconOnly={true}
+                                                                raidDiff="Heroic"
+                                                                className="mt-2"
+                                                                iconClassName={
+                                                                    'object-cover object-top rounded-full h-10 w-10 border border-background'
+                                                                }
+                                                            />
+                                                        ) : (
+                                                            // Quando non esite mapping sul nostro db -> ricorro a wowhead
+                                                            <WowheadLink
+                                                                itemId={upgrade.itemId}
+                                                                specId={dropt.charInfo.specId}
+                                                                iconOnly={true}
+                                                                className={
+                                                                    ' border-red-50 h-30 w-10 '
+                                                                }
+                                                                data-wh-icon-size="medium"
+                                                            />
+                                                        )}
+                                                        <p className="text-xs text-gray-600 text-center">
+                                                            <strong>
+                                                                {getDpsHumanReadable(upgrade.dps)}
+                                                            </strong>
+                                                        </p>
+                                                    </div>
+                                                )
+                                            })}
                                     </div>
                                 ) : (
                                     <p className="text-sm text-gray-600">No upgrades available.</p>
