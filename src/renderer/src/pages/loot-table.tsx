@@ -28,7 +28,7 @@ export default function LootTable(): JSX.Element {
                         {data?.map((boss) => (
                             <div
                                 key={boss.id}
-                                className="flex flex-col justify-between bg-muted rounded-lg overflow-hidden"
+                                className="flex flex-col  bg-muted rounded-lg overflow-hidden"
                             >
                                 <div className="flex flex-col gap-y-2">
                                     <img
