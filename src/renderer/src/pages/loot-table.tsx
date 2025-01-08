@@ -18,6 +18,11 @@ export default function LootTable(): JSX.Element {
                 </div>
             ) : (
                 <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
+                    <div className="grid grid-cols-3 w-full items-center">
+                        <div></div>
+                        <h1 className="mx-auto text-3xl font-bold">Raid Loot Table</h1>
+                        <div></div>
+                    </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-4">
                         {data?.map((boss) => (
                             <div

@@ -7,6 +7,7 @@ import {
     unitTimestampToRelativeDays,
     unixTimestampToWowWeek
 } from '@renderer/lib/utils'
+import { specIcon } from '@renderer/lib/wow-icon'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -153,10 +154,17 @@ export default function DroptimizerPage(): JSX.Element {
                         {filteredDroptimizers.map((dropt) => (
                             <div
                                 key={dropt.url}
-                                className="flex flex-col justify-between p-6 bg-muted h-[220px] w-[300px] rounded-lg relative"
+                                className="flex flex-col justify-between p-6 bg-muted h-[230px] w-[300px] rounded-lg relative"
                             >
-                                <h2 className="font-black text-2xl">{dropt.charInfo.name}</h2>
-                                <div className="text-sm text-gray-600">
+                                <div className="flex items-center space-x-3">
+                                    <img
+                                        src={specIcon.get(dropt.charInfo.specId)}
+                                        alt={dropt.charInfo.spec}
+                                        className="object-cover object-top rounded-md full h-10 w-10 border border-background"
+                                    />
+                                    <h2 className="font-black">{dropt.charInfo.name}</h2>
+                                </div>
+                                <div className="text-sm text-gray-600 gap-3 mt-3">
                                     <p>
                                         <strong>Raid Difficulty:</strong>{' '}
                                         {dropt.raidInfo.difficulty}
