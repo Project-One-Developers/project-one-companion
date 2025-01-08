@@ -46,6 +46,7 @@ export default function LootTable(): JSX.Element {
                                                 <WowItemIcon
                                                     item={item}
                                                     iconOnly={false}
+                                                    raidDiff="Heroic"
                                                     className="mt-2"
                                                     iconClassName={
                                                         'object-cover object-top rounded-full h-10 w-10 border border-background'

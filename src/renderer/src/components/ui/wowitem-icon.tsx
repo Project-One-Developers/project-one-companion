@@ -1,23 +1,24 @@
-import { Item } from '@shared/types/types'
+import { Item, WowRaidDifficulty } from '@shared/types/types'
 
 export const WowItemIcon = ({
     item,
     iconOnly,
     iconClassName,
+    raidDiff = 'Heroic',
     className
 }: {
     item: Item
     iconOnly: boolean
     iconClassName: string
+    raidDiff: WowRaidDifficulty
     className: string
 }) => {
-    const diff = 'Heroic' // todo: prendere in input
     let ilvl
-    if (diff === 'Heroic') {
+    if (raidDiff === 'Heroic') {
         ilvl = item.ilvlHeroic
-    } else if (diff === 'Mythic') {
+    } else if (raidDiff === 'Mythic') {
         ilvl = item.ilvlMythic
-    } else if (diff === 'Normal') {
+    } else if (raidDiff === 'Normal') {
         ilvl = item.ilvlNormal
     }
     return (
