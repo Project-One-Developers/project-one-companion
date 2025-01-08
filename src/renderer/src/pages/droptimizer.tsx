@@ -214,6 +214,9 @@ export default function DroptimizerPage(): JSX.Element {
                                                                 item={foundItem}
                                                                 iconOnly={true}
                                                                 raidDiff="Heroic"
+                                                                catalystBanner={
+                                                                    upgrade.catalyzedItemId !== null
+                                                                }
                                                                 className="mt-2"
                                                                 iconClassName={
                                                                     'object-cover object-top rounded-full h-10 w-10 border border-background'
