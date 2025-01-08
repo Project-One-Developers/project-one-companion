@@ -1,4 +1,6 @@
 import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
+import { WowheadLink } from '@renderer/components/ui/wowhead-link'
+import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import {
@@ -7,7 +9,6 @@ import {
     unitTimestampToRelativeDays,
     unixTimestampToWowWeek
 } from '@renderer/lib/utils'
-import { specIcon } from '@renderer/lib/wow-icon'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -73,7 +74,7 @@ export default function DroptimizerPage(): JSX.Element {
                     <LoaderCircle className="animate-spin text-5xl" />
                 </div>
             ) : (
-                <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
+                <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative ">
                     <div className="grid grid-cols-3 w-full items-center">
                         <div></div>
                         <h1 className="mx-auto text-3xl font-bold">Droptimizer</h1>
@@ -157,14 +158,13 @@ export default function DroptimizerPage(): JSX.Element {
                                 className="flex flex-col justify-between p-6 bg-muted h-[230px] w-[300px] rounded-lg relative"
                             >
                                 <div className="flex items-center space-x-3">
-                                    <img
-                                        src={specIcon.get(dropt.charInfo.specId)}
-                                        alt={dropt.charInfo.spec}
+                                    <WowSpecIcon
+                                        specId={dropt.charInfo.specId}
                                         className="object-cover object-top rounded-md full h-10 w-10 border border-background"
                                     />
                                     <h2 className="font-black">{dropt.charInfo.name}</h2>
                                 </div>
-                                <div className="text-sm text-gray-600 gap-3 mt-3">
+                                <div className="text-sm text-gray-600 mt-3">
                                     <p>
                                         <strong>Raid Difficulty:</strong>{' '}
                                         {dropt.raidInfo.difficulty}
@@ -191,14 +191,16 @@ export default function DroptimizerPage(): JSX.Element {
                                                     className="-mr-4 relative group"
                                                     key={item.itemId}
                                                 >
-                                                    <img
-                                                        height={50}
-                                                        width={50}
-                                                        src={
-                                                            'https://wow.zamimg.com/images/wow/icons/large/inv_nerubian_ring_01_color3.jpg'
+                                                    <WowheadLink
+                                                        target="_blank"
+                                                        itemId={item.itemId}
+                                                        specId={dropt.charInfo.specId}
+                                                        iconOnly={true}
+                                                        className={
+                                                            'object-cover object-top rounded-full h-10 w-10 border border-background'
                                                         }
-                                                        alt={String(item.itemId)}
-                                                        className="object-cover !m-0 !p-0 object-top rounded-full h-10 w-10 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
+                                                        data-wh-icon-size="medium"
+                                                        rel="noreferrer"
                                                     />
                                                     <p className="text-xs text-gray-600 text-center">
                                                         <strong>

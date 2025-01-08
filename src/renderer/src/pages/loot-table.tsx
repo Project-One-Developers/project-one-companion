@@ -36,6 +36,8 @@ export default function LootTable(): JSX.Element {
                                             <WowheadLink
                                                 target="_blank"
                                                 itemId={item.id}
+                                                itemLvl={item.ilvlMythic}
+                                                iconOnly={false}
                                                 className={'text-xs'}
                                                 data-wh-icon-size="medium"
                                                 rel="noreferrer"
