@@ -58,3 +58,18 @@ export const specIcon = new Map<number, string>([
     [1468, 'https://wow.zamimg.com/images/wow/icons/medium/classicon_evoker_preservation.jpg'], // Preservation Evoker
     [1473, 'https://wow.zamimg.com/images/wow/icons/medium/classicon_evoker_augmentation.jpg'] // Augmentation Evoker
 ])
+
+export const encounterIcon = new Map<number, string>([
+    [2607, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/12/117772.webp'], // Ulgrax the Devourer
+    [2611, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/165/117669.webp'], // The Bloodbound Horror
+    [2599, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/33/116257.webp'], // Sikran, Captain of the Sureki
+    [2609, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/132/118404.webp'], // Rasha'nan
+    [2612, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/179/118963.webp'], // Broodtwister Ovi'nax
+    [2601, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/186/117946.webp'], // Nexus-Princess Ky'veza
+    [
+        2608,
+        'https://assets2.mythictrap.com/nerubar-palace/background_finals/silken-court-custom.png'
+    ], // The Silken Court
+    [2602, 'https://wow.zamimg.com/modelviewer/beta/webthumbs/npc/213/119253.png'], // Queen Ansurek
+    [-67, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
+])

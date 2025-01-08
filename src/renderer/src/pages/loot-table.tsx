@@ -1,6 +1,7 @@
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
+import { encounterIcon } from '@renderer/lib/wow-icon'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
@@ -27,25 +28,33 @@ export default function LootTable(): JSX.Element {
                         {data?.map((boss) => (
                             <div
                                 key={boss.id}
-                                className="flex flex-col justify-between p-6 bg-muted rounded-lg relative"
+                                className="flex flex-col justify-between bg-muted rounded-lg overflow-hidden"
                             >
-                                <h2 className="font-black absolute -top-3 left-2 cursor-pointer">
-                                    {boss.name}
-                                </h2>
-                                <ul>
-                                    {boss.items.map((item) => (
-                                        <li key={item.id}>
-                                            <WowItemIcon
-                                                item={item}
-                                                iconOnly={false}
-                                                className="mt-2"
-                                                iconClassName={
-                                                    'object-cover object-top rounded-full h-10 w-10 border border-background'
-                                                }
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
+                                <div className="flex flex-col gap-y-2">
+                                    <img
+                                        src={encounterIcon.get(boss.id)}
+                                        alt={`${boss.name} icon`}
+                                        className="w-full h-32 object-scale-down"
+                                    />
+                                    <h2 className="text-center text-xs font-bold ">{boss.name}</h2>
+                                </div>
+
+                                <div className="p-6">
+                                    <ul>
+                                        {boss.items.map((item) => (
+                                            <li key={item.id}>
+                                                <WowItemIcon
+                                                    item={item}
+                                                    iconOnly={false}
+                                                    className="mt-2"
+                                                    iconClassName={
+                                                        'object-cover object-top rounded-full h-10 w-10 border border-background'
+                                                    }
+                                                />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         ))}
                     </div>
