@@ -1,4 +1,4 @@
-import { WowheadLink } from '@renderer/components/ui/wowhead-link'
+import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
 import { useQuery } from '@tanstack/react-query'
@@ -23,24 +23,25 @@ export default function LootTable(): JSX.Element {
                         <h1 className="mx-auto text-3xl font-bold">Raid Loot Table</h1>
                         <div></div>
                     </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-4">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                         {data?.map((boss) => (
                             <div
                                 key={boss.id}
                                 className="flex flex-col justify-between p-6 bg-muted rounded-lg relative"
                             >
-                                <h2 className="font-black text-2xl">{boss.name}</h2>
+                                <h2 className="font-black absolute -top-3 left-2 cursor-pointer">
+                                    {boss.name}
+                                </h2>
                                 <ul>
                                     {boss.items.map((item) => (
                                         <li key={item.id}>
-                                            <WowheadLink
-                                                target="_blank"
-                                                itemId={item.id}
-                                                itemLvl={item.ilvlMythic}
+                                            <WowItemIcon
+                                                item={item}
                                                 iconOnly={false}
-                                                className={'text-xs'}
-                                                data-wh-icon-size="medium"
-                                                rel="noreferrer"
+                                                className="mt-2"
+                                                iconClassName={
+                                                    'object-cover object-top rounded-full h-10 w-10 border border-background'
+                                                }
                                             />
                                         </li>
                                     ))}

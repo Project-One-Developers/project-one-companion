@@ -66,9 +66,9 @@ export const itemSchema = z.object({
     stats: z.string().nullish(),
     mainStats: z.string().nullish(),
     secondaryStats: z.string().nullish(),
-    wowheadUrl: z.string().url().nullish(),
-    iconName: z.string().nullish(),
-    iconUrl: z.string().url().nullish(),
+    wowheadUrl: z.string().url(),
+    iconName: z.string(),
+    iconUrl: z.string().url(),
     bossName: z.string().nullish(), // ridondante ma utile
     bossId: z.number()
 })
