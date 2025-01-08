@@ -21,8 +21,21 @@ export function getDpsHumanReadable(dps: number): string {
 }
 
 export function unitTimestampToRelativeDays(unixTimestamp: number): string {
-    const daysAgo = Math.floor((Date.now() - unixTimestamp * 1000) / 86400000)
-    return daysAgo ? `${daysAgo} days ago` : 'Today'
+    const now = new Date()
+    const date = new Date(unixTimestamp * 1000)
+
+    // Compare calendar days
+    const today = now.getDate()
+    const timestampDay = date.getDate()
+
+    if (now.toDateString() === date.toDateString()) {
+        return 'Today'
+    } else if (today - timestampDay === 1 || (today === 1 && now.getMonth() !== date.getMonth())) {
+        return 'Yesterday'
+    }
+
+    const daysAgo = Math.round((now.getTime() - date.getTime()) / 86400000)
+    return `${daysAgo} days ago`
 }
 
 export function unixTimestampToWowWeek(unixTimestamp?: number): number {
