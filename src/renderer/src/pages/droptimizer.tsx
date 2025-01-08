@@ -1,17 +1,10 @@
+import { DroptimizerCard } from '@renderer/components/droptimizer-card'
 import { FiltersPanel } from '@renderer/components/filter-panel'
 import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
-import { WowheadLink } from '@renderer/components/ui/wowhead-link'
-import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
-import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
-import {
-    formatWowWeek,
-    getDpsHumanReadable,
-    unitTimestampToRelativeDays,
-    unixTimestampToWowWeek
-} from '@renderer/lib/utils'
+import { formatWowWeek, unixTimestampToWowWeek } from '@renderer/lib/utils'
 import { Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -89,7 +82,7 @@ export default function DroptimizerPage(): JSX.Element {
 
     return (
         <>
-            {isLoading ? (
+            {isLoading || raidItemsIsLoading ? (
                 <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                     <LoaderCircle className="animate-spin text-5xl" />
                 </div>
@@ -116,87 +109,11 @@ export default function DroptimizerPage(): JSX.Element {
                     {/* Droptimizer Panel */}
                     <div className="flex flex-wrap gap-x-4 gap-y-4">
                         {filteredDroptimizers.map((dropt) => (
-                            <div
+                            <DroptimizerCard
                                 key={dropt.url}
-                                className="flex flex-col justify-between p-6 bg-muted h-[230px] w-[300px] rounded-lg relative"
-                            >
-                                <div className="flex items-center space-x-3">
-                                    <WowSpecIcon
-                                        specId={dropt.charInfo.specId}
-                                        className="object-cover object-top rounded-md full h-10 w-10 border border-background"
-                                    />
-                                    <h2 className="font-black">{dropt.charInfo.name}</h2>
-                                </div>
-                                <div className="text-sm text-gray-600 mt-3">
-                                    <p>
-                                        <strong>Raid Difficulty:</strong>{' '}
-                                        {dropt.raidInfo.difficulty}
-                                    </p>
-                                    <p>
-                                        <strong>Fight Style:</strong> {dropt.simInfo.fightstyle}(
-                                        {dropt.simInfo.nTargets}) {dropt.simInfo.duration} sec
-                                    </p>
-                                    <p title={new Date(dropt.simInfo.date * 1000).toLocaleString()}>
-                                        <strong>Date: </strong>
-                                        {unitTimestampToRelativeDays(dropt.simInfo.date)}
-                                    </p>
-                                    <p>
-                                        <strong>Upgrades:</strong> {dropt.upgrades?.length}
-                                    </p>
-                                </div>
-                                {dropt.upgrades && !raidItemsIsLoading ? (
-                                    <div className={'flex items-center gap-3 mt-1'}>
-                                        {dropt.upgrades
-                                            .sort((a, b) => b.dps - a.dps)
-                                            .slice(0, 6)
-                                            .map((upgrade) => {
-                                                // Lookup the item in the raidItems array
-                                                const foundItem = raidItems.find(
-                                                    (item) => item.id === upgrade.itemId
-                                                )
-                                                return (
-                                                    <div
-                                                        className="-mr-4 relative group"
-                                                        key={upgrade.itemId}
-                                                    >
-                                                        {foundItem ? (
-                                                            <WowItemIcon
-                                                                item={foundItem}
-                                                                iconOnly={true}
-                                                                raidDiff="Heroic"
-                                                                catalystBanner={
-                                                                    upgrade.catalyzedItemId !== null
-                                                                }
-                                                                className="mt-2"
-                                                                iconClassName={
-                                                                    'object-cover object-top rounded-full h-10 w-10 border border-background'
-                                                                }
-                                                            />
-                                                        ) : (
-                                                            // Quando non esite mapping sul nostro db -> ricorro a wowhead
-                                                            <WowheadLink
-                                                                itemId={upgrade.itemId}
-                                                                specId={dropt.charInfo.specId}
-                                                                iconOnly={true}
-                                                                className={
-                                                                    ' border-red-50 h-30 w-10 '
-                                                                }
-                                                                data-wh-icon-size="medium"
-                                                            />
-                                                        )}
-                                                        <p className="text-xs text-gray-600 text-center">
-                                                            <strong>
-                                                                {getDpsHumanReadable(upgrade.dps)}
-                                                            </strong>
-                                                        </p>
-                                                    </div>
-                                                )
-                                            })}
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-600">No upgrades available.</p>
-                                )}
-                            </div>
+                                droptimizer={dropt}
+                                raidItems={raidItems}
+                            />
                         ))}
                     </div>
                 </div>
