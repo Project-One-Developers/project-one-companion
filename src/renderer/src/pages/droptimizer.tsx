@@ -1,3 +1,4 @@
+import { FiltersPanel } from '@renderer/components/filter-panel'
 import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
 import { WowheadLink } from '@renderer/components/ui/wowhead-link'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
@@ -33,10 +34,16 @@ export default function DroptimizerPage(): JSX.Element {
     const raidItemsIsLoading = itemRes.isLoading
 
     // Filters state
-    const [selectedRaidDiff, setSelectedRaidDiff] = useState('all')
-    const [onlyLatest, setOnlyLatest] = useState(true)
-    const [filterByCurrentWeek, setFilterByCurrentWeek] = useState(false)
-    const [onlyWithUpgrades, setOnlyWithUpgrades] = useState(false)
+    const [filters, setFilters] = useState({
+        raidDiff: 'all',
+        onlyLatest: true,
+        currentWeek: false,
+        onlyUpgrades: false
+    })
+
+    const updateFilter = (key: string, value: any) => {
+        setFilters((prev) => ({ ...prev, [key]: value }))
+    }
 
     // Compute filtered data
     const filteredDroptimizers = useMemo(() => {
@@ -49,25 +56,25 @@ export default function DroptimizerPage(): JSX.Element {
             .sort((a, b) => b.simInfo.date - a.simInfo.date)
             .filter((dropt) => {
                 // Filter by raid difficulty
-                if (selectedRaidDiff !== 'all' && dropt.raidInfo.difficulty !== selectedRaidDiff) {
+                if (filters.raidDiff !== 'all' && dropt.raidInfo.difficulty !== filters.raidDiff) {
                     return false
                 }
 
                 // Filter by current week
                 if (
-                    filterByCurrentWeek &&
+                    filters.currentWeek &&
                     unixTimestampToWowWeek(dropt.simInfo.date) !== unixTimestampToWowWeek()
                 ) {
                     return false
                 }
 
                 // Filter by upgrades
-                if (onlyWithUpgrades && (!dropt.upgrades || dropt.upgrades.length === 0)) {
+                if (filters.onlyUpgrades && (!dropt.upgrades || dropt.upgrades.length === 0)) {
                     return false
                 }
 
-                // Worka solo se l'array di droptimizer è ordinato per dropt.date desc
-                if (onlyLatest) {
+                // Works only if the droptimizer array is sorted by dropt.simInfo.date desc
+                if (filters.onlyLatest) {
                     const existingDropt = latestDroptimizersMap.get(dropt.ak)
                     if (!existingDropt || dropt.simInfo.date > existingDropt.simInfo.date) {
                         latestDroptimizersMap.set(dropt.ak, dropt)
@@ -78,7 +85,7 @@ export default function DroptimizerPage(): JSX.Element {
 
                 return true
             })
-    }, [data, selectedRaidDiff, filterByCurrentWeek, onlyWithUpgrades, onlyLatest])
+    }, [data, filters])
 
     return (
         <>
@@ -88,82 +95,25 @@ export default function DroptimizerPage(): JSX.Element {
                 </div>
             ) : (
                 <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative ">
-                    <div className="grid grid-cols-3 w-full items-center">
+                    <div className="grid grid-cols- w-full items-center">
                         <div></div>
                         <h1 className="mx-auto text-3xl font-bold">Droptimizer</h1>
                         <div className="flex items-center justify-center absolute bottom-6 right-6">
                             <NewDroptimizerForm />
                         </div>
-                    </div>
-
-                    {/* Info Bar */}
-                    <div className="flex flex-wrap gap-4 items-center bg-gray-800 text-white p-4 rounded-lg w-full">
                         {/* WoW Reset Info */}
-                        <div>
-                            <div>
-                                <p className="font-semibold">
-                                    <strong>WoW Reset:</strong> {formatWowWeek()} (
-                                    {unixTimestampToWowWeek()})
-                                </p>
-                            </div>
-                        </div>
-                        {/* Filters Section */}
-                        <div className="flex flex-wrap gap-4">
-                            <div className="flex flex-col">
-                                <label htmlFor="raid-diff" className="font-semibold">
-                                    Raid Difficulty:
-                                </label>
-                                {/* TODO: bindare alle raid diff di wow enum */}
-                                <select
-                                    id="raid-diff"
-                                    value={selectedRaidDiff}
-                                    onChange={(e) => setSelectedRaidDiff(e.target.value)}
-                                    className="border rounded-md p-2 bg-gray-700 text-white"
-                                >
-                                    <option value="all">All</option>
-                                    <option value="Heroic">Heroic</option>
-                                    <option value="Mythic">Mythic</option>
-                                </select>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <label htmlFor="only-latest" className="font-semibold">
-                                    Latest only:
-                                </label>
-                                <input
-                                    id="only-latest"
-                                    type="checkbox"
-                                    checked={onlyLatest}
-                                    onChange={(e) => setOnlyLatest(e.target.checked)}
-                                    className="w-4 h-4"
-                                />
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <label htmlFor="current-week" className="font-semibold">
-                                    Current Reset:
-                                </label>
-                                <input
-                                    id="current-week"
-                                    type="checkbox"
-                                    checked={filterByCurrentWeek}
-                                    onChange={(e) => setFilterByCurrentWeek(e.target.checked)}
-                                    className="w-4 h-4"
-                                />
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <label htmlFor="only-upgrades" className="font-semibold">
-                                    Upgrades only:
-                                </label>
-                                <input
-                                    id="only-upgrades"
-                                    type="checkbox"
-                                    checked={onlyWithUpgrades}
-                                    onChange={(e) => setOnlyWithUpgrades(e.target.checked)}
-                                    className="w-4 h-4"
-                                />
-                            </div>
+                        <div className="flex items-center justify-center absolute bottom-6 right-20">
+                            <p className="">
+                                <strong>WoW Reset:</strong> {formatWowWeek()} (
+                                {unixTimestampToWowWeek()})
+                            </p>
                         </div>
                     </div>
-
+                    {/* Filter Panel */}
+                    <div className="w-full">
+                        <FiltersPanel filters={filters} updateFilter={updateFilter} />
+                    </div>
+                    {/* Droptimizer Panel */}
                     <div className="flex flex-wrap gap-x-4 gap-y-4">
                         {filteredDroptimizers.map((dropt) => (
                             <div
