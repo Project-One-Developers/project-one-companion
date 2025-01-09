@@ -1,5 +1,7 @@
 import { getDpsHumanReadable, unitTimestampToRelativeDays } from '@renderer/lib/utils'
 import { Droptimizer, Item } from '@shared/types/types'
+import { useEffect, useState } from 'react'
+import DroptimizerDetailDialog from './droptimizer-detail-dialog'
 import { WowheadLink } from './ui/wowhead-link'
 import { WowItemIcon } from './ui/wowitem-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
@@ -13,8 +15,20 @@ export const DroptimizerCard = ({
     droptimizer: dropt,
     raidItems: raidItems
 }: DroptimizerCardProps) => {
+    // droptimizer detail dialog
+    const [isOpen, setOpen] = useState(false)
+    useEffect(() => {
+        console.log('isOpen changed state:', isOpen)
+    }, [isOpen])
+    const handleSetOpen = (open: boolean) => {
+        console.log('setOpen called with:', open)
+        setOpen(open)
+    }
     return (
-        <div className="flex flex-col justify-between p-6 bg-muted h-[230px] w-[310px] rounded-lg relative">
+        <div
+            className="flex flex-col justify-between p-6 bg-muted h-[230px] w-[310px] rounded-lg relative cursor-pointer"
+            onClick={() => setOpen(true)}
+        >
             {/* Character Info */}
             <div className="flex items-center space-x-3">
                 <WowSpecIcon
@@ -80,6 +94,7 @@ export const DroptimizerCard = ({
             ) : (
                 <p className="text-sm text-gray-600">No upgrades available.</p>
             )}
+            <DroptimizerDetailDialog droptimizer={dropt} isOpen={isOpen} setOpen={handleSetOpen} />
         </div>
     )
 }

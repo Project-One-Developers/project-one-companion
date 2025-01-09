@@ -10,7 +10,7 @@ export const WowItemIcon = ({
 }: {
     item: Item
     iconOnly: boolean
-    iconClassName: string
+    iconClassName?: string
     catalystBanner?: boolean
     raidDiff?: WowRaidDifficulty
     className: string
