@@ -94,6 +94,7 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
 }
 
 export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
+    console.log('getDroptimizerListHandler')
     return await getDroptimizerList()
 }
 

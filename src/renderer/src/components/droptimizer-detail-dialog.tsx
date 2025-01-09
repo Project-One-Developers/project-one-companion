@@ -1,68 +1,85 @@
-import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { queryClient } from '@renderer/lib/tanstack-query/client'
-import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import type { Droptimizer } from '@shared/types/types'
-import { useMutation } from '@tanstack/react-query'
-import { Loader2 } from 'lucide-react'
-import { toast } from './hooks/use-toast'
-import { Button } from './ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
+import { getDpsHumanReadable } from '@renderer/lib/utils'
+import type { Boss, Droptimizer, DroptimizerUpgrade } from '@shared/types/types'
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
+import { WowItemIcon } from './ui/wowitem-icon'
 
 type DroptimizerDetailDialogProps = {
     droptimizer: Droptimizer
-    isOpen: boolean
-    setOpen: (open: boolean) => void
+    bosses: Boss[]
 }
 
 export default function DroptimizerDetailDialog({
     droptimizer,
-    isOpen,
-    setOpen
+    bosses
 }: DroptimizerDetailDialogProps): JSX.Element {
-    //const [open, setOpen] = useState(false)
-    const { mutate, isPending } = useMutation({
-        mutationFn: async () => console.log('ok'),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
-            setOpen(false)
-            toast({
-                title: 'Cancellazione droptimizer',
-                description: `Il droptimizer ${droptimizer.url} è stato cancellato con successo.`
-            })
+    const bossMap: Map<Boss, DroptimizerUpgrade[]> = new Map()
+
+    droptimizer.upgrades?.forEach((up) => {
+        for (let index = 0; index < bosses.length; index++) {
+            const boss = bosses[index]
+            const bossUpgrade = boss.items.find((i) => i.id === up.itemId)
+            if (bossUpgrade) {
+                const val = bossMap.get(boss)
+                if (val !== undefined) {
+                    val.push(up)
+                } else {
+                    bossMap.set(boss, [up])
+                }
+            }
         }
     })
-    return (
-        <Dialog
-            open={isOpen}
-            onOpenChange={(open) => {
-                console.log('Dialog onOpenChange called with:', open)
-                setOpen(open)
-            }}
-        >
-            {/* <DialogTrigger className="absolute top-2 right-2 cursor-pointer">
-                <X className="w-3" />
-            </DialogTrigger> */}
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Droptimizer info</DialogTitle>
-                    <DialogDescription>{droptimizer.charInfo.name}</DialogDescription>
-                </DialogHeader>
-                {/* <img
-                    src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2w4YzhldHo5OGtnc29raXAzN2k0YnA4am5seWdleDJlZTdwcHlmdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4DvP1HK8UviaOuRcCY/giphy.gif"
-                    alt="Be Careful"
-                    width={400}
-                    height={400}
-                /> */}
-                <DialogPrimitive.Close asChild>
-                    <button className="IconButton" aria-label="Close">
-                        test
-                    </button>
-                </DialogPrimitive.Close>
 
-                <Button disabled={isPending} onClick={() => mutate()}>
-                    {isPending ? <Loader2 className="animate-spin" /> : 'Conferma'}
-                </Button>
-            </DialogContent>
-        </Dialog>
+    // Sort bosses by order
+    const sortedBosses = [...bossMap.keys()].sort((a, b) => a.order - b.order)
+
+    return (
+        <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+                <DialogTitle>Droptimizer info</DialogTitle>
+                <DialogDescription>{droptimizer.charInfo.name}</DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+                {sortedBosses.map((boss) => (
+                    <div key={boss.id} className="flex flex-col gap-2">
+                        {/* Boss Name Column */}
+                        <div className="font-bold text-sm text-gray-700">
+                            {boss.order} • {boss.name}
+                        </div>
+                        {/* Upgrades Column */}
+                        <div className="flex flex-wrap gap-2">
+                            {bossMap.get(boss)?.map((upgrade) => {
+                                const foundItem = boss.items.find((i) => i.id === upgrade.itemId)
+                                return (
+                                    <div key={upgrade.itemId} className="relative group">
+                                        {foundItem ? (
+                                            <WowItemIcon
+                                                item={foundItem}
+                                                iconOnly={true}
+                                                raidDiff="Heroic"
+                                                catalystBanner={upgrade.catalyzedItemId !== null}
+                                                className="mt-2"
+                                                iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
+                                            />
+                                        ) : (
+                                            <a
+                                                href={`https://www.wowhead.com/item=${upgrade.itemId}`}
+                                                rel="noreferrer"
+                                                target="_blank"
+                                                className="q3 links"
+                                            >
+                                                <p>{upgrade.itemId}</p>
+                                            </a>
+                                        )}
+                                        <p className="text-xs text-center">
+                                            <strong>{getDpsHumanReadable(upgrade.dps)}</strong>
+                                        </p>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </DialogContent>
     )
 }
