@@ -5,6 +5,7 @@ export const droptimizerUpgradeSchema = z.object({
     id: z.string(),
     dps: z.number(),
     itemId: z.number(),
+    ilvl: z.number(),
     slot: z.string(),
     catalyzedItemId: z.number().nullable(),
     droptimizerId: z.string()

@@ -6,6 +6,7 @@ export const WowItemIcon = ({
     iconClassName,
     catalystBanner = false,
     raidDiff = 'Heroic',
+    ilvl,
     className
 }: {
     item: Item
@@ -13,15 +14,17 @@ export const WowItemIcon = ({
     iconClassName?: string
     catalystBanner?: boolean
     raidDiff?: WowRaidDifficulty
+    ilvl?: number
     className: string
 }) => {
-    let ilvl
-    if (raidDiff === 'Heroic') {
-        ilvl = item.ilvlHeroic
-    } else if (raidDiff === 'Mythic') {
-        ilvl = item.ilvlMythic
-    } else if (raidDiff === 'Normal') {
-        ilvl = item.ilvlNormal
+    if (ilvl === undefined) {
+        if (raidDiff === 'Heroic') {
+            ilvl = item.ilvlHeroic
+        } else if (raidDiff === 'Mythic') {
+            ilvl = item.ilvlMythic
+        } else if (raidDiff === 'Normal') {
+            ilvl = item.ilvlNormal
+        }
     }
     return (
         <a

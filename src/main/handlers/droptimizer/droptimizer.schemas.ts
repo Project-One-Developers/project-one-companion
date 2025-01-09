@@ -70,6 +70,7 @@ export const jsonDataSchema = z
             dps: Math.round(item.mean - dpsMean),
             encounterId: Number(item.name.split('/')[1]),
             itemId: Number(item.name.split('/')[3]),
+            ilvl: Number(item.name.split('/')[4]),
             slot: item.name.split('/')[6]
         }))
         return {

@@ -61,8 +61,8 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
                 itemId: tiersetMapping ? tiersetMapping.tokenId : up.itemId, // boss drops token id, not the specific tierset
                 slot: up.slot,
                 dps: up.dps,
+                ilvl: up.ilvl,
                 catalyzedItemId: null,
-
                 ...(catalystMapping && {
                     itemId: catalystMapping.raidItemId, // itemId looted by boss
                     catalyzedItemId: catalystMapping.catalyzedItemId // itemId converted by catalyst

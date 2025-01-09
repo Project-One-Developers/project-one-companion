@@ -47,9 +47,9 @@ export const wowRoleClassSchema = z.object({
 export const itemSchema = z.object({
     id: z.number(),
     name: z.string(),
-    ilvlMythic: z.number().nullish(),
-    ilvlHeroic: z.number().nullish(),
-    ilvlNormal: z.number().nullish(),
+    ilvlMythic: z.number(),
+    ilvlHeroic: z.number(),
+    ilvlNormal: z.number(),
     bonusID: z.string().nullish(),
     itemClass: z.string().nullish(),
     slot: z.string().nullish(),

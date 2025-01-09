@@ -94,6 +94,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 id: newUUID(),
                 droptimizerId: droptimizerRes.url,
                 itemId: up.itemId,
+                ilvl: up.ilvl,
                 slot: up.slot,
                 dps: up.dps,
                 catalyzedItemId: up.catalyzedItemId

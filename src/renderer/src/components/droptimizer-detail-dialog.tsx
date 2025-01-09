@@ -36,7 +36,11 @@ export default function DroptimizerDetailDialog({
         <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>Droptimizer info</DialogTitle>
-                <DialogDescription>{droptimizer.charInfo.name}</DialogDescription>
+                <DialogDescription>
+                    <a href={droptimizer.url} rel="noreferrer" target="_blank" className="q3 links">
+                        {droptimizer.charInfo.name}
+                    </a>
+                </DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 mt-4">
                 {sortedBosses.map((boss) => (
@@ -55,14 +59,14 @@ export default function DroptimizerDetailDialog({
                                             <WowItemIcon
                                                 item={foundItem}
                                                 iconOnly={true}
-                                                raidDiff="Heroic"
+                                                ilvl={upgrade.ilvl}
                                                 catalystBanner={upgrade.catalyzedItemId !== null}
                                                 className="mt-2"
                                                 iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
                                             />
                                         ) : (
                                             <a
-                                                href={`https://www.wowhead.com/item=${upgrade.itemId}`}
+                                                href={`https://www.wowhead.com/item=${upgrade.itemId}&ilvl=${upgrade.ilvl}`}
                                                 rel="noreferrer"
                                                 target="_blank"
                                                 className="q3 links"

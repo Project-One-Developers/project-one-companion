@@ -56,6 +56,7 @@ export const droptimizerUpgradesTable = pgTable(
         id: varchar('id').primaryKey(),
         dps: integer('dps').notNull(),
         slot: varchar('slot').notNull(),
+        ilvl: integer('ilvl').notNull(),
         itemId: integer('item_id')
             .references(() => itemTable.id)
             .notNull(),
@@ -159,9 +160,9 @@ export const bossTable = pgTable('bosses', {
 export const itemTable = pgTable('items', {
     id: integer('id').primaryKey(), // ricicliamo id fornito da wow api
     name: varchar('name', { length: 255 }).notNull(),
-    ilvlMythic: integer('ilvl_mythic'),
-    ilvlHeroic: integer('ilvl_heroic'),
-    ilvlNormal: integer('ilvl_normal'),
+    ilvlMythic: integer('ilvl_mythic').notNull(),
+    ilvlHeroic: integer('ilvl_heroic').notNull(),
+    ilvlNormal: integer('ilvl_normal').notNull(),
     itemClass: varchar('item_class', { length: 50 }),
     slot: varchar('slot', { length: 50 }),
     itemSubclass: varchar('item_subclass', { length: 50 }),

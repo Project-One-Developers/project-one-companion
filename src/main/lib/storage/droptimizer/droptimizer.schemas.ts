@@ -52,6 +52,7 @@ export const droptimizerStorageSchema = z
                 id: up.id,
                 itemId: up.itemId,
                 dps: up.dps,
+                ilvl: up.ilvl,
                 slot: up.slot,
                 catalyzedItemId: up.catalyzedItemId,
                 droptimizerId: up.droptimizerId
