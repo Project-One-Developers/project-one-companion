@@ -9,12 +9,10 @@ import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 export default function DroptimizerPage(): JSX.Element {
-    const res = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: [queryKeys.droptimizers],
         queryFn: fetchDroptimizers
     })
-    const data = res.data
-    const isLoading = res.isLoading
 
     // Filters state
     const [filters, setFilters] = useState({

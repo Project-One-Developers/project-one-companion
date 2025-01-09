@@ -1,19 +1,32 @@
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
+import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
 import { encounterIcon } from '@renderer/lib/wow-icon'
+import { Boss, Droptimizer, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
 export default function LootTable(): JSX.Element {
     const currentRaid = 1273
-    const { data, isLoading } = useQuery({
+    const droptimizerRes = useQuery({
+        queryKey: [queryKeys.droptimizers],
+        queryFn: fetchDroptimizers
+    })
+    const itemRes = useQuery({
         queryKey: [queryKeys.raidLootTable, currentRaid],
         queryFn: () => fetchRaidLootTable(currentRaid)
     })
+    const droptimizers: Droptimizer[] = droptimizerRes.data ?? []
+    const droptimizersIsLoading = droptimizerRes.isLoading
+    const encounterList: Boss[] = itemRes.data ?? []
+    //const raidItems: Item[] = itemRes.data?.flatMap((boss) => boss.items) ?? []
+    const raidItemsIsLoading = itemRes.isLoading
+    const diff: WowRaidDifficulty = 'Heroic'
+
     return (
         <>
-            {isLoading ? (
+            {raidItemsIsLoading ? (
                 <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                     <LoaderCircle className="animate-spin text-5xl" />
                 </div>
@@ -25,7 +38,7 @@ export default function LootTable(): JSX.Element {
                         <div></div>
                     </div>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-4">
-                        {data?.map((boss) => (
+                        {encounterList.map((boss) => (
                             <div
                                 key={boss.id}
                                 className="flex flex-col  bg-muted rounded-lg overflow-hidden"
@@ -46,7 +59,7 @@ export default function LootTable(): JSX.Element {
                                                 <WowItemIcon
                                                     item={item}
                                                     iconOnly={false}
-                                                    raidDiff="Heroic"
+                                                    raidDiff={diff}
                                                     className="mt-2"
                                                     iconClassName={
                                                         'object-cover object-top rounded-full h-10 w-10 border border-background'
