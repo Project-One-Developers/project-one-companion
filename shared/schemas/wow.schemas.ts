@@ -34,6 +34,26 @@ export const wowClassHealerSchema = z.enum([
     'Evoker'
 ])
 
+export const wowItemSlotSchema = z.enum([
+    'Head',
+    'Neck',
+    'Shoulder',
+    'Back',
+    'Chest',
+    'Wrist',
+    'Hands',
+    'Waist',
+    'Legs',
+    'Feet',
+    'Finger',
+    'Trinket',
+    'Main Hand',
+    'Off Hand',
+    'Ranged'
+])
+
+export const wowArmorTypeSchema = z.enum(['Cloth', 'Mail', 'Leather', 'Plate'])
+
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
 
 export const wowRaidDiffSchema = z.enum(['Normal', 'Heroic', 'Mythic'])

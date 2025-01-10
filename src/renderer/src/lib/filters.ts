@@ -1,4 +1,4 @@
-import type { Droptimizer } from '../../../../shared/types/types'
+import type { Droptimizer, WowArmorType, WowItemSlot } from '../../../../shared/types/types'
 import { unixTimestampToRelativeDays } from './utils'
 
 export type LootFilter = {
@@ -8,6 +8,8 @@ export type LootFilter = {
     minUpgrade: number
     olderThanDays: boolean
     maxDays: number
+    selectedSlots: WowItemSlot[]
+    selectedArmorTypes: WowArmorType[]
 }
 
 export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilter): Droptimizer[] {

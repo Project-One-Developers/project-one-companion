@@ -22,7 +22,9 @@ export default function DroptimizerPage(): JSX.Element {
         onlyUpgrades: false,
         minUpgrade: 1000,
         olderThanDays: false,
-        maxDays: 7
+        maxDays: 7,
+        selectedArmorTypes: [],
+        selectedSlots: []
     })
 
     const updateFilter = (key: string, value: any) => {
@@ -31,6 +33,7 @@ export default function DroptimizerPage(): JSX.Element {
 
     // Compute filtered data
     const filteredDroptimizers = useMemo(() => {
+        console.log('toggled')
         if (!data?.droptimizers) return []
         return filterDroptimizer(data.droptimizers, filter)
     }, [data?.droptimizers, filter])

@@ -2,6 +2,8 @@ import { Checkbox, CheckedState } from '@radix-ui/react-checkbox'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@radix-ui/react-select'
 import { LootFilter } from '@renderer/lib/filters'
+import { armorTypesIcon, itemSlotIcon } from '@renderer/lib/wow-icon'
+import { wowArmorTypeSchema, wowItemSlotSchema } from '@shared/schemas/wow.schemas'
 import { Check, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 
@@ -10,50 +12,29 @@ type FiltersPanelProps = {
     updateFilter: (key: string, value: any) => void
 }
 
-// Work in progress
-const itemSlots = [
-    { name: 'Head', icon: '/path/to/head-icon.png' },
-    { name: 'Shoulder', icon: '/path/to/shoulder-icon.png' },
-    { name: 'Chest', icon: '/path/to/chest-icon.png' },
-    { name: 'Wrist', icon: '/path/to/wrist-icon.png' },
-    { name: 'Hands', icon: '/path/to/hands-icon.png' },
-    { name: 'Waist', icon: '/path/to/waist-icon.png' },
-    { name: 'Legs', icon: '/path/to/legs-icon.png' },
-    { name: 'Feet', icon: '/path/to/feet-icon.png' },
-    { name: 'Neck', icon: '/path/to/neck-icon.png' },
-    { name: 'Back', icon: '/path/to/back-icon.png' },
-    { name: 'Finger', icon: '/path/to/finger-icon.png' },
-    { name: 'Trinket', icon: '/path/to/trinket-icon.png' },
-    { name: 'Main Hand', icon: '/path/to/main-hand-icon.png' },
-    { name: 'Off Hand', icon: '/path/to/off-hand-icon.png' }
-]
-
-const armorTypes = [
-    { name: 'Cloth', icon: '/path/to/cloth-icon.png' },
-    { name: 'Leather', icon: '/path/to/leather-icon.png' },
-    { name: 'Mail', icon: '/path/to/mail-icon.png' },
-    { name: 'Plate', icon: '/path/to/plate-icon.png' }
-]
-
 export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedSlots, setSelectedSlots] = useState<string[]>([])
     const [selectedArmorTypes, setSelectedArmorTypes] = useState<string[]>([])
 
     const toggleSlot = (slotName: string) => {
-        setSelectedSlots((prev) =>
-            prev.includes(slotName) ? prev.filter((slot) => slot !== slotName) : [...prev, slotName]
-        )
-        updateFilter('selectedSlots', selectedSlots)
+        setSelectedSlots((prev) => {
+            const newSelectedSlots = prev.includes(slotName)
+                ? prev.filter((slot) => slot !== slotName)
+                : [...prev, slotName]
+            updateFilter('selectedSlots', newSelectedSlots)
+            return newSelectedSlots
+        })
     }
 
     const toggleArmorType = (armorType: string) => {
-        setSelectedArmorTypes((prev) =>
-            prev.includes(armorType)
+        setSelectedArmorTypes((prev) => {
+            const newSelectedArmorTypes = prev.includes(armorType)
                 ? prev.filter((type) => type !== armorType)
                 : [...prev, armorType]
-        )
-        updateFilter('selectedArmorTypes', selectedArmorTypes)
+            updateFilter('selectedArmorTypes', newSelectedArmorTypes)
+            return newSelectedArmorTypes
+        })
     }
 
     return (
@@ -165,18 +146,16 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
                 <div className="flex flex-col space-y-2">
                     <label className="text-sm font-semibold">Item Slots:</label>
                     <div className="flex flex-wrap gap-2">
-                        {itemSlots.map((slot) => (
+                        {wowItemSlotSchema.options.map((slot) => (
                             <button
-                                key={slot.name}
-                                onClick={() => toggleSlot(slot.name)}
-                                className={`p-2 rounded-md ${
-                                    selectedSlots.includes(slot.name)
-                                        ? 'bg-blue-600'
-                                        : 'bg-gray-700'
+                                key={slot}
+                                onClick={() => toggleSlot(slot)}
+                                className={`p-1 rounded-md ${
+                                    selectedSlots.includes(slot) ? 'bg-blue-600' : 'bg-gray-700'
                                 }`}
-                                title={slot.name}
+                                title={slot}
                             >
-                                <img src={slot.icon} alt={slot.name} className="w-6 h-6" />
+                                <img src={itemSlotIcon.get(slot)} alt={slot} className="w-6 h-6" />
                             </button>
                         ))}
                     </div>
@@ -186,20 +165,20 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
                 <div className="flex flex-col space-y-2">
                     <label className="text-sm font-semibold">Armor Types:</label>
                     <div className="flex flex-wrap gap-2">
-                        {armorTypes.map((armorType) => (
+                        {wowArmorTypeSchema.options.map((armorType) => (
                             <button
-                                key={armorType.name}
-                                onClick={() => toggleArmorType(armorType.name)}
-                                className={`p-2 rounded-md ${
-                                    selectedArmorTypes.includes(armorType.name)
+                                key={armorType}
+                                onClick={() => toggleArmorType(armorType)}
+                                className={`p-1 rounded-md ${
+                                    selectedArmorTypes.includes(armorType)
                                         ? 'bg-blue-600'
                                         : 'bg-gray-700'
                                 }`}
-                                title={armorType.name}
+                                title={armorType}
                             >
                                 <img
-                                    src={armorType.icon}
-                                    alt={armorType.name}
+                                    src={armorTypesIcon.get(armorType)}
+                                    alt={armorType}
                                     className="w-6 h-6"
                                 />
                             </button>

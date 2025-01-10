@@ -1,4 +1,4 @@
-import type { WowClass } from 'shared/types/types'
+import type { WowArmorType, WowClass, WowItemSlot, WowRaidDifficulty } from 'shared/types/types'
 
 export const classIcon = new Map<WowClass, string>([
     ['Death Knight', 'https://wow.zamimg.com/images/wow/icons/medium/class_deathknight.jpg'],
@@ -72,4 +72,44 @@ export const encounterIcon = new Map<number, string>([
     ], // The Silken Court
     [2602, 'https://wow.zamimg.com/modelviewer/beta/webthumbs/npc/213/119253.png'], // Queen Ansurek
     [-67, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
+])
+
+export const itemSlotIcon = new Map<WowItemSlot, string>([
+    ['Head', 'https://wow.zamimg.com/images/wow/icons/large/inv_helmet_24.jpg'],
+    ['Neck', 'https://wow.zamimg.com/images/wow/icons/large/inv_jewelry_necklace_07.jpg'],
+    ['Shoulder', 'https://wow.zamimg.com/images/wow/icons/large/inv_shoulder_25.jpg'],
+    ['Back', 'https://wow.zamimg.com/images/wow/icons/large/inv_misc_cape_20.jpg'],
+    ['Chest', 'https://wow.zamimg.com/images/wow/icons/large/inv_chest_chain_05.jpg'],
+    ['Wrist', 'https://wow.zamimg.com/images/wow/icons/large/inv_bracer_07.jpg'],
+    ['Hands', 'https://wow.zamimg.com/images/wow/icons/large/inv_gauntlets_04.jpg'],
+    ['Waist', 'https://wow.zamimg.com/images/wow/icons/large/inv_belt_15.jpg'],
+    ['Legs', 'https://wow.zamimg.com/images/wow/icons/large/inv_pants_08.jpg'],
+    ['Feet', 'https://wow.zamimg.com/images/wow/icons/large/inv_boots_05.jpg'],
+    ['Finger', 'https://wow.zamimg.com/images/wow/icons/large/inv_jewelry_ring_22.jpg'],
+    ['Trinket', 'https://wow.zamimg.com/images/wow/icons/large/inv_jewelry_talisman_01.jpg'],
+    ['Main Hand', 'https://wow.zamimg.com/images/wow/icons/large/inv_sword_04.jpg'],
+    ['Off Hand', 'https://wow.zamimg.com/images/wow/icons/large/inv_shield_04.jpg'],
+    ['Ranged', 'https://wow.zamimg.com/images/wow/icons/large/inv_weapon_bow_07.jpg']
+])
+
+export const armorTypesIcon = new Map<WowArmorType, string>([
+    ['Cloth', 'https://wow.zamimg.com/images/wow/icons/large/inv_chest_cloth_23.jpg'],
+    ['Leather', 'https://wow.zamimg.com/images/wow/icons/large/inv_chest_leather_09.jpg'],
+    ['Mail', 'https://wow.zamimg.com/images/wow/icons/large/inv_chest_mail_04.jpg'],
+    ['Plate', 'https://wow.zamimg.com/images/wow/icons/large/inv_chest_plate04.jpg']
+])
+
+export const raidDiffIcon = new Map<WowRaidDifficulty, string>([
+    [
+        'Normal',
+        'https://wow.zamimg.com/images/wow/icons/large/achievement_general_dungeoncompletionspeed.jpg'
+    ],
+    [
+        'Heroic',
+        'https://wow.zamimg.com/images/wow/icons/large/achievement_general_dungeoncompletionspeedgold.jpg'
+    ],
+    [
+        'Mythic',
+        'https://wow.zamimg.com/images/wow/icons/large/achievement_dungeon_gloryoftheraider.jpg'
+    ]
 ])
