@@ -1,12 +1,13 @@
 import type { Droptimizer } from '../../../../shared/types/types'
-import { unixTimestampToWowWeek } from './utils'
+import { unixTimestampToRelativeDays } from './utils'
 
 export type LootFilter = {
     raidDiff: string
     onlyLatest: boolean
-    currentWeek: boolean
     onlyUpgrades: boolean
     minUpgrade: number
+    olderThanDays: boolean
+    maxDays: number
 }
 
 export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilter): Droptimizer[] {
@@ -21,10 +22,10 @@ export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilte
                 return false
             }
 
-            // Filter by current week
+            // Filter droptimizer older than X days
             if (
-                filter.currentWeek &&
-                unixTimestampToWowWeek(dropt.simInfo.date) !== unixTimestampToWowWeek()
+                filter.olderThanDays &&
+                unixTimestampToRelativeDays(dropt.simInfo.date) > filter.maxDays
             ) {
                 return false
             }

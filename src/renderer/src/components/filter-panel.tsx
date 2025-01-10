@@ -53,27 +53,45 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
                     </Select>
                 </div>
 
-                {/* Checkbox Filters */}
-                {[
-                    { id: 'only-latest', label: 'Latest only', key: 'onlyLatest' },
-                    { id: 'current-week', label: 'Current Reset', key: 'currentWeek' }
-                ].map(({ id, label, key }) => (
-                    <div key={id} className="flex items-center gap-3">
-                        <Checkbox
-                            id={id}
-                            checked={filter[key as keyof typeof filter] as CheckedState}
-                            onCheckedChange={(checked) => updateFilter(key, !!checked)}
-                            className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
-                        >
-                            {filter[key as keyof typeof filter] && (
-                                <Check className="text-white w-4 h-4" />
-                            )}
-                        </Checkbox>
-                        <label htmlFor={id} className="text-sm font-semibold">
-                            {label}
-                        </label>
-                    </div>
-                ))}
+                {/* Latest only ( for a given character / spec / diff ) */}
+                <div className="flex items-center gap-3">
+                    <Checkbox
+                        id="only-latest"
+                        checked={filter.onlyLatest as CheckedState}
+                        onCheckedChange={(checked) => updateFilter('onlyLatest', !!checked)}
+                        className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                    >
+                        {filter.onlyLatest && <Check className="text-white w-4 h-4" />}
+                    </Checkbox>
+                    <label htmlFor="only-latest" className="text-sm font-semibold">
+                        Latest only ( for a given character / spec / diff )
+                    </label>
+                </div>
+
+                {/* Ignore droptimizer older than */}
+                <div className="flex flex-row items-center gap-3">
+                    <Checkbox
+                        id="older-than-days"
+                        checked={filter.olderThanDays as CheckedState}
+                        onCheckedChange={(checked) => updateFilter('olderThanDays', !!checked)}
+                        className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                    >
+                        {filter.olderThanDays && <Check className="text-white w-4 h-4" />}
+                    </Checkbox>
+                    <label htmlFor="only-upgrades" className="text-sm font-semibold">
+                        Ignore droptimizer older than
+                    </label>
+                    <input
+                        id="upgrade-amount"
+                        type="number"
+                        min="1"
+                        step="1"
+                        value={filter.maxDays}
+                        onChange={(e) => updateFilter('maxDays', Number(e.target.value))}
+                        disabled={!filter.olderThanDays}
+                        className={`border rounded-md p-2 bg-gray-700 text-white w-14 ${!filter.olderThanDays ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    />
+                </div>
 
                 {/* Upgrades only and Minimum Upgrade Amount in the same row */}
                 <div className="flex flex-row items-center gap-3">

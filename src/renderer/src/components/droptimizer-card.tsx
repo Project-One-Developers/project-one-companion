@@ -1,6 +1,6 @@
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
-import { getDpsHumanReadable, unitTimestampToRelativeDays } from '@renderer/lib/utils'
+import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
 import { Boss, Droptimizer, Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -53,7 +53,7 @@ export const DroptimizerCard = ({ droptimizer: dropt }: DroptimizerCardProps) =>
                             </p>
                             <p title={new Date(dropt.simInfo.date * 1000).toLocaleString()}>
                                 <strong>Date: </strong>
-                                {unitTimestampToRelativeDays(dropt.simInfo.date)}
+                                {formatUnixTimestampToRelativeDays(dropt.simInfo.date)}
                             </p>
                             <DialogTrigger asChild className="cursor-pointer q3 links">
                                 <p>

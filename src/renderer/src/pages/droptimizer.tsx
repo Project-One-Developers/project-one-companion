@@ -19,9 +19,10 @@ export default function DroptimizerPage(): JSX.Element {
     const [filter, setFilters] = useState<LootFilter>({
         raidDiff: 'all',
         onlyLatest: true,
-        currentWeek: false,
         onlyUpgrades: false,
-        minUpgrade: 1000
+        minUpgrade: 1000,
+        olderThanDays: false,
+        maxDays: 7
     })
 
     const updateFilter = (key: string, value: any) => {

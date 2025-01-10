@@ -20,22 +20,19 @@ export function getDpsHumanReadable(dps: number): string {
     return formatter.format(dps)
 }
 
-export function unitTimestampToRelativeDays(unixTimestamp: number): string {
+export function formatUnixTimestampToRelativeDays(unixTimestamp: number): string {
+    const diffDays = unixTimestampToRelativeDays(unixTimestamp)
+
+    if (diffDays === 0) return 'Today'
+    if (diffDays === 1) return 'Yesterday'
+    return `${diffDays} days ago`
+}
+
+export function unixTimestampToRelativeDays(unixTimestamp: number): number {
     const now = new Date()
     const date = new Date(unixTimestamp * 1000)
-
-    // Compare calendar days
-    const today = now.getDate()
-    const timestampDay = date.getDate()
-
-    if (now.toDateString() === date.toDateString()) {
-        return 'Today'
-    } else if (today - timestampDay === 1 || (today === 1 && now.getMonth() !== date.getMonth())) {
-        return 'Yesterday'
-    }
-
-    const daysAgo = Math.round((now.getTime() - date.getTime()) / 86400000)
-    return `${daysAgo} days ago`
+    const diffTime = now.getTime() - date.getTime()
+    return Math.round(diffTime / (1000 * 60 * 60 * 24))
 }
 
 export function unixTimestampToWowWeek(unixTimestamp?: number): number {
