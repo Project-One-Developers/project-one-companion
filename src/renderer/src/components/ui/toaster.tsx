@@ -8,6 +8,8 @@ import {
     ToastViewport
 } from './toast'
 
+import type { JSX } from "react";
+
 export function Toaster(): JSX.Element {
     const { toasts } = useToast()
 

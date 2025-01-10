@@ -4,6 +4,8 @@ import { Command as CommandPrimitive } from 'cmdk'
 import { Search } from 'lucide-react'
 import * as React from 'react'
 
+import type { JSX } from "react";
+
 const Command = React.forwardRef<
     React.ElementRef<typeof CommandPrimitive>,
     React.ComponentPropsWithoutRef<typeof CommandPrimitive>
@@ -36,7 +38,7 @@ const CommandInput = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
     // TODO: readd cmdk-input-wrapper=""
-    <div className="flex items-center border-b px-3">
+    (<div className="flex items-center border-b px-3">
         <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
         <CommandPrimitive.Input
             ref={ref}
@@ -46,7 +48,7 @@ const CommandInput = React.forwardRef<
             )}
             {...props}
         />
-    </div>
+    </div>)
 ))
 
 CommandInput.displayName = CommandPrimitive.Input.displayName

@@ -8,6 +8,8 @@ import { Boss, Droptimizer, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
+import type { JSX } from "react";
+
 export default function LootTable(): JSX.Element {
     const currentRaid = 1273
     const droptimizerRes = useQuery({

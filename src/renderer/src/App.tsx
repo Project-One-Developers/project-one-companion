@@ -12,6 +12,8 @@ import LootTable from './pages/loot-table'
 import RaidSession from './pages/raid-session'
 import RosterPage from './pages/roster'
 
+import type { JSX } from "react";
+
 function App(): JSX.Element {
     return (
         <QueryClientProvider client={queryClient}>

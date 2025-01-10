@@ -13,6 +13,8 @@ import {
 } from 'react-hook-form'
 import { Label } from './label'
 
+import type { JSX } from "react";
+
 const Form = FormProvider
 
 type FormFieldContextValue<

@@ -4,7 +4,7 @@ import { deletePlayer } from '@renderer/lib/tanstack-query/players'
 import type { Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type JSX } from 'react';
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import {

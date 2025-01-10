@@ -3,6 +3,8 @@ import { cn } from '@renderer/lib/utils'
 import { Check, ChevronRight, Circle } from 'lucide-react'
 import * as React from 'react'
 
+import type { JSX } from "react";
+
 const DropdownMenu = DropdownMenuPrimitive.Root
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger

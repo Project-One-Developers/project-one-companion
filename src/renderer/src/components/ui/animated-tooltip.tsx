@@ -3,7 +3,7 @@
 import { cn } from '@renderer/lib/utils'
 import { classIcon } from '@renderer/lib/wow-icon'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useState } from 'react'
+import { useState, type JSX } from 'react';
 import type { Character, Player } from 'shared/types/types'
 import { CharacterForm } from '../character-form'
 

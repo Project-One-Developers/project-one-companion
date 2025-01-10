@@ -3,6 +3,8 @@ import type { Boss, Droptimizer, DroptimizerUpgrade } from '@shared/types/types'
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { WowItemIcon } from './ui/wowitem-icon'
 
+import type { JSX } from "react";
+
 type DroptimizerDetailDialogProps = {
     droptimizer: Droptimizer
     bosses: Boss[]

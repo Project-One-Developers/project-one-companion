@@ -6,7 +6,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { formatWowWeek, unixTimestampToWowWeek } from '@renderer/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type JSX } from 'react';
 
 export default function DroptimizerPage(): JSX.Element {
     const { data, isLoading } = useQuery({
