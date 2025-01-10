@@ -3,6 +3,7 @@ import {
     ListRestart,
     LucideEye,
     LucideGauge,
+    LucideHandshake,
     LucideSkull,
     LucideSwords
 } from 'lucide-react'
@@ -18,7 +19,7 @@ import {
     SidebarMenuItem
 } from './ui/sidebar'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 const rosterItems = [
     {
@@ -40,6 +41,11 @@ const rosterItems = [
         title: 'Raid Session',
         url: '/raid-session',
         icon: LucideSwords
+    },
+    {
+        title: 'Tierset',
+        url: '/tierset',
+        icon: LucideHandshake
     }
 ]
 

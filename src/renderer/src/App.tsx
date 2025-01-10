@@ -12,7 +12,8 @@ import LootTable from './pages/loot-table'
 import RaidSession from './pages/raid-session'
 import RosterPage from './pages/roster'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
+import Tierset from './pages/tierset'
 
 function App(): JSX.Element {
     return (
@@ -28,6 +29,7 @@ function App(): JSX.Element {
                         <Route path="/droptimizer" element={<DroptimizerForm />} />
                         <Route path="/loot-table" element={<LootTable />} />
                         <Route path="/raid-session" element={<RaidSession />} />
+                        <Route path="/tierset" element={<Tierset />} />
                         <Route path="/config" element={<Config />} />
                     </Routes>
                 </BrowserRouter>
