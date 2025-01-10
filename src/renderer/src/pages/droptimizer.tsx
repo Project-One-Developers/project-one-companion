@@ -1,12 +1,13 @@
 import { DroptimizerCard } from '@renderer/components/droptimizer-card'
 import { FiltersPanel } from '@renderer/components/filter-panel'
 import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
+import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { formatWowWeek, unixTimestampToWowWeek } from '@renderer/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
-import { useMemo, useState, type JSX } from 'react';
+import { useMemo, useState, type JSX } from 'react'
 
 export default function DroptimizerPage(): JSX.Element {
     const { data, isLoading } = useQuery({
@@ -15,11 +16,12 @@ export default function DroptimizerPage(): JSX.Element {
     })
 
     // Filters state
-    const [filters, setFilters] = useState({
+    const [filter, setFilters] = useState<LootFilter>({
         raidDiff: 'all',
         onlyLatest: true,
         currentWeek: false,
-        onlyUpgrades: false
+        onlyUpgrades: false,
+        minUpgrade: 1000
     })
 
     const updateFilter = (key: string, value: any) => {
@@ -29,44 +31,8 @@ export default function DroptimizerPage(): JSX.Element {
     // Compute filtered data
     const filteredDroptimizers = useMemo(() => {
         if (!data?.droptimizers) return []
-
-        // Using a Map to track the latest droptimizer for each characterName
-        const latestDroptimizersMap = new Map()
-
-        return data.droptimizers
-            .sort((a, b) => b.simInfo.date - a.simInfo.date)
-            .filter((dropt) => {
-                // Filter by raid difficulty
-                if (filters.raidDiff !== 'all' && dropt.raidInfo.difficulty !== filters.raidDiff) {
-                    return false
-                }
-
-                // Filter by current week
-                if (
-                    filters.currentWeek &&
-                    unixTimestampToWowWeek(dropt.simInfo.date) !== unixTimestampToWowWeek()
-                ) {
-                    return false
-                }
-
-                // Filter by upgrades
-                if (filters.onlyUpgrades && (!dropt.upgrades || dropt.upgrades.length === 0)) {
-                    return false
-                }
-
-                // Works only if the droptimizer array is sorted by dropt.simInfo.date desc
-                if (filters.onlyLatest) {
-                    const existingDropt = latestDroptimizersMap.get(dropt.ak)
-                    if (!existingDropt || dropt.simInfo.date > existingDropt.simInfo.date) {
-                        latestDroptimizersMap.set(dropt.ak, dropt)
-                    } else {
-                        return false
-                    }
-                }
-
-                return true
-            })
-    }, [data, filters])
+        return filterDroptimizer(data.droptimizers, filter)
+    }, [data?.droptimizers, filter])
 
     return (
         <>
@@ -92,7 +58,7 @@ export default function DroptimizerPage(): JSX.Element {
                     </div>
                     {/* Filter Panel */}
                     <div className="w-full">
-                        <FiltersPanel filters={filters} updateFilter={updateFilter} />
+                        <FiltersPanel filter={filter} updateFilter={updateFilter} />
                     </div>
                     {/* Droptimizer Panel */}
                     <div className="flex flex-wrap gap-x-4 gap-y-4">
