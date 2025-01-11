@@ -89,6 +89,7 @@ export const itemSlotIcon = new Map<WowItemSlot, string>([
     ['Trinket', 'https://wow.zamimg.com/images/wow/icons/large/inv_jewelry_talisman_01.jpg'],
     ['Main Hand', 'https://wow.zamimg.com/images/wow/icons/large/inv_sword_04.jpg'],
     ['Off Hand', 'https://wow.zamimg.com/images/wow/icons/large/inv_shield_04.jpg'],
+    ['Two Hand', 'https://wow.zamimg.com/images/wow/icons/large/inv_hammer_16.jpg'],
     ['Ranged', 'https://wow.zamimg.com/images/wow/icons/large/inv_weapon_bow_07.jpg']
 ])
 
@@ -100,16 +101,6 @@ export const armorTypesIcon = new Map<WowArmorType, string>([
 ])
 
 export const raidDiffIcon = new Map<WowRaidDifficulty, string>([
-    [
-        'Normal',
-        'https://wow.zamimg.com/images/wow/icons/large/achievement_general_dungeoncompletionspeed.jpg'
-    ],
-    [
-        'Heroic',
-        'https://wow.zamimg.com/images/wow/icons/large/achievement_general_dungeoncompletionspeedgold.jpg'
-    ],
-    [
-        'Mythic',
-        'https://wow.zamimg.com/images/wow/icons/large/achievement_dungeon_gloryoftheraider.jpg'
-    ]
+    ['Heroic', './assets/icons/diff-heroic.png'],
+    ['Mythic', './assets/icons/diff-mythic.png']
 ])

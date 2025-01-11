@@ -17,7 +17,7 @@ export default function DroptimizerPage(): JSX.Element {
 
     // Filters state
     const [filter, setFilters] = useState<LootFilter>({
-        raidDiff: 'all',
+        selectedRaidDiff: [],
         onlyLatest: true,
         onlyUpgrades: false,
         minUpgrade: 1000,

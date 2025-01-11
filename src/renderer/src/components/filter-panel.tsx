@@ -1,9 +1,10 @@
 import { Checkbox, CheckedState } from '@radix-ui/react-checkbox'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@radix-ui/react-select'
 import { LootFilter } from '@renderer/lib/filters'
-import { armorTypesIcon, itemSlotIcon } from '@renderer/lib/wow-icon'
+import { armorTypesIcon, itemSlotIcon, raidDiffIcon } from '@renderer/lib/wow-icon'
+import { RAID_DIFF } from '@shared/consts/wow.consts'
 import { wowArmorTypeSchema, wowItemSlotSchema } from '@shared/schemas/wow.schemas'
+import { WowRaidDifficulty } from '@shared/types/types'
 import { Check, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 
@@ -37,6 +38,14 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
         })
     }
 
+    // Add this function to toggle difficulties
+    const toggleDifficulty = (difficulty: WowRaidDifficulty) => {
+        const newSelectedDifficulties = filter.selectedRaidDiff.includes(difficulty)
+            ? filter.selectedRaidDiff.filter((diff) => diff !== difficulty)
+            : [...filter.selectedRaidDiff, difficulty]
+        updateFilter('selectedRaidDiff', newSelectedDifficulties)
+    }
+
     return (
         <Collapsible.Root
             className="bg-gray-800 text-white p-6 rounded-lg"
@@ -54,29 +63,6 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
 
             {/* Panel Content */}
             <Collapsible.Content className="mt-4 space-y-4">
-                {/* Raid Difficulty Selector */}
-                <div className="flex flex-col space-y-2">
-                    <label htmlFor="raid-diff" className="text-sm font-semibold">
-                        Raid Difficulty:
-                    </label>
-                    <Select
-                        value={filter.raidDiff}
-                        onValueChange={(value) => updateFilter('raidDiff', value)}
-                    >
-                        <SelectTrigger
-                            id="raid-diff"
-                            className="border rounded-md p-2 bg-gray-700 text-white flex items-center justify-between"
-                        >
-                            <span>{filter.raidDiff || 'Select'}</span>
-                        </SelectTrigger>
-                        <SelectContent className="bg-gray-700 text-white border border-gray-600 rounded-md">
-                            <SelectItem value="all">All</SelectItem>
-                            <SelectItem value="Heroic">Heroic</SelectItem>
-                            <SelectItem value="Mythic">Mythic</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-
                 {/* Latest only ( for a given character / spec / diff ) */}
                 <div className="flex items-center gap-3">
                     <Checkbox
@@ -140,6 +126,31 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
                         disabled={!filter.onlyUpgrades}
                         className={`border rounded-md p-2 bg-gray-700 text-white w-20 ${!filter.onlyUpgrades ? 'opacity-50 cursor-not-allowed' : ''}`}
                     />
+                </div>
+
+                {/* Raid Difficulty Selector */}
+                <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-semibold">Raid Difficulty:</label>
+                    <div className="flex flex-wrap gap-4">
+                        {RAID_DIFF.map((difficulty) => (
+                            <div
+                                key={difficulty}
+                                className={`cursor-pointer transition-transform hover:scale-110 ${
+                                    filter.selectedRaidDiff.includes(difficulty)
+                                        ? 'ring-2 ring-blue-500'
+                                        : 'opacity-50 grayscale'
+                                }`}
+                                onClick={() => toggleDifficulty(difficulty)}
+                            >
+                                <img
+                                    src={raidDiffIcon.get(difficulty)}
+                                    alt={difficulty}
+                                    className="w-16 h-16 object-cover"
+                                    title={difficulty}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Item Slot Toggles */}
