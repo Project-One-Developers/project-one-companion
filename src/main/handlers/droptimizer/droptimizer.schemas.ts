@@ -1,13 +1,6 @@
 import { WowClass, WowRaidDifficulty } from '@shared/types/types'
 import { z } from 'zod'
 
-export const csvItemUpgradeSchema = z.object({
-    encounterId: z.number(),
-    itemId: z.number(),
-    dps: z.number(),
-    slot: z.string()
-})
-
 export const jsonDataSchema = z
     .object({
         sim: z.object({
