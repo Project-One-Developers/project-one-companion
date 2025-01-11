@@ -86,7 +86,7 @@ export const DroptimizerCard = ({ droptimizer: dropt }: DroptimizerCardProps) =>
                                                             iconOnly={true}
                                                             raidDiff={dropt.raidInfo.difficulty}
                                                             catalystBanner={
-                                                                upgrade.catalyzedItem?.id !== null
+                                                                upgrade.catalyzedItem != null
                                                             }
                                                             className="mt-2"
                                                             iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
