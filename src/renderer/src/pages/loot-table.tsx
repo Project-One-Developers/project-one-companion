@@ -138,7 +138,7 @@ const BossPanel = ({
 // Main Component
 export default function LootTable(): JSX.Element {
     const DEFAULT_FILTER: LootFilter = {
-        selectedRaidDiff: [],
+        selectedRaidDiff: 'Mythic',
         onlyLatest: true,
         onlyUpgrades: false,
         minUpgrade: 1000,
@@ -150,7 +150,6 @@ export default function LootTable(): JSX.Element {
 
     const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
     const currentRaid = 1273
-    const diff: WowRaidDifficulty = 'Heroic'
 
     const { droptimizers, droptimizersIsLoading, encounterList, encounterListIsLoading } =
         useRaidData(currentRaid)
@@ -189,7 +188,7 @@ export default function LootTable(): JSX.Element {
                         key={boss.id}
                         boss={boss}
                         droptimizers={filteredDroptimizers}
-                        diff={diff}
+                        diff={filter.selectedRaidDiff}
                     />
                 ))}
             </div>

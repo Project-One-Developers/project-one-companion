@@ -7,7 +7,7 @@ import type {
 import { unixTimestampToRelativeDays } from './utils'
 
 export type LootFilter = {
-    selectedRaidDiff: WowRaidDifficulty[]
+    selectedRaidDiff: WowRaidDifficulty
     onlyLatest: boolean
     onlyUpgrades: boolean
     minUpgrade: number

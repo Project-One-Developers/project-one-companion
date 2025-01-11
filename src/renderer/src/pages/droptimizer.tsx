@@ -10,7 +10,7 @@ import { useMemo, useState, type JSX } from 'react'
 
 // Default filter values
 const DEFAULT_FILTER: LootFilter = {
-    selectedRaidDiff: [],
+    selectedRaidDiff: 'Mythic',
     onlyLatest: true,
     onlyUpgrades: false,
     minUpgrade: 1000,
@@ -48,7 +48,7 @@ export default function DroptimizerPage(): JSX.Element {
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             <Header />
-            <FiltersPanel className="w-full" filter={filter} updateFilter={updateFilter} />
+            <FiltersPanel filter={filter} updateFilter={updateFilter} />
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 {filteredDroptimizers.map((dropt) => (
                     <DroptimizerCard key={dropt.url} droptimizer={dropt} />
