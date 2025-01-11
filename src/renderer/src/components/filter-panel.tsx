@@ -80,7 +80,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                     >
                         {filter.olderThanDays && <Check className="text-white w-4 h-4" />}
                     </Checkbox>
-                    <label htmlFor="only-upgrades" className="text-sm font-semibold">
+                    <label htmlFor="older-than-days" className="text-sm font-semibold">
                         Ignore droptimizer older than
                     </label>
                     <input
