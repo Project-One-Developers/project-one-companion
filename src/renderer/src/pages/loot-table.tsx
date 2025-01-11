@@ -42,7 +42,7 @@ const BossItem = ({
     droptimizers: Droptimizer[]
     diff: WowRaidDifficulty
 }) => (
-    <div className="flex flex-row gap-x-8 justify-between">
+    <div className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer">
         <WowItemIcon
             item={item}
             iconOnly={false}
