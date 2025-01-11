@@ -57,15 +57,21 @@ export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilte
                     }
 
                     // slot
-                    if (filter.selectedSlots.length > 0 && upgrade.item.slot) {
-                        if (!filter.selectedSlots.includes(upgrade.item.slot)) {
+                    if (filter.selectedSlots.length > 0) {
+                        if (
+                            upgrade.item.slot == null ||
+                            !filter.selectedSlots.includes(upgrade.item.slot)
+                        ) {
                             return false
                         }
                     }
 
                     // armor type
-                    if (filter.selectedArmorTypes.length > 0 && upgrade.item.armorType != null) {
-                        if (!filter.selectedArmorTypes.includes(upgrade.item.armorType)) {
+                    if (filter.selectedArmorTypes.length > 0) {
+                        if (
+                            upgrade.item.armorType == null ||
+                            !filter.selectedArmorTypes.includes(upgrade.item.armorType)
+                        ) {
                             return false
                         }
                     }
