@@ -1,7 +1,10 @@
-import { itemSchema, itemToCatalystSchema, itemToTiersetSchema } from '@shared/schemas/wow.schemas'
-import type { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
-import { newBossSchema } from '@storage/bosses/bosses.schemas'
-import { NewBoss } from '@storage/bosses/bosses.types.'
+import {
+    itemSchema,
+    itemToCatalystSchema,
+    itemToTiersetSchema,
+    newBossSchema
+} from '@shared/schemas/wow.schemas'
+import type { Item, ItemToCatalyst, ItemToTierset, NewBoss } from '@shared/types/types'
 import { readFileSync } from 'fs'
 import * as path from 'path'
 import { z } from 'zod'

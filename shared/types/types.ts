@@ -12,6 +12,7 @@ import {
     itemSchema,
     itemToCatalystSchema,
     itemToTiersetSchema,
+    newBossSchema,
     wowArmorTypeSchema,
     wowClassSchema,
     wowItemSlotSchema,
@@ -38,5 +39,6 @@ export type ItemToTierset = z.infer<typeof itemToTiersetSchema>
 export type ItemToCatalyst = z.infer<typeof itemToCatalystSchema>
 
 export type Boss = z.infer<typeof bossSchema>
+export type NewBoss = z.infer<typeof newBossSchema>
 
 export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>

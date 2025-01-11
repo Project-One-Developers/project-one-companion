@@ -8,10 +8,9 @@ import type {
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
-import { eq } from 'drizzle-orm'
+import { eq, InferInsertModel } from 'drizzle-orm'
 import { newUUID } from '../../utils'
 import { droptimizerListStorageSchema, droptimizerStorageSchema } from './droptimizer.schemas'
-import type { UpgradesTableInsert } from './droptimizer.types'
 
 /**
  * Retrieves a Droptimizer by its ID from the database.
@@ -89,18 +88,13 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             throw new Error(errorMsg)
         }
 
-        const upgradesArray: UpgradesTableInsert[] = droptimizer.upgrades.map((up) => {
-            const res: UpgradesTableInsert = {
+        const upgradesArray = droptimizer.upgrades.map(
+            (up): InferInsertModel<typeof droptimizerUpgradesTable> => ({
                 id: newUUID(),
                 droptimizerId: droptimizerRes.url,
-                itemId: up.itemId,
-                ilvl: up.ilvl,
-                slot: up.slot,
-                dps: up.dps,
-                catalyzedItemId: up.catalyzedItemId
-            }
-            return res
-        })
+                ...up
+            })
+        )
 
         await tx.insert(droptimizerUpgradesTable).values(upgradesArray)
 

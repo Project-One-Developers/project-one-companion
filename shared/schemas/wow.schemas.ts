@@ -102,6 +102,8 @@ export const bossSchema = z.object({
     items: z.array(itemSchema)
 })
 
+export const newBossSchema = bossSchema.omit({ items: true })
+
 export const itemToTiersetSchema = z.object({
     itemId: z.number(),
     tokenId: z.number()

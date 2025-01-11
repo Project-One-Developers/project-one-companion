@@ -1,11 +1,11 @@
 import { bossSchema } from '@shared/schemas/wow.schemas'
-import type { Boss } from '@shared/types/types'
+import type { Boss, NewBoss } from '@shared/types/types'
 import { bossTable } from '@storage/storage.schema'
 import { conflictUpdateAllExcept } from '@storage/storage.utils'
 import { z } from 'zod'
 import { db } from '../storage.config'
 import { bossOverviewSchema } from './bosses.schemas'
-import { BossOverview, NewBoss } from './bosses.types.'
+import { BossOverview } from './bosses.types.'
 
 export const upsertBosses = async (bosses: NewBoss[]): Promise<void> => {
     await db
