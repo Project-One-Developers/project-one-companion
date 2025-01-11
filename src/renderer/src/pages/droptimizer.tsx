@@ -4,10 +4,22 @@ import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { formatWowWeek, unixTimestampToWowWeek } from '@renderer/lib/utils'
+import { Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
+
+// Default filter values
+const DEFAULT_FILTER: LootFilter = {
+    selectedRaidDiff: [],
+    onlyLatest: true,
+    onlyUpgrades: false,
+    minUpgrade: 1000,
+    olderThanDays: false,
+    maxDays: 7,
+    selectedArmorTypes: [],
+    selectedSlots: []
+}
 
 export default function DroptimizerPage(): JSX.Element {
     const { data, isLoading } = useQuery({
@@ -15,63 +27,56 @@ export default function DroptimizerPage(): JSX.Element {
         queryFn: fetchDroptimizers
     })
 
-    // Filters state
-    const [filter, setFilters] = useState<LootFilter>({
-        selectedRaidDiff: [],
-        onlyLatest: true,
-        onlyUpgrades: false,
-        minUpgrade: 1000,
-        olderThanDays: false,
-        maxDays: 7,
-        selectedArmorTypes: [],
-        selectedSlots: []
-    })
+    const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
 
-    const updateFilter = (key: string, value: any) => {
+    const updateFilter = (key: keyof LootFilter, value: unknown): void => {
         setFilters((prev) => ({ ...prev, [key]: value }))
     }
 
-    // Compute filtered data
     const filteredDroptimizers = useMemo(() => {
-        console.log('toggled')
         if (!data?.droptimizers) return []
         return filterDroptimizer(data.droptimizers, filter)
     }, [data?.droptimizers, filter])
 
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
+                <LoaderCircle className="animate-spin text-5xl" />
+            </div>
+        )
+    }
+
     return (
-        <>
-            {isLoading ? (
-                <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
-                    <LoaderCircle className="animate-spin text-5xl" />
-                </div>
-            ) : (
-                <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative ">
-                    <div className="grid grid-cols- w-full items-center">
-                        <div></div>
-                        <h1 className="mx-auto text-3xl font-bold">Droptimizer</h1>
-                        <div className="flex items-center justify-center absolute bottom-6 right-6">
-                            <NewDroptimizerForm />
-                        </div>
-                        {/* WoW Reset Info */}
-                        <div className="flex items-center justify-center absolute bottom-6 right-20">
-                            <p className="">
-                                <strong>WoW Reset:</strong> {formatWowWeek()} (
-                                {unixTimestampToWowWeek()})
-                            </p>
-                        </div>
-                    </div>
-                    {/* Filter Panel */}
-                    <div className="w-full">
-                        <FiltersPanel filter={filter} updateFilter={updateFilter} />
-                    </div>
-                    {/* Droptimizer Panel */}
-                    <div className="flex flex-wrap gap-x-4 gap-y-4">
-                        {filteredDroptimizers.map((dropt) => (
-                            <DroptimizerCard key={dropt.url} droptimizer={dropt} />
-                        ))}
-                    </div>
-                </div>
-            )}
-        </>
+        <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
+            <Header />
+            <FiltersPanel className="w-full" filter={filter} updateFilter={updateFilter} />
+            <DroptimizerList droptimizers={filteredDroptimizers} />
+        </div>
     )
 }
+
+const Header = (): JSX.Element => (
+    <div className="grid grid-cols- w-full items-center">
+        <div />
+        <h1 className="mx-auto text-3xl font-bold">Droptimizer</h1>
+        <NewDroptimizerButton />
+    </div>
+)
+
+const NewDroptimizerButton = (): JSX.Element => (
+    <div className="flex items-center justify-center absolute bottom-6 right-6">
+        <NewDroptimizerForm />
+    </div>
+)
+
+type DroptimizerListProps = {
+    droptimizers: Droptimizer[]
+}
+
+const DroptimizerList = ({ droptimizers }: DroptimizerListProps): JSX.Element => (
+    <div className="flex flex-wrap gap-x-4 gap-y-4">
+        {droptimizers.map((dropt) => (
+            <DroptimizerCard key={dropt.url} droptimizer={dropt} />
+        ))}
+    </div>
+)

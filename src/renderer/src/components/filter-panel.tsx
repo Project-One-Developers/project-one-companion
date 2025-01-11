@@ -10,10 +10,11 @@ import { useState } from 'react'
 
 type FiltersPanelProps = {
     filter: LootFilter
-    updateFilter: (key: string, value: any) => void
+    updateFilter: (key: keyof LootFilter, value: any) => void
+    className?: string
 }
 
-export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps) => {
+export const FiltersPanel = ({ filter: filter, updateFilter, className }: FiltersPanelProps) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const toggleSlot = (slotName: WowItemSlot) => {
@@ -30,7 +31,6 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
         updateFilter('selectedArmorTypes', newSelectedArmorTypes)
     }
 
-    // Add this function to toggle difficulties
     const toggleDifficulty = (difficulty: WowRaidDifficulty) => {
         const newSelectedDifficulties = filter.selectedRaidDiff.includes(difficulty)
             ? filter.selectedRaidDiff.filter((diff) => diff !== difficulty)
@@ -40,7 +40,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
 
     return (
         <Collapsible.Root
-            className="bg-gray-800 text-white p-6 rounded-lg"
+            className={`bg-gray-800 text-white p-6 rounded-lg ${className}`}
             defaultOpen={false}
             open={isOpen}
             onOpenChange={setIsOpen}
