@@ -4,7 +4,6 @@ import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
@@ -50,7 +49,11 @@ export default function DroptimizerPage(): JSX.Element {
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             <Header />
             <FiltersPanel className="w-full" filter={filter} updateFilter={updateFilter} />
-            <DroptimizerList droptimizers={filteredDroptimizers} />
+            <div className="flex flex-wrap gap-x-4 gap-y-4">
+                {filteredDroptimizers.map((dropt) => (
+                    <DroptimizerCard key={dropt.url} droptimizer={dropt} />
+                ))}
+            </div>
         </div>
     )
 }
@@ -66,17 +69,5 @@ const Header = (): JSX.Element => (
 const NewDroptimizerButton = (): JSX.Element => (
     <div className="flex items-center justify-center absolute bottom-6 right-6">
         <NewDroptimizerForm />
-    </div>
-)
-
-type DroptimizerListProps = {
-    droptimizers: Droptimizer[]
-}
-
-const DroptimizerList = ({ droptimizers }: DroptimizerListProps): JSX.Element => (
-    <div className="flex flex-wrap gap-x-4 gap-y-4">
-        {droptimizers.map((dropt) => (
-            <DroptimizerCard key={dropt.url} droptimizer={dropt} />
-        ))}
     </div>
 )
