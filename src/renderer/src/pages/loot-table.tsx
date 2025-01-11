@@ -94,8 +94,19 @@ const BossPanel = ({
             })
     }
 
+    const itemsWithDroptimizers = boss.items.reduce(
+        (acc, item) => {
+            const itemDroptimizers = getDroptimizersContainingItemId(item.id)
+            if (itemDroptimizers.length > 0) {
+                acc.push({ item, itemDroptimizers: itemDroptimizers })
+            }
+            return acc
+        },
+        [] as { item: Item; itemDroptimizers: Droptimizer[] }[]
+    )
+
     return (
-        <div className="flex flex-col bg-muted rounded-lg overflow-hidden">
+        <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[250px]">
             {/* Boss header: cover + name */}
             <div className="flex flex-col gap-y-2">
                 <img
@@ -107,14 +118,18 @@ const BossPanel = ({
             </div>
             {/* Boss items */}
             <div className="flex flex-col gap-y-3 p-6">
-                {boss.items.map((item) => (
-                    <BossItem
-                        key={item.id}
-                        item={item}
-                        droptimizers={getDroptimizersContainingItemId(item.id)}
-                        diff={diff}
-                    />
-                ))}
+                {itemsWithDroptimizers.length > 0 ? (
+                    itemsWithDroptimizers.map(({ item, itemDroptimizers }) => (
+                        <BossItem
+                            key={item.id}
+                            item={item}
+                            droptimizers={itemDroptimizers}
+                            diff={diff}
+                        />
+                    ))
+                ) : (
+                    <p className="text-center text-sm text-gray-500">No upgrades available</p>
+                )}
             </div>
         </div>
     )
