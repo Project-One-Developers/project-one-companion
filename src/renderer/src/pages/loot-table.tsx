@@ -81,11 +81,17 @@ const BossPanel = ({
     diff: WowRaidDifficulty
 }) => {
     const getDroptimizersContainingItemId = (itemId: number): Droptimizer[] => {
-        return droptimizers.filter(
-            (droptimizer) =>
-                droptimizer.upgrades != null &&
-                droptimizer.upgrades.findIndex((up) => up.item.id === itemId) > -1
-        )
+        return droptimizers
+            .filter(
+                (droptimizer) =>
+                    droptimizer.upgrades != null &&
+                    droptimizer.upgrades.findIndex((up) => up.item.id === itemId) > -1
+            )
+            .sort((a, b) => {
+                const aDps = a.upgrades?.[0].dps ?? 0
+                const bDps = b.upgrades?.[0].dps ?? 0
+                return bDps - aDps
+            })
     }
 
     return (
