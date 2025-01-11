@@ -4,7 +4,8 @@ import { bossTable } from '@storage/storage.schema'
 import { conflictUpdateAllExcept } from '@storage/storage.utils'
 import { z } from 'zod'
 import { db } from '../storage.config'
-import { NewBoss } from './bosses.types.'
+import { bossOverviewSchema } from './bosses.schemas'
+import { BossOverview, NewBoss } from './bosses.types.'
 
 export const upsertBosses = async (bosses: NewBoss[]): Promise<void> => {
     await db
@@ -26,4 +27,12 @@ export const getRaidLootTable = async (raidId: number): Promise<Boss[]> => {
         }
     })
     return z.array(bossSchema).parse(result)
+}
+
+export const getBossesNames = async (): Promise<BossOverview[]> => {
+    const result = await db.query.bossTable.findMany({
+        columns: { id: true, name: true }
+    })
+
+    return z.array(bossOverviewSchema).parse(result)
 }

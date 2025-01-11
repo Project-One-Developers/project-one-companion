@@ -7,7 +7,8 @@
         "renderer",
         "items",
         "players",
-        "preload"
+        "preload",
+        "raid-session"
     ],
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"

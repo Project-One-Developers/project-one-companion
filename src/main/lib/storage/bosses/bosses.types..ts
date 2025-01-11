@@ -1,4 +1,6 @@
 import { z } from 'zod'
-import { newBossSchema } from './bosses.schemas'
+import { bossOverviewSchema, newBossSchema } from './bosses.schemas'
 
 export type NewBoss = z.infer<typeof newBossSchema>
+
+export type BossOverview = z.infer<typeof bossOverviewSchema>
