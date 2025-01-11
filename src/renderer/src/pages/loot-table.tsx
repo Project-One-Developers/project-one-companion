@@ -5,7 +5,7 @@ import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
-import { getDpsHumanReadable } from '@renderer/lib/utils'
+import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { Boss, Droptimizer, Item, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
@@ -57,7 +57,11 @@ const BossItem = ({
                     <WowSpecIcon
                         specId={dropt.charInfo.specId}
                         className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                        title={dropt.charInfo.name}
+                        title={
+                            dropt.charInfo.name +
+                            ' - ' +
+                            formatUnixTimestampToRelativeDays(dropt.simInfo.date)
+                        }
                     />
                     <p className="text-bold text-[11px]">
                         {dropt.upgrades != null && dropt.upgrades.length > 0
