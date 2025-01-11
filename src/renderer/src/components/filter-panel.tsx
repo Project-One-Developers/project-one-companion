@@ -4,7 +4,7 @@ import { LootFilter } from '@renderer/lib/filters'
 import { armorTypesIcon, itemSlotIcon, raidDiffIcon } from '@renderer/lib/wow-icon'
 import { RAID_DIFF } from '@shared/consts/wow.consts'
 import { wowArmorTypeSchema, wowItemSlotSchema } from '@shared/schemas/wow.schemas'
-import { WowRaidDifficulty } from '@shared/types/types'
+import { WowArmorType, WowItemSlot, WowRaidDifficulty } from '@shared/types/types'
 import { Check, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 
@@ -15,27 +15,19 @@ type FiltersPanelProps = {
 
 export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [selectedSlots, setSelectedSlots] = useState<string[]>([])
-    const [selectedArmorTypes, setSelectedArmorTypes] = useState<string[]>([])
 
-    const toggleSlot = (slotName: string) => {
-        setSelectedSlots((prev) => {
-            const newSelectedSlots = prev.includes(slotName)
-                ? prev.filter((slot) => slot !== slotName)
-                : [...prev, slotName]
-            updateFilter('selectedSlots', newSelectedSlots)
-            return newSelectedSlots
-        })
+    const toggleSlot = (slotName: WowItemSlot) => {
+        const newSelectedSlots = filter.selectedSlots.includes(slotName)
+            ? filter.selectedSlots.filter((slot) => slot !== slotName)
+            : [...filter.selectedSlots, slotName]
+        updateFilter('selectedSlots', newSelectedSlots)
     }
 
-    const toggleArmorType = (armorType: string) => {
-        setSelectedArmorTypes((prev) => {
-            const newSelectedArmorTypes = prev.includes(armorType)
-                ? prev.filter((type) => type !== armorType)
-                : [...prev, armorType]
-            updateFilter('selectedArmorTypes', newSelectedArmorTypes)
-            return newSelectedArmorTypes
-        })
+    const toggleArmorType = (armorType: WowArmorType) => {
+        const newSelectedArmorTypes = filter.selectedArmorTypes.includes(armorType)
+            ? filter.selectedArmorTypes.filter((type) => type !== armorType)
+            : [...filter.selectedArmorTypes, armorType]
+        updateFilter('selectedArmorTypes', newSelectedArmorTypes)
     }
 
     // Add this function to toggle difficulties
@@ -158,16 +150,22 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
                     <label className="text-sm font-semibold">Item Slots:</label>
                     <div className="flex flex-wrap gap-2">
                         {wowItemSlotSchema.options.map((slot) => (
-                            <button
+                            <div
                                 key={slot}
-                                onClick={() => toggleSlot(slot)}
-                                className={`p-1 rounded-md ${
-                                    selectedSlots.includes(slot) ? 'bg-blue-600' : 'bg-gray-700'
+                                className={`cursor-pointer transition-transform hover:scale-125 ${
+                                    filter.selectedSlots.includes(slot)
+                                        ? 'ring-2 ring-blue-500'
+                                        : 'opacity-50 grayscale'
                                 }`}
-                                title={slot}
+                                onClick={() => toggleSlot(slot)}
                             >
-                                <img src={itemSlotIcon.get(slot)} alt={slot} className="w-6 h-6" />
-                            </button>
+                                <img
+                                    src={itemSlotIcon.get(slot)}
+                                    alt={slot}
+                                    className="w-7 h-7"
+                                    title={slot}
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -177,22 +175,38 @@ export const FiltersPanel = ({ filter: filter, updateFilter }: FiltersPanelProps
                     <label className="text-sm font-semibold">Armor Types:</label>
                     <div className="flex flex-wrap gap-2">
                         {wowArmorTypeSchema.options.map((armorType) => (
-                            <button
+                            <div
                                 key={armorType}
-                                onClick={() => toggleArmorType(armorType)}
-                                className={`p-1 rounded-md ${
-                                    selectedArmorTypes.includes(armorType)
-                                        ? 'bg-blue-600'
-                                        : 'bg-gray-700'
+                                className={`cursor-pointer transition-transform hover:scale-125 ${
+                                    filter.selectedArmorTypes.includes(armorType)
+                                        ? 'ring-2 ring-blue-500'
+                                        : 'opacity-50 grayscale'
                                 }`}
-                                title={armorType}
+                                onClick={() => toggleArmorType(armorType)}
                             >
                                 <img
                                     src={armorTypesIcon.get(armorType)}
                                     alt={armorType}
-                                    className="w-6 h-6"
+                                    className="w-7 h-7"
+                                    title={armorType}
                                 />
-                            </button>
+                            </div>
+                            // <button
+                            //     key={armorType}
+                            //     onClick={() => toggleArmorType(armorType)}
+                            //     className={`p-1 rounded-md ${
+                            //         filter.selectedArmorTypes.includes(armorType)
+                            //             ? 'bg-blue-600'
+                            //             : 'bg-gray-700'
+                            //     }`}
+                            //     title={armorType}
+                            // >
+                            //     <img
+                            //         src={armorTypesIcon.get(armorType)}
+                            //         alt={armorType}
+                            //         className="w-6 h-6"
+                            //     />
+                            // </button>
                         ))}
                     </div>
                 </div>
