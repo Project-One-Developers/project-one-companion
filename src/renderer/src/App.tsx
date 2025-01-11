@@ -19,9 +19,9 @@ function App(): JSX.Element {
     return (
         <QueryClientProvider client={queryClient}>
             <SidebarProvider defaultOpen={true}>
-                <ProjectOneSidebar />
-                <SidebarTrigger />
                 <BrowserRouter>
+                    <ProjectOneSidebar />
+                    <SidebarTrigger />
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/roster" element={<RosterPage />} />

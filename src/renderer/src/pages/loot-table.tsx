@@ -177,12 +177,6 @@ export default function LootTable(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            {/* Header */}
-            <div className="grid grid-cols-3 w-full items-center">
-                <div />
-                <h1 className="mx-auto text-3xl font-bold">Raid Loot Table</h1>
-                <div />
-            </div>
             {/* Filter */}
             <FiltersPanel filter={filter} updateFilter={updateFilter} />
             {/* Boss List */}

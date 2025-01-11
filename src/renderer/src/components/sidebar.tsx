@@ -7,6 +7,7 @@ import {
     LucideSkull,
     LucideSwords
 } from 'lucide-react'
+import { NavLink, useLocation } from 'react-router-dom'
 import { toast } from './hooks/use-toast'
 import {
     Sidebar,
@@ -63,6 +64,8 @@ const weakaurasItems = [
 ]
 
 export default function ProjectOneSidebar(): JSX.Element {
+    const location = useLocation()
+
     const upsertJsonData = async (): Promise<void> => {
         await window.api
             .upsertJsonData()
@@ -88,12 +91,15 @@ export default function ProjectOneSidebar(): JSX.Element {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {rosterItems.map((item) => (
-                                <SidebarMenuItem key={item.title} className="hover:bg-muted">
+                                <SidebarMenuItem
+                                    key={item.title}
+                                    className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
+                                >
                                     <SidebarMenuButton asChild>
-                                        <a href={item.url}>
+                                        <NavLink to={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
-                                        </a>
+                                        </NavLink>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
@@ -105,12 +111,15 @@ export default function ProjectOneSidebar(): JSX.Element {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {weakaurasItems.map((item) => (
-                                <SidebarMenuItem key={item.title} className="hover:bg-muted">
+                                <SidebarMenuItem
+                                    key={item.title}
+                                    className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
+                                >
                                     <SidebarMenuButton asChild>
-                                        <a href={item.url}>
+                                        <NavLink to={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
-                                        </a>
+                                        </NavLink>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}

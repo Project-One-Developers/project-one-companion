@@ -47,27 +47,20 @@ export default function DroptimizerPage(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            <Header />
             <FiltersPanel filter={filter} updateFilter={updateFilter} />
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 {filteredDroptimizers.map((dropt) => (
                     <DroptimizerCard key={dropt.url} droptimizer={dropt} />
                 ))}
             </div>
+            {/* Bottom right buttons */}
+            <Widget />
         </div>
     )
 }
 
-const Header = (): JSX.Element => (
-    <div className="grid grid-cols- w-full items-center">
-        <div />
-        <h1 className="mx-auto text-3xl font-bold">Droptimizer</h1>
-        <NewDroptimizerButton />
-    </div>
-)
-
-const NewDroptimizerButton = (): JSX.Element => (
-    <div className="flex items-center justify-center absolute bottom-6 right-6">
+const Widget = (): JSX.Element => (
+    <div className="absolute bottom-6 right-6">
         <NewDroptimizerForm />
     </div>
 )

@@ -6,7 +6,7 @@ import type { NewCharacter } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Loader2, PlusIcon } from 'lucide-react'
-import { useState, type JSX } from 'react';
+import { useState, type JSX } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from './hooks/use-toast'
@@ -26,7 +26,7 @@ const newPlayerName = z.object({
     playerName: z.string().min(1)
 })
 
-export default function PlayerForm(): JSX.Element {
+export default function NewPlayerForm(): JSX.Element {
     const [open, setOpen] = useState(false)
 
     const { mutate, isPending } = useMutation({

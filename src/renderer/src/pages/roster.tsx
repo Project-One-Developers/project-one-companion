@@ -6,7 +6,7 @@ import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 export default function RosterPage(): JSX.Element {
     const { data, isLoading } = useQuery({
@@ -22,13 +22,6 @@ export default function RosterPage(): JSX.Element {
                 </div>
             ) : (
                 <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-                    <div className="grid grid-cols-3 w-full items-center">
-                        <div></div>
-                        <h1 className="mx-auto text-3xl font-bold">Roster</h1>
-                        <div className="flex items-center justify-center absolute bottom-6 right-6">
-                            <PlayerForm />
-                        </div>
-                    </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-4">
                         {data?.players.map((player) => (
                             <div
@@ -45,6 +38,9 @@ export default function RosterPage(): JSX.Element {
                                 ) : null}
                             </div>
                         ))}
+                    </div>
+                    <div className="absolute bottom-6 right-6">
+                        <PlayerForm />
                     </div>
                 </div>
             )}
