@@ -44,21 +44,40 @@ export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilte
             return true
         })
 
-    return filterByDroptimizerFilters
-        .map((dropt) => {
-            const upgrades = dropt.upgrades ?? []
-            // Filter by upgrades
-            const filteredUpgrades = upgrades.filter((upgrade) => {
+    // now filter remaining droptimizer by upgrade filter (eg: slot, dps, armor type)
+    return (
+        filterByDroptimizerFilters
+            .map((dropt) => {
+                const upgrades = dropt.upgrades ?? []
                 // Filter by upgrades
-                if (filter.onlyUpgrades && upgrade.dps < filter.minUpgrade) {
-                    return false
+                const filteredUpgrades = upgrades.filter((upgrade) => {
+                    // Filter by upgrades
+                    if (filter.onlyUpgrades && upgrade.dps < filter.minUpgrade) {
+                        return false
+                    }
+
+                    // slot
+                    if (filter.selectedSlots.length > 0 && upgrade.item.slot) {
+                        if (!filter.selectedSlots.includes(upgrade.item.slot)) {
+                            return false
+                        }
+                    }
+
+                    // armor type
+                    if (filter.selectedArmorTypes.length > 0 && upgrade.item.armorType != null) {
+                        if (!filter.selectedArmorTypes.includes(upgrade.item.armorType)) {
+                            return false
+                        }
+                    }
+
+                    return true
+                })
+                return {
+                    ...dropt,
+                    upgrades: filteredUpgrades
                 }
-                return true
             })
-            return {
-                ...dropt,
-                upgrades: filteredUpgrades
-            }
-        })
-        .filter((dropt) => dropt.upgrades && dropt.upgrades.length > 0)
+            // finally remove empty droptimizers
+            .filter((dropt) => dropt.upgrades && dropt.upgrades.length > 0)
+    )
 }

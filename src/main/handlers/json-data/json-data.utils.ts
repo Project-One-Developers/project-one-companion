@@ -24,6 +24,7 @@ export const fetchRaidItems = (): Item[] => {
         boe: itemRaw.boe,
         itemClass: itemRaw.itemClass,
         slot: itemRaw.slot,
+        armorType: itemRaw.armorType,
         itemSubclass: itemRaw.itemSubclass,
         tierPrefix: itemRaw.token,
         tier: itemRaw.itemSubclass === 'Token',

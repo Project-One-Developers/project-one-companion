@@ -113,7 +113,16 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
     const result = await db.query.droptimizerTable.findFirst({
         where: (droptimizerTable, { eq }) => eq(droptimizerTable.url, droptimizerId),
         with: {
-            upgrades: true
+            upgrades: {
+                columns: {
+                    catalyzedItemId: false, //ignored
+                    itemId: false //ignored
+                },
+                with: {
+                    item: true,
+                    catalyzedItem: true
+                }
+            }
         }
     })
 

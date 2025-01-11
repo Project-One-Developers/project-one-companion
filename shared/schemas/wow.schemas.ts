@@ -49,10 +49,11 @@ export const wowItemSlotSchema = z.enum([
     'Trinket',
     'Main Hand',
     'Off Hand',
+    'Two Hand',
     'Ranged'
 ])
 
-export const wowArmorTypeSchema = z.enum(['Cloth', 'Mail', 'Leather', 'Plate'])
+export const wowArmorTypeSchema = z.enum(['Cloth', 'Leather', 'Mail', 'Plate'])
 
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
 
@@ -71,9 +72,10 @@ export const itemSchema = z.object({
     ilvlHeroic: z.number(),
     ilvlNormal: z.number(),
     bonusID: z.string().nullish(),
-    itemClass: z.string().nullish(),
-    slot: z.string().nullish(),
+    itemClass: z.string(),
+    slot: wowItemSlotSchema.nullish(),
     itemSubclass: z.string().nullish(),
+    armorType: wowArmorTypeSchema.nullish(),
     tierPrefix: z.string().nullish(),
     tier: z.boolean().default(false),
     veryRare: z.boolean().default(false),

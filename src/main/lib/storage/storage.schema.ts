@@ -1,4 +1,4 @@
-import { CLASSES, RAID_DIFF, ROLES } from '@shared/consts/wow.consts'
+import { ARMOR_TYPES, CLASSES, ITEM_SLOTS, RAID_DIFF, ROLES } from '@shared/consts/wow.consts'
 import { relations } from 'drizzle-orm'
 import {
     boolean,
@@ -18,6 +18,9 @@ import {
 export const pgClassEnum = pgEnum('class', CLASSES)
 export const pgRoleEnum = pgEnum('role', ROLES)
 export const pgRaidDiffEnum = pgEnum('raid_diff', RAID_DIFF)
+
+export const pgItemArmorTypeEnum = pgEnum('item_armor_type', ARMOR_TYPES)
+export const pgItemSlotEnum = pgEnum('item_slot', ITEM_SLOTS)
 
 //////////////////////////////////////////////////////////
 //                   CHARACHTERS                        //
@@ -164,7 +167,8 @@ export const itemTable = pgTable('items', {
     ilvlHeroic: integer('ilvl_heroic').notNull(),
     ilvlNormal: integer('ilvl_normal').notNull(),
     itemClass: varchar('item_class', { length: 50 }),
-    slot: varchar('slot', { length: 50 }),
+    slot: pgItemSlotEnum('slot'),
+    armorType: pgItemArmorTypeEnum('armor_type'),
     itemSubclass: varchar('item_subclass', { length: 50 }),
     tierPrefix: varchar('tier_prefix', { length: 50 }), // es: Dreadful
     tier: boolean('tier').notNull().default(false), // se è un item tierser

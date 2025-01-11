@@ -1,5 +1,7 @@
 import {
+    wowArmorTypeSchema,
     wowClassSchema,
+    wowItemSlotSchema,
     wowRaidDiffSchema,
     wowRoleClassSchema,
     wowRolesSchema
@@ -16,3 +18,6 @@ export const ROLES_CLASSES_MAP = {
     Healer: wowRoleClassSchema.shape.Healer.options,
     DPS: wowRoleClassSchema.shape.DPS.options
 }
+
+export const ARMOR_TYPES = wowArmorTypeSchema.options
+export const ITEM_SLOTS = wowItemSlotSchema.options
