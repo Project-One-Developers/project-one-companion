@@ -1,20 +1,27 @@
 import { z } from 'zod'
-import { wowClassSchema, wowRaidDiffSchema } from './wow.schemas'
+import { itemSchema, wowClassSchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const droptimizerUpgradeSchema = z.object({
     id: z.string(),
     dps: z.number(),
-    itemId: z.number(),
+    item: itemSchema,
     ilvl: z.number(),
     slot: z.string(),
-    catalyzedItemId: z.number().nullable(),
+    catalyzedItem: itemSchema.nullable(),
     droptimizerId: z.string()
 })
 
-export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema.omit({
-    id: true,
-    droptimizerId: true
-})
+export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema
+    .omit({
+        id: true,
+        item: true,
+        catalyzedItem: true,
+        droptimizerId: true
+    })
+    .extend({
+        itemId: z.number(),
+        catalyzedItemId: z.number().nullable()
+    })
 
 export const droptimizerSchema = z.object({
     url: z.string().url(),

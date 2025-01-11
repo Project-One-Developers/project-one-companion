@@ -45,7 +45,16 @@ export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
 export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
     const result = await db.query.droptimizerTable.findMany({
         with: {
-            upgrades: true
+            upgrades: {
+                columns: {
+                    catalyzedItemId: false, //ignored
+                    itemId: false //ignored
+                },
+                with: {
+                    item: true,
+                    catalyzedItem: true
+                }
+            }
         }
     })
 

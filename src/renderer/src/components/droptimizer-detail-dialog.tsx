@@ -3,7 +3,7 @@ import type { Boss, Droptimizer, DroptimizerUpgrade } from '@shared/types/types'
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { WowItemIcon } from './ui/wowitem-icon'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 type DroptimizerDetailDialogProps = {
     droptimizer: Droptimizer
@@ -19,7 +19,7 @@ export default function DroptimizerDetailDialog({
     droptimizer.upgrades?.forEach((up) => {
         for (let index = 0; index < bosses.length; index++) {
             const boss = bosses[index]
-            const bossUpgrade = boss.items.find((i) => i.id === up.itemId)
+            const bossUpgrade = boss.items.find((i) => i.id === up.item.id)
             if (bossUpgrade) {
                 const val = bossMap.get(boss)
                 if (val !== undefined) {
@@ -54,26 +54,26 @@ export default function DroptimizerDetailDialog({
                         {/* Upgrades Column */}
                         <div className="flex flex-wrap gap-2">
                             {bossMap.get(boss)?.map((upgrade) => {
-                                const foundItem = boss.items.find((i) => i.id === upgrade.itemId)
+                                const foundItem = boss.items.find((i) => i.id === upgrade.item.id)
                                 return (
-                                    <div key={upgrade.itemId} className="relative group">
+                                    <div key={upgrade.item.id} className="relative group">
                                         {foundItem ? (
                                             <WowItemIcon
                                                 item={foundItem}
                                                 iconOnly={true}
                                                 ilvl={upgrade.ilvl}
-                                                catalystBanner={upgrade.catalyzedItemId !== null}
+                                                catalystBanner={upgrade.catalyzedItem?.id !== null}
                                                 className="mt-2"
                                                 iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
                                             />
                                         ) : (
                                             <a
-                                                href={`https://www.wowhead.com/item=${upgrade.itemId}&ilvl=${upgrade.ilvl}`}
+                                                href={`https://www.wowhead.com/item=${upgrade.item.id}&ilvl=${upgrade.ilvl}`}
                                                 rel="noreferrer"
                                                 target="_blank"
                                                 className="q3 links"
                                             >
-                                                <p>{upgrade.itemId}</p>
+                                                <p>{upgrade.item.id}</p>
                                             </a>
                                         )}
                                         <p className="text-xs text-center">

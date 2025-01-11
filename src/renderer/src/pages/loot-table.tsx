@@ -8,7 +8,7 @@ import { Boss, Droptimizer, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 export default function LootTable(): JSX.Element {
     const currentRaid = 1273
@@ -32,7 +32,7 @@ export default function LootTable(): JSX.Element {
         return droptimizers.filter(
             (droptimizer) =>
                 droptimizer.upgrades != null &&
-                droptimizer.upgrades.findIndex((up) => up.itemId === itemId) > -1
+                droptimizer.upgrades.findIndex((up) => up.item.id === itemId) > -1
         )
     }
 

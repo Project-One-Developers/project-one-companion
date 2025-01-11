@@ -238,6 +238,14 @@ export const droptimizerUpgradesRelations = relations(droptimizerUpgradesTable, 
     droptimizer: one(droptimizerTable, {
         fields: [droptimizerUpgradesTable.droptimizerId],
         references: [droptimizerTable.url]
+    }),
+    item: one(itemTable, {
+        fields: [droptimizerUpgradesTable.itemId],
+        references: [itemTable.id]
+    }),
+    catalyzedItem: one(itemTable, {
+        fields: [droptimizerUpgradesTable.catalyzedItemId],
+        references: [itemTable.id]
     })
 }))
 

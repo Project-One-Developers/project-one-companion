@@ -50,11 +50,11 @@ export const droptimizerStorageSchema = z
             },
             upgrades: data.upgrades.map((up) => ({
                 id: up.id,
-                itemId: up.itemId,
+                item: up.item,
                 dps: up.dps,
                 ilvl: up.ilvl,
                 slot: up.slot,
-                catalyzedItemId: up.catalyzedItemId,
+                catalyzedItem: up.catalyzedItem,
                 droptimizerId: up.droptimizerId
             }))
         }

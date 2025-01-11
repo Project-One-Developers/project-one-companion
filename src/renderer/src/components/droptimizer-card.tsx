@@ -73,12 +73,12 @@ export const DroptimizerCard = ({ droptimizer: dropt }: DroptimizerCardProps) =>
                                         .slice(0, 7)
                                         .map((upgrade) => {
                                             const foundItem = raidItems.find(
-                                                (item) => item.id === upgrade.itemId
+                                                (item) => item.id === upgrade.item.id
                                             )
                                             return (
                                                 <div
                                                     className="-mr-4 relative group"
-                                                    key={upgrade.itemId}
+                                                    key={upgrade.item.id}
                                                 >
                                                     {foundItem ? (
                                                         <WowItemIcon
@@ -86,19 +86,19 @@ export const DroptimizerCard = ({ droptimizer: dropt }: DroptimizerCardProps) =>
                                                             iconOnly={true}
                                                             raidDiff={dropt.raidInfo.difficulty}
                                                             catalystBanner={
-                                                                upgrade.catalyzedItemId !== null
+                                                                upgrade.catalyzedItem?.id !== null
                                                             }
                                                             className="mt-2"
                                                             iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
                                                         />
                                                     ) : (
                                                         <a
-                                                            href={`https://www.wowhead.com/item=${upgrade.itemId}`}
+                                                            href={`https://www.wowhead.com/item=${upgrade.item.id}`}
                                                             rel="noreferrer"
                                                             target="_blank"
                                                             className="q3 links"
                                                         >
-                                                            <p>{upgrade.itemId}</p>
+                                                            <p>{upgrade.item.id}</p>
                                                         </a>
                                                     )}
                                                     <p className="text-xs text-center">
