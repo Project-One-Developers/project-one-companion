@@ -15,37 +15,35 @@ export const fetchRaidItems = (): Item[] => {
     )
 
     // cba validare qua
-    const result = jsonData.map((itemRaw) => {
-        return itemSchema.parse({
-            id: Number(itemRaw.itemId),
-            name: itemRaw.name,
-            ilvlMythic: itemRaw.mythicLevel ? Number(itemRaw.mythicLevel) : null,
-            ilvlHeroic: itemRaw.heroicLevel ? Number(itemRaw.heroicLevel) : null,
-            ilvlNormal: itemRaw.normalLevel ? Number(itemRaw.normalLevel) : null,
-            boe: itemRaw.boe,
-            itemClass: itemRaw.itemClass,
-            slot: itemRaw.slot,
-            itemSubclass: itemRaw.itemSubclass,
-            tierPrefix: itemRaw.token,
-            tier: 'Token' === itemRaw.itemSubclass,
-            veryRare: 'Very Rare' === itemRaw.bonusId,
-            catalyzed: itemRaw.catalyst,
-            specs: itemRaw.specs ? itemRaw.specs.split(',') : null,
-            specIds: itemRaw.specIds ? String(itemRaw.specIds).split('|') : null,
-            classes: itemRaw.classes ? itemRaw.classes.split(',') : null,
-            classesId: itemRaw.classesId ? String(itemRaw.classesId).split('|') : null,
-            stats: itemRaw.stats,
-            mainStats: itemRaw.mainStats,
-            secondaryStats: itemRaw.secondaryStats,
-            wowheadUrl: itemRaw.wowheadUrl,
-            iconName: itemRaw.iconName,
-            iconUrl: itemRaw.iconUrl,
-            bossName: itemRaw.bossName,
-            bossId: itemRaw.journalEncounterID
-        })
+    const transformRawItem = (itemRaw: any): Item => ({
+        id: Number(itemRaw.itemId),
+        name: itemRaw.name,
+        ilvlMythic: Number(itemRaw.mythicLevel),
+        ilvlHeroic: Number(itemRaw.heroicLevel),
+        ilvlNormal: Number(itemRaw.normalLevel),
+        boe: itemRaw.boe,
+        itemClass: itemRaw.itemClass,
+        slot: itemRaw.slot,
+        itemSubclass: itemRaw.itemSubclass,
+        tierPrefix: itemRaw.token,
+        tier: itemRaw.itemSubclass === 'Token',
+        veryRare: itemRaw.bonusId === 'Very Rare',
+        catalyzed: itemRaw.catalyst,
+        specs: itemRaw.specs?.split(',') ?? null,
+        specIds: itemRaw.specIds?.split('|') ?? null,
+        classes: itemRaw.classes?.split(',') ?? null,
+        classesId: itemRaw.classesId?.split('|') ?? null,
+        stats: itemRaw.stats,
+        mainStats: itemRaw.mainStats,
+        secondaryStats: itemRaw.secondaryStats,
+        wowheadUrl: itemRaw.wowheadUrl,
+        iconName: itemRaw.iconName,
+        iconUrl: itemRaw.iconUrl,
+        bossName: itemRaw.bossName,
+        bossId: itemRaw.journalEncounterID
     })
 
-    return z.array(itemSchema).parse(result)
+    return z.array(itemSchema).parse(jsonData.map(transformRawItem))
 }
 
 export const fetchRaidBosses = (): NewBoss[] => {
