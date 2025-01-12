@@ -1,29 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import NewSessionForm from '@renderer/components/new-session-form'
+import { queryKeys } from '@renderer/lib/tanstack-query/keys'
+import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
+import { NewRaidSession, RaidSession } from '@shared/types/types'
+import { useQuery } from '@tanstack/react-query'
 import { Calendar, PlusCircle, Users } from 'lucide-react'
 import type { JSX } from 'react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-// Mock data for raid sessions
-const mockSessions = [
-    { id: 1, name: 'Weekly Raid - Aberrus', date: '2023-06-15', participants: 20 },
-    { id: 2, name: 'Heroic Progress Run', date: '2023-06-18', participants: 25 },
-    { id: 3, name: 'Alt Run - Normal', date: '2023-06-20', participants: 15 }
-]
-
-interface RaidSession {
-    id: number
-    name: string
-    date: string
-    participants: number
-}
-
-interface Character {
-    id: number
-    name: string
-    class: string
-}
 
 const SessionCard: React.FC<{ session: RaidSession; onClick: () => void }> = ({
     session,
@@ -40,24 +24,23 @@ const SessionCard: React.FC<{ session: RaidSession; onClick: () => void }> = ({
         </div>
         <div className="flex items-center text-gray-400">
             <Users className="w-4 h-4 mr-2" />
-            <span>{session.participants} participants</span>
+            <span>20 participants</span>
         </div>
     </div>
 )
 
-export default function RaidSession(): JSX.Element {
-    const [sessions, setSessions] = useState<RaidSession[]>(mockSessions)
+export default function RaidSessionPage(): JSX.Element {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    const { data, isLoading } = useQuery({
+        queryKey: [queryKeys.raidSessions],
+        queryFn: fetchRaidSessions
+    })
+
     const navigate = useNavigate()
 
-    const handleNewSession = (name: string, characters: number[]) => {
-        const newSession: RaidSession = {
-            id: sessions.length + 1,
-            name,
-            date: new Date().toISOString().split('T')[0],
-            participants: characters.length
-        }
-        setSessions([...sessions, newSession])
+    const handleNewSession = (newSession: NewRaidSession) => {
+        console.log(newSession)
         setIsDialogOpen(false)
     }
 
@@ -84,7 +67,7 @@ export default function RaidSession(): JSX.Element {
                 </Dialog.Root>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {sessions.map((session) => (
+                {data?.map((session) => (
                     <SessionCard
                         key={session.id}
                         session={session}

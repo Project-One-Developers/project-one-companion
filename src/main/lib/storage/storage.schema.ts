@@ -100,22 +100,23 @@ export const droptimizerTable = pgTable('droptimizers', {
 export const raidSessionTable = pgTable('raid_sessions', {
     id: varchar('id').primaryKey(),
     name: varchar('name').notNull(),
-    date: integer('date').notNull()
+    raidDate: integer('date').notNull()
 })
 
 export const raidSessionRosterTable = pgTable(
     'raid_sessions_roster',
     {
-        id: varchar('id').primaryKey(),
         raidSessionId: varchar('raid_session_id')
-            .references(() => raidSessionTable.id)
+            .references(() => raidSessionTable.id, { onDelete: 'cascade' })
             .notNull(),
         charId: varchar('char_id')
-            .references(() => charTable.id)
+            .references(() => charTable.id, { onDelete: 'cascade' })
             .notNull()
     },
     (t) => [
-        unique('raid_partecipation').on(t.raidSessionId, t.charId) // un char può partecipare ad una sessione alla volta
+        {
+            pk: primaryKey({ columns: [t.raidSessionId, t.charId] })
+        }
     ]
 )
 
@@ -259,4 +260,25 @@ export const droptimizerRelations = relations(droptimizerTable, ({ many }) => ({
 
 export const playerCharRelations = relations(playerTable, ({ many }) => ({
     chars: many(charTable)
+}))
+
+// Raid Sessions
+
+export const raidSessionTableRelations = relations(raidSessionTable, ({ many }) => ({
+    charPartecipation: many(raidSessionRosterTable)
+}))
+
+export const charTableRelations = relations(charTable, ({ many }) => ({
+    raidPartecipation: many(raidSessionRosterTable)
+}))
+
+export const raidSessionRosterRelations = relations(raidSessionRosterTable, ({ one }) => ({
+    raidSession: one(raidSessionTable, {
+        fields: [raidSessionRosterTable.raidSessionId],
+        references: [raidSessionTable.id]
+    }),
+    character: one(charTable, {
+        fields: [raidSessionRosterTable.charId],
+        references: [charTable.id]
+    })
 }))

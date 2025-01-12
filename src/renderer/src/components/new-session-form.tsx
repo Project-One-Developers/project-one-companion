@@ -1,38 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
+import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
 import { Character, NewRaidSession, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import React from 'react'
-import { Controller, FieldErrors, useForm, UseFormRegister } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { WowClassIcon } from './ui/wowclass-icon'
 
 interface NewSessionFormProps {
     onSubmit: (data: NewRaidSession) => void
 }
-
-interface FormInputProps {
-    register: UseFormRegister<NewRaidSession>
-    name: 'name' | 'raidDate'
-    placeholder: string
-    errors: FieldErrors<NewRaidSession>
-}
-
-const FormInput: React.FC<FormInputProps> = ({ register, name, placeholder, errors }) => (
-    <div className="mb-4">
-        <input
-            {...register(name)}
-            type="text"
-            placeholder={placeholder}
-            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
-        />
-        <div className="h-5">
-            {errors[name] && <p className="text-red-500 text-sm">{errors[name]?.message}</p>}
-        </div>
-    </div>
-)
 
 interface CharacterIconProps {
     character: Character
@@ -75,7 +56,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player, selectedCharacters, onCha
 const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
     const defaultDate = new Date()
     defaultDate.setHours(21, 0, 0, 0) // Set to 9 PM
-    const defaultDateString = defaultDate.toLocaleString('it-IT').replace(',', '')
+    const defaultDateString = Math.floor(defaultDate.getTime() / 1000) // Convert to Unix timestamp (seconds)
 
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.players],
@@ -91,11 +72,11 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
         reset,
         formState: { errors }
     } = useForm<NewRaidSession>({
-        resolver: zodResolver(newRaidSessionSchema),
+        resolver: zodResolver(newRaidSessionSchema.extend({ raidDate: z.string() })),
         defaultValues: {
             name: '',
             roster: [],
-            raidDate: defaultDateString
+            raidDate: formaUnixTimestampToItalianDate(defaultDateString)
         }
     })
 
@@ -106,13 +87,36 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-2 max-w-2xl mx-auto">
-            <FormInput register={register} name="name" placeholder="Session Name" errors={errors} />
-            <FormInput
-                register={register}
-                name="raidDate"
-                placeholder="YYYY-MM-DD HH:mm"
-                errors={errors}
-            />
+            {/* Session name */}
+            <div className="mb-4">
+                <input
+                    {...register}
+                    type="text"
+                    placeholder="Session Name"
+                    className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
+                />
+                <div className="h-5">
+                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+                </div>
+            </div>
+
+            {/* Raid Date input */}
+            <div className="mb-4">
+                <input
+                    {...register('raidDate', {
+                        setValueAs: (v: string) => 1111
+                    })}
+                    type="text"
+                    placeholder="GG/MM/AAAA HH:mm"
+                    className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
+                />
+                <div className="h-5">
+                    {errors.raidDate && (
+                        <p className="text-red-500 text-sm">{errors.raidDate.message}</p>
+                    )}
+                </div>
+            </div>
+
             <h2 className="text-xl font-bold mb-4">Select Characters:</h2>
             {isLoading ? (
                 <LoaderCircle className="animate-spin text-5xl text-blue-500 mx-auto" />

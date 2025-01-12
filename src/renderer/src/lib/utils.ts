@@ -49,6 +49,11 @@ export function unixTimestampToWowWeek(unixTimestamp?: number): number {
     return Math.floor(daysDifference / 7)
 }
 
+export function formaUnixTimestampToItalianDate(unixTimestamp: number): string {
+    const date = new Date(unixTimestamp * 1000)
+    return date.toLocaleString('it-IT')
+}
+
 export function formatWowWeek(wowWeek?: number): string {
     if (wowWeek == null) {
         wowWeek = unixTimestampToWowWeek()
