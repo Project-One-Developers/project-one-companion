@@ -22,7 +22,7 @@ const playerStorageSchema = z
             id: char.id,
             class: char.class,
             role: char.role,
-            characterName: char.name
+            name: char.name
         }))
     }))
 

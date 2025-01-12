@@ -16,17 +16,12 @@ export const newBossSchema = bossSchema.omit({ items: true })
 export const raidSessionSchema = z.object({
     id: z.string(),
     name: z.string(),
-    date: z.number(),
+    raidDate: z.number(),
     roster: z.array(characterSchema.omit({ droptimizer: true }))
 })
 
 export const newRaidSessionSchema = z.object({
     name: z.string().min(1, 'Session name is required'),
-    raidDate: z
-        .string()
-        .refine((val) => !isNaN(Date.parse(val)), {
-            message: 'Invalid date format. Use DD/MM/YYYY HH:mm:ss'
-        })
-        .transform((s) => Date.parse(s)),
+    raidDate: z.number(),
     roster: z.array(z.string()) // array of character ids
 })

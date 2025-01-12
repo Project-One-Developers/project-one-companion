@@ -48,8 +48,8 @@ export const getRaidSessionList = async (): Promise<RaidSession[]> => {
     return z.array(raidSessionSchema).parse(processedResults)
 }
 
-export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<RaidSession> => {
-    const raidSessionId = await db.transaction(async (tx) => {
+export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<string> => {
+    return await db.transaction(async (tx) => {
         const res = await tx
             .insert(raidSessionTable)
             .values({
@@ -78,12 +78,6 @@ export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<Ra
 
         return res.id
     })
-
-    const result = await db.query.raidSessionTable.findFirst({
-        where: (raidSessionTable, { eq }) => eq(raidSessionTable.id, raidSessionId)
-    })
-
-    return raidSessionSchema.parse(result)
 }
 
 export const deleteRaidSession = async (id: string): Promise<void> => {

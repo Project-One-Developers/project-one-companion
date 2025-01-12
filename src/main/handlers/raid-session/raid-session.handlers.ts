@@ -2,6 +2,7 @@ import { NewRaidSession, RaidSession } from '@shared/types/types'
 import {
     addRaidSession,
     deleteRaidSession,
+    getRaidSession,
     getRaidSessionList
 } from '@storage/raid-session/raid-session.storage'
 import { parseRaidSessionCsv } from './raid-session.utils'
@@ -18,7 +19,8 @@ export const getRaidSessionListHandler = async (): Promise<RaidSession[]> => {
 }
 
 export const addRaidSessionHandler = async (raidSession: NewRaidSession): Promise<RaidSession> => {
-    return await addRaidSession(raidSession)
+    const id = await addRaidSession(raidSession)
+    return await getRaidSession(id)
 }
 
 export const deleteRaidSessionHandler = async (id: string): Promise<void> => {

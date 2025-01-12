@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
+import { formatUnixTimestampForDisplay, parseStringToUnixTimestamp } from '@renderer/lib/utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
 import { Character, NewRaidSession, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
@@ -9,20 +10,6 @@ import React from 'react'
 import { Controller, FieldErrors, useForm, UseFormRegister } from 'react-hook-form'
 import { z } from 'zod'
 import { WowClassIcon } from './ui/wowclass-icon'
-
-// Helper functions for date conversion
-const formatDateForDisplay = (timestamp: number): string => {
-    const date = new Date(timestamp * 1000)
-    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
-}
-
-const parseDateToTimestamp = (dateString: string): number => {
-    const [datePart, timePart] = dateString.split(' ')
-    const [day, month, year] = datePart.split('/').map(Number)
-    const [hours, minutes] = timePart.split(':').map(Number)
-    const date = new Date(year, month - 1, day, hours, minutes)
-    return Math.floor(date.getTime() / 1000)
-}
 
 // Updated schema
 const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
@@ -99,7 +86,9 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player, selectedCharacters, onCha
 const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
     const defaultDate = new Date()
     defaultDate.setHours(21, 0, 0, 0) // Set to 9 PM
-    const defaultDateString = formatDateForDisplay(Math.floor(defaultDate.getTime() / 1000))
+    const defaultDateString = formatUnixTimestampForDisplay(
+        Math.floor(defaultDate.getTime() / 1000)
+    )
 
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.players],
@@ -126,7 +115,7 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
     const onSubmitForm = (formData: FormNewRaidSession) => {
         const submissionData: NewRaidSession = {
             ...formData,
-            raidDate: parseDateToTimestamp(formData.raidDate)
+            raidDate: parseStringToUnixTimestamp(formData.raidDate)
         }
         onSubmit(submissionData)
         reset()

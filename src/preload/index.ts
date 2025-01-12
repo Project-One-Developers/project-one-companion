@@ -5,6 +5,7 @@ import type {
     Droptimizer,
     Item,
     NewCharacter,
+    NewRaidSession,
     Player,
     RaidSession
 } from '@shared/types/types'
@@ -37,8 +38,14 @@ export const api = {
         return ipcRenderer.invoke('get-raid-loot-table', raidId)
     },
     // Raid sessions
+    addRaidSession(newSession: NewRaidSession): Promise<RaidSession> {
+        return ipcRenderer.invoke('add-raid-session', newSession)
+    },
     getRaidSessions(): Promise<RaidSession[]> {
         return ipcRenderer.invoke('get-raid-sessions')
+    },
+    deleteRaidSession(id: string): Promise<void> {
+        return ipcRenderer.invoke('delete-raid-session', id)
     },
     // JSON Data
     getItems(): Promise<Item[]> {

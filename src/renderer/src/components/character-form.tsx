@@ -7,7 +7,7 @@ import { wowClassSchema, wowRolesSchema } from '@shared/schemas/wow.schemas'
 import type { NewCharacter } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2, PlusIcon } from 'lucide-react'
-import { useState, type JSX } from 'react';
+import { useState, type JSX } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from './hooks/use-toast'
@@ -25,7 +25,7 @@ import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 const newCharacterSchema = z.object({
-    characterName: z.string().min(1),
+    name: z.string().min(1),
     class: wowClassSchema,
     role: wowRolesSchema,
     playerName: z.string().min(1)
@@ -42,7 +42,7 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
             setOpen(false)
             toast({
                 title: 'Aggiunta player',
-                description: `Il pg ${arg.characterName} del player ${arg.playerName} è stato aggiunto con successo.`
+                description: `Il pg ${arg.name} del player ${arg.playerName} è stato aggiunto con successo.`
             })
         },
         onError: (error) => {
@@ -56,7 +56,7 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
     const form = useForm<NewCharacter>({
         resolver: zodResolver(newCharacterSchema),
         defaultValues: {
-            characterName: '',
+            name: '',
             class: 'Death Knight',
             role: 'Tank',
             playerName
@@ -86,7 +86,7 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                         <FormField
                             control={form.control}
-                            name="characterName"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Nome</FormLabel>

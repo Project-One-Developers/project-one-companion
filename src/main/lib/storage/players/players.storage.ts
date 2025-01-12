@@ -55,7 +55,7 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
         .insert(charTable)
         .values({
             id,
-            name: character.characterName,
+            name: character.name,
             class: character.class,
             role: character.role,
             playerId: player.id
@@ -69,7 +69,7 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
         characters: [
             {
                 id,
-                characterName: result?.name,
+                name: result?.name,
                 class: character.class,
                 role: character.role,
                 playerId: player.id

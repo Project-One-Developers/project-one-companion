@@ -1,10 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog'
+import { toast } from '@renderer/components/hooks/use-toast'
 import NewSessionForm from '@renderer/components/new-session-form'
+import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
+import { addRaidSession, fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
+import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
 import { NewRaidSession, RaidSession } from '@shared/types/types'
-import { useQuery } from '@tanstack/react-query'
-import { Calendar, PlusCircle, Users } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { Calendar, Loader2, PlusCircle, Users } from 'lucide-react'
 import type { JSX } from 'react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -20,11 +23,11 @@ const SessionCard: React.FC<{ session: RaidSession; onClick: () => void }> = ({
         <h3 className="text-xl font-bold mb-2">{session.name}</h3>
         <div className="flex items-center text-gray-400 mb-1">
             <Calendar className="w-4 h-4 mr-2" />
-            <span>{session.date}</span>
+            <span>{formatUnixTimestampForDisplay(session.raidDate)}</span>
         </div>
         <div className="flex items-center text-gray-400">
             <Users className="w-4 h-4 mr-2" />
-            <span>20 participants</span>
+            <span>{session.roster.length} participants</span>
         </div>
     </div>
 )
@@ -37,10 +40,29 @@ export default function RaidSessionPage(): JSX.Element {
         queryFn: fetchRaidSessions
     })
 
+    const { mutate, isPending } = useMutation({
+        mutationFn: addRaidSession,
+        onSuccess: (_, arg) => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
+            //form.reset()
+            setIsDialogOpen(false)
+            toast({
+                title: 'Raid Session added',
+                description: `Raid session ${arg.name} created successfully`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Errore',
+                description: `Non è stato possibile creare la raid session. Errore: ${error.message}`
+            })
+        }
+    })
+
     const navigate = useNavigate()
 
     const handleNewSession = (newSession: NewRaidSession) => {
-        console.log(newSession)
+        mutate(newSession)
         setIsDialogOpen(false)
     }
 
@@ -61,7 +83,11 @@ export default function RaidSessionPage(): JSX.Element {
                             <Dialog.Title className="text-2xl font-bold mb-4">
                                 Create New Session
                             </Dialog.Title>
-                            <NewSessionForm onSubmit={handleNewSession} />
+                            {isPending ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                <NewSessionForm onSubmit={handleNewSession} />
+                            )}
                         </Dialog.Content>
                     </Dialog.Portal>
                 </Dialog.Root>

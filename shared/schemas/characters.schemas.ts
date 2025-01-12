@@ -4,7 +4,7 @@ import { wowClassSchema, wowRolesSchema } from './wow.schemas'
 
 export const characterSchema = z.object({
     id: z.string().uuid(),
-    characterName: z.string(),
+    name: z.string(),
     class: wowClassSchema,
     role: wowRolesSchema,
     droptimizer: z.array(droptimizerSchema).optional()

@@ -78,3 +78,16 @@ export function formatWowWeek(wowWeek?: number): string {
 
     return `${startDateString} - ${endDateString}`
 }
+
+export const formatUnixTimestampForDisplay = (unixTimestamp: number): string => {
+    const date = new Date(unixTimestamp * 1000)
+    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+}
+
+export const parseStringToUnixTimestamp = (dateString: string): number => {
+    const [datePart, timePart] = dateString.split(' ')
+    const [day, month, year] = datePart.split('/').map(Number)
+    const [hours, minutes] = timePart.split(':').map(Number)
+    const date = new Date(year, month - 1, day, hours, minutes)
+    return Math.floor(date.getTime() / 1000)
+}

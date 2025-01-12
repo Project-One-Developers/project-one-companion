@@ -3,7 +3,7 @@
 import { cn } from '@renderer/lib/utils'
 import { classIcon } from '@renderer/lib/wow-icon'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useState, type JSX } from 'react';
+import { useState, type JSX } from 'react'
 import type { Character, Player } from 'shared/types/types'
 import { CharacterForm } from '../character-form'
 
@@ -60,7 +60,7 @@ export const AnimatedTooltip = ({
                                 <div className="absolute inset-x-10 z-30 w-[20%] -bottom-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent h-px" />
                                 <div className="absolute left-10 w-[40%] z-30 -bottom-px bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px" />
                                 <div className="font-bold text-background relative z-30 text-base">
-                                    {item.characterName}
+                                    {item.name}
                                 </div>
                                 <div className="text-muted-foreground text-xs">{item.class}</div>
                                 {item.droptimizer?.length ? (
