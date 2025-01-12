@@ -1,4 +1,4 @@
-import { itemToCatalystArraySchema, itemToTiersetArraySchema } from '@shared/schemas/wow.schemas'
+import { itemToCatalystArraySchema, itemToTiersetArraySchema } from '@shared/schemas/items.schema'
 import type {
     Droptimizer,
     ItemToCatalyst,

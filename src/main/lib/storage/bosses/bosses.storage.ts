@@ -1,4 +1,4 @@
-import { bossSchema } from '@shared/schemas/wow.schemas'
+import { bossSchema } from '@shared/schemas/raid.schemas'
 import type { Boss, NewBoss } from '@shared/types/types'
 import { bossTable } from '@storage/storage.schema'
 import { conflictUpdateAllExcept } from '@storage/storage.utils'

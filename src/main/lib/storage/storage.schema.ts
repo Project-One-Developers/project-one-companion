@@ -99,8 +99,8 @@ export const droptimizerTable = pgTable('droptimizers', {
 
 export const raidSessionTable = pgTable('raid_sessions', {
     id: varchar('id').primaryKey(),
-    startedAt: integer('date').notNull(),
-    completedAt: integer('date')
+    name: varchar('name').notNull(),
+    date: integer('date').notNull()
 })
 
 export const raidSessionRosterTable = pgTable(

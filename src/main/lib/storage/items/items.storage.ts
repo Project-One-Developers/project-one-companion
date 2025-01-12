@@ -1,4 +1,4 @@
-import { itemSchema } from '@shared/schemas/wow.schemas'
+import { itemSchema } from '@shared/schemas/items.schema'
 import type { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { z } from 'zod'
 import { db } from '../storage.config'

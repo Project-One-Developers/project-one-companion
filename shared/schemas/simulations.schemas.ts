@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { itemSchema, wowClassSchema, wowRaidDiffSchema } from './wow.schemas'
+import { itemSchema } from './items.schema'
+import { wowClassSchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const droptimizerUpgradeSchema = z.object({
     id: z.string(),
