@@ -23,7 +23,7 @@ export const raidSessionSchema = z.object({
 export const newRaidSessionSchema = z.object({
     name: z.string().min(1, 'Session name is required'),
     raidDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-        message: 'Invalid date format. Use YYYY-MM-DD HH:mm'
+        message: 'Invalid date format. Use DD/MM/YYYY HH:mm:ss'
     }),
     roster: z.array(z.string()) // array of character ids
 })
