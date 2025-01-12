@@ -1,19 +1,62 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
-import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
 import { Character, NewRaidSession, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import React from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FieldErrors, useForm, UseFormRegister } from 'react-hook-form'
 import { z } from 'zod'
 import { WowClassIcon } from './ui/wowclass-icon'
+
+// Helper functions for date conversion
+const formatDateForDisplay = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000)
+    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+}
+
+const parseDateToTimestamp = (dateString: string): number => {
+    const [datePart, timePart] = dateString.split(' ')
+    const [day, month, year] = datePart.split('/').map(Number)
+    const [hours, minutes] = timePart.split(':').map(Number)
+    const date = new Date(year, month - 1, day, hours, minutes)
+    return Math.floor(date.getTime() / 1000)
+}
+
+// Updated schema
+const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
+    raidDate: z.string().refine((val) => /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(val), {
+        message: 'Invalid date format. Use DD/MM/YYYY HH:mm'
+    })
+})
+
+type FormNewRaidSession = z.infer<typeof updatedNewRaidSessionSchema>
 
 interface NewSessionFormProps {
     onSubmit: (data: NewRaidSession) => void
 }
+
+interface FormInputProps {
+    register: UseFormRegister<FormNewRaidSession>
+    name: 'name' | 'raidDate'
+    placeholder: string
+    errors: FieldErrors<FormNewRaidSession>
+}
+
+const FormInput: React.FC<FormInputProps> = ({ register, name, placeholder, errors }) => (
+    <div className="mb-4">
+        <input
+            {...register(name)}
+            type="text"
+            placeholder={placeholder}
+            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
+        />
+        <div className="h-5">
+            {errors[name] && <p className="text-red-500 text-sm">{errors[name]?.message}</p>}
+        </div>
+    </div>
+)
 
 interface CharacterIconProps {
     character: Character
@@ -56,7 +99,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player, selectedCharacters, onCha
 const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
     const defaultDate = new Date()
     defaultDate.setHours(21, 0, 0, 0) // Set to 9 PM
-    const defaultDateString = Math.floor(defaultDate.getTime() / 1000) // Convert to Unix timestamp (seconds)
+    const defaultDateString = formatDateForDisplay(Math.floor(defaultDate.getTime() / 1000))
 
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.players],
@@ -71,52 +114,33 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
         control,
         reset,
         formState: { errors }
-    } = useForm<NewRaidSession>({
-        resolver: zodResolver(newRaidSessionSchema.extend({ raidDate: z.string() })),
+    } = useForm<FormNewRaidSession>({
+        resolver: zodResolver(updatedNewRaidSessionSchema),
         defaultValues: {
             name: '',
             roster: [],
-            raidDate: formaUnixTimestampToItalianDate(defaultDateString)
+            raidDate: defaultDateString
         }
     })
 
-    const onSubmitForm = (formData: NewRaidSession) => {
-        onSubmit(formData)
+    const onSubmitForm = (formData: FormNewRaidSession) => {
+        const submissionData: NewRaidSession = {
+            ...formData,
+            raidDate: parseDateToTimestamp(formData.raidDate)
+        }
+        onSubmit(submissionData)
         reset()
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-2 max-w-2xl mx-auto">
-            {/* Session name */}
-            <div className="mb-4">
-                <input
-                    {...register}
-                    type="text"
-                    placeholder="Session Name"
-                    className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-                <div className="h-5">
-                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-                </div>
-            </div>
-
-            {/* Raid Date input */}
-            <div className="mb-4">
-                <input
-                    {...register('raidDate', {
-                        setValueAs: (v: string) => 1111
-                    })}
-                    type="text"
-                    placeholder="GG/MM/AAAA HH:mm"
-                    className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-                <div className="h-5">
-                    {errors.raidDate && (
-                        <p className="text-red-500 text-sm">{errors.raidDate.message}</p>
-                    )}
-                </div>
-            </div>
-
+            <FormInput register={register} name="name" placeholder="Session Name" errors={errors} />
+            <FormInput
+                register={register}
+                name="raidDate"
+                placeholder="DD/MM/YYYY HH:mm"
+                errors={errors}
+            />
             <h2 className="text-xl font-bold mb-4">Select Characters:</h2>
             {isLoading ? (
                 <LoaderCircle className="animate-spin text-5xl text-blue-500 mx-auto" />

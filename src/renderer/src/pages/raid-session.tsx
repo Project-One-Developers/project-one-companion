@@ -32,7 +32,7 @@ const SessionCard: React.FC<{ session: RaidSession; onClick: () => void }> = ({
 export default function RaidSessionPage(): JSX.Element {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-    const { data, isLoading } = useQuery({
+    const { data } = useQuery({
         queryKey: [queryKeys.raidSessions],
         queryFn: fetchRaidSessions
     })
