@@ -7,7 +7,7 @@ import { addRaidSession, fetchRaidSessions } from '@renderer/lib/tanstack-query/
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
 import { NewRaidSession, RaidSession } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Calendar, Loader2, PlusCircle, Users } from 'lucide-react'
+import { Calendar, Loader2, LoaderCircle, PlusCircle, Users } from 'lucide-react'
 import type { JSX } from 'react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -35,7 +35,7 @@ const SessionCard: React.FC<{ session: RaidSession; onClick: () => void }> = ({
 export default function RaidSessionPage(): JSX.Element {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-    const { data } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: [queryKeys.raidSessions],
         queryFn: fetchRaidSessions
     })
@@ -64,6 +64,14 @@ export default function RaidSessionPage(): JSX.Element {
     const handleNewSession = (newSession: NewRaidSession) => {
         mutate(newSession)
         setIsDialogOpen(false)
+    }
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
+                <LoaderCircle className="animate-spin text-5xl" />
+            </div>
+        )
     }
 
     return (
