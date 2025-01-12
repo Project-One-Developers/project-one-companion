@@ -1,4 +1,6 @@
-import type { JSX } from "react";
+import logoImage from '@renderer/assets/logo.png'
+import type { JSX } from 'react'
+
 export default function HomePage(): JSX.Element {
     return (
         <>
@@ -6,7 +8,7 @@ export default function HomePage(): JSX.Element {
                 <div>
                     <img
                         className="ml-auto mr-auto"
-                        src="./assets/logo.png"
+                        src={logoImage}
                         alt="Logo image"
                         width={256}
                         height={256}

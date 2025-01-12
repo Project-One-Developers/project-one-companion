@@ -1,3 +1,5 @@
+import heroicIcon from '@renderer/assets/icons/diff-heroic.png'
+import mythicIcon from '@renderer/assets/icons/diff-mythic.png'
 import type { WowArmorType, WowClass, WowItemSlot, WowRaidDifficulty } from 'shared/types/types'
 
 export const classIcon = new Map<WowClass, string>([
@@ -101,6 +103,6 @@ export const armorTypesIcon = new Map<WowArmorType, string>([
 ])
 
 export const raidDiffIcon = new Map<WowRaidDifficulty, string>([
-    ['Heroic', './assets/icons/diff-heroic.png'],
-    ['Mythic', './assets/icons/diff-mythic.png']
+    ['Heroic', heroicIcon],
+    ['Mythic', mythicIcon]
 ])
