@@ -1,9 +1,4 @@
-import type {
-    Droptimizer,
-    WowArmorType,
-    WowItemSlot,
-    WowRaidDifficulty
-} from '../../../../shared/types/types'
+import { Droptimizer, WowArmorType, WowItemSlot, WowRaidDifficulty } from '@shared/types/types'
 import { unixTimestampToRelativeDays } from './utils'
 
 export type LootFilter = {
