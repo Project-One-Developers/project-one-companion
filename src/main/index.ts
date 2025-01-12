@@ -1,7 +1,7 @@
 import { is, optimizer } from '@electron-toolkit/utils'
 import { BrowserWindow, Menu, app, screen, shell } from 'electron'
 import { join } from 'path'
-import icon from '../../resources/icon.png?asset'
+import icon from '../../build/icon.png'
 import { menu } from './app/menu'
 import { store } from './app/store'
 import { allHandlers } from './handlers'
