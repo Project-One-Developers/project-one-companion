@@ -78,14 +78,14 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
                         name="roster"
                         control={control}
                         render={({ field }) => (
-                            <div className="space-y-4">
+                            <div className="">
                                 {players.map((player) => (
-                                    <div key={player.id} className="bg-gray-800 p-4 rounded-lg">
-                                        <div className="flex items-center justify-between mb-2">
+                                    <div key={player.id} className="bg-gray-800 p-2 rounded-lg">
+                                        <div className="flex items-center justify-between">
                                             <h3 className="font-bold text-lg">
                                                 {player.playerName}
                                             </h3>
-                                            <div className="flex space-x-2">
+                                            <div className="flex gap-x-1">
                                                 {player.characters?.map((char) => (
                                                     <div
                                                         key={char.id}
