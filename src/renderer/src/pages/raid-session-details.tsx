@@ -5,7 +5,7 @@ import { Input } from '@renderer/components/ui/input'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
 import { Item } from '@shared/types/types'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Edit, Plus, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -15,8 +15,8 @@ const mockLoot: Item[] = []
 export const RaidSessionDetailsPage = () => {
     const { raidSessionId } = useParams<{ raidSessionId: string }>()
     const navigate = useNavigate()
-    const queryClient = useQueryClient()
-    const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null)
+    // const queryClient = useQueryClient()
+    // const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null)
     const [lootItem, setLootItem] = useState('')
     const [assignCharacter, setAssignCharacter] = useState('')
 
@@ -45,6 +45,7 @@ export const RaidSessionDetailsPage = () => {
     }
 
     const handleUpdateRoster = (newRoster: string) => {
+        console.log(newRoster)
         //updateRosterMutation.mutate({ raidSessionId, roster: newRoster })
     }
 

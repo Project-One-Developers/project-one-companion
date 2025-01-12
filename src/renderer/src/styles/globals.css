@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
     :root {
         --background: 0 0% 0%;
@@ -25,77 +24,68 @@
         --ring: 0 0% 100%;
         --radius: 0.5rem;
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 100;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-Thin.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-Thin.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 200;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-ExtraLight.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-ExtraLight.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 300;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-Light.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-Light.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 400;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-Regular.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-Regular.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 500;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-Medium.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-Medium.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 600;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-SemiBold.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-SemiBold.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 700;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-Bold.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-Bold.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 800;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-ExtraBold.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-ExtraBold.ttf') format('truetype');
     }
-
     @font-face {
         font-family: 'Geist';
         font-style: normal;
         font-weight: 900;
         font-display: swap;
-        src: url(../../assets/font/Geist/ttf/Geist-Black.ttf) format('ttf');
+        src: url('@renderer/assets/font/Geist/ttf/Geist-Black.ttf') format('truetype');
     }
 }
 
