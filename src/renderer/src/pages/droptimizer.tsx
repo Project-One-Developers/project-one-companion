@@ -49,9 +49,18 @@ export default function DroptimizerPage(): JSX.Element {
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             <FiltersPanel filter={filter} updateFilter={updateFilter} />
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {filteredDroptimizers.map((dropt) => (
-                    <DroptimizerCard key={dropt.url} droptimizer={dropt} />
-                ))}
+                {filteredDroptimizers.length > 0 ? (
+                    filteredDroptimizers.map((dropt) => (
+                        <DroptimizerCard key={dropt.url} droptimizer={dropt} />
+                    ))
+                ) : (
+                    <img
+                        src="https://media1.tenor.com/m/md1_j1SnRSkAAAAd/brian-david-gilbert-nothing-here.gif"
+                        alt="Empty"
+                        width={400}
+                        height={400}
+                    />
+                )}
             </div>
             {/* Bottom right buttons */}
             <Widget />
