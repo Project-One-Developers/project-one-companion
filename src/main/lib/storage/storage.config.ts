@@ -1,8 +1,8 @@
 import * as schema from '@storage/storage.schema'
-import { config } from 'dotenv'
+import * as dotenv from 'dotenv'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
-config()
+dotenv.config()
 
 const databaseUrl = import.meta.env.MAIN_VITE_DATABASE_URL
 

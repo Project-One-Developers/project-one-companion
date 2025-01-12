@@ -1,5 +1,7 @@
-import 'dotenv/config'
+import * as dotenv from 'dotenv'
 import { type Configuration } from 'electron-builder'
+
+dotenv.config()
 
 const config = {
     appId: `${process.env.VITE_APPID}`,
