@@ -14,6 +14,10 @@ export const loadRaidSessionCsvHandler = async (sessionId: string, csv: string):
     // TODO: insertion
 }
 
+export const getRaidSessionHandler = async (id: string): Promise<RaidSession> => {
+    return await getRaidSession(id)
+}
+
 export const getRaidSessionListHandler = async (): Promise<RaidSession[]> => {
     return await getRaidSessionList()
 }

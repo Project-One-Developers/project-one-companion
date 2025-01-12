@@ -13,6 +13,7 @@ import { upsertJsonDataHandler } from './json-data/json-data.handlers'
 import {
     addRaidSessionHandler,
     deleteRaidSessionHandler,
+    getRaidSessionHandler,
     getRaidSessionListHandler
 } from './raid-session/raid-session.handlers'
 import { getRaidLootTableHanlder } from './raid/raid.handler'
@@ -28,6 +29,7 @@ export const allHandlers = {
     'get-items': getItemsHandler,
     'get-raid-loot-table': getRaidLootTableHanlder,
     'get-raid-sessions': getRaidSessionListHandler,
+    'get-raid-session': getRaidSessionHandler,
     'add-raid-session': addRaidSessionHandler,
     'delete-raid-session': deleteRaidSessionHandler
 }

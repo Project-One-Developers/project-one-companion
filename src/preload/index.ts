@@ -41,6 +41,9 @@ export const api = {
     addRaidSession(newSession: NewRaidSession): Promise<RaidSession> {
         return ipcRenderer.invoke('add-raid-session', newSession)
     },
+    getRaidSession(id: string): Promise<RaidSession> {
+        return ipcRenderer.invoke('get-raid-session', id)
+    },
     getRaidSessions(): Promise<RaidSession[]> {
         return ipcRenderer.invoke('get-raid-sessions')
     },
