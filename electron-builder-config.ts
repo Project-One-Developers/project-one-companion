@@ -22,10 +22,10 @@ const config = {
         executableName: `${process.env.VITE_TITLE}`
     },
     nsis: {
-        artifactName: 'Install ${productName}.${ext}',
+        artifactName: '${productName} installer.${ext}',
         shortcutName: '${productName}',
         uninstallDisplayName: '${productName}',
-        createDesktopShortcut: 'always',
+        createDesktopShortcut: false,
         runAfterFinish: true,
         deleteAppDataOnUninstall: true
     },
@@ -55,9 +55,9 @@ const config = {
         artifactName: '${productName}.${ext}'
     },
     linux: {
-        target: ['AppImage', 'snap', 'deb'],
-        maintainer: 'Florencea Bear',
-        category: 'Utility'
+        target: ['AppImage'],
+        maintainer: 'Project One Devs',
+        category: 'World of Warcraft'
     },
     appImage: {
         artifactName: '${productName}.${ext}'
