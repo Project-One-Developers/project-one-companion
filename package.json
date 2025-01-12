@@ -4,6 +4,7 @@
     "description": "Project One guild companion app",
     "main": "./out/main/index.js",
     "author": "Project One Devs",
+    "homepage": "https://github.com/zerbiniandrea/projectone-companion",
     "scripts": {
         "format": "prettier \"**/*\" --write --ignore-unknown --cache",
         "lint": "eslint . && tsc --noEmit -p tsconfig.node.json --composite false && tsc --noEmit -p tsconfig.web.json --composite false",
