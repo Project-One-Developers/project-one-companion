@@ -195,8 +195,14 @@ export const RaidSessionDetailsPage = () => {
                                     Select from Boss
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                    className="cursor-pointer p-2 hover:bg-gray-700 rounded"
-                                    onSelect={() => handleAddLootItem('import')}
+                                    className={`cursor-pointer p-2 rounded ${
+                                        !lootItem.trim()
+                                            ? 'opacity-50 cursor-not-allowed bg-gray-700'
+                                            : 'hover:bg-gray-700'
+                                    }`}
+                                    // TODO: check if string is some sort of csv input? just a basic check
+                                    onSelect={() => lootItem.trim() && handleAddLootItem('import')}
+                                    disabled={!lootItem.trim()}
                                 >
                                     Import from RCLootCouncil
                                 </DropdownMenuItem>
