@@ -36,9 +36,9 @@ export const RaidSessionDetailsPage = () => {
         enabled: !!raidSessionId
     })
 
-    const { mutate, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: addRaidSessionLootsRcLoot,
-        onSuccess: (_, arg) => {
+        onSuccess: () => {
             //queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
             //form.reset()
             //setIsDialogOpen(false)
