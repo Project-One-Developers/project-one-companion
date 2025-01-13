@@ -22,6 +22,21 @@ export const ROLES_CLASSES_MAP = {
 export const ARMOR_TYPES = wowArmorTypeSchema.options
 export const ITEM_SLOTS = wowItemSlotSchema.options
 
+export const PROFESSION_TYPES = new Set([
+    'Alchemy',
+    'Blacksmithing',
+    'Enchanting',
+    'Engineering',
+    'Herbalism',
+    'Inscription',
+    'Jewelcrafting',
+    'Leatherworking',
+    'Mining',
+    'Skinning',
+    'Tailoring',
+    'Cooking'
+])
+
 export const REALMS = {
     EU: [
         { name: 'Aegwynn', slug: 'aegwynn' },

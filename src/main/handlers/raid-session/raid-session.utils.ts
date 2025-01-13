@@ -1,3 +1,4 @@
+import { PROFESSION_TYPES } from '@shared/consts/wow.consts'
 import { getBossesNames } from '@storage/bosses/bosses.storage'
 import { newUUID } from '@utils'
 import { parse } from 'papaparse'
@@ -24,7 +25,13 @@ export const parseRaidSessionCsv = async (
         throw new Error('Error during parsing RCLoot CSV:' + parsedData.errors[0])
     }
 
-    const rawRecords = z.array(rawLootRecordSchema).parse(parsedData.data)
+    const filteredData = parsedData.data.filter(
+        (record) =>
+            !PROFESSION_TYPES.has(record.subType) &&
+            !record.response.toLowerCase().includes('personal loot')
+    )
+
+    const rawRecords = z.array(rawLootRecordSchema).parse(filteredData)
 
     // TODO: maybe instead of getting the boss, we can just check where the item ID loots
     // and then get the boss ID from that, this makes this consistent even if RC uses
@@ -41,7 +48,7 @@ export const parseRaidSessionCsv = async (
 
         return {
             id: newUUID(),
-            dropDate: new Date(`${record.date} ${record.time}`).getTime(), //TODO: what do we actually want to save here?
+            dropDate: parseDateTime(record.date, record.time), //TODO: what do we actually want to save here?
             socket: record.itemString.includes('Socket'),
             raidSessionId: sessionId,
             itemId: record.itemID,
@@ -52,4 +59,23 @@ export const parseRaidSessionCsv = async (
     })
 
     return raidSessionLootsSchema.parse(loots)
+}
+
+const parseDateTime = (dateStr: string, timeStr: string): number => {
+    // Split date components
+    const [day, month, shortYear] = dateStr.split('/')
+
+    // Convert 2-digit year to 4-digit (assuming 20xx for years 00-99)
+    const fullYear = `20${shortYear}`
+
+    // Create ISO format date string (yyyy-mm-ddTHH:mm:ss)
+    const isoDateTime = `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timeStr}`
+
+    const dateTime = new Date(isoDateTime)
+
+    if (isNaN(dateTime.getTime())) {
+        throw new Error(`Unable to parse date/time: ${dateStr} ${timeStr}`)
+    }
+
+    return dateTime.getTime()
 }
