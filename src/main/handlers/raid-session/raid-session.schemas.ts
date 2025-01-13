@@ -22,7 +22,7 @@ export const rawLootRecordSchema = z.object({
     isAwardReason: z.boolean(),
     subType: z.string(),
     equipLoc: z.string(),
-    note: z.string(),
+    note: z.string().optional(),
     owner: z.string()
 })
 

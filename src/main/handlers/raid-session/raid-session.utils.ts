@@ -19,6 +19,11 @@ export const parseRaidSessionCsv = async (
         skipEmptyLines: true
     })
 
+    if (!parsedData.data || parsedData.errors.length > 0) {
+        console.log(parsedData.errors)
+        throw new Error('Error during parsing RCLoot CSV:' + parsedData.errors[0])
+    }
+
     const rawRecords = z.array(rawLootRecordSchema).parse(parsedData.data)
 
     // TODO: maybe instead of getting the boss, we can just check where the item ID loots

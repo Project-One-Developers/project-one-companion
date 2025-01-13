@@ -7,8 +7,11 @@ import {
 } from '@storage/raid-session/raid-session.storage'
 import { parseRaidSessionCsv } from './raid-session.utils'
 
-export const loadRaidSessionCsvHandler = async (sessionId: string, csv: string): Promise<void> => {
-    const parsedData = parseRaidSessionCsv(sessionId, csv)
+export const addRaidLootsByRCLootCsvHandler = async (
+    sessionId: string,
+    csv: string
+): Promise<void> => {
+    const parsedData = await parseRaidSessionCsv(sessionId, csv)
     console.log(parsedData)
 
     // TODO: insertion

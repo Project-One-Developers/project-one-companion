@@ -22,3 +22,13 @@ export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<Ra
 export const deleteRaidSession = async (id: string): Promise<void> => {
     return await window.api.deleteRaidSession(id)
 }
+
+export const addRaidSessionLootsRcLoot = async (params: {
+    id: string | undefined
+    csv: string
+}): Promise<void> => {
+    if (!params.id) {
+        throw new Error('No raid session id provided')
+    }
+    return await window.api.addRaidSessionLootsRcLoot(params.id, params.csv)
+}

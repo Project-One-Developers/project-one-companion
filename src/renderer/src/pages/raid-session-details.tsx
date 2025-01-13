@@ -1,13 +1,20 @@
 import * as Select from '@radix-ui/react-select'
 import { Separator } from '@radix-ui/react-separator'
+import { toast } from '@renderer/components/hooks/use-toast'
 import { Button } from '@renderer/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from '@renderer/components/ui/dropdown-menu'
 import { Input } from '@renderer/components/ui/input'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
+import { addRaidSessionLootsRcLoot, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
 import { Item } from '@shared/types/types'
-import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft, Calendar, Edit, LoaderCircle, Plus, Sword, Users } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { ArrowLeft, Calendar, ChevronDown, Edit, LoaderCircle, Sword, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -29,9 +36,42 @@ export const RaidSessionDetailsPage = () => {
         enabled: !!raidSessionId
     })
 
-    const handleAddLootItem = () => {
-        if (lootItem) {
-            setLootItem('')
+    const { mutate, isPending } = useMutation({
+        mutationFn: addRaidSessionLootsRcLoot,
+        onSuccess: (_, arg) => {
+            //queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
+            //form.reset()
+            //setIsDialogOpen(false)
+            toast({
+                title: 'Loot imported',
+                description: `Loots successfully imported from RCLootCouncil`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Errore',
+                description: `Non è stato possibile creare la raid session. Errore: ${error.message}`
+            })
+        }
+    })
+
+    const handleAddLootItem = (method: string) => {
+        switch (method) {
+            case 'boss':
+                // Logic for selecting from boss
+                break
+            case 'import':
+                // Logic for importing from RCLootCouncil
+                console.log('RCIMPORT invoked: ' + raidSessionId + ' - ' + lootItem)
+                mutate({ id: raidSessionId, csv: lootItem })
+                break
+            case 'manual':
+                // Logic for manual entry (can use the existing lootItem state)
+                if (lootItem) {
+                    // Your existing logic for adding an item
+                    setLootItem('')
+                }
+                break
         }
     }
 
@@ -126,19 +166,41 @@ export const RaidSessionDetailsPage = () => {
                         )}
                     </ul>
                     <div className="flex space-x-2">
-                        <Input
-                            type="text"
+                        <textarea
                             value={lootItem}
-                            placeholder="Add item"
                             onChange={(e) => setLootItem(e.target.value)}
-                            className="bg-gray-700 border-gray-600 focus:border-blue-500"
+                            placeholder="Paste CSV data here"
+                            className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-sm text-gray-300 focus:border-blue-500"
+                            rows={4}
                         />
-                        <Button
-                            onClick={handleAddLootItem}
-                            className="bg-yellow-600 hover:bg-yellow-700"
-                        >
-                            <Plus className="mr-2 h-4 w-4" /> Add Loot
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button className="bg-yellow-600 hover:bg-yellow-700">
+                                    <Sword className="mr-2 h-4 w-4" /> Add Loot
+                                    <ChevronDown className="ml-2 h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-gray-800 p-2 rounded-md shadow-lg">
+                                <DropdownMenuItem
+                                    className="cursor-pointer p-2 hover:bg-gray-700 rounded"
+                                    onSelect={() => handleAddLootItem('boss')}
+                                >
+                                    Select from Boss
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    className="cursor-pointer p-2 hover:bg-gray-700 rounded"
+                                    onSelect={() => handleAddLootItem('import')}
+                                >
+                                    Import from RCLootCouncil
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    className="cursor-pointer p-2 hover:bg-gray-700 rounded"
+                                    onSelect={() => handleAddLootItem('manual')}
+                                >
+                                    Enter Manually
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </section>
 

@@ -50,6 +50,9 @@ export const api = {
     deleteRaidSession(id: string): Promise<void> {
         return ipcRenderer.invoke('delete-raid-session', id)
     },
+    addRaidSessionLootsRcLoot(id: string, csv: string): Promise<void> {
+        return ipcRenderer.invoke('add-raid-session-loots-rcloot', id, csv)
+    },
     // JSON Data
     getItems(): Promise<Item[]> {
         return ipcRenderer.invoke('get-items')
