@@ -4,6 +4,7 @@ import { join } from 'path'
 import icon from '../../build/icon.png'
 import { menu } from './app/menu'
 import { store } from './app/store'
+import { setZodErrorMap } from './config/zod'
 import { allHandlers } from './handlers'
 import { registerHandlers } from './handlers/handlers.utils'
 
@@ -15,6 +16,8 @@ function createWindow(): void {
         savedBounds.x < screenArea.x ||
         savedBounds.y < screenArea.y ||
         savedBounds.y > screenArea.y + screenArea.height
+
+    setZodErrorMap()
 
     const mainWindow = new BrowserWindow({
         width: savedBounds.width,
