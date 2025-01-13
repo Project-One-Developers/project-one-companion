@@ -17,7 +17,7 @@ const SessionCard: React.FC<{ session: RaidSession; onClick: () => void }> = ({
     onClick
 }) => (
     <div
-        className="bg-gray-800 p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition-colors"
+        className="bg-muted p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition-colors"
         onClick={onClick}
     >
         <h3 className="text-xl font-bold mb-2">{session.name}</h3>
