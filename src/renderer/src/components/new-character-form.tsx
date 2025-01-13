@@ -51,7 +51,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
             name: '',
             realm: 'pozzo-delleternità',
             class: 'Death Knight',
-            role: 'Tank',
+            role: 'DPS',
             playerName: player.name
         }
     })

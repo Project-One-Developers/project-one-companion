@@ -68,7 +68,7 @@ interface PlayerRowProps {
 }
 
 const PlayerRow: React.FC<PlayerRowProps> = ({ player, selectedCharacters, onCharacterToggle }) => (
-    <div className="bg-gray-800 p-2 rounded-lg flex items-center justify-between">
+    <div className="flex items-center justify-between">
         <h3 className="font-bold text-lg">{player.name}</h3>
         <div className="flex gap-x-1">
             {player.characters?.map((char) => (
@@ -122,53 +122,72 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-2 max-w-2xl mx-auto">
-            <FormInput register={register} name="name" placeholder="Session Name" errors={errors} />
-            <FormInput
-                register={register}
-                name="raidDate"
-                placeholder="DD/MM/YYYY HH:mm"
-                errors={errors}
-            />
-            <h2 className="text-xl font-bold mb-4">Select Characters:</h2>
-            {isLoading ? (
-                <LoaderCircle className="animate-spin text-5xl text-blue-500 mx-auto" />
-            ) : (
-                <Controller
-                    name="roster"
-                    control={control}
-                    render={({ field }) => (
-                        <>
-                            {players.map((player) => (
-                                <PlayerRow
-                                    key={player.id}
-                                    player={player}
-                                    selectedCharacters={field.value}
-                                    onCharacterToggle={(charId) => {
-                                        const currentRoster = new Set(field.value)
-                                        const playerCharIds = new Set(
-                                            player.characters?.map((c) => c.id) || []
-                                        )
+        <form onSubmit={handleSubmit(onSubmitForm)} className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                    <h2 className="text-xl font-bold">Session Details</h2>
+                    <FormInput
+                        register={register}
+                        name="name"
+                        placeholder="Session Name"
+                        errors={errors}
+                    />
+                    <FormInput
+                        register={register}
+                        name="raidDate"
+                        placeholder="DD/MM/YYYY HH:mm"
+                        errors={errors}
+                    />
+                </div>
 
-                                        if (currentRoster.has(charId)) {
-                                            currentRoster.delete(charId)
-                                        } else {
-                                            playerCharIds.forEach((id) => currentRoster.delete(id))
-                                            currentRoster.add(charId)
-                                        }
+                <div className="space-y-4">
+                    <h2 className="text-xl font-bold">Select Characters</h2>
+                    {isLoading ? (
+                        <LoaderCircle className="animate-spin text-5xl text-blue-500 mx-auto" />
+                    ) : (
+                        <div className="max-h-64 overflow-y-auto pr-2">
+                            <Controller
+                                name="roster"
+                                control={control}
+                                render={({ field }) => (
+                                    <div className="space-y-2">
+                                        {players.map((player) => (
+                                            <PlayerRow
+                                                key={player.id}
+                                                player={player}
+                                                selectedCharacters={field.value}
+                                                onCharacterToggle={(charId) => {
+                                                    const currentRoster = new Set(field.value)
+                                                    const playerCharIds = new Set(
+                                                        player.characters?.map((c) => c.id) || []
+                                                    )
 
-                                        field.onChange(Array.from(currentRoster))
-                                    }}
-                                />
-                            ))}
-                        </>
+                                                    if (currentRoster.has(charId)) {
+                                                        currentRoster.delete(charId)
+                                                    } else {
+                                                        playerCharIds.forEach((id) =>
+                                                            currentRoster.delete(id)
+                                                        )
+                                                        currentRoster.add(charId)
+                                                    }
+
+                                                    field.onChange(Array.from(currentRoster))
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            />
+                        </div>
                     )}
-                />
-            )}
-            {errors.roster && <p className="text-red-500 text-sm mt-1">{errors.roster.message}</p>}
+                    {errors.roster && (
+                        <p className="text-red-500 text-sm">{errors.roster.message}</p>
+                    )}
+                </div>
+            </div>
             <button
                 type="submit"
-                className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold"
+                className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold mt-6"
             >
                 Create New Session
             </button>
