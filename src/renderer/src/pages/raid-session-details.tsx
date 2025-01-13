@@ -1,5 +1,3 @@
-import * as Select from '@radix-ui/react-select'
-import { Separator } from '@radix-ui/react-separator'
 import { toast } from '@renderer/components/hooks/use-toast'
 import { Button } from '@renderer/components/ui/button'
 import {
@@ -8,7 +6,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@renderer/components/ui/dropdown-menu'
-import { Input } from '@renderer/components/ui/input'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addRaidSessionLootsRcLoot, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
@@ -25,13 +22,8 @@ export const RaidSessionDetailsPage = () => {
     const { raidSessionId } = useParams<{ raidSessionId: string }>()
     const navigate = useNavigate()
     const [lootItem, setLootItem] = useState('')
-    const [assignCharacter, setAssignCharacter] = useState('')
 
-    const {
-        data: raidSession,
-        isLoading,
-        isError
-    } = useQuery({
+    const { data: raidSession, isLoading } = useQuery({
         queryKey: [queryKeys.players, raidSessionId],
         queryFn: () => fetchRaidSession(raidSessionId),
         enabled: !!raidSessionId
@@ -76,13 +68,6 @@ export const RaidSessionDetailsPage = () => {
         }
     }
 
-    const handleAssignItem = () => {
-        if (assignCharacter && lootItem) {
-            setAssignCharacter('')
-            setLootItem('')
-        }
-    }
-
     const handleUpdateRoster = (newRoster: string) => {
         console.log(newRoster)
     }
@@ -95,10 +80,7 @@ export const RaidSessionDetailsPage = () => {
             </div>
         )
     }
-    if (isError)
-        return (
-            <div className="text-center p-8 text-red-500">Error loading raid session details.</div>
-        )
+
     if (!raidSession) return null
 
     return (
@@ -215,51 +197,6 @@ export const RaidSessionDetailsPage = () => {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                </section>
-
-                <section className="bg-muted p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4 text-purple-400">Assign Loot</h2>
-                    <div className="space-y-4">
-                        <Input
-                            type="text"
-                            value={lootItem}
-                            placeholder="Item"
-                            onChange={(e) => setLootItem(e.target.value)}
-                            className="bg-gray-700 border-gray-600 focus:border-purple-500"
-                        />
-                        <Select.Root value={assignCharacter} onValueChange={setAssignCharacter}>
-                            <Select.Trigger className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 focus:border-purple-500">
-                                <Select.Value placeholder="Select character" />
-                            </Select.Trigger>
-                            <Select.Content className="bg-gray-700 border border-gray-600 rounded-md overflow-hidden">
-                                <Select.Viewport className="p-2">
-                                    {raidSession.roster.map((character) => (
-                                        <Select.Item
-                                            key={character.id}
-                                            value={character.id}
-                                            className="cursor-pointer p-2 rounded hover:bg-gray-600"
-                                        >
-                                            {character.name}
-                                        </Select.Item>
-                                    ))}
-                                </Select.Viewport>
-                            </Select.Content>
-                        </Select.Root>
-                        <Button
-                            onClick={handleAssignItem}
-                            className="w-full bg-purple-600 hover:bg-purple-700"
-                        >
-                            Assign Item
-                        </Button>
-                    </div>
-                </section>
-
-                <section className="bg-muted p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4 text-blue-400">Recap</h2>
-                    <p className="mb-2">Total items looted: {mockLoot.length}</p>
-                    <Separator className="my-4 bg-gray-700" />
-                    <p className="mb-2">Assigned items: 0</p>
-                    <p>Unassigned items: {mockLoot.length}</p>
                 </section>
             </div>
         </div>
