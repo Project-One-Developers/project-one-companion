@@ -12,6 +12,7 @@ import { Input } from '@renderer/components/ui/input'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addRaidSessionLootsRcLoot, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
+import { ROLE_PRIORITIES } from '@shared/consts/wow.consts'
 import { Item } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Calendar, ChevronDown, Edit, LoaderCircle, Sword, Users } from 'lucide-react'
@@ -124,18 +125,24 @@ export const RaidSessionDetailsPage = () => {
                         <Users className="mr-2" /> Roster
                     </h2>
                     <div className="flex flex-wrap gap-4 mb-4">
-                        {raidSession.roster.map((character) => (
-                            <div
-                                key={character.id}
-                                className="flex flex-col min-w-20 items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
-                            >
-                                <WowClassIcon
-                                    wowClassName={character.class}
-                                    className="h-10 w-10 border-2 border-background rounded-lg"
-                                />
-                                <span className="text-xs">{character.name}</span>
-                            </div>
-                        ))}
+                        {raidSession.roster
+                            .sort(
+                                (a, b) =>
+                                    ROLE_PRIORITIES[a.role] - ROLE_PRIORITIES[b.role] ||
+                                    a.name.localeCompare(b.name)
+                            )
+                            .map((character) => (
+                                <div
+                                    key={character.id}
+                                    className="flex flex-col min-w-20 items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
+                                >
+                                    <WowClassIcon
+                                        wowClassName={character.class}
+                                        className="h-10 w-10 border-2 border-background rounded-lg"
+                                    />
+                                    <span className="text-xs">{character.name}</span>
+                                </div>
+                            ))}
                     </div>
                     <Button
                         onClick={() => handleUpdateRoster('Update')}

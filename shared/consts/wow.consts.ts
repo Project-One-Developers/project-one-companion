@@ -1,3 +1,4 @@
+import { WoWRole } from '@shared/types/types'
 import {
     wowArmorTypeSchema,
     wowClassSchema,
@@ -36,6 +37,12 @@ export const PROFESSION_TYPES = new Set([
     'Tailoring',
     'Cooking'
 ])
+
+export const ROLE_PRIORITIES: Record<WoWRole, number> = {
+    Tank: 0,
+    Healer: 1,
+    DPS: 2
+} as const
 
 export const REALMS = {
     EU: [

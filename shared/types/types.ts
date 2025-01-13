@@ -23,13 +23,15 @@ import {
     wowArmorTypeSchema,
     wowClassSchema,
     wowItemSlotSchema,
-    wowRaidDiffSchema
+    wowRaidDiffSchema,
+    wowRolesSchema
 } from '../schemas/wow.schemas'
 
 export type WowClass = z.infer<typeof wowClassSchema>
 export type WowRaidDifficulty = z.infer<typeof wowRaidDiffSchema>
 export type WowItemSlot = z.infer<typeof wowItemSlotSchema>
 export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
+export type WoWRole = z.infer<typeof wowRolesSchema>
 
 export type Player = z.infer<typeof playerSchema>
 export type NewPlayer = z.infer<typeof newPlayerSchema>
