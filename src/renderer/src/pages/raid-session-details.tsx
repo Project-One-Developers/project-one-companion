@@ -1,4 +1,6 @@
+import * as Dialog from '@radix-ui/react-dialog'
 import { toast } from '@renderer/components/hooks/use-toast'
+import NewSessionForm from '@renderer/components/new-session-form'
 import { Button } from '@renderer/components/ui/button'
 import {
     DropdownMenu,
@@ -7,12 +9,26 @@ import {
     DropdownMenuTrigger
 } from '@renderer/components/ui/dropdown-menu'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
+import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { addRaidSessionLootsRcLoot, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
+import {
+    addRaidSession,
+    addRaidSessionLootsRcLoot,
+    fetchRaidSession
+} from '@renderer/lib/tanstack-query/raid'
 import { ROLE_PRIORITIES } from '@shared/consts/wow.consts'
-import { Item } from '@shared/types/types'
+import { Item, NewRaidSession } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ArrowLeft, Calendar, ChevronDown, Edit, LoaderCircle, Sword, Users } from 'lucide-react'
+import {
+    ArrowLeft,
+    Calendar,
+    ChevronDown,
+    Edit,
+    LoaderCircle,
+    Sword,
+    Trash2,
+    Users
+} from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -22,7 +38,7 @@ export const RaidSessionDetailsPage = () => {
     const { raidSessionId } = useParams<{ raidSessionId: string }>()
     const navigate = useNavigate()
     const [lootItem, setLootItem] = useState('')
-
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
     const { data: raidSession, isLoading } = useQuery({
         queryKey: [queryKeys.players, raidSessionId],
         queryFn: () => fetchRaidSession(raidSessionId),
@@ -48,6 +64,25 @@ export const RaidSessionDetailsPage = () => {
         }
     })
 
+    const { mutate: mutateSession } = useMutation({
+        mutationFn: addRaidSession, // todo: switch con edit
+        onSuccess: (_, arg) => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
+            //form.reset()
+            setIsDialogOpen(false)
+            toast({
+                title: 'Raid Session edited',
+                description: `Raid session ${arg.name} edited successfully`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Errore',
+                description: `Non è stato possibile editedare la raid session. Errore: ${error.message}`
+            })
+        }
+    })
+
     const handleAddLootItem = (method: string) => {
         switch (method) {
             case 'boss':
@@ -66,6 +101,16 @@ export const RaidSessionDetailsPage = () => {
                 }
                 break
         }
+    }
+
+    const handleEditSession = (editedSession: NewRaidSession) => {
+        console.log(`Editing current session ${editedSession.name}`)
+        mutateSession(editedSession)
+        setIsDialogOpen(false)
+    }
+
+    const handleDeleteSession = (sessionId: string) => {
+        console.log(`Deleting session with ID: ${sessionId}`)
     }
 
     const handleUpdateRoster = (newRoster: string) => {
@@ -91,11 +136,38 @@ export const RaidSessionDetailsPage = () => {
             </Button>
 
             {/* Page Header */}
-            <div className="bg-muted rounded-lg p-6 mb-8 shadow-lg">
-                <h1 className="text-3xl font-bold mb-2 text-blue-400">{raidSession.name}</h1>
-                <div className="flex items-center text-gray-400">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <span>{new Date(raidSession.raidDate * 1000).toLocaleString()}</span>
+            <div className="bg-muted rounded-lg p-6 mb-8 shadow-lg flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold mb-2 text-blue-400">{raidSession.name}</h1>
+                    <div className="flex items-center text-gray-400">
+                        <Calendar className="mr-2 h-4 w-4" />
+                        <span>{new Date(raidSession.raidDate * 1000).toLocaleString()}</span>
+                    </div>
+                </div>
+                <div className="flex space-x-2">
+                    <Dialog.Root open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                        <Dialog.Trigger asChild>
+                            <Button variant="secondary" className="hover:bg-blue-700">
+                                <Edit className="mr-2 h-4 w-4" /> Edit Session
+                            </Button>
+                        </Dialog.Trigger>
+                        <Dialog.Portal>
+                            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50" />
+                            <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-6 rounded-lg shadow-xl">
+                                <Dialog.Title className="text-2xl font-bold mb-4">
+                                    Edit Session
+                                </Dialog.Title>
+                                <NewSessionForm onSubmit={handleEditSession} />
+                            </Dialog.Content>
+                        </Dialog.Portal>
+                    </Dialog.Root>
+                    <Button
+                        variant="destructive"
+                        onClick={() => handleDeleteSession(raidSession.id)}
+                        className="hover:bg-red-700"
+                    >
+                        <Trash2 className="mr-2 h-4 w-4" /> Delete Session
+                    </Button>
                 </div>
             </div>
 
