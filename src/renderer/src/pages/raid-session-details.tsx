@@ -87,17 +87,13 @@ export const RaidSessionDetailsPage = () => {
                         {raidSession.roster.map((character) => (
                             <div
                                 key={character.id}
-                                className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
+                                className="flex flex-col min-w-20 items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
                             >
                                 <WowClassIcon
                                     wowClassName={character.class}
-                                    className="h-10 w-10 border-2 rounded-full"
+                                    className="h-10 w-10 border-2 border-background rounded-lg"
                                 />
-                                <span className="text-xs">
-                                    {character.name.length > 7
-                                        ? `${character.name.slice(0, 7)}...`
-                                        : character.name}
-                                </span>
+                                <span className="text-xs">{character.name}</span>
                             </div>
                         ))}
                     </div>
