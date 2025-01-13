@@ -8,21 +8,23 @@ const playerStorageSchema = z
         chars: z.array(
             z.object({
                 id: z.string(),
+                name: z.string(),
+                realm: z.string(),
                 class: wowClassSchema,
                 role: wowRolesSchema,
-                name: z.string(),
                 playerId: z.string()
             })
         )
     })
     .transform((data) => ({
         id: data.id,
-        playerName: data.name,
+        name: data.name,
         characters: data.chars.map((char) => ({
             id: char.id,
+            name: char.name,
+            realm: char.realm,
             class: char.class,
-            role: char.role,
-            name: char.name
+            role: char.role
         }))
     }))
 

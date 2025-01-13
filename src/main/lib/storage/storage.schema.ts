@@ -31,15 +31,22 @@ export const playerTable = pgTable('players', {
     name: varchar('name').notNull().unique()
 })
 
-export const charTable = pgTable('chars', {
-    id: varchar('id').primaryKey(),
-    name: varchar('name', { length: 24 }).notNull().unique(), // wow charname limit == 24
-    class: pgClassEnum().notNull(),
-    role: pgRoleEnum().notNull(),
-    playerId: varchar('player_id')
-        .references(() => playerTable.id)
-        .notNull()
-})
+export const charTable = pgTable(
+    'chars',
+    {
+        id: varchar('id').primaryKey(),
+        name: varchar('name', { length: 24 }).notNull(), // wow charname limit == 24
+        realm: varchar('realm').notNull(),
+        class: pgClassEnum().notNull(),
+        role: pgRoleEnum().notNull(),
+        playerId: varchar('player_id')
+            .references(() => playerTable.id)
+            .notNull()
+    },
+    (t) => [
+        unique('name_realm').on(t.name, t.realm) // coppia nome-realm unique
+    ]
+)
 
 export const bisListTable = pgTable('bis_list', {
     id: varchar('id').primaryKey(),

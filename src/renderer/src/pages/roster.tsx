@@ -23,13 +23,13 @@ export default function RosterPage(): JSX.Element {
             ) : (
                 <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
                     <div className="flex flex-wrap gap-x-4 gap-y-4">
-                        {data?.players.map((player) => (
+                        {data?.map((player) => (
                             <div
                                 key={player.id}
                                 className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[300px] rounded-lg relative"
                             >
                                 <DeletePlayerDialog player={player} />
-                                <h2 className="font-black text-2xl">{player.playerName}</h2>
+                                <h2 className="font-black text-2xl">{player.name}</h2>
                                 {player.characters ? (
                                     <AnimatedTooltip
                                         player={player}

@@ -4,7 +4,7 @@ import { deletePlayer } from '@renderer/lib/tanstack-query/players'
 import type { Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2, X } from 'lucide-react'
-import { useState, type JSX } from 'react';
+import { useState, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import {
@@ -25,7 +25,7 @@ export default function DeletePlayerDialog({ player }: { player: Player }): JSX.
             setOpen(false)
             toast({
                 title: 'Cancellazione player',
-                description: `Il player ${player.playerName} è stato cancellato con successo.`
+                description: `Il player ${player.name} è stato cancellato con successo.`
             })
         }
     })
@@ -38,8 +38,8 @@ export default function DeletePlayerDialog({ player }: { player: Player }): JSX.
                 <DialogHeader>
                     <DialogTitle>Cancellazione player</DialogTitle>
                     <DialogDescription>
-                        Il player {player.playerName} e i relativi personaggi verranno
-                        definitivamente cancellati dal database.
+                        Il player {player.name} e i relativi personaggi verranno definitivamente
+                        cancellati dal database.
                     </DialogDescription>
                 </DialogHeader>
                 <img

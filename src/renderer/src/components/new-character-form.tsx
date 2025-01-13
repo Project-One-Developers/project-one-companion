@@ -2,14 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addCharacter } from '@renderer/lib/tanstack-query/players'
-import { ROLES, ROLES_CLASSES_MAP } from '@shared/consts/wow.consts'
-import { wowClassSchema, wowRolesSchema } from '@shared/schemas/wow.schemas'
-import type { NewCharacter } from '@shared/types/types'
+import { REALMS, ROLES, ROLES_CLASSES_MAP } from '@shared/consts/wow.consts'
+import { newCharacterSchema } from '@shared/schemas/characters.schemas'
+import type { NewCharacter, Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2, PlusIcon } from 'lucide-react'
 import { useState, type JSX } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import {
@@ -24,14 +23,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
-const newCharacterSchema = z.object({
-    name: z.string().min(1),
-    class: wowClassSchema,
-    role: wowRolesSchema,
-    playerName: z.string().min(1)
-})
-
-export function CharacterForm({ playerName }: { playerName: string }): JSX.Element {
+export function CharacterForm({ player }: { player: Player }): JSX.Element {
     const [open, setOpen] = useState(false)
 
     const { mutate, isPending } = useMutation({
@@ -42,7 +34,7 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
             setOpen(false)
             toast({
                 title: 'Aggiunta player',
-                description: `Il pg ${arg.name} del player ${arg.playerName} è stato aggiunto con successo.`
+                description: `Il pg ${arg.name} del player ${player.name} è stato aggiunto con successo.`
             })
         },
         onError: (error) => {
@@ -57,9 +49,10 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
         resolver: zodResolver(newCharacterSchema),
         defaultValues: {
             name: '',
+            realm: 'pozzo-delleternità',
             class: 'Death Knight',
             role: 'Tank',
-            playerName
+            playerName: player.name
         }
     })
 
@@ -77,7 +70,7 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Nuovo pg per {playerName}</DialogTitle>
+                    <DialogTitle>Nuovo pg per {player.name}</DialogTitle>
                     <DialogDescription>
                         Inserisci il nome corretto del personaggio in game
                     </DialogDescription>
@@ -92,6 +85,35 @@ export function CharacterForm({ playerName }: { playerName: string }): JSX.Eleme
                                     <FormLabel>Nome</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="realm"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Realm</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Seleziona un server" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {REALMS.EU.map((r) => (
+                                                    <SelectItem key={r.slug} value={r.slug}>
+                                                        {r.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

@@ -1,6 +1,6 @@
 import type { NewCharacter, Player } from 'shared/types/types'
 
-export const fetchPlayers = async (): Promise<{ players: Player[] } | null> => {
+export const fetchPlayers = async (): Promise<Player[]> => {
     const response = await window.api.getCharactersList()
     return response
 }

@@ -7,13 +7,12 @@ import { eq } from 'drizzle-orm'
 import { newUUID } from '../../utils'
 import { playersListStorageSchema } from './players.schemas'
 
-export const getCharactersList = async (): Promise<Player[]> => {
+export const getPlayerWithCharactersList = async (): Promise<Player[]> => {
     const result = await db.query.playerTable.findMany({
         with: {
             chars: true
         }
     })
-
     return playersListStorageSchema.parse(result)
 }
 
@@ -42,7 +41,7 @@ export const getPlayerByName = async (playerName: string): Promise<Player | null
         return null
     }
 
-    return playerSchema.parse({ id: result.id, playerName: result.name })
+    return playerSchema.parse({ id: result.id, name: result.name })
 }
 
 export const addCharacter = async (character: NewCharacter): Promise<Player> => {
@@ -56,6 +55,7 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
         .values({
             id,
             name: character.name,
+            realm: character.realm,
             class: character.class,
             role: character.role,
             playerId: player.id
@@ -65,13 +65,14 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
 
     return playerSchema.parse({
         id,
-        playerName: player.playerName,
+        name: player.name,
         characters: [
             {
                 id,
                 name: result?.name,
-                class: character.class,
-                role: character.role,
+                realm: result?.realm,
+                class: result?.class,
+                role: result?.role,
                 playerId: player.id
             }
         ]
@@ -92,7 +93,7 @@ export const addPlayer = async (playerName: string): Promise<Player> => {
 
     return playerSchema.parse({
         id,
-        playerName: result?.name
+        name: result?.name
     })
 }
 

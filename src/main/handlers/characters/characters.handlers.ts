@@ -3,16 +3,16 @@ import {
     addCharacter,
     addPlayer,
     deletePlayer,
-    getCharactersList
+    getPlayerWithCharactersList
 } from '@storage/players/players.storage'
 
 export const addCharacterHandler = async (character: NewCharacter): Promise<Player> => {
     return await addCharacter(character)
 }
 
-export const getCharactersListHandler = async (): Promise<{ players: Player[] }> => {
-    const players = await getCharactersList()
-    return { players }
+export const getCharactersListHandler = async (): Promise<Player[]> => {
+    const players = await getPlayerWithCharactersList()
+    return players
 }
 
 export const addPlayerHandler = async (playerName: string): Promise<Player> => {

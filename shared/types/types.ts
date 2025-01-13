@@ -6,7 +6,12 @@ import {
     raidSessionSchema
 } from '@shared/schemas/raid.schemas'
 import { z } from 'zod'
-import { characterSchema, newCharacterSchema, playerSchema } from '../schemas/characters.schemas'
+import {
+    characterSchema,
+    newCharacterSchema,
+    newPlayerSchema,
+    playerSchema
+} from '../schemas/characters.schemas'
 import {
     droptimizerSchema,
     droptimizerUpgradeSchema,
@@ -27,6 +32,8 @@ export type WowItemSlot = z.infer<typeof wowItemSlotSchema>
 export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
 
 export type Player = z.infer<typeof playerSchema>
+export type NewPlayer = z.infer<typeof newPlayerSchema>
+
 export type Character = z.infer<typeof characterSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
 

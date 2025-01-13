@@ -4,7 +4,8 @@ import { wowClassSchema, wowRolesSchema } from './wow.schemas'
 
 export const characterSchema = z.object({
     id: z.string().uuid(),
-    name: z.string(),
+    name: z.string().min(1),
+    realm: z.string().min(1),
     class: wowClassSchema,
     role: wowRolesSchema,
     droptimizer: z.array(droptimizerSchema).optional()
@@ -12,8 +13,13 @@ export const characterSchema = z.object({
 
 export const playerSchema = z.object({
     id: z.string().uuid(),
-    playerName: z.string(),
+    name: z.string().min(1),
     characters: z.array(characterSchema).optional()
+})
+
+export const newPlayerSchema = playerSchema.omit({
+    id: true,
+    characters: true
 })
 
 export const charactersListSchema = z.object({
@@ -29,4 +35,6 @@ export const newCharacterSchema = characterSchema
         id: true,
         droptimizer: true
     })
-    .merge(playerSchema.omit({ id: true, characters: true }))
+    .extend({
+        playerName: characterSchema.shape.name
+    })

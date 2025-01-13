@@ -17,7 +17,7 @@ export const api = {
     addCharacter(character: NewCharacter): Promise<Player> {
         return ipcRenderer.invoke('add-character', character)
     },
-    getCharactersList(): Promise<{ players: Player[] }> {
+    getCharactersList(): Promise<Player[]> {
         return ipcRenderer.invoke('get-characters-list')
     },
     addPlayer(playerName: string): Promise<Player> {

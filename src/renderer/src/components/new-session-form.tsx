@@ -69,7 +69,7 @@ interface PlayerRowProps {
 
 const PlayerRow: React.FC<PlayerRowProps> = ({ player, selectedCharacters, onCharacterToggle }) => (
     <div className="bg-gray-800 p-2 rounded-lg flex items-center justify-between">
-        <h3 className="font-bold text-lg">{player.playerName}</h3>
+        <h3 className="font-bold text-lg">{player.name}</h3>
         <div className="flex gap-x-1">
             {player.characters?.map((char) => (
                 <CharacterIcon
@@ -95,7 +95,7 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
         queryFn: fetchPlayers
     })
 
-    const players = data?.players ?? []
+    const players = data ?? []
 
     const {
         register,
