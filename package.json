@@ -63,7 +63,7 @@
         "autoprefixer": "10.4.20",
         "dotenv": "^16.4.7",
         "dotenv-cli": "8.0.0",
-        "electron": "33.3.1",
+        "electron": "34.0.0",
         "electron-builder": "25.1.8",
         "electron-store": "10.0.0",
         "electron-vite": "2.3.0",
