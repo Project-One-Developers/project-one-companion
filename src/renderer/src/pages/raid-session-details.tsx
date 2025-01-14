@@ -1,5 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import DeleteSessionDialog from '@renderer/components/delete-sesson-dialog'
+import DeleteSessionDialog from '@renderer/components/delete-session-dialog'
 import { toast } from '@renderer/components/hooks/use-toast'
 import EditSessionDialog from '@renderer/components/session-dialog'
 import { Button } from '@renderer/components/ui/button'
