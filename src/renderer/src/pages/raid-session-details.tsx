@@ -1,6 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
+import DeleteSessionDialog from '@renderer/components/delete-sesson-dialog'
 import { toast } from '@renderer/components/hooks/use-toast'
-import SessionForm from '@renderer/components/session-form'
+import EditSessionDialog from '@renderer/components/session-dialog'
 import { Button } from '@renderer/components/ui/button'
 import {
     DropdownMenu,
@@ -39,7 +40,10 @@ export const RaidSessionDetailsPage = () => {
     const { raidSessionId } = useParams<{ raidSessionId: string }>()
     const navigate = useNavigate()
     const [lootItem, setLootItem] = useState('')
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    // dialog
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
     const { data: raidSession, isLoading } = useQuery({
         queryKey: [queryKeys.raidSession, raidSessionId],
@@ -90,7 +94,7 @@ export const RaidSessionDetailsPage = () => {
         mutationFn: editRaidSession,
         onSuccess: (_, arg) => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.raidSession, raidSessionId] })
-            setIsDialogOpen(false)
+            setIsEditDialogOpen(false)
             toast({
                 title: 'Raid Session edited',
                 description: `Raid session ${arg.name} edited successfully`
@@ -110,7 +114,7 @@ export const RaidSessionDetailsPage = () => {
         }
     }
 
-    const { mutate: mutateDeleteSession } = useMutation({
+    const { mutate: mutateDeleteSession, isPending: isDeletingSession } = useMutation({
         mutationFn: deleteRaidSession,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
@@ -129,10 +133,6 @@ export const RaidSessionDetailsPage = () => {
         if (raidSessionId) {
             mutateDeleteSession(sessionId)
         }
-    }
-
-    const handleUpdateRoster = (newRoster: string) => {
-        console.log(newRoster)
     }
 
     if (isLoading) {
@@ -162,32 +162,32 @@ export const RaidSessionDetailsPage = () => {
                     </div>
                 </div>
                 <div className="flex space-x-2">
-                    <Dialog.Root open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <Dialog.Root open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                         <Dialog.Trigger asChild>
                             <Button variant="secondary" className="hover:bg-blue-700">
                                 <Edit className="mr-2 h-4 w-4" /> Edit Session
                             </Button>
                         </Dialog.Trigger>
-                        <Dialog.Portal>
-                            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50" />
-                            <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-6 rounded-lg shadow-xl">
-                                <Dialog.Title className="text-2xl font-bold mb-4">
-                                    Edit Session
-                                </Dialog.Title>
-                                <SessionForm
-                                    existingSession={raidSession}
-                                    onSubmit={handleEditSession}
-                                />
-                            </Dialog.Content>
-                        </Dialog.Portal>
+                        <EditSessionDialog
+                            isOpen={isEditDialogOpen}
+                            onOpenChange={setIsEditDialogOpen}
+                            existingSession={raidSession}
+                            onSubmit={handleEditSession}
+                        />
                     </Dialog.Root>
-                    <Button
-                        variant="destructive"
-                        onClick={() => handleDeleteSession(raidSession.id)}
-                        className="hover:bg-red-700"
-                    >
-                        <Trash2 className="mr-2 h-4 w-4" /> Delete Session
-                    </Button>
+                    <Dialog.Root open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                        <Dialog.Trigger asChild>
+                            <Button variant="destructive" className="hover:bg-red-700">
+                                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                            </Button>
+                        </Dialog.Trigger>
+                        <DeleteSessionDialog
+                            isOpen={isDeleteDialogOpen}
+                            onOpenChange={setIsDeleteDialogOpen}
+                            onDelete={() => handleDeleteSession(raidSession.id)}
+                            isDeleting={isDeletingSession}
+                        />
+                    </Dialog.Root>
                 </div>
             </div>
 
@@ -218,12 +218,6 @@ export const RaidSessionDetailsPage = () => {
                                 </div>
                             ))}
                     </div>
-                    <Button
-                        onClick={() => handleUpdateRoster('Update')}
-                        className="w-full bg-green-600 hover:bg-green-700"
-                    >
-                        <Edit className="mr-2 h-4 w-4" /> Edit Roster
-                    </Button>
                 </section>
 
                 {/* Looted items Panel */}
