@@ -13,10 +13,10 @@ importers:
     dependencies:
       '@electron-toolkit/preload':
         specifier: 3.0.1
-        version: 3.0.1(electron@33.3.1)
+        version: 3.0.1(electron@34.0.0)
       '@electron-toolkit/utils':
         specifier: 3.0.0
-        version: 3.0.0(electron@33.3.1)
+        version: 3.0.0(electron@34.0.0)
       '@hookform/resolvers':
         specifier: 3.10.0
         version: 3.10.0(react-hook-form@7.54.2(react@19.0.0))
@@ -124,8 +124,8 @@ importers:
         specifier: 8.0.0
         version: 8.0.0
       electron:
-        specifier: 33.3.1
-        version: 33.3.1
+        specifier: 34.0.0
+        version: 34.0.0
       electron-builder:
         specifier: 25.1.8
         version: 25.1.8(electron-builder-squirrel-windows@25.1.8)
@@ -2630,8 +2630,8 @@ packages:
       '@swc/core':
         optional: true
 
-  electron@33.3.1:
-    resolution: {integrity: sha512-Z7l2bVgpdKxHQMI4i0CirBX2n+iCYKOx5mbzNM3BpOyFELwlobEXKmzCmEnwP+3EcNeIhUQyIEBFQxN06QgdIw==}
+  electron@34.0.0:
+    resolution: {integrity: sha512-fpaPb0lifoUJ6UJa4Lk8/0B2Ku/xDZWdc1Gkj67jbygTCrvSon0qquju6Ltx1Kz23GRqqlIHXiy9EvrjpY7/Wg==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -5173,13 +5173,13 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
-  '@electron-toolkit/preload@3.0.1(electron@33.3.1)':
+  '@electron-toolkit/preload@3.0.1(electron@34.0.0)':
     dependencies:
-      electron: 33.3.1
+      electron: 34.0.0
 
-  '@electron-toolkit/utils@3.0.0(electron@33.3.1)':
+  '@electron-toolkit/utils@3.0.0(electron@34.0.0)':
     dependencies:
-      electron: 33.3.1
+      electron: 34.0.0
 
   '@electron/asar@3.2.18':
     dependencies:
@@ -7423,7 +7423,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@33.3.1:
+  electron@34.0.0:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 20.17.12
