@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import type {
     Boss,
     Droptimizer,
+    EditRaidSession,
     Item,
     NewCharacter,
     NewRaidSession,
@@ -40,6 +41,9 @@ export const api = {
     // Raid sessions
     addRaidSession(newSession: NewRaidSession): Promise<RaidSession> {
         return ipcRenderer.invoke('add-raid-session', newSession)
+    },
+    putRaidSession(editedSession: EditRaidSession): Promise<RaidSession> {
+        return ipcRenderer.invoke('edit-raid-session', editedSession)
     },
     getRaidSession(id: string): Promise<RaidSession> {
         return ipcRenderer.invoke('get-raid-session', id)

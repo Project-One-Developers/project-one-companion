@@ -1,5 +1,5 @@
 import { raidSessionSchema } from '@shared/schemas/raid.schemas'
-import type { NewRaidSession, RaidSession } from '@shared/types/types'
+import type { EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { raidSessionRosterTable, raidSessionTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
@@ -46,6 +46,42 @@ export const getRaidSessionList = async (): Promise<RaidSession[]> => {
 
     const processedResults = result.map(flattenRaidPartecipation)
     return z.array(raidSessionSchema).parse(processedResults)
+}
+
+export const editRaidSession = async (editedRaidSession: EditRaidSession): Promise<string> => {
+    return await db.transaction(async (tx) => {
+        const res = await tx
+            .update(raidSessionTable)
+            .set({
+                name: editedRaidSession.name,
+                raidDate: editedRaidSession.raidDate
+            })
+            .where(eq(raidSessionTable.id, editedRaidSession.id))
+
+        if (!res) {
+            tx.rollback()
+            const errorMsg = `Failed to insert a raid session. RaidSession: ${JSON.stringify(editedRaidSession)}`
+            console.log(errorMsg)
+            throw new Error(errorMsg)
+        }
+
+        // delete old partecipation
+        await tx
+            .delete(raidSessionRosterTable)
+            .where(eq(raidSessionRosterTable.raidSessionId, editedRaidSession.id))
+
+        // insert updated roster
+        const raidPartecipation = editedRaidSession.roster.map(
+            (characterId): InferInsertModel<typeof raidSessionRosterTable> => ({
+                raidSessionId: editedRaidSession.id,
+                charId: characterId
+            })
+        )
+
+        await tx.insert(raidSessionRosterTable).values(raidPartecipation)
+
+        return res.id
+    })
 }
 
 export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<string> => {

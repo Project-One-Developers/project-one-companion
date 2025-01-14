@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { toast } from '@renderer/components/hooks/use-toast'
-import NewSessionForm from '@renderer/components/new-session-form'
+import SessionForm from '@renderer/components/session-form'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addRaidSession, fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
@@ -94,7 +94,7 @@ export default function RaidSessionPage(): JSX.Element {
                             {isPending ? (
                                 <Loader2 className="animate-spin" />
                             ) : (
-                                <NewSessionForm onSubmit={handleNewSession} />
+                                <SessionForm onSubmit={handleNewSession} />
                             )}
                         </Dialog.Content>
                     </Dialog.Portal>

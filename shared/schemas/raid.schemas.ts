@@ -25,3 +25,7 @@ export const newRaidSessionSchema = z.object({
     raidDate: z.number(),
     roster: z.array(z.string()) // array of character ids
 })
+
+export const editRaidSessionSchema = newRaidSessionSchema.extend({
+    id: raidSessionSchema.shape.id
+})

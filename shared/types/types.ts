@@ -1,6 +1,7 @@
 import { itemSchema, itemToCatalystSchema, itemToTiersetSchema } from '@shared/schemas/items.schema'
 import {
     bossSchema,
+    editRaidSessionSchema,
     newBossSchema,
     newRaidSessionSchema,
     raidSessionSchema
@@ -54,3 +55,4 @@ export type NewBoss = z.infer<typeof newBossSchema>
 
 export type RaidSession = z.infer<typeof raidSessionSchema>
 export type NewRaidSession = z.infer<typeof newRaidSessionSchema>
+export type EditRaidSession = z.infer<typeof editRaidSessionSchema>

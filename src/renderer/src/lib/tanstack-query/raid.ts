@@ -1,4 +1,4 @@
-import type { Boss, NewRaidSession, RaidSession } from 'shared/types/types'
+import type { Boss, EditRaidSession, NewRaidSession, RaidSession } from 'shared/types/types'
 
 export const fetchRaidLootTable = async (raidId: number): Promise<Boss[]> => {
     return await window.api.getRaidLootTable(raidId)
@@ -13,6 +13,10 @@ export const fetchRaidSession = async (id: string | undefined): Promise<RaidSess
         throw new Error('No raid session id provided')
     }
     return await window.api.getRaidSession(id)
+}
+
+export const editRaidSession = async (editedRaidSession: EditRaidSession): Promise<RaidSession> => {
+    return await window.api.putRaidSession(editedRaidSession)
 }
 
 export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<RaidSession> => {

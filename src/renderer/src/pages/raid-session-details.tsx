@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { toast } from '@renderer/components/hooks/use-toast'
-import NewSessionForm from '@renderer/components/new-session-form'
+import SessionForm from '@renderer/components/session-form'
 import { Button } from '@renderer/components/ui/button'
 import {
     DropdownMenu,
@@ -12,8 +12,9 @@ import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import {
-    addRaidSession,
     addRaidSessionLootsRcLoot,
+    deleteRaidSession,
+    editRaidSession,
     fetchRaidSession
 } from '@renderer/lib/tanstack-query/raid'
 import { ROLE_PRIORITIES } from '@shared/consts/wow.consts'
@@ -39,8 +40,9 @@ export const RaidSessionDetailsPage = () => {
     const navigate = useNavigate()
     const [lootItem, setLootItem] = useState('')
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+
     const { data: raidSession, isLoading } = useQuery({
-        queryKey: [queryKeys.players, raidSessionId],
+        queryKey: [queryKeys.raidSession, raidSessionId],
         queryFn: () => fetchRaidSession(raidSessionId),
         enabled: !!raidSessionId
     })
@@ -60,25 +62,6 @@ export const RaidSessionDetailsPage = () => {
             toast({
                 title: 'Errore',
                 description: `Non è stato possibile creare la raid session. Errore: ${error.message}`
-            })
-        }
-    })
-
-    const { mutate: mutateSession } = useMutation({
-        mutationFn: addRaidSession, // todo: switch con edit
-        onSuccess: (_, arg) => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
-            //form.reset()
-            setIsDialogOpen(false)
-            toast({
-                title: 'Raid Session edited',
-                description: `Raid session ${arg.name} edited successfully`
-            })
-        },
-        onError: (error) => {
-            toast({
-                title: 'Errore',
-                description: `Non è stato possibile editedare la raid session. Errore: ${error.message}`
             })
         }
     })
@@ -103,14 +86,49 @@ export const RaidSessionDetailsPage = () => {
         }
     }
 
+    const { mutate: mutateEditSession } = useMutation({
+        mutationFn: editRaidSession,
+        onSuccess: (_, arg) => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSession, raidSessionId] })
+            setIsDialogOpen(false)
+            toast({
+                title: 'Raid Session edited',
+                description: `Raid session ${arg.name} edited successfully`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Error',
+                description: `Unable to edit the raid session. Error: ${error.message}`
+            })
+        }
+    })
+
     const handleEditSession = (editedSession: NewRaidSession) => {
-        console.log(`Editing current session ${editedSession.name}`)
-        mutateSession(editedSession)
-        setIsDialogOpen(false)
+        if (raidSessionId) {
+            mutateEditSession({ id: raidSessionId, ...editedSession })
+        }
     }
+
+    const { mutate: mutateDeleteSession } = useMutation({
+        mutationFn: deleteRaidSession,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
+            navigate(`/raid-session`)
+        },
+        onError: (error) => {
+            toast({
+                title: 'Error',
+                description: `Unable to delete the raid session. Error: ${error.message}`
+            })
+        }
+    })
 
     const handleDeleteSession = (sessionId: string) => {
         console.log(`Deleting session with ID: ${sessionId}`)
+        if (raidSessionId) {
+            mutateDeleteSession(sessionId)
+        }
     }
 
     const handleUpdateRoster = (newRoster: string) => {
@@ -119,9 +137,8 @@ export const RaidSessionDetailsPage = () => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center h-screen bg-gray-900">
-                <LoaderCircle className="animate-spin text-blue-500 w-16 h-16" />
-                <p className="mt-4 text-gray-400">Loading raid session details...</p>
+            <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
+                <LoaderCircle className="animate-spin text-5xl" />
             </div>
         )
     }
@@ -157,7 +174,10 @@ export const RaidSessionDetailsPage = () => {
                                 <Dialog.Title className="text-2xl font-bold mb-4">
                                     Edit Session
                                 </Dialog.Title>
-                                <NewSessionForm onSubmit={handleEditSession} />
+                                <SessionForm
+                                    existingSession={raidSession}
+                                    onSubmit={handleEditSession}
+                                />
                             </Dialog.Content>
                         </Dialog.Portal>
                     </Dialog.Root>

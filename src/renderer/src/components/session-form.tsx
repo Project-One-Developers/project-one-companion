@@ -3,7 +3,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay, parseStringToUnixTimestamp } from '@renderer/lib/utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
-import { Character, NewRaidSession, Player } from '@shared/types/types'
+import { Character, NewRaidSession, Player, RaidSession } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import React from 'react'
@@ -20,8 +20,9 @@ const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
 
 type FormNewRaidSession = z.infer<typeof updatedNewRaidSessionSchema>
 
-interface NewSessionFormProps {
+interface SessionFormProps {
     onSubmit: (data: NewRaidSession) => void
+    existingSession?: RaidSession
 }
 
 interface FormInputProps {
@@ -83,7 +84,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player, selectedCharacters, onCha
     </div>
 )
 
-const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
+const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) => {
     const defaultDate = new Date()
     defaultDate.setHours(21, 0, 0, 0) // Set to 9 PM
     const defaultDateString = formatUnixTimestampForDisplay(
@@ -105,11 +106,17 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
         formState: { errors }
     } = useForm<FormNewRaidSession>({
         resolver: zodResolver(updatedNewRaidSessionSchema),
-        defaultValues: {
-            name: '',
-            roster: [],
-            raidDate: defaultDateString
-        }
+        defaultValues: existingSession
+            ? {
+                  name: existingSession.name,
+                  roster: existingSession.roster.map((r) => r.id),
+                  raidDate: formatUnixTimestampForDisplay(existingSession.raidDate)
+              }
+            : {
+                  name: '',
+                  roster: [],
+                  raidDate: defaultDateString
+              }
     })
 
     const onSubmitForm = (formData: FormNewRaidSession) => {
@@ -118,7 +125,9 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
             raidDate: parseStringToUnixTimestamp(formData.raidDate)
         }
         onSubmit(submissionData)
-        reset()
+        if (!existingSession) {
+            reset()
+        }
     }
 
     return (
@@ -195,4 +204,4 @@ const NewSessionForm: React.FC<NewSessionFormProps> = ({ onSubmit }) => {
     )
 }
 
-export default NewSessionForm
+export default SessionForm

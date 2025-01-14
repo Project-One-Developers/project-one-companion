@@ -14,6 +14,7 @@ import {
     addRaidLootsByRCLootCsvHandler,
     addRaidSessionHandler,
     deleteRaidSessionHandler,
+    editRaidSessionHandler,
     getRaidSessionHandler,
     getRaidSessionListHandler
 } from './raid-session/raid-session.handlers'
@@ -32,6 +33,7 @@ export const allHandlers = {
     'get-raid-sessions': getRaidSessionListHandler,
     'get-raid-session': getRaidSessionHandler,
     'add-raid-session': addRaidSessionHandler,
-    'add-raid-session-loots-rcloot': addRaidLootsByRCLootCsvHandler,
-    'delete-raid-session': deleteRaidSessionHandler
+    'edit-raid-session': editRaidSessionHandler,
+    'delete-raid-session': deleteRaidSessionHandler,
+    'add-raid-session-loots-rcloot': addRaidLootsByRCLootCsvHandler
 }
