@@ -45,7 +45,7 @@ const config = {
         artifactName: '${productName}.${ext}'
     },
     linux: {
-        target: ['AppImage', 'snap', 'deb', 'rpm'],
+        target: ['AppImage', 'snap', 'deb'],
         maintainer: 'Project One Devs',
         category: 'Utility'
     },
