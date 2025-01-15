@@ -52,6 +52,9 @@ const config = {
     appImage: {
         artifactName: '${productName}.${ext}'
     },
+    deb: {
+        artifactName: '${productName}.${ext}'
+    },
     npmRebuild: false
 } satisfies Configuration
 
