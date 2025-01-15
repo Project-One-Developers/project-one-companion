@@ -52,5 +52,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload Installer
         with:
-          name: WeakAuras-Companion-CI-Installer
+          name: ProjectOne-Companion-CI-Installer
           path: dist/**/*Setup*.exe
