@@ -32,13 +32,13 @@ jobs:
 
       - name: Build
         if: github.ref == 'refs/heads/main'
-        run: pnpm run build
+        run: pnpm run build:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         if: github.ref != 'refs/heads/main'
-        run: pnpm run build --publish=never
+        run: pnpm run build:win --publish=never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
