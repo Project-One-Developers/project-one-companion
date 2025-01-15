@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
+import { addDroptimizer } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { addPlayer } from '@renderer/lib/tanstack-query/players'
-import { newPlayerSchema } from '@shared/schemas/characters.schemas'
-import { NewPlayer } from '@shared/types/types'
+import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import { useMutation } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Loader2, PlusIcon } from 'lucide-react'
 import { useState, type JSX } from 'react'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import {
@@ -22,37 +22,42 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 
-export default function NewPlayerForm(): JSX.Element {
+const formSchema = z.object({
+    url: raidbotsURLSchema
+})
+type FormValues = z.infer<typeof formSchema>
+
+export default function DroptimizerNewForm(): JSX.Element {
     const [open, setOpen] = useState(false)
 
     const { mutate, isPending } = useMutation({
-        mutationFn: addPlayer,
-        onSuccess: (_, arg) => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
+        mutationFn: addDroptimizer,
+        onSuccess: (response) => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.droptimizers] })
             form.reset()
             setOpen(false)
             toast({
-                title: 'Aggiunta player',
-                description: `Il player ${arg} è stato aggiunto con successo.`
+                title: 'Aggiunta droptimizer',
+                description: `Il droptimizer per il pg ${response.charInfo.name} è stato aggiunto con successo.`
             })
         },
         onError: (error) => {
             toast({
                 title: 'Errore',
-                description: `Non è stato possibile aggiungere il pg. Errore: ${error.message}`
+                description: `Non è stato possibile aggiungere il droptimizer. Errore: ${error.message}`
             })
         }
     })
 
-    const form = useForm<NewPlayer>({
-        resolver: zodResolver(newPlayerSchema),
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ''
+            url: ''
         }
     })
 
-    function onSubmit(values: { name: string }): void {
-        mutate(values.name)
+    function onSubmit(values: FormValues): void {
+        mutate(values.url)
     }
 
     return (
@@ -66,21 +71,21 @@ export default function NewPlayerForm(): JSX.Element {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Nuovo player</DialogTitle>
+                    <DialogTitle>Nuovo droptimizer</DialogTitle>
                     <DialogDescription>
-                        Inserisci solo il nickname del giocatore. I personaggi giocati andranno
-                        aggiunti successivamente e dovranno essere chiamati come il personaggio in
-                        game.
+                        {
+                            "Inserisci l'url del droptimizer nella forma https://www.raidbots.com/simbot/report/id"
+                        }
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="url"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nome</FormLabel>
+                                    <FormLabel>Droptimizer URL</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>

@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import DeleteSessionDialog from '@renderer/components/delete-session-dialog'
 import { toast } from '@renderer/components/hooks/use-toast'
-import EditSessionDialog from '@renderer/components/session-dialog'
+import SessionDeleteDialog from '@renderer/components/session-delete-dialog'
+import SessionEditDialog from '@renderer/components/session-edit-dialog'
 import { Button } from '@renderer/components/ui/button'
 import {
     DropdownMenu,
@@ -168,7 +168,7 @@ export const RaidSessionDetailsPage = () => {
                                 <Edit className="mr-2 h-4 w-4" /> Edit Session
                             </Button>
                         </Dialog.Trigger>
-                        <EditSessionDialog
+                        <SessionEditDialog
                             isOpen={isEditDialogOpen}
                             onOpenChange={setIsEditDialogOpen}
                             existingSession={raidSession}
@@ -181,7 +181,7 @@ export const RaidSessionDetailsPage = () => {
                                 <Trash2 className="mr-2 h-4 w-4" /> Delete
                             </Button>
                         </Dialog.Trigger>
-                        <DeleteSessionDialog
+                        <SessionDeleteDialog
                             isOpen={isDeleteDialogOpen}
                             onOpenChange={setIsDeleteDialogOpen}
                             onDelete={() => handleDeleteSession(raidSession.id)}

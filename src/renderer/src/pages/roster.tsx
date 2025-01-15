@@ -1,5 +1,5 @@
-import DeletePlayerDialog from '@renderer/components/delete-player-dialog'
-import PlayerForm from '@renderer/components/new-player-form'
+import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
+import PlayerForm from '@renderer/components/player-new-form'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
@@ -28,7 +28,7 @@ export default function RosterPage(): JSX.Element {
                                 key={player.id}
                                 className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[300px] rounded-lg relative"
                             >
-                                <DeletePlayerDialog player={player} />
+                                <PlayerDeleteDialog player={player} />
                                 <h2 className="font-black text-2xl">{player.name}</h2>
                                 {player.characters ? (
                                     <AnimatedTooltip

@@ -16,7 +16,7 @@ import {
     DialogTrigger
 } from './ui/dialog'
 
-export default function DeletePlayerDialog({ player }: { player: Player }): JSX.Element {
+export default function PlayerDeleteDialog({ player }: { player: Player }): JSX.Element {
     const [open, setOpen] = useState(false)
     const { mutate, isPending } = useMutation({
         mutationFn: async () => deletePlayer(player.id),

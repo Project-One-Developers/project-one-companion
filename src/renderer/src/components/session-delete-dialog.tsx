@@ -11,19 +11,19 @@ import {
     DialogTitle
 } from './ui/dialog'
 
-type DeleteSessionDialogProps = {
+type SessionDeleteDialogProps = {
     isOpen: boolean
     onOpenChange: (open: boolean) => void
     onDelete: () => void
     isDeleting: boolean
 }
 
-export default function DeleteSessionDialog({
+export default function SessionDeleteDialog({
     isOpen,
     onOpenChange,
     onDelete,
     isDeleting
-}: DeleteSessionDialogProps): JSX.Element {
+}: SessionDeleteDialogProps): JSX.Element {
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogPortal>

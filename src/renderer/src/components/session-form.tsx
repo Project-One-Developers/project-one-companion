@@ -3,13 +3,43 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay, parseStringToUnixTimestamp } from '@renderer/lib/utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
-import { Character, NewRaidSession, Player, RaidSession } from '@shared/types/types'
+import { NewRaidSession, Player, RaidSession } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import React from 'react'
-import { Controller, FieldErrors, useForm, UseFormRegister } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { WowClassIcon } from './ui/wowclass-icon'
+
+interface PlayerWithCharsRowProps {
+    player: Player
+    selectedCharacters: string[]
+    onCharacterToggle: (charId: string) => void
+}
+
+const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
+    player,
+    selectedCharacters,
+    onCharacterToggle
+}) => (
+    <div className="flex items-center justify-between">
+        <h3 className="font-bold text-lg">{player.name}</h3>
+        <div className="flex gap-x-1">
+            {player.characters?.map((char) => (
+                <WowClassIcon
+                    key={char.id}
+                    wowClassName={char.class}
+                    className={`object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200 ${
+                        selectedCharacters.includes(char.id)
+                            ? 'scale-110 ring-2 ring-blue-500'
+                            : 'hover:opacity-100 opacity-50 grayscale'
+                    }`}
+                    onClick={() => onCharacterToggle(char.id)}
+                />
+            ))}
+        </div>
+    </div>
+)
 
 // Updated schema
 const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
@@ -25,71 +55,9 @@ interface SessionFormProps {
     existingSession?: RaidSession
 }
 
-interface FormInputProps {
-    register: UseFormRegister<FormNewRaidSession>
-    name: 'name' | 'raidDate'
-    placeholder: string
-    errors: FieldErrors<FormNewRaidSession>
-}
-
-const FormInput: React.FC<FormInputProps> = ({ register, name, placeholder, errors }) => (
-    <div className="mb-4">
-        <input
-            {...register(name)}
-            type="text"
-            placeholder={placeholder}
-            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
-        />
-        <div className="h-5">
-            {errors[name] && <p className="text-red-500 text-sm">{errors[name]?.message}</p>}
-        </div>
-    </div>
-)
-
-interface CharacterIconProps {
-    character: Character
-    isSelected: boolean
-    onClick: () => void
-}
-
-const CharacterIcon: React.FC<CharacterIconProps> = ({ character, isSelected, onClick }) => (
-    <WowClassIcon
-        wowClassName={character.class}
-        className={`object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200 ${
-            isSelected ? 'scale-110 ring-2 ring-blue-500' : 'hover:opacity-100 opacity-50 grayscale'
-        }`}
-        onClick={onClick}
-    />
-)
-
-interface PlayerRowProps {
-    player: Player
-    selectedCharacters: string[]
-    onCharacterToggle: (charId: string) => void
-}
-
-const PlayerRow: React.FC<PlayerRowProps> = ({ player, selectedCharacters, onCharacterToggle }) => (
-    <div className="flex items-center justify-between">
-        <h3 className="font-bold text-lg">{player.name}</h3>
-        <div className="flex gap-x-1">
-            {player.characters?.map((char) => (
-                <CharacterIcon
-                    key={char.id}
-                    character={char}
-                    isSelected={selectedCharacters.includes(char.id)}
-                    onClick={() => onCharacterToggle(char.id)}
-                />
-            ))}
-        </div>
-    </div>
-)
-
 const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) => {
     const defaultDate = new Date()
-    defaultDate.setHours(21, 0, 0, 0) // Set to 9 PM
-    const defaultDateString = formatUnixTimestampForDisplay(
-        Math.floor(defaultDate.getTime() / 1000)
-    )
+    defaultDate.setHours(21, 0, 0, 0) // Set to Today 9 PM
 
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.players],
@@ -115,7 +83,7 @@ const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) 
             : {
                   name: '',
                   roster: [],
-                  raidDate: defaultDateString
+                  raidDate: formatUnixTimestampForDisplay(Math.floor(defaultDate.getTime() / 1000))
               }
     })
 
@@ -135,33 +103,48 @@ const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                     <h2 className="text-xl font-bold">Session Details</h2>
-                    <FormInput
-                        register={register}
-                        name="name"
-                        placeholder="Session Name"
-                        errors={errors}
-                    />
-                    <FormInput
-                        register={register}
-                        name="raidDate"
-                        placeholder="DD/MM/YYYY HH:mm"
-                        errors={errors}
-                    />
+                    <div className="mb-4">
+                        <input
+                            {...register('name')}
+                            type="text"
+                            placeholder={'Session Name'}
+                            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                        <div className="h-5">
+                            {errors.name && (
+                                <p className="text-red-500 text-sm">{errors.name?.message}</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="mb-4">
+                        <input
+                            {...register('raidDate')}
+                            type="text"
+                            placeholder={'DD/MM/YYYY HH:mm'}
+                            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                        <div className="h-5">
+                            {errors.name && (
+                                <p className="text-red-500 text-sm">{errors.raidDate?.message}</p>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
+                {/* Characters in roster panel */}
                 <div className="space-y-4">
                     <h2 className="text-xl font-bold">Select Characters</h2>
                     {isLoading ? (
                         <LoaderCircle className="animate-spin text-5xl text-blue-500 mx-auto" />
                     ) : (
-                        <div className="max-h-64 overflow-y-auto pr-2">
+                        <div className="overflow-y-auto pr-2">
                             <Controller
                                 name="roster"
                                 control={control}
                                 render={({ field }) => (
                                     <div className="space-y-2">
                                         {players.map((player) => (
-                                            <PlayerRow
+                                            <PlayerWithCharsRow
                                                 key={player.id}
                                                 player={player}
                                                 selectedCharacters={field.value}

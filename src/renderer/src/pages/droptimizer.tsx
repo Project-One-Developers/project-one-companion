@@ -1,6 +1,6 @@
 import { DroptimizerCard } from '@renderer/components/droptimizer-card'
+import DroptimizerNewForm from '@renderer/components/droptimizer-new-form'
 import { FiltersPanel } from '@renderer/components/filter-panel'
-import NewDroptimizerForm from '@renderer/components/new-droptimizer-form'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -70,6 +70,6 @@ export default function DroptimizerPage(): JSX.Element {
 
 const Widget = (): JSX.Element => (
     <div className="absolute bottom-6 right-6">
-        <NewDroptimizerForm />
+        <DroptimizerNewForm />
     </div>
 )

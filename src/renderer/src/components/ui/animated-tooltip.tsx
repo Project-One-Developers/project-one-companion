@@ -5,7 +5,7 @@ import { classIcon } from '@renderer/lib/wow-icon'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useState, type JSX } from 'react'
 import type { Character, Player } from 'shared/types/types'
-import { CharacterForm } from '../new-character-form'
+import { CharacterForm } from '../character-form'
 
 export const AnimatedTooltip = ({
     items,
