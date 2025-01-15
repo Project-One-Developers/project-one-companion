@@ -6,9 +6,15 @@ on:
     tags:
       - '*'
   pull_request:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      VITE_TITLE: ${{ secrets.VITE_TITLE }}
+      VITE_APPID: ${{ secrets.VITE_APPID }}
+      MAIN_VITE_DATABASE_URL: ${{ secrets.MAIN_VITE_DATABASE_URL }}
 
     strategy:
       matrix:
@@ -16,6 +22,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ matrix.node }}
@@ -34,13 +41,13 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: pnpm run build:linux
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         if: github.ref != 'refs/heads/main'
         run: pnpm run build:linux --publish=never
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@v4
         name: Upload AppImage
@@ -48,14 +55,3 @@ jobs:
           name: WeakAuras-Companion-CI-AppImage
           path: dist/**/*.AppImage
 
-      - uses: actions/upload-artifact@v4
-        name: Upload Snap
-        with:
-          name: WeakAuras-Companion-CI-Snap
-          path: dist/**/*.snap
-
-      - uses: actions/upload-artifact@v4
-        name: Upload deb
-        with:
-          name: WeakAuras-Companion-CI-deb
-          path: dist/**/*.deb
