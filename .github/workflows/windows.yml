@@ -6,6 +6,7 @@ on:
     tags:
       - '*'
   pull_request:
+
 jobs:
   build:
     runs-on: windows-latest
@@ -14,8 +15,14 @@ jobs:
       matrix:
         node: ['22']
 
+    env:
+      VITE_TITLE: ${{ secrets.VITE_TITLE }}
+      VITE_APPID: ${{ secrets.VITE_APPID }}
+      MAIN_VITE_DATABASE_URL: ${{ secrets.MAIN_VITE_DATABASE_URL }}
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ matrix.node }}
