@@ -7,6 +7,7 @@ import { store } from './app/store'
 import { setZodErrorMap } from './config/zod'
 import { allHandlers } from './handlers'
 import { registerHandlers } from './handlers/handlers.utils'
+import { updateElectronApp } from './lib/autoupdater/autoupdater'
 
 function createWindow(): void {
     const savedBounds = store.getBounds()
@@ -17,7 +18,7 @@ function createWindow(): void {
         savedBounds.y < screenArea.y ||
         savedBounds.y > screenArea.y + screenArea.height
 
-    setZodErrorMap()
+    setZodErrorMap() // todo: why here?
 
     const mainWindow = new BrowserWindow({
         width: savedBounds.width,
@@ -47,6 +48,7 @@ function createWindow(): void {
         store.setBounds(bounds)
     })
 
+    // Make all links open with the browser, not with the application
     mainWindow.webContents.setWindowOpenHandler((details) => {
         shell.openExternal(details.url)
         return { action: 'deny' }
@@ -78,6 +80,9 @@ app.whenReady().then(() => {
     registerHandlers(allHandlers)
 
     createWindow()
+
+    // check for app updates
+    updateElectronApp()
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the

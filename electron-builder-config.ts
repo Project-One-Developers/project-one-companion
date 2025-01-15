@@ -30,43 +30,29 @@ const config = {
         deleteAppDataOnUninstall: true
     },
     mac: {
-        target: 'dmg',
+        target: {
+            target: 'default',
+            arch: 'universal'
+        },
+        category: 'public.app-category.utilities',
         entitlementsInherit: 'build/entitlements.mac.plist',
-        extendInfo: [
-            {
-                NSCameraUsageDescription: "Application requests access to the device's camera."
-            },
-            {
-                NSMicrophoneUsageDescription:
-                    "Application requests access to the device's microphone."
-            },
-            {
-                NSDocumentsFolderUsageDescription:
-                    "Application requests access to the user's Documents folder."
-            },
-            {
-                NSDownloadsFolderUsageDescription:
-                    "Application requests access to the user's Downloads folder."
-            }
-        ],
+        extendInfo: {
+            LSUIElement: 1
+        },
         notarize: false
     },
     dmg: {
         artifactName: '${productName}.${ext}'
     },
     linux: {
-        target: ['AppImage'],
+        target: ['AppImage', 'snap', 'deb', 'rpm'],
         maintainer: 'Project One Devs',
-        category: 'World of Warcraft'
+        category: 'Utility'
     },
     appImage: {
         artifactName: '${productName}.${ext}'
     },
     npmRebuild: false
-    //   publish: {
-    //     provider: "generic",
-    //     url: "https://example.com/auto-updates",
-    //   },
 } satisfies Configuration
 
 export default config
