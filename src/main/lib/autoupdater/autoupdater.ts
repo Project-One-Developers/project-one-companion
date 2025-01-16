@@ -60,7 +60,10 @@ const initUpdater = (opts: UpdateOptions) => {
                 if (response === 0) {
                     logger.log('[Update] User chose to download the update')
                     if (isMacOS) {
-                        const url = `https://github.com/zerbiniandrea/projectone-companion/releases/download/v${event.version}/${event.path}`
+                        const fileUrl =
+                            event.files.find((file) => file.url.includes('.dmg'))?.url ??
+                            event.files[0].url
+                        const url = `https://github.com/zerbiniandrea/projectone-companion/releases/download/v${event.version}/${fileUrl}`
                         // open url in browser
                         shell.openExternal(url)
                     } else {
@@ -105,11 +108,15 @@ const initUpdater = (opts: UpdateOptions) => {
         })
     }
 
+    // mac: ~/Library/Logs/project-one-companion/main.log
+    // linux: ~/.config/project-one-companion/logs/main.log
+    // win: %USERPROFILE%\AppData\Roaming\project-one-companion\logs\main.log
     logger.transports.file.level = 'info'
     // log.transports.console.format = '{h}:{i}:{s} {text}';w
     autoUpdater.logger = logger
     autoUpdater.fullChangelog = false
     autoUpdater.autoDownload = false
+    autoUpdater.allowDowngrade = false
     autoUpdater.autoInstallOnAppQuit = false
 
     // check for updates right away and keep checking later

@@ -15,5 +15,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  minio:
+    image: docker.io/bitnami/minio:latest
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_DEFAULT_BUCKETS=test-update
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=adminadmin
+    volumes:
+      - 'miniodata:/data'
+
 volumes:
   postgresdata:
+  miniodata:
