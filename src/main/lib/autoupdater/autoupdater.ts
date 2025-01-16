@@ -3,7 +3,9 @@ import logger from 'electron-log/main'
 import { autoUpdater, UpdateDownloadedEvent, UpdateInfo } from 'electron-updater'
 
 const isMacOS = process.platform === 'darwin'
-const supportedPlatforms = ['darwin', 'win32']
+const isLinux = process.platform === 'linux'
+const supportedPlatforms = ['darwin', 'win32', 'linux']
+const supportedAutodownloads = ['win32']
 
 export type UpdateOptions = {
     /** How frequently to check for updates, in seconds. Defaults to 60 minutes (`3600`). */
@@ -28,8 +30,9 @@ const initUpdater = (opts: UpdateOptions) => {
             `Electron's autoUpdater does not support the '${process.platform}' platform. Ref: https://www.electronjs.org/docs/latest/api/auto-updater#platform-notices`
         )
         return
-    } else if (isMacOS) {
-        // Temporary solution on MacOS for unsigned app updates
+    }
+    if (!supportedAutodownloads.includes(process?.platform)) {
+        // MacOS & Linux -> download in browser
         autoUpdater.autoDownload = false
     }
 
@@ -43,10 +46,10 @@ const initUpdater = (opts: UpdateOptions) => {
     })
 
     autoUpdater.on('update-available', (event: UpdateInfo) => {
-        if (autoUpdater.autoDownload) {
+        if (!opts.notifyUser) {
             logger.log('[Update] Update available; downloading...')
         } else {
-            // for eg: MacOS
+            // for eg: MacOS & Linux
             logger.log('[Update] Update available. Prompting user to download...')
             const dialogOpts: MessageBoxOptions = {
                 type: 'info',
@@ -59,14 +62,24 @@ const initUpdater = (opts: UpdateOptions) => {
             dialog.showMessageBox(dialogOpts).then(({ response }) => {
                 if (response === 0) {
                     logger.log('[Update] User chose to download the update')
-                    if (isMacOS) {
-                        const fileUrl =
-                            event.files.find((file) => file.url.includes('.dmg'))?.url ??
-                            event.files[0].url
+                    if (!autoUpdater.autoDownload) {
+                        let fileUrl = ''
+                        if (isMacOS) {
+                            fileUrl =
+                                event.files.find((file) => file.url.includes('.dmg'))?.url ??
+                                event.files[0].url
+                        } else if (isLinux) {
+                            fileUrl =
+                                event.files.find((file) => file.url.includes('.AppImage'))?.url ??
+                                event.files[0].url
+                        } else {
+                            fileUrl = event.files[0].url
+                        }
                         const url = `https://github.com/zerbiniandrea/projectone-companion/releases/download/v${event.version}/${fileUrl}`
-                        // open url in browser
+                        // download from browser
                         shell.openExternal(url)
                     } else {
+                        // use internal auto-updater
                         autoUpdater.downloadUpdate()
                     }
                 } else {
