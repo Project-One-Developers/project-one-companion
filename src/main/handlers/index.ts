@@ -19,6 +19,11 @@ import {
     getRaidSessionListHandler
 } from './raid-session/raid-session.handlers'
 import { getRaidLootTableHanlder } from './raid/raid.handler'
+import {
+    getAppSettingsHandler,
+    resetAppSettingsHandler,
+    setAppSettingsHandler
+} from './settings/settings.handlers'
 
 export const allHandlers = {
     'add-droptimizer': addDroptimizerHandler,
@@ -35,5 +40,8 @@ export const allHandlers = {
     'add-raid-session': addRaidSessionHandler,
     'edit-raid-session': editRaidSessionHandler,
     'delete-raid-session': deleteRaidSessionHandler,
-    'add-raid-session-loots-rcloot': addRaidLootsByRCLootCsvHandler
+    'add-raid-session-loots-rcloot': addRaidLootsByRCLootCsvHandler,
+    'app-settings-get': getAppSettingsHandler,
+    'app-settings-set': setAppSettingsHandler,
+    'app-settings-reset': resetAppSettingsHandler
 }

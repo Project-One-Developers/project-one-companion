@@ -1,13 +1,32 @@
 import * as schema from '@storage/storage.schema'
-import * as dotenv from 'dotenv'
 import { drizzle } from 'drizzle-orm/node-postgres'
+import { store } from '../../app/store'
+
+import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-const databaseUrl = import.meta.env.MAIN_VITE_DATABASE_URL
+const getDatabaseUrl = (): string => {
+    const envUrl = process.env.MAIN_VITE_DATABASE_URL
+    if (envUrl) {
+        console.log('[Database]: using database URL found in environment variables')
+        return envUrl
+    }
 
-if (!databaseUrl) {
-    throw new Error('DATABASE_URL environment variable is not set')
+    const storedUrl = store.getDatabaseUrl()
+    if (storedUrl) return storedUrl
+
+    throw new Error('Database URL not found in environment variables or user settings')
 }
 
-export const db = drizzle({ connection: databaseUrl, casing: 'snake_case', schema: schema })
+export let db = drizzle({ connection: getDatabaseUrl(), casing: 'snake_case', schema: schema })
+
+export const reloadConnection = (): void => {
+    // Close existing connection if necessary
+    // if (db && typeof db.$client.end === 'function') {
+    //     db.$client.$client.connection
+    // }
+
+    // Recreate the database instance
+    db = drizzle({ connection: getDatabaseUrl(), casing: 'snake_case', schema: schema })
+}

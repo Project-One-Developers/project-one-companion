@@ -1,14 +1,13 @@
 import {
     Code2Icon,
-    ListRestart,
     LucideEye,
     LucideGauge,
     LucideHandshake,
     LucideSkull,
-    LucideSwords
+    LucideSwords,
+    Settings
 } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { toast } from './hooks/use-toast'
 import {
     Sidebar,
     SidebarContent,
@@ -66,23 +65,6 @@ const weakaurasItems = [
 export default function ProjectOneSidebar(): JSX.Element {
     const location = useLocation()
 
-    const upsertJsonData = async (): Promise<void> => {
-        await window.api
-            .upsertJsonData()
-            .then(() => {
-                toast({
-                    title: 'Resources updated',
-                    description: 'Data from JSON files has been updated in the database.'
-                })
-            })
-            .catch(() => {
-                toast({
-                    title: 'Resources not updated',
-                    description: `Could not update resources.`
-                })
-            })
-    }
-
     return (
         <Sidebar>
             <SidebarContent>
@@ -127,11 +109,10 @@ export default function ProjectOneSidebar(): JSX.Element {
                     </SidebarGroupContent>
                 </SidebarGroup>
                 <SidebarGroup className="mt-auto">
-                    <button
-                        onClick={upsertJsonData}
-                        className="p-2 rounded-full hover:bg-muted w-fit focus:outline-none"
-                    >
-                        <ListRestart />
+                    <button className="p-2 rounded-full hover:bg-muted w-fit focus:outline-none">
+                        <NavLink to="/config">
+                            <Settings />
+                        </NavLink>
                     </button>
                 </SidebarGroup>
             </SidebarContent>

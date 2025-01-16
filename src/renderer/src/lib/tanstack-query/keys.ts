@@ -3,5 +3,6 @@ export const queryKeys = {
     droptimizers: 'droptimizers-list',
     raidLootTable: 'raid-loot-table',
     raidSessions: 'raid-sessions',
-    raidSession: 'raid-session'
+    raidSession: 'raid-session',
+    appSettings: 'app-settings'
 }

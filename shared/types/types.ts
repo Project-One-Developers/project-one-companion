@@ -6,6 +6,7 @@ import {
     newRaidSessionSchema,
     raidSessionSchema
 } from '@shared/schemas/raid.schemas'
+import { appSettingsSchema } from '@shared/schemas/store.schemas'
 import { z } from 'zod'
 import {
     characterSchema,
@@ -56,3 +57,6 @@ export type NewBoss = z.infer<typeof newBossSchema>
 export type RaidSession = z.infer<typeof raidSessionSchema>
 export type NewRaidSession = z.infer<typeof newRaidSessionSchema>
 export type EditRaidSession = z.infer<typeof editRaidSessionSchema>
+
+// App config
+export type AppSettings = z.infer<typeof appSettingsSchema>

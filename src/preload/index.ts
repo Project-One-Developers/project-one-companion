@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { electronAPI } from '@electron-toolkit/preload'
 import type {
+    AppSettings,
     Boss,
     Droptimizer,
     EditRaidSession,
@@ -56,6 +57,16 @@ export const api = {
     },
     addRaidSessionLootsRcLoot(id: string, csv: string): Promise<void> {
         return ipcRenderer.invoke('add-raid-session-loots-rcloot', id, csv)
+    },
+    // App settings
+    getAppSettings(): Promise<AppSettings> {
+        return ipcRenderer.invoke('app-settings-get')
+    },
+    editAppSettings(settings: AppSettings): Promise<void> {
+        return ipcRenderer.invoke('app-settings-set', settings)
+    },
+    resetAppSettings(): Promise<void> {
+        return ipcRenderer.invoke('app-settings-reset')
     },
     // JSON Data
     getItems(): Promise<Item[]> {
