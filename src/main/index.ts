@@ -48,6 +48,15 @@ function createWindow(): void {
         store.setBounds(bounds)
     })
 
+    mainWindow?.on('minimize', () => {
+        if (mainWindow.isMinimized()) {
+            mainWindow.minimize()
+            if (process.platform === 'darwin') {
+                app.dock.hide()
+            }
+        }
+    })
+
     // Make all links open with the browser, not with the application
     mainWindow.webContents.setWindowOpenHandler((details) => {
         shell.openExternal(details.url)
@@ -81,13 +90,23 @@ app.whenReady().then(() => {
 
     createWindow()
 
+    if (process.platform === 'darwin') {
+        app.dock.show()
+    }
+
     // check for app updates
     updateElectronApp()
 
-    app.on('activate', function () {
+    app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow()
+
+            if (process.platform === 'darwin') {
+                void app.dock.show()
+            }
+        }
     })
 })
 
