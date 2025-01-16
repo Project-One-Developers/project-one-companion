@@ -4,6 +4,7 @@ import { store } from '../../app/store'
 
 import * as dotenv from 'dotenv'
 
+// todo: va qua??
 dotenv.config()
 
 const getDatabaseUrl = (): string => {
