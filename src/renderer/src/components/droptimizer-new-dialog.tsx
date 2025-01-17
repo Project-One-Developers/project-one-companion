@@ -46,9 +46,9 @@ export default function DroptimizerNewDialog(): JSX.Element {
     })
 
     // Mutation handling
-    const { mutate, isPending } = useMutation({
+    const manualMutation = useMutation({
         mutationFn: addDroptimizer,
-        onSuccess: () => {
+        onSuccess: (response) => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.droptimizers] })
             form.reset()
             setOpen(false)
@@ -88,7 +88,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
     }
 
     function onSubmit(values: FormValues): void {
-        mutate(values.url)
+        manualMutation.mutate(values.url)
     }
 
     const FormContent = (): JSX.Element => (
@@ -107,8 +107,8 @@ export default function DroptimizerNewDialog(): JSX.Element {
                         </FormItem>
                     )}
                 />
-                <Button disabled={isPending} type="submit">
-                    {isPending ? <Loader2 className="animate-spin" /> : 'Add'}
+                <Button disabled={manualMutation.isPending} type="submit">
+                    {manualMutation.isPending ? <Loader2 className="animate-spin" /> : 'Add'}
                 </Button>
             </form>
         </Form>
