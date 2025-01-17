@@ -42,7 +42,10 @@ const config = {
         notarize: false
     },
     dmg: {
-        artifactName: '${productName}.${ext}'
+        artifactName: '${productName}.${ext}',
+        // Turn off blockmaps since we don't support automatic updates.
+        // https://github.com/electron-userland/electron-builder/issues/2900#issuecomment-730571696
+        writeUpdateInfo: false
     },
     linux: {
         target: ['AppImage'],
