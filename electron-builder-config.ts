@@ -30,10 +30,7 @@ const config = {
         deleteAppDataOnUninstall: true
     },
     mac: {
-        target: {
-            target: 'default',
-            arch: 'universal'
-        },
+        target: 'dmg',
         category: 'public.app-category.utilities',
         entitlementsInherit: 'build/entitlements.mac.plist',
         extendInfo: {
