@@ -13,7 +13,9 @@ import {
     getItemToCatalystMapping,
     getItemToTiersetMapping
 } from '@storage/droptimizer/droptimizer.storage'
+import { getConfig } from '@storage/settings/settings.storage'
 import { getUnixTimestamp } from '@utils'
+import { readAllMessagesInDiscord } from '../../lib/discord/discord'
 import { fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 
 // Static cache variables
@@ -99,4 +101,39 @@ export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
 
 export const deleteDroptimizerHandler = async (url: string): Promise<void> => {
     return await deleteDroptimizer(url)
+}
+
+export const syncDroptimizersFromDiscord = async (): Promise<void> => {
+    const botKey = await getConfig('DISCORD_BOT_TOKEN')
+    const channelId = '1283383693695778878' // #droptimizers-drop
+
+    if (botKey === null) {
+        throw new Error('DISCORD_BOT_TOKEN not set in database')
+    }
+
+    const messages = await readAllMessagesInDiscord(botKey, channelId)
+    const raidbotsUrlRegex = /https:\/\/www\.raidbots\.com\/simbot\/report\/([a-zA-Z0-9]+)/g
+
+    const twoWeeksAgo = new Date()
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14)
+
+    const uniqueUrls = new Set(
+        messages
+            .filter((msg) => msg.createdAt >= twoWeeksAgo) // filter out messages older than 2 weeks
+            .flatMap((message) => {
+                const matches = message.content.match(raidbotsUrlRegex)
+                return matches ? matches : []
+            })
+    )
+
+    console.log(`Found ${uniqueUrls.size} unique valid Raidbots URLs in the last 2 weeks`)
+
+    for (const url of uniqueUrls) {
+        try {
+            await addDroptimizerHandler(url)
+            console.log(`Successfully added droptimizer for URL: ${url}`)
+        } catch (error) {
+            console.error(`Failed to add droptimizer for URL: ${url}`, error)
+        }
+    }
 }

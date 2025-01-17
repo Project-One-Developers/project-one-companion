@@ -2,7 +2,6 @@ import { describe, expect, it, jest } from '@jest/globals'
 import { ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { addDroptimizer } from '@storage/droptimizer/droptimizer.storage'
 import * as fs from 'fs'
-import { allHandlers } from '..'
 import { addDroptimizerHandler } from './droptimizer.handlers'
 
 jest.mock('./droptimizer.utils', () => {
@@ -55,12 +54,6 @@ jest.mock('@storage/droptimizer/droptimizer.storage', () => {
 })
 
 describe('Droptimizer Handlers', () => {
-    it('should have the add-droptimizer handler', () => {
-        expect(allHandlers['add-droptimizer']).toBeDefined()
-        expect(allHandlers['add-droptimizer']).toEqual(addDroptimizerHandler)
-        expect(typeof allHandlers['add-droptimizer']).toBe('function')
-    })
-
     it('should throw an error when URL is not provided', async () => {
         await expect(addDroptimizerHandler('')).rejects.toThrow() // non mi interessa validare l'errore specifico
     })

@@ -6,7 +6,9 @@ import {
 } from './characters/characters.handlers'
 import {
     addDroptimizerHandler,
-    getDroptimizerListHandler
+    deleteDroptimizerHandler,
+    getDroptimizerListHandler,
+    syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
 import { getItemsHandler } from './items/items.handlers'
 import { upsertJsonDataHandler } from './json-data/json-data.handlers'
@@ -26,8 +28,10 @@ import {
 } from './settings/settings.handlers'
 
 export const allHandlers = {
-    'add-droptimizer': addDroptimizerHandler,
-    'get-droptimizer-list': getDroptimizerListHandler,
+    'droptimizer-add': addDroptimizerHandler,
+    'droptimizer-list': getDroptimizerListHandler,
+    'droptimizer-delete': deleteDroptimizerHandler,
+    'droptimizer-discord-sync': syncDroptimizersFromDiscord,
     'add-character': addCharacterHandler,
     'get-characters-list': getCharactersListHandler,
     'add-player': addPlayerHandler,

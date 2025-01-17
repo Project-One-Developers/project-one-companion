@@ -73,7 +73,7 @@ export default function SettingsPage(): JSX.Element {
     const handleResetSettings = async () => {
         setIsResetting(true)
         await window.api
-            .upsertJsonData() // todo: implementare
+            .resetAppSettings()
             .then(() => {
                 toast({
                     title: 'Settings Reset',
