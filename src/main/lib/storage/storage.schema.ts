@@ -224,6 +224,14 @@ export const itemToCatalystTable = pgTable(
     ]
 )
 
+// Project One Configuration
+// Contains Config and Secret that we cant distribute with the client application
+// eg: DISCORD_BOT_TOKEN
+export const appConfigTable = pgTable('app_config', {
+    key: varchar('key').primaryKey(),
+    value: varchar('value').notNull()
+})
+
 //////////////////////////////////////////////////////////
 //                     RELATIONS                        //
 //////////////////////////////////////////////////////////

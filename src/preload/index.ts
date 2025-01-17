@@ -28,12 +28,18 @@ export const api = {
     deletePlayer(playerId: string): Promise<void> {
         return ipcRenderer.invoke('delete-player', playerId)
     },
-    // Simulations
+    // Droptimizers
     addDroptimizer(url: string): Promise<Droptimizer> {
-        return ipcRenderer.invoke('add-droptimizer', url)
+        return ipcRenderer.invoke('droptimizer-add', url)
     },
     getDroptimizerList(): Promise<Droptimizer[]> {
-        return ipcRenderer.invoke('get-droptimizer-list')
+        return ipcRenderer.invoke('droptimizer-list')
+    },
+    deleteDroptimizer(url: string): Promise<void> {
+        return ipcRenderer.invoke('droptimizer-delete', url)
+    },
+    syncDroptimizerFromDiscord(): Promise<void> {
+        return ipcRenderer.invoke('droptimizer-discord-sync')
     },
     // Raid loot table
     getRaidLootTable(raidId: number): Promise<Boss[]> {
