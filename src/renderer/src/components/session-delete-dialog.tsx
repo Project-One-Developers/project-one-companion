@@ -19,13 +19,13 @@ import {
 
 type SessionDeleteDialogProps = {
     isOpen: boolean
-    onOpenChange: (open: boolean) => void
+    setOpen: (open: boolean) => void
     raidSession: RaidSession
 }
 
 export default function SessionDeleteDialog({
     isOpen,
-    onOpenChange,
+    setOpen,
     raidSession
 }: SessionDeleteDialogProps): JSX.Element {
     const navigate = useNavigate()
@@ -50,7 +50,7 @@ export default function SessionDeleteDialog({
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+        <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

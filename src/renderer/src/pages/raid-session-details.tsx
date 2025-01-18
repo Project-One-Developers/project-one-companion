@@ -137,7 +137,7 @@ export const RaidSessionDetailsPage = () => {
                     </Button>
                     <SessionDeleteDialog
                         isOpen={isDeleteDialogOpen}
-                        onOpenChange={setIsDeleteDialogOpen}
+                        setOpen={setIsDeleteDialogOpen}
                         raidSession={raidSession}
                     />
                 </div>

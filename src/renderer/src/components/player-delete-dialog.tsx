@@ -3,21 +3,23 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { deletePlayer } from '@renderer/lib/tanstack-query/players'
 import type { Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
-import { Loader2, X } from 'lucide-react'
-import { useState, type JSX } from 'react'
+import { Loader2 } from 'lucide-react'
+import { type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from './ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 
-export default function PlayerDeleteDialog({ player }: { player: Player }): JSX.Element {
-    const [open, setOpen] = useState(false)
+type PlayerDeleteDialogProps = {
+    isOpen: boolean
+    setOpen: (open: boolean) => void
+    player: Player
+}
+
+export default function PlayerDeleteDialog({
+    isOpen,
+    setOpen,
+    player
+}: PlayerDeleteDialogProps): JSX.Element {
     const { mutate, isPending } = useMutation({
         mutationFn: async () => deletePlayer(player.id),
         onSuccess: () => {
@@ -30,16 +32,13 @@ export default function PlayerDeleteDialog({ player }: { player: Player }): JSX.
         }
     })
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild className="absolute top-2 right-2 cursor-pointer">
-                <X className="w-3" />
-            </DialogTrigger>
+        <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Player Deletion</DialogTitle>
                     <DialogDescription>
                         The player {player.name} and their associated characters will be permanently
-                        deleted from the database.
+                        deleted from the database. {player.id}
                     </DialogDescription>
                 </DialogHeader>
                 <img
