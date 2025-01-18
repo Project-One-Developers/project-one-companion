@@ -1,31 +1,36 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { addPlayer } from '@renderer/lib/tanstack-query/players'
+import { addPlayer, editPlayer } from '@renderer/lib/tanstack-query/players'
 import { newPlayerSchema } from '@shared/schemas/characters.schemas'
-import { NewPlayer } from '@shared/types/types'
+import { NewPlayer, Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
-import clsx from 'clsx'
-import { Loader2, PlusIcon } from 'lucide-react'
-import { useState, type JSX } from 'react'
+import { Loader2 } from 'lucide-react'
+import { type JSX } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from './ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 
-export default function PlayerNewForm(): JSX.Element {
-    const [open, setOpen] = useState(false)
+type PlayerDialogProps = {
+    isOpen: boolean
+    setOpen: (open: boolean) => void
+    existingPlayer?: Player
+}
 
-    const { mutate, isPending } = useMutation({
+export default function PlayerDialog({
+    isOpen,
+    setOpen,
+    existingPlayer
+}: PlayerDialogProps): JSX.Element {
+    const isEditing = existingPlayer != null
+    if (isEditing) {
+        console.log(`Editing player with ID: ${existingPlayer.id}`)
+    }
+
+    const addMutation = useMutation({
         mutationFn: addPlayer,
         onSuccess: (_, arg) => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
@@ -44,6 +49,26 @@ export default function PlayerNewForm(): JSX.Element {
         }
     })
 
+    const editMutation = useMutation({
+        mutationFn: editPlayer,
+        onSuccess: (_, arg) => {
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.raidSession, arg.id]
+            })
+            setOpen(false)
+            toast({
+                title: 'Player edited',
+                description: `Player ${arg.name} edited successfully`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Error',
+                description: `Unable to edit the player. Error: ${error.message}`
+            })
+        }
+    })
+
     const form = useForm<NewPlayer>({
         resolver: zodResolver(newPlayerSchema),
         defaultValues: {
@@ -51,19 +76,16 @@ export default function PlayerNewForm(): JSX.Element {
         }
     })
 
-    function onSubmit(values: { name: string }): void {
-        mutate(values.name)
+    function onSubmit(values: NewPlayer): void {
+        if (isEditing) {
+            editMutation.mutate({ id: existingPlayer.id, ...values })
+        } else {
+            addMutation.mutate(values)
+        }
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <div className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer">
-                    <PlusIcon
-                        className={clsx('w-5 h-5 hover:rotate-45 ease-linear transition-transform')}
-                    />
-                </div>
-            </DialogTrigger>
+        <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>New player</DialogTitle>
@@ -87,8 +109,15 @@ export default function PlayerNewForm(): JSX.Element {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={isPending} type="submit">
-                            {isPending ? <Loader2 className="animate-spin" /> : 'Add'}
+                        <Button
+                            disabled={addMutation.isPending || editMutation.isPending}
+                            type="submit"
+                        >
+                            {addMutation.isPending || editMutation.isPending ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                'Confirm'
+                            )}
                         </Button>
                     </form>
                 </Form>

@@ -1,5 +1,11 @@
-import { playerSchema } from '@shared/schemas/characters.schemas'
-import type { NewCharacter, Player } from '@shared/types/types'
+import { characterSchema, playerSchema } from '@shared/schemas/characters.schemas'
+import type {
+    Character,
+    EditCharacter,
+    EditPlayer,
+    NewCharacter,
+    Player
+} from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charTable, playerTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
@@ -16,11 +22,11 @@ export const getPlayerWithCharactersList = async (): Promise<Player[]> => {
     return playersListStorageSchema.parse(result)
 }
 
-export const getPlayerById = async (playerId: string): Promise<Player | null> => {
+export const getPlayerById = async (id: string): Promise<Player | null> => {
     const result = await db
         .select()
         .from(playerTable)
-        .where(eq(playerTable.id, playerId))
+        .where(eq(playerTable.id, id))
         .then(takeFirstResult)
 
     if (!result) {
@@ -28,6 +34,20 @@ export const getPlayerById = async (playerId: string): Promise<Player | null> =>
     }
 
     return playerSchema.parse(result)
+}
+
+export const getCharacterById = async (id: string): Promise<Character | null> => {
+    const result = await db
+        .select()
+        .from(charTable)
+        .where(eq(charTable.id, id))
+        .then(takeFirstResult)
+
+    if (!result) {
+        return null
+    }
+
+    return characterSchema.parse(result)
 }
 
 export const getPlayerByName = async (playerName: string): Promise<Player | null> => {
@@ -99,7 +119,33 @@ export const addPlayer = async (playerName: string): Promise<Player> => {
     })
 }
 
-export const deletePlayer = async (playerId: string): Promise<void> => {
-    await db.delete(charTable).where(eq(charTable.playerId, playerId))
-    await db.delete(playerTable).where(eq(playerTable.id, playerId))
+export const editPlayer = async (edited: EditPlayer): Promise<void> => {
+    await db
+        .update(playerTable)
+        .set({
+            name: edited.name
+        })
+        .where(eq(playerTable.id, edited.id))
+}
+
+export const editCharacter = async (edited: EditCharacter): Promise<void> => {
+    await db
+        .update(charTable)
+        .set({
+            name: edited.name,
+            realm: edited.realm,
+            class: edited.class,
+            role: edited.role,
+            main: edited.main
+        })
+        .where(eq(charTable.id, edited.id))
+}
+
+export const deletePlayer = async (id: string): Promise<void> => {
+    await db.delete(charTable).where(eq(charTable.playerId, id))
+    await db.delete(playerTable).where(eq(playerTable.id, id))
+}
+
+export const deleteCharacter = async (id: string): Promise<void> => {
+    await db.delete(charTable).where(eq(charTable.id, id))
 }

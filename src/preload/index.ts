@@ -3,10 +3,14 @@ import { electronAPI } from '@electron-toolkit/preload'
 import type {
     AppSettings,
     Boss,
+    Character,
     Droptimizer,
+    EditCharacter,
+    EditPlayer,
     EditRaidSession,
     Item,
     NewCharacter,
+    NewPlayer,
     NewRaidSession,
     Player,
     RaidSession
@@ -16,17 +20,29 @@ import { contextBridge, ipcRenderer } from 'electron'
 // Custom APIs for renderer
 export const api = {
     // Characters
-    addCharacter(character: NewCharacter): Promise<Player> {
-        return ipcRenderer.invoke('add-character', character)
+    addCharacter(character: NewCharacter): Promise<Character> {
+        return ipcRenderer.invoke('character-add', character)
     },
-    getCharactersList(): Promise<Player[]> {
-        return ipcRenderer.invoke('get-characters-list')
+    getCharactersList(): Promise<Character[]> {
+        return ipcRenderer.invoke('character-list')
     },
-    addPlayer(playerName: string): Promise<Player> {
-        return ipcRenderer.invoke('add-player', playerName)
+    deleteCharacter(id: string): Promise<void> {
+        return ipcRenderer.invoke('character-delete', id)
     },
-    deletePlayer(playerId: string): Promise<void> {
-        return ipcRenderer.invoke('delete-player', playerId)
+    editCharacter(edited: EditCharacter): Promise<Character> {
+        return ipcRenderer.invoke('character-edit', edited)
+    },
+    getPlayerList(): Promise<Player[]> {
+        return ipcRenderer.invoke('player-list')
+    },
+    addPlayer(player: NewPlayer): Promise<Player> {
+        return ipcRenderer.invoke('player-add', player)
+    },
+    editPlayer(player: EditPlayer): Promise<Player> {
+        return ipcRenderer.invoke('player-edit', player)
+    },
+    deletePlayer(id: string): Promise<void> {
+        return ipcRenderer.invoke('player-delete', id)
     },
     // Droptimizers
     addDroptimizer(url: string): Promise<Droptimizer> {
@@ -43,23 +59,23 @@ export const api = {
     },
     // Raid loot table
     getRaidLootTable(raidId: number): Promise<Boss[]> {
-        return ipcRenderer.invoke('get-raid-loot-table', raidId)
+        return ipcRenderer.invoke('loot-table-get', raidId)
     },
     // Raid sessions
     addRaidSession(newSession: NewRaidSession): Promise<RaidSession> {
-        return ipcRenderer.invoke('add-raid-session', newSession)
+        return ipcRenderer.invoke('raid-session-add', newSession)
     },
-    putRaidSession(editedSession: EditRaidSession): Promise<RaidSession> {
-        return ipcRenderer.invoke('edit-raid-session', editedSession)
+    editRaidSession(editedSession: EditRaidSession): Promise<RaidSession> {
+        return ipcRenderer.invoke('raid-session-edit', editedSession)
     },
     getRaidSession(id: string): Promise<RaidSession> {
-        return ipcRenderer.invoke('get-raid-session', id)
+        return ipcRenderer.invoke('raid-session-get', id)
     },
     getRaidSessions(): Promise<RaidSession[]> {
-        return ipcRenderer.invoke('get-raid-sessions')
+        return ipcRenderer.invoke('raid-session-list')
     },
     deleteRaidSession(id: string): Promise<void> {
-        return ipcRenderer.invoke('delete-raid-session', id)
+        return ipcRenderer.invoke('raid-session-delete', id)
     },
     addRaidSessionLootsRcLoot(id: string, csv: string): Promise<void> {
         return ipcRenderer.invoke('add-raid-session-loots-rcloot', id, csv)
@@ -69,7 +85,7 @@ export const api = {
         return ipcRenderer.invoke('app-settings-get')
     },
     editAppSettings(settings: AppSettings): Promise<void> {
-        return ipcRenderer.invoke('app-settings-set', settings)
+        return ipcRenderer.invoke('app-settings-edit', settings)
     },
     resetAppSettings(): Promise<void> {
         return ipcRenderer.invoke('app-settings-reset')

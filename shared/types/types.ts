@@ -10,6 +10,8 @@ import { appSettingsSchema } from '@shared/schemas/store.schemas'
 import { z } from 'zod'
 import {
     characterSchema,
+    editCharacterSchema,
+    editPlayerSchema,
     newCharacterSchema,
     newPlayerSchema,
     playerSchema
@@ -37,9 +39,11 @@ export type WoWRole = z.infer<typeof wowRolesSchema>
 
 export type Player = z.infer<typeof playerSchema>
 export type NewPlayer = z.infer<typeof newPlayerSchema>
+export type EditPlayer = z.infer<typeof editPlayerSchema>
 
 export type Character = z.infer<typeof characterSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
+export type EditCharacter = z.infer<typeof editCharacterSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>

@@ -23,6 +23,10 @@ export const newPlayerSchema = playerSchema.omit({
     characters: true
 })
 
+export const editPlayerSchema = newPlayerSchema.extend({
+    id: playerSchema.shape.id
+})
+
 export const charactersListSchema = z.object({
     characters: z.array(characterSchema)
 })
@@ -39,3 +43,7 @@ export const newCharacterSchema = characterSchema
     .extend({
         playerName: characterSchema.shape.name
     })
+
+export const editCharacterSchema = characterSchema.extend({
+    id: characterSchema.shape.id
+})

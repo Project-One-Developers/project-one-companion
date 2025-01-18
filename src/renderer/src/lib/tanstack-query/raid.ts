@@ -16,7 +16,7 @@ export const fetchRaidSession = async (id: string | undefined): Promise<RaidSess
 }
 
 export const editRaidSession = async (editedRaidSession: EditRaidSession): Promise<RaidSession> => {
-    return await window.api.putRaidSession(editedRaidSession)
+    return await window.api.editRaidSession(editedRaidSession)
 }
 
 export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<RaidSession> => {
