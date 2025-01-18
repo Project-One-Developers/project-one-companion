@@ -68,8 +68,8 @@ export default function PlayerNewForm(): JSX.Element {
                 <DialogHeader>
                     <DialogTitle>New player</DialogTitle>
                     <DialogDescription>
-                        Enter only the player's nickname. Characters played should be added later
-                        and must be named as they are in the game.
+                        Enter only the player&apos;s nickname. Characters played should be added
+                        later and must be named as they are in the game.
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>

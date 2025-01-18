@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CheckedState } from '@radix-ui/react-checkbox'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addCharacter } from '@renderer/lib/tanstack-query/players'
@@ -11,6 +12,7 @@ import { useState, type JSX } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
+import { Checkbox } from './ui/checkbox'
 import {
     Dialog,
     DialogContent,
@@ -19,7 +21,15 @@ import {
     DialogTitle,
     DialogTrigger
 } from './ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from './ui/form'
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
@@ -52,6 +62,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
             realm: 'pozzo-delleternità',
             class: 'Death Knight',
             role: 'DPS',
+            main: true,
             playerName: player.name
         }
     })
@@ -175,6 +186,27 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                                         </Select>
                                     </FormControl>
                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="main"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value as CheckedState}
+                                            onCheckedChange={field.onChange}
+                                            className="h-5 w-5"
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>Main Character</FormLabel>
+                                        <FormDescription>
+                                            Check this if this is the player&apos;s main character.
+                                        </FormDescription>
+                                    </div>
                                 </FormItem>
                             )}
                         />

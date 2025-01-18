@@ -8,6 +8,7 @@ export const characterSchema = z.object({
     realm: z.string().min(1),
     class: wowClassSchema,
     role: wowRolesSchema,
+    main: z.boolean(),
     droptimizer: z.array(droptimizerSchema).optional()
 })
 

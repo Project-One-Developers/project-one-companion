@@ -39,6 +39,7 @@ export const charTable = pgTable(
         realm: varchar('realm').notNull(),
         class: pgClassEnum().notNull(),
         role: pgRoleEnum().notNull(),
+        main: boolean('main').notNull(), // consider player main char (for future me: dont put any constraint in case any player has more than one "main "char)
         playerId: varchar('player_id')
             .references(() => playerTable.id)
             .notNull()

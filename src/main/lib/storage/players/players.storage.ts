@@ -58,6 +58,7 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
             realm: character.realm,
             class: character.class,
             role: character.role,
+            main: character.main,
             playerId: player.id
         })
         .returning()
@@ -73,6 +74,7 @@ export const addCharacter = async (character: NewCharacter): Promise<Player> => 
                 realm: result?.realm,
                 class: result?.class,
                 role: result?.role,
+                main: result?.main,
                 playerId: player.id
             }
         ]

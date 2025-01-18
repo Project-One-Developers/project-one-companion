@@ -12,6 +12,7 @@ const playerStorageSchema = z
                 realm: z.string(),
                 class: wowClassSchema,
                 role: wowRolesSchema,
+                main: z.boolean(),
                 playerId: z.string()
             })
         )
@@ -23,6 +24,7 @@ const playerStorageSchema = z
             id: char.id,
             name: char.name,
             realm: char.realm,
+            main: char.main,
             class: char.class,
             role: char.role
         }))
