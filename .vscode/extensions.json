@@ -4,7 +4,6 @@
         "esbenp.prettier-vscode",
         "vivaxy.vscode-conventional-commits",
         "yoavbls.pretty-ts-errors",
-        "redhat.vscode-yaml",
-        "orta.vscode-jest"
+        "redhat.vscode-yaml"
     ]
 }
