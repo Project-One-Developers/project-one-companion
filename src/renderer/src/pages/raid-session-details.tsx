@@ -1,7 +1,6 @@
-import * as Dialog from '@radix-ui/react-dialog'
 import { toast } from '@renderer/components/hooks/use-toast'
 import SessionDeleteDialog from '@renderer/components/session-delete-dialog'
-import SessionEditDialog from '@renderer/components/session-edit-dialog'
+import RaidSessionDialog from '@renderer/components/session-dialog'
 import { Button } from '@renderer/components/ui/button'
 import {
     DropdownMenu,
@@ -10,15 +9,10 @@ import {
     DropdownMenuTrigger
 } from '@renderer/components/ui/dropdown-menu'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
-import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import {
-    addRaidSessionLootsRcLoot,
-    editRaidSession,
-    fetchRaidSession
-} from '@renderer/lib/tanstack-query/raid'
+import { addRaidSessionLootsRcLoot, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
 import { ROLE_PRIORITIES } from '@shared/consts/wow.consts'
-import { Item, NewRaidSession } from '@shared/types/types'
+import { Item } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
     ArrowLeft,
@@ -89,30 +83,6 @@ export const RaidSessionDetailsPage = () => {
         }
     }
 
-    const { mutate: mutateEditSession } = useMutation({
-        mutationFn: editRaidSession,
-        onSuccess: (_, arg) => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSession, raidSessionId] })
-            setIsEditDialogOpen(false)
-            toast({
-                title: 'Raid Session edited',
-                description: `Raid session ${arg.name} edited successfully`
-            })
-        },
-        onError: (error) => {
-            toast({
-                title: 'Error',
-                description: `Unable to edit the raid session. Error: ${error.message}`
-            })
-        }
-    })
-
-    const handleEditSession = (editedSession: NewRaidSession) => {
-        if (raidSessionId) {
-            mutateEditSession({ id: raidSessionId, ...editedSession })
-        }
-    }
-
     if (isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
@@ -140,19 +110,22 @@ export const RaidSessionDetailsPage = () => {
                     </div>
                 </div>
                 <div className="flex space-x-2">
-                    <Dialog.Root open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                        <Dialog.Trigger asChild>
-                            <Button variant="secondary" className="hover:bg-blue-700">
-                                <Edit className="mr-2 h-4 w-4" /> Edit Session
-                            </Button>
-                        </Dialog.Trigger>
-                        <SessionEditDialog
-                            isOpen={isEditDialogOpen}
-                            onOpenChange={setIsEditDialogOpen}
-                            existingSession={raidSession}
-                            onSubmit={handleEditSession}
-                        />
-                    </Dialog.Root>
+                    {/* Edit Session */}
+                    <Button
+                        variant="secondary"
+                        className="hover:bg-blue-700"
+                        onClick={() => {
+                            setIsEditDialogOpen(true)
+                        }}
+                    >
+                        <Edit className="mr-2 h-4 w-4" /> Edit Session
+                    </Button>
+                    <RaidSessionDialog
+                        isOpen={isEditDialogOpen}
+                        setOpen={setIsEditDialogOpen}
+                        existingSession={raidSession}
+                    />
+                    {/* Delete Session */}
                     <Button
                         variant="destructive"
                         className="hover:bg-red-700"
