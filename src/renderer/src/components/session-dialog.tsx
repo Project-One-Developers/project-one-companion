@@ -44,7 +44,7 @@ export default function RaidSessionDialog({
         onError: (error) => {
             toast({
                 title: 'Errore',
-                description: `Non è stato possibile creare la raid session. Errore: ${error.message}`
+                description: `Unable to create raid session. Errore: ${error.message}`
             })
         }
     })

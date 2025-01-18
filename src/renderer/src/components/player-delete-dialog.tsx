@@ -24,8 +24,8 @@ export default function PlayerDeleteDialog({ player }: { player: Player }): JSX.
             queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
             setOpen(false)
             toast({
-                title: 'Cancellazione player',
-                description: `Il player ${player.name} è stato cancellato con successo.`
+                title: 'Player Deletion',
+                description: `The player ${player.name} has been successfully deleted.`
             })
         }
     })
@@ -36,10 +36,10 @@ export default function PlayerDeleteDialog({ player }: { player: Player }): JSX.
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Cancellazione player</DialogTitle>
+                    <DialogTitle>Player Deletion</DialogTitle>
                     <DialogDescription>
-                        Il player {player.name} e i relativi personaggi verranno definitivamente
-                        cancellati dal database.
+                        The player {player.name} and their associated characters will be permanently
+                        deleted from the database.
                     </DialogDescription>
                 </DialogHeader>
                 <img
@@ -49,7 +49,7 @@ export default function PlayerDeleteDialog({ player }: { player: Player }): JSX.
                     height={400}
                 />
                 <Button disabled={isPending} onClick={() => mutate()}>
-                    {isPending ? <Loader2 className="animate-spin" /> : 'Conferma'}
+                    {isPending ? <Loader2 className="animate-spin" /> : 'Confirm'}
                 </Button>
             </DialogContent>
         </Dialog>

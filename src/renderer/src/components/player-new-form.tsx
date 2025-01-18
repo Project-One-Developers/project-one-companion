@@ -32,14 +32,14 @@ export default function PlayerNewForm(): JSX.Element {
             form.reset()
             setOpen(false)
             toast({
-                title: 'Aggiunta player',
-                description: `Il player ${arg} è stato aggiunto con successo.`
+                title: 'Player added',
+                description: `The player ${arg} has been successfully added.`
             })
         },
         onError: (error) => {
             toast({
-                title: 'Errore',
-                description: `Non è stato possibile aggiungere il pg. Errore: ${error.message}`
+                title: 'Error',
+                description: `Unable to add the player. Error: ${error.message}`
             })
         }
     })
@@ -66,11 +66,10 @@ export default function PlayerNewForm(): JSX.Element {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Nuovo player</DialogTitle>
+                    <DialogTitle>New player</DialogTitle>
                     <DialogDescription>
-                        Inserisci solo il nickname del giocatore. I personaggi giocati andranno
-                        aggiunti successivamente e dovranno essere chiamati come il personaggio in
-                        game.
+                        Enter only the player's nickname. Characters played should be added later
+                        and must be named as they are in the game.
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -80,7 +79,7 @@ export default function PlayerNewForm(): JSX.Element {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nome</FormLabel>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
@@ -89,7 +88,7 @@ export default function PlayerNewForm(): JSX.Element {
                             )}
                         />
                         <Button disabled={isPending} type="submit">
-                            {isPending ? <Loader2 className="animate-spin" /> : 'Aggiungi'}
+                            {isPending ? <Loader2 className="animate-spin" /> : 'Add'}
                         </Button>
                     </form>
                 </Form>

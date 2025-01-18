@@ -33,14 +33,14 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
             form.reset()
             setOpen(false)
             toast({
-                title: 'Aggiunta player',
-                description: `Il pg ${arg.name} del player ${player.name} è stato aggiunto con successo.`
+                title: 'Character Added',
+                description: `The character ${arg.name} for player ${player.name} has been successfully added.`
             })
         },
         onError: (error) => {
             toast({
-                title: 'Errore',
-                description: `Non è stato possibile aggiungere il pg. Errore: ${error.message}`
+                title: 'Error',
+                description: `Unable to add the character. Error: ${error.message}`
             })
         }
     })
@@ -70,9 +70,9 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Nuovo pg per {player.name}</DialogTitle>
+                    <DialogTitle>New character for {player.name}</DialogTitle>
                     <DialogDescription>
-                        Inserisci il nome corretto del personaggio in game
+                        Enter the correct character name as it appears in-game
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -82,7 +82,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nome</FormLabel>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
@@ -103,7 +103,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Seleziona un server" />
+                                                    <SelectValue placeholder="Select a server" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -124,7 +124,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                             name="role"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ruolo</FormLabel>
+                                    <FormLabel>Role</FormLabel>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
@@ -132,7 +132,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Seleziona un ruolo" />
+                                                    <SelectValue placeholder="Select a role" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -153,7 +153,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                             name="class"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Classe</FormLabel>
+                                    <FormLabel>Class</FormLabel>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
@@ -162,7 +162,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Seleziona una classe" />
+                                                    <SelectValue placeholder="Select a class" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -179,7 +179,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                             )}
                         />
                         <Button disabled={isPending} type="submit">
-                            {isPending ? <Loader2 className="animate-spin" /> : 'Aggiungi'}
+                            {isPending ? <Loader2 className="animate-spin" /> : 'Add'}
                         </Button>
                     </form>
                 </Form>
