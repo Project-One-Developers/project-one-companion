@@ -56,10 +56,8 @@ export default function SessionDeleteDialog({
                 <DialogContent>
                     <DialogTitle>Delete Session</DialogTitle>
                     <DialogDescription>
-                        <p>
-                            The raid session <strong>{raidSession.name}</strong> and relative loot
-                            data will be permanently deleted from the database
-                        </p>
+                        The raid session <strong>{raidSession.name}</strong> and relative loot data
+                        will be permanently deleted from the database
                     </DialogDescription>
                     <Button
                         variant="destructive"
