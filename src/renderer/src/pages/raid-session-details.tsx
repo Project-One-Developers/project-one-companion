@@ -8,10 +8,10 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@renderer/components/ui/dropdown-menu'
+import { Separator } from '@renderer/components/ui/separator'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addRaidSessionLootsRcLoot, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
-import { ROLE_PRIORITIES } from '@shared/consts/wow.consts'
 import { Item } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
@@ -19,10 +19,12 @@ import {
     Calendar,
     ChevronDown,
     Edit,
+    Heart,
     LoaderCircle,
+    Shield,
     Sword,
-    Trash2,
-    Users
+    Swords,
+    Trash2
 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -146,31 +148,83 @@ export const RaidSessionDetailsPage = () => {
             {/* First Row: Roster Panel + Looted Items */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Roster Panel */}
-                <section className="bg-muted p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4 flex items-center text-green-400">
-                        <Users className="mr-2" /> Roster
-                    </h2>
-                    <div className="flex flex-wrap gap-4 mb-4">
-                        {raidSession.roster
-                            .sort(
-                                (a, b) =>
-                                    ROLE_PRIORITIES[a.role] - ROLE_PRIORITIES[b.role] ||
-                                    a.name.localeCompare(b.name)
-                            )
-                            .map((character) => (
-                                <div
-                                    key={character.id}
-                                    className="flex flex-col min-w-20 items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
-                                >
-                                    <WowClassIcon
-                                        wowClassName={character.class}
-                                        className="h-10 w-10 border-2 border-background rounded-lg"
-                                    />
-                                    <span className="text-xs">{character.name}</span>
-                                </div>
-                            ))}
+                <div className="bg-muted p-6 rounded-lg shadow-md">
+                    {/* Tanks */}
+                    <div className="mb-4">
+                        <div className="flex items-center mb-2">
+                            <Shield className="mr-2 h-5 w-5 text-blue-400" />
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                            {raidSession.roster
+                                .filter((character) => character.role === 'Tank')
+                                .sort((a, b) => a.class.localeCompare(b.class))
+                                .map((character) => (
+                                    <div
+                                        key={character.id}
+                                        className="flex flex-col min-w-20 items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
+                                    >
+                                        <WowClassIcon
+                                            wowClassName={character.class}
+                                            className="h-10 w-10 border-2 border-background rounded-lg"
+                                        />
+                                        <span className="text-xs">{character.name}</span>
+                                    </div>
+                                ))}
+                        </div>
                     </div>
-                </section>
+
+                    <Separator className="my-4 bg-gray-600" />
+
+                    {/* Healers */}
+                    <div className="mb-4">
+                        <div className="flex items-center mb-2">
+                            <Heart className="mr-2 h-5 w-5 text-green-400" />
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                            {raidSession.roster
+                                .filter((character) => character.role === 'Healer')
+                                .sort((a, b) => a.class.localeCompare(b.class))
+                                .map((character) => (
+                                    <div
+                                        key={character.id}
+                                        className="flex flex-col min-w-20 items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
+                                    >
+                                        <WowClassIcon
+                                            wowClassName={character.class}
+                                            className="h-10 w-10 border-2 border-background rounded-lg"
+                                        />
+                                        <span className="text-xs">{character.name}</span>
+                                    </div>
+                                ))}
+                        </div>
+                    </div>
+
+                    <Separator className="my-4 bg-gray-600" />
+
+                    {/* DPS */}
+                    <div>
+                        <div className="flex items-center mb-2">
+                            <Swords className="mr-2 h-5 w-5 text-red-400" />
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                            {raidSession.roster
+                                .filter((character) => character.role === 'DPS')
+                                .sort((a, b) => a.class.localeCompare(b.class))
+                                .map((character) => (
+                                    <div
+                                        key={character.id}
+                                        className="flex flex-col min-w-20 items-center rounded-lg cursor-pointer transition-transform hover:scale-125"
+                                    >
+                                        <WowClassIcon
+                                            wowClassName={character.class}
+                                            className="h-10 w-10 border-2 border-background rounded-lg"
+                                        />
+                                        <span className="text-xs">{character.name}</span>
+                                    </div>
+                                ))}
+                        </div>
+                    </div>
+                </div>
 
                 {/* Looted items Panel */}
                 <section className="bg-muted p-6 rounded-lg shadow-md">
