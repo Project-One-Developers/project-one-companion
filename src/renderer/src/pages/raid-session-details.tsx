@@ -14,7 +14,6 @@ import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import {
     addRaidSessionLootsRcLoot,
-    deleteRaidSession,
     editRaidSession,
     fetchRaidSession
 } from '@renderer/lib/tanstack-query/raid'
@@ -114,27 +113,6 @@ export const RaidSessionDetailsPage = () => {
         }
     }
 
-    const { mutate: mutateDeleteSession, isPending: isDeletingSession } = useMutation({
-        mutationFn: deleteRaidSession,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
-            navigate(`/raid-session`)
-        },
-        onError: (error) => {
-            toast({
-                title: 'Error',
-                description: `Unable to delete the raid session. Error: ${error.message}`
-            })
-        }
-    })
-
-    const handleDeleteSession = (sessionId: string) => {
-        console.log(`Deleting session with ID: ${sessionId}`)
-        if (raidSessionId) {
-            mutateDeleteSession(sessionId)
-        }
-    }
-
     if (isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
@@ -175,19 +153,20 @@ export const RaidSessionDetailsPage = () => {
                             onSubmit={handleEditSession}
                         />
                     </Dialog.Root>
-                    <Dialog.Root open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                        <Dialog.Trigger asChild>
-                            <Button variant="destructive" className="hover:bg-red-700">
-                                <Trash2 className="mr-2 h-4 w-4" /> Delete
-                            </Button>
-                        </Dialog.Trigger>
-                        <SessionDeleteDialog
-                            isOpen={isDeleteDialogOpen}
-                            onOpenChange={setIsDeleteDialogOpen}
-                            onDelete={() => handleDeleteSession(raidSession.id)}
-                            isDeleting={isDeletingSession}
-                        />
-                    </Dialog.Root>
+                    <Button
+                        variant="destructive"
+                        className="hover:bg-red-700"
+                        onClick={() => {
+                            setIsDeleteDialogOpen(true)
+                        }}
+                    >
+                        <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    </Button>
+                    <SessionDeleteDialog
+                        isOpen={isDeleteDialogOpen}
+                        onOpenChange={setIsDeleteDialogOpen}
+                        raidSession={raidSession}
+                    />
                 </div>
             </div>
 
