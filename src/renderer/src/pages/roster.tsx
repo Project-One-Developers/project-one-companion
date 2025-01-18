@@ -62,7 +62,7 @@ export default function RosterPage(): JSX.Element {
             </div>
 
             {/* Bottom Right Plus Icon */}
-            <div className="absolute bottom-6 right-6">
+            <div className="fixed bottom-6 right-6">
                 <div
                     className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
                     onClick={() => setIsAddDialogOpen(true)}
