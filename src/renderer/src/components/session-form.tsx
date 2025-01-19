@@ -41,7 +41,6 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
     </div>
 )
 
-// Updated schema
 const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
     raidDate: z.string().refine((val) => /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(val), {
         message: 'Invalid date format. Use DD/MM/YYYY HH:mm'
@@ -50,29 +49,22 @@ const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
 
 type FormNewRaidSession = z.infer<typeof updatedNewRaidSessionSchema>
 
-interface SessionFormProps {
+const SessionForm: React.FC<{
     onSubmit: (data: NewRaidSession) => void
     existingSession?: RaidSession
-}
-
-const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) => {
+}> = ({ onSubmit, existingSession }) => {
     const defaultDate = new Date()
-    defaultDate.setHours(21, 0, 0, 0) // Set to Today 9 PM
+    defaultDate.setHours(21, 0, 0, 0)
 
-    const { data, isLoading } = useQuery({
+    const { data: players = [], isLoading } = useQuery({
         queryKey: [queryKeys.players],
         queryFn: fetchPlayers
     })
 
-    const players = data ?? []
-    const tankPlayers = players.filter(
-        (p) => p.characters && p.characters.length > 0 && p.characters[0].role === 'Tank'
-    )
-    const healerPlayers = players.filter(
-        (p) => p.characters && p.characters.length > 0 && p.characters[0].role === 'Healer'
-    )
-    const dpsPlayers = players.filter(
-        (p) => p.characters && p.characters.length > 0 && p.characters[0].role === 'DPS'
+    const [tankPlayers, healerPlayers, dpsPlayers] = ['Tank', 'Healer', 'DPS'].map((role) =>
+        players.filter(
+            (p) => p.characters && p.characters.length > 0 && p.characters[0].role === role
+        )
     )
 
     const {
@@ -97,106 +89,112 @@ const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) 
     })
 
     const onSubmitForm = (formData: FormNewRaidSession) => {
-        const submissionData: NewRaidSession = {
+        onSubmit({
             ...formData,
             raidDate: parseStringToUnixTimestamp(formData.raidDate)
-        }
-        onSubmit(submissionData)
-        if (!existingSession) {
-            reset()
-        }
+        })
+        if (!existingSession) reset()
     }
+
     const toggleCharacter = (
         currentRoster: Set<string>,
         player: Player,
         charId: string
     ): string[] => {
         const playerCharIds = new Set(player.characters?.map((c) => c.id) || [])
-
         if (currentRoster.has(charId)) {
             currentRoster.delete(charId)
         } else {
             playerCharIds.forEach((id) => currentRoster.delete(id))
             currentRoster.add(charId)
         }
-
         return Array.from(currentRoster)
     }
 
-    return (
-        <form onSubmit={handleSubmit(onSubmitForm)} className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                    <h2 className="text-xl font-bold">Session Details</h2>
-                    <div className="mb-4">
-                        <input
-                            {...register('name')}
-                            type="text"
-                            placeholder={'Session Name'}
-                            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
-                        />
-                        <div className="h-5">
-                            {errors.name && (
-                                <p className="text-red-500 text-sm">{errors.name?.message}</p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="mb-4">
-                        <input
-                            {...register('raidDate')}
-                            type="text"
-                            placeholder={'DD/MM/YYYY HH:mm'}
-                            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
-                        />
-                        <div className="h-5">
-                            {errors.name && (
-                                <p className="text-red-500 text-sm">{errors.raidDate?.message}</p>
-                            )}
-                        </div>
-                    </div>
-                </div>
+    if (isLoading) {
+        return <LoaderCircle className="animate-spin text-5xl mx-auto mt-10 mb-10" />
+    }
 
-                {/* Characters in roster panel */}
-                <div className="space-y-4">
-                    <h2 className="text-xl font-bold">Select Characters</h2>
-                    {isLoading ? (
-                        <LoaderCircle className="animate-spin text-5xl text-blue-500 mx-auto" />
-                    ) : (
-                        <div className="overflow-y-auto pr-2">
-                            <Controller
-                                name="roster"
-                                control={control}
-                                render={({ field }) => (
-                                    <div className="space-y-2">
-                                        {players.map((player) => (
-                                            <PlayerWithCharsRow
-                                                key={player.id}
-                                                player={player}
-                                                selectedCharacters={field.value}
-                                                onCharacterToggle={(charId) => {
-                                                    const currentRoster = new Set(field.value)
-                                                    const updatedRoster = toggleCharacter(
-                                                        currentRoster,
-                                                        player,
-                                                        charId
-                                                    )
-                                                    field.onChange(updatedRoster)
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            />
-                        </div>
-                    )}
-                    {errors.roster && (
-                        <p className="text-red-500 text-sm">{errors.roster.message}</p>
-                    )}
-                </div>
+    return (
+        <form onSubmit={handleSubmit(onSubmitForm)} className="max-w-6xl mx-auto space-y-6">
+            <div className="flex space-x-4">
+                {['name', 'raidDate'].map((field) => (
+                    <div key={field} className="flex-1">
+                        <input
+                            {...register(field as 'name' | 'raidDate')}
+                            type="text"
+                            placeholder={field === 'name' ? 'Session Name' : 'DD/MM/YYYY HH:mm'}
+                            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                        {errors[field as 'name' | 'raidDate'] && (
+                            <p className="text-red-500 text-sm">
+                                {errors[field as 'name' | 'raidDate']?.message}
+                            </p>
+                        )}
+                    </div>
+                ))}
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Controller
+                    name="roster"
+                    control={control}
+                    render={({ field }) => (
+                        <>
+                            <div className="space-y-2 overflow-y-auto p-1">
+                                {tankPlayers.map((player) => (
+                                    <PlayerWithCharsRow
+                                        key={player.id}
+                                        player={player}
+                                        selectedCharacters={field.value}
+                                        onCharacterToggle={(charId) => {
+                                            const currentRoster = new Set(field.value)
+                                            field.onChange(
+                                                toggleCharacter(currentRoster, player, charId)
+                                            )
+                                        }}
+                                    />
+                                ))}
+                                <hr className="border-gray-800" />
+                                {healerPlayers.map((player) => (
+                                    <PlayerWithCharsRow
+                                        key={player.id}
+                                        player={player}
+                                        selectedCharacters={field.value}
+                                        onCharacterToggle={(charId) => {
+                                            const currentRoster = new Set(field.value)
+                                            field.onChange(
+                                                toggleCharacter(currentRoster, player, charId)
+                                            )
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                            <div className="space-y-2 overflow-y-auto p-1">
+                                {dpsPlayers.map((player) => (
+                                    <PlayerWithCharsRow
+                                        key={player.id}
+                                        player={player}
+                                        selectedCharacters={field.value}
+                                        onCharacterToggle={(charId) => {
+                                            const currentRoster = new Set(field.value)
+                                            field.onChange(
+                                                toggleCharacter(currentRoster, player, charId)
+                                            )
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        </>
+                    )}
+                />
+            </div>
+
+            {errors.roster && <p className="text-red-500 text-sm">{errors.roster.message}</p>}
+
             <button
                 type="submit"
-                className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold mt-6"
+                className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold"
             >
                 Confirm
             </button>
