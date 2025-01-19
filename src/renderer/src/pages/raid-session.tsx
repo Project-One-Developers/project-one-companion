@@ -1,28 +1,16 @@
+import * as Separator from '@radix-ui/react-separator'
 import SessionDeleteDialog from '@renderer/components/session-delete-dialog'
 import RaidSessionDialog from '@renderer/components/session-dialog'
 import SessionLootNewDialog from '@renderer/components/session-loot-new-dialog'
 import { Button } from '@renderer/components/ui/button'
-import { Separator } from '@renderer/components/ui/separator'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
 import { Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import {
-    ArrowLeft,
-    Calendar,
-    Edit,
-    Heart,
-    LoaderCircle,
-    PlusIcon,
-    Shield,
-    Sword,
-    Swords,
-    Trash2
-} from 'lucide-react'
+import { ArrowLeft, Calendar, Edit, LoaderCircle, PlusIcon, Sword, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-
 const mockLoot: Item[] = []
 
 export const RaidSessionPage = () => {
@@ -40,6 +28,8 @@ export const RaidSessionPage = () => {
         enabled: !!raidSessionId
     })
 
+    if (!raidSession) return null
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
@@ -48,7 +38,18 @@ export const RaidSessionPage = () => {
         )
     }
 
-    if (!raidSession) return null
+    // prepare data
+    const tanks = raidSession.roster
+        .filter((character) => character.role === 'Tank')
+        .sort((a, b) => a.class.localeCompare(b.class))
+
+    const healers = raidSession.roster
+        .filter((character) => character.role === 'Healer')
+        .sort((a, b) => a.class.localeCompare(b.class))
+
+    const dps = raidSession.roster
+        .filter((character) => character.role === 'DPS')
+        .sort((a, b) => a.class.localeCompare(b.class))
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 p-8 relative">
@@ -102,86 +103,59 @@ export const RaidSessionPage = () => {
 
             {/* Roster Panel */}
             <div className="bg-muted p-6 rounded-lg shadow-md">
-                {/* Tanks and Healers */}
-                <div className="flex mb-4">
-                    {/* Tanks */}
-                    <div className="flex-1">
-                        <div className="flex items-center mb-2">
-                            <Shield className="mr-2 h-5 w-5 text-blue-400" />
-                            <h3 className="text-lg font-semibold">Tanks</h3>
-                        </div>
-                        <div className="flex ">
-                            {raidSession.roster
-                                .filter((character) => character.role === 'Tank')
-                                .sort((a, b) => a.class.localeCompare(b.class))
-                                .map((character) => (
-                                    <div
-                                        key={character.id}
-                                        className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
-                                    >
-                                        <WowClassIcon
-                                            wowClassName={character.class}
-                                            className="h-10 w-10 border-2 border-background rounded-lg"
-                                        />
-                                        <span className="text-xs mt-1">{character.name}</span>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-
-                    {/* Vertical Separator */}
-                    {/* <Separator orientation="vertical" className="mx-4 bg-gray-600" /> */}
-
-                    {/* Healers */}
-                    <div className="flex-1">
-                        <div className="flex items-center mb-2">
-                            <Heart className="mr-2 h-5 w-5 text-green-400" />
-                            <h3 className="text-lg font-semibold">Healers</h3>
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                            {raidSession.roster
-                                .filter((character) => character.role === 'Healer')
-                                .sort((a, b) => a.class.localeCompare(b.class))
-                                .map((character) => (
-                                    <div
-                                        key={character.id}
-                                        className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
-                                    >
-                                        <WowClassIcon
-                                            wowClassName={character.class}
-                                            className="h-10 w-10 border-2 border-background rounded-lg"
-                                        />
-                                        <span className="text-xs mt-1">{character.name}</span>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-                </div>
-
-                <Separator className="my-4 bg-gray-600" />
-
-                {/* DPS */}
-                <div>
-                    <div className="flex items-center mb-2">
-                        <Swords className="mr-2 h-5 w-5 text-red-400" />
-                        <h3 className="text-lg font-semibold">DPS</h3>
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                        {raidSession.roster
-                            .filter((character) => character.role === 'DPS')
-                            .sort((a, b) => a.class.localeCompare(b.class))
-                            .map((character) => (
+                <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center space-x-2">
+                        <div className="flex flex-wrap gap-2">
+                            {tanks.map((character) => (
                                 <div
                                     key={character.id}
                                     className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
                                 >
                                     <WowClassIcon
                                         wowClassName={character.class}
-                                        className="h-10 w-10 border-2 border-background rounded-lg"
+                                        charname={character.name}
+                                        className="h-8 w-8 border-2 border-background rounded-lg"
                                     />
-                                    <span className="text-xs mt-1">{character.name}</span>
                                 </div>
                             ))}
+
+                            <Separator.Root
+                                className="h-8 mr-3 ml-3 w-[1px] bg-gray-400"
+                                decorative
+                                orientation="vertical"
+                            />
+
+                            {healers.map((character) => (
+                                <div
+                                    key={character.id}
+                                    className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
+                                >
+                                    <WowClassIcon
+                                        wowClassName={character.class}
+                                        charname={character.name}
+                                        className="h-8 w-8 border-2 border-background rounded-lg"
+                                    />
+                                </div>
+                            ))}
+                            <Separator.Root
+                                className="h-8 mr-3 ml-3 w-[1px] bg-gray-400"
+                                decorative
+                                orientation="vertical"
+                            />
+
+                            {dps.map((character) => (
+                                <div
+                                    key={character.id}
+                                    className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
+                                >
+                                    <WowClassIcon
+                                        wowClassName={character.class}
+                                        charname={character.name}
+                                        className="h-8 w-8 border-2 border-background rounded-lg"
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
