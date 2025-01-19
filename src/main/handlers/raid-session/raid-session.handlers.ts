@@ -1,4 +1,10 @@
-import { EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
+import {
+    EditRaidSession,
+    NewLootsFromManualInput,
+    NewLootsFromRc,
+    NewRaidSession,
+    RaidSession
+} from '@shared/types/types'
 import {
     addRaidSession,
     deleteRaidSession,
@@ -8,12 +14,18 @@ import {
 } from '@storage/raid-session/raid-session.storage'
 import { parseRaidSessionCsv } from './raid-session.utils'
 
-export const addRaidLootsByRCLootCsvHandler = async (
-    sessionId: string,
-    csv: string
-): Promise<void> => {
-    const parsedData = await parseRaidSessionCsv(sessionId, csv)
+export const addRaidLootsByRCLootCsvHandler = async (loot: NewLootsFromRc): Promise<void> => {
+    const parsedData = await parseRaidSessionCsv(loot.raidSessionId, loot.csv)
     console.log(parsedData)
+
+    // TODO: insertion
+}
+
+export const addRaidLootsByManualInputHandler = async (
+    loot: NewLootsFromManualInput
+): Promise<void> => {
+    //const parsedData = await parseRaidSessionCsv(loot.raidSessionId, loot.csv)
+    console.log(loot)
 
     // TODO: insertion
 }

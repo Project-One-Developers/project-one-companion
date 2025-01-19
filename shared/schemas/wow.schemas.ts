@@ -57,7 +57,7 @@ export const wowArmorTypeSchema = z.enum(['Cloth', 'Leather', 'Mail', 'Plate'])
 
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
 
-export const wowRaidDiffSchema = z.enum(['Heroic', 'Mythic'])
+export const wowRaidDiffSchema = z.enum(['Normal', 'Heroic', 'Mythic'])
 
 export const wowRoleClassSchema = z.object({
     Tank: wowClassTankSchema,

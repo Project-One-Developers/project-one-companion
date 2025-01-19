@@ -10,6 +10,8 @@ import type {
     EditRaidSession,
     Item,
     NewCharacter,
+    NewLootsFromManualInput,
+    NewLootsFromRc,
     NewPlayer,
     NewRaidSession,
     Player,
@@ -77,8 +79,12 @@ export const api = {
     deleteRaidSession(id: string): Promise<void> {
         return ipcRenderer.invoke('raid-session-delete', id)
     },
-    addRaidSessionLootsRcLoot(id: string, csv: string): Promise<void> {
-        return ipcRenderer.invoke('add-raid-session-loots-rcloot', id, csv)
+    // Loots
+    addLootsManual(loots: NewLootsFromManualInput): Promise<void> {
+        return ipcRenderer.invoke('loots-add-manual', loots)
+    },
+    addLootsFromRc(loots: NewLootsFromRc): Promise<void> {
+        return ipcRenderer.invoke('loots-add-rcloot', loots)
     },
     // App settings
     getAppSettings(): Promise<AppSettings> {
@@ -91,11 +97,15 @@ export const api = {
         return ipcRenderer.invoke('app-settings-reset')
     },
     // JSON Data
-    getItems(): Promise<Item[]> {
-        return ipcRenderer.invoke('get-items')
-    },
     upsertJsonData(): Promise<void> {
         return ipcRenderer.invoke('upsert-json-data')
+    },
+    // Items
+    getItems(): Promise<Item[]> {
+        return ipcRenderer.invoke('items-list')
+    },
+    searchItems(searchTerm: string, limit: number): Promise<Item[]> {
+        return ipcRenderer.invoke('items-search', searchTerm, limit)
     }
 }
 

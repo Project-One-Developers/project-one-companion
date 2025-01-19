@@ -1,5 +1,6 @@
 import { itemSchema } from '@shared/schemas/items.schema'
 import type { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
+import { ilike } from 'drizzle-orm'
 import { z } from 'zod'
 import { db } from '../storage.config'
 import { itemTable, itemToCatalystTable, itemToTiersetTable } from '../storage.schema'
@@ -8,6 +9,15 @@ import { conflictUpdateAllExcept } from '../storage.utils'
 export const getItems = async (): Promise<Item[]> => {
     const items = await db.query.itemTable.findMany()
     return z.array(itemSchema).parse(items)
+}
+
+export const searchItems = async (searchTerm: string, limit: number): Promise<Item[]> => {
+    const res = await db
+        .select()
+        .from(itemTable)
+        .where(ilike(itemTable.name, '%' + searchTerm + '%'))
+        .limit(limit)
+    return z.array(itemSchema).parse(res)
 }
 
 export const upsertItems = async (items: Item[]): Promise<void> => {

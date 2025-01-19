@@ -8,8 +8,8 @@ import { queryClient } from './lib/tanstack-query/client'
 import DroptimizerForm from './pages/droptimizer'
 import HomePage from './pages/home'
 import LootTable from './pages/loot-table'
-import RaidSessionPage from './pages/raid-session'
-import { RaidSessionDetailsPage } from './pages/raid-session-details'
+import { RaidSessionPage } from './pages/raid-session'
+import RaidSessionListPage from './pages/raid-session-list'
 import RosterPage from './pages/roster'
 import SettingsPage from './pages/settings'
 import Tierset from './pages/tierset'
@@ -26,11 +26,8 @@ function App(): JSX.Element {
                         <Route path="/roster" element={<RosterPage />} />
                         <Route path="/droptimizer" element={<DroptimizerForm />} />
                         <Route path="/loot-table" element={<LootTable />} />
-                        <Route path="/raid-session" element={<RaidSessionPage />} />
-                        <Route
-                            path="raid-session/:raidSessionId"
-                            element={<RaidSessionDetailsPage />}
-                        />
+                        <Route path="/raid-session" element={<RaidSessionListPage />} />
+                        <Route path="raid-session/:raidSessionId" element={<RaidSessionPage />} />
                         <Route path="/tierset" element={<Tierset />} />
                         <Route path="/config" element={<SettingsPage />} />
                     </Routes>

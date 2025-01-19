@@ -13,9 +13,10 @@ import {
     getDroptimizerListHandler,
     syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
-import { getItemsHandler } from './items/items.handlers'
+import { getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import { upsertJsonDataHandler } from './json-data/json-data.handlers'
 import {
+    addRaidLootsByManualInputHandler,
     addRaidLootsByRCLootCsvHandler,
     addRaidSessionHandler,
     deleteRaidSessionHandler,
@@ -44,14 +45,16 @@ export const allHandlers = {
     'player-edit': editPlayerHandler,
     'player-list': getPlayerWithCharactersListHandler,
     'upsert-json-data': upsertJsonDataHandler,
-    'get-items': getItemsHandler,
+    'items-list': getItemsHandler,
+    'items-search': searchItemsHandler,
     'loot-table-get': getRaidLootTableHanlder,
     'raid-session-list': getRaidSessionListHandler,
     'raid-session-get': getRaidSessionHandler,
     'raid-session-add': addRaidSessionHandler,
     'raid-session-edit': editRaidSessionHandler,
     'raid-session-delete': deleteRaidSessionHandler,
-    'add-raid-session-loots-rcloot': addRaidLootsByRCLootCsvHandler,
+    'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
+    'loots-add-manual': addRaidLootsByManualInputHandler,
     'app-settings-get': getAppSettingsHandler,
     'app-settings-set': setAppSettingsHandler,
     'app-settings-reset': resetAppSettingsHandler
