@@ -65,6 +65,15 @@ const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) 
     })
 
     const players = data ?? []
+    const tankPlayers = players.filter(
+        (p) => p.characters && p.characters.length > 0 && p.characters[0].role === 'Tank'
+    )
+    const healerPlayers = players.filter(
+        (p) => p.characters && p.characters.length > 0 && p.characters[0].role === 'Healer'
+    )
+    const dpsPlayers = players.filter(
+        (p) => p.characters && p.characters.length > 0 && p.characters[0].role === 'DPS'
+    )
 
     const {
         register,
@@ -96,6 +105,22 @@ const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) 
         if (!existingSession) {
             reset()
         }
+    }
+    const toggleCharacter = (
+        currentRoster: Set<string>,
+        player: Player,
+        charId: string
+    ): string[] => {
+        const playerCharIds = new Set(player.characters?.map((c) => c.id) || [])
+
+        if (currentRoster.has(charId)) {
+            currentRoster.delete(charId)
+        } else {
+            playerCharIds.forEach((id) => currentRoster.delete(id))
+            currentRoster.add(charId)
+        }
+
+        return Array.from(currentRoster)
     }
 
     return (
@@ -150,20 +175,12 @@ const SessionForm: React.FC<SessionFormProps> = ({ onSubmit, existingSession }) 
                                                 selectedCharacters={field.value}
                                                 onCharacterToggle={(charId) => {
                                                     const currentRoster = new Set(field.value)
-                                                    const playerCharIds = new Set(
-                                                        player.characters?.map((c) => c.id) || []
+                                                    const updatedRoster = toggleCharacter(
+                                                        currentRoster,
+                                                        player,
+                                                        charId
                                                     )
-
-                                                    if (currentRoster.has(charId)) {
-                                                        currentRoster.delete(charId)
-                                                    } else {
-                                                        playerCharIds.forEach((id) =>
-                                                            currentRoster.delete(id)
-                                                        )
-                                                        currentRoster.add(charId)
-                                                    }
-
-                                                    field.onChange(Array.from(currentRoster))
+                                                    field.onChange(updatedRoster)
                                                 }}
                                             />
                                         ))}
