@@ -51,7 +51,14 @@ export function unixTimestampToWowWeek(unixTimestamp?: number): number {
 
 export function formaUnixTimestampToItalianDate(unixTimestamp: number): string {
     const date = new Date(unixTimestamp * 1000)
-    return date.toLocaleString('it-IT')
+    const options: Intl.DateTimeFormatOptions = {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    }
+    return new Intl.DateTimeFormat('it-IT', options).format(date)
 }
 
 export function formatWowWeek(wowWeek?: number): string {

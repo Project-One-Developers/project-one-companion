@@ -6,6 +6,7 @@ import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
+import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
 import { Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Calendar, Edit, LoaderCircle, PlusIcon, Sword, Trash2 } from 'lucide-react'
@@ -64,7 +65,7 @@ export const RaidSessionPage = () => {
                     <h1 className="text-3xl font-bold mb-2 text-blue-400">{raidSession.name}</h1>
                     <div className="flex items-center text-gray-400">
                         <Calendar className="mr-2 h-4 w-4" />
-                        <span>{new Date(raidSession.raidDate * 1000).toLocaleString()}</span>
+                        <span>{formaUnixTimestampToItalianDate(raidSession.raidDate)}</span>
                     </div>
                 </div>
                 <div className="flex space-x-2">
