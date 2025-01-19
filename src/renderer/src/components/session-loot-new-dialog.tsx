@@ -127,7 +127,7 @@ export default function SessionLootNewDialog({
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[700px]">
                 <DialogHeader>
                     <DialogTitle>New Loots</DialogTitle>
                     <DialogDescription>
@@ -138,13 +138,13 @@ export default function SessionLootNewDialog({
                     <Tabs.List className="flex border-b mb-4">
                         <Tabs.Trigger
                             value="manual"
-                            className="px-4 py-2 flex-1 text-center hover:bg-gray-100 data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                            className="px-4 py-2 flex-1 text-center hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
                         >
                             Manual Entry
                         </Tabs.Trigger>
                         <Tabs.Trigger
                             value="rcloot"
-                            className="px-4 py-2 flex-1 flex items-center justify-center space-x-2 hover:bg-gray-100 data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                            className="px-4 py-2 flex-1 flex items-center justify-center space-x-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
                         >
                             <img
                                 className="w-6 h-6"
