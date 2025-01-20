@@ -78,7 +78,7 @@ export const parseWowAuditData = (jsonData: unknown): NewCharacterWowAudit[] => 
             tiersetLegsDiff: jsonData[274], // tier_legs_difficulty
 
             // Best Slot ever equipped
-            highestIlvlEverEquipped: jsonData[132], // highest_ilvl_ever_equipped
+            highestIlvlEverEquipped: String(jsonData[132]), // highest_ilvl_ever_equipped
             bestHeadIlvl: getNullSafeValue(jsonData, 192),
             bestHeadId: getNullSafeValue(jsonData, 193),
             bestHeadName: getNullSafeValue(jsonData, 194),
