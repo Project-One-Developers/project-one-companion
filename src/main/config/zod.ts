@@ -7,7 +7,7 @@ export const setZodErrorMap = () => {
 
         return {
             ...baseError,
-            message: `${baseError.message}${path}`
+            message: `Zod parse error on data ${ctx.data} - ${baseError.message}${path}`
         }
     })
 }
