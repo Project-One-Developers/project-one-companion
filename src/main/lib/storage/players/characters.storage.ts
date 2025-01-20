@@ -1,21 +1,15 @@
-import {
-    characterSchema,
-    charactersListSchema,
-    playerSchema
-} from '@shared/schemas/characters.schemas'
+import { characterSchema, charactersListSchema } from '@shared/schemas/characters.schemas'
 import type {
     Character,
     EditCharacter,
     NewCharacter,
-    NewCharacterWowAudit,
-    Player
+    NewCharacterWowAudit
 } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charTable, charWowAuditTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
 import { eq } from 'drizzle-orm'
 import { newUUID } from '../../utils'
-import { addPlayer, getPlayerByName } from './players.storage'
 
 export const getCharacterById = async (id: string): Promise<Character | null> => {
     const result = await db
@@ -40,41 +34,20 @@ export const getCharactersList = async (): Promise<Character[]> => {
     return charactersListSchema.parse(result)
 }
 
-export const addCharacter = async (character: NewCharacter): Promise<Player> => {
-    const player =
-        (await getPlayerByName(character.playerName)) ?? (await addPlayer(character.playerName))
-
+export const addCharacter = async (character: NewCharacter): Promise<string> => {
     const id = newUUID()
 
-    const result = await db
-        .insert(charTable)
-        .values({
-            id,
-            name: character.name,
-            realm: character.realm,
-            class: character.class,
-            role: character.role,
-            main: character.main,
-            playerId: player.id
-        })
-        .returning()
-        .then(takeFirstResult)
-
-    return playerSchema.parse({
+    await db.insert(charTable).values({
         id,
-        name: player.name,
-        characters: [
-            {
-                id,
-                name: result?.name,
-                realm: result?.realm,
-                class: result?.class,
-                role: result?.role,
-                main: result?.main,
-                playerId: player.id
-            }
-        ]
+        name: character.name,
+        realm: character.realm,
+        class: character.class,
+        role: character.role,
+        main: character.main,
+        playerId: character.playerId
     })
+
+    return id
 }
 
 export const addCharacterWowAudit = async (characters: NewCharacterWowAudit[]): Promise<void> => {

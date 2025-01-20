@@ -118,7 +118,8 @@ export default function RosterPage(): JSX.Element {
                     <CharacterDialog
                         isOpen={isNewCharDialogOpen}
                         setOpen={setIsNewCharDialogOpen}
-                        playerName={selectedPlayer.name}
+                        mode="add"
+                        player={selectedPlayer}
                     />
                 </>
             )}

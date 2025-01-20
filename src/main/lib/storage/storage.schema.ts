@@ -390,7 +390,7 @@ export const droptimizerRelations = relations(droptimizerTable, ({ many }) => ({
 }))
 
 export const playerCharRelations = relations(playerTable, ({ many }) => ({
-    chars: many(charTable)
+    characters: many(charTable)
 }))
 
 // Raid Sessions

@@ -12,7 +12,8 @@ export const characterSchema = z.object({
     realm: z.string().min(1),
     class: wowClassSchema,
     role: wowRolesSchema,
-    main: z.boolean()
+    main: z.boolean(),
+    playerId: playerSchema.shape.id
 })
 
 export const playerWithCharacterSchema = playerSchema.extend({
@@ -33,13 +34,9 @@ export const playersListSchema = z.object({
     players: z.array(playerSchema)
 })
 
-export const newCharacterSchema = characterSchema
-    .omit({
-        id: true
-    })
-    .extend({
-        playerName: characterSchema.shape.name
-    })
+export const newCharacterSchema = characterSchema.omit({
+    id: true
+})
 
 export const editCharacterSchema = characterSchema.extend({
     id: characterSchema.shape.id

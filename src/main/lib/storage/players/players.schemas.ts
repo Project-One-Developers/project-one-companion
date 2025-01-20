@@ -5,7 +5,7 @@ const playerStorageSchema = z
     .object({
         id: z.string(),
         name: z.string(),
-        chars: z.array(
+        characters: z.array(
             z.object({
                 id: z.string(),
                 name: z.string(),
@@ -20,13 +20,14 @@ const playerStorageSchema = z
     .transform((data) => ({
         id: data.id,
         name: data.name,
-        characters: data.chars.map((char) => ({
+        characters: data.characters.map((char) => ({
             id: char.id,
             name: char.name,
             realm: char.realm,
             main: char.main,
             class: char.class,
-            role: char.role
+            role: char.role,
+            playerId: char.playerId
         }))
     }))
 

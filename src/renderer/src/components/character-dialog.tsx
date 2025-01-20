@@ -5,7 +5,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addCharacter, editCharacter } from '@renderer/lib/tanstack-query/players'
 import { REALMS, ROLES, ROLES_CLASSES_MAP } from '@shared/consts/wow.consts'
 import { newCharacterSchema } from '@shared/schemas/characters.schemas'
-import type { Character, NewCharacter } from '@shared/types/types'
+import type { Character, NewCharacter, Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { type JSX } from 'react'
@@ -29,19 +29,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 type CharacterDialogProps = {
     isOpen: boolean
     setOpen: (open: boolean) => void
-    playerName: string
+    mode: 'add' | 'edit'
+    player?: Player
     existingCharacter?: Character
 }
 
 export default function CharacterDialog({
     isOpen,
     setOpen,
-    playerName,
+    mode,
+    player,
     existingCharacter
 }: CharacterDialogProps): JSX.Element {
-    const isEditing = existingCharacter != null
-    if (isEditing) {
-        console.log(`Editing character with ID: ${existingCharacter.id}`)
+    if (mode === 'edit' && !existingCharacter) {
+        throw new Error('Cannot edit a character that does not exist')
+    }
+    if (mode === 'add' && !player) {
+        throw new Error('Cannot add a character without a player')
     }
 
     const addMutation = useMutation({
@@ -52,7 +56,7 @@ export default function CharacterDialog({
             setOpen(false)
             toast({
                 title: 'Character Added',
-                description: `The character ${arg.name} for player ${arg.playerName} has been successfully added.`
+                description: `The character ${arg.name} has been successfully added.`
             })
         },
         onError: (error) => {
@@ -91,7 +95,7 @@ export default function CharacterDialog({
             class: 'Death Knight',
             role: 'DPS',
             main: true,
-            playerName: playerName
+            playerId: player?.id
         }
     })
 
@@ -99,7 +103,7 @@ export default function CharacterDialog({
     const filteredClasses = ROLES_CLASSES_MAP[selectedRole] || []
 
     function onSubmit(values: NewCharacter): void {
-        if (isEditing) {
+        if (mode === 'edit' && existingCharacter) {
             editMutation.mutate({ id: existingCharacter.id, ...values })
         } else {
             addMutation.mutate(values)
@@ -111,7 +115,7 @@ export default function CharacterDialog({
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>
-                        {isEditing ? 'New' : 'Edit'} character for {playerName}
+                        {mode === 'add' ? 'New' : 'Edit'} character for {player?.name}
                     </DialogTitle>
                     <DialogDescription>
                         Enter the correct character name as it appears in-game

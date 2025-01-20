@@ -3,6 +3,7 @@ import type {
     EditCharacter,
     EditPlayer,
     NewCharacter,
+    NewPlayer,
     Player,
     PlayerWithCharacters
 } from '@shared/types/types'
@@ -27,8 +28,9 @@ import { fetchWowAuditData, parseWowAuditData } from './characters.utils'
 
 // Characters
 
-export const addCharacterHandler = async (character: NewCharacter): Promise<Player> => {
-    return await addCharacter(character)
+export const addCharacterHandler = async (character: NewCharacter): Promise<Character | null> => {
+    const id = await addCharacter(character)
+    return await getCharacterById(id)
 }
 
 export const getCharacterHandler = async (id: string): Promise<Character | null> => {
@@ -75,8 +77,9 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
 
 // Players
 
-export const addPlayerHandler = async (playerName: string): Promise<Player> => {
-    return await addPlayer(playerName)
+export const addPlayerHandler = async (player: NewPlayer): Promise<Player | null> => {
+    const id = await addPlayer(player)
+    return await getPlayerById(id)
 }
 
 export const deletePlayerHandler = async (playerId: string): Promise<void> => {
