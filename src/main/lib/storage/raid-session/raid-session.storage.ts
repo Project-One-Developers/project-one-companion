@@ -38,15 +38,12 @@ export const getRaidSession = async (id: string): Promise<RaidSession> => {
 }
 
 export const getRaidSessionList = async (): Promise<RaidSession[]> => {
+    // todo: switchare in query raid session + count loot + count partecipation
     const result = await db.query.raidSessionTable.findMany({
         with: {
             charPartecipation: {
                 with: {
-                    character: {
-                        with: {
-                            player: true
-                        }
-                    }
+                    character: true
                 }
             }
         }
