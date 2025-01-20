@@ -1,5 +1,5 @@
 import { playerSchema } from '@shared/schemas/characters.schemas'
-import type { EditPlayer, Player } from '@shared/types/types'
+import type { EditPlayer, Player, PlayerWithCharacters } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charTable, playerTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm'
 import { newUUID } from '../../utils'
 import { playersListStorageSchema } from './players.schemas'
 
-export const getPlayerWithCharactersList = async (): Promise<Player[]> => {
+export const getPlayerWithCharactersList = async (): Promise<PlayerWithCharacters[]> => {
     const result = await db.query.playerTable.findMany({
         with: {
             chars: true

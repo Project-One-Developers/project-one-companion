@@ -3,8 +3,8 @@ import PlayerDialog from '@renderer/components/player-dialog'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
 import { Button } from '@renderer/components/ui/button'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
-import { Player } from '@shared/types/types'
+import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
+import { Character, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { LoaderCircle, PlusIcon, X } from 'lucide-react'
@@ -16,18 +16,37 @@ export default function RosterPage(): JSX.Element {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
 
-    const { data, isLoading } = useQuery({
-        queryKey: [queryKeys.players],
-        queryFn: fetchPlayers
+    const characterQuery = useQuery({
+        queryKey: [queryKeys.characters],
+        queryFn: fetchCharacters
     })
 
-    if (isLoading) {
+    if (characterQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
             </div>
         )
     }
+
+    const characters = characterQuery.data ?? []
+
+    const charMap = new Map<string, Character[]>() // <playerId, [characters]>
+    const playerMap = new Map<string, Player>() // <playerId, player>
+
+    characters.forEach((character) => {
+        const player = character.player
+
+        if (!playerMap.has(player.id)) {
+            playerMap.set(player.id, player)
+        }
+
+        if (!charMap.has(player.id)) {
+            charMap.set(player.id, [character])
+        } else {
+            charMap.get(player.id)?.push(character) // Use optional chaining
+        }
+    })
 
     const handleDeleteClick = (player: Player) => {
         setSelectedPlayer(player)
@@ -36,29 +55,32 @@ export default function RosterPage(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
+            {/* Player Card */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {data?.map((player) => (
-                    // Player Card
-                    <div
-                        key={player.id}
-                        className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[300px] rounded-lg relative"
-                    >
-                        {/* Top Right Menu */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute top-3 right-2"
-                            onClick={() => handleDeleteClick(player)}
+                {Array.from(playerMap.keys()).map((playerId) => {
+                    const player = playerMap.get(playerId)
+                    const characters = charMap.get(playerId) ?? []
+                    return !player ? null : (
+                        // Player Card
+                        <div
+                            key={player.id}
+                            className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[300px] rounded-lg relative"
                         >
-                            <X className="h-4 w-4" />
-                        </Button>
+                            {/* Top Right Menu */}
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-3 right-2"
+                                onClick={() => handleDeleteClick(player)}
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
 
-                        <h2 className="font-black text-2xl">{player.name}</h2>
-                        {player.characters ? (
-                            <AnimatedTooltip player={player} items={[...player.characters]} />
-                        ) : null}
-                    </div>
-                ))}
+                            <h2 className="font-black text-2xl">{player.name}</h2>
+                            <AnimatedTooltip player={player} items={characters} />
+                        </div>
+                    )
+                })}
             </div>
 
             {/* Bottom Right Icons */}

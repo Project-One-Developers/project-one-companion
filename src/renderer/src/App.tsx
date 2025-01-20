@@ -5,6 +5,7 @@ import ProjectOneSidebar from './components/sidebar'
 import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar'
 import { Toaster } from './components/ui/toaster'
 import { queryClient } from './lib/tanstack-query/client'
+import { CharacterPage } from './pages/character'
 import DroptimizerForm from './pages/droptimizer'
 import HomePage from './pages/home'
 import LootTable from './pages/loot-table'
@@ -24,10 +25,11 @@ function App(): JSX.Element {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/roster" element={<RosterPage />} />
+                        <Route path="/roster/:characterId" element={<CharacterPage />} />
                         <Route path="/droptimizer" element={<DroptimizerForm />} />
                         <Route path="/loot-table" element={<LootTable />} />
                         <Route path="/raid-session" element={<RaidSessionListPage />} />
-                        <Route path="raid-session/:raidSessionId" element={<RaidSessionPage />} />
+                        <Route path="/raid-session/:raidSessionId" element={<RaidSessionPage />} />
                         <Route path="/tierset" element={<Tierset />} />
                         <Route path="/config" element={<SettingsPage />} />
                     </Routes>

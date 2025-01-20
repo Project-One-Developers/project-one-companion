@@ -4,13 +4,26 @@ import type {
     EditPlayer,
     NewCharacter,
     NewPlayer,
-    Player
+    Player,
+    PlayerWithCharacters
 } from 'shared/types/types'
 
 // characters
 
 export const addCharacter = async (character: NewCharacter): Promise<Character> => {
     const response = await window.api.addCharacter(character)
+    return response
+}
+
+export const fetchCharacter = async (id: string | undefined): Promise<Character> => {
+    if (!id) {
+        throw new Error('No raid session id provided')
+    }
+    return await window.api.getCharacter(id)
+}
+
+export const fetchCharacters = async (): Promise<Character[]> => {
+    const response = await window.api.getCharactersList()
     return response
 }
 
@@ -25,8 +38,8 @@ export const editCharacter = async (edited: EditCharacter): Promise<Character> =
 
 // players
 
-export const fetchPlayers = async (): Promise<Player[]> => {
-    const response = await window.api.getPlayerList()
+export const fetchPlayers = async (): Promise<PlayerWithCharacters[]> => {
+    const response = await window.api.getPlayerWithCharList()
     return response
 }
 

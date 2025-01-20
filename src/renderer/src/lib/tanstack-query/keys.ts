@@ -5,6 +5,8 @@ export const queryKeys = {
     raidSessions: 'raid-session-list',
     raidSession: 'raid-session',
     raidSessionLoots: 'raid-session-loots',
+    character: 'character',
+    characters: 'character-list',
     itemSearch: 'item-search',
     appSettings: 'app-settings'
 }

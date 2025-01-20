@@ -23,7 +23,11 @@ export const getRaidSession = async (id: string): Promise<RaidSession> => {
         with: {
             charPartecipation: {
                 with: {
-                    character: true
+                    character: {
+                        with: {
+                            player: true
+                        }
+                    }
                 }
             }
         }
@@ -38,7 +42,11 @@ export const getRaidSessionList = async (): Promise<RaidSession[]> => {
         with: {
             charPartecipation: {
                 with: {
-                    character: true
+                    character: {
+                        with: {
+                            player: true
+                        }
+                    }
                 }
             }
         }

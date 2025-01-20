@@ -4,8 +4,8 @@ import { cn } from '@renderer/lib/utils'
 import { classIcon } from '@renderer/lib/wow-icon'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useState, type JSX } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Character, Player } from 'shared/types/types'
-import { CharacterForm } from '../character-dialog'
 
 export const AnimatedTooltip = ({
     items,
@@ -25,6 +25,8 @@ export const AnimatedTooltip = ({
         const halfWidth = event.target.offsetWidth / 2
         x.set(event.nativeEvent.offsetX - halfWidth)
     }
+
+    const navigate = useNavigate()
 
     return (
         <div className={cn('flex items-center gap-2', className)}>
@@ -86,19 +88,19 @@ export const AnimatedTooltip = ({
                             </motion.div>
                         )}
                     </AnimatePresence>
-                    <img
-                        onMouseMove={handleMouseMove}
-                        height={50}
-                        width={50}
-                        src={classIcon.get(item.class)}
-                        alt={item.class}
-                        className="object-cover !m-0 !p-0 object-top rounded-full h-12 w-12 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
-                    />
+                    <div className="cursor-pointer" onClick={() => navigate(`/roster/${item.id}`)}>
+                        <img
+                            onMouseMove={handleMouseMove}
+                            height={50}
+                            width={50}
+                            src={classIcon.get(item.class)}
+                            alt={item.class}
+                            className="object-cover !m-0 !p-0 object-top rounded-full h-12 w-12 border group-hover:scale-105 group-hover:z-30 border-background relative transition duration-500"
+                        />
+                    </div>
                 </div>
             ))}
-            <div className="ml-3">
-                <CharacterForm player={player} />
-            </div>
+            <div className="ml-3">{/* <CharacterDialog player={player} /> */}</div>
         </div>
     )
 }
