@@ -34,6 +34,9 @@ export const api = {
     editCharacter(edited: EditCharacter): Promise<Character> {
         return ipcRenderer.invoke('character-edit', edited)
     },
+    syncWowAudit(): Promise<void> {
+        return ipcRenderer.invoke('character-sync-wowaudit')
+    },
     getPlayerList(): Promise<Player[]> {
         return ipcRenderer.invoke('player-list')
     },

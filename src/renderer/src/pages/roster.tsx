@@ -61,8 +61,28 @@ export default function RosterPage(): JSX.Element {
                 ))}
             </div>
 
-            {/* Bottom Right Plus Icon */}
-            <div className="fixed bottom-6 right-6">
+            {/* Bottom Right Icons */}
+            <div className="fixed bottom-6 right-6 space-y-2">
+                <div
+                    className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
+                    onClick={() => setIsAddDialogOpen(true)}
+                >
+                    <img
+                        src="https://cdn.raiderio.net/images/mstile-150x150.png"
+                        title="Sync Raider.io"
+                        className=" hover:scale-125 ease-linear transition-transform "
+                    ></img>
+                </div>
+                <div
+                    className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
+                    onClick={() => window.api.syncWowAudit()}
+                >
+                    <img
+                        src="https://data.wowaudit.com/img/new-logo-icon.svg"
+                        title="Sync WowAudit"
+                        className=" hover:scale-125 ease-linear transition-transform "
+                    ></img>
+                </div>
                 <div
                     className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
                     onClick={() => setIsAddDialogOpen(true)}

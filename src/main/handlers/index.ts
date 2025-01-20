@@ -5,7 +5,8 @@ import {
     deletePlayerHandler,
     editCharacterHandler,
     editPlayerHandler,
-    getPlayerWithCharactersListHandler
+    getPlayerWithCharactersListHandler,
+    syncCharacterWowAudit
 } from './characters/characters.handlers'
 import {
     addDroptimizerHandler,
@@ -40,6 +41,7 @@ export const allHandlers = {
     //'character-list': todo,
     'character-delete': deleteCharacterHandler,
     'character-edit': editCharacterHandler,
+    'character-sync-wowaudit': syncCharacterWowAudit,
     'player-add': addPlayerHandler,
     'player-delete': deletePlayerHandler,
     'player-edit': editPlayerHandler,

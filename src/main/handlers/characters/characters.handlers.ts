@@ -7,15 +7,21 @@ import type {
 } from '@shared/types/types'
 import {
     addCharacter,
-    addPlayer,
+    addCharacterWowAudit,
+    deleteAllCharacterWowAudit,
     deleteCharacter,
-    deletePlayer,
     editCharacter,
+    getCharacterById
+} from '@storage/players/characters.storage'
+import {
+    addPlayer,
+    deletePlayer,
     editPlayer,
-    getCharacterById,
     getPlayerById,
     getPlayerWithCharactersList
 } from '@storage/players/players.storage'
+import { getConfig } from '@storage/settings/settings.storage'
+import { fetchWowAuditData, parseWowAuditData } from './characters.utils'
 
 // Characters
 
@@ -33,6 +39,22 @@ export const editCharacterHandler = async (edited: EditCharacter): Promise<Chara
 
     // retrieve updated entity
     return await getCharacterById(edited.id)
+}
+
+export const syncCharacterWowAudit = async (): Promise<void> => {
+    const key = await getConfig('WOW_AUDIT_API_KEY')
+
+    if (key === null) {
+        throw new Error('WOW_AUDIT_API_KEY not set in database')
+    }
+
+    const json = await fetchWowAuditData(key)
+
+    if (json != null) {
+        const charsData = parseWowAuditData(json)
+        await deleteAllCharacterWowAudit()
+        await addCharacterWowAudit(charsData)
+    }
 }
 
 // export const getCharacterListHandler = async (): Promise<Character[]> => {
