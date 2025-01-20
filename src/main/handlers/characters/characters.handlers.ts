@@ -3,7 +3,8 @@ import type {
     EditCharacter,
     EditPlayer,
     NewCharacter,
-    Player
+    Player,
+    PlayerWithCharacters
 } from '@shared/types/types'
 import {
     addCharacter,
@@ -11,7 +12,8 @@ import {
     deleteAllCharacterWowAudit,
     deleteCharacter,
     editCharacter,
-    getCharacterById
+    getCharacterById,
+    getCharactersList
 } from '@storage/players/characters.storage'
 import {
     addPlayer,
@@ -27,6 +29,15 @@ import { fetchWowAuditData, parseWowAuditData } from './characters.utils'
 
 export const addCharacterHandler = async (character: NewCharacter): Promise<Player> => {
     return await addCharacter(character)
+}
+
+export const getCharacterHandler = async (id: string): Promise<Character | null> => {
+    return await getCharacterById(id)
+}
+
+export const getChracterListHandler = async (): Promise<Character[]> => {
+    const res = await getCharactersList()
+    return res
 }
 
 export const deleteCharacterHandler = async (id: string): Promise<void> => {
@@ -80,7 +91,7 @@ export const editPlayerHandler = async (edited: EditPlayer): Promise<Player | nu
     return await getPlayerById(edited.id)
 }
 
-export const getPlayerWithCharactersListHandler = async (): Promise<Player[]> => {
+export const getPlayerWithCharactersListHandler = async (): Promise<PlayerWithCharacters[]> => {
     const players = await getPlayerWithCharactersList()
     return players
 }

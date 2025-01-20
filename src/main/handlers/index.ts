@@ -5,6 +5,8 @@ import {
     deletePlayerHandler,
     editCharacterHandler,
     editPlayerHandler,
+    getCharacterHandler,
+    getChracterListHandler,
     getPlayerWithCharactersListHandler,
     syncCharacterWowAudit
 } from './characters/characters.handlers'
@@ -38,7 +40,8 @@ export const allHandlers = {
     'droptimizer-delete': deleteDroptimizerHandler,
     'droptimizer-discord-sync': syncDroptimizersFromDiscord,
     'character-add': addCharacterHandler,
-    //'character-list': todo,
+    'character-get': getCharacterHandler,
+    'character-list': getChracterListHandler,
     'character-delete': deleteCharacterHandler,
     'character-edit': editCharacterHandler,
     'character-sync-wowaudit': syncCharacterWowAudit,

@@ -399,8 +399,12 @@ export const raidSessionTableRelations = relations(raidSessionTable, ({ many }) 
     charPartecipation: many(raidSessionRosterTable)
 }))
 
-export const charTableRelations = relations(charTable, ({ many }) => ({
-    raidPartecipation: many(raidSessionRosterTable)
+export const charTableRelations = relations(charTable, ({ one, many }) => ({
+    raidPartecipation: many(raidSessionRosterTable),
+    player: one(playerTable, {
+        fields: [charTable.playerId],
+        references: [playerTable.id]
+    })
 }))
 
 export const raidSessionRosterRelations = relations(raidSessionRosterTable, ({ one }) => ({

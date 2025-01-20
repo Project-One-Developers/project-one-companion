@@ -1,4 +1,8 @@
-import { characterSchema, playerSchema } from '@shared/schemas/characters.schemas'
+import {
+    characterSchema,
+    charactersListSchema,
+    playerSchema
+} from '@shared/schemas/characters.schemas'
 import type {
     Character,
     EditCharacter,
@@ -25,6 +29,15 @@ export const getCharacterById = async (id: string): Promise<Character | null> =>
     }
 
     return characterSchema.parse(result)
+}
+
+export const getCharactersList = async (): Promise<Character[]> => {
+    const result = await db.query.charTable.findMany({
+        with: {
+            player: true
+        }
+    })
+    return charactersListSchema.parse(result)
 }
 
 export const addCharacter = async (character: NewCharacter): Promise<Player> => {

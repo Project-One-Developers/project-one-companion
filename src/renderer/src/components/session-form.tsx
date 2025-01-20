@@ -3,7 +3,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay, parseStringToUnixTimestamp } from '@renderer/lib/utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
-import { NewRaidSession, Player, RaidSession } from '@shared/types/types'
+import { NewRaidSession, PlayerWithCharacters, RaidSession } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import React from 'react'
@@ -12,7 +12,7 @@ import { z } from 'zod'
 import { WowClassIcon } from './ui/wowclass-icon'
 
 interface PlayerWithCharsRowProps {
-    player: Player
+    player: PlayerWithCharacters
     selectedCharacters: string[]
     onCharacterToggle: (charId: string) => void
 }
@@ -98,7 +98,7 @@ const SessionForm: React.FC<{
 
     const toggleCharacter = (
         currentRoster: Set<string>,
-        player: Player,
+        player: PlayerWithCharacters,
         charId: string
     ): string[] => {
         const playerCharIds = new Set(player.characters?.map((c) => c.id) || [])

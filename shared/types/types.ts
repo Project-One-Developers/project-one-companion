@@ -20,7 +20,8 @@ import {
     editPlayerSchema,
     newCharacterSchema,
     newPlayerSchema,
-    playerSchema
+    playerSchema,
+    playerWithCharacterSchema
 } from '../schemas/characters.schemas'
 import {
     droptimizerSchema,
@@ -44,6 +45,7 @@ export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
 export type WoWRole = z.infer<typeof wowRolesSchema>
 
 export type Player = z.infer<typeof playerSchema>
+export type PlayerWithCharacters = z.infer<typeof playerWithCharacterSchema>
 export type NewPlayer = z.infer<typeof newPlayerSchema>
 export type EditPlayer = z.infer<typeof editPlayerSchema>
 

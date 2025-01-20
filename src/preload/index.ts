@@ -15,6 +15,7 @@ import type {
     NewPlayer,
     NewRaidSession,
     Player,
+    PlayerWithCharacters,
     RaidSession
 } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
@@ -24,6 +25,9 @@ export const api = {
     // Characters
     addCharacter(character: NewCharacter): Promise<Character> {
         return ipcRenderer.invoke('character-add', character)
+    },
+    getCharacter(id: string): Promise<Character> {
+        return ipcRenderer.invoke('character-get', id)
     },
     getCharactersList(): Promise<Character[]> {
         return ipcRenderer.invoke('character-list')
@@ -37,7 +41,7 @@ export const api = {
     syncWowAudit(): Promise<void> {
         return ipcRenderer.invoke('character-sync-wowaudit')
     },
-    getPlayerList(): Promise<Player[]> {
+    getPlayerWithCharList(): Promise<PlayerWithCharacters[]> {
         return ipcRenderer.invoke('player-list')
     },
     addPlayer(player: NewPlayer): Promise<Player> {

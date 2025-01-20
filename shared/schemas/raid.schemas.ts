@@ -17,7 +17,7 @@ export const raidSessionSchema = z.object({
     id: z.string(),
     name: z.string(),
     raidDate: z.number(),
-    roster: z.array(characterSchema.omit({ droptimizer: true }))
+    roster: z.array(characterSchema)
 })
 
 export const newRaidSessionSchema = z.object({

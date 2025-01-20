@@ -1,3 +1,4 @@
+import CharacterDialog from '@renderer/components/character-dialog'
 import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
 import PlayerDialog from '@renderer/components/player-dialog'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
@@ -14,14 +15,15 @@ import { useState, type JSX } from 'react'
 export default function RosterPage(): JSX.Element {
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [isNewCharDialogOpen, setIsNewCharDialogOpen] = useState(false)
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
 
-    const { data, isLoading } = useQuery({
+    const characterQuery = useQuery({
         queryKey: [queryKeys.players],
         queryFn: fetchPlayers
     })
 
-    if (isLoading) {
+    if (characterQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -29,15 +31,22 @@ export default function RosterPage(): JSX.Element {
         )
     }
 
+    const players = characterQuery.data ?? []
+
     const handleDeleteClick = (player: Player) => {
         setSelectedPlayer(player)
         setIsDeleteDialogOpen(true)
     }
 
+    const handleNewCharClick = (player: Player) => {
+        setSelectedPlayer(player)
+        setIsNewCharDialogOpen(true)
+    }
+
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {data?.map((player) => (
+                {players.map((player) => (
                     // Player Card
                     <div
                         key={player.id}
@@ -54,9 +63,14 @@ export default function RosterPage(): JSX.Element {
                         </Button>
 
                         <h2 className="font-black text-2xl">{player.name}</h2>
-                        {player.characters ? (
-                            <AnimatedTooltip player={player} items={[...player.characters]} />
-                        ) : null}
+                        <div className="flex flex-row items-center">
+                            {player.characters && (
+                                <AnimatedTooltip items={[...player.characters]} />
+                            )}
+                            <div className="ml-1" onClick={() => handleNewCharClick(player)}>
+                                <PlusIcon className="w-5 h-5 cursor-pointer" />
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -94,13 +108,20 @@ export default function RosterPage(): JSX.Element {
             </div>
 
             {/* Page Dialogs */}
-            {selectedPlayer ? (
-                <PlayerDeleteDialog
-                    isOpen={isDeleteDialogOpen}
-                    setOpen={setIsDeleteDialogOpen}
-                    player={selectedPlayer}
-                />
-            ) : null}
+            {selectedPlayer && (
+                <>
+                    <PlayerDeleteDialog
+                        isOpen={isDeleteDialogOpen}
+                        setOpen={setIsDeleteDialogOpen}
+                        player={selectedPlayer}
+                    />
+                    <CharacterDialog
+                        isOpen={isNewCharDialogOpen}
+                        setOpen={setIsNewCharDialogOpen}
+                        playerName={selectedPlayer.name}
+                    />
+                </>
+            )}
             <PlayerDialog isOpen={isAddDialogOpen} setOpen={setIsAddDialogOpen} />
         </div>
     )

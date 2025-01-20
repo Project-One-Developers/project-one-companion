@@ -2,25 +2,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { addCharacter } from '@renderer/lib/tanstack-query/players'
+import { addCharacter, editCharacter } from '@renderer/lib/tanstack-query/players'
 import { REALMS, ROLES, ROLES_CLASSES_MAP } from '@shared/consts/wow.consts'
 import { newCharacterSchema } from '@shared/schemas/characters.schemas'
-import type { NewCharacter, Player } from '@shared/types/types'
+import type { Character, NewCharacter } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
-import { Loader2, PlusIcon } from 'lucide-react'
-import { useState, type JSX } from 'react'
+import { Loader2 } from 'lucide-react'
+import { type JSX } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from './ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import {
     Form,
     FormControl,
@@ -33,10 +26,25 @@ import {
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
-export function CharacterForm({ player }: { player: Player }): JSX.Element {
-    const [open, setOpen] = useState(false)
+type CharacterDialogProps = {
+    isOpen: boolean
+    setOpen: (open: boolean) => void
+    playerName: string
+    existingCharacter?: Character
+}
 
-    const { mutate, isPending } = useMutation({
+export default function CharacterDialog({
+    isOpen,
+    setOpen,
+    playerName,
+    existingCharacter
+}: CharacterDialogProps): JSX.Element {
+    const isEditing = existingCharacter != null
+    if (isEditing) {
+        console.log(`Editing character with ID: ${existingCharacter.id}`)
+    }
+
+    const addMutation = useMutation({
         mutationFn: addCharacter,
         onSuccess: (_, arg) => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
@@ -44,13 +52,33 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
             setOpen(false)
             toast({
                 title: 'Character Added',
-                description: `The character ${arg.name} for player ${player.name} has been successfully added.`
+                description: `The character ${arg.name} for player ${arg.playerName} has been successfully added.`
             })
         },
         onError: (error) => {
             toast({
                 title: 'Error',
                 description: `Unable to add the character. Error: ${error.message}`
+            })
+        }
+    })
+
+    const editMutation = useMutation({
+        mutationFn: editCharacter,
+        onSuccess: (_, arg) => {
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.character, arg.id]
+            })
+            setOpen(false)
+            toast({
+                title: 'Character edited',
+                description: `Character ${arg.name} edited successfully`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Error',
+                description: `Unable to edit the character. Error: ${error.message}`
             })
         }
     })
@@ -63,7 +91,7 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
             class: 'Death Knight',
             role: 'DPS',
             main: true,
-            playerName: player.name
+            playerName: playerName
         }
     })
 
@@ -71,17 +99,20 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
     const filteredClasses = ROLES_CLASSES_MAP[selectedRole] || []
 
     function onSubmit(values: NewCharacter): void {
-        mutate(values)
+        if (isEditing) {
+            editMutation.mutate({ id: existingCharacter.id, ...values })
+        } else {
+            addMutation.mutate(values)
+        }
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <PlusIcon className="w-5 h-5 cursor-pointer" />
-            </DialogTrigger>
+        <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>New character for {player.name}</DialogTitle>
+                    <DialogTitle>
+                        {isEditing ? 'New' : 'Edit'} character for {playerName}
+                    </DialogTitle>
                     <DialogDescription>
                         Enter the correct character name as it appears in-game
                     </DialogDescription>
@@ -210,8 +241,15 @@ export function CharacterForm({ player }: { player: Player }): JSX.Element {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={isPending} type="submit">
-                            {isPending ? <Loader2 className="animate-spin" /> : 'Add'}
+                        <Button
+                            disabled={addMutation.isPending || editMutation.isPending}
+                            type="submit"
+                        >
+                            {addMutation.isPending || editMutation.isPending ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                'Add'
+                            )}
                         </Button>
                     </form>
                 </Form>
