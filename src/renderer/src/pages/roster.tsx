@@ -67,7 +67,7 @@ export default function RosterPage(): JSX.Element {
                             {player.characters && (
                                 <AnimatedTooltip items={[...player.characters]} />
                             )}
-                            <div className="ml-1" onClick={() => handleNewCharClick(player)}>
+                            <div className="ml-5" onClick={() => handleNewCharClick(player)}>
                                 <PlusIcon className="w-5 h-5 cursor-pointer" />
                             </div>
                         </div>
