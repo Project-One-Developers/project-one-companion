@@ -5,15 +5,13 @@ import { classIcon } from '@renderer/lib/wow-icon'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useState, type JSX } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { Character, Player } from 'shared/types/types'
+import type { Character } from 'shared/types/types'
 
 export const AnimatedTooltip = ({
     items,
-    player,
     className
 }: {
     items: Character[]
-    player: Player
     className?: string
 }): JSX.Element => {
     const [hoveredIndex, setHoveredIndex] = useState<string | null>(null)
@@ -65,26 +63,6 @@ export const AnimatedTooltip = ({
                                     {item.name}
                                 </div>
                                 <div className="text-muted-foreground text-xs">{item.class}</div>
-                                {item.droptimizer?.length ? (
-                                    <div className="text-muted-foreground text-xs">
-                                        Last droptimizer:
-                                        {new Date(
-                                            item.droptimizer[
-                                                item.droptimizer.length - 1
-                                            ].simInfo.date
-                                        ).toLocaleDateString()}
-                                    </div>
-                                ) : null}
-                                {item.droptimizer?.length ? (
-                                    <div className="text-muted-foreground text-xs">
-                                        Last droptimizer:{' '}
-                                        {new Date(
-                                            item.droptimizer[
-                                                item.droptimizer.length - 1
-                                            ].simInfo.date
-                                        ).toLocaleDateString()}
-                                    </div>
-                                ) : null}
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -100,7 +78,6 @@ export const AnimatedTooltip = ({
                     </div>
                 </div>
             ))}
-            <div className="ml-3">{/* <CharacterDialog player={player} /> */}</div>
         </div>
     )
 }

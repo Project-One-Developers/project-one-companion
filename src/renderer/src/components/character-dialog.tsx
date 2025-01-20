@@ -7,20 +7,13 @@ import { REALMS, ROLES, ROLES_CLASSES_MAP } from '@shared/consts/wow.consts'
 import { newCharacterSchema } from '@shared/schemas/characters.schemas'
 import type { Character, NewCharacter } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
-import { Loader2, PlusIcon } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { type JSX } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from './ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import {
     Form,
     FormControl,
@@ -98,7 +91,7 @@ export default function CharacterDialog({
             class: 'Death Knight',
             role: 'DPS',
             main: true,
-            playerName: isEditing ? existingCharacter.player.name : playerName
+            playerName: playerName
         }
     })
 
@@ -115,9 +108,6 @@ export default function CharacterDialog({
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <PlusIcon className="w-5 h-5 cursor-pointer" />
-            </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>

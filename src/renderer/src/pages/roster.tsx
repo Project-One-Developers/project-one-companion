@@ -1,10 +1,11 @@
+import CharacterDialog from '@renderer/components/character-dialog'
 import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
 import PlayerDialog from '@renderer/components/player-dialog'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
 import { Button } from '@renderer/components/ui/button'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
-import { Character, Player } from '@shared/types/types'
+import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
+import { Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { LoaderCircle, PlusIcon, X } from 'lucide-react'
@@ -14,11 +15,12 @@ import { useState, type JSX } from 'react'
 export default function RosterPage(): JSX.Element {
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [isNewCharDialogOpen, setIsNewCharDialogOpen] = useState(false)
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
 
     const characterQuery = useQuery({
-        queryKey: [queryKeys.characters],
-        queryFn: fetchCharacters
+        queryKey: [queryKeys.players],
+        queryFn: fetchPlayers
     })
 
     if (characterQuery.isLoading) {
@@ -29,58 +31,48 @@ export default function RosterPage(): JSX.Element {
         )
     }
 
-    const characters = characterQuery.data ?? []
-
-    const charMap = new Map<string, Character[]>() // <playerId, [characters]>
-    const playerMap = new Map<string, Player>() // <playerId, player>
-
-    characters.forEach((character) => {
-        const player = character.player
-
-        if (!playerMap.has(player.id)) {
-            playerMap.set(player.id, player)
-        }
-
-        if (!charMap.has(player.id)) {
-            charMap.set(player.id, [character])
-        } else {
-            charMap.get(player.id)?.push(character) // Use optional chaining
-        }
-    })
+    const players = characterQuery.data ?? []
 
     const handleDeleteClick = (player: Player) => {
         setSelectedPlayer(player)
         setIsDeleteDialogOpen(true)
     }
 
+    const handleNewCharClick = (player: Player) => {
+        setSelectedPlayer(player)
+        setIsNewCharDialogOpen(true)
+    }
+
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            {/* Player Card */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {Array.from(playerMap.keys()).map((playerId) => {
-                    const player = playerMap.get(playerId)
-                    const characters = charMap.get(playerId) ?? []
-                    return !player ? null : (
-                        // Player Card
-                        <div
-                            key={player.id}
-                            className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[300px] rounded-lg relative"
+                {players.map((player) => (
+                    // Player Card
+                    <div
+                        key={player.id}
+                        className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[300px] rounded-lg relative"
+                    >
+                        {/* Top Right Menu */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-3 right-2"
+                            onClick={() => handleDeleteClick(player)}
                         >
-                            {/* Top Right Menu */}
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="absolute top-3 right-2"
-                                onClick={() => handleDeleteClick(player)}
-                            >
-                                <X className="h-4 w-4" />
-                            </Button>
+                            <X className="h-4 w-4" />
+                        </Button>
 
-                            <h2 className="font-black text-2xl">{player.name}</h2>
-                            <AnimatedTooltip player={player} items={characters} />
+                        <h2 className="font-black text-2xl">{player.name}</h2>
+                        <div className="flex flex-row items-center">
+                            {player.characters && (
+                                <AnimatedTooltip items={[...player.characters]} />
+                            )}
+                            <div className="ml-1" onClick={() => handleNewCharClick(player)}>
+                                <PlusIcon className="w-5 h-5 cursor-pointer" />
+                            </div>
                         </div>
-                    )
-                })}
+                    </div>
+                ))}
             </div>
 
             {/* Bottom Right Icons */}
@@ -116,13 +108,20 @@ export default function RosterPage(): JSX.Element {
             </div>
 
             {/* Page Dialogs */}
-            {selectedPlayer ? (
-                <PlayerDeleteDialog
-                    isOpen={isDeleteDialogOpen}
-                    setOpen={setIsDeleteDialogOpen}
-                    player={selectedPlayer}
-                />
-            ) : null}
+            {selectedPlayer && (
+                <>
+                    <PlayerDeleteDialog
+                        isOpen={isDeleteDialogOpen}
+                        setOpen={setIsDeleteDialogOpen}
+                        player={selectedPlayer}
+                    />
+                    <CharacterDialog
+                        isOpen={isNewCharDialogOpen}
+                        setOpen={setIsNewCharDialogOpen}
+                        playerName={selectedPlayer.name}
+                    />
+                </>
+            )}
             <PlayerDialog isOpen={isAddDialogOpen} setOpen={setIsAddDialogOpen} />
         </div>
     )

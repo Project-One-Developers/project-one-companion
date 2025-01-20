@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { droptimizerSchema } from './simulations.schemas'
 import { wowClassSchema, wowRolesSchema } from './wow.schemas'
 
 export const playerSchema = z.object({
@@ -13,17 +12,11 @@ export const characterSchema = z.object({
     realm: z.string().min(1),
     class: wowClassSchema,
     role: wowRolesSchema,
-    main: z.boolean(),
-    player: playerSchema,
-    droptimizer: z.array(droptimizerSchema).optional()
+    main: z.boolean()
 })
 
 export const playerWithCharacterSchema = playerSchema.extend({
-    characters: z.array(
-        characterSchema.omit({
-            player: true
-        })
-    )
+    characters: z.array(characterSchema)
 })
 
 export const newPlayerSchema = playerSchema.omit({
@@ -42,8 +35,7 @@ export const playersListSchema = z.object({
 
 export const newCharacterSchema = characterSchema
     .omit({
-        id: true,
-        droptimizer: true
+        id: true
     })
     .extend({
         playerName: characterSchema.shape.name

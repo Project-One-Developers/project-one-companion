@@ -13,7 +13,7 @@ export const CharacterPage = () => {
     const navigate = useNavigate()
 
     // dialog
-    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
     const { data: character, isLoading } = useQuery({
@@ -70,13 +70,18 @@ export const CharacterPage = () => {
                     <Button
                         variant="secondary"
                         className="hover:bg-blue-700"
-                        onClick={() => {
-                            setIsEditDialogOpen(true)
-                        }}
+                        // onClick={() => {
+                        //     setIsEditDialogOpen(true)
+                        // }}
                     >
                         <Edit className="mr-2 h-4 w-4" /> Edit
                     </Button>
-                    {/* <CharacterForm player={null} /> */}
+                    {/* <CharacterDialog
+                        isOpen={isEditDialogOpen}
+                        setOpen={setIsDeleteDialogOpen}
+                        playerName={character.playerName}
+                        character={character}
+                    /> */}
                     {/* Delete Character */}
                     <Button
                         variant="destructive"
