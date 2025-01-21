@@ -1,8 +1,9 @@
 import * as schema from '@storage/storage.schema'
-import { drizzle } from 'drizzle-orm/node-postgres'
+import { drizzle } from 'drizzle-orm/postgres-js'
 import { store } from '../../app/store'
 
 import * as dotenv from 'dotenv'
+import postgres from 'postgres'
 
 // todo: va qua??
 dotenv.config()
@@ -20,14 +21,19 @@ const getDatabaseUrl = (): string => {
     throw new Error('Database URL not found in environment variables or user settings')
 }
 
-export let db = drizzle({ connection: getDatabaseUrl(), casing: 'snake_case', schema: schema })
+// Disable prefetch as it is not supported for "Transaction" pool mode
+export let client = postgres(getDatabaseUrl(), { prepare: false })
+export let db = drizzle({ client: client, casing: 'snake_case', schema: schema })
 
 export const reloadConnection = (): void => {
     // Close existing connection if necessary
-    // if (db && typeof db.$client.end === 'function') {
-    //     db.$client.$client.connection
-    // }
+    if (client) {
+        client.end()
+    }
+
+    // Create new client with updated URL
+    client = postgres(getDatabaseUrl(), { prepare: false })
 
     // Recreate the database instance
-    db = drizzle({ connection: getDatabaseUrl(), casing: 'snake_case', schema: schema })
+    db = drizzle({ client: client, casing: 'snake_case', schema: schema })
 }
