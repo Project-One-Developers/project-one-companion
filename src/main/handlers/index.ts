@@ -61,6 +61,6 @@ export const allHandlers = {
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,
     'app-settings-get': getAppSettingsHandler,
-    'app-settings-set': setAppSettingsHandler,
+    'app-settings-edit': setAppSettingsHandler,
     'app-settings-reset': resetAppSettingsHandler
 }
