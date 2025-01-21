@@ -1,6 +1,7 @@
 import { itemSchema, itemToCatalystSchema, itemToTiersetSchema } from '@shared/schemas/items.schema'
 import {
     lootSchema,
+    lootWithItemSchema,
     newLootSchema,
     newLootsFromManualInputSchema,
     newLootsFromRcSchema
@@ -76,6 +77,7 @@ export type EditRaidSession = z.infer<typeof editRaidSessionSchema>
 
 // Raid loots
 export type Loot = z.infer<typeof lootSchema>
+export type LootWithItem = z.infer<typeof lootWithItemSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootsFromRc = z.infer<typeof newLootsFromRcSchema>
 export type NewLootsFromManualInput = z.infer<typeof newLootsFromManualInputSchema>

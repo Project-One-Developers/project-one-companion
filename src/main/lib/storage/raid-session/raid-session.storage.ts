@@ -1,23 +1,12 @@
 import { charactersListSchema } from '@shared/schemas/characters.schemas'
 import { raidSessionSchema } from '@shared/schemas/raid.schemas'
-import type {
-    Character,
-    EditRaidSession,
-    NewLoot,
-    NewRaidSession,
-    RaidSession
-} from '@shared/types/types'
+import type { Character, EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
 import { db } from '@storage/storage.config'
-import {
-    charTable,
-    lootTable,
-    raidSessionRosterTable,
-    raidSessionTable
-} from '@storage/storage.schema'
+import { charTable, raidSessionRosterTable, raidSessionTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
 import { eq, InferInsertModel } from 'drizzle-orm'
 import { z } from 'zod'
-import { getUnixTimestamp, newUUID } from '../../utils'
+import { newUUID } from '../../utils'
 
 const flattenRaidPartecipation = (result: any): RaidSession => {
     return {
@@ -145,30 +134,4 @@ export const getRaidSessionRoster = async (id: string): Promise<Character[]> => 
         .where(eq(raidSessionRosterTable.raidSessionId, id))
 
     return charactersListSchema.parse(result.flatMap((sr) => sr.characters))
-}
-
-export const addLoots = async (
-    raidSessionId: string,
-    loots: NewLoot[],
-    elegibleCharacters: Character[]
-): Promise<void> => {
-    await db.transaction(async (tx) => {
-        const lootValues = loots.map((loot): InferInsertModel<typeof lootTable> => {
-            return {
-                id: newUUID(),
-                dropDate: loot.dropDate ?? getUnixTimestamp(),
-                thirdStat: '',
-                socket: loot.socket,
-                charsEligibility: elegibleCharacters.map((c) => c.id),
-                raidSessionId: raidSessionId,
-                rclootId: loot.rclootId,
-                itemId: loot.itemId
-            }
-        })
-
-        await tx
-            .insert(lootTable)
-            .values(lootValues)
-            .onConflictDoNothing({ target: lootTable.rclootId }) // do nothing on item already inserted
-    })
 }

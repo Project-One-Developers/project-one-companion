@@ -1,35 +1,11 @@
+import { EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
 import {
-    EditRaidSession,
-    NewLootsFromManualInput,
-    NewLootsFromRc,
-    NewRaidSession,
-    RaidSession
-} from '@shared/types/types'
-import {
-    addLoots,
     addRaidSession,
     deleteRaidSession,
     editRaidSession,
     getRaidSession,
-    getRaidSessionList,
-    getRaidSessionRoster
+    getRaidSessionList
 } from '@storage/raid-session/raid-session.storage'
-import { parseRaidSessionCsv } from './raid-session.utils'
-
-export const addRaidLootsByRCLootCsvHandler = async (loot: NewLootsFromRc): Promise<void> => {
-    const parsedData = await parseRaidSessionCsv(loot.csv)
-    const elegibleCharacters = await getRaidSessionRoster(loot.raidSessionId)
-    addLoots(loot.raidSessionId, parsedData, elegibleCharacters)
-}
-
-export const addRaidLootsByManualInputHandler = async (
-    loot: NewLootsFromManualInput
-): Promise<void> => {
-    //const parsedData = await parseRaidSessionCsv(loot.raidSessionId, loot.csv)
-    console.log(loot)
-
-    // TODO: insertion
-}
 
 export const getRaidSessionHandler = async (id: string): Promise<RaidSession> => {
     return await getRaidSession(id)

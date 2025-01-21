@@ -42,7 +42,7 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
         return newLootSchema.parse({
             dropDate: parseDateTime(record.date, record.time),
             socket: record.itemString.includes('Socket'),
-            diff: parseWowDiff(record.difficultyID),
+            raidDifficulty: parseWowDiff(record.difficultyID),
             itemId: record.itemID,
             rclootId: record.id
         })

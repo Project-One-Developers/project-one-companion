@@ -2,17 +2,16 @@ import * as Separator from '@radix-ui/react-separator'
 import SessionDeleteDialog from '@renderer/components/session-delete-dialog'
 import RaidSessionDialog from '@renderer/components/session-dialog'
 import SessionLootNewDialog from '@renderer/components/session-loot-new-dialog'
+import { SessionLootsPanel } from '@renderer/components/session-loots-panel'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
-import { Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Calendar, Edit, LoaderCircle, PlusIcon, Sword, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-const mockLoot: Item[] = []
 
 export const RaidSessionPage = () => {
     const { raidSessionId } = useParams<{ raidSessionId: string }>()
@@ -175,21 +174,7 @@ export const RaidSessionPage = () => {
                         <PlusIcon className="mr-2 h-4 w-4" /> Add Loot
                     </Button>
                 </div>
-                <ul className="space-y-2 mb-4 max-h-48 overflow-y-auto">
-                    {mockLoot.length > 0 ? (
-                        mockLoot.map((item, index) => (
-                            <li
-                                key={index}
-                                className="bg-gray-700 p-3 rounded-lg flex justify-between items-center"
-                            >
-                                <span>{item.name}</span>
-                                <span className="text-gray-400">Unassigned</span>
-                            </li>
-                        ))
-                    ) : (
-                        <li className="text-gray-400 text-center py-4">No items looted yet</li>
-                    )}
-                </ul>
+                <SessionLootsPanel raidSessionId={raidSession.id} />
             </div>
 
             <SessionLootNewDialog

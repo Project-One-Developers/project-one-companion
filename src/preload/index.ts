@@ -10,6 +10,7 @@ import type {
     EditPlayer,
     EditRaidSession,
     Item,
+    LootWithItem,
     NewCharacter,
     NewLootsFromManualInput,
     NewLootsFromRc,
@@ -93,6 +94,9 @@ export const api = {
     },
     addLootsFromRc(loots: NewLootsFromRc): Promise<void> {
         return ipcRenderer.invoke('loots-add-rcloot', loots)
+    },
+    getLootsBySession(sessionId: string): Promise<LootWithItem[]> {
+        return ipcRenderer.invoke('loots-get-by-session', sessionId)
     },
     // App settings
     getAppSettings(): Promise<AppSettings> {

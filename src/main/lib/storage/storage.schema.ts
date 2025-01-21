@@ -248,6 +248,7 @@ export const lootTable = pgTable('loots', {
     dropDate: integer('drop_date').notNull(),
     thirdStat: varchar('third_stat', { length: 255 }),
     socket: boolean('socket').notNull().default(false),
+    raidDifficulty: pgRaidDiffEnum('raid_difficulty').notNull(),
     charsEligibility: text('chars_eligibility').array(), // array of IDs referencing RaidSession.Chars
     rclootId: varchar('rcloot_id').unique(),
     raidSessionId: varchar('raid_session_id')
@@ -413,5 +414,13 @@ export const raidSessionRosterRelations = relations(raidSessionRosterTable, ({ o
     character: one(charTable, {
         fields: [raidSessionRosterTable.charId],
         references: [charTable.id]
+    })
+}))
+
+// Loot table
+export const lootsRelations = relations(lootTable, ({ one }) => ({
+    item: one(itemTable, {
+        fields: [lootTable.itemId],
+        references: [itemTable.id]
     })
 }))

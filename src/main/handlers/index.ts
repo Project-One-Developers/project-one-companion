@@ -16,18 +16,24 @@ import {
     getDroptimizerListHandler,
     syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
-import { getItemsHandler, searchItemsHandler } from './items/items.handlers'
+import {
+    getItemsHandler,
+    getRaidLootTableHanlder as getRaidLootTableHandler,
+    searchItemsHandler
+} from './items/items.handlers'
 import { upsertJsonDataHandler } from './json-data/json-data.handlers'
 import {
     addRaidLootsByManualInputHandler,
     addRaidLootsByRCLootCsvHandler,
+    getLootsBySessionIdHandler
+} from './loots/loot.handlers'
+import {
     addRaidSessionHandler,
     deleteRaidSessionHandler,
     editRaidSessionHandler,
     getRaidSessionHandler,
     getRaidSessionListHandler
 } from './raid-session/raid-session.handlers'
-import { getRaidLootTableHanlder } from './raid/raid.handler'
 import {
     getAppSettingsHandler,
     resetAppSettingsHandler,
@@ -52,7 +58,7 @@ export const allHandlers = {
     'upsert-json-data': upsertJsonDataHandler,
     'items-list': getItemsHandler,
     'items-search': searchItemsHandler,
-    'loot-table-get': getRaidLootTableHanlder,
+    'loot-table-get': getRaidLootTableHandler,
     'raid-session-list': getRaidSessionListHandler,
     'raid-session-get': getRaidSessionHandler,
     'raid-session-add': addRaidSessionHandler,
@@ -60,6 +66,7 @@ export const allHandlers = {
     'raid-session-delete': deleteRaidSessionHandler,
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,
+    'loots-get-by-session': getLootsBySessionIdHandler,
     'app-settings-get': getAppSettingsHandler,
     'app-settings-edit': setAppSettingsHandler,
     'app-settings-reset': resetAppSettingsHandler
