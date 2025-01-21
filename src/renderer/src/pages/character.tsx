@@ -1,4 +1,5 @@
 import CharacterDeleteDialog from '@renderer/components/character-delete-dialog'
+import CharacterDialog from '@renderer/components/character-dialog'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -13,7 +14,7 @@ export const CharacterPage = () => {
     const navigate = useNavigate()
 
     // dialog
-    // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
     const { data: character, isLoading } = useQuery({
@@ -70,18 +71,19 @@ export const CharacterPage = () => {
                     <Button
                         variant="secondary"
                         className="hover:bg-blue-700"
-                        // onClick={() => {
-                        //     setIsEditDialogOpen(true)
-                        // }}
+                        onClick={() => {
+                            setIsEditDialogOpen(true)
+                        }}
                     >
                         <Edit className="mr-2 h-4 w-4" /> Edit
                     </Button>
-                    {/* <CharacterDialog
+                    <CharacterDialog
                         isOpen={isEditDialogOpen}
-                        setOpen={setIsDeleteDialogOpen}
-                        playerName={character.playerName}
-                        character={character}
-                    /> */}
+                        setOpen={setIsEditDialogOpen}
+                        mode="edit"
+                        player={character.player}
+                        existingCharacter={character}
+                    />
                     {/* Delete Character */}
                     <Button
                         variant="destructive"

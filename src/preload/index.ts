@@ -4,6 +4,7 @@ import type {
     AppSettings,
     Boss,
     Character,
+    CharacterWithPlayer,
     Droptimizer,
     EditCharacter,
     EditPlayer,
@@ -26,7 +27,7 @@ export const api = {
     addCharacter(character: NewCharacter): Promise<Character> {
         return ipcRenderer.invoke('character-add', character)
     },
-    getCharacter(id: string): Promise<Character> {
+    getCharacter(id: string): Promise<CharacterWithPlayer> {
         return ipcRenderer.invoke('character-get', id)
     },
     getCharactersList(): Promise<Character[]> {

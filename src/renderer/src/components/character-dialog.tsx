@@ -90,7 +90,7 @@ export default function CharacterDialog({
     const form = useForm<NewCharacter>({
         resolver: zodResolver(newCharacterSchema),
         defaultValues: {
-            name: '',
+            name: mode === 'edit' ? existingCharacter?.name : '',
             realm: 'pozzo-delleternità',
             class: 'Death Knight',
             role: 'DPS',
@@ -252,7 +252,7 @@ export default function CharacterDialog({
                             {addMutation.isPending || editMutation.isPending ? (
                                 <Loader2 className="animate-spin" />
                             ) : (
-                                'Add'
+                                'Confirm'
                             )}
                         </Button>
                     </form>

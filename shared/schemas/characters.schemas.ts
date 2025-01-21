@@ -16,6 +16,10 @@ export const characterSchema = z.object({
     playerId: playerSchema.shape.id
 })
 
+export const characterWithPlayerSchema = characterSchema.extend({
+    player: playerSchema
+})
+
 export const playerWithCharacterSchema = playerSchema.extend({
     characters: z.array(characterSchema)
 })

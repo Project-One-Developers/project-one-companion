@@ -1,5 +1,6 @@
 import type {
     Character,
+    CharacterWithPlayer,
     EditCharacter,
     EditPlayer,
     NewCharacter,
@@ -15,7 +16,7 @@ export const addCharacter = async (character: NewCharacter): Promise<Character> 
     return response
 }
 
-export const fetchCharacter = async (id: string | undefined): Promise<Character> => {
+export const fetchCharacter = async (id: string | undefined): Promise<CharacterWithPlayer> => {
     if (!id) {
         throw new Error('No raid session id provided')
     }

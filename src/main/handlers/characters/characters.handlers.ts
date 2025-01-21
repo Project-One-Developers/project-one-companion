@@ -1,5 +1,6 @@
 import type {
     Character,
+    CharacterWithPlayer,
     EditCharacter,
     EditPlayer,
     NewCharacter,
@@ -33,7 +34,7 @@ export const addCharacterHandler = async (character: NewCharacter): Promise<Char
     return await getCharacterById(id)
 }
 
-export const getCharacterHandler = async (id: string): Promise<Character | null> => {
+export const getCharacterHandler = async (id: string): Promise<CharacterWithPlayer | null> => {
     return await getCharacterById(id)
 }
 
@@ -61,6 +62,8 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
         throw new Error('WOW_AUDIT_API_KEY not set in database')
     }
 
+    console.log('[WowAudit] Start Sync')
+
     const json = await fetchWowAuditData(key)
 
     if (json != null) {
@@ -68,6 +71,7 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
         await deleteAllCharacterWowAudit()
         await addCharacterWowAudit(charsData)
     }
+    console.log('[WowAudit] End Sync')
 }
 
 // export const getCharacterListHandler = async (): Promise<Character[]> => {

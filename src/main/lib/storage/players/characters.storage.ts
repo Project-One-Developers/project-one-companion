@@ -1,28 +1,29 @@
-import { characterSchema, charactersListSchema } from '@shared/schemas/characters.schemas'
+import { charactersListSchema, characterWithPlayerSchema } from '@shared/schemas/characters.schemas'
 import type {
     Character,
+    CharacterWithPlayer,
     EditCharacter,
     NewCharacter,
     NewCharacterWowAudit
 } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charTable, charWowAuditTable } from '@storage/storage.schema'
-import { takeFirstResult } from '@storage/storage.utils'
 import { eq } from 'drizzle-orm'
 import { newUUID } from '../../utils'
 
-export const getCharacterById = async (id: string): Promise<Character | null> => {
-    const result = await db
-        .select()
-        .from(charTable)
-        .where(eq(charTable.id, id))
-        .then(takeFirstResult)
+export const getCharacterById = async (id: string): Promise<CharacterWithPlayer | null> => {
+    const result = await db.query.charTable.findFirst({
+        where: (char, { eq }) => eq(char.id, id),
+        with: {
+            player: true
+        }
+    })
 
     if (!result) {
         return null
     }
 
-    return characterSchema.parse(result)
+    return characterWithPlayerSchema.parse(result)
 }
 
 export const getCharactersList = async (): Promise<Character[]> => {
