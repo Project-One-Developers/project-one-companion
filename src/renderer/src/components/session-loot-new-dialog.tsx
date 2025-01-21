@@ -4,7 +4,7 @@ import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { searchItems } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addLootsFromRc, addLootsManual } from '@renderer/lib/tanstack-query/loots'
-import { lootInfoSchema } from '@shared/schemas/loot.schema'
+import { newLootSchema } from '@shared/schemas/loot.schema'
 import { Item, RaidSession } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Loader2, LoaderCircle, X } from 'lucide-react'
@@ -28,7 +28,7 @@ type SessionLootNewDialogProps = {
 }
 
 const manualFormSchema = z.object({
-    items: z.array(lootInfoSchema)
+    items: z.array(newLootSchema)
 })
 
 const rcLootFormSchema = z.object({
@@ -121,7 +121,7 @@ export default function SessionLootNewDialog({
 
     const handleItemSelect = (item: Item) => {
         setSelectedItems([...selectedItems, item])
-        append({ id: item.id, bonus: '', socket: false, diff: 'Normal' })
+        append({ itemId: item.id, bonus: '', socket: false, diff: 'Normal' })
         setSearchTerm('')
     }
 

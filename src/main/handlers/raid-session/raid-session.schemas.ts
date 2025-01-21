@@ -25,19 +25,3 @@ export const rawLootRecordSchema = z.object({
     note: z.string().nullable(),
     owner: z.string()
 })
-
-const lootSchema = z.object({
-    id: z.string(),
-    dropDate: z.number(),
-    thirdStat: z.string().nullable(),
-    socket: z.boolean(),
-    raidSessionId: z.string(),
-    itemId: z.number(),
-    bossId: z.number(),
-    assignedTo: z.string().nullable()
-})
-
-export const raidSessionLootsSchema = z.array(lootSchema)
-
-export type RaidSessionLoots = z.infer<typeof raidSessionLootsSchema>
-export type Loot = z.infer<typeof lootSchema>

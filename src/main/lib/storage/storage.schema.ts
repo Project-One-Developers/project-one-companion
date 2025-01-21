@@ -254,10 +254,16 @@ export const lootTable = pgTable('loots', {
         .notNull(),
     itemId: integer('item_id')
         .references(() => itemTable.id)
+        .notNull()
+})
+
+export const lootEligibilityTable = pgTable('loots_eligibility', {
+    charId: varchar('char_id')
+        .references(() => charTable.id)
         .notNull(),
-    bossId: integer('boss_id')
-        .references(() => bossTable.id)
-        .notNull() // ridondato per comodità ma ricavabile da item.boss.id
+    lootId: varchar('loot_id')
+        .references(() => lootTable.id)
+        .notNull()
 })
 
 export const assignmentTable = pgTable('assignments', {

@@ -1,11 +1,24 @@
+import { charactersListSchema } from '@shared/schemas/characters.schemas'
 import { raidSessionSchema } from '@shared/schemas/raid.schemas'
-import type { EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
+import type {
+    Character,
+    EditRaidSession,
+    NewLoot,
+    NewRaidSession,
+    RaidSession
+} from '@shared/types/types'
 import { db } from '@storage/storage.config'
-import { raidSessionRosterTable, raidSessionTable } from '@storage/storage.schema'
+import {
+    charTable,
+    lootEligibilityTable,
+    lootTable,
+    raidSessionRosterTable,
+    raidSessionTable
+} from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
 import { eq, InferInsertModel } from 'drizzle-orm'
 import { z } from 'zod'
-import { newUUID } from '../../utils'
+import { getUnixTimestamp, newUUID } from '../../utils'
 
 const flattenRaidPartecipation = (result: any): RaidSession => {
     return {
@@ -123,4 +136,46 @@ export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<st
 
 export const deleteRaidSession = async (id: string): Promise<void> => {
     await db.delete(raidSessionTable).where(eq(raidSessionTable.id, id))
+}
+
+export const getRaidSessionRoster = async (id: string): Promise<Character[]> => {
+    const result = await db
+        .select()
+        .from(raidSessionRosterTable)
+        .innerJoin(charTable, eq(raidSessionRosterTable.charId, charTable.id))
+        .where(eq(raidSessionRosterTable.raidSessionId, id))
+
+    return charactersListSchema.parse(result.flatMap((sr) => sr.characters))
+}
+
+export const addLoots = async (
+    raidSessionId: string,
+    loots: NewLoot[],
+    elegibleCharacters: Character[]
+): Promise<void> => {
+    await db.transaction(async (tx) => {
+        // se è già stato importato, per ora sovrascrivo poi vedremo
+        //await tx.delete(droptimizerTable).where(eq(droptimizerTable.url, droptimizer.url))
+
+        const lootValues = loots.map((loot): InferInsertModel<typeof lootTable> => {
+            return {
+                id: newUUID(),
+                dropDate: loot.dropDate ?? getUnixTimestamp(),
+                thirdStat: '',
+                socket: loot.socket,
+                raidSessionId: raidSessionId,
+                itemId: loot.itemId
+            }
+        })
+
+        const eligibilityValues = lootValues.flatMap((loot) =>
+            elegibleCharacters.map((char) => ({
+                charId: char.id,
+                lootId: loot.id
+            }))
+        )
+
+        await tx.insert(lootTable).values(lootValues)
+        await tx.insert(lootEligibilityTable).values(eligibilityValues)
+    })
 }

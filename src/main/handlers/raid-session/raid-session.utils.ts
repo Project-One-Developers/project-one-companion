@@ -1,19 +1,24 @@
 import { PROFESSION_TYPES } from '@shared/consts/wow.consts'
-import { getBossesNames } from '@storage/bosses/bosses.storage'
-import { newUUID } from '@utils'
+import { newLootSchema } from '@shared/schemas/loot.schema'
+import { NewLoot, WowRaidDifficulty } from '@shared/types/types'
 import { parse } from 'papaparse'
 import { z } from 'zod'
-import {
-    Loot,
-    RaidSessionLoots,
-    raidSessionLootsSchema,
-    rawLootRecordSchema
-} from './raid-session.schemas'
+import { rawLootRecordSchema } from './raid-session.schemas'
 
-export const parseRaidSessionCsv = async (
-    sessionId: string,
-    csv: string
-): Promise<RaidSessionLoots> => {
+const parseWowDiff = (wowDiff: number): WowRaidDifficulty => {
+    switch (wowDiff) {
+        case 14:
+            return 'Normal'
+        case 15:
+            return 'Heroic'
+        case 16:
+            return 'Mythic'
+        default:
+            return 'Mythic'
+    }
+}
+
+export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
     const parsedData = parse(csv, {
         header: true,
         dynamicTyping: true,
@@ -36,29 +41,25 @@ export const parseRaidSessionCsv = async (
     // TODO: maybe instead of getting the boss, we can just check where the item ID loots
     // and then get the boss ID from that, this makes this consistent even if RC uses
     // slightly weird names
-    const bosses = await getBossesNames()
+    // const bosses = await getBossesNames()
 
-    const loots = rawRecords.map((record): Loot => {
-        const boss = bosses.find((boss) => boss.name === record.boss)
-        if (!boss) {
-            // TODO: are we sure RC boss names are the same as we have in the db?
-            // can we improve this mapping to make it consistent?
-            throw new Error(`Boss ${record.boss} not found`)
-        }
+    const loots = rawRecords.map((record): NewLoot => {
+        // const boss = bosses.find((boss) => boss.name === record.boss)
+        // if (!boss) {
+        //     // TODO: are we sure RC boss names are the same as we have in the db?
+        //     // can we improve this mapping to make it consistent?
+        //     throw new Error(`Boss ${record.boss} not found`)
+        // }
 
-        return {
-            id: newUUID(),
+        return newLootSchema.parse({
             dropDate: parseDateTime(record.date, record.time), //TODO: what do we actually want to save here?
             socket: record.itemString.includes('Socket'),
-            raidSessionId: sessionId,
-            itemId: record.itemID,
-            bossId: boss.id, // TODO: don't we already know where a specific loot drops?
-            thirdStat: null, //TODO: implement?
-            assignedTo: record.player.split('-')[0]
-        }
+            diff: parseWowDiff(record.difficultyID),
+            itemId: record.itemID
+        })
     })
 
-    return raidSessionLootsSchema.parse(loots)
+    return loots
 }
 
 const parseDateTime = (dateStr: string, timeStr: string): number => {
@@ -77,5 +78,5 @@ const parseDateTime = (dateStr: string, timeStr: string): number => {
         throw new Error(`Unable to parse date/time: ${dateStr} ${timeStr}`)
     }
 
-    return dateTime.getTime()
+    return dateTime.getTime() / 1000
 }
