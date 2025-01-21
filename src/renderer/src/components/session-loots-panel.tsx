@@ -8,6 +8,12 @@ type SessionLootsPanelProps = {
     raidSessionId: string
 }
 
+type GroupedLoots = {
+    [bossId: string]: {
+        [difficulty: string]: (typeof loot)[]
+    }
+}
+
 export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => {
     const lootsQuery = useQuery({
         queryKey: [queryKeys.lootsBySession, raidSessionId],
@@ -24,32 +30,62 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
         )
     }
 
-    return (
-        <div className="bg-muted p-6 rounded-lg shadow-md">
-            <ul className="space-y-2 mb-4 max-h-48 overflow-y-auto">
-                {loots.length > 0 ? (
-                    loots.map((loot, index) => (
-                        // <li
-                        //     key={index}
-                        //     className="bg-gray-700 p-3 rounded-lg flex justify-between items-center"
-                        // >
-                        //     <span>{loot.item.name}</span>
-                        //     <span className="text-gray-400">Unassigned</span>
-                        // </li>
+    // Group loots by boss ID and then by difficulty
+    const groupedLoots: GroupedLoots = loots.reduce((acc, loot) => {
+        if (!acc[loot.item.bossId]) {
+            acc[loot.item.bossId] = {}
+        }
+        if (!acc[loot.item.bossId][loot.raidDifficulty]) {
+            acc[loot.item.bossId][loot.raidDifficulty] = []
+        }
+        acc[loot.item.bossId][loot.raidDifficulty].push(loot)
+        return acc
+    }, {} as GroupedLoots)
 
-                        <WowItemIcon
-                            key={index}
-                            item={loot.item}
-                            iconOnly={true}
-                            raidDiff={loot.raidDifficulty}
-                            className="mt-2"
-                            iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
-                        />
-                    ))
-                ) : (
-                    <li className="text-gray-400 text-center py-4">No items looted yet</li>
-                )}
-            </ul>
+    // Get all unique difficulties
+    const allDifficulties = Array.from(new Set(loots.map((loot) => loot.raidDifficulty)))
+
+    return (
+        <div className="mb-4 max-h-96 overflow-y-auto">
+            {Object.keys(groupedLoots).length > 0 ? (
+                <table className="w-full border-collapse">
+                    <thead>
+                        <tr className="">
+                            <th className="p-2 text-left">Boss ID</th>
+                            {allDifficulties.map((difficulty) => (
+                                <th key={difficulty} className="p-2 text-left">
+                                    {difficulty}
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.entries(groupedLoots).map(([bossId, difficulties]) => (
+                            <tr key={bossId} className="border-t">
+                                <td className="p-2 font-semibold">{bossId}</td>
+                                {allDifficulties.map((difficulty) => (
+                                    <td key={difficulty} className="p-2">
+                                        <div className="flex flex-wrap gap-1">
+                                            {difficulties[difficulty]?.map((loot, index) => (
+                                                <WowItemIcon
+                                                    key={index}
+                                                    item={loot.item}
+                                                    iconOnly={true}
+                                                    raidDiff={loot.raidDifficulty}
+                                                    className="mt-1"
+                                                    iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                                                />
+                                            )) || <span className="text-gray-400">-</span>}
+                                        </div>
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <div className="text-gray-400 text-center py-4">No items looted yet</div>
+            )}
         </div>
     )
 }
