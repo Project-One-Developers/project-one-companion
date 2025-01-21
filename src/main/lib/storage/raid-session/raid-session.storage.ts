@@ -85,7 +85,7 @@ export const editRaidSession = async (editedRaidSession: EditRaidSession): Promi
 
         await tx.insert(raidSessionRosterTable).values(raidPartecipation)
 
-        return res.id
+        return editedRaidSession.id
     })
 }
 
