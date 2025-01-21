@@ -52,18 +52,40 @@ export const CharacterPage = () => {
                         <h1 className="text-3xl font-bold mb-2">{character.name}</h1>
                     </div>
                     <div className="flex flex-row mt-2 gap-1">
-                        <img
-                            className="cursor-pointer h-5 w-5"
-                            src="https://assets.rpglogs.com/img/warcraft/favicon.png?v=2"
-                        />
-                        <img
-                            className="cursor-pointer h-5 w-5"
-                            src="https://cdn.raiderio.net/images/mstile-150x150.png"
-                        />
-                        <img
-                            className="cursor-pointer h-5 w-5"
-                            src="https://cdn.raiderio.net/assets/img/wow-icon-a718385c1d75ca9edbb3eed0a5546c30.png"
-                        />
+                        {/* Warcraft logs */}
+                        <a
+                            href={`https://www.warcraftlogs.com/character/eu/${character.realm}/${character.name}`}
+                            rel="noreferrer"
+                            target="_blank"
+                        >
+                            <img
+                                className="cursor-pointer h-5 w-5"
+                                src="https://assets.rpglogs.com/img/warcraft/favicon.png?v=2"
+                            />
+                        </a>
+                        {/* Raider.io */}
+                        <a
+                            href={`https://raider.io/characters/eu/${character.realm}/${character.name}`}
+                            rel="noreferrer"
+                            target="_blank"
+                        >
+                            <img
+                                className="cursor-pointer h-5 w-5"
+                                src="https://cdn.raiderio.net/images/mstile-150x150.png"
+                            />
+                        </a>
+
+                        {/* wow armory */}
+                        <a
+                            href={`https://worldofwarcraft.blizzard.com/en-gb/character/eu/${character.realm}/${character.name}`}
+                            rel="noreferrer"
+                            target="_blank"
+                        >
+                            <img
+                                className="cursor-pointer h-5 w-5"
+                                src="https://cdn.raiderio.net/assets/img/wow-icon-a718385c1d75ca9edbb3eed0a5546c30.png"
+                            />
+                        </a>
                     </div>
                 </div>
                 <div className="flex space-x-2">
