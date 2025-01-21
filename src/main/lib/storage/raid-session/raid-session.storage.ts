@@ -10,7 +10,6 @@ import type {
 import { db } from '@storage/storage.config'
 import {
     charTable,
-    lootEligibilityTable,
     lootTable,
     raidSessionRosterTable,
     raidSessionTable
@@ -154,28 +153,22 @@ export const addLoots = async (
     elegibleCharacters: Character[]
 ): Promise<void> => {
     await db.transaction(async (tx) => {
-        // se è già stato importato, per ora sovrascrivo poi vedremo
-        //await tx.delete(droptimizerTable).where(eq(droptimizerTable.url, droptimizer.url))
-
         const lootValues = loots.map((loot): InferInsertModel<typeof lootTable> => {
             return {
                 id: newUUID(),
                 dropDate: loot.dropDate ?? getUnixTimestamp(),
                 thirdStat: '',
                 socket: loot.socket,
+                charsEligibility: elegibleCharacters.map((c) => c.id),
                 raidSessionId: raidSessionId,
+                rclootId: loot.rclootId,
                 itemId: loot.itemId
             }
         })
 
-        const eligibilityValues = lootValues.flatMap((loot) =>
-            elegibleCharacters.map((char) => ({
-                charId: char.id,
-                lootId: loot.id
-            }))
-        )
-
-        await tx.insert(lootTable).values(lootValues)
-        await tx.insert(lootEligibilityTable).values(eligibilityValues)
+        await tx
+            .insert(lootTable)
+            .values(lootValues)
+            .onConflictDoNothing({ target: lootTable.rclootId }) // do nothing on item already inserted
     })
 }

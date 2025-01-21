@@ -38,24 +38,13 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
 
     const rawRecords = z.array(rawLootRecordSchema).parse(filteredData)
 
-    // TODO: maybe instead of getting the boss, we can just check where the item ID loots
-    // and then get the boss ID from that, this makes this consistent even if RC uses
-    // slightly weird names
-    // const bosses = await getBossesNames()
-
     const loots = rawRecords.map((record): NewLoot => {
-        // const boss = bosses.find((boss) => boss.name === record.boss)
-        // if (!boss) {
-        //     // TODO: are we sure RC boss names are the same as we have in the db?
-        //     // can we improve this mapping to make it consistent?
-        //     throw new Error(`Boss ${record.boss} not found`)
-        // }
-
         return newLootSchema.parse({
-            dropDate: parseDateTime(record.date, record.time), //TODO: what do we actually want to save here?
+            dropDate: parseDateTime(record.date, record.time),
             socket: record.itemString.includes('Socket'),
             diff: parseWowDiff(record.difficultyID),
-            itemId: record.itemID
+            itemId: record.itemID,
+            rclootId: record.id
         })
     })
 

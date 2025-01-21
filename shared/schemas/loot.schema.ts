@@ -17,7 +17,8 @@ export const newLootSchema = z.object({
     dropDate: z.number().nullish(),
     diff: wowRaidDiffSchema,
     bonus: z.string().nullish(), // Leech, Speed, etc
-    socket: z.boolean()
+    socket: z.boolean(),
+    rclootId: z.string().nullish()
 })
 
 export const newLootsFromManualInputSchema = z.object({

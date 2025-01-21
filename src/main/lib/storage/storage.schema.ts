@@ -248,21 +248,13 @@ export const lootTable = pgTable('loots', {
     dropDate: integer('drop_date').notNull(),
     thirdStat: varchar('third_stat', { length: 255 }),
     socket: boolean('socket').notNull().default(false),
-    // eligibility: text('eligibility').array(), // array of IDs referencing RaidSession.Chars
+    charsEligibility: text('chars_eligibility').array(), // array of IDs referencing RaidSession.Chars
+    rclootId: varchar('rcloot_id').unique(),
     raidSessionId: varchar('raid_session_id')
         .references(() => raidSessionTable.id)
         .notNull(),
     itemId: integer('item_id')
         .references(() => itemTable.id)
-        .notNull()
-})
-
-export const lootEligibilityTable = pgTable('loots_eligibility', {
-    charId: varchar('char_id')
-        .references(() => charTable.id)
-        .notNull(),
-    lootId: varchar('loot_id')
-        .references(() => lootTable.id)
         .notNull()
 })
 
