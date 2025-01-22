@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import type {
     AppSettings,
     Boss,
+    BossWithItems,
     Character,
     CharacterWithPlayer,
     Droptimizer,
@@ -68,9 +69,12 @@ export const api = {
     syncDroptimizerFromDiscord(): Promise<void> {
         return ipcRenderer.invoke('droptimizer-discord-sync')
     },
-    // Raid loot table
-    getRaidLootTable(raidId: number): Promise<Boss[]> {
-        return ipcRenderer.invoke('loot-table-get', raidId)
+    // Bosses
+    getBosses(raidId: number): Promise<Boss[]> {
+        return ipcRenderer.invoke('boss-list', raidId)
+    },
+    getRaidLootTable(raidId: number): Promise<BossWithItems[]> {
+        return ipcRenderer.invoke('boss-loot-table-get', raidId)
     },
     // Raid sessions
     addRaidSession(newSession: NewRaidSession): Promise<RaidSession> {

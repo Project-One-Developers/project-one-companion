@@ -2,12 +2,13 @@ import { FiltersPanel } from '@renderer/components/filter-panel'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
+import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
 import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
 import { encounterIcon } from '@renderer/lib/wow-icon'
-import { Boss, Droptimizer, Item, WowRaidDifficulty } from '@shared/types/types'
+import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
+import { BossWithItems, Droptimizer, Item, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
@@ -80,7 +81,7 @@ const BossPanel = ({
     droptimizers,
     diff
 }: {
-    boss: Boss
+    boss: BossWithItems
     droptimizers: Droptimizer[]
     diff: WowRaidDifficulty
 }) => {
@@ -153,10 +154,9 @@ export default function LootTable(): JSX.Element {
     }
 
     const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
-    const currentRaid = 1273
 
     const { droptimizers, droptimizersIsLoading, encounterList, encounterListIsLoading } =
-        useRaidData(currentRaid)
+        useRaidData(CURRENT_RAID_ID)
 
     const updateFilter = (key: keyof LootFilter, value: unknown): void => {
         setFilters((prev) => ({ ...prev, [key]: value }))

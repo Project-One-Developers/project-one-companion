@@ -1,13 +1,11 @@
-import { bossSchema } from '@shared/schemas/raid.schemas'
-import type { Boss, NewBoss } from '@shared/types/types'
+import { bossSchema, bossWithItemsSchema } from '@shared/schemas/boss.schema'
+import { Boss, BossWithItems } from '@shared/types/types'
 import { bossTable } from '@storage/storage.schema'
 import { conflictUpdateAllExcept } from '@storage/storage.utils'
 import { z } from 'zod'
 import { db } from '../storage.config'
-import { bossOverviewSchema } from './bosses.schemas'
-import { BossOverview } from './bosses.types.'
 
-export const upsertBosses = async (bosses: NewBoss[]): Promise<void> => {
+export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
     await db
         .insert(bossTable)
         .values(bosses)
@@ -17,7 +15,7 @@ export const upsertBosses = async (bosses: NewBoss[]): Promise<void> => {
         })
 }
 
-export const getRaidLootTable = async (raidId: number): Promise<Boss[]> => {
+export const getRaidLootTable = async (raidId: number): Promise<BossWithItems[]> => {
     const result = await db.query.bossTable.findMany({
         where: (bossTable, { eq }) => {
             return eq(bossTable.raidId, raidId)
@@ -26,13 +24,14 @@ export const getRaidLootTable = async (raidId: number): Promise<Boss[]> => {
             items: true
         }
     })
-    return z.array(bossSchema).parse(result)
+    return z.array(bossWithItemsSchema).parse(result)
 }
 
-export const getBossesNames = async (): Promise<BossOverview[]> => {
+export const getBosses = async (raidId: number): Promise<Boss[]> => {
     const result = await db.query.bossTable.findMany({
-        columns: { id: true, name: true }
+        where: (bossTable, { eq }) => {
+            return eq(bossTable.raidId, raidId)
+        }
     })
-
-    return z.array(bossOverviewSchema).parse(result)
+    return z.array(bossSchema).parse(result)
 }

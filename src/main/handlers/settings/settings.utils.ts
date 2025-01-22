@@ -1,6 +1,6 @@
+import { bossSchema } from '@shared/schemas/boss.schema'
 import { itemSchema, itemToCatalystSchema, itemToTiersetSchema } from '@shared/schemas/items.schema'
-import { newBossSchema } from '@shared/schemas/raid.schemas'
-import type { Item, ItemToCatalyst, ItemToTierset, NewBoss } from '@shared/types/types'
+import type { Boss, Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { readFileSync } from 'fs'
 import * as path from 'path'
 import { z } from 'zod'
@@ -43,12 +43,12 @@ export const fetchRaidItems = (): Item[] => {
     return z.array(itemSchema).parse(jsonData.map(transformRawItem))
 }
 
-export const fetchRaidBosses = (): NewBoss[] => {
+export const fetchRaidBosses = (): Boss[] => {
     const jsonData = JSON.parse(
         readFileSync(path.join(__dirname, '../../resources/wow/bosses.json'), 'utf-8')
     )
 
-    return z.array(newBossSchema).parse(jsonData)
+    return z.array(bossSchema).parse(jsonData)
 }
 
 export const fetchItemsToTierset = (): ItemToTierset[] => {

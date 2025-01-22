@@ -8,5 +8,6 @@ export const queryKeys = {
     characters: 'character-list',
     itemSearch: 'item-search',
     appSettings: 'app-settings',
-    lootsBySession: 'loots-by-session'
+    lootsBySession: 'loots-by-session',
+    bosses: 'boss-list'
 }

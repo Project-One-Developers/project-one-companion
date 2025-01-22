@@ -1,8 +1,14 @@
+import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { deleteDroptimizer } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/raid'
 import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
-import { Boss, Droptimizer, DroptimizerUpgrade, Item, WowRaidDifficulty } from '@shared/types/types'
+import {
+    BossWithItems,
+    Droptimizer,
+    DroptimizerUpgrade,
+    Item,
+    WowRaidDifficulty
+} from '@shared/types/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { LoaderCircle, X } from 'lucide-react'
 import { useState } from 'react'
@@ -22,7 +28,7 @@ const CharacterInfo = ({ charInfo }: { charInfo: Droptimizer['charInfo'] }) => (
     </div>
 )
 
-const DroptimizerInfo = ({ dropt, bosses }: { dropt: Droptimizer; bosses: Boss[] }) => {
+const DroptimizerInfo = ({ dropt, bosses }: { dropt: Droptimizer; bosses: BossWithItems[] }) => {
     const [isOpen, setOpen] = useState(false)
     return (
         <div className="text-xs mt-3">

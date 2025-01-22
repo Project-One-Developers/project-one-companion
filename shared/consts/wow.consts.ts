@@ -9,10 +9,10 @@ import {
     wowRolesSchema
 } from '../schemas/wow.schemas'
 
+export const CURRENT_RAID_ID = 1273 // Nerubar palace
+
 export const CLASSES = wowClassSchema.options
-
 export const ROLES = wowRolesSchema.options
-
 export const RAID_DIFF = wowRaidDiffSchema.options
 
 export const ROLES_CLASSES_MAP = {
@@ -22,7 +22,6 @@ export const ROLES_CLASSES_MAP = {
 }
 
 export const TERZIARY_STATS = wowItemTerziaryStatsSchema.options
-
 export const ARMOR_TYPES = wowArmorTypeSchema.options
 export const ITEM_SLOTS = wowItemSlotSchema.options
 

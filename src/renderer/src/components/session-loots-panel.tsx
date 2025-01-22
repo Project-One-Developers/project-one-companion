@@ -1,5 +1,7 @@
+import { fetchBosses } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
+import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithItem } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -20,10 +22,15 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
         queryKey: [queryKeys.lootsBySession, raidSessionId],
         queryFn: () => getLootsBySession(raidSessionId)
     })
+    const bossesQuery = useQuery({
+        queryKey: [queryKeys.bosses, CURRENT_RAID_ID],
+        queryFn: () => fetchBosses(CURRENT_RAID_ID)
+    })
 
     const loots = lootsQuery.data ?? []
+    const bosses = bossesQuery.data ?? []
 
-    if (lootsQuery.isLoading) {
+    if (lootsQuery.isLoading || bossesQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -31,20 +38,29 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
         )
     }
 
+    // Group boss in a Map < boss id, boss > and sort by boss order
+    const orderedBosses = bosses.sort((a, b) => a.order - b.order)
+
     // Group loots by boss ID and then by difficulty
-    const groupedLoots: GroupedLoots = loots.reduce((acc, loot) => {
-        if (!acc[loot.item.bossId]) {
-            acc[loot.item.bossId] = {}
-        }
-        if (!acc[loot.item.bossId][loot.raidDifficulty]) {
-            acc[loot.item.bossId][loot.raidDifficulty] = []
-        }
-        acc[loot.item.bossId][loot.raidDifficulty].push(loot)
-        return acc
-    }, {} as GroupedLoots)
+    const groupedLoots: GroupedLoots = loots
+        .sort((a, b) => a.itemId - b.itemId)
+        .reduce((acc, loot) => {
+            if (!acc[loot.item.bossId]) {
+                acc[loot.item.bossId] = {}
+            }
+            if (!acc[loot.item.bossId][loot.raidDifficulty]) {
+                acc[loot.item.bossId][loot.raidDifficulty] = []
+            }
+            acc[loot.item.bossId][loot.raidDifficulty].push(loot)
+            return acc
+        }, {} as GroupedLoots)
 
     // Get all unique difficulties
-    const allDifficulties = Array.from(new Set(loots.map((loot) => loot.raidDifficulty)))
+    const difficultyOrder = ['Mythic', 'Heroic', 'Normal']
+
+    const allDifficulties = Array.from(new Set(loots.map((loot) => loot.raidDifficulty))).sort(
+        (a, b) => difficultyOrder.indexOf(a) - difficultyOrder.indexOf(b)
+    )
 
     return (
         <div className="mb-4 ">
@@ -52,7 +68,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                 <table className="w-full border-collapse">
                     <thead>
                         <tr className="">
-                            <th className="p-2 text-left">Boss ID</th>
+                            <th className="p-2 text-left">Boss</th>
                             {allDifficulties.map((difficulty) => (
                                 <th key={difficulty} className="p-2 text-left">
                                     {difficulty}
@@ -61,22 +77,24 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.entries(groupedLoots).map(([bossId, difficulties]) => (
-                            <tr key={bossId} className="border-t">
-                                <td className="p-2 font-semibold">{bossId}</td>
+                        {orderedBosses.map((boss) => (
+                            <tr key={boss.id} className="border-t">
+                                <td className="p-2 font-semibold">{boss.name}</td>
                                 {allDifficulties.map((difficulty) => (
                                     <td key={difficulty} className="p-2">
                                         <div className="flex flex-wrap gap-1">
-                                            {difficulties[difficulty]?.map((loot, index) => (
-                                                <WowItemIcon
-                                                    key={index}
-                                                    item={loot.item}
-                                                    iconOnly={true}
-                                                    raidDiff={loot.raidDifficulty}
-                                                    className="mt-1"
-                                                    iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
-                                                />
-                                            )) || <span className="text-gray-400">-</span>}
+                                            {groupedLoots[boss.id]?.[difficulty]?.map(
+                                                (loot, index) => (
+                                                    <WowItemIcon
+                                                        key={index}
+                                                        item={loot.item}
+                                                        iconOnly={true}
+                                                        raidDiff={loot.raidDifficulty}
+                                                        className="mt-1"
+                                                        iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                                                    />
+                                                )
+                                            ) || <span className="text-gray-400">-</span>}
                                         </div>
                                     </td>
                                 ))}

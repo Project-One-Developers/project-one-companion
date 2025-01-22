@@ -1,17 +1,5 @@
 import { z } from 'zod'
 import { characterSchema } from './characters.schemas'
-import { itemSchema } from './items.schema'
-
-export const bossSchema = z.object({
-    id: z.number(),
-    name: z.string(),
-    raidName: z.string().nullish(),
-    raidId: z.number().nullish(),
-    order: z.number(),
-    items: z.array(itemSchema)
-})
-
-export const newBossSchema = bossSchema.omit({ items: true })
 
 export const raidSessionSchema = z.object({
     id: z.string(),

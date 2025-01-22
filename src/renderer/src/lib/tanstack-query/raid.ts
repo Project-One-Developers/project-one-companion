@@ -1,8 +1,4 @@
-import type { Boss, EditRaidSession, NewRaidSession, RaidSession } from 'shared/types/types'
-
-export const fetchRaidLootTable = async (raidId: number): Promise<Boss[]> => {
-    return await window.api.getRaidLootTable(raidId)
-}
+import type { EditRaidSession, NewRaidSession, RaidSession } from 'shared/types/types'
 
 export const fetchRaidSessions = async (): Promise<RaidSession[]> => {
     return await window.api.getRaidSessions()

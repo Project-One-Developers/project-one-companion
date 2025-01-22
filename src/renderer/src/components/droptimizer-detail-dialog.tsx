@@ -1,5 +1,5 @@
 import { getDpsHumanReadable } from '@renderer/lib/utils'
-import type { Boss, Droptimizer, DroptimizerUpgrade } from '@shared/types/types'
+import type { BossWithItems, Droptimizer, DroptimizerUpgrade } from '@shared/types/types'
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { WowItemIcon } from './ui/wowitem-icon'
 
@@ -7,14 +7,14 @@ import type { JSX } from 'react'
 
 type DroptimizerDetailDialogProps = {
     droptimizer: Droptimizer
-    bosses: Boss[]
+    bosses: BossWithItems[]
 }
 
 export default function DroptimizerDetailDialog({
     droptimizer,
     bosses
 }: DroptimizerDetailDialogProps): JSX.Element {
-    const bossMap: Map<Boss, DroptimizerUpgrade[]> = new Map()
+    const bossMap: Map<BossWithItems, DroptimizerUpgrade[]> = new Map()
 
     droptimizer.upgrades?.forEach((up) => {
         for (let index = 0; index < bosses.length; index++) {

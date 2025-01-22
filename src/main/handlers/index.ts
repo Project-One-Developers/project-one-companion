@@ -1,3 +1,4 @@
+import { getBossesHandler, getRaidLootTableHandler } from './bosses/bosses.handlers'
 import {
     addCharacterHandler,
     addPlayerHandler,
@@ -16,12 +17,7 @@ import {
     getDroptimizerListHandler,
     syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
-import {
-    getItemsHandler,
-    getRaidLootTableHanlder as getRaidLootTableHandler,
-    searchItemsHandler
-} from './items/items.handlers'
-import { upsertJsonDataHandler } from './json-data/json-data.handlers'
+import { getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
     addRaidLootsByManualInputHandler,
     addRaidLootsByRCLootCsvHandler,
@@ -37,7 +33,8 @@ import {
 import {
     getAppSettingsHandler,
     resetAppSettingsHandler,
-    setAppSettingsHandler
+    setAppSettingsHandler,
+    upsertJsonDataHandler
 } from './settings/settings.handlers'
 
 export const allHandlers = {
@@ -58,7 +55,8 @@ export const allHandlers = {
     'upsert-json-data': upsertJsonDataHandler,
     'items-list': getItemsHandler,
     'items-search': searchItemsHandler,
-    'loot-table-get': getRaidLootTableHandler,
+    'boss-loot-table-get': getRaidLootTableHandler,
+    'boss-list': getBossesHandler,
     'raid-session-list': getRaidSessionListHandler,
     'raid-session-get': getRaidSessionHandler,
     'raid-session-add': addRaidSessionHandler,
