@@ -91,10 +91,10 @@ export default function CharacterDialog({
         resolver: zodResolver(newCharacterSchema),
         defaultValues: {
             name: mode === 'edit' ? existingCharacter?.name : '',
-            realm: 'pozzo-delleternità',
-            class: 'Death Knight',
-            role: 'DPS',
-            main: true,
+            realm: mode === 'edit' ? existingCharacter?.realm : 'pozzo-delleternità',
+            class: mode === 'edit' ? existingCharacter?.class : 'Death Knight',
+            role: mode === 'edit' ? existingCharacter?.role : 'DPS',
+            main: mode === 'edit' ? existingCharacter?.main : true,
             playerId: player?.id
         }
     })
