@@ -5,6 +5,8 @@ export const WowItemIcon = ({
     iconOnly,
     iconClassName,
     catalystBanner = false,
+    socketBanner = false,
+    tierBanner = false,
     raidDiff = 'Heroic',
     ilvl,
     className
@@ -13,6 +15,8 @@ export const WowItemIcon = ({
     iconOnly: boolean
     iconClassName?: string
     catalystBanner?: boolean
+    socketBanner?: boolean
+    tierBanner?: boolean
     raidDiff?: WowRaidDifficulty
     ilvl?: number
     className: string
@@ -26,22 +30,42 @@ export const WowItemIcon = ({
             ilvl = item.ilvlNormal
         }
     }
+
     return (
         <a
+            className=""
             href={`${item.wowheadUrl}&ilvl=${ilvl}`}
             rel="noreferrer"
-            // data-wowhead={`item=${item.id}?ilvl=${item.ilvlMythic}`}
+            // data-wowhead={`item=${item.id}?ilvl=${item.ilvlMythic}`} https://www.raidbots.com/frontend/c6217d2ee6dd7647cbfa.png
             target="_blank"
         >
-            <div className={`flex items-center space-x-3 ${className}`}>
-                <img src={item.iconUrl} alt="" className={`${iconClassName}`}></img>
-                {catalystBanner && (
-                    <div className="absolute top-1 right-1 bg-red-600 text-white text-[7px] font-bold px-2 rounded-b-sm border border-background">
-                        CAT
-                    </div>
-                )}
+            <div className={`flex items-center ${className}`}>
+                <div className="relative inline-block">
+                    <img src={item.iconUrl} alt="" className={`${iconClassName} block`} />
+                    {catalystBanner && (
+                        <div className="absolute top-0 right-1 bg-red-600 text-white text-[7px] font-bold px-2 rounded-b-sm border border-background">
+                            CAT
+                        </div>
+                    )}
+                    {/* {tierBanner && item.tier && (
+                       <div className="absolute top-0 right-1 bg-red-600 text-white text-[7px] font-bold px-2 rounded-b-sm border border-background">
+                           TIER
+                       </div>
+                   )} */}
+                    {tierBanner && item.tier && (
+                        <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
+                    )}
+                    {socketBanner && (
+                        <div className="absolute bottom-0 right-0">
+                            <img
+                                className="w-3 h-3 border"
+                                src="https://www.raidbots.com/frontend/c6217d2ee6dd7647cbfa.png"
+                            />
+                        </div>
+                    )}
+                </div>
                 {!iconOnly && (
-                    <div id="item-info" className="flex flex-col">
+                    <div id="item-info" className="flex flex-col ml-3">
                         <p className="font-black text-xs">{item.name}</p>
                         <div className="flex">
                             {item.slot && item.slot !== 'Trinket' && (

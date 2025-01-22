@@ -90,6 +90,8 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                                         item={loot.item}
                                                         iconOnly={true}
                                                         raidDiff={loot.raidDifficulty}
+                                                        socketBanner={loot.socket}
+                                                        tierBanner={true}
                                                         className="mt-1"
                                                         iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
                                                     />
