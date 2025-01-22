@@ -1,5 +1,6 @@
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
+import { LootWithItem } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { WowItemIcon } from './ui/wowitem-icon'
@@ -10,7 +11,7 @@ type SessionLootsPanelProps = {
 
 type GroupedLoots = {
     [bossId: string]: {
-        [difficulty: string]: (typeof loot)[]
+        [difficulty: string]: LootWithItem[]
     }
 }
 
@@ -46,7 +47,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
     const allDifficulties = Array.from(new Set(loots.map((loot) => loot.raidDifficulty)))
 
     return (
-        <div className="mb-4 max-h-96 overflow-y-auto">
+        <div className="mb-4 ">
             {Object.keys(groupedLoots).length > 0 ? (
                 <table className="w-full border-collapse">
                     <thead>

@@ -9,7 +9,15 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft, Calendar, Edit, LoaderCircle, PlusIcon, Sword, Trash2 } from 'lucide-react'
+import {
+    ArrowLeft,
+    Calendar,
+    Edit,
+    LoaderCircle,
+    PlusIcon,
+    ShoppingBag,
+    Trash2
+} from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -164,7 +172,7 @@ export const RaidSessionPage = () => {
             <div className="bg-muted p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold flex items-center text-yellow-400">
-                        <Sword className="mr-2" /> Looted Items
+                        <ShoppingBag className="mr-2" /> Loots
                     </h2>
                     <Button
                         variant="outline"
