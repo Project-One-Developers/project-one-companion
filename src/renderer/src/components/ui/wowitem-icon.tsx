@@ -9,6 +9,7 @@ export const WowItemIcon = ({
     tierBanner = false,
     raidDiff = 'Heroic',
     ilvl,
+    bonusString,
     className
 }: {
     item: Item
@@ -19,6 +20,7 @@ export const WowItemIcon = ({
     tierBanner?: boolean
     raidDiff?: WowRaidDifficulty
     ilvl?: number
+    bonusString?: string
     className: string
 }) => {
     if (ilvl === undefined) {
@@ -31,14 +33,13 @@ export const WowItemIcon = ({
         }
     }
 
+    let hrefString = `${item.wowheadUrl}&ilvl=${ilvl}`
+    if (bonusString) {
+        hrefString += `&bonus=${bonusString}`
+    }
+
     return (
-        <a
-            className=""
-            href={`${item.wowheadUrl}&ilvl=${ilvl}`}
-            rel="noreferrer"
-            // data-wowhead={`item=${item.id}?ilvl=${item.ilvlMythic}`} https://www.raidbots.com/frontend/c6217d2ee6dd7647cbfa.png
-            target="_blank"
-        >
+        <a className="" href={`${hrefString}`} rel="noreferrer" target="_blank">
             <div className={`flex items-center ${className}`}>
                 <div className="relative inline-block">
                     <img src={item.iconUrl} alt="" className={`${iconClassName} block`} />

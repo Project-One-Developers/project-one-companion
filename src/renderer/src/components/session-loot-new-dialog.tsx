@@ -74,7 +74,7 @@ export default function SessionLootNewDialog({
     const addManualLootsMutation = useMutation({
         mutationFn: addLootsManual,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
             manualForm.reset()
             setSelectedItems([])
             setOpen(false)
@@ -94,7 +94,7 @@ export default function SessionLootNewDialog({
     const addRcLootsMutation = useMutation({
         mutationFn: addLootsFromRc,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
             rcLootForm.reset()
             setOpen(false)
             toast({
@@ -121,7 +121,7 @@ export default function SessionLootNewDialog({
 
     const handleItemSelect = (item: Item) => {
         setSelectedItems([...selectedItems, item])
-        append({ itemId: item.id, bonus: '', socket: false, raidDifficulty: 'Normal' })
+        append({ itemId: item.id, bonusString: '', socket: false, raidDifficulty: 'Normal' })
         setSearchTerm('')
     }
 
@@ -225,7 +225,7 @@ export default function SessionLootNewDialog({
                                             />
                                             <FormField
                                                 control={manualForm.control}
-                                                name={`items.${index}.bonus`}
+                                                name={`items.${index}.bonusString`}
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormControl>

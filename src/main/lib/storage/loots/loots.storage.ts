@@ -28,6 +28,8 @@ export const addLoots = async (
             thirdStat: '',
             raidDifficulty: loot.raidDifficulty,
             socket: loot.socket,
+            itemString: loot.itemString,
+            bonusString: loot.bonusString,
             charsEligibility: elegibleCharacters.map((c) => c.id),
             raidSessionId: raidSessionId,
             rclootId: loot.rclootId,

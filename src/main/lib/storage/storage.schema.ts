@@ -246,7 +246,9 @@ export const raidSessionRosterTable = pgTable(
 export const lootTable = pgTable('loots', {
     id: varchar('id').primaryKey(),
     dropDate: integer('drop_date').notNull(),
-    thirdStat: varchar('third_stat', { length: 255 }),
+    thirdStat: varchar('third_stat'),
+    itemString: varchar('item_string'),
+    bonusString: varchar('bonus_string'),
     socket: boolean('socket').notNull().default(false),
     raidDifficulty: pgRaidDiffEnum('raid_difficulty').notNull(),
     charsEligibility: text('chars_eligibility').array(), // array of IDs referencing RaidSession.Chars

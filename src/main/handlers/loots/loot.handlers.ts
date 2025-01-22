@@ -1,7 +1,7 @@
 import { LootWithItem, NewLootsFromManualInput, NewLootsFromRc } from '@shared/types/types'
 import { addLoots, getLootsByRaidSessionId } from '@storage/loots/loots.storage'
 import { getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
-import { parseRaidSessionCsv } from '../raid-session/raid-session.utils'
+import { parseRaidSessionCsv } from './loot.utils'
 
 export const addRaidLootsByRCLootCsvHandler = async (loot: NewLootsFromRc): Promise<void> => {
     const parsedData = await parseRaidSessionCsv(loot.csv)
