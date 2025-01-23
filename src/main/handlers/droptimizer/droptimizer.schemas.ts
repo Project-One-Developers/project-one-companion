@@ -33,6 +33,7 @@ export const jsonDataSchema = z
         }),
         simbot: z.object({
             title: z.string(),
+            publicTitle: z.string(),
             simType: z.literal('droptimizer'), // At the moment, we only support droptimizer sims
             input: z.string(), // original raidbot input
             meta: z.object({
@@ -76,7 +77,9 @@ export const jsonDataSchema = z
             },
             raidInfo: {
                 id: raidId,
-                difficulty: data.simbot.title.split('•')[2].replaceAll(' ', '') as WowRaidDifficulty // Difficulty is the third element
+                difficulty: data.simbot.publicTitle
+                    .split('•')[2]
+                    .replaceAll(' ', '') as WowRaidDifficulty // Difficulty is the third element
             },
             charInfo: {
                 name: data.simbot.meta.rawFormData.character.name,
