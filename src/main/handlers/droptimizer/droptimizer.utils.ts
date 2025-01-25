@@ -26,7 +26,7 @@ export const extractWeeklyRewardChoices = (
     if (!match) return []
 
     const items: { id: number; bonusString: string; itemLevel: number }[] = []
-    const itemRegex = /# .*?\((\d+)\)\n#.*?id=(\d+),bonus_id=([\d\/]+)/g
+    const itemRegex = /# .*?\((\d+)\)\n#.*?id=(\d+),bonus_id=([\d/]+)/g
     let itemMatch: string[] | null
 
     while ((itemMatch = itemRegex.exec(match[1])) !== null) {
