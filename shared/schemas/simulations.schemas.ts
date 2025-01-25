@@ -52,7 +52,25 @@ export const droptimizerSchema = z.object({
 })
 
 export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).extend({
-    upgrades: z.array(newDroptimizerUpgradeSchema)
+    upgrades: z.array(newDroptimizerUpgradeSchema),
+    weeklyChest: z
+        .array(
+            z.object({
+                id: z.number(),
+                bonusString: z.string(),
+                itemLevel: z.number()
+            })
+        )
+        .nullish(),
+    currencies: z
+        .array(
+            z.object({
+                id: z.number(),
+                type: z.string(),
+                amount: z.number()
+            })
+        )
+        .nullish()
 })
 
 export const raidbotsURLSchema = z

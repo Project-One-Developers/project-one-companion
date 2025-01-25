@@ -89,7 +89,9 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         raidInfo: parsedJson.raidInfo,
         simInfo: parsedJson.simInfo,
         dateImported: getUnixTimestamp(),
-        upgrades: Array.from(upgradesMap.values())
+        upgrades: Array.from(upgradesMap.values()),
+        currencies: parsedJson.currencies,
+        weeklyChest: parsedJson.weeklyChest
     }
 
     return await addDroptimizer(droptimizer)

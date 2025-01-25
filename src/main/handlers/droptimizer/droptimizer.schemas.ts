@@ -1,5 +1,6 @@
 import { WowClass, WowRaidDifficulty } from '@shared/types/types'
 import { z } from 'zod'
+import { extractWeeklyRewardChoices } from './droptimizer.utils'
 
 export const jsonDataSchema = z
     .object({
@@ -38,9 +39,54 @@ export const jsonDataSchema = z
             input: z.string(), // original raidbot input
             meta: z.object({
                 rawFormData: z.object({
+                    text: z.string(),
                     character: z.object({
                         name: z.string(),
                         realm: z.string(),
+                        //[
+                        //   {
+                        //     "type": "currency",
+                        //     "id": 2914, // Weathered Harbinger Crest
+                        //     "amount": 187
+                        //   },
+                        //   {
+                        //     "type": "currency",
+                        //     "id": 2916, // Runed Harbinger Crest
+                        //     "amount": 40
+                        //   },
+                        //   {
+                        //     "type": "currency",
+                        //     "id": 2122, // ??
+                        //     "amount": 5
+                        //   },
+                        //   {
+                        //     "type": "currency",
+                        //     "id": 2915, // Carved Harbinger Crest
+                        //     "amount": 96
+                        //   },
+                        //   {
+                        //     "type": "currency",
+                        //     "id": 2917, // gilden harbinger
+                        //     "amount": 104
+                        //   },
+                        //   {
+                        //     "type": "currency",
+                        //     "id": 3008, // valorstone
+                        //     "amount": 1590
+                        //   },
+                        //   {
+                        //     "type": "item",
+                        //     "id": 211296, // Spark of Omens
+                        //     "amount": 2
+                        //   }
+                        // ]
+                        upgradeCurrencies: z.array(
+                            z.object({
+                                type: z.string(),
+                                id: z.number(),
+                                amount: z.number()
+                            })
+                        ),
                         talentLoadouts: z.array(
                             z.object({
                                 talents: z.object({
@@ -67,13 +113,14 @@ export const jsonDataSchema = z
             ilvl: Number(item.name.split('/')[4]),
             slot: item.name.split('/')[6]
         }))
+
         return {
             simInfo: {
                 date: data.timestamp,
                 fightstyle: data.sim.options.fight_style,
                 duration: data.sim.options.max_time,
                 nTargets: data.sim.options.desired_targets,
-                raidbotInput: data.simbot.input
+                raidbotInput: data.simbot.meta.rawFormData.text ?? data.simbot.input
             },
             raidInfo: {
                 id: raidId,
@@ -94,6 +141,10 @@ export const jsonDataSchema = z
                 specId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.specId,
                 talents: data.sim.players[0].talents
             },
+            weeklyChest: data.simbot.meta.rawFormData.text
+                ? extractWeeklyRewardChoices(data.simbot.meta.rawFormData.text)
+                : null,
+            currencies: data.simbot.meta.rawFormData.character.upgradeCurrencies,
             upgrades: upgrades
         }
     })

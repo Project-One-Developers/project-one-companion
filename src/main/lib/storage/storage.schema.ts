@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm'
 import {
     boolean,
     integer,
+    jsonb,
     pgEnum,
     pgTable,
     primaryKey,
@@ -213,7 +214,10 @@ export const droptimizerTable = pgTable('droptimizers', {
     characterClassId: integer('character_classId').notNull(),
     characterSpec: varchar('character_spec').notNull(),
     characterSpecId: integer('character_specId').notNull(),
-    characterTalents: varchar('character_talents').notNull()
+    characterTalents: varchar('character_talents').notNull(),
+    weeklyChest:
+        jsonb('weekly_chest').$type<{ id: number; bonusString: string; itemLevel: number }[]>(),
+    currencies: jsonb('currencies').$type<{ id: number; type: string; amount: number }[]>()
 })
 
 //////////////////////////////////////////////////////////
