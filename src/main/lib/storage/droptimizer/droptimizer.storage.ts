@@ -91,6 +91,33 @@ export const getDroptimizerLastByCharAndDiff = async (
     return result ? droptimizerStorageSchema.parse(result) : null
 }
 
+export const getDroptimizerLastByChar = async (
+    charName: string,
+    charRealm: string
+): Promise<Droptimizer | null> => {
+    const result = await db.query.droptimizerTable.findFirst({
+        where: (droptimizerTable, { eq, and }) =>
+            and(
+                eq(droptimizerTable.characterName, charName),
+                eq(droptimizerTable.characterServer, charRealm)
+            ),
+        // orderBy: (droptimizerTable, { desc }) => desc(droptimizerTable.simDate),
+        with: {
+            upgrades: {
+                columns: {
+                    catalyzedItemId: false, //ignored
+                    itemId: false //ignored
+                },
+                with: {
+                    item: true,
+                    catalyzedItem: true
+                }
+            }
+        }
+    })
+    return result ? droptimizerStorageSchema.parse(result) : null
+}
+
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
     const droptimizerId = await db.transaction(async (tx) => {
         // se è già stato importato, per ora sovrascrivo poi vedremo

@@ -13,11 +13,12 @@ import {
     raidSessionSchema
 } from '@shared/schemas/raid.schemas'
 import { appSettingsSchema } from '@shared/schemas/store.schemas'
-import { charWowAuditSchema } from 'src/main/handlers/characters/character.schemas'
 import { z } from 'zod'
 import {
+    characterGameInfoSchema,
     characterSchema,
     characterWithPlayerSchema,
+    charWowAuditSchema,
     editCharacterSchema,
     editPlayerSchema,
     newCharacterSchema,
@@ -52,10 +53,12 @@ export type NewPlayer = z.infer<typeof newPlayerSchema>
 export type EditPlayer = z.infer<typeof editPlayerSchema>
 
 export type Character = z.infer<typeof characterSchema>
+export type CharacterGameInfo = z.infer<typeof characterGameInfoSchema>
 export type CharacterWithPlayer = z.infer<typeof characterWithPlayerSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
-export type NewCharacterWowAudit = z.infer<typeof charWowAuditSchema>
 export type EditCharacter = z.infer<typeof editCharacterSchema>
+
+export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>

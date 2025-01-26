@@ -1,5 +1,6 @@
 import type {
     Character,
+    CharacterGameInfo,
     CharacterWithPlayer,
     EditCharacter,
     EditPlayer,
@@ -8,6 +9,7 @@ import type {
     Player,
     PlayerWithCharacters
 } from '@shared/types/types'
+import { getDroptimizerLastByChar } from '@storage/droptimizer/droptimizer.storage'
 import {
     addCharacter,
     addCharacterWowAudit,
@@ -15,7 +17,8 @@ import {
     deleteCharacter,
     editCharacter,
     getCharacterById,
-    getCharactersList
+    getCharactersList,
+    getLastCharacterWowAudit
 } from '@storage/players/characters.storage'
 import {
     addPlayer,
@@ -101,4 +104,26 @@ export const editPlayerHandler = async (edited: EditPlayer): Promise<Player | nu
 export const getPlayerWithCharactersListHandler = async (): Promise<PlayerWithCharacters[]> => {
     const players = await getPlayerWithCharactersList()
     return players
+}
+
+export const getCharLatestGameInfoHandler = async (
+    charName: string,
+    charRealm: string
+): Promise<CharacterGameInfo> => {
+    const lastDroptimizer = await getDroptimizerLastByChar(charName, charRealm)
+    const lastWowAudit = await getLastCharacterWowAudit(charName, charRealm)
+
+    const res: CharacterGameInfo = {
+        droptimizer: lastDroptimizer
+            ? {
+                  url: lastDroptimizer.url,
+                  date: lastDroptimizer.simInfo.date,
+                  weeklyChest: lastDroptimizer.weeklyChest,
+                  currencies: lastDroptimizer.currencies
+              }
+            : null,
+        wowaudit: lastWowAudit
+    }
+
+    return res
 }

@@ -5,6 +5,7 @@ import type {
     Boss,
     BossWithItems,
     Character,
+    CharacterGameInfo,
     CharacterWithPlayer,
     Droptimizer,
     EditCharacter,
@@ -41,6 +42,9 @@ export const api = {
     },
     editCharacter(edited: EditCharacter): Promise<Character> {
         return ipcRenderer.invoke('character-edit', edited)
+    },
+    getCharacterGameInfo(charName: string, charRealm: string): Promise<CharacterGameInfo> {
+        return ipcRenderer.invoke('character-game-info', charName, charRealm)
     },
     syncWowAudit(): Promise<void> {
         return ipcRenderer.invoke('character-sync-wowaudit')

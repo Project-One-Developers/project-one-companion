@@ -7,6 +7,7 @@ import {
     editCharacterHandler,
     editPlayerHandler,
     getCharacterHandler,
+    getCharLatestGameInfoHandler,
     getChracterListHandler,
     getPlayerWithCharactersListHandler,
     syncCharacterWowAudit
@@ -50,6 +51,7 @@ export const allHandlers = {
     'character-delete': deleteCharacterHandler,
     'character-edit': editCharacterHandler,
     'character-sync-wowaudit': syncCharacterWowAudit,
+    'character-game-info': getCharLatestGameInfoHandler,
     'player-add': addPlayerHandler,
     'player-delete': deletePlayerHandler,
     'player-edit': editPlayerHandler,

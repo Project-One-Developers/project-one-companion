@@ -1,5 +1,6 @@
 import CharacterDeleteDialog from '@renderer/components/character-delete-dialog'
 import CharacterDialog from '@renderer/components/character-dialog'
+import { CharGameInfoPanel } from '@renderer/components/character-game-info-panel'
 import { LastCharDroptimizers } from '@renderer/components/character-last-droptimizer-panel'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
@@ -129,6 +130,11 @@ export const CharacterPage = () => {
             {/*  Body */}
             <div className="flex bg-muted rounded-lg mb-2 shadow-lg  justify-between items-center">
                 <LastCharDroptimizers character={character} />
+            </div>
+
+            {/* In game info */}
+            <div className="flex bg-muted rounded-lg mb-2 shadow-lg  justify-between items-center">
+                <CharGameInfoPanel character={character} />
             </div>
         </div>
     )
