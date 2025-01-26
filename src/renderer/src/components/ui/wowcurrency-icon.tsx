@@ -7,8 +7,7 @@ type WowItemIconProps = {
 }
 
 export const WowCurrencyIcon = ({ currency, iconClassName }: WowItemIconProps) => {
-    const currencyHref = `https://www.wowhead.com/currency=${currency.id}`
-
+    const currencyHref = `https://www.wowhead.com/${currency.type}=${currency.id}`
     const currencyInfo = currencyIcon.get(currency.id)
 
     if (!currencyInfo) {

@@ -101,7 +101,7 @@ export const getDroptimizerLastByChar = async (
                 eq(droptimizerTable.characterName, charName),
                 eq(droptimizerTable.characterServer, charRealm)
             ),
-        // orderBy: (droptimizerTable, { desc }) => desc(droptimizerTable.simDate),
+        orderBy: (droptimizerTable, { desc }) => desc(droptimizerTable.simDate),
         with: {
             upgrades: {
                 columns: {

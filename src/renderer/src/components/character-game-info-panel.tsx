@@ -95,14 +95,15 @@ type CurrenciesPanelProps = {
 const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     return (
         <div className="flex flex-row items-center justify-between space-x-4">
-            {currencies.map((currency) => (
-                <WowCurrencyIcon
-                    key={currency.id}
-                    currency={currency}
-                    className="mt-1"
-                    iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
-                />
-            ))}
+            {currencies
+                .sort((a, b) => a.id - b.id)
+                .map((currency) => (
+                    <WowCurrencyIcon
+                        key={currency.id}
+                        currency={currency}
+                        iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                    />
+                ))}
         </div>
     )
 }
