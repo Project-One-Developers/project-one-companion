@@ -3,7 +3,8 @@ import type {
     Droptimizer,
     ItemToCatalyst,
     ItemToTierset,
-    NewDroptimizer
+    NewDroptimizer,
+    WowRaidDifficulty
 } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
@@ -59,6 +60,35 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
     })
 
     return droptimizerListStorageSchema.parse(result)
+}
+
+export const getDroptimizerLastByCharAndDiff = async (
+    charName: string,
+    charRealm: string,
+    raidDiff: WowRaidDifficulty
+): Promise<Droptimizer | null> => {
+    const result = await db.query.droptimizerTable.findFirst({
+        where: (droptimizerTable, { eq, and }) =>
+            and(
+                eq(droptimizerTable.characterName, charName),
+                eq(droptimizerTable.characterServer, charRealm),
+                eq(droptimizerTable.raidDifficulty, raidDiff)
+            ),
+        orderBy: (droptimizerTable, { desc }) => desc(droptimizerTable.simDate),
+        with: {
+            upgrades: {
+                columns: {
+                    catalyzedItemId: false, //ignored
+                    itemId: false //ignored
+                },
+                with: {
+                    item: true,
+                    catalyzedItem: true
+                }
+            }
+        }
+    })
+    return result ? droptimizerStorageSchema.parse(result) : null
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {

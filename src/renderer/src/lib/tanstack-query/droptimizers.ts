@@ -1,4 +1,4 @@
-import type { Droptimizer } from 'shared/types/types'
+import type { Droptimizer, WowRaidDifficulty } from 'shared/types/types'
 
 export const fetchDroptimizers = async (): Promise<{ droptimizers: Droptimizer[] } | null> => {
     const droptimizers = await window.api.getDroptimizerList()
@@ -15,4 +15,12 @@ export const deleteDroptimizer = async (url: string): Promise<void> => {
 
 export const syncDroptimizersFromDiscord = async (): Promise<void> => {
     return await window.api.syncDroptimizerFromDiscord()
+}
+
+export const getDroptimizerLastByCharAndDiff = async (
+    charName: string,
+    charRealm: string,
+    diff: WowRaidDifficulty
+): Promise<Droptimizer | null> => {
+    return await window.api.getDroptimizerLastByCharAndDiff(charName, charRealm, diff)
 }

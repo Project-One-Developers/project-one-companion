@@ -1,5 +1,6 @@
 import CharacterDeleteDialog from '@renderer/components/character-delete-dialog'
 import CharacterDialog from '@renderer/components/character-dialog'
+import { LastCharDroptimizers } from '@renderer/components/character-last-droptimizer-panel'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -17,21 +18,22 @@ export const CharacterPage = () => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-    const { data: character, isLoading } = useQuery({
+    const characterQuery = useQuery({
         queryKey: [queryKeys.character, characterId],
         queryFn: () => fetchCharacter(characterId),
         enabled: !!characterId
     })
 
-    if (!character) return null
-
-    if (isLoading) {
+    if (!characterQuery.data) return null
+    if (characterQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
             </div>
         )
     }
+
+    const character = characterQuery.data
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 p-8 relative">
@@ -122,6 +124,11 @@ export const CharacterPage = () => {
                         character={character}
                     />
                 </div>
+            </div>
+
+            {/*  Body */}
+            <div className="flex bg-muted rounded-lg mb-2 shadow-lg  justify-between items-center">
+                <LastCharDroptimizers character={character} />
             </div>
         </div>
     )

@@ -19,7 +19,8 @@ import type {
     NewRaidSession,
     Player,
     PlayerWithCharacters,
-    RaidSession
+    RaidSession,
+    WowRaidDifficulty
 } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
 
@@ -62,6 +63,13 @@ export const api = {
     },
     getDroptimizerList(): Promise<Droptimizer[]> {
         return ipcRenderer.invoke('droptimizer-list')
+    },
+    getDroptimizerLastByCharAndDiff(
+        charName: string,
+        charRealm: string,
+        diff: WowRaidDifficulty
+    ): Promise<Droptimizer | null> {
+        return ipcRenderer.invoke('droptimizer-last-char-diff', charName, charRealm, diff)
     },
     deleteDroptimizer(url: string): Promise<void> {
         return ipcRenderer.invoke('droptimizer-delete', url)
