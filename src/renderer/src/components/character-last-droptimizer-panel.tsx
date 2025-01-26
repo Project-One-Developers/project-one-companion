@@ -30,17 +30,12 @@ export const LastCharDroptimizers = ({ character }: LastCharDroptimizersProps) =
     const hcDroptimizer = droptimizerHcQuery.data
     const mythicDroptimizer = droptimizerMythicQuery.data
 
+    if (!hcDroptimizer && !mythicDroptimizer) return null
+
     return (
         <div className="flex flex-wrap gap-x-4 gap-y-4">
             {hcDroptimizer && <DroptimizerCard droptimizer={hcDroptimizer} />}
             {mythicDroptimizer && <DroptimizerCard droptimizer={mythicDroptimizer} />}
         </div>
-
-        // <div className="flex flex-col items-center relative">
-        //     <div className="flex flex-wrap gap-x-4 gap-y-4">
-        //         {hcDroptimizer && <DroptimizerCard droptimizer={hcDroptimizer} />}
-        //         {mythicDroptimizer && <DroptimizerCard droptimizer={mythicDroptimizer} />}
-        //     </div>
-        // </div>
     )
 }

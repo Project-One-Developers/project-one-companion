@@ -1,6 +1,8 @@
+import * as Tabs from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
-import { Character } from '@shared/types/types'
+import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
+import { Character, CharacterWowAudit } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
@@ -41,7 +43,7 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
             )}
 
             {wowauditData && (
-                <div className="flex flex-col justify-between p-6 bg-muted h-[230px] w-[310px] rounded-lg relative">
+                <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
                     <WoWAuditPanel data={wowauditData} />
                 </div>
             )}
@@ -109,15 +111,93 @@ const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
 }
 
 type WoWAuditPanelProps = {
-    data: any // Replace 'any' with the actual type of wowauditData when available
+    data: CharacterWowAudit
 }
 
 const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
     return (
-        <div className="bg-gray-800 p-4 rounded-lg mb-4 w-full">
-            <h2 className="text-xl font-bold mb-2">WoWAudit Data</h2>
-            {/* Add WoWAudit data display here */}
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+        <div className="p-4 rounded-lg  w-full relative">
+            {/* Top right corner icon and last update info */}
+            <div className="absolute top-4 right-4 flex items-center">
+                <img
+                    src="https://data.wowaudit.com/img/new-logo-icon.svg"
+                    alt="Character Icon"
+                    className="w-8 h-8 rounded-full mr-2"
+                />
+                <p className="text-sm">
+                    Last Update: {formaUnixTimestampToItalianDate(data.wowauditLastModifiedUnixTs)}
+                </p>
+            </div>
+            {/* Character Info Panel */}
+            <div className="rounded-lg mb-4">
+                <div className="grid grid-cols-2 gap-2">
+                    <div>
+                        <p>
+                            <strong>Highest Item Level:</strong>{' '}
+                            {data.hightestIlvlEverEquipped || 'N/A'}
+                        </p>
+                        <p>
+                            <strong>Mythic Dungeons This Week:</strong>{' '}
+                            {data.weekMythicDungeons || 0}
+                        </p>
+                        <p>
+                            <strong>Empty Sockets:</strong> {data.emptySockets || 'N/A'}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* WowAudit Best Gear info */}
+            <Tabs.Root defaultValue="best" className="w-full">
+                <Tabs.List className="flex border-b mb-4">
+                    <Tabs.Trigger
+                        value="best"
+                        className="px-4 py-2 flex-1 text-center hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                    >
+                        Best Gear
+                    </Tabs.Trigger>
+                    <Tabs.Trigger
+                        value="current"
+                        className="px-4 py-2 flex-1 flex items-center justify-center space-x-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                    >
+                        Current Gear
+                    </Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.Content value="best" className="p-4">
+                    <table className="w-full border-collapse">
+                        <thead>
+                            <tr className="">
+                                <th className="text-left">ILvl</th>
+                                <th className="text-left">Slot</th>
+                                <th className="text-left">Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.entries(data.bestGear).map(([key, value]) => (
+                                <tr key={key} className="border-t">
+                                    <td className="">{value.ilvl}</td>
+                                    <td className="">
+                                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                                    </td>
+                                    <td className="">
+                                        <a
+                                            className="q3 links"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            href={`https://www.wowhead.com/item=${value.id}?ilvl=${value.ilvl}`}
+                                        >
+                                            {value.name}
+                                        </a>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </Tabs.Content>
+                <Tabs.Content value="current" className="p-4">
+                    <></>
+                </Tabs.Content>
+            </Tabs.Root>
         </div>
     )
 }
