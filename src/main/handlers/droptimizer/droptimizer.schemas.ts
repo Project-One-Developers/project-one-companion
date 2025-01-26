@@ -17,7 +17,7 @@ const extractWeeklyRewardChoices = (
     while ((itemMatch = itemRegex.exec(match[1])) !== null) {
         items.push({
             id: parseInt(itemMatch[2], 10),
-            bonusString: itemMatch[3],
+            bonusString: itemMatch[3].replaceAll('/', ':'),
             itemLevel: parseInt(itemMatch[1], 10)
         })
     }
@@ -66,43 +66,6 @@ export const jsonDataSchema = z
                     character: z.object({
                         name: z.string(),
                         realm: z.string(),
-                        //[
-                        //   {
-                        //     "type": "currency",
-                        //     "id": 2914, // Weathered Harbinger Crest
-                        //     "amount": 187
-                        //   },
-                        //   {
-                        //     "type": "currency",
-                        //     "id": 2916, // Runed Harbinger Crest
-                        //     "amount": 40
-                        //   },
-                        //   {
-                        //     "type": "currency",
-                        //     "id": 2122, // ??
-                        //     "amount": 5
-                        //   },
-                        //   {
-                        //     "type": "currency",
-                        //     "id": 2915, // Carved Harbinger Crest
-                        //     "amount": 96
-                        //   },
-                        //   {
-                        //     "type": "currency",
-                        //     "id": 2917, // gilden harbinger
-                        //     "amount": 104
-                        //   },
-                        //   {
-                        //     "type": "currency",
-                        //     "id": 3008, // valorstone
-                        //     "amount": 1590
-                        //   },
-                        //   {
-                        //     "type": "item",
-                        //     "id": 211296, // Spark of Omens
-                        //     "amount": 2
-                        //   }
-                        // ]
                         upgradeCurrencies: z
                             .array(
                                 z.object({
