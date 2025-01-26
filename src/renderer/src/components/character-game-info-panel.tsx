@@ -1,4 +1,5 @@
 import * as Tabs from '@radix-ui/react-tabs'
+import weeklyChestIcon from '@renderer/assets/icons/weekly-chest.png'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
@@ -6,6 +7,7 @@ import { Character, CharacterWowAudit } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
+import { WowItemIcon } from './ui/wowitem-icon'
 
 type CharGameInfoPanelProps = {
     character: Character
@@ -37,9 +39,7 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
             )}
 
             {gameInfo && gameInfo.weeklyChest && (
-                <div className="flex flex-col justify-between p-6 bg-muted w-[310px] rounded-lg relative">
-                    <WeeklyChestPanel weeklyChest={gameInfo.weeklyChest} />
-                </div>
+                <WeeklyChestPanel weeklyChest={gameInfo.weeklyChest} />
             )}
 
             {wowauditData && (
@@ -60,29 +60,34 @@ type WeeklyChestPanelProps = {
 }
 
 const WeeklyChestPanel = ({ weeklyChest }: WeeklyChestPanelProps) => {
+    if (!weeklyChest || weeklyChest.length === 0) {
+        return <div>No weekly chest found</div>
+    }
     return (
-        <>
-            {weeklyChest.map((weeklyChest) => (
-                // <WowItemIcon
-                //     key={index}
-                //     item={loot.item}
-                //     iconOnly={true}
-                //     raidDiff={loot.raidDifficulty}
-                //     bonusString={loot.bonusString}
-                //     socketBanner={loot.socket}
-                //     tierBanner={true}
-                //     className="mt-1"
-                //     iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
-                // />
-                //                                                 )
-                <div key={weeklyChest.id} className="">
-                    <h2 className="text-xl font-bold mb-2">Weekly Chest</h2>
-                    <p>ID: {weeklyChest.id}</p>
-                    <p>Bonus String: {weeklyChest.bonusString}</p>
-                    <p>Item Level: {weeklyChest.itemLevel}</p>
-                </div>
-            ))}
-        </>
+        <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-4">
+                <p className="text-lg font-semibold">Weekly Chest</p>
+                <img
+                    src={weeklyChestIcon}
+                    alt="Weekly Chest Icon"
+                    className="h-16 w-16 object-contain"
+                />
+            </div>
+            {/* Chest Items */}
+            <div className="flex flex-wrap gap-2">
+                {weeklyChest.map((wc) => (
+                    <WowItemIcon
+                        key={wc.id}
+                        item={wc.id}
+                        iconOnly={false}
+                        bonusString={wc.bonusString}
+                        ilvl={wc.itemLevel}
+                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                    />
+                ))}
+            </div>
+        </div>
     )
 }
 

@@ -19,7 +19,7 @@ import {
     getDroptimizerListHandler,
     syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
-import { getItemsHandler, searchItemsHandler } from './items/items.handlers'
+import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
     addRaidLootsByManualInputHandler,
     addRaidLootsByRCLootCsvHandler,
@@ -57,6 +57,7 @@ export const allHandlers = {
     'player-edit': editPlayerHandler,
     'player-list': getPlayerWithCharactersListHandler,
     'upsert-json-data': upsertJsonDataHandler,
+    'item-get': getItemByIdHandler,
     'items-list': getItemsHandler,
     'items-search': searchItemsHandler,
     'boss-loot-table-get': getRaidLootTableHandler,

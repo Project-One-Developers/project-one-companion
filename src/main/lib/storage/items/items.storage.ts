@@ -11,6 +11,14 @@ export const getItems = async (): Promise<Item[]> => {
     return z.array(itemSchema).parse(items)
 }
 
+export const getItem = async (id: number): Promise<Item | null> => {
+    const res = await db.query.itemTable.findFirst({
+        where: (itemTable, { eq }) => eq(itemTable.id, id)
+    })
+
+    return itemSchema.parse(res)
+}
+
 export const searchItems = async (searchTerm: string, limit: number): Promise<Item[]> => {
     const res = await db
         .select()

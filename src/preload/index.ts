@@ -129,6 +129,9 @@ export const api = {
         return ipcRenderer.invoke('upsert-json-data')
     },
     // Items
+    getItem(id: number): Promise<Item | null> {
+        return ipcRenderer.invoke('item-get', id)
+    },
     getItems(): Promise<Item[]> {
         return ipcRenderer.invoke('items-list')
     },
