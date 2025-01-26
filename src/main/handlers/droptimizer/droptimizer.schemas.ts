@@ -1,6 +1,29 @@
 import { WowClass, WowRaidDifficulty } from '@shared/types/types'
 import { z } from 'zod'
-import { extractWeeklyRewardChoices } from './droptimizer.utils'
+
+const extractWeeklyRewardChoices = (
+    text: string
+): { id: number; bonusString: string; itemLevel: number }[] => {
+    const rewardSectionRegex =
+        /### Weekly Reward Choices\n([\s\S]*?)\n### End of Weekly Reward Choices/
+    const match = text.match(rewardSectionRegex)
+
+    if (!match) return []
+
+    const items: { id: number; bonusString: string; itemLevel: number }[] = []
+    const itemRegex = /# .*?\((\d+)\)\n#.*?id=(\d+),bonus_id=([\d/]+)/g
+    let itemMatch: string[] | null
+
+    while ((itemMatch = itemRegex.exec(match[1])) !== null) {
+        items.push({
+            id: parseInt(itemMatch[2], 10),
+            bonusString: itemMatch[3],
+            itemLevel: parseInt(itemMatch[1], 10)
+        })
+    }
+
+    return items
+}
 
 export const jsonDataSchema = z
     .object({
@@ -80,13 +103,15 @@ export const jsonDataSchema = z
                         //     "amount": 2
                         //   }
                         // ]
-                        upgradeCurrencies: z.array(
-                            z.object({
-                                type: z.string(),
-                                id: z.number(),
-                                amount: z.number()
-                            })
-                        ),
+                        upgradeCurrencies: z
+                            .array(
+                                z.object({
+                                    type: z.string(),
+                                    id: z.number(),
+                                    amount: z.number()
+                                })
+                            )
+                            .nullish(),
                         talentLoadouts: z.array(
                             z.object({
                                 talents: z.object({
@@ -120,7 +145,9 @@ export const jsonDataSchema = z
                 fightstyle: data.sim.options.fight_style,
                 duration: data.sim.options.max_time,
                 nTargets: data.sim.options.desired_targets,
-                raidbotInput: data.simbot.meta.rawFormData.text ?? data.simbot.input
+                raidbotInput: data.simbot.meta.rawFormData.text
+                    ? data.simbot.meta.rawFormData.text
+                    : data.simbot.input
             },
             raidInfo: {
                 id: raidId,
@@ -143,8 +170,8 @@ export const jsonDataSchema = z
             },
             weeklyChest: data.simbot.meta.rawFormData.text
                 ? extractWeeklyRewardChoices(data.simbot.meta.rawFormData.text)
-                : null,
-            currencies: data.simbot.meta.rawFormData.character.upgradeCurrencies,
+                : [],
+            currencies: data.simbot.meta.rawFormData.character.upgradeCurrencies ?? [],
             upgrades: upgrades
         }
     })

@@ -138,6 +138,90 @@ describe('Droptimizer Handlers', () => {
                     ilvl: 639,
                     slot: 'finger2'
                 }
+            ],
+            weeklyChest: [
+                {
+                    bonusString: '10278/10388/6652/10383/1628/10255',
+                    id: 219301,
+                    itemLevel: 593
+                },
+                {
+                    bonusString: '10278/10388/6652/10877/10377/10383/1628/10255',
+                    id: 221163,
+                    itemLevel: 593
+                },
+                {
+                    bonusString: '10281/6652/10377/1489/10255',
+                    id: 211005,
+                    itemLevel: 584
+                },
+                {
+                    bonusString: '10281/6652/10377/3163/10255',
+                    id: 219174,
+                    itemLevel: 584
+                },
+                {
+                    bonusString: '42/10380/10356/10258/1530/10255',
+                    id: 225591,
+                    itemLevel: 629
+                },
+                {
+                    bonusString: '40/10876/10380/10356/10259/1527/10255',
+                    id: 225583,
+                    itemLevel: 626
+                }
+            ],
+            currencies: [
+                {
+                    amount: 2259,
+                    id: 2915,
+                    type: 'currency'
+                },
+                {
+                    amount: 150,
+                    id: 2917,
+                    type: 'currency'
+                },
+                {
+                    amount: 2487,
+                    id: 1792,
+                    type: 'currency'
+                },
+                {
+                    amount: 798,
+                    id: 2916,
+                    type: 'currency'
+                },
+                {
+                    amount: 87,
+                    id: 2122,
+                    type: 'currency'
+                },
+                {
+                    amount: 1236,
+                    id: 2914,
+                    type: 'currency'
+                },
+                {
+                    amount: 2000,
+                    id: 3008,
+                    type: 'currency'
+                },
+                {
+                    amount: 4,
+                    id: 224072,
+                    type: 'item'
+                },
+                {
+                    amount: 2,
+                    id: 210233,
+                    type: 'item'
+                },
+                {
+                    amount: 1,
+                    id: 228339,
+                    type: 'item'
+                }
             ]
         }
 
@@ -330,7 +414,9 @@ describe('Droptimizer Handlers', () => {
                     ilvl: 639,
                     catalyzedItemId: null
                 }
-            ]
+            ],
+            weeklyChest: [],
+            currencies: []
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)
