@@ -128,14 +128,10 @@ export const CharacterPage = () => {
             </div>
 
             {/*  Body */}
-            <div className="flex bg-muted rounded-lg mb-2 shadow-lg  justify-between items-center">
-                <LastCharDroptimizers character={character} />
-            </div>
+            <LastCharDroptimizers character={character} />
 
             {/* In game info */}
-            <div className="flex bg-muted rounded-lg mb-2 shadow-lg  justify-between items-center">
-                <CharGameInfoPanel character={character} />
-            </div>
+            <CharGameInfoPanel character={character} />
         </div>
     )
 }

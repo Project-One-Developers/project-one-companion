@@ -27,8 +27,10 @@ import {
     playerWithCharacterSchema
 } from '../schemas/characters.schemas'
 import {
+    droptimizerCurrenciesSchema,
     droptimizerSchema,
     droptimizerUpgradeSchema,
+    droptimizerWeeklyChestSchema,
     newDroptimizerSchema,
     newDroptimizerUpgradeSchema,
     raidbotsURLSchema
@@ -62,6 +64,9 @@ export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
+export type DroptimizerWeeklyChest = z.infer<typeof droptimizerWeeklyChestSchema>
+export type DroptimizerCurrenciesUpgrade = z.infer<typeof droptimizerCurrenciesSchema>
+
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
 export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>

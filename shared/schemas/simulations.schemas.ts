@@ -61,8 +61,8 @@ export const droptimizerSchema = z.object({
         talents: z.string()
     }),
     upgrades: z.array(droptimizerUpgradeSchema).nullable(),
-    weeklyChest: z.array(droptimizerWeeklyChestSchema).nullish(),
-    currencies: z.array(droptimizerCurrenciesSchema).nullish()
+    weeklyChest: z.array(droptimizerWeeklyChestSchema).nullable(),
+    currencies: z.array(droptimizerCurrenciesSchema).nullable()
 })
 
 export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).extend({

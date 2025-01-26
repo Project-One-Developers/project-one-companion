@@ -11,7 +11,7 @@ import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.sch
 import { takeFirstResult } from '@storage/storage.utils'
 import { eq, InferInsertModel } from 'drizzle-orm'
 import { newUUID } from '../../utils'
-import { droptimizerListStorageSchema, droptimizerStorageSchema } from './droptimizer.schemas'
+import { droptimizerStorageListToSchema, droptimizerStorageToSchema } from './droptimizer.schemas'
 
 /**
  * Retrieves a Droptimizer by its ID from the database.
@@ -31,7 +31,7 @@ export const getDroptimizer = async (url: string): Promise<Droptimizer | null> =
         return null
     }
 
-    return droptimizerStorageSchema.parse(result)
+    return droptimizerStorageToSchema.parse(result)
 }
 
 export const getItemToTiersetMapping = async (): Promise<ItemToTierset[]> => {
@@ -59,7 +59,7 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
         }
     })
 
-    return droptimizerListStorageSchema.parse(result)
+    return droptimizerStorageListToSchema.parse(result)
 }
 
 export const getDroptimizerLastByCharAndDiff = async (
@@ -88,7 +88,7 @@ export const getDroptimizerLastByCharAndDiff = async (
             }
         }
     })
-    return result ? droptimizerStorageSchema.parse(result) : null
+    return result ? droptimizerStorageToSchema.parse(result) : null
 }
 
 export const getDroptimizerLastByChar = async (
@@ -115,7 +115,7 @@ export const getDroptimizerLastByChar = async (
             }
         }
     })
-    return result ? droptimizerStorageSchema.parse(result) : null
+    return result ? droptimizerStorageToSchema.parse(result) : null
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
@@ -185,7 +185,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         }
     })
 
-    return droptimizerStorageSchema.parse(result)
+    return droptimizerStorageToSchema.parse(result)
 }
 
 export const deleteDroptimizer = async (url: string): Promise<void> => {
