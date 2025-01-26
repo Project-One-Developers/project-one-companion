@@ -1,5 +1,4 @@
 import * as Tabs from '@radix-ui/react-tabs'
-import weeklyChestIcon from '@renderer/assets/icons/weekly-chest.png'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
@@ -27,21 +26,16 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
         )
     }
 
-    const gameInfo = charGameInfoQuery.data?.droptimizer
-    const wowauditData = charGameInfoQuery.data?.wowaudit
+    const currencies = charGameInfoQuery.data?.droptimizer?.currencies ?? null
+    const weeklyChest = charGameInfoQuery.data?.droptimizer?.weeklyChest ?? null
+    const wowauditData = charGameInfoQuery.data?.wowaudit ?? null
 
     return (
         <>
-            {gameInfo && gameInfo.currencies && (
-                <div className="flex flex-col justify-between p-6 bg-muted w-[310px] rounded-lg relative">
-                    <CurrenciesPanel currencies={gameInfo.currencies} />
-                </div>
-            )}
-
-            {gameInfo && gameInfo.weeklyChest && (
-                <WeeklyChestPanel weeklyChest={gameInfo.weeklyChest} />
-            )}
-
+            <div className="flex flex-wrap gap-x-4 gap-y-4">
+                <CurrenciesPanel currencies={currencies} />
+                <WeeklyChestPanel weeklyChests={weeklyChest} />
+            </div>
             {wowauditData && (
                 <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
                     <WoWAuditPanel data={wowauditData} />
@@ -52,40 +46,41 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
 }
 
 type WeeklyChestPanelProps = {
-    weeklyChest: {
-        id: number
-        bonusString: string
-        itemLevel: number
-    }[]
+    weeklyChests:
+        | {
+              id: number
+              bonusString: string
+              itemLevel: number
+          }[]
+        | null
 }
 
-const WeeklyChestPanel = ({ weeklyChest }: WeeklyChestPanelProps) => {
-    if (!weeklyChest || weeklyChest.length === 0) {
-        return <div>No weekly chest found</div>
-    }
+const WeeklyChestPanel = ({ weeklyChests }: WeeklyChestPanelProps) => {
     return (
         <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
                 <p className="text-lg font-semibold">Weekly Chest</p>
-                <img
+                {/* <img
                     src={weeklyChestIcon}
                     alt="Weekly Chest Icon"
                     className="h-16 w-16 object-contain"
-                />
+                /> */}
             </div>
             {/* Chest Items */}
             <div className="flex flex-wrap gap-2">
-                {weeklyChest.map((wc) => (
-                    <WowItemIcon
-                        key={wc.id}
-                        item={wc.id}
-                        iconOnly={false}
-                        bonusString={wc.bonusString}
-                        ilvl={wc.itemLevel}
-                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
-                    />
-                ))}
+                {!weeklyChests ? <div>No weekly chest found</div> : null}
+                {weeklyChests &&
+                    weeklyChests.map((wc) => (
+                        <WowItemIcon
+                            key={wc.id}
+                            item={wc.id}
+                            iconOnly={false}
+                            bonusString={wc.bonusString}
+                            ilvl={wc.itemLevel}
+                            iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                        />
+                    ))}
             </div>
         </div>
     )
@@ -96,21 +91,35 @@ type CurrenciesPanelProps = {
         id: number
         type: string
         amount: number
-    }>
+    }> | null
 }
 
 const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     return (
-        <div className="flex flex-row items-center justify-between space-x-4">
-            {currencies
-                .sort((a, b) => a.id - b.id)
-                .map((currency) => (
-                    <WowCurrencyIcon
-                        key={currency.id}
-                        currency={currency}
-                        iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
-                    />
-                ))}
+        <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-4">
+                <p className="text-lg font-semibold">Currencies</p>
+                {/* <img
+                    src={weeklyChestIcon}
+                    alt="Weekly Chest Icon"
+                    className="h-16 w-16 object-contain"
+                /> */}
+            </div>
+            {/* Chest Items */}
+            <div className="flex flex-row items-center justify-between space-x-4">
+                {!currencies ? <div>No currency info found</div> : null}
+                {currencies &&
+                    currencies
+                        .sort((a, b) => a.id - b.id)
+                        .map((currency) => (
+                            <WowCurrencyIcon
+                                key={currency.id}
+                                currency={currency}
+                                iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                            />
+                        ))}
+            </div>
         </div>
     )
 }
