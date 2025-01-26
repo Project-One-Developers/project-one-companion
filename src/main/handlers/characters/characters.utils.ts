@@ -1,5 +1,7 @@
-import { NewCharacterWowAudit } from '@shared/types/types'
-import { charWowAuditSchema } from './character.schemas'
+import {
+    charWowAuditStorageSchema,
+    NewCharacterWowAudit
+} from '@storage/players/characters.schemas'
 
 export const fetchWowAuditData = async (apiKey: string): Promise<unknown> => {
     const responseJson = await fetch(`https://data.wowaudit.com/dragonflight/${apiKey}.json`)
@@ -145,7 +147,7 @@ export const parseWowAuditData = (jsonData: unknown): NewCharacterWowAudit[] => 
             bestOffHandQuality: getNullSafeValue(jsonData, 255)
         }
 
-        return charWowAuditSchema.parse(wowAuditChar)
+        return charWowAuditStorageSchema.parse(wowAuditChar)
     })
 
     return res

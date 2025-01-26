@@ -4,11 +4,13 @@ import type {
     ItemToCatalyst,
     ItemToTierset,
     NewDroptimizer,
-    NewDroptimizerUpgrade
+    NewDroptimizerUpgrade,
+    WowRaidDifficulty
 } from '@shared/types/types'
 import {
     addDroptimizer,
     deleteDroptimizer,
+    getDroptimizerLastByCharAndDiff,
     getDroptimizerList,
     getItemToCatalystMapping,
     getItemToTiersetMapping
@@ -103,6 +105,14 @@ export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
 
 export const deleteDroptimizerHandler = async (url: string): Promise<void> => {
     return await deleteDroptimizer(url)
+}
+
+export const getDroptimizerLastByCharAndDiffHandler = async (
+    charName: string,
+    charRealm: string,
+    raidDiff: WowRaidDifficulty
+): Promise<Droptimizer | null> => {
+    return await getDroptimizerLastByCharAndDiff(charName, charRealm, raidDiff)
 }
 
 export const syncDroptimizersFromDiscord = async (): Promise<void> => {

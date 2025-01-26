@@ -2,14 +2,15 @@ import { charactersListSchema, characterWithPlayerSchema } from '@shared/schemas
 import type {
     Character,
     CharacterWithPlayer,
+    CharacterWowAudit,
     EditCharacter,
-    NewCharacter,
-    NewCharacterWowAudit
+    NewCharacter
 } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charTable, charWowAuditTable } from '@storage/storage.schema'
 import { eq } from 'drizzle-orm'
 import { newUUID } from '../../utils'
+import { charWowAuditStorageToCharacterWowAudit, NewCharacterWowAudit } from './characters.schemas'
 
 export const getCharacterById = async (id: string): Promise<CharacterWithPlayer | null> => {
     const result = await db.query.charTable.findFirst({
@@ -53,6 +54,17 @@ export const addCharacter = async (character: NewCharacter): Promise<string> => 
 
 export const addCharacterWowAudit = async (characters: NewCharacterWowAudit[]): Promise<void> => {
     await db.insert(charWowAuditTable).values(characters)
+}
+
+export const getLastCharacterWowAudit = async (
+    charName: string,
+    charRealm: string
+): Promise<CharacterWowAudit | null> => {
+    const result = await db.query.charWowAuditTable.findFirst({
+        where: (charWowAuditTable, { eq, and }) =>
+            and(eq(charWowAuditTable.name, charName), eq(charWowAuditTable.realm, charRealm))
+    })
+    return result ? charWowAuditStorageToCharacterWowAudit.parse(result) : null
 }
 
 export const deleteAllCharacterWowAudit = async (): Promise<void> => {

@@ -24,6 +24,18 @@ export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema
         catalyzedItemId: z.number().nullable()
     })
 
+export const droptimizerWeeklyChestSchema = z.object({
+    id: z.number(),
+    bonusString: z.string(),
+    itemLevel: z.number()
+})
+
+export const droptimizerCurrenciesSchema = z.object({
+    id: z.number(),
+    type: z.string(),
+    amount: z.number()
+})
+
 export const droptimizerSchema = z.object({
     url: z.string().url(),
     ak: z.string(),
@@ -48,29 +60,13 @@ export const droptimizerSchema = z.object({
         specId: z.number(), // https://wowpedia.fandom.com/wiki/SpecializationID
         talents: z.string()
     }),
-    upgrades: z.array(droptimizerUpgradeSchema).nullable()
+    upgrades: z.array(droptimizerUpgradeSchema).nullable(),
+    weeklyChest: z.array(droptimizerWeeklyChestSchema).nullable(),
+    currencies: z.array(droptimizerCurrenciesSchema).nullable()
 })
 
 export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).extend({
-    upgrades: z.array(newDroptimizerUpgradeSchema),
-    weeklyChest: z
-        .array(
-            z.object({
-                id: z.number(),
-                bonusString: z.string(),
-                itemLevel: z.number()
-            })
-        )
-        .nullish(),
-    currencies: z
-        .array(
-            z.object({
-                id: z.number(),
-                type: z.string(),
-                amount: z.number()
-            })
-        )
-        .nullish()
+    upgrades: z.array(newDroptimizerUpgradeSchema)
 })
 
 export const raidbotsURLSchema = z

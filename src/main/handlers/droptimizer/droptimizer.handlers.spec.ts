@@ -64,11 +64,11 @@ describe('Droptimizer Handlers', () => {
         await addDroptimizerHandler(testUrl)
 
         const expectedData = {
-            ak: '1273,Mythic,Bubbledan,pozzo_delleternità,Havoc,Demon Hunter',
+            ak: '1273,Mythic,Bubbledan,pozzo-delleternità,Havoc,Demon Hunter',
             url: testUrl,
             charInfo: {
                 name: 'Bubbledan',
-                server: 'pozzo_delleternità',
+                server: 'pozzo-delleternità',
                 class: 'Demon Hunter',
                 classId: 12,
                 spec: 'Havoc',

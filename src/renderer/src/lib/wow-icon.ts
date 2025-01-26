@@ -108,3 +108,48 @@ export const raidDiffIcon = new Map<WowRaidDifficulty, string>([
     ['Heroic', heroicIcon],
     ['Mythic', mythicIcon]
 ])
+
+export const currencyIcon = new Map<number, { url: string; name: string }>([
+    [
+        2914,
+        {
+            url: 'https://www.raidbots.com/static/images/icons/56/inv_crestupgrade_xalatath_weathered.png',
+            name: 'Weathered Harbinger Crest'
+        }
+    ],
+    [
+        2915,
+        {
+            url: 'https://www.raidbots.com/static/images/icons/56/inv_crestupgrade_xalatath_carved.png',
+            name: 'Carved Harbinger Crest'
+        }
+    ],
+    [
+        2916,
+        {
+            url: 'https://www.raidbots.com/static/images/icons/56/inv_crestupgrade_xalatath_runed.png',
+            name: 'Runed Harbinger Crest'
+        }
+    ],
+    [
+        2917,
+        {
+            url: 'https://www.raidbots.com/static/images/icons/56/inv_crestupgrade_xalatath_gilded.png',
+            name: 'Gilded Harbinger Crest'
+        }
+    ],
+    [
+        3008,
+        {
+            url: 'https://www.raidbots.com/static/images/icons/56/inv_valorstone_base.png',
+            name: 'Valorstone'
+        }
+    ],
+    [
+        211296,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_spark_whole_violet.jpg',
+            name: 'Spark of Omen'
+        }
+    ]
+])

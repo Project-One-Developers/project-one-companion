@@ -5,6 +5,7 @@ import type {
     Boss,
     BossWithItems,
     Character,
+    CharacterGameInfo,
     CharacterWithPlayer,
     Droptimizer,
     EditCharacter,
@@ -19,7 +20,8 @@ import type {
     NewRaidSession,
     Player,
     PlayerWithCharacters,
-    RaidSession
+    RaidSession,
+    WowRaidDifficulty
 } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
 
@@ -40,6 +42,9 @@ export const api = {
     },
     editCharacter(edited: EditCharacter): Promise<Character> {
         return ipcRenderer.invoke('character-edit', edited)
+    },
+    getCharacterGameInfo(charName: string, charRealm: string): Promise<CharacterGameInfo> {
+        return ipcRenderer.invoke('character-game-info', charName, charRealm)
     },
     syncWowAudit(): Promise<void> {
         return ipcRenderer.invoke('character-sync-wowaudit')
@@ -62,6 +67,13 @@ export const api = {
     },
     getDroptimizerList(): Promise<Droptimizer[]> {
         return ipcRenderer.invoke('droptimizer-list')
+    },
+    getDroptimizerLastByCharAndDiff(
+        charName: string,
+        charRealm: string,
+        diff: WowRaidDifficulty
+    ): Promise<Droptimizer | null> {
+        return ipcRenderer.invoke('droptimizer-last-char-diff', charName, charRealm, diff)
     },
     deleteDroptimizer(url: string): Promise<void> {
         return ipcRenderer.invoke('droptimizer-delete', url)

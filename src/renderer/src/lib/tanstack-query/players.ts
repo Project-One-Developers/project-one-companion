@@ -1,5 +1,6 @@
 import type {
     Character,
+    CharacterGameInfo,
     CharacterWithPlayer,
     EditCharacter,
     EditPlayer,
@@ -35,6 +36,13 @@ export const deleteCharacter = async (id: string): Promise<void> => {
 
 export const editCharacter = async (edited: EditCharacter): Promise<Character> => {
     return await window.api.editCharacter(edited)
+}
+
+export const getCharacterGameInfo = async (
+    charName: string,
+    charRealm: string
+): Promise<CharacterGameInfo> => {
+    return await window.api.getCharacterGameInfo(charName, charRealm)
 }
 
 // players

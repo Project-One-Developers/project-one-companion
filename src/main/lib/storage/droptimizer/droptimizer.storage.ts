@@ -3,14 +3,15 @@ import type {
     Droptimizer,
     ItemToCatalyst,
     ItemToTierset,
-    NewDroptimizer
+    NewDroptimizer,
+    WowRaidDifficulty
 } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
 import { eq, InferInsertModel } from 'drizzle-orm'
 import { newUUID } from '../../utils'
-import { droptimizerListStorageSchema, droptimizerStorageSchema } from './droptimizer.schemas'
+import { droptimizerStorageListToSchema, droptimizerStorageToSchema } from './droptimizer.schemas'
 
 /**
  * Retrieves a Droptimizer by its ID from the database.
@@ -30,7 +31,7 @@ export const getDroptimizer = async (url: string): Promise<Droptimizer | null> =
         return null
     }
 
-    return droptimizerStorageSchema.parse(result)
+    return droptimizerStorageToSchema.parse(result)
 }
 
 export const getItemToTiersetMapping = async (): Promise<ItemToTierset[]> => {
@@ -58,7 +59,63 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
         }
     })
 
-    return droptimizerListStorageSchema.parse(result)
+    return droptimizerStorageListToSchema.parse(result)
+}
+
+export const getDroptimizerLastByCharAndDiff = async (
+    charName: string,
+    charRealm: string,
+    raidDiff: WowRaidDifficulty
+): Promise<Droptimizer | null> => {
+    const result = await db.query.droptimizerTable.findFirst({
+        where: (droptimizerTable, { eq, and }) =>
+            and(
+                eq(droptimizerTable.characterName, charName),
+                eq(droptimizerTable.characterServer, charRealm),
+                eq(droptimizerTable.raidDifficulty, raidDiff)
+            ),
+        orderBy: (droptimizerTable, { desc }) => desc(droptimizerTable.simDate),
+        with: {
+            upgrades: {
+                columns: {
+                    catalyzedItemId: false, //ignored
+                    itemId: false //ignored
+                },
+                with: {
+                    item: true,
+                    catalyzedItem: true
+                }
+            }
+        }
+    })
+    return result ? droptimizerStorageToSchema.parse(result) : null
+}
+
+export const getDroptimizerLastByChar = async (
+    charName: string,
+    charRealm: string
+): Promise<Droptimizer | null> => {
+    const result = await db.query.droptimizerTable.findFirst({
+        where: (droptimizerTable, { eq, and }) =>
+            and(
+                eq(droptimizerTable.characterName, charName),
+                eq(droptimizerTable.characterServer, charRealm)
+            ),
+        orderBy: (droptimizerTable, { desc }) => desc(droptimizerTable.simDate),
+        with: {
+            upgrades: {
+                columns: {
+                    catalyzedItemId: false, //ignored
+                    itemId: false //ignored
+                },
+                with: {
+                    item: true,
+                    catalyzedItem: true
+                }
+            }
+        }
+    })
+    return result ? droptimizerStorageToSchema.parse(result) : null
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
@@ -128,7 +185,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         }
     })
 
-    return droptimizerStorageSchema.parse(result)
+    return droptimizerStorageToSchema.parse(result)
 }
 
 export const deleteDroptimizer = async (url: string): Promise<void> => {
