@@ -69,8 +69,8 @@ importers:
         specifier: 0.30.2
         version: 0.30.2
       drizzle-orm:
-        specifier: 0.38.4
-        version: 0.38.4(@types/react@19.0.8)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0)
+        specifier: 0.39.0
+        version: 0.39.0(@types/react@19.0.8)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0)
       electron-updater:
         specifier: 6.3.9
         version: 6.3.9
@@ -2583,8 +2583,8 @@ packages:
     resolution: {integrity: sha512-vhdLrxWA32WNVF77NabpSnX7pQBornx64VDQDmKddRonOB2Xe/yY4glQ7rECoa+ogqcQNo7VblLUbeBK6Zn9Ow==}
     hasBin: true
 
-  drizzle-orm@0.38.4:
-    resolution: {integrity: sha512-s7/5BpLKO+WJRHspvpqTydxFob8i1vo2rEx4pY6TGY7QSMuUfWUuzaY0DIpXCkgHOo37BaFC+SJQb99dDUXT3Q==}
+  drizzle-orm@0.39.0:
+    resolution: {integrity: sha512-kkZwo3Jvht0fdJD/EWGx0vYcEK0xnGrlNVaY07QYluRZA9N21B9VFbY+54bnb/1xvyzcg97tE65xprSAP/fFGQ==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -7567,7 +7567,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.38.4(@types/react@19.0.8)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0):
+  drizzle-orm@0.39.0(@types/react@19.0.8)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0):
     optionalDependencies:
       '@types/react': 19.0.8
       pg: 8.13.1
