@@ -1,4 +1,3 @@
-import * as Tabs from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
@@ -162,56 +161,64 @@ const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
             </div>
 
             {/* WowAudit Best Gear info */}
-            <Tabs.Root defaultValue="best" className="w-full">
-                <Tabs.List className="flex border-b mb-4">
-                    <Tabs.Trigger
-                        value="best"
-                        className="px-4 py-2 flex-1 text-center hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                    >
-                        Best Gear
-                    </Tabs.Trigger>
-                    <Tabs.Trigger
-                        value="current"
-                        className="px-4 py-2 flex-1 flex items-center justify-center space-x-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                    >
-                        Current Gear
-                    </Tabs.Trigger>
-                </Tabs.List>
-                <Tabs.Content value="best" className="p-4">
-                    <table className="w-full border-collapse">
-                        <thead>
-                            <tr className="">
-                                <th className="text-left">ILvl</th>
-                                <th className="text-left">Slot</th>
-                                <th className="text-left">Name</th>
+            <table className="w-full border-collapse">
+                <thead>
+                    <tr className="">
+                        <th className="text-left">Slot</th>
+                        <th className="text-left">
+                            <div className="flex items-center">
+                                RaidBot
+                                <img
+                                    src="https://assets.rpglogs.com/img/warcraft/raidbots-icon.png"
+                                    alt="Character Icon"
+                                    className="w-6 h-6 rounded-full ml-2"
+                                />
+                            </div>
+                        </th>
+                        <th className="text-left">
+                            <div className="flex items-center">
+                                Best Gear
+                                <img
+                                    src="https://data.wowaudit.com/img/new-logo-icon.svg"
+                                    alt="Character Icon"
+                                    className="w-6 h-6 rounded-full ml-2"
+                                />
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.entries(data.bestGear).map(([key, value]) =>
+                        value ? (
+                            <tr key={key} className="border-t">
+                                <td>{key.charAt(0).toUpperCase() + key.slice(1)}</td>
+                                <td>
+                                    <WowItemIcon
+                                        item={value.id}
+                                        iconOnly={false}
+                                        ilvl={value.ilvl}
+                                        showIlvl={true}
+                                        showSubclass={false}
+                                        showSlot={false}
+                                        iconClassName="object-cover object-top rounded-lg h-10 w-10 border border-background"
+                                    />
+                                </td>
+                                <td>
+                                    <WowItemIcon
+                                        item={value.id}
+                                        iconOnly={false}
+                                        ilvl={value.ilvl}
+                                        showIlvl={true}
+                                        showSubclass={false}
+                                        showSlot={false}
+                                        iconClassName="object-cover object-top rounded-lg h-10 w-10 border border-background"
+                                    />
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {Object.entries(data.bestGear).map(([key, value]) => (
-                                <tr key={key} className="border-t">
-                                    <td className="">{value.ilvl}</td>
-                                    <td className="">
-                                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                                    </td>
-                                    <td className="">
-                                        <a
-                                            className="q3 links"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            href={`https://www.wowhead.com/item=${value.id}?ilvl=${value.ilvl}`}
-                                        >
-                                            {value.name}
-                                        </a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </Tabs.Content>
-                <Tabs.Content value="current" className="p-4">
-                    <></>
-                </Tabs.Content>
-            </Tabs.Root>
+                        ) : null
+                    )}
+                </tbody>
+            </table>
         </div>
     )
 }

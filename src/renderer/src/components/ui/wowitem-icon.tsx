@@ -13,7 +13,10 @@ export const WowItemIcon = ({
     ilvl,
     bonusString,
     className,
-    iconClassName
+    iconClassName,
+    showSlot = true,
+    showSubclass = true,
+    showIlvl = true
 }: {
     item: Item | number
     iconOnly: boolean
@@ -25,6 +28,9 @@ export const WowItemIcon = ({
     bonusString?: string
     className?: string
     iconClassName?: string
+    showSlot?: boolean
+    showSubclass?: boolean
+    showIlvl?: boolean
 }) => {
     const { data: itemData, isLoading } = useQuery({
         queryKey: ['item', item],
@@ -39,7 +45,22 @@ export const WowItemIcon = ({
             </div>
         )
     }
-    if (!itemData) return null
+    if (!itemData) {
+        if (typeof item === 'number') {
+            return (
+                <a
+                    className=""
+                    href={`https://www.wowhead.com/item=${item}`}
+                    rel="noreferrer"
+                    target="_blank"
+                >
+                    ${item as number}
+                </a>
+            )
+        } else {
+            return null
+        }
+    }
 
     const getIlvl = () => {
         if (ilvl !== undefined) return ilvl
@@ -84,12 +105,18 @@ export const WowItemIcon = ({
                     <div id="item-info" className="flex flex-col ml-3">
                         <p className="font-black text-xs">{itemData.name}</p>
                         <div className="flex">
-                            {itemData.slot && itemData.slot !== 'Trinket' && (
+                            {showSlot && itemData.slot && itemData.slot !== 'Trinket' && (
                                 <p className="text-xs mr-1">{itemData.slot}</p>
                             )}
-                            <p className="text-xs">
-                                {itemData.itemSubclass} • {currentIlvl}
-                            </p>
+                            {(showSubclass || showIlvl) && ( // Only render if either subclass or ilvl is visible
+                                <p className="text-xs">
+                                    {showSubclass && itemData.itemSubclass}{' '}
+                                    {/* Conditionally render subclass */}
+                                    {showSubclass && showIlvl && ' • '}{' '}
+                                    {/* Add separator if both are visible */}
+                                    {showIlvl && currentIlvl} {/* Conditionally render ilvl */}
+                                </p>
+                            )}
                         </div>
                     </div>
                 )}

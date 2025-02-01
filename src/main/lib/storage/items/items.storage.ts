@@ -16,6 +16,10 @@ export const getItem = async (id: number): Promise<Item | null> => {
         where: (itemTable, { eq }) => eq(itemTable.id, id)
     })
 
+    if (!res) {
+        return null
+    }
+
     return itemSchema.parse(res)
 }
 
