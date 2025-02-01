@@ -283,8 +283,9 @@ export const assignmentTable = pgTable('assignments', {
 export const bossTable = pgTable('bosses', {
     id: integer('id').primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
     name: varchar('name', { length: 255 }).notNull().unique(),
-    raidName: varchar('raid_name'),
-    raidId: integer('raid_id'),
+    instanceId: integer('instance_id').notNull(),
+    instanceName: varchar('instance_name').notNull(),
+    instanceType: varchar('instance_type').notNull(),
     order: integer('order').notNull()
 })
 
@@ -299,7 +300,7 @@ export const itemTable = pgTable('items', {
     slot: pgItemSlotEnum('slot'),
     armorType: pgItemArmorTypeEnum('armor_type'),
     itemSubclass: varchar('item_subclass', { length: 50 }),
-    tierPrefix: varchar('tier_prefix', { length: 50 }), // es: Dreadful
+    tokenPrefix: varchar('token_prefix', { length: 50 }), // es: Dreadful
     tier: boolean('tier').notNull().default(false), // se è un item tierser
     veryRare: boolean('very_rare').notNull().default(false),
     boe: boolean('boe').notNull().default(false),
@@ -314,6 +315,9 @@ export const itemTable = pgTable('items', {
     iconName: varchar('icon_name', { length: 255 }),
     iconUrl: text('icon_url'),
     catalyzed: boolean('catalyzed').notNull().default(false), // se questo item è ottenibile solo tramite catalyst
+    sourceId: integer('source_id'),
+    sourceName: varchar('source_name'),
+    sourceType: varchar('source_type'),
     bossName: varchar('boss_name', { length: 255 }), // ridondante ma utile
     bossId: integer('boss_id')
         .references(() => bossTable.id)
@@ -334,13 +338,13 @@ export const itemToTiersetTable = pgTable('items_to_tierset', {
 export const itemToCatalystTable = pgTable(
     'items_to_catalyst',
     {
-        raidItemId: integer('raid_item_id').notNull(),
+        itemId: integer('item_id').notNull(),
         encounterId: integer('encounter_id').notNull(),
         catalyzedItemId: integer('catalyzed_item_id').notNull()
     },
     (t) => [
         {
-            pk: primaryKey({ columns: [t.raidItemId, t.encounterId, t.catalyzedItemId] }) // todo: non va
+            pk: primaryKey({ columns: [t.itemId, t.encounterId, t.catalyzedItemId] }) // todo: non va
         }
     ]
 )

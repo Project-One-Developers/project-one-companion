@@ -12,7 +12,7 @@ export const itemSchema = z.object({
     slot: wowItemSlotSchema.nullish(),
     itemSubclass: z.string().nullish(),
     armorType: wowArmorTypeSchema.nullish(),
-    tierPrefix: z.string().nullish(),
+    tokenPrefix: z.string().nullish(),
     tier: z.boolean().default(false),
     veryRare: z.boolean().default(false),
     catalyzed: z.boolean().default(false),
@@ -27,8 +27,12 @@ export const itemSchema = z.object({
     wowheadUrl: z.string().url(),
     iconName: z.string(),
     iconUrl: z.string().url(),
-    bossName: z.string().nullish(), // ridondante ma utile
-    bossId: z.number()
+    bossName: z.string(),
+    bossId: z.number(),
+    sourceId: z.number(), // instance id (eg: raid id, profession id, mplus name)
+    sourceName: z.string(),
+    sourceType: z.string(),
+    onUseTrinket: z.boolean().nullish()
 })
 
 export const itemToTiersetSchema = z.object({
@@ -38,7 +42,7 @@ export const itemToTiersetSchema = z.object({
 export const itemToTiersetArraySchema = z.array(itemToTiersetSchema)
 
 export const itemToCatalystSchema = z.object({
-    raidItemId: z.number(),
+    itemId: z.number(),
     encounterId: z.number(),
     catalyzedItemId: z.number()
 })

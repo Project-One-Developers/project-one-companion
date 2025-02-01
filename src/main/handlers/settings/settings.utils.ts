@@ -22,7 +22,7 @@ export const fetchRaidItems = (): Item[] => {
         slot: itemRaw.slot,
         armorType: itemRaw.armorType,
         itemSubclass: itemRaw.itemSubclass,
-        tierPrefix: itemRaw.token,
+        tokenPrefix: itemRaw.token,
         tier: itemRaw.itemSubclass === 'Token',
         veryRare: itemRaw.bonusId === 'Very Rare',
         catalyzed: itemRaw.catalyst,
@@ -36,8 +36,12 @@ export const fetchRaidItems = (): Item[] => {
         wowheadUrl: itemRaw.wowheadUrl,
         iconName: itemRaw.iconName,
         iconUrl: itemRaw.iconUrl,
-        bossName: itemRaw.bossName,
-        bossId: itemRaw.journalEncounterID
+        bossName: itemRaw.journalEncounterName,
+        bossId: itemRaw.journalEncounterID,
+        sourceId: itemRaw.sourceId, // instance id (eg: raid id, profession id, mplus name)
+        sourceName: itemRaw.sourceName,
+        sourceType: itemRaw.sourceType,
+        onUseTrinket: itemRaw.onUseTrinket
     })
 
     return z.array(itemSchema).parse(jsonData.map(transformRawItem))

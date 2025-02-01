@@ -68,7 +68,7 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
                 ilvl: up.ilvl,
                 catalyzedItemId: null,
                 ...(catalystMapping && {
-                    itemId: catalystMapping.raidItemId, // itemId looted by boss
+                    itemId: catalystMapping.itemId, // itemId looted by boss
                     catalyzedItemId: catalystMapping.catalyzedItemId // itemId converted by catalyst
                 })
             }

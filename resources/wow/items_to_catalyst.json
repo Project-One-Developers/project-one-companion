@@ -1,587 +1,972 @@
 [
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 211979
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":211979
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 211979
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":211979
     },
     {
-        "raidItemId": 212437,
-        "encounterId": 2609,
-        "catalyzedItemId": 211980
+        "itemId":212437,
+        "encounterId":2609,
+        "catalyzedItemId":211980
     },
     {
-        "raidItemId": 225587,
-        "encounterId": 2602,
-        "catalyzedItemId": 211980
+        "itemId":225587,
+        "encounterId":2602,
+        "catalyzedItemId":211980
     },
     {
-        "raidItemId": 212442,
-        "encounterId": 2607,
-        "catalyzedItemId": 211981
+        "itemId":212442,
+        "encounterId":2607,
+        "catalyzedItemId":211981
     },
     {
-        "raidItemId": 225589,
-        "encounterId": 2601,
-        "catalyzedItemId": 211981
+        "itemId":225589,
+        "encounterId":2601,
+        "catalyzedItemId":211981
     },
     {
-        "raidItemId": 225590,
-        "encounterId": 2611,
-        "catalyzedItemId": 211986
+        "itemId":212424,
+        "encounterId":2607,
+        "catalyzedItemId":211982
     },
     {
-        "raidItemId": 212443,
-        "encounterId": 2608,
-        "catalyzedItemId": 211986
+        "itemId":212422,
+        "encounterId":2611,
+        "catalyzedItemId":211983
     },
     {
-        "raidItemId": 225744,
-        "encounterId": -67,
-        "catalyzedItemId": 211986
+        "itemId":212427,
+        "encounterId":2599,
+        "catalyzedItemId":211984
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 211988
+        "itemId":225727,
+        "encounterId":-67,
+        "catalyzedItemId":211984
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 211988
+        "itemId":212418,
+        "encounterId":2612,
+        "catalyzedItemId":211985
     },
     {
-        "raidItemId": 212437,
-        "encounterId": 2609,
-        "catalyzedItemId": 211989
+        "itemId":212443,
+        "encounterId":2608,
+        "catalyzedItemId":211986
     },
     {
-        "raidItemId": 225587,
-        "encounterId": 2602,
-        "catalyzedItemId": 211989
+        "itemId":225590,
+        "encounterId":2611,
+        "catalyzedItemId":211986
     },
     {
-        "raidItemId": 212442,
-        "encounterId": 2607,
-        "catalyzedItemId": 211990
+        "itemId":225744,
+        "encounterId":-67,
+        "catalyzedItemId":211986
     },
     {
-        "raidItemId": 225589,
-        "encounterId": 2601,
-        "catalyzedItemId": 211990
+        "itemId":212420,
+        "encounterId":2602,
+        "catalyzedItemId":211987
     },
     {
-        "raidItemId": 225590,
-        "encounterId": 2611,
-        "catalyzedItemId": 211995
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":211988
     },
     {
-        "raidItemId": 212443,
-        "encounterId": 2608,
-        "catalyzedItemId": 211995
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":211988
     },
     {
-        "raidItemId": 225744,
-        "encounterId": -67,
-        "catalyzedItemId": 211995
+        "itemId":212437,
+        "encounterId":2609,
+        "catalyzedItemId":211989
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 211997
+        "itemId":225587,
+        "encounterId":2602,
+        "catalyzedItemId":211989
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 211997
+        "itemId":212442,
+        "encounterId":2607,
+        "catalyzedItemId":211990
     },
     {
-        "raidItemId": 212437,
-        "encounterId": 2609,
-        "catalyzedItemId": 211998
+        "itemId":225589,
+        "encounterId":2601,
+        "catalyzedItemId":211990
     },
     {
-        "raidItemId": 225587,
-        "encounterId": 2602,
-        "catalyzedItemId": 211998
+        "itemId":212424,
+        "encounterId":2607,
+        "catalyzedItemId":211991
     },
     {
-        "raidItemId": 212442,
-        "encounterId": 2607,
-        "catalyzedItemId": 211999
+        "itemId":212422,
+        "encounterId":2611,
+        "catalyzedItemId":211992
     },
     {
-        "raidItemId": 225589,
-        "encounterId": 2601,
-        "catalyzedItemId": 211999
+        "itemId":212427,
+        "encounterId":2599,
+        "catalyzedItemId":211993
     },
     {
-        "raidItemId": 225590,
-        "encounterId": 2611,
-        "catalyzedItemId": 212004
+        "itemId":225727,
+        "encounterId":-67,
+        "catalyzedItemId":211993
     },
     {
-        "raidItemId": 212443,
-        "encounterId": 2608,
-        "catalyzedItemId": 212004
+        "itemId":212418,
+        "encounterId":2612,
+        "catalyzedItemId":211994
     },
     {
-        "raidItemId": 225744,
-        "encounterId": -67,
-        "catalyzedItemId": 212004
+        "itemId":212443,
+        "encounterId":2608,
+        "catalyzedItemId":211995
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212006
+        "itemId":225590,
+        "encounterId":2611,
+        "catalyzedItemId":211995
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212006
+        "itemId":225744,
+        "encounterId":-67,
+        "catalyzedItemId":211995
     },
     {
-        "raidItemId": 212415,
-        "encounterId": 2599,
-        "catalyzedItemId": 212007
+        "itemId":212420,
+        "encounterId":2602,
+        "catalyzedItemId":211996
     },
     {
-        "raidItemId": 225581,
-        "encounterId": 2601,
-        "catalyzedItemId": 212007
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":211997
     },
     {
-        "raidItemId": 212414,
-        "encounterId": 2611,
-        "catalyzedItemId": 212008
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":211997
     },
     {
-        "raidItemId": 225580,
-        "encounterId": 2612,
-        "catalyzedItemId": 212008
+        "itemId":212437,
+        "encounterId":2609,
+        "catalyzedItemId":211998
     },
     {
-        "raidItemId": 225725,
-        "encounterId": -67,
-        "catalyzedItemId": 212008
+        "itemId":225587,
+        "encounterId":2602,
+        "catalyzedItemId":211998
     },
     {
-        "raidItemId": 212431,
-        "encounterId": 2607,
-        "catalyzedItemId": 212013
+        "itemId":212442,
+        "encounterId":2607,
+        "catalyzedItemId":211999
     },
     {
-        "raidItemId": 225586,
-        "encounterId": 2609,
-        "catalyzedItemId": 212013
+        "itemId":225589,
+        "encounterId":2601,
+        "catalyzedItemId":211999
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212015
+        "itemId":212424,
+        "encounterId":2607,
+        "catalyzedItemId":212000
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212015
+        "itemId":212422,
+        "encounterId":2611,
+        "catalyzedItemId":212001
     },
     {
-        "raidItemId": 212415,
-        "encounterId": 2599,
-        "catalyzedItemId": 212016
+        "itemId":212427,
+        "encounterId":2599,
+        "catalyzedItemId":212002
     },
     {
-        "raidItemId": 225581,
-        "encounterId": 2601,
-        "catalyzedItemId": 212016
+        "itemId":225727,
+        "encounterId":-67,
+        "catalyzedItemId":212002
     },
     {
-        "raidItemId": 212414,
-        "encounterId": 2611,
-        "catalyzedItemId": 212017
+        "itemId":212418,
+        "encounterId":2612,
+        "catalyzedItemId":212003
     },
     {
-        "raidItemId": 225580,
-        "encounterId": 2612,
-        "catalyzedItemId": 212017
+        "itemId":212443,
+        "encounterId":2608,
+        "catalyzedItemId":212004
     },
     {
-        "raidItemId": 225725,
-        "encounterId": -67,
-        "catalyzedItemId": 212017
+        "itemId":225590,
+        "encounterId":2611,
+        "catalyzedItemId":212004
     },
     {
-        "raidItemId": 212431,
-        "encounterId": 2607,
-        "catalyzedItemId": 212022
+        "itemId":225744,
+        "encounterId":-67,
+        "catalyzedItemId":212004
     },
     {
-        "raidItemId": 225586,
-        "encounterId": 2609,
-        "catalyzedItemId": 212022
+        "itemId":212420,
+        "encounterId":2602,
+        "catalyzedItemId":212005
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212024
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212006
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212024
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212006
     },
     {
-        "raidItemId": 212415,
-        "encounterId": 2599,
-        "catalyzedItemId": 212025
+        "itemId":212415,
+        "encounterId":2599,
+        "catalyzedItemId":212007
     },
     {
-        "raidItemId": 225581,
-        "encounterId": 2601,
-        "catalyzedItemId": 212025
+        "itemId":225581,
+        "encounterId":2601,
+        "catalyzedItemId":212007
     },
     {
-        "raidItemId": 212414,
-        "encounterId": 2611,
-        "catalyzedItemId": 212026
+        "itemId":212414,
+        "encounterId":2611,
+        "catalyzedItemId":212008
     },
     {
-        "raidItemId": 225580,
-        "encounterId": 2612,
-        "catalyzedItemId": 212026
+        "itemId":225580,
+        "encounterId":2612,
+        "catalyzedItemId":212008
     },
     {
-        "raidItemId": 225725,
-        "encounterId": -67,
-        "catalyzedItemId": 212026
+        "itemId":225725,
+        "encounterId":-67,
+        "catalyzedItemId":212008
     },
     {
-        "raidItemId": 212431,
-        "encounterId": 2607,
-        "catalyzedItemId": 212031
+        "itemId":212429,
+        "encounterId":2608,
+        "catalyzedItemId":212009
     },
     {
-        "raidItemId": 225586,
-        "encounterId": 2609,
-        "catalyzedItemId": 212031
+        "itemId":225724,
+        "encounterId":-67,
+        "catalyzedItemId":212009
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212033
+        "itemId":212435,
+        "encounterId":2602,
+        "catalyzedItemId":212010
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212033
+        "itemId":212428,
+        "encounterId":2607,
+        "catalyzedItemId":212011
     },
     {
-        "raidItemId": 212438,
-        "encounterId": 2611,
-        "catalyzedItemId": 212034
+        "itemId":212436,
+        "encounterId":2602,
+        "catalyzedItemId":212012
     },
     {
-        "raidItemId": 225588,
-        "encounterId": 2612,
-        "catalyzedItemId": 212034
+        "itemId":212431,
+        "encounterId":2607,
+        "catalyzedItemId":212013
     },
     {
-        "raidItemId": 212425,
-        "encounterId": 2607,
-        "catalyzedItemId": 212035
+        "itemId":225586,
+        "encounterId":2609,
+        "catalyzedItemId":212013
     },
     {
-        "raidItemId": 225583,
-        "encounterId": 2609,
-        "catalyzedItemId": 212035
+        "itemId":212421,
+        "encounterId":2611,
+        "catalyzedItemId":212014
     },
     {
-        "raidItemId": 225723,
-        "encounterId": -67,
-        "catalyzedItemId": 212035
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212015
     },
     {
-        "raidItemId": 212445,
-        "encounterId": 2599,
-        "catalyzedItemId": 212040
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212015
     },
     {
-        "raidItemId": 225591,
-        "encounterId": 2601,
-        "catalyzedItemId": 212040
+        "itemId":212415,
+        "encounterId":2599,
+        "catalyzedItemId":212016
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212042
+        "itemId":225581,
+        "encounterId":2601,
+        "catalyzedItemId":212016
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212042
+        "itemId":212414,
+        "encounterId":2611,
+        "catalyzedItemId":212017
     },
     {
-        "raidItemId": 212438,
-        "encounterId": 2611,
-        "catalyzedItemId": 212043
+        "itemId":225580,
+        "encounterId":2612,
+        "catalyzedItemId":212017
     },
     {
-        "raidItemId": 225588,
-        "encounterId": 2612,
-        "catalyzedItemId": 212043
+        "itemId":225725,
+        "encounterId":-67,
+        "catalyzedItemId":212017
     },
     {
-        "raidItemId": 212425,
-        "encounterId": 2607,
-        "catalyzedItemId": 212044
+        "itemId":212429,
+        "encounterId":2608,
+        "catalyzedItemId":212018
     },
     {
-        "raidItemId": 225583,
-        "encounterId": 2609,
-        "catalyzedItemId": 212044
+        "itemId":225724,
+        "encounterId":-67,
+        "catalyzedItemId":212018
     },
     {
-        "raidItemId": 225723,
-        "encounterId": -67,
-        "catalyzedItemId": 212044
+        "itemId":212435,
+        "encounterId":2602,
+        "catalyzedItemId":212019
     },
     {
-        "raidItemId": 212445,
-        "encounterId": 2599,
-        "catalyzedItemId": 212049
+        "itemId":212428,
+        "encounterId":2607,
+        "catalyzedItemId":212020
     },
     {
-        "raidItemId": 225591,
-        "encounterId": 2601,
-        "catalyzedItemId": 212049
+        "itemId":212436,
+        "encounterId":2602,
+        "catalyzedItemId":212021
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212051
+        "itemId":212431,
+        "encounterId":2607,
+        "catalyzedItemId":212022
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212051
+        "itemId":225586,
+        "encounterId":2609,
+        "catalyzedItemId":212022
     },
     {
-        "raidItemId": 212438,
-        "encounterId": 2611,
-        "catalyzedItemId": 212052
+        "itemId":212421,
+        "encounterId":2611,
+        "catalyzedItemId":212023
     },
     {
-        "raidItemId": 225588,
-        "encounterId": 2612,
-        "catalyzedItemId": 212052
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212024
     },
     {
-        "raidItemId": 212425,
-        "encounterId": 2607,
-        "catalyzedItemId": 212053
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212024
     },
     {
-        "raidItemId": 225583,
-        "encounterId": 2609,
-        "catalyzedItemId": 212053
+        "itemId":212415,
+        "encounterId":2599,
+        "catalyzedItemId":212025
     },
     {
-        "raidItemId": 225723,
-        "encounterId": -67,
-        "catalyzedItemId": 212053
+        "itemId":225581,
+        "encounterId":2601,
+        "catalyzedItemId":212025
     },
     {
-        "raidItemId": 212445,
-        "encounterId": 2599,
-        "catalyzedItemId": 212058
+        "itemId":212414,
+        "encounterId":2611,
+        "catalyzedItemId":212026
     },
     {
-        "raidItemId": 225591,
-        "encounterId": 2601,
-        "catalyzedItemId": 212058
+        "itemId":225580,
+        "encounterId":2612,
+        "catalyzedItemId":212026
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212060
+        "itemId":225725,
+        "encounterId":-67,
+        "catalyzedItemId":212026
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212060
+        "itemId":212429,
+        "encounterId":2608,
+        "catalyzedItemId":212027
     },
     {
-        "raidItemId": 212438,
-        "encounterId": 2611,
-        "catalyzedItemId": 212061
+        "itemId":225724,
+        "encounterId":-67,
+        "catalyzedItemId":212027
     },
     {
-        "raidItemId": 225588,
-        "encounterId": 2612,
-        "catalyzedItemId": 212061
+        "itemId":212435,
+        "encounterId":2602,
+        "catalyzedItemId":212028
     },
     {
-        "raidItemId": 212425,
-        "encounterId": 2607,
-        "catalyzedItemId": 212062
+        "itemId":212428,
+        "encounterId":2607,
+        "catalyzedItemId":212029
     },
     {
-        "raidItemId": 225583,
-        "encounterId": 2609,
-        "catalyzedItemId": 212062
+        "itemId":212436,
+        "encounterId":2602,
+        "catalyzedItemId":212030
     },
     {
-        "raidItemId": 225723,
-        "encounterId": -67,
-        "catalyzedItemId": 212062
+        "itemId":212431,
+        "encounterId":2607,
+        "catalyzedItemId":212031
     },
     {
-        "raidItemId": 212445,
-        "encounterId": 2599,
-        "catalyzedItemId": 212067
+        "itemId":225586,
+        "encounterId":2609,
+        "catalyzedItemId":212031
     },
     {
-        "raidItemId": 225591,
-        "encounterId": 2601,
-        "catalyzedItemId": 212067
+        "itemId":212421,
+        "encounterId":2611,
+        "catalyzedItemId":212032
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212069
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212033
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212069
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212033
     },
     {
-        "raidItemId": 212426,
-        "encounterId": 2607,
-        "catalyzedItemId": 212070
+        "itemId":212438,
+        "encounterId":2611,
+        "catalyzedItemId":212034
     },
     {
-        "raidItemId": 225584,
-        "encounterId": 2608,
-        "catalyzedItemId": 212070
+        "itemId":225588,
+        "encounterId":2612,
+        "catalyzedItemId":212034
     },
     {
-        "raidItemId": 212430,
-        "encounterId": 2611,
-        "catalyzedItemId": 212071
+        "itemId":212425,
+        "encounterId":2607,
+        "catalyzedItemId":212035
     },
     {
-        "raidItemId": 225585,
-        "encounterId": 2602,
-        "catalyzedItemId": 212071
+        "itemId":225583,
+        "encounterId":2609,
+        "catalyzedItemId":212035
     },
     {
-        "raidItemId": 212416,
-        "encounterId": 2599,
-        "catalyzedItemId": 212076
+        "itemId":225723,
+        "encounterId":-67,
+        "catalyzedItemId":212035
     },
     {
-        "raidItemId": 225582,
-        "encounterId": 2612,
-        "catalyzedItemId": 212076
+        "itemId":212444,
+        "encounterId":2602,
+        "catalyzedItemId":212036
     },
     {
-        "raidItemId": 225721,
-        "encounterId": -67,
-        "catalyzedItemId": 212076
+        "itemId":225722,
+        "encounterId":-67,
+        "catalyzedItemId":212036
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212078
+        "itemId":212423,
+        "encounterId":2607,
+        "catalyzedItemId":212037
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212078
+        "itemId":212417,
+        "encounterId":2611,
+        "catalyzedItemId":212038
     },
     {
-        "raidItemId": 212426,
-        "encounterId": 2607,
-        "catalyzedItemId": 212079
+        "itemId":212432,
+        "encounterId":2608,
+        "catalyzedItemId":212039
     },
     {
-        "raidItemId": 225584,
-        "encounterId": 2608,
-        "catalyzedItemId": 212079
+        "itemId":212445,
+        "encounterId":2599,
+        "catalyzedItemId":212040
     },
     {
-        "raidItemId": 212430,
-        "encounterId": 2611,
-        "catalyzedItemId": 212080
+        "itemId":225591,
+        "encounterId":2601,
+        "catalyzedItemId":212040
     },
     {
-        "raidItemId": 225585,
-        "encounterId": 2602,
-        "catalyzedItemId": 212080
+        "itemId":212433,
+        "encounterId":2602,
+        "catalyzedItemId":212041
     },
     {
-        "raidItemId": 212416,
-        "encounterId": 2599,
-        "catalyzedItemId": 212085
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212042
     },
     {
-        "raidItemId": 225582,
-        "encounterId": 2612,
-        "catalyzedItemId": 212085
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212042
     },
     {
-        "raidItemId": 225721,
-        "encounterId": -67,
-        "catalyzedItemId": 212085
+        "itemId":212438,
+        "encounterId":2611,
+        "catalyzedItemId":212043
     },
     {
-        "raidItemId": 212446,
-        "encounterId": 2607,
-        "catalyzedItemId": 212087
+        "itemId":225588,
+        "encounterId":2612,
+        "catalyzedItemId":212043
     },
     {
-        "raidItemId": 225574,
-        "encounterId": 2609,
-        "catalyzedItemId": 212087
+        "itemId":212425,
+        "encounterId":2607,
+        "catalyzedItemId":212044
     },
     {
-        "raidItemId": 212426,
-        "encounterId": 2607,
-        "catalyzedItemId": 212088
+        "itemId":225583,
+        "encounterId":2609,
+        "catalyzedItemId":212044
     },
     {
-        "raidItemId": 225584,
-        "encounterId": 2608,
-        "catalyzedItemId": 212088
+        "itemId":225723,
+        "encounterId":-67,
+        "catalyzedItemId":212044
     },
     {
-        "raidItemId": 212430,
-        "encounterId": 2611,
-        "catalyzedItemId": 212089
+        "itemId":212444,
+        "encounterId":2602,
+        "catalyzedItemId":212045
     },
     {
-        "raidItemId": 225585,
-        "encounterId": 2602,
-        "catalyzedItemId": 212089
+        "itemId":225722,
+        "encounterId":-67,
+        "catalyzedItemId":212045
     },
     {
-        "raidItemId": 212416,
-        "encounterId": 2599,
-        "catalyzedItemId": 212094
+        "itemId":212423,
+        "encounterId":2607,
+        "catalyzedItemId":212046
     },
     {
-        "raidItemId": 225582,
-        "encounterId": 2612,
-        "catalyzedItemId": 212094
+        "itemId":212417,
+        "encounterId":2611,
+        "catalyzedItemId":212047
     },
     {
-        "raidItemId": 225721,
-        "encounterId": -67,
-        "catalyzedItemId": 212094
+        "itemId":212432,
+        "encounterId":2608,
+        "catalyzedItemId":212048
+    },
+    {
+        "itemId":212445,
+        "encounterId":2599,
+        "catalyzedItemId":212049
+    },
+    {
+        "itemId":225591,
+        "encounterId":2601,
+        "catalyzedItemId":212049
+    },
+    {
+        "itemId":212433,
+        "encounterId":2602,
+        "catalyzedItemId":212050
+    },
+    {
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212051
+    },
+    {
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212051
+    },
+    {
+        "itemId":212438,
+        "encounterId":2611,
+        "catalyzedItemId":212052
+    },
+    {
+        "itemId":225588,
+        "encounterId":2612,
+        "catalyzedItemId":212052
+    },
+    {
+        "itemId":212425,
+        "encounterId":2607,
+        "catalyzedItemId":212053
+    },
+    {
+        "itemId":225583,
+        "encounterId":2609,
+        "catalyzedItemId":212053
+    },
+    {
+        "itemId":225723,
+        "encounterId":-67,
+        "catalyzedItemId":212053
+    },
+    {
+        "itemId":212444,
+        "encounterId":2602,
+        "catalyzedItemId":212054
+    },
+    {
+        "itemId":225722,
+        "encounterId":-67,
+        "catalyzedItemId":212054
+    },
+    {
+        "itemId":212423,
+        "encounterId":2607,
+        "catalyzedItemId":212055
+    },
+    {
+        "itemId":212417,
+        "encounterId":2611,
+        "catalyzedItemId":212056
+    },
+    {
+        "itemId":212432,
+        "encounterId":2608,
+        "catalyzedItemId":212057
+    },
+    {
+        "itemId":212445,
+        "encounterId":2599,
+        "catalyzedItemId":212058
+    },
+    {
+        "itemId":225591,
+        "encounterId":2601,
+        "catalyzedItemId":212058
+    },
+    {
+        "itemId":212433,
+        "encounterId":2602,
+        "catalyzedItemId":212059
+    },
+    {
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212060
+    },
+    {
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212060
+    },
+    {
+        "itemId":212438,
+        "encounterId":2611,
+        "catalyzedItemId":212061
+    },
+    {
+        "itemId":225588,
+        "encounterId":2612,
+        "catalyzedItemId":212061
+    },
+    {
+        "itemId":212425,
+        "encounterId":2607,
+        "catalyzedItemId":212062
+    },
+    {
+        "itemId":225583,
+        "encounterId":2609,
+        "catalyzedItemId":212062
+    },
+    {
+        "itemId":225723,
+        "encounterId":-67,
+        "catalyzedItemId":212062
+    },
+    {
+        "itemId":212444,
+        "encounterId":2602,
+        "catalyzedItemId":212063
+    },
+    {
+        "itemId":225722,
+        "encounterId":-67,
+        "catalyzedItemId":212063
+    },
+    {
+        "itemId":212423,
+        "encounterId":2607,
+        "catalyzedItemId":212064
+    },
+    {
+        "itemId":212417,
+        "encounterId":2611,
+        "catalyzedItemId":212065
+    },
+    {
+        "itemId":212432,
+        "encounterId":2608,
+        "catalyzedItemId":212066
+    },
+    {
+        "itemId":212445,
+        "encounterId":2599,
+        "catalyzedItemId":212067
+    },
+    {
+        "itemId":225591,
+        "encounterId":2601,
+        "catalyzedItemId":212067
+    },
+    {
+        "itemId":212433,
+        "encounterId":2602,
+        "catalyzedItemId":212068
+    },
+    {
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212069
+    },
+    {
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212069
+    },
+    {
+        "itemId":212426,
+        "encounterId":2607,
+        "catalyzedItemId":212070
+    },
+    {
+        "itemId":225584,
+        "encounterId":2608,
+        "catalyzedItemId":212070
+    },
+    {
+        "itemId":212430,
+        "encounterId":2611,
+        "catalyzedItemId":212071
+    },
+    {
+        "itemId":225585,
+        "encounterId":2602,
+        "catalyzedItemId":212071
+    },
+    {
+        "itemId":212439,
+        "encounterId":2611,
+        "catalyzedItemId":212072
+    },
+    {
+        "itemId":212434,
+        "encounterId":2602,
+        "catalyzedItemId":212073
+    },
+    {
+        "itemId":212440,
+        "encounterId":2609,
+        "catalyzedItemId":212074
+    },
+    {
+        "itemId":225720,
+        "encounterId":-67,
+        "catalyzedItemId":212074
+    },
+    {
+        "itemId":212441,
+        "encounterId":2601,
+        "catalyzedItemId":212075
+    },
+    {
+        "itemId":212416,
+        "encounterId":2599,
+        "catalyzedItemId":212076
+    },
+    {
+        "itemId":225582,
+        "encounterId":2612,
+        "catalyzedItemId":212076
+    },
+    {
+        "itemId":225721,
+        "encounterId":-67,
+        "catalyzedItemId":212076
+    },
+    {
+        "itemId":212419,
+        "encounterId":2607,
+        "catalyzedItemId":212077
+    },
+    {
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212078
+    },
+    {
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212078
+    },
+    {
+        "itemId":212426,
+        "encounterId":2607,
+        "catalyzedItemId":212079
+    },
+    {
+        "itemId":225584,
+        "encounterId":2608,
+        "catalyzedItemId":212079
+    },
+    {
+        "itemId":212430,
+        "encounterId":2611,
+        "catalyzedItemId":212080
+    },
+    {
+        "itemId":225585,
+        "encounterId":2602,
+        "catalyzedItemId":212080
+    },
+    {
+        "itemId":212439,
+        "encounterId":2611,
+        "catalyzedItemId":212081
+    },
+    {
+        "itemId":212434,
+        "encounterId":2602,
+        "catalyzedItemId":212082
+    },
+    {
+        "itemId":212440,
+        "encounterId":2609,
+        "catalyzedItemId":212083
+    },
+    {
+        "itemId":225720,
+        "encounterId":-67,
+        "catalyzedItemId":212083
+    },
+    {
+        "itemId":212441,
+        "encounterId":2601,
+        "catalyzedItemId":212084
+    },
+    {
+        "itemId":212416,
+        "encounterId":2599,
+        "catalyzedItemId":212085
+    },
+    {
+        "itemId":225582,
+        "encounterId":2612,
+        "catalyzedItemId":212085
+    },
+    {
+        "itemId":225721,
+        "encounterId":-67,
+        "catalyzedItemId":212085
+    },
+    {
+        "itemId":212419,
+        "encounterId":2607,
+        "catalyzedItemId":212086
+    },
+    {
+        "itemId":212446,
+        "encounterId":2607,
+        "catalyzedItemId":212087
+    },
+    {
+        "itemId":225574,
+        "encounterId":2609,
+        "catalyzedItemId":212087
+    },
+    {
+        "itemId":212426,
+        "encounterId":2607,
+        "catalyzedItemId":212088
+    },
+    {
+        "itemId":225584,
+        "encounterId":2608,
+        "catalyzedItemId":212088
+    },
+    {
+        "itemId":212430,
+        "encounterId":2611,
+        "catalyzedItemId":212089
+    },
+    {
+        "itemId":225585,
+        "encounterId":2602,
+        "catalyzedItemId":212089
+    },
+    {
+        "itemId":212439,
+        "encounterId":2611,
+        "catalyzedItemId":212090
+    },
+    {
+        "itemId":212434,
+        "encounterId":2602,
+        "catalyzedItemId":212091
+    },
+    {
+        "itemId":212440,
+        "encounterId":2609,
+        "catalyzedItemId":212092
+    },
+    {
+        "itemId":225720,
+        "encounterId":-67,
+        "catalyzedItemId":212092
+    },
+    {
+        "itemId":212441,
+        "encounterId":2601,
+        "catalyzedItemId":212093
+    },
+    {
+        "itemId":212416,
+        "encounterId":2599,
+        "catalyzedItemId":212094
+    },
+    {
+        "itemId":225582,
+        "encounterId":2612,
+        "catalyzedItemId":212094
+    },
+    {
+        "itemId":225721,
+        "encounterId":-67,
+        "catalyzedItemId":212094
     }
 ]

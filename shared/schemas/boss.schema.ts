@@ -4,8 +4,9 @@ import { itemSchema } from './items.schema'
 export const bossSchema = z.object({
     id: z.number(),
     name: z.string(),
-    raidName: z.string().nullish(),
-    raidId: z.number().nullish(),
+    instanceName: z.string(),
+    instanceType: z.string(),
+    instanceId: z.number(),
     order: z.number()
 })
 

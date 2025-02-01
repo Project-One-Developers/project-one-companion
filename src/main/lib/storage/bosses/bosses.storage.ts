@@ -18,7 +18,7 @@ export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
 export const getRaidLootTable = async (raidId: number): Promise<BossWithItems[]> => {
     const result = await db.query.bossTable.findMany({
         where: (bossTable, { eq }) => {
-            return eq(bossTable.raidId, raidId)
+            return eq(bossTable.instanceId, raidId)
         },
         with: {
             items: true
@@ -30,7 +30,7 @@ export const getRaidLootTable = async (raidId: number): Promise<BossWithItems[]>
 export const getBosses = async (raidId: number): Promise<Boss[]> => {
     const result = await db.query.bossTable.findMany({
         where: (bossTable, { eq }) => {
-            return eq(bossTable.raidId, raidId)
+            return eq(bossTable.instanceId, raidId)
         }
     })
     return z.array(bossSchema).parse(result)
