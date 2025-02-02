@@ -155,102 +155,120 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
             legsDiff: data.tiersetLegsDiff
         },
         bestGear: {
-            head: {
-                ilvl: data.bestHeadIlvl,
-                id: data.bestHeadId,
-                name: data.bestHeadName,
-                quality: data.bestHeadQuality
-            },
-            neck: {
-                ilvl: data.bestNeckIlvl,
-                id: data.bestNeckId,
-                name: data.bestNeckName,
-                quality: data.bestNeckQuality
-            },
-            shoulder: {
-                ilvl: data.bestShoulderIlvl,
-                id: data.bestShoulderId,
-                name: data.bestShoulderName,
-                quality: data.bestShoulderQuality
-            },
-            back: {
-                ilvl: data.bestBackIlvl,
-                id: data.bestBackId,
-                name: data.bestBackName,
-                quality: data.bestBackQuality
-            },
-            chest: {
-                ilvl: data.bestChestIlvl,
-                id: data.bestChestId,
-                name: data.bestChestName,
-                quality: data.bestChestQuality
-            },
-            wrist: {
-                ilvl: data.bestWristIlvl,
-                id: data.bestWristId,
-                name: data.bestWristName,
-                quality: data.bestWristQuality
-            },
-            hands: {
-                ilvl: data.bestHandsIlvl,
-                id: data.bestHandsId,
-                name: data.bestHandsName,
-                quality: data.bestHandsQuality
-            },
-            waist: {
-                ilvl: data.bestWaistIlvl,
-                id: data.bestWaistId,
-                name: data.bestWaistName,
-                quality: data.bestWaistQuality
-            },
-            legs: {
-                ilvl: data.bestLegsIlvl,
-                id: data.bestLegsId,
-                name: data.bestLegsName,
-                quality: data.bestLegsQuality
-            },
-            feet: {
-                ilvl: data.bestFeetIlvl,
-                id: data.bestFeetId,
-                name: data.bestFeetName,
-                quality: data.bestFeetQuality
-            },
-            finger1: {
-                ilvl: data.bestFinger1Ilvl,
-                id: data.bestFinger1Id,
-                name: data.bestFinger1Name,
-                quality: data.bestFinger1Quality
-            },
-            finger2: {
-                ilvl: data.bestFinger2Ilvl,
-                id: data.bestFinger2Id,
-                name: data.bestFinger2Name,
-                quality: data.bestFinger2Quality
-            },
-            trinket1: {
-                ilvl: data.bestTrinket1Ilvl,
-                id: data.bestTrinket1Id,
-                name: data.bestTrinket1Name,
-                quality: data.bestTrinket1Quality
-            },
-            trinket2: {
-                ilvl: data.bestTrinket2Ilvl,
-                id: data.bestTrinket2Id,
-                name: data.bestTrinket2Name,
-                quality: data.bestTrinket2Quality
-            },
-            mainHand: {
-                ilvl: data.bestMainHandIlvl,
-                id: data.bestMainHandId,
-                name: data.bestMainHandName,
-                quality: data.bestMainHandQuality
-            },
-            offHand: {
-                ilvl: data.bestOffHandIlvl,
-                id: data.bestOffHandId,
-                name: data.bestOffHandName,
-                quality: data.bestOffHandQuality
-            }
+            head: createGearPiece(
+                data.bestHeadIlvl,
+                data.bestHeadId,
+                data.bestHeadName,
+                data.bestHeadQuality
+            ),
+            neck: createGearPiece(
+                data.bestNeckIlvl,
+                data.bestNeckId,
+                data.bestNeckName,
+                data.bestNeckQuality
+            ),
+            shoulder: createGearPiece(
+                data.bestShoulderIlvl,
+                data.bestShoulderId,
+                data.bestShoulderName,
+                data.bestShoulderQuality
+            ),
+            back: createGearPiece(
+                data.bestBackIlvl,
+                data.bestBackId,
+                data.bestBackName,
+                data.bestBackQuality
+            ),
+            chest: createGearPiece(
+                data.bestChestIlvl,
+                data.bestChestId,
+                data.bestChestName,
+                data.bestChestQuality
+            ),
+            wrist: createGearPiece(
+                data.bestWristIlvl,
+                data.bestWristId,
+                data.bestWristName,
+                data.bestWristQuality
+            ),
+            hands: createGearPiece(
+                data.bestHandsIlvl,
+                data.bestHandsId,
+                data.bestHandsName,
+                data.bestHandsQuality
+            ),
+            waist: createGearPiece(
+                data.bestWaistIlvl,
+                data.bestWaistId,
+                data.bestWaistName,
+                data.bestWaistQuality
+            ),
+            legs: createGearPiece(
+                data.bestLegsIlvl,
+                data.bestLegsId,
+                data.bestLegsName,
+                data.bestLegsQuality
+            ),
+            feet: createGearPiece(
+                data.bestFeetIlvl,
+                data.bestFeetId,
+                data.bestFeetName,
+                data.bestFeetQuality
+            ),
+            finger1: createGearPiece(
+                data.bestFinger1Ilvl,
+                data.bestFinger1Id,
+                data.bestFinger1Name,
+                data.bestFinger1Quality
+            ),
+            finger2: createGearPiece(
+                data.bestFinger2Ilvl,
+                data.bestFinger2Id,
+                data.bestFinger2Name,
+                data.bestFinger2Quality
+            ),
+            trinket1: createGearPiece(
+                data.bestTrinket1Ilvl,
+                data.bestTrinket1Id,
+                data.bestTrinket1Name,
+                data.bestTrinket1Quality
+            ),
+            trinket2: createGearPiece(
+                data.bestTrinket2Ilvl,
+                data.bestTrinket2Id,
+                data.bestTrinket2Name,
+                data.bestTrinket2Quality
+            ),
+            mainHand: createGearPiece(
+                data.bestMainHandIlvl,
+                data.bestMainHandId,
+                data.bestMainHandName,
+                data.bestMainHandQuality
+            ),
+            offHand: createGearPiece(
+                data.bestOffHandIlvl,
+                data.bestOffHandId,
+                data.bestOffHandName,
+                data.bestOffHandQuality
+            )
         }
     })
 )
+
+// Helper function to create a gear piece only if all properties are non-null
+function createGearPiece(
+    ilvl: number | null,
+    id: number | null,
+    name: string | null,
+    quality: number | null
+) {
+    if (ilvl !== null && id !== null && name !== null && quality !== null) {
+        return {
+            ilvl,
+            id,
+            name,
+            quality
+        }
+    }
+    return null
+}
