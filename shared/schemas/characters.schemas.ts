@@ -122,13 +122,6 @@ export const charWowAuditSchema = z.object({
 })
 
 export const characterGameInfoSchema = z.object({
-    droptimizer: z
-        .object({
-            url: droptimizerSchema.shape.url,
-            date: droptimizerSchema.shape.simInfo.shape.date,
-            weeklyChest: droptimizerSchema.shape.weeklyChest,
-            currencies: droptimizerSchema.shape.currencies
-        })
-        .nullable(),
+    droptimizer: droptimizerSchema.nullable(),
     wowaudit: charWowAuditSchema.nullable()
 })

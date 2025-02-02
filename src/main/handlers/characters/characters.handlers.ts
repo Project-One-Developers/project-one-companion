@@ -114,14 +114,7 @@ export const getCharLatestGameInfoHandler = async (
     const lastWowAudit = await getLastCharacterWowAudit(charName, charRealm)
 
     const res: CharacterGameInfo = {
-        droptimizer: lastDroptimizer
-            ? {
-                  url: lastDroptimizer.url,
-                  date: lastDroptimizer.simInfo.date,
-                  weeklyChest: lastDroptimizer.weeklyChest,
-                  currencies: lastDroptimizer.currencies
-              }
-            : null,
+        droptimizer: lastDroptimizer,
         wowaudit: lastWowAudit
     }
 

@@ -12,6 +12,8 @@ export const WowItemIcon = ({
     raidDiff = 'Heroic',
     ilvl,
     bonusString,
+    enchantString,
+    gemsString,
     className,
     iconClassName,
     showSlot = true,
@@ -26,6 +28,8 @@ export const WowItemIcon = ({
     raidDiff?: WowRaidDifficulty
     ilvl?: number
     bonusString?: string
+    enchantString?: string
+    gemsString?: string
     className?: string
     iconClassName?: string
     showSlot?: boolean
@@ -76,8 +80,22 @@ export const WowItemIcon = ({
         }
     }
 
+    // refine bonus string if needed
+    if (bonusString) {
+        // same sources like droptimizer uses / instead of : notation
+        bonusString = bonusString.replaceAll('/', ':')
+    }
+    if (enchantString) {
+        // same sources like droptimizer uses / instead of : notation
+        enchantString = enchantString.replaceAll('/', ':')
+    }
+    if (gemsString) {
+        // same sources like droptimizer uses / instead of : notation
+        gemsString = gemsString.replaceAll('/', ':')
+    }
+
     const currentIlvl = getIlvl()
-    const hrefString = `${itemData.wowheadUrl}&ilvl=${currentIlvl}${bonusString ? `&bonus=${bonusString}` : ''}`
+    const hrefString = `${itemData.wowheadUrl}&ilvl=${currentIlvl}${bonusString ? `&bonus=${bonusString}` : ''}${enchantString ? `&ench=${enchantString}` : ''}${gemsString ? `&gems=${gemsString}` : ''}`
 
     return (
         <a className="" href={hrefString} rel="noreferrer" target="_blank">

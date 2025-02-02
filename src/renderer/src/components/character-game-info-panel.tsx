@@ -1,7 +1,7 @@
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
-import { Character, CharacterWowAudit } from '@shared/types/types'
+import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
@@ -25,6 +25,7 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
         )
     }
 
+    const droptimizer = charGameInfoQuery.data?.droptimizer ?? null
     const currencies = charGameInfoQuery.data?.droptimizer?.currencies ?? null
     const weeklyChest = charGameInfoQuery.data?.droptimizer?.weeklyChest ?? null
     const wowauditData = charGameInfoQuery.data?.wowaudit ?? null
@@ -39,7 +40,7 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
             </div>
             {wowauditData && (
                 <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
-                    <WoWAuditPanel data={wowauditData} />
+                    <GearInfo wowAudit={wowauditData} droptimizer={droptimizer} />
                 </div>
             )}
         </>
@@ -125,11 +126,12 @@ const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     )
 }
 
-type WoWAuditPanelProps = {
-    data: CharacterWowAudit
+type GearInfoProps = {
+    wowAudit: CharacterWowAudit
+    droptimizer: Droptimizer | null
 }
 
-const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
+const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
     return (
         <div className="p-4 rounded-lg  w-full relative">
             {/* Character Info Panel */}
@@ -138,10 +140,10 @@ const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
                     <div>
                         <p>
                             <strong>Mythic Dungeons This Week:</strong>{' '}
-                            {data.weekMythicDungeons || 0}
+                            {wowAudit.weekMythicDungeons || 0}
                         </p>
                         <p>
-                            <strong>Empty Sockets:</strong> {data.emptySockets || 'N/A'}
+                            <strong>Empty Sockets:</strong> {wowAudit.emptySockets || 'N/A'}
                         </p>
                     </div>
                 </div>
@@ -164,10 +166,10 @@ const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
                         </th>
                         <th className="text-left">
                             <div className="flex items-center">
-                                Best Gear • {data.hightestIlvlEverEquipped || 'N/A'}
+                                Best Gear • {wowAudit.hightestIlvlEverEquipped || 'N/A'}
                                 <img
                                     src="https://data.wowaudit.com/img/new-logo-icon.svg"
-                                    title={`Last Update: ${formaUnixTimestampToItalianDate(data.wowauditLastModifiedUnixTs)}`}
+                                    title={`Last Update: ${formaUnixTimestampToItalianDate(wowAudit.wowauditLastModifiedUnixTs)}`}
                                     className="w-6 h-6 rounded-full ml-2"
                                 />
                             </div>
@@ -175,26 +177,34 @@ const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.entries(data.bestGear).map(([key, value]) =>
+                    {Object.entries(wowAudit.bestGear).map(([key, value]) =>
                         value ? (
                             <tr key={key} className="border-t">
                                 <td>{key.charAt(0).toUpperCase() + key.slice(1)}</td>
                                 <td>
-                                    <WowItemIcon
-                                        item={value.id}
-                                        iconOnly={false}
-                                        ilvl={value.ilvl}
-                                        showIlvl={true}
-                                        showSubclass={false}
-                                        showSlot={false}
-                                        iconClassName="object-cover object-top rounded-lg h-10 w-10 border border-background"
-                                    />
+                                    {droptimizer?.itemsEquipped &&
+                                    key in droptimizer.itemsEquipped ? (
+                                        <WowItemIcon
+                                            item={droptimizer.itemsEquipped[key].id}
+                                            ilvl={droptimizer.itemsEquipped[key].itemLevel}
+                                            bonusString={droptimizer.itemsEquipped[key].bonus_id}
+                                            enchantString={
+                                                droptimizer.itemsEquipped[key].enchant_id
+                                            }
+                                            gemsString={droptimizer.itemsEquipped[key].gem_id}
+                                            iconOnly={false}
+                                            showIlvl={true}
+                                            showSubclass={false}
+                                            showSlot={false}
+                                            iconClassName="object-cover object-top rounded-lg h-10 w-10 border border-background"
+                                        />
+                                    ) : null}
                                 </td>
                                 <td>
                                     <WowItemIcon
                                         item={value.id}
-                                        iconOnly={false}
                                         ilvl={value.ilvl}
+                                        iconOnly={false}
                                         showIlvl={true}
                                         showSubclass={false}
                                         showSlot={false}
