@@ -206,6 +206,7 @@ export const droptimizerTable = pgTable('droptimizers', {
     simDuration: integer('sim_duration').notNull(),
     simNTargets: integer('sim_n_targets').notNull(),
     simRaidbotInput: text('sim_raidbot_input').notNull(),
+    simUpgradeEquipped: boolean('sim_upgrade_equipped'),
     raidId: integer('raid_id').notNull(),
     raidDifficulty: pgRaidDiffEnum('raid_difficulty').notNull(),
     characterName: varchar('character_name', { length: 24 }).notNull(),
@@ -217,7 +218,10 @@ export const droptimizerTable = pgTable('droptimizers', {
     characterTalents: varchar('character_talents').notNull(),
     weeklyChest:
         jsonb('weekly_chest').$type<{ id: number; bonusString: string; itemLevel: number }[]>(),
-    currencies: jsonb('currencies').$type<{ id: number; type: string; amount: number }[]>()
+    currencies: jsonb('currencies').$type<{ id: number; type: string; amount: number }[]>(),
+    itemsAverageItemLevel: integer('items_average_ilvl'),
+    itemsAverageItemLevelEquipped: integer('items_average_ilvl_equipped'),
+    itemsEquipped: jsonb('items_equipped').notNull()
 })
 
 //////////////////////////////////////////////////////////

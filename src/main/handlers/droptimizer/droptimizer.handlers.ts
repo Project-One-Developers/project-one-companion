@@ -93,7 +93,10 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         dateImported: getUnixTimestamp(),
         upgrades: Array.from(upgradesMap.values()),
         currencies: parsedJson.currencies,
-        weeklyChest: parsedJson.weeklyChest
+        weeklyChest: parsedJson.weeklyChest,
+        itemsAverageItemLevel: parsedJson.itemsAverageItemLevel,
+        itemsAverageItemLevelEquipped: parsedJson.itemsAverageItemLevelEquipped,
+        itemsEquipped: parsedJson.itemsEquipped
     }
 
     return await addDroptimizer(droptimizer)

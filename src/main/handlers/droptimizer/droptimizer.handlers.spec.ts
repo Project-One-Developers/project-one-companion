@@ -85,7 +85,8 @@ describe('Droptimizer Handlers', () => {
                 fightstyle: 'Patchwerk',
                 duration: 300,
                 nTargets: 1,
-                raidbotInput: expect.any(String)
+                raidbotInput: expect.any(String),
+                upgradeEquipped: true
             },
             dateImported: expect.any(Number),
             upgrades: [
@@ -222,7 +223,10 @@ describe('Droptimizer Handlers', () => {
                     id: 228339,
                     type: 'item'
                 }
-            ]
+            ],
+            itemsAverageItemLevel: null,
+            itemsAverageItemLevelEquipped: null,
+            itemsEquipped: expect.any(Object)
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)
@@ -256,6 +260,7 @@ describe('Droptimizer Handlers', () => {
                 fightstyle: 'Patchwerk',
                 duration: 300,
                 nTargets: 1,
+                upgradeEquipped: false,
                 raidbotInput: expect.any(String)
             },
             dateImported: expect.any(Number),
@@ -416,7 +421,10 @@ describe('Droptimizer Handlers', () => {
                 }
             ],
             weeklyChest: [],
-            currencies: []
+            currencies: [],
+            itemsEquipped: expect.any(Object),
+            itemsAverageItemLevel: 631,
+            itemsAverageItemLevelEquipped: 631
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)

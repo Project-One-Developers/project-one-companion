@@ -1,7 +1,6 @@
 import CharacterDeleteDialog from '@renderer/components/character-delete-dialog'
 import CharacterDialog from '@renderer/components/character-dialog'
 import { CharGameInfoPanel } from '@renderer/components/character-game-info-panel'
-import { LastCharDroptimizers } from '@renderer/components/character-last-droptimizer-panel'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -128,7 +127,8 @@ export const CharacterPage = () => {
             </div>
 
             {/*  Body */}
-            <LastCharDroptimizers character={character} />
+            {/* todo: sostituire con link alla page droptimizer, magari automaticamente filtrata su sto pg */}
+            {/* <LastCharDroptimizers character={character} /> */}
 
             {/* In game info */}
             <CharGameInfoPanel character={character} />

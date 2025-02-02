@@ -34,6 +34,8 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 <CurrenciesPanel currencies={currencies} />
                 <WeeklyChestPanel weeklyChests={weeklyChest} />
+                {/* Todo: Diventa tierset panel: deve combinare info raidbot + wowaudit */}
+                <WeeklyChestPanel weeklyChests={weeklyChest} />
             </div>
             {wowauditData && (
                 <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
@@ -130,25 +132,10 @@ type WoWAuditPanelProps = {
 const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
     return (
         <div className="p-4 rounded-lg  w-full relative">
-            {/* Top right corner icon and last update info */}
-            <div className="absolute top-4 right-4 flex items-center">
-                <img
-                    src="https://data.wowaudit.com/img/new-logo-icon.svg"
-                    alt="Character Icon"
-                    className="w-8 h-8 rounded-full mr-2"
-                />
-                <p className="text-sm">
-                    Last Update: {formaUnixTimestampToItalianDate(data.wowauditLastModifiedUnixTs)}
-                </p>
-            </div>
             {/* Character Info Panel */}
             <div className="rounded-lg mb-4">
                 <div className="grid grid-cols-2 gap-2">
                     <div>
-                        <p>
-                            <strong>Highest Item Level:</strong>{' '}
-                            {data.hightestIlvlEverEquipped || 'N/A'}
-                        </p>
                         <p>
                             <strong>Mythic Dungeons This Week:</strong>{' '}
                             {data.weekMythicDungeons || 0}
@@ -177,10 +164,10 @@ const WoWAuditPanel = ({ data }: WoWAuditPanelProps) => {
                         </th>
                         <th className="text-left">
                             <div className="flex items-center">
-                                Best Gear
+                                Best Gear • {data.hightestIlvlEverEquipped || 'N/A'}
                                 <img
                                     src="https://data.wowaudit.com/img/new-logo-icon.svg"
-                                    alt="Character Icon"
+                                    title={`Last Update: ${formaUnixTimestampToItalianDate(data.wowauditLastModifiedUnixTs)}`}
                                     className="w-6 h-6 rounded-full ml-2"
                                 />
                             </div>

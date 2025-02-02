@@ -1,6 +1,6 @@
 import type { RaidbotsURL } from '@shared/types/types'
 import { z } from 'zod'
-import { jsonDataSchema } from './droptimizer.schemas'
+import { raidbotParseAndTransform } from './droptimizer.schemas'
 
 export const fetchRaidbotsData = async (url: RaidbotsURL): Promise<unknown> => {
     const responseJson = await fetch(`${url}/data.json`)
@@ -12,6 +12,6 @@ export const fetchRaidbotsData = async (url: RaidbotsURL): Promise<unknown> => {
     return await responseJson.json()
 }
 
-export const parseRaidbotsData = (jsonData: unknown): z.infer<typeof jsonDataSchema> => {
-    return jsonDataSchema.parse(jsonData)
+export const parseRaidbotsData = (jsonData: unknown): z.infer<typeof raidbotParseAndTransform> => {
+    return raidbotParseAndTransform.parse(jsonData)
 }

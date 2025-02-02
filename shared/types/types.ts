@@ -28,6 +28,7 @@ import {
 } from '../schemas/characters.schemas'
 import {
     droptimizerCurrenciesSchema,
+    droptimizerGearItemSchema,
     droptimizerSchema,
     droptimizerUpgradeSchema,
     droptimizerWeeklyChestSchema,
@@ -66,6 +67,7 @@ export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
 export type DroptimizerWeeklyChest = z.infer<typeof droptimizerWeeklyChestSchema>
 export type DroptimizerCurrenciesUpgrade = z.infer<typeof droptimizerCurrenciesSchema>
+export type DroptimizerGearItem = z.infer<typeof droptimizerGearItemSchema>
 
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>

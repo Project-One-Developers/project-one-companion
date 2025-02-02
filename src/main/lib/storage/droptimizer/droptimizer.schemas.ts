@@ -1,5 +1,6 @@
 import {
     droptimizerCurrenciesSchema,
+    droptimizerGearItemSchema,
     droptimizerUpgradeSchema,
     droptimizerWeeklyChestSchema
 } from '@shared/schemas/simulations.schemas'
@@ -16,6 +17,7 @@ export const droptimizerStorageSchema = z.object({
     simDuration: z.number().min(1),
     simNTargets: z.number().min(1),
     simRaidbotInput: z.string(),
+    simUpgradeEquipped: z.boolean(),
     raidId: z.number(),
     raidDifficulty: wowRaidDiffSchema,
     characterName: z.string(),
@@ -27,7 +29,27 @@ export const droptimizerStorageSchema = z.object({
     characterTalents: z.string(),
     upgrades: z.array(droptimizerUpgradeSchema),
     weeklyChest: z.array(droptimizerWeeklyChestSchema).nullable(),
-    currencies: z.array(droptimizerCurrenciesSchema).nullable()
+    currencies: z.array(droptimizerCurrenciesSchema).nullable(),
+    itemsAverageItemLevel: z.number().nullable(),
+    itemsAverageItemLevelEquipped: z.number().nullable(),
+    itemsEquipped: z.object({
+        head: droptimizerGearItemSchema.nullish(),
+        neck: droptimizerGearItemSchema.nullish(),
+        shoulder: droptimizerGearItemSchema.nullish(),
+        back: droptimizerGearItemSchema.nullish(),
+        chest: droptimizerGearItemSchema.nullish(),
+        wrist: droptimizerGearItemSchema.nullish(),
+        hands: droptimizerGearItemSchema.nullish(),
+        waist: droptimizerGearItemSchema.nullish(),
+        legs: droptimizerGearItemSchema.nullish(),
+        feet: droptimizerGearItemSchema.nullish(),
+        finger1: droptimizerGearItemSchema.nullish(),
+        finger2: droptimizerGearItemSchema.nullish(),
+        trinket1: droptimizerGearItemSchema.nullish(),
+        trinket2: droptimizerGearItemSchema.nullish(),
+        mainHand: droptimizerGearItemSchema.nullish(),
+        offHand: droptimizerGearItemSchema.nullish()
+    })
 })
 
 export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
@@ -41,7 +63,8 @@ export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
                 fightstyle: data.simFightStyle,
                 duration: data.simDuration,
                 nTargets: data.simNTargets,
-                raidbotInput: data.simRaidbotInput
+                raidbotInput: data.simRaidbotInput,
+                upgradeEquipped: data.simUpgradeEquipped
             },
             raidInfo: {
                 id: data.raidId,
@@ -66,7 +89,10 @@ export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
                 droptimizerId: up.droptimizerId
             })),
             weeklyChest: data.weeklyChest,
-            currencies: data.currencies
+            currencies: data.currencies,
+            itemsAverageItemLevel: data.itemsAverageItemLevel,
+            itemsAverageItemLevelEquipped: data.itemsAverageItemLevelEquipped,
+            itemsEquipped: data.itemsEquipped
         }
     }
 )

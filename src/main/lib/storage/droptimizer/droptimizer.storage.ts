@@ -134,6 +134,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 simDuration: droptimizer.simInfo.duration,
                 simNTargets: droptimizer.simInfo.nTargets,
                 simRaidbotInput: droptimizer.simInfo.raidbotInput,
+                simUpgradeEquipped: droptimizer.simInfo.upgradeEquipped,
                 raidId: droptimizer.raidInfo.id,
                 raidDifficulty: droptimizer.raidInfo.difficulty,
                 characterName: droptimizer.charInfo.name,
@@ -144,7 +145,8 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 characterSpecId: droptimizer.charInfo.specId,
                 characterTalents: droptimizer.charInfo.talents,
                 weeklyChest: droptimizer.weeklyChest,
-                currencies: droptimizer.currencies
+                currencies: droptimizer.currencies,
+                itemsEquipped: droptimizer.itemsEquipped
             })
             .returning({ url: droptimizerTable.url })
             .then(takeFirstResult)

@@ -36,6 +36,48 @@ export const droptimizerCurrenciesSchema = z.object({
     amount: z.number()
 })
 
+export const droptimizerGearItemSchema = z
+    .object({
+        itemLevel: z.number(),
+        id: z.number(),
+        name: z.string(),
+        bonus_id: z
+            .preprocess((val) => {
+                // Convert numbers to strings
+                if (typeof val === 'number') {
+                    return val.toString()
+                }
+                return val
+            }, z.string())
+            .nullish(),
+        enchant_id: z
+            .preprocess((val) => {
+                // Convert numbers to strings
+                if (typeof val === 'number') {
+                    return val.toString()
+                }
+                return val
+            }, z.string())
+            .nullish(),
+        gem_id: z
+            .preprocess((val) => {
+                // Convert numbers to strings
+                if (typeof val === 'number') {
+                    return val.toString()
+                }
+                return val
+            }, z.string())
+            .nullish(),
+        upgrade: z
+            .object({
+                level: z.number(),
+                max: z.number(),
+                name: z.string()
+            })
+            .nullish()
+    })
+    .nullish()
+
 export const droptimizerSchema = z.object({
     url: z.string().url(),
     ak: z.string(),
@@ -45,7 +87,8 @@ export const droptimizerSchema = z.object({
         fightstyle: z.string(),
         duration: z.number().min(1),
         nTargets: z.number().min(1),
-        raidbotInput: z.string()
+        raidbotInput: z.string(),
+        upgradeEquipped: z.boolean()
     }),
     raidInfo: z.object({
         id: z.number(),
@@ -62,7 +105,27 @@ export const droptimizerSchema = z.object({
     }),
     upgrades: z.array(droptimizerUpgradeSchema).nullable(),
     weeklyChest: z.array(droptimizerWeeklyChestSchema).nullable(),
-    currencies: z.array(droptimizerCurrenciesSchema).nullable()
+    currencies: z.array(droptimizerCurrenciesSchema).nullable(),
+    itemsAverageItemLevel: z.number().nullable(),
+    itemsAverageItemLevelEquipped: z.number().nullable(),
+    itemsEquipped: z.object({
+        head: droptimizerGearItemSchema.nullish(),
+        neck: droptimizerGearItemSchema.nullish(),
+        shoulder: droptimizerGearItemSchema.nullish(),
+        back: droptimizerGearItemSchema.nullish(),
+        chest: droptimizerGearItemSchema.nullish(),
+        wrist: droptimizerGearItemSchema.nullish(),
+        hands: droptimizerGearItemSchema.nullish(),
+        waist: droptimizerGearItemSchema.nullish(),
+        legs: droptimizerGearItemSchema.nullish(),
+        feet: droptimizerGearItemSchema.nullish(),
+        finger1: droptimizerGearItemSchema.nullish(),
+        finger2: droptimizerGearItemSchema.nullish(),
+        trinket1: droptimizerGearItemSchema.nullish(),
+        trinket2: droptimizerGearItemSchema.nullish(),
+        mainHand: droptimizerGearItemSchema.nullish(),
+        offHand: droptimizerGearItemSchema.nullish()
+    })
 })
 
 export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).extend({
