@@ -51,9 +51,7 @@ export const editCharacterSchema = characterSchema.extend({
 
 export const wowauditGearItemSchema = z.object({
     ilvl: z.number(),
-    id: z.number(),
-    name: z.string(),
-    quality: z.number()
+    id: z.number()
 })
 
 export const charWowAuditSchema = z.object({
@@ -66,6 +64,7 @@ export const charWowAuditSchema = z.object({
     wowauditLastModifiedUnixTs: z.number(),
     weekMythicDungeons: z.number().nullable(),
     emptySockets: z.number().nullable(),
+    averageIlvl: z.string().nullable(),
     hightestIlvlEverEquipped: z.string().nullable(),
     enchant: z.object({
         wrist: z.number().nullable(),
@@ -100,6 +99,24 @@ export const charWowAuditSchema = z.object({
         chestDiff: z.string().nullable(),
         handsDiff: z.string().nullable(),
         legsDiff: z.string().nullable()
+    }),
+    equippedGear: z.object({
+        head: wowauditGearItemSchema.nullish(),
+        neck: wowauditGearItemSchema.nullish(),
+        shoulder: wowauditGearItemSchema.nullish(),
+        back: wowauditGearItemSchema.nullish(),
+        chest: wowauditGearItemSchema.nullish(),
+        wrist: wowauditGearItemSchema.nullish(),
+        hands: wowauditGearItemSchema.nullish(),
+        waist: wowauditGearItemSchema.nullish(),
+        legs: wowauditGearItemSchema.nullish(),
+        feet: wowauditGearItemSchema.nullish(),
+        finger1: wowauditGearItemSchema.nullish(),
+        finger2: wowauditGearItemSchema.nullish(),
+        trinket1: wowauditGearItemSchema.nullish(),
+        trinket2: wowauditGearItemSchema.nullish(),
+        mainHand: wowauditGearItemSchema.nullish(),
+        offHand: wowauditGearItemSchema.nullish()
     }),
     bestGear: z.object({
         head: wowauditGearItemSchema.nullish(),
