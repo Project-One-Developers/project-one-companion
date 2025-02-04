@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
 import { WowItemIcon } from './ui/wowitem-icon'
+import { NextGreatVaultPanel } from './wowaudit-greatvault-panel'
 
 type CharGameInfoPanelProps = {
     character: Character
@@ -37,7 +38,7 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
                 <CurrenciesPanel currencies={currencies} />
                 <WeeklyChestPanel weeklyChests={weeklyChest} />
                 {/* Todo: Diventa tierset panel: deve combinare info raidbot + wowaudit */}
-                <NextWeeklyChestPanel weeklyChests={nextWeekChest} />
+                <NextGreatVaultPanel greatVault={nextWeekChest} />
             </div>
             {wowauditData && (
                 <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
@@ -85,78 +86,6 @@ const WeeklyChestPanel = ({ weeklyChests }: WeeklyChestPanelProps) => {
                         />
                     ))}
             </div>
-        </div>
-    )
-}
-
-type NextWeeklyChestPanelProps = {
-    greatVault: {
-        slot1: number | null
-        slot2: number | null
-        slot3: number | null
-        slot4: number | null
-        slot5: number | null
-        slot6: number | null
-        slot7: number | null
-        slot8: number | null
-        slot9: number | null
-    } | null
-}
-
-const NextWeeklyChestPanel = ({ greatVault }: NextWeeklyChestPanelProps) => {
-    if (!greatVault) {
-        return (
-            <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
-                <div className="flex justify-between items-center mb-4">
-                    <p className="text-lg font-semibold">Next Great Vault</p>
-                </div>
-                <div>No great vault info</div>
-            </div>
-        )
-    }
-
-    // Group slots into categories
-    const raidRewards = [greatVault.slot1, greatVault.slot2, greatVault.slot3]
-    const mythicPlusRewards = [greatVault.slot4, greatVault.slot5, greatVault.slot6]
-    const worldRewards = [greatVault.slot7, greatVault.slot8, greatVault.slot9]
-
-    const renderRow = (title: string, rewards: (number | null)[]) => (
-        <div className="mb-4">
-            <p className="text-sm font-medium mb-2">{title}</p>
-            <div className="flex gap-2">
-                {rewards.map((item, index) =>
-                    item ? (
-                        <WowItemIcon
-                            key={index}
-                            item={item}
-                            iconOnly={false}
-                            bonusString={''} // Add bonusString if available
-                            ilvl={0} // Add item level if available
-                            iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
-                        />
-                    ) : (
-                        <div key={index} className="h-8 w-8 bg-gray-200 rounded-lg"></div>
-                    )
-                )}
-            </div>
-        </div>
-    )
-
-    return (
-        <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
-            {/* Header */}
-            {/* <div className="flex justify-between items-center mb-4">
-                <p className="text-lg font-semibold">Weekly Chest</p>
-            </div> */}
-
-            {/* Raid Rewards */}
-            {renderRow('Raid Reward', raidRewards)}
-
-            {/* Mythic Plus Rewards */}
-            {renderRow('Mythic Plus Reward', mythicPlusRewards)}
-
-            {/* World Rewards */}
-            {renderRow('World Reward', worldRewards)}
         </div>
     )
 }
