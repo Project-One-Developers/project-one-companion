@@ -4,6 +4,8 @@ import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
+import { CurrentGreatVaultPanel } from './greatvault-current-panel'
+import { NextGreatVaultPanel } from './greatvault-next-panel'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
 import { WowItemIcon } from './ui/wowitem-icon'
 
@@ -29,14 +31,23 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
     const currencies = charGameInfoQuery.data?.droptimizer?.currencies ?? null
     const weeklyChest = charGameInfoQuery.data?.droptimizer?.weeklyChest ?? null
     const wowauditData = charGameInfoQuery.data?.wowaudit ?? null
+    const nextWeekChest = wowauditData?.greatVault ?? null
+
+    if (droptimizer && wowauditData) {
+        if (droptimizer.simInfo.date > wowauditData.wowauditLastModifiedUnixTs) {
+            console.log('Droptimizer is newer')
+        } else {
+            console.log('WowAudit is newer')
+        }
+    }
 
     return (
         <>
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 <CurrenciesPanel currencies={currencies} />
-                <WeeklyChestPanel weeklyChests={weeklyChest} />
+                <CurrentGreatVaultPanel weeklyChests={weeklyChest} />
                 {/* Todo: Diventa tierset panel: deve combinare info raidbot + wowaudit */}
-                <WeeklyChestPanel weeklyChests={weeklyChest} />
+                <NextGreatVaultPanel greatVault={nextWeekChest} />
             </div>
             {wowauditData && (
                 <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
@@ -44,47 +55,6 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
                 </div>
             )}
         </>
-    )
-}
-
-type WeeklyChestPanelProps = {
-    weeklyChests:
-        | {
-              id: number
-              bonusString: string
-              itemLevel: number
-          }[]
-        | null
-}
-
-const WeeklyChestPanel = ({ weeklyChests }: WeeklyChestPanelProps) => {
-    return (
-        <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-                <p className="text-lg font-semibold">Weekly Chest</p>
-                {/* <img
-                    src={weeklyChestIcon}
-                    alt="Weekly Chest Icon"
-                    className="h-16 w-16 object-contain"
-                /> */}
-            </div>
-            {/* Chest Items */}
-            <div className="flex flex-wrap gap-2">
-                {!weeklyChests ? <div>No weekly chest found</div> : null}
-                {weeklyChests &&
-                    weeklyChests.map((wc) => (
-                        <WowItemIcon
-                            key={wc.id}
-                            item={wc.id}
-                            iconOnly={false}
-                            bonusString={wc.bonusString}
-                            ilvl={wc.itemLevel}
-                            iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
-                        />
-                    ))}
-            </div>
-        </div>
     )
 }
 
