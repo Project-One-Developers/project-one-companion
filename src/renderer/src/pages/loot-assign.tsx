@@ -70,8 +70,9 @@ export default function LootAssign() {
     }
 
     return (
-        <div className="flex flex-col mt-10 p-4 max-w-4xl mx-auto">
-            <div className="overflow-x-auto whitespace-nowrap flex space-x-4 pb-4">
+        <div className="w-dvw h-dvh flex flex-col gap-y-8 p-8 relative">
+            {/* Page Header */}
+            <div className=" bg-muted rounded-lg p-6 mb-2 shadow-lg flex items-center">
                 {sessions.map((session) => (
                     <div
                         key={session.id}
@@ -90,65 +91,69 @@ export default function LootAssign() {
                     </div>
                 ))}
             </div>
-            <Tabs defaultValue="Head" className="mt-6">
-                <TabsList className="flex space-x-2 overflow-x-auto pb-2">
-                    {SLOT_CATEGORIES.map((slot) => (
-                        <TabsTrigger
-                            key={slot}
-                            value={slot}
-                            className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all"
-                        >
-                            {slot}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-                {SLOT_CATEGORIES.map((slot) => (
-                    <TabsContent
-                        key={slot}
-                        value={slot}
-                        className="bg-muted p-4 rounded-lg shadow-md"
-                    >
-                        {loots.filter((loot) => loot.item.slot === slot).length > 0 ? (
-                            loots
-                                .filter((loot) => loot.item.slot === slot)
-                                .map((loot, index) => (
-                                    <div
-                                        key={index}
-                                        className="border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
-                                        onClick={() => setSelectedLoot(loot)}
-                                    >
-                                        {loot.item.name} - {loot.raidDifficulty}
-                                    </div>
-                                ))
-                        ) : (
-                            <p className="text-gray-400">No loot in this category</p>
-                        )}
-                    </TabsContent>
-                ))}
-            </Tabs>
-            {selectedLoot && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-gray-900 p-6 rounded-lg shadow-lg max-w-lg w-full">
-                        <h3 className="text-xl font-bold mb-4">Assign {selectedLoot.item.name}</h3>
-                        <div className="flex flex-wrap gap-4">
-                            {characters.map((character) => (
-                                <div
-                                    key={character.id}
-                                    className="cursor-pointer p-4 bg-gray-800 rounded-lg hover:bg-gray-700"
+
+            {/*  Body */}
+
+            <div className="flex">
+                <div className="w-2/3 pr-5">
+                    <Tabs defaultValue="Head">
+                        <TabsList className="flex space-x-2 overflow-x-auto pb-2">
+                            {SLOT_CATEGORIES.map((slot) => (
+                                <TabsTrigger
+                                    key={slot}
+                                    value={slot}
+                                    className="flex flex-col items-start gap-1 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
                                 >
-                                    {character.name}
-                                </div>
+                                    {slot}
+                                </TabsTrigger>
                             ))}
-                        </div>
-                        <button
-                            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500"
-                            onClick={() => setSelectedLoot(null)}
-                        >
-                            Close
-                        </button>
-                    </div>
+                        </TabsList>
+                        {SLOT_CATEGORIES.map((slot) => (
+                            <TabsContent
+                                key={slot}
+                                value={slot}
+                                className="bg-muted p-4 rounded-lg shadow-md mt-2"
+                            >
+                                {loots.filter((loot) => loot.item.slot === slot).length > 0 ? (
+                                    loots
+                                        .filter((loot) => loot.item.slot === slot)
+                                        .map((loot, index) => (
+                                            <div
+                                                key={index}
+                                                className="border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
+                                                onClick={() => setSelectedLoot(loot)}
+                                            >
+                                                {loot.item.name} - {loot.item.id}
+                                            </div>
+                                        ))
+                                ) : (
+                                    <p className="text-gray-400">No loot in this category</p>
+                                )}
+                            </TabsContent>
+                        ))}
+                    </Tabs>
                 </div>
-            )}
+                <div className="w-1/3 bg-muted p-4 rounded-lg">
+                    <h3 className="text-xl font-bold mb-4">Assign Loot</h3>
+                    {selectedLoot ? (
+                        <>
+                            <p className="text-lg font-semibold mb-2">{selectedLoot.item.name}</p>
+                            <div className="flex flex-wrap gap-4">
+                                {characters.map((character) => (
+                                    <div
+                                        key={character.id}
+                                        className="cursor-pointer p-4 bg-gray-800 rounded-lg hover:bg-gray-700"
+                                    >
+                                        {character.name}
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <p className="text-gray-400">Select an item to assign</p>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }
