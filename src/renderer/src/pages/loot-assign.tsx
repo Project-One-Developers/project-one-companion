@@ -1,4 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
+import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
+import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
 import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
@@ -121,9 +123,21 @@ export default function LootAssign() {
                                             <div
                                                 key={index}
                                                 className="border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
-                                                onClick={() => setSelectedLoot(loot)}
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setSelectedLoot(loot)
+                                                }}
                                             >
-                                                {loot.item.name} - {loot.item.id}
+                                                <WowItemIcon
+                                                    key={index}
+                                                    item={loot.item}
+                                                    iconOnly={false}
+                                                    raidDiff={loot.raidDifficulty}
+                                                    bonusString={loot.bonusString}
+                                                    socketBanner={loot.socket}
+                                                    tierBanner={true}
+                                                    iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                                                />
                                             </div>
                                         ))
                                 ) : (
@@ -134,24 +148,7 @@ export default function LootAssign() {
                     </Tabs>
                 </div>
                 <div className="w-1/3 bg-muted p-4 rounded-lg">
-                    <h3 className="text-xl font-bold mb-4">Assign Loot</h3>
-                    {selectedLoot ? (
-                        <>
-                            <p className="text-lg font-semibold mb-2">{selectedLoot.item.name}</p>
-                            <div className="flex flex-wrap gap-4">
-                                {characters.map((character) => (
-                                    <div
-                                        key={character.id}
-                                        className="cursor-pointer p-4 bg-gray-800 rounded-lg hover:bg-gray-700"
-                                    >
-                                        {character.name}
-                                    </div>
-                                ))}
-                            </div>
-                        </>
-                    ) : (
-                        <p className="text-gray-400">Select an item to assign</p>
-                    )}
+                    <LootsEligibleChars roster={characters} selectedLoot={selectedLoot} />
                 </div>
             </div>
         </div>
