@@ -35,7 +35,11 @@ export function unixTimestampToRelativeDays(unixTimestamp: number): number {
     return Math.round(diffTime / (1000 * 60 * 60 * 24))
 }
 
-export function unixTimestampToWowWeek(unixTimestamp?: number): number {
+export function currentWowWeek(): number {
+    return unixTimestampToWowWeek(Math.floor(Date.now() / 1000)) //  current unix timestamp
+}
+
+export function unixTimestampToWowWeek(unixTimestamp: number): number {
     if (unixTimestamp == null) {
         unixTimestamp = Math.floor(Date.now() / 1000) // current unix timestamp
     }
@@ -63,7 +67,7 @@ export function formaUnixTimestampToItalianDate(unixTimestamp: number): string {
 
 export function formatWowWeek(wowWeek?: number): string {
     if (wowWeek == null) {
-        wowWeek = unixTimestampToWowWeek()
+        wowWeek = currentWowWeek()
     }
 
     const WOW_START_DATE = new Date('2004-11-24T00:00:00Z') // WoW start date (Wednesday)

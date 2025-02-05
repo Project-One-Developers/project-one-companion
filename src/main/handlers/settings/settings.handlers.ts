@@ -10,6 +10,7 @@ import { store } from '../../app/store'
 import {
     fetchItemsToCatalyst,
     fetchItemsToTierset,
+    fetchNonRaidItems,
     fetchRaidBosses,
     fetchRaidItems
 } from './settings.utils'
@@ -39,6 +40,7 @@ export const upsertJsonDataHandler = async (): Promise<void> => {
     console.log('Reloading resources/wow/*.json')
 
     const raidItems = fetchRaidItems()
+    const nonRaidItems = fetchNonRaidItems()
     const raidBosses = fetchRaidBosses()
     const raidItemsToTierset = fetchItemsToTierset()
     const raidItemsToCatalyst = fetchItemsToCatalyst()
@@ -46,6 +48,7 @@ export const upsertJsonDataHandler = async (): Promise<void> => {
     // non rendere concorrente: i value hanno relazioni
     await upsertBosses(raidBosses)
     await upsertItems(raidItems)
+    await upsertItems(nonRaidItems)
     await upsertItemsToTierset(raidItemsToTierset)
     await upsertItemsToCatalyst(raidItemsToCatalyst)
 }

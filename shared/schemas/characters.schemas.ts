@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { droptimizerSchema } from './simulations.schemas'
-import { wowClassSchema, wowRolesSchema } from './wow.schemas'
+import { wowClassSchema, wowRaidDiffSchema, wowRolesSchema } from './wow.schemas'
 
 export const playerSchema = z.object({
     id: z.string().uuid(),
@@ -49,9 +49,19 @@ export const editCharacterSchema = characterSchema.extend({
 
 // wow audit
 
+export const wowauditEnchantSchema = z.object({
+    name: z.string(),
+    quality: z.number()
+})
+
 export const wowauditGearItemSchema = z.object({
     ilvl: z.number(),
     id: z.number()
+})
+
+export const wowauditTiersetItemSchema = z.object({
+    ilvl: z.number(),
+    diff: wowRaidDiffSchema
 })
 
 export const charWowAuditSchema = z.object({
@@ -67,15 +77,15 @@ export const charWowAuditSchema = z.object({
     averageIlvl: z.string().nullable(),
     hightestIlvlEverEquipped: z.string().nullable(),
     enchant: z.object({
-        wrist: z.number().nullable(),
-        legs: z.number().nullable(),
-        mainHand: z.number().nullable(),
-        offHand: z.number().nullable(),
-        finger1: z.number().nullable(),
-        finger2: z.number().nullable(),
-        back: z.number().nullable(),
-        chest: z.number().nullable(),
-        feet: z.number().nullable()
+        wrist: wowauditEnchantSchema.nullable(),
+        legs: wowauditEnchantSchema.nullable(),
+        mainHand: wowauditEnchantSchema.nullable(),
+        offHand: wowauditEnchantSchema.nullable(),
+        finger1: wowauditEnchantSchema.nullable(),
+        finger2: wowauditEnchantSchema.nullable(),
+        back: wowauditEnchantSchema.nullable(),
+        chest: wowauditEnchantSchema.nullable(),
+        feet: wowauditEnchantSchema.nullable()
     }),
     greatVault: z.object({
         slot1: z.number().nullable(),
@@ -89,16 +99,11 @@ export const charWowAuditSchema = z.object({
         slot9: z.number().nullable()
     }),
     tierset: z.object({
-        headIlvl: z.number().nullable(),
-        shouldersIlvl: z.number().nullable(),
-        chestIlvl: z.number().nullable(),
-        handsIlvl: z.number().nullable(),
-        legsIlvl: z.number().nullable(),
-        headDiff: z.string().nullable(),
-        shouldersDiff: z.string().nullable(),
-        chestDiff: z.string().nullable(),
-        handsDiff: z.string().nullable(),
-        legsDiff: z.string().nullable()
+        head: wowauditTiersetItemSchema.nullable(),
+        shoulder: wowauditTiersetItemSchema.nullable(),
+        chest: wowauditTiersetItemSchema.nullable(),
+        hands: wowauditTiersetItemSchema.nullable(),
+        legs: wowauditTiersetItemSchema.nullable()
     }),
     equippedGear: z.object({
         head: wowauditGearItemSchema.nullish(),

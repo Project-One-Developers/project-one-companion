@@ -107,7 +107,7 @@ export const WowItemIcon = ({
                             CAT
                         </div>
                     )}
-                    {tierBanner && itemData.tier && (
+                    {tierBanner && (itemData.tierset || itemData.token) && (
                         <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
                     )}
                     {socketBanner && (

@@ -1,11 +1,13 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
-import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
+import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { CurrentGreatVaultPanel } from './greatvault-current-panel'
 import { NextGreatVaultPanel } from './greatvault-next-panel'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
 import { WowItemIcon } from './ui/wowitem-icon'
 
@@ -29,24 +31,14 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
 
     const droptimizer = charGameInfoQuery.data?.droptimizer ?? null
     const currencies = charGameInfoQuery.data?.droptimizer?.currencies ?? null
-    const weeklyChest = charGameInfoQuery.data?.droptimizer?.weeklyChest ?? null
     const wowauditData = charGameInfoQuery.data?.wowaudit ?? null
     const nextWeekChest = wowauditData?.greatVault ?? null
-
-    if (droptimizer && wowauditData) {
-        if (droptimizer.simInfo.date > wowauditData.wowauditLastModifiedUnixTs) {
-            console.log('Droptimizer is newer')
-        } else {
-            console.log('WowAudit is newer')
-        }
-    }
 
     return (
         <>
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 <CurrenciesPanel currencies={currencies} />
-                <CurrentGreatVaultPanel weeklyChests={weeklyChest} />
-                {/* Todo: Diventa tierset panel: deve combinare info raidbot + wowaudit */}
+                <CurrentGreatVaultPanel droptimizer={droptimizer} />
                 <NextGreatVaultPanel greatVault={nextWeekChest} />
             </div>
             {wowauditData && (
@@ -69,6 +61,20 @@ type CurrenciesPanelProps = {
 const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     return (
         <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
+            {/* Character Info Panel */}
+            {/* <div className="rounded-lg mb-4">
+                <div className="grid grid-cols-2 gap-2">
+                    <div>
+                        <p>
+                            <strong>Mythic Dungeons This Week:</strong>{' '}
+                            {wowAudit.weekMythicDungeons || 0}
+                        </p>
+                        <p>
+                            <strong>Empty Sockets:</strong> {wowAudit.emptySockets || 'N/A'}
+                        </p>
+                    </div>
+                </div>
+            </div> */}
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
                 <p className="text-lg font-semibold">Currencies</p>
@@ -102,90 +108,159 @@ type GearInfoProps = {
 }
 
 const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
+    let wowAuditNewer = true
+    if (droptimizer && wowAudit) {
+        if (droptimizer.simInfo.date > wowAudit.wowauditLastModifiedUnixTs) {
+            console.log('Droptimizer is newer')
+            wowAuditNewer = false
+        } else {
+            console.log('WowAudit is newer')
+        }
+    }
     return (
-        <div className="p-4 rounded-lg  w-full relative">
-            {/* Character Info Panel */}
-            <div className="rounded-lg mb-4">
-                <div className="grid grid-cols-2 gap-2">
-                    <div>
-                        <p>
-                            <strong>Mythic Dungeons This Week:</strong>{' '}
-                            {wowAudit.weekMythicDungeons || 0}
-                        </p>
-                        <p>
-                            <strong>Empty Sockets:</strong> {wowAudit.emptySockets || 'N/A'}
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div className="p-4 rounded-lg w-full relative bg-background shadow-lg">
+            <Tabs defaultValue={wowAuditNewer ? 'wowaudit' : 'droptimizer'} className="w-full">
+                <TabsList className="flex justify-start space-x-4 border-b pb-2">
+                    <TabsTrigger
+                        value="wowaudit"
+                        className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                    >
+                        <div className="flex items-center gap-2">
+                            <img
+                                src="https://data.wowaudit.com/img/new-logo-icon.svg"
+                                className="w-6 h-6 rounded-full"
+                            />
+                            <span>WoW Audit</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">
+                            {wowAudit
+                                ? formatUnixTimestampForDisplay(wowAudit.wowauditLastModifiedUnixTs)
+                                : 'No wowaudit imported'}
+                        </span>
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="droptimizer"
+                        className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                    >
+                        <div className="flex items-center gap-2">
+                            <img
+                                src="https://assets.rpglogs.com/img/warcraft/raidbots-icon.png"
+                                className="w-6 h-6 rounded-full"
+                            />
+                            <span>Droptimizer</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">
+                            {droptimizer
+                                ? formatUnixTimestampForDisplay(droptimizer.simInfo.date)
+                                : 'No droptimizer imported'}
+                        </span>
+                    </TabsTrigger>
+                </TabsList>
 
-            {/* WowAudit Best Gear info */}
-            <table className="w-full border-collapse">
-                <thead>
-                    <tr className="">
-                        <th className="text-left">Slot</th>
-                        <th className="text-left">
-                            <div className="flex items-center">
-                                RaidBot
-                                <img
-                                    src="https://assets.rpglogs.com/img/warcraft/raidbots-icon.png"
-                                    alt="Character Icon"
-                                    className="w-6 h-6 rounded-full ml-2"
-                                />
-                            </div>
-                        </th>
-                        <th className="text-left">
-                            <div className="flex items-center">
-                                Best Gear • {wowAudit.hightestIlvlEverEquipped || 'N/A'}
-                                <img
-                                    src="https://data.wowaudit.com/img/new-logo-icon.svg"
-                                    title={`Last Update: ${formaUnixTimestampToItalianDate(wowAudit.wowauditLastModifiedUnixTs)}`}
-                                    className="w-6 h-6 rounded-full ml-2"
-                                />
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Object.entries(wowAudit.bestGear).map(([key, value]) =>
-                        value ? (
-                            <tr key={key} className="border-t">
-                                <td>{key.charAt(0).toUpperCase() + key.slice(1)}</td>
-                                <td>
-                                    {droptimizer?.itemsEquipped &&
-                                    key in droptimizer.itemsEquipped ? (
-                                        <WowItemIcon
-                                            item={droptimizer.itemsEquipped[key].id}
-                                            ilvl={droptimizer.itemsEquipped[key].itemLevel}
-                                            bonusString={droptimizer.itemsEquipped[key].bonus_id}
-                                            enchantString={
-                                                droptimizer.itemsEquipped[key].enchant_id
-                                            }
-                                            gemsString={droptimizer.itemsEquipped[key].gem_id}
-                                            iconOnly={false}
-                                            showIlvl={true}
-                                            showSubclass={false}
-                                            showSlot={false}
-                                            iconClassName="object-cover object-top rounded-lg h-10 w-10 border border-background"
-                                        />
-                                    ) : null}
-                                </td>
-                                <td>
-                                    <WowItemIcon
-                                        item={value.id}
-                                        ilvl={value.ilvl}
-                                        iconOnly={false}
-                                        showIlvl={true}
-                                        showSubclass={false}
-                                        showSlot={false}
-                                        iconClassName="object-cover object-top rounded-lg h-10 w-10 border border-background"
-                                    />
-                                </td>
-                            </tr>
-                        ) : null
-                    )}
-                </tbody>
-            </table>
+                <TabsContent value="wowaudit">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Slot</TableHead>
+                                <TableHead>Equipped • {wowAudit.averageIlvl || 'N/A'}</TableHead>
+                                <TableHead>Enchant</TableHead>
+                                <TableHead>
+                                    Tierset •{' '}
+                                    {Object.values(wowAudit.tierset).filter((t) => t != null)
+                                        .length + '/5'}
+                                </TableHead>
+                                <TableHead>
+                                    Best Gear • {wowAudit.hightestIlvlEverEquipped || 'N/A'}
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {Object.entries(wowAudit.equippedGear).map(([key, value]) =>
+                                value ? (
+                                    <TableRow key={key}>
+                                        <TableCell>
+                                            {key.charAt(0).toUpperCase() + key.slice(1)}
+                                        </TableCell>
+                                        <TableCell>
+                                            <WowItemIcon
+                                                item={wowAudit.equippedGear[key].id}
+                                                ilvl={wowAudit.equippedGear[key].ilvl}
+                                                iconOnly={false}
+                                                showIlvl={true}
+                                                showSlot={false}
+                                                showSubclass={false}
+                                                tierBanner={true}
+                                                iconClassName="rounded-lg h-10 w-10 border border-background"
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            {wowAudit.enchant[key] && (
+                                                <p>{wowAudit.enchant[key].name}</p>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {wowAudit.tierset[key] && (
+                                                <p>
+                                                    {wowAudit.tierset[key].diff} -{' '}
+                                                    {wowAudit.tierset[key].ilvl}{' '}
+                                                </p>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {wowAudit.bestGear[key].id !=
+                                            wowAudit.equippedGear[key].id ? (
+                                                <WowItemIcon
+                                                    item={wowAudit.bestGear[key].id}
+                                                    ilvl={wowAudit.bestGear[key].ilvl}
+                                                    iconOnly={false}
+                                                    showIlvl={true}
+                                                    showSlot={false}
+                                                    showSubclass={false}
+                                                    tierBanner={true}
+                                                    iconClassName="rounded-lg h-10 w-10 border border-background"
+                                                />
+                                            ) : null}
+                                        </TableCell>
+                                    </TableRow>
+                                ) : null
+                            )}
+                        </TableBody>
+                    </Table>
+                </TabsContent>
+
+                <TabsContent value="droptimizer">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Slot</TableHead>
+                                <TableHead>Equipped Item</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {Object.entries(droptimizer?.itemsEquipped || {}).map(([key, item]) => (
+                                <TableRow key={key}>
+                                    <TableCell>
+                                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                                    </TableCell>
+                                    <TableCell>
+                                        {item && (
+                                            <WowItemIcon
+                                                item={item.id}
+                                                ilvl={item.itemLevel}
+                                                iconOnly={false}
+                                                showIlvl={true}
+                                                iconClassName="rounded-lg h-10 w-10 border border-background"
+                                            />
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TabsContent>
+            </Tabs>
         </div>
     )
 }
+
+export default GearInfo

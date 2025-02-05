@@ -22,8 +22,10 @@ export const fetchRaidItems = (): Item[] => {
         slot: itemRaw.slot,
         armorType: itemRaw.armorType,
         itemSubclass: itemRaw.itemSubclass,
-        tokenPrefix: itemRaw.token,
-        tier: itemRaw.itemSubclass === 'Token',
+        token: itemRaw.token,
+        tokenPrefix: itemRaw.tokenPrefix,
+        tierset: itemRaw.tierset,
+        tiersetPrefix: itemRaw.tiersetPrefix,
         veryRare: itemRaw.bonusId === 'Very Rare',
         catalyzed: itemRaw.catalyst,
         specs: itemRaw.specs?.split(',') ?? null,
@@ -45,6 +47,47 @@ export const fetchRaidItems = (): Item[] => {
     })
 
     return z.array(itemSchema).parse(jsonData.map(transformRawItem))
+}
+
+export const fetchNonRaidItems = (): Item[] => {
+    const res: Item[] = []
+
+    res.push({
+        id: 228411,
+        name: "Cyrce's Circlet",
+        ilvlMythic: 619,
+        ilvlHeroic: 619,
+        ilvlNormal: 619,
+        boe: false,
+        slot: 'Finger',
+        itemSubclass: null,
+        token: false,
+        tokenPrefix: null,
+        tierset: false,
+        tiersetPrefix: null,
+        veryRare: false,
+        catalyzed: false,
+        specs: null,
+        specIds: null,
+        classes: null,
+        classesId: null,
+        stats: null,
+        mainStats: null,
+        secondaryStats: null,
+        itemClass: 'Armor',
+        armorType: null,
+        wowheadUrl: 'https://www.wowhead.com/item=228411/cyrces-circlet',
+        iconName: 'inv_siren_isle_ring',
+        iconUrl: 'https://wow.zamimg.com/images/wow/icons/large/inv_siren_isle_ring.jpg',
+        bossName: 'Jewelcrafting', // non è vero
+        bossId: -37, // non è vero
+        sourceId: -66, // non è vero
+        sourceName: 'Professions - Epic',
+        sourceType: 'profession593',
+        onUseTrinket: false
+    })
+
+    return res
 }
 
 export const fetchRaidBosses = (): Boss[] => {

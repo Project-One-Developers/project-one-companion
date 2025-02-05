@@ -104,6 +104,15 @@ export const charWowAuditTable = pgTable(
         enchantQualityBack: integer('enchant_quality_back'),
         enchantQualityChest: integer('enchant_quality_chest'),
         enchantQualityFeet: integer('enchant_quality_feet'),
+        enchantNameWrist: varchar('enchant_name_wrist'),
+        enchantNameLegs: varchar('enchant_name_legs'),
+        enchantNameMainHand: varchar('enchant_name_main_hand'),
+        enchantNameOffHand: varchar('enchant_name_off_hand'),
+        enchantNameFinger1: varchar('enchant_name_finger1'),
+        enchantNameFinger2: varchar('enchant_name_finger2'),
+        enchantNameBack: varchar('enchant_name_back'),
+        enchantNameChest: varchar('enchant_name_chest'),
+        enchantNameFeet: varchar('enchant_name_feet'),
         greatVaultSlot1: integer('great_vault_slot1'),
         greatVaultSlot2: integer('great_vault_slot2'),
         greatVaultSlot3: integer('great_vault_slot3'),
@@ -305,10 +314,13 @@ export const itemTable = pgTable('items', {
     slot: pgItemSlotEnum('slot'),
     armorType: pgItemArmorTypeEnum('armor_type'),
     itemSubclass: varchar('item_subclass', { length: 50 }),
+    token: boolean('token').notNull(), // se è un item che genera tierset
     tokenPrefix: varchar('token_prefix', { length: 50 }), // es: Dreadful
-    tier: boolean('tier').notNull().default(false), // se è un item tierser
-    veryRare: boolean('very_rare').notNull().default(false),
-    boe: boolean('boe').notNull().default(false),
+    tierset: boolean('tierset').notNull(), // se è un item tierset
+    tiersetPrefix: varchar('tierset_prefix', { length: 50 }),
+    veryRare: boolean('very_rare').notNull(),
+    boe: boolean('boe').notNull(),
+    onUseTrinket: boolean('on_use_trinket').notNull(),
     specs: text('specs').array(), // null == tutte le spec
     specIds: text('spec_ids').array(),
     classes: text('classes').array(),

@@ -82,14 +82,26 @@ export const parseWowAuditData = (jsonData: unknown): NewCharacterWowAudit[] => 
             // Checks
             weekMythicDungeons: jsonData[105], // week_mythic_dungeons
             emptySockets: jsonData[84], // empty_sockets
-            enchantQualityWrist: getNullSafeValue(jsonData, 85), // enchant_quality_wrist
-            enchantQualityLegs: getNullSafeValue(jsonData, 86), // enchant_quality_legs
-            enchantQualityMainHand: getNullSafeValue(jsonData, 87), // enchant_quality_main_hand
-            enchantQualityOffHand: getNullSafeValue(jsonData, 88), // enchant_quality_off_hand
-            enchantQualityFinger1: getNullSafeValue(jsonData, 89), // enchant_quality_finger_1
-            enchantQualityFinger2: getNullSafeValue(jsonData, 90), // enchant_quality_finger_2
+            enchantQualityWrist: getNullSafeValue(jsonData, 84), // enchant_quality_wrist
+            enchantQualityLegs: getNullSafeValue(jsonData, 85), // enchant_quality_legs
+            enchantQualityMainHand: getNullSafeValue(jsonData, 86), // enchant_quality_main_hand
+            enchantQualityOffHand: getNullSafeValue(jsonData, 87), // enchant_quality_off_hand
+            enchantQualityFinger1: getNullSafeValue(jsonData, 88), // enchant_quality_finger_1
+            enchantQualityFinger2: getNullSafeValue(jsonData, 89), // enchant_quality_finger_2
             enchantQualityBack: getNullSafeValue(jsonData, 121), // enchant_quality_back
+
             enchantQualityChest: getNullSafeValue(jsonData, 122), // enchant_quality_chest
+
+            enchantNameBack: getNullSafeValue(jsonData, 124),
+            enchantNameChest: getNullSafeValue(jsonData, 125),
+            enchantNameWrist: getNullSafeValue(jsonData, 130),
+            enchantNameLegs: getNullSafeValue(jsonData, 131),
+            enchantNameFeet: getNullSafeValue(jsonData, 126),
+            enchantNameFinger1: getNullSafeValue(jsonData, 118),
+            enchantNameFinger2: getNullSafeValue(jsonData, 119),
+            enchantNameMainHand: getNullSafeValue(jsonData, 116),
+            enchantNameOffHand: getNullSafeValue(jsonData, 117),
+
             enchantQualityFeet: getNullSafeValue(jsonData, 123), // enchant_quality_feet
 
             highestIlvlEverEquipped: String(jsonData[132]), // highest_ilvl_ever_equipped
@@ -140,16 +152,16 @@ export const parseWowAuditData = (jsonData: unknown): NewCharacterWowAudit[] => 
             bestOffHandId: getNullSafeValue(jsonData, 253),
 
             // Tiersets info
-            tiersetHeadIlvl: jsonData[265], // tiersetHeadIlvl
-            tiersetShouldersIlvl: jsonData[266], // tiersetShouldersIlvl
-            tiersetChestIlvl: jsonData[267], // tiersetChestIlvl
-            tiersetHandsIlvl: jsonData[268], // tiersetHandsIlvl
-            tiersetLegsIlvl: jsonData[269], // tiersetLegsIlvl
-            tiersetHeadDiff: jsonData[270], // tier_head_difficulty
-            tiersetShouldersDiff: jsonData[271], // tier_shoulder_difficulty
-            tiersetChestDiff: jsonData[272], // tier_chest_difficulty
-            tiersetHandsDiff: jsonData[273], // tier_hands_difficulty
-            tiersetLegsDiff: jsonData[274] // tier_legs_difficulty
+            tiersetHeadIlvl: getNullSafeValue(jsonData, 265), // tiersetHeadIlvl
+            tiersetShouldersIlvl: getNullSafeValue(jsonData, 266), // tiersetShouldersIlvl
+            tiersetChestIlvl: getNullSafeValue(jsonData, 267), // tiersetChestIlvl
+            tiersetHandsIlvl: getNullSafeValue(jsonData, 268), // tiersetHandsIlvl
+            tiersetLegsIlvl: getNullSafeValue(jsonData, 269), // tiersetLegsIlvl
+            tiersetHeadDiff: getNullSafeValue(jsonData, 270), // tier_head_difficulty
+            tiersetShouldersDiff: getNullSafeValue(jsonData, 271), // tier_shoulder_difficulty
+            tiersetChestDiff: getNullSafeValue(jsonData, 272), // tier_chest_difficulty
+            tiersetHandsDiff: getNullSafeValue(jsonData, 273), // tier_hands_difficulty
+            tiersetLegsDiff: getNullSafeValue(jsonData, 274) // tier_legs_difficulty
         }
 
         return charWowAuditStorageSchema.parse(wowAuditChar)

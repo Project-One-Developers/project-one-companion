@@ -1,4 +1,4 @@
-import { CharacterWowAudit } from '@shared/types/types'
+import { CharacterWowAudit, WowRaidDifficulty } from '@shared/types/types'
 import { z } from 'zod'
 
 export type NewCharacterWowAudit = z.infer<typeof charWowAuditStorageSchema>
@@ -55,6 +55,15 @@ export const charWowAuditStorageSchema = z.object({
     enchantQualityBack: z.number().nullable(),
     enchantQualityChest: z.number().nullable(),
     enchantQualityFeet: z.number().nullable(),
+    enchantNameWrist: z.string().nullable(),
+    enchantNameLegs: z.string().nullable(),
+    enchantNameMainHand: z.string().nullable(),
+    enchantNameOffHand: z.string().nullable(),
+    enchantNameFinger1: z.string().nullable(),
+    enchantNameFinger2: z.string().nullable(),
+    enchantNameBack: z.string().nullable(),
+    enchantNameChest: z.string().nullable(),
+    enchantNameFeet: z.string().nullable(),
     greatVaultSlot1: z.number().nullable(),
     greatVaultSlot2: z.number().nullable(),
     greatVaultSlot3: z.number().nullable(),
@@ -123,15 +132,15 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
         averageIlvl: data.averageItemLevel,
         hightestIlvlEverEquipped: data.highestIlvlEverEquipped,
         enchant: {
-            wrist: data.enchantQualityWrist,
-            legs: data.enchantQualityLegs,
-            mainHand: data.enchantQualityMainHand,
-            offHand: data.enchantQualityOffHand,
-            finger1: data.enchantQualityFinger1,
-            finger2: data.enchantQualityFinger2,
-            back: data.enchantQualityBack,
-            chest: data.enchantQualityChest,
-            feet: data.enchantQualityFeet
+            wrist: createEnchantPiece(data.enchantNameWrist, data.enchantQualityWrist),
+            legs: createEnchantPiece(data.enchantNameLegs, data.enchantQualityLegs),
+            mainHand: createEnchantPiece(data.enchantNameMainHand, data.enchantQualityMainHand),
+            offHand: createEnchantPiece(data.enchantNameOffHand, data.enchantQualityOffHand),
+            finger1: createEnchantPiece(data.enchantNameFinger1, data.enchantQualityFinger1),
+            finger2: createEnchantPiece(data.enchantNameFinger2, data.enchantQualityFinger2),
+            back: createEnchantPiece(data.enchantNameBack, data.enchantQualityBack),
+            chest: createEnchantPiece(data.enchantNameChest, data.enchantQualityChest),
+            feet: createEnchantPiece(data.enchantNameFeet, data.enchantQualityFeet)
         },
         greatVault: {
             slot1: data.greatVaultSlot1,
@@ -145,16 +154,11 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
             slot9: data.greatVaultSlot9
         },
         tierset: {
-            headIlvl: data.tiersetHeadIlvl,
-            shouldersIlvl: data.tiersetShouldersIlvl,
-            chestIlvl: data.tiersetChestIlvl,
-            handsIlvl: data.tiersetHandsIlvl,
-            legsIlvl: data.tiersetLegsIlvl,
-            headDiff: data.tiersetHeadDiff,
-            shouldersDiff: data.tiersetShouldersDiff,
-            chestDiff: data.tiersetChestDiff,
-            handsDiff: data.tiersetHandsDiff,
-            legsDiff: data.tiersetLegsDiff
+            head: createTiersetPiece(data.tiersetHeadIlvl, data.tiersetHeadDiff),
+            shoulder: createTiersetPiece(data.tiersetShouldersIlvl, data.tiersetShouldersDiff),
+            chest: createTiersetPiece(data.tiersetChestIlvl, data.tiersetChestDiff),
+            hands: createTiersetPiece(data.tiersetHandsIlvl, data.tiersetHandsDiff),
+            legs: createTiersetPiece(data.tiersetLegsIlvl, data.tiersetLegsDiff)
         },
         equippedGear: {
             head: createGearPiece(data.headIlvl, data.headId),
@@ -204,4 +208,33 @@ function createGearPiece(ilvl: number | null, id: number | null) {
         }
     }
     return null
+}
+
+function createTiersetPiece(ilvl: number | null, diff: string | null) {
+    if (ilvl !== null && diff !== null) {
+        return {
+            ilvl,
+            diff: wowAuditTiersetDiffToEnum(diff)
+        }
+    }
+    return null
+}
+
+function createEnchantPiece(name: string | null, quality: number | null) {
+    if (name !== null && quality !== null) {
+        return {
+            name,
+            quality
+        }
+    }
+    return null
+}
+
+function wowAuditTiersetDiffToEnum(diff: string): WowRaidDifficulty {
+    if (diff === 'N') return 'Normal'
+    if (diff === 'H') return 'Heroic'
+    if (diff === 'M') return 'Mythic'
+
+    console.log('Unable to map raid difficulty ' + diff)
+    return 'Mythic'
 }
