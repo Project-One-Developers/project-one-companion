@@ -247,8 +247,14 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                             <WowItemIcon
                                                 item={item.id}
                                                 ilvl={item.itemLevel}
+                                                bonusString={item.bonus_id ?? undefined}
+                                                enchantString={item.enchant_id ?? undefined}
+                                                gemsString={item.gem_id ?? undefined}
                                                 iconOnly={false}
                                                 showIlvl={true}
+                                                showSlot={false}
+                                                showSubclass={false}
+                                                tierBanner={true}
                                                 iconClassName="rounded-lg h-10 w-10 border border-background"
                                             />
                                         )}
