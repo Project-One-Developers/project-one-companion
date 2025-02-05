@@ -4,6 +4,10 @@ export const fetchRaidSessions = async (): Promise<RaidSession[]> => {
     return await window.api.getRaidSessions()
 }
 
+export const fetchRaidSessionsWithLoots = async (): Promise<RaidSession[]> => {
+    return await window.api.getRaidSessions()
+}
+
 export const fetchRaidSession = async (id: string | undefined): Promise<RaidSession> => {
     if (!id) {
         throw new Error('No raid session id provided')

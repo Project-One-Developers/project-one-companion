@@ -46,6 +46,11 @@ const rosterItems = [
         title: 'Tierset',
         url: '/tierset',
         icon: LucideHandshake
+    },
+    {
+        title: 'Assign',
+        url: '/assign',
+        icon: LucideHandshake
     }
 ]
 

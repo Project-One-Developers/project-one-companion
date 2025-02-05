@@ -271,6 +271,7 @@ export const lootTable = pgTable('loots', {
     raidDifficulty: pgRaidDiffEnum('raid_difficulty').notNull(),
     charsEligibility: text('chars_eligibility').array(), // array of IDs referencing RaidSession.Chars
     rclootId: varchar('rcloot_id').unique(),
+    assignedCharacterId: varchar('assigned_character_id').references(() => charTable.id),
     raidSessionId: varchar('raid_session_id')
         .references(() => raidSessionTable.id)
         .notNull(),
