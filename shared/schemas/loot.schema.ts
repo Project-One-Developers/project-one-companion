@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { characterSchema } from './characters.schemas'
 import { itemSchema } from './items.schema'
 import { raidSessionSchema } from './raid.schemas'
 import { wowRaidDiffSchema } from './wow.schemas'
@@ -10,6 +11,9 @@ export const lootSchema = z.object({
     bonusString: z.string(),
     thirdStat: z.string(),
     socket: z.boolean(),
+    rclootId: z.string().nullable(),
+    charsEligibility: z.string().array(),
+    assignedCharacterId: characterSchema.shape.id.nullable(),
     raidSessionId: raidSessionSchema.shape.id,
     itemId: itemSchema.shape.id
 })

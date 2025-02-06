@@ -9,7 +9,7 @@ import type {
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
-import { eq, InferInsertModel } from 'drizzle-orm'
+import { eq, InferInsertModel, sql } from 'drizzle-orm'
 import { newUUID } from '../../utils'
 import { droptimizerStorageListToSchema, droptimizerStorageToSchema } from './droptimizer.schemas'
 
@@ -60,6 +60,43 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
     })
 
     return droptimizerStorageListToSchema.parse(result)
+}
+
+export const getDroptimizerByIdsList = async (ids: string[]): Promise<Droptimizer[]> => {
+    const result = await db.query.droptimizerTable.findMany({
+        where: (droptimizerTable, { inArray }) => inArray(droptimizerTable.url, ids), // Filter by URLs in the ids array
+        with: {
+            upgrades: {
+                columns: {
+                    catalyzedItemId: false, //ignored
+                    itemId: false //ignored
+                },
+                with: {
+                    item: true,
+                    catalyzedItem: true
+                }
+            }
+        }
+    })
+
+    return droptimizerStorageListToSchema.parse(result)
+}
+
+export const getDroptimizerLatestList = async (): Promise<Droptimizer[]> => {
+    // Execute the SQL query and explicitly type the results as { url: string }[]
+    const latestDroptimizers: { url: string }[] = await db.execute(
+        sql`
+            SELECT DISTINCT ON (${droptimizerTable.ak}) url
+            FROM ${droptimizerTable}
+            ORDER BY ${droptimizerTable.ak}, ${droptimizerTable.simDate} DESC
+        `
+    )
+
+    // Extract the URLs from the query results
+    const urls = latestDroptimizers.map((row) => row.url)
+
+    // Pass the URLs to getDroptimizerByIdsList
+    return getDroptimizerByIdsList(urls)
 }
 
 export const getDroptimizerLastByCharAndDiff = async (

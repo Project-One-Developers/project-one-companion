@@ -16,6 +16,7 @@ import {
     addDroptimizerHandler,
     deleteDroptimizerHandler,
     getDroptimizerLastByCharAndDiffHandler,
+    getDroptimizerLatestListHandler,
     getDroptimizerListHandler,
     syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
@@ -42,6 +43,7 @@ import {
 export const allHandlers = {
     'droptimizer-add': addDroptimizerHandler,
     'droptimizer-list': getDroptimizerListHandler,
+    'droptimizer-latest-list': getDroptimizerLatestListHandler,
     'droptimizer-delete': deleteDroptimizerHandler,
     'droptimizer-discord-sync': syncDroptimizersFromDiscord,
     'droptimizer-last-char-diff': getDroptimizerLastByCharAndDiffHandler,

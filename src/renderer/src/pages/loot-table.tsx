@@ -3,7 +3,7 @@ import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
-import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
+import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
 import { encounterIcon } from '@renderer/lib/wow-icon'
@@ -18,7 +18,7 @@ import { useMemo, useState, type JSX } from 'react'
 const useRaidData = (currentRaid: number) => {
     const droptimizerRes = useQuery({
         queryKey: [queryKeys.droptimizers],
-        queryFn: fetchDroptimizers
+        queryFn: fetchLatestDroptimizers
     })
     const itemRes = useQuery({
         queryKey: [queryKeys.raidLootTable, currentRaid],

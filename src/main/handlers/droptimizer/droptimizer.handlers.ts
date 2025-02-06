@@ -11,6 +11,7 @@ import {
     addDroptimizer,
     deleteDroptimizer,
     getDroptimizerLastByCharAndDiff,
+    getDroptimizerLatestList,
     getDroptimizerList,
     getItemToCatalystMapping,
     getItemToTiersetMapping
@@ -104,6 +105,10 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
 
 export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
     return await getDroptimizerList()
+}
+
+export const getDroptimizerLatestListHandler = async (): Promise<Droptimizer[]> => {
+    return await getDroptimizerLatestList()
 }
 
 export const deleteDroptimizerHandler = async (url: string): Promise<void> => {

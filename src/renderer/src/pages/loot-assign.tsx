@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
+import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
 import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
@@ -41,6 +42,11 @@ export default function LootAssign() {
     const charactersQuery = useQuery({
         queryKey: [queryKeys.characters],
         queryFn: fetchCharacters
+    })
+
+    const droptimizerRes = useQuery({
+        queryKey: [queryKeys.droptimizers],
+        queryFn: fetchLatestDroptimizers
     })
 
     if (raidSessionsQuery.isLoading || charactersQuery.isLoading) {
@@ -97,7 +103,8 @@ export default function LootAssign() {
             {/*  Body */}
 
             <div className="flex">
-                <div className="w-2/3 pr-5">
+                {/* Items List Col */}
+                <div className="flex flex-col pr-5">
                     <Tabs defaultValue="Head">
                         <TabsList className="flex space-x-2 overflow-x-auto pb-2">
                             {SLOT_CATEGORIES.map((slot) => (
@@ -147,7 +154,8 @@ export default function LootAssign() {
                         ))}
                     </Tabs>
                 </div>
-                <div className="w-1/3 bg-muted p-4 rounded-lg">
+                {/* Eligible Chars Col */}
+                <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
                     <LootsEligibleChars roster={characters} selectedLoot={selectedLoot} />
                 </div>
             </div>
