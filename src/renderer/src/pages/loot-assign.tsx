@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
-import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
 import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
@@ -44,10 +43,10 @@ export default function LootAssign() {
         queryFn: fetchCharacters
     })
 
-    const droptimizerRes = useQuery({
-        queryKey: [queryKeys.droptimizers],
-        queryFn: fetchLatestDroptimizers
-    })
+    // const droptimizerRes = useQuery({
+    //     queryKey: [queryKeys.droptimizers],
+    //     queryFn: fetchLatestDroptimizers
+    // })
 
     if (raidSessionsQuery.isLoading || charactersQuery.isLoading) {
         return (
