@@ -50,7 +50,7 @@
         "drizzle-orm": "0.39.2",
         "discord.js": "14.17.3",
         "electron-updater": "6.3.9",
-        "framer-motion": "12.3.0",
+        "framer-motion": "12.3.1",
         "lucide-react": "0.474.0",
         "papaparse": "^5.5.2",
         "postgres": "3.4.5",
