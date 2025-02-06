@@ -1,9 +1,10 @@
 import {
     Code2Icon,
-    LucideEye,
+    LucideAccessibility,
     LucideGauge,
-    LucideHandshake,
-    LucideSkull,
+    LucideMedal,
+    LucidePuzzle,
+    LucideScrollText,
     LucideSwords,
     Settings
 } from 'lucide-react'
@@ -16,7 +17,9 @@ import {
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
-    SidebarMenuItem
+    SidebarMenuItem,
+    SidebarTrigger,
+    useSidebar
 } from './ui/sidebar'
 
 import type { JSX } from 'react'
@@ -25,7 +28,7 @@ const rosterItems = [
     {
         title: 'Roster',
         url: '/roster',
-        icon: LucideEye
+        icon: LucideAccessibility
     },
     {
         title: 'Droptimizer',
@@ -35,7 +38,7 @@ const rosterItems = [
     {
         title: 'Loot Table',
         url: '/loot-table',
-        icon: LucideSkull
+        icon: LucideScrollText
     },
     {
         title: 'Raid Session',
@@ -45,18 +48,23 @@ const rosterItems = [
     {
         title: 'Tierset',
         url: '/tierset',
-        icon: LucideHandshake
+        icon: LucidePuzzle
+    },
+    {
+        title: 'Assign',
+        url: '/assign',
+        icon: LucideMedal
     }
 ]
 
 const weakaurasItems = [
     {
-        title: 'Placeholder 1',
-        url: '#',
+        title: 'Nerubar',
+        url: 'https://wago.io/F5xeJMMVb',
         icon: Code2Icon
     },
     {
-        title: 'Placeholder 2',
+        title: 'Liberation of Undermine',
         url: '#',
         icon: Code2Icon
     }
@@ -65,57 +73,66 @@ const weakaurasItems = [
 export default function ProjectOneSidebar(): JSX.Element {
     const location = useLocation()
 
+    const { open } = useSidebar()
+
+    if (!open) {
+        return <SidebarTrigger className="absolute left-2 z-10" />
+    }
+
     return (
-        <Sidebar>
-            <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Raid</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {rosterItems.map((item) => (
-                                <SidebarMenuItem
-                                    key={item.title}
-                                    className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
-                                >
-                                    <SidebarMenuButton asChild>
-                                        <NavLink to={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </NavLink>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Weakauras</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {weakaurasItems.map((item) => (
-                                <SidebarMenuItem
-                                    key={item.title}
-                                    className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
-                                >
-                                    <SidebarMenuButton asChild>
-                                        <NavLink to={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </NavLink>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-                <SidebarGroup className="mt-auto">
-                    <button className="p-2 rounded-full hover:bg-muted w-fit focus:outline-none">
-                        <NavLink to="/config">
-                            <Settings />
-                        </NavLink>
-                    </button>
-                </SidebarGroup>
-            </SidebarContent>
-        </Sidebar>
+        <>
+            <Sidebar>
+                <SidebarTrigger className="ml-2" />
+                <SidebarContent>
+                    <SidebarGroup>
+                        {/* <SidebarGroupLabel>Raid</SidebarGroupLabel> */}
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {rosterItems.map((item) => (
+                                    <SidebarMenuItem
+                                        key={item.title}
+                                        className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
+                                    >
+                                        <SidebarMenuButton asChild>
+                                            <NavLink to={item.url}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </NavLink>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Weakauras</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {weakaurasItems.map((item) => (
+                                    <SidebarMenuItem
+                                        key={item.title}
+                                        className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
+                                    >
+                                        <SidebarMenuButton asChild>
+                                            <NavLink to={item.url}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </NavLink>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                    <SidebarGroup className="mt-auto">
+                        <button className="p-2 rounded-full hover:bg-muted w-fit focus:outline-none">
+                            <NavLink to="/config">
+                                <Settings />
+                            </NavLink>
+                        </button>
+                    </SidebarGroup>
+                </SidebarContent>
+            </Sidebar>
+        </>
     )
 }

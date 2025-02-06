@@ -68,6 +68,9 @@ export const api = {
     getDroptimizerList(): Promise<Droptimizer[]> {
         return ipcRenderer.invoke('droptimizer-list')
     },
+    getDroptimizerLatestList(): Promise<Droptimizer[]> {
+        return ipcRenderer.invoke('droptimizer-latest-list')
+    },
     getDroptimizerLastByCharAndDiff(
         charName: string,
         charRealm: string,

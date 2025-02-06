@@ -2,7 +2,7 @@ import { DroptimizerCard } from '@renderer/components/droptimizer-card'
 import DroptimizerNewDialog from '@renderer/components/droptimizer-new-dialog'
 import { FiltersPanel } from '@renderer/components/filter-panel'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
-import { fetchDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
+import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -23,7 +23,7 @@ const DEFAULT_FILTER: LootFilter = {
 export default function DroptimizerPage(): JSX.Element {
     const { data, isLoading } = useQuery({
         queryKey: [queryKeys.droptimizers],
-        queryFn: fetchDroptimizers
+        queryFn: fetchLatestDroptimizers
     })
 
     const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
