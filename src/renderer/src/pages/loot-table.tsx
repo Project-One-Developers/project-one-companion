@@ -42,38 +42,45 @@ const BossItem = ({
     item: Item
     droptimizers: Droptimizer[]
     diff: WowRaidDifficulty
-}) => (
-    <div className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer">
-        <WowItemIcon
-            item={item}
-            iconOnly={false}
-            raidDiff={diff}
-            className=""
-            iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
-        />
-        {/* Character List with upgrade */}
-        <div className="flex flex-row items-center gap-x-2">
-            {droptimizers.map((dropt) => (
-                <div key={`${item.id}-${dropt.url}`} className="flex flex-col items-center">
-                    <WowSpecIcon
-                        specId={dropt.charInfo.specId}
-                        className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                        title={
-                            dropt.charInfo.name +
-                            ' - ' +
-                            formatUnixTimestampToRelativeDays(dropt.simInfo.date)
-                        }
-                    />
-                    <p className="text-bold text-[11px]">
-                        {dropt.upgrades != null && dropt.upgrades.length > 0
-                            ? getDpsHumanReadable(dropt.upgrades[0].dps)
-                            : '?'}
-                    </p>
-                </div>
-            ))}
+}) => {
+    const getItemDps = function (dropt: Droptimizer, itemId: number): string {
+        if (dropt.upgrades != null && dropt.upgrades.length > 0) {
+            const upgrade = dropt.upgrades.find((up) => up.item.id === itemId)
+            if (upgrade == null) return '?'
+            return getDpsHumanReadable(upgrade.dps)
+        }
+        return '?'
+    }
+
+    return (
+        <div className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer">
+            <WowItemIcon
+                item={item}
+                iconOnly={false}
+                raidDiff={diff}
+                className=""
+                iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
+            />
+            {/* Character List with upgrade */}
+            <div className="flex flex-row items-center gap-x-2">
+                {droptimizers.map((dropt) => (
+                    <div key={`${item.id}-${dropt.url}`} className="flex flex-col items-center">
+                        <WowSpecIcon
+                            specId={dropt.charInfo.specId}
+                            className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                            title={
+                                dropt.charInfo.name +
+                                ' - ' +
+                                formatUnixTimestampToRelativeDays(dropt.simInfo.date)
+                            }
+                        />
+                        <p className="text-bold text-[11px]">{getItemDps(dropt, item.id)}</p>
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-)
+    )
+}
 
 // Boss Card Component
 const BossPanel = ({
