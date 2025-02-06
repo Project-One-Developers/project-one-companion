@@ -1,6 +1,7 @@
 import type { Character, LootWithItem } from '@shared/types/types'
 import { type JSX } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
+import { WowItemIcon } from './ui/wowitem-icon'
 
 type LootsEligibleCharsProps = {
     roster: Character[]
@@ -12,13 +13,31 @@ export default function LootsEligibleChars({
     selectedLoot
 }: LootsEligibleCharsProps): JSX.Element {
     if (!selectedLoot) {
-        return <p className="text-gray-400">Select an item to assign</p>
+        return <p className="text-gray-400">Select an item to start assigning</p>
     }
 
+    const eligibleChars: string[] = selectedLoot.charsEligibility
+    const filteredRoster = roster.filter(
+        (character) =>
+            eligibleChars.includes(character.id) &&
+            (selectedLoot.item.classes == null ||
+                selectedLoot.item.classes.includes(character.class))
+    )
+
     return (
-        <div>
-            <h3 className="text-xl font-bold mb-4">{selectedLoot.item.name}</h3>
-            <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-row justify-center">
+                <WowItemIcon
+                    item={selectedLoot.item}
+                    iconOnly={false}
+                    raidDiff={selectedLoot.raidDifficulty}
+                    bonusString={selectedLoot.bonusString}
+                    socketBanner={selectedLoot.socket}
+                    tierBanner={true}
+                    iconClassName="object-cover object-top rounded-lg h-10 w-10 border border-background"
+                />
+            </div>
+            <div className="flex">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -30,10 +49,9 @@ export default function LootsEligibleChars({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {roster.map((character) => (
+                        {filteredRoster.map((character) => (
                             <TableRow key={character.id}>
                                 <TableCell>
-                                    {' '}
                                     <div className="flex flex-row space-x-4 ">
                                         {/* <WowClassIcon
                                             wowClassName={character.class}
