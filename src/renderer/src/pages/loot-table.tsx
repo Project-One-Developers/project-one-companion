@@ -1,11 +1,10 @@
+import { DroptimizersUpgradeForItem } from '@renderer/components/droptimizer-upgrades-for-item'
 import { FiltersPanel } from '@renderer/components/filter-panel'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
-import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { BossWithItems, Droptimizer, Item, WowRaidDifficulty } from '@shared/types/types'
@@ -31,47 +30,6 @@ const useRaidData = (currentRaid: number) => {
         encounterList: itemRes.data ?? [],
         encounterListIsLoading: itemRes.isLoading
     }
-}
-
-const DroptimizersUpgradeForItem = ({
-    item,
-    droptimizers
-}: {
-    item: Item
-    droptimizers: Droptimizer[]
-}) => {
-    const itemDroptimizerUpgrades = droptimizers
-        .flatMap((dropt) =>
-            (dropt.upgrades ?? []).map((upgrade) => ({
-                ...upgrade,
-                droptimizer: {
-                    url: dropt.url,
-                    charInfo: dropt.charInfo,
-                    simInfo: dropt.simInfo
-                }
-            }))
-        )
-        .filter((upgrade) => upgrade.item.id === item.id)
-        .sort((a, b) => b.dps - a.dps)
-
-    return (
-        <div className="flex flex-row items-center gap-x-2">
-            {itemDroptimizerUpgrades.map((upgrade) => (
-                <div key={`${upgrade.id}`} className="flex flex-col items-center">
-                    <WowSpecIcon
-                        specId={upgrade.droptimizer.charInfo.specId}
-                        className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                        title={
-                            upgrade.droptimizer.charInfo.name +
-                            ' - ' +
-                            formatUnixTimestampToRelativeDays(upgrade.droptimizer.simInfo.date)
-                        }
-                    />
-                    <p className="text-bold text-[11px]">{getDpsHumanReadable(upgrade.dps)}</p>
-                </div>
-            ))}
-        </div>
-    )
 }
 
 // Boss Card Component
