@@ -1,6 +1,7 @@
 import { PROFESSION_TYPES } from '@shared/consts/wow.consts'
 import {
     doesItemHaveSocket,
+    doesItemHaveTertiaryStat,
     getItemBonusString,
     parseItemString
 } from '@shared/libs/item-string-parser/item-string-parser'
@@ -51,7 +52,7 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
             dropDate: parseDateTime(date, time),
             bonusString: getItemBonusString(parsedItem),
             itemString,
-            // thirdStat: doesItemHaveTertiaryStat(parsedItem),
+            tertiaryStat: doesItemHaveTertiaryStat(parsedItem),
             socket: doesItemHaveSocket(parsedItem),
             raidDifficulty: parseWowDiff(difficultyID),
             itemId: itemID,
