@@ -21,28 +21,26 @@ const DEFAULT_FILTER: LootFilter = {
 }
 
 export default function DroptimizerPage(): JSX.Element {
-    const { data, isLoading } = useQuery({
+    const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
+    const droptimizerQuery = useQuery({
         queryKey: [queryKeys.droptimizers],
         queryFn: fetchLatestDroptimizers
     })
-
-    const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
-
-    const updateFilter = (key: keyof LootFilter, value: unknown): void => {
-        setFilters((prev) => ({ ...prev, [key]: value }))
-    }
-
     const filteredDroptimizers = useMemo(() => {
-        if (!data?.droptimizers) return []
-        return filterDroptimizer(data.droptimizers, filter)
-    }, [data?.droptimizers, filter])
+        if (!droptimizerQuery.data) return []
+        return filterDroptimizer(droptimizerQuery.data, filter)
+    }, [droptimizerQuery.data, filter])
 
-    if (isLoading) {
+    if (droptimizerQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
             </div>
         )
+    }
+
+    const updateFilter = (key: keyof LootFilter, value: unknown): void => {
+        setFilters((prev) => ({ ...prev, [key]: value }))
     }
 
     return (

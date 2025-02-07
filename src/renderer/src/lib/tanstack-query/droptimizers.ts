@@ -1,13 +1,13 @@
 import type { Droptimizer, WowRaidDifficulty } from 'shared/types/types'
 
-export const fetchDroptimizers = async (): Promise<{ droptimizers: Droptimizer[] }> => {
+export const fetchDroptimizers = async (): Promise<Droptimizer[]> => {
     const droptimizers = await window.api.getDroptimizerList()
-    return { droptimizers }
+    return droptimizers
 }
 
-export const fetchLatestDroptimizers = async (): Promise<{ droptimizers: Droptimizer[] }> => {
+export const fetchLatestDroptimizers = async (): Promise<Droptimizer[]> => {
     const droptimizers = await window.api.getDroptimizerLatestList()
-    return { droptimizers }
+    return droptimizers
 }
 
 export const addDroptimizer = async (url: string): Promise<Droptimizer> => {

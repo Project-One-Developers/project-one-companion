@@ -25,7 +25,7 @@ const useRaidData = (currentRaid: number) => {
     })
 
     return {
-        droptimizers: droptimizerRes.data?.droptimizers ?? [],
+        droptimizers: droptimizerRes.data ?? [],
         droptimizersIsLoading: droptimizerRes.isLoading,
         encounterList: itemRes.data ?? [],
         encounterListIsLoading: itemRes.isLoading
@@ -42,7 +42,7 @@ const BossPanel = ({
     droptimizers: Droptimizer[]
     diff: WowRaidDifficulty
 }) => {
-    const hasBossDroptimizerUpgrades = droptimizers.some((dropt) =>
+    const bossHasDroptimizers = droptimizers.some((dropt) =>
         (dropt.upgrades ?? []).some((upgrade) => upgrade.item.bossId === boss.id)
     )
     const itemHasDroptimizers = function (item: Item): boolean {
@@ -63,31 +63,27 @@ const BossPanel = ({
             </div>
             {/* Boss items */}
             <div className="flex flex-col gap-y-3 p-6">
-                {hasBossDroptimizerUpgrades ? (
-                    boss.items.map((item) => (
-                        <>
-                            {itemHasDroptimizers(item) && (
-                                <div
-                                    key={item.id}
-                                    className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer"
-                                >
-                                    <WowItemIcon
-                                        item={item}
-                                        iconOnly={false}
-                                        raidDiff={diff}
-                                        className=""
-                                        tierBanner={true}
-                                        iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
-                                    />
-                                    <div className="flex flex-row items-center gap-x-2">
-                                        <DroptimizersUpgradeForItem
-                                            item={item}
-                                            droptimizers={droptimizers}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                        </>
+                {bossHasDroptimizers ? (
+                    boss.items.filter(itemHasDroptimizers).map((item) => (
+                        <div
+                            key={item.id}
+                            className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer"
+                        >
+                            <WowItemIcon
+                                item={item}
+                                iconOnly={false}
+                                raidDiff={diff}
+                                className=""
+                                tierBanner={true}
+                                iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
+                            />
+                            <div className="flex flex-row items-center gap-x-2">
+                                <DroptimizersUpgradeForItem
+                                    item={item}
+                                    droptimizers={droptimizers}
+                                />
+                            </div>
+                        </div>
                     ))
                 ) : (
                     <p className="text-center text-sm text-gray-500">No upgrades available</p>

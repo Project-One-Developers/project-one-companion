@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
+import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
 import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
@@ -43,10 +44,10 @@ export default function LootAssign() {
         queryFn: fetchCharacters
     })
 
-    // const droptimizerRes = useQuery({
-    //     queryKey: [queryKeys.droptimizers],
-    //     queryFn: fetchLatestDroptimizers
-    // })
+    const droptimizerRes = useQuery({
+        queryKey: [queryKeys.droptimizers],
+        queryFn: fetchLatestDroptimizers
+    })
 
     if (raidSessionsQuery.isLoading || charactersQuery.isLoading) {
         return (
@@ -58,6 +59,7 @@ export default function LootAssign() {
 
     const sessions = raidSessionsQuery.data ?? []
     const characters = charactersQuery.data ?? []
+    const droptimizers = droptimizerRes.data ?? []
 
     const toggleSession = async (sessionId) => {
         const newSelectedSessions = new Set(selectedSessions)
@@ -128,7 +130,7 @@ export default function LootAssign() {
                                         .map((loot, index) => (
                                             <div
                                                 key={index}
-                                                className="border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
+                                                className="flex flex-row justify-between border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     setSelectedLoot(loot)
@@ -144,6 +146,14 @@ export default function LootAssign() {
                                                     tierBanner={true}
                                                     iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
                                                 />
+
+                                                <span>
+                                                    <p>
+                                                        Assigned to $
+                                                        {selectedLoot?.assignedCharacterId}
+                                                    </p>
+                                                </span>
+                                                <p></p>
                                             </div>
                                         ))
                                 ) : (
@@ -155,7 +165,11 @@ export default function LootAssign() {
                 </div>
                 {/* Eligible Chars Col */}
                 <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
-                    <LootsEligibleChars roster={characters} selectedLoot={selectedLoot} />
+                    <LootsEligibleChars
+                        roster={characters}
+                        droptimizers={droptimizers}
+                        selectedLoot={selectedLoot}
+                    />
                 </div>
             </div>
         </div>
