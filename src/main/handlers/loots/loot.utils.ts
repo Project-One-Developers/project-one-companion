@@ -1,4 +1,9 @@
 import { PROFESSION_TYPES } from '@shared/consts/wow.consts'
+import {
+    doesItemHaveSocket,
+    getItemBonusString,
+    parseItemString
+} from '@shared/libs/item-string-parser/item-string-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import { NewLoot, WowRaidDifficulty } from '@shared/types/types'
 import { parse } from 'papaparse'
@@ -15,56 +20,6 @@ const parseWowDiff = (wowDiff: number): WowRaidDifficulty => {
             return 'Mythic'
         default:
             return 'Mythic'
-    }
-}
-
-interface ItemInfo {
-    itemID: number
-    enchantID: number
-    gemIDs: number[]
-    suffixID: number
-    uniqueID: number
-    linkLevel: number
-    specializationID: number
-    modifiersMask: number
-    itemContext: number
-    bonusIDs: number[]
-    modifiers: { type: number; value: number }[]
-    //relics: number[][]
-    crafterGUID: number
-    extraEnchantID: number
-}
-
-function parseItemString(itemString: string): ItemInfo {
-    const parts = itemString.split(':').map(Number)
-
-    return {
-        itemID: parts[1],
-        enchantID: parts[2],
-        gemIDs: parts.slice(3, 7),
-        suffixID: parts[7],
-        uniqueID: parts[8],
-        linkLevel: parts[9],
-        specializationID: parts[10],
-        modifiersMask: parts[11],
-        itemContext: parts[12],
-        bonusIDs: parts.slice(14, 14 + parts[13]),
-        modifiers: Array.from({ length: parts[14 + parts[13]] }, (_, i) => ({
-            type: parts[15 + parts[13] + i * 2],
-            value: parts[16 + parts[13] + i * 2]
-        })),
-        // relics: [
-        //     parts.slice(15 + parts[13] * 2 + 1, 15 + parts[13] * 2 + 1 + parts[15 + parts[13] * 2]),
-        //     parts.slice(
-        //         15 + parts[13] * 2 + 2 + parts[15 + parts[13] * 2],
-        //         15 + parts[13] * 2 + 2 + parts[15 + parts[13] * 2] + parts[15 + parts[13] * 2 + 1]
-        //     ),
-        //     parts.slice(
-        //         15 + parts[13] * 2 + 3 + parts[15 + parts[13] * 2] + parts[15 + parts[13] * 2 + 1]
-        //     )
-        // ],
-        crafterGUID: parts[parts.length - 2],
-        extraEnchantID: parts[parts.length - 1]
     }
 }
 
@@ -88,18 +43,22 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
 
     const rawRecords = z.array(rawLootRecordSchema).parse(filteredData)
 
-    const loots = rawRecords.map((record): NewLoot => {
+    const loots = rawRecords.map((record) => {
         const parsedItem = parseItemString(record.itemString)
-        return newLootSchema.parse({
-            dropDate: parseDateTime(record.date, record.time),
-            bonusString: parsedItem.bonusIDs.join(':'),
-            itemString: record.itemString,
-            thirdStat: record.itemString.includes('+3'),
-            socket: parsedItem.bonusIDs.includes(10397), // 10397 = 1 socket
-            raidDifficulty: parseWowDiff(record.difficultyID),
-            itemId: record.itemID,
-            rclootId: record.id
-        })
+        const { date, time, itemString, difficultyID, itemID, id } = record
+
+        const loot: NewLoot = {
+            dropDate: parseDateTime(date, time),
+            bonusString: getItemBonusString(parsedItem),
+            itemString,
+            // thirdStat: doesItemHaveTertiaryStat(parsedItem),
+            socket: doesItemHaveSocket(parsedItem),
+            raidDifficulty: parseWowDiff(difficultyID),
+            itemId: itemID,
+            rclootId: id
+        }
+
+        return newLootSchema.parse(loot)
     })
 
     return loots
