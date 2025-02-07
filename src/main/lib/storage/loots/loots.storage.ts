@@ -25,7 +25,7 @@ export const addLoots = async (
         return {
             id: newUUID(),
             dropDate: loot.dropDate ?? getUnixTimestamp(),
-            tertiaryStat: '',
+            tertiaryStat: false, // TODO: implement
             raidDifficulty: loot.raidDifficulty,
             socket: loot.socket,
             itemString: loot.itemString,
