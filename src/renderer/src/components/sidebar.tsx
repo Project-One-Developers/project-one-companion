@@ -3,7 +3,6 @@ import {
     LucideAccessibility,
     LucideGauge,
     LucideMedal,
-    LucidePuzzle,
     LucideScrollText,
     LucideSwords,
     Settings
@@ -24,7 +23,7 @@ import {
 
 import type { JSX } from 'react'
 
-const rosterItems = [
+const preparationItems = [
     {
         title: 'Roster',
         url: '/roster',
@@ -39,16 +38,14 @@ const rosterItems = [
         title: 'Loot Table',
         url: '/loot-table',
         icon: LucideScrollText
-    },
+    }
+]
+
+const raidItems = [
     {
         title: 'Raid Session',
         url: '/raid-session',
         icon: LucideSwords
-    },
-    {
-        title: 'Tierset',
-        url: '/tierset',
-        icon: LucidePuzzle
     },
     {
         title: 'Assign',
@@ -64,8 +61,13 @@ const weakaurasItems = [
         icon: Code2Icon
     },
     {
-        title: 'Liberation of Undermine',
-        url: '#',
+        title: 'Assignment LoU',
+        url: 'https://wago.io/NSUndermine',
+        icon: Code2Icon
+    },
+    {
+        title: 'Generic LoU',
+        url: 'https://wago.io/Undermine',
         icon: Code2Icon
     }
 ]
@@ -85,10 +87,30 @@ export default function ProjectOneSidebar(): JSX.Element {
                 <SidebarTrigger className="ml-2" />
                 <SidebarContent>
                     <SidebarGroup>
-                        {/* <SidebarGroupLabel>Raid</SidebarGroupLabel> */}
+                        <SidebarGroupLabel>Preparation</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {rosterItems.map((item) => (
+                                {preparationItems.map((item) => (
+                                    <SidebarMenuItem
+                                        key={item.title}
+                                        className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
+                                    >
+                                        <SidebarMenuButton asChild>
+                                            <NavLink to={item.url}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </NavLink>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Raid</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {raidItems.map((item) => (
                                     <SidebarMenuItem
                                         key={item.title}
                                         className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
@@ -114,10 +136,10 @@ export default function ProjectOneSidebar(): JSX.Element {
                                         className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
                                     >
                                         <SidebarMenuButton asChild>
-                                            <NavLink to={item.url}>
+                                            <a href={item.url} rel="noreferrer" target="_blank">
                                                 <item.icon />
                                                 <span>{item.title}</span>
-                                            </NavLink>
+                                            </a>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 ))}
