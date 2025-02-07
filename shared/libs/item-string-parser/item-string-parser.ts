@@ -48,7 +48,7 @@ export const parseItemString = (itemString: string): ItemStringData => {
     const upgradeValue = rest[numBonusIds]
 
     // Create the raw object
-    const rawItemInfo = {
+    const rawItemInfo: ItemStringData = {
         itemID,
         enchantID,
         gemIDs: [gemId1, gemId2, gemId3, gemId4],
