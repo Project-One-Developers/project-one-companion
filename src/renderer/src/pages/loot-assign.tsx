@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
+import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -78,6 +79,55 @@ export default function LootAssign() {
         setLoots(updatedLoots)
     }
 
+    const getCharacterDetails = (characterId) => {
+        return characters.find((c) => c.id === characterId)
+    }
+
+    const renderLoots = (slot) => {
+        const filteredLoots = loots.filter((loot) => loot.item.slot === slot)
+        if (filteredLoots.length === 0) {
+            return <p className="text-gray-400">No loot in this category</p>
+        }
+
+        return filteredLoots.map((loot, index) => {
+            const characterDetails = getCharacterDetails(loot.assignedCharacterId)
+            const isSelected = selectedLoot && selectedLoot.id === loot.id
+            return (
+                <div
+                    key={index}
+                    className={`flex flex-row justify-between border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${isSelected ? 'bg-gray-700' : ''}`}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setSelectedLoot(loot)
+                    }}
+                >
+                    <WowItemIcon
+                        key={index}
+                        item={loot.item}
+                        iconOnly={false}
+                        raidDiff={loot.raidDifficulty}
+                        bonusString={loot.bonusString}
+                        socketBanner={loot.socket}
+                        tierBanner={true}
+                        iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                    />
+
+                    {/* Assign to */}
+                    {characterDetails && (
+                        <div className="flex flex-row space-x-4 items-center ">
+                            <p className="text-sm -mr-2">{characterDetails.name}</p>
+                            <WowClassIcon
+                                wowClassName={characterDetails.class}
+                                charname={characterDetails.name}
+                                className="h-8 w-8 border-2 border-background rounded-lg"
+                            />
+                        </div>
+                    )}
+                </div>
+            )
+        })
+    }
+
     return (
         <div className="w-dvw h-dvh flex flex-col gap-y-8 p-8 relative">
             {/* Page Header */}
@@ -124,41 +174,7 @@ export default function LootAssign() {
                                 value={slot}
                                 className="bg-muted p-4 rounded-lg shadow-md mt-2"
                             >
-                                {loots.filter((loot) => loot.item.slot === slot).length > 0 ? (
-                                    loots
-                                        .filter((loot) => loot.item.slot === slot)
-                                        .map((loot, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex flex-row justify-between border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    setSelectedLoot(loot)
-                                                }}
-                                            >
-                                                <WowItemIcon
-                                                    key={index}
-                                                    item={loot.item}
-                                                    iconOnly={false}
-                                                    raidDiff={loot.raidDifficulty}
-                                                    bonusString={loot.bonusString}
-                                                    socketBanner={loot.socket}
-                                                    tierBanner={true}
-                                                    iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
-                                                />
-
-                                                <span>
-                                                    <p>
-                                                        Assigned to $
-                                                        {selectedLoot?.assignedCharacterId}
-                                                    </p>
-                                                </span>
-                                                <p></p>
-                                            </div>
-                                        ))
-                                ) : (
-                                    <p className="text-gray-400">No loot in this category</p>
-                                )}
+                                {renderLoots(slot)}
                             </TabsContent>
                         ))}
                     </Tabs>
