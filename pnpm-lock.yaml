@@ -13,10 +13,10 @@ importers:
     dependencies:
       '@electron-toolkit/preload':
         specifier: 3.0.1
-        version: 3.0.1(electron@34.1.0)
+        version: 3.0.1(electron@34.1.1)
       '@electron-toolkit/utils':
         specifier: 3.0.0
-        version: 3.0.0(electron@34.1.0)
+        version: 3.0.0(electron@34.1.1)
       '@hookform/resolvers':
         specifier: 3.10.0
         version: 3.10.0(react-hook-form@7.54.2(react@19.0.0))
@@ -130,8 +130,8 @@ importers:
         specifier: 8.0.0
         version: 8.0.0
       electron:
-        specifier: 34.1.0
-        version: 34.1.0
+        specifier: 34.1.1
+        version: 34.1.1
       electron-builder:
         specifier: 25.1.8
         version: 25.1.8(electron-builder-squirrel-windows@25.1.8)
@@ -1284,19 +1284,6 @@ packages:
       '@types/react-dom':
         optional: true
 
-  '@radix-ui/react-collection@1.1.1':
-    resolution: {integrity: sha512-LwT3pSho9Dljg+wY2KN2mrrh6y3qELfftINERIzBUO9e0N+t0oMTyn3k9iv+ZqgrwGkRnLpNJrsMv9BZlt2yuA==}
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      '@types/react-dom':
-        optional: true
-
   '@radix-ui/react-collection@1.1.2':
     resolution: {integrity: sha512-9z54IEKRxIa9VityapoEYMuByaG42iSy1ZXlY2KcuLSEtq8x4987/N6m15ppoMffgZX72gER2uHe1D9Y6Unlcw==}
     peerDependencies:
@@ -1707,19 +1694,6 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
-        optional: true
-
-  '@radix-ui/react-visually-hidden@1.1.1':
-    resolution: {integrity: sha512-vVfA2IZ9q/J+gEamvj761Oq1FpWgCDaNOOIfbPVp2MVPLEomUr5+Vf7kJGwQ24YxZSlQVar7Bes8kyTo5Dshpg==}
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      '@types/react-dom':
         optional: true
 
   '@radix-ui/react-visually-hidden@1.1.2':
@@ -2801,8 +2775,8 @@ packages:
       '@swc/core':
         optional: true
 
-  electron@34.1.0:
-    resolution: {integrity: sha512-ZUid8XrGPA0dfes97PPADc8ecWOUX/qYRNp1glze9coZLEYc+PsMvgjVDCHSvjfHfiI+V3unwngSVpBouX71YQ==}
+  electron@34.1.1:
+    resolution: {integrity: sha512-1aDYk9Gsv1/fFeClMrxWGoVMl7uCUgl1pe26BiTnLXmAoqEXCa3f3sCKFWV+cuDzUjQGAZcpkWhGYTgWUSQrLA==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -5422,13 +5396,13 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
-  '@electron-toolkit/preload@3.0.1(electron@34.1.0)':
+  '@electron-toolkit/preload@3.0.1(electron@34.1.1)':
     dependencies:
-      electron: 34.1.0
+      electron: 34.1.1
 
-  '@electron-toolkit/utils@3.0.0(electron@34.1.0)':
+  '@electron-toolkit/utils@3.0.0(electron@34.1.1)':
     dependencies:
-      electron: 34.1.0
+      electron: 34.1.1
 
   '@electron/asar@3.2.18':
     dependencies:
@@ -6149,18 +6123,6 @@ snapshots:
       '@types/react': 19.0.8
       '@types/react-dom': 19.0.3(@types/react@19.0.8)
 
-  '@radix-ui/react-collection@1.1.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      '@radix-ui/react-compose-refs': 1.1.1(@types/react@19.0.8)(react@19.0.0)
-      '@radix-ui/react-context': 1.1.1(@types/react@19.0.8)(react@19.0.0)
-      '@radix-ui/react-primitive': 2.0.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@radix-ui/react-slot': 1.1.1(@types/react@19.0.8)(react@19.0.0)
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-    optionalDependencies:
-      '@types/react': 19.0.8
-      '@types/react-dom': 19.0.3(@types/react@19.0.8)
-
   '@radix-ui/react-collection@1.1.2(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@radix-ui/react-compose-refs': 1.1.1(@types/react@19.0.8)(react@19.0.0)
@@ -6583,15 +6545,6 @@ snapshots:
       react: 19.0.0
     optionalDependencies:
       '@types/react': 19.0.8
-
-  '@radix-ui/react-visually-hidden@1.1.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      '@radix-ui/react-primitive': 2.0.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-    optionalDependencies:
-      '@types/react': 19.0.8
-      '@types/react-dom': 19.0.3(@types/react@19.0.8)
 
   '@radix-ui/react-visually-hidden@1.1.2(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
@@ -7799,7 +7752,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@34.1.0:
+  electron@34.1.1:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 20.17.17
