@@ -41,11 +41,9 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
                 <CurrentGreatVaultPanel droptimizer={droptimizer} />
                 <NextGreatVaultPanel greatVault={nextWeekChest} />
             </div>
-            {wowauditData && (
-                <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
-                    <GearInfo wowAudit={wowauditData} droptimizer={droptimizer} />
-                </div>
-            )}
+            <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
+                <GearInfo wowAudit={wowauditData} droptimizer={droptimizer} />
+            </div>
         </>
     )
 }
@@ -103,18 +101,15 @@ const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
 }
 
 type GearInfoProps = {
-    wowAudit: CharacterWowAudit
+    wowAudit: CharacterWowAudit | null
     droptimizer: Droptimizer | null
 }
 
 const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
-    let wowAuditNewer = true
+    let wowAuditNewer = wowAudit != null
     if (droptimizer && wowAudit) {
         if (droptimizer.simInfo.date > wowAudit.wowauditLastModifiedUnixTs) {
-            console.log('Droptimizer is newer')
             wowAuditNewer = false
-        } else {
-            console.log('WowAudit is newer')
         }
     }
     return (
@@ -158,60 +153,36 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                 </TabsList>
 
                 <TabsContent value="wowaudit">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Slot</TableHead>
-                                <TableHead>Equipped • {wowAudit.averageIlvl || 'N/A'}</TableHead>
-                                <TableHead>Enchant</TableHead>
-                                <TableHead>
-                                    Tierset •{' '}
-                                    {Object.values(wowAudit.tierset).filter((t) => t != null)
-                                        .length + '/5'}
-                                </TableHead>
-                                <TableHead>
-                                    Best Gear • {wowAudit.hightestIlvlEverEquipped || 'N/A'}
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {Object.entries(wowAudit.equippedGear).map(([key, value]) =>
-                                value ? (
-                                    <TableRow key={key}>
-                                        <TableCell>
-                                            {key.charAt(0).toUpperCase() + key.slice(1)}
-                                        </TableCell>
-                                        <TableCell>
-                                            <WowItemIcon
-                                                item={wowAudit.equippedGear[key].id}
-                                                ilvl={wowAudit.equippedGear[key].ilvl}
-                                                iconOnly={false}
-                                                showIlvl={true}
-                                                showSlot={false}
-                                                showSubclass={false}
-                                                tierBanner={true}
-                                                iconClassName="rounded-lg h-10 w-10 border border-background"
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            {wowAudit.enchant[key] && (
-                                                <p>{wowAudit.enchant[key].name}</p>
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {wowAudit.tierset[key] && (
-                                                <p>
-                                                    {wowAudit.tierset[key].diff} -{' '}
-                                                    {wowAudit.tierset[key].ilvl}{' '}
-                                                </p>
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {wowAudit.bestGear[key].id !=
-                                            wowAudit.equippedGear[key].id ? (
+                    {wowAudit && (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Slot</TableHead>
+                                    <TableHead>
+                                        Equipped • {wowAudit.averageIlvl || 'N/A'}
+                                    </TableHead>
+                                    <TableHead>Enchant</TableHead>
+                                    <TableHead>
+                                        Tierset •{' '}
+                                        {Object.values(wowAudit.tierset).filter((t) => t != null)
+                                            .length + '/5'}
+                                    </TableHead>
+                                    <TableHead>
+                                        Best Gear • {wowAudit.hightestIlvlEverEquipped || 'N/A'}
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {Object.entries(wowAudit.equippedGear).map(([key, value]) =>
+                                    value ? (
+                                        <TableRow key={key}>
+                                            <TableCell>
+                                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                                            </TableCell>
+                                            <TableCell>
                                                 <WowItemIcon
-                                                    item={wowAudit.bestGear[key].id}
-                                                    ilvl={wowAudit.bestGear[key].ilvl}
+                                                    item={wowAudit.equippedGear[key].id}
+                                                    ilvl={wowAudit.equippedGear[key].ilvl}
                                                     iconOnly={false}
                                                     showIlvl={true}
                                                     showSlot={false}
@@ -219,50 +190,80 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                                     tierBanner={true}
                                                     iconClassName="rounded-lg h-10 w-10 border border-background"
                                                 />
-                                            ) : null}
-                                        </TableCell>
-                                    </TableRow>
-                                ) : null
-                            )}
-                        </TableBody>
-                    </Table>
+                                            </TableCell>
+                                            <TableCell>
+                                                {wowAudit.enchant[key] && (
+                                                    <p>{wowAudit.enchant[key].name}</p>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {wowAudit.tierset[key] && (
+                                                    <p>
+                                                        {wowAudit.tierset[key].diff} -{' '}
+                                                        {wowAudit.tierset[key].ilvl}{' '}
+                                                    </p>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {wowAudit.bestGear[key].id !=
+                                                wowAudit.equippedGear[key].id ? (
+                                                    <WowItemIcon
+                                                        item={wowAudit.bestGear[key].id}
+                                                        ilvl={wowAudit.bestGear[key].ilvl}
+                                                        iconOnly={false}
+                                                        showIlvl={true}
+                                                        showSlot={false}
+                                                        showSubclass={false}
+                                                        tierBanner={true}
+                                                        iconClassName="rounded-lg h-10 w-10 border border-background"
+                                                    />
+                                                ) : null}
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : null
+                                )}
+                            </TableBody>
+                        </Table>
+                    )}
                 </TabsContent>
 
                 <TabsContent value="droptimizer">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Slot</TableHead>
-                                <TableHead>Equipped Item</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {Object.entries(droptimizer?.itemsEquipped || {}).map(([key, item]) => (
-                                <TableRow key={key}>
-                                    <TableCell>
-                                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                                    </TableCell>
-                                    <TableCell>
-                                        {item && (
-                                            <WowItemIcon
-                                                item={item.id}
-                                                ilvl={item.itemLevel}
-                                                bonusString={item.bonus_id ?? undefined}
-                                                enchantString={item.enchant_id ?? undefined}
-                                                gemsString={item.gem_id ?? undefined}
-                                                iconOnly={false}
-                                                showIlvl={true}
-                                                showSlot={false}
-                                                showSubclass={false}
-                                                tierBanner={true}
-                                                iconClassName="rounded-lg h-10 w-10 border border-background"
-                                            />
-                                        )}
-                                    </TableCell>
+                    {droptimizer && (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Slot</TableHead>
+                                    <TableHead>Equipped Item</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {Object.entries(droptimizer.itemsEquipped).map(([key, item]) => (
+                                    <TableRow key={key}>
+                                        <TableCell>
+                                            {key.charAt(0).toUpperCase() + key.slice(1)}
+                                        </TableCell>
+                                        <TableCell>
+                                            {item && (
+                                                <WowItemIcon
+                                                    item={item.id}
+                                                    ilvl={item.itemLevel}
+                                                    bonusString={item.bonus_id ?? undefined}
+                                                    enchantString={item.enchant_id ?? undefined}
+                                                    gemsString={item.gem_id ?? undefined}
+                                                    iconOnly={false}
+                                                    showIlvl={true}
+                                                    showSlot={false}
+                                                    showSubclass={false}
+                                                    tierBanner={true}
+                                                    iconClassName="rounded-lg h-10 w-10 border border-background"
+                                                />
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
                 </TabsContent>
             </Tabs>
         </div>
