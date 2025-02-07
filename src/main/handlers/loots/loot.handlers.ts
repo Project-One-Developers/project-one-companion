@@ -6,7 +6,8 @@ import { parseRaidSessionCsv } from './loot.utils'
 export const addRaidLootsByRCLootCsvHandler = async (loot: NewLootsFromRc): Promise<void> => {
     const parsedData = await parseRaidSessionCsv(loot.csv)
     const elegibleCharacters = await getRaidSessionRoster(loot.raidSessionId)
-    addLoots(loot.raidSessionId, parsedData, elegibleCharacters)
+
+    await addLoots(loot.raidSessionId, parsedData, elegibleCharacters)
 }
 
 export const addRaidLootsByManualInputHandler = async (
