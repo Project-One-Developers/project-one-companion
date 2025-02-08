@@ -147,7 +147,12 @@ export const raidbotParseAndTransform = raidBotSchema.transform((data) => {
         },
         charInfo: {
             name: data.simbot.meta.rawFormData.character.name,
-            server: data.simbot.meta.rawFormData.character.realm.toLowerCase().replaceAll('_', '-'),
+            // non si capisce un cazzo: a volte arriva rng: pozzo-delleternità, pozzo dell'eternità, pozzo_dell'eternità
+            server: data.simbot.meta.rawFormData.character.realm
+                .toLowerCase()
+                .replaceAll('_', '-')
+                .replaceAll(' ', '-')
+                .replaceAll("'", ''),
             class: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents
                 .className as WowClass,
             classId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.classId,
