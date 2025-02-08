@@ -57,13 +57,9 @@ export default function LootAssign() {
 
     useEffect(() => {
         // update selected loot when loots are fetched / refetched
-        if (selectedLoot) {
-            if (lootsQuery.data) {
-                const updatedLoot = lootsQuery.data.find((loot) => loot.id === selectedLoot.id)
-                setSelectedLoot(updatedLoot ?? null)
-            } else {
-                setSelectedLoot(null)
-            }
+        if (selectedLoot && lootsQuery.data) {
+            const updatedLoot = lootsQuery.data.find((loot) => loot.id === selectedLoot.id)
+            setSelectedLoot(updatedLoot ?? null)
         }
     }, [lootsQuery.data, selectedLoot])
 
