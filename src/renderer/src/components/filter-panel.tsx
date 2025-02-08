@@ -78,21 +78,6 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
 
                 {/* Panel Content */}
                 <Collapsible.Content className="mt-4 space-y-4">
-                    {/* Latest only ( for a given character / spec / diff ) */}
-                    <div className="flex items-center gap-3">
-                        <Checkbox
-                            id="only-latest"
-                            checked={filter.onlyLatest as CheckedState}
-                            onCheckedChange={(checked) => updateFilter('onlyLatest', !!checked)}
-                            className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
-                        >
-                            {filter.onlyLatest && <Check className="text-white w-4 h-4" />}
-                        </Checkbox>
-                        <label htmlFor="only-latest" className="text-sm font-semibold">
-                            Latest only ( for a given character / spec / diff )
-                        </label>
-                    </div>
-
                     {/* Ignore droptimizer older than */}
                     <div className="flex flex-row items-center gap-3">
                         <Checkbox

@@ -3,7 +3,6 @@ import { unixTimestampToRelativeDays } from './utils'
 
 export type LootFilter = {
     selectedRaidDiff: WowRaidDifficulty
-    onlyLatest: boolean
     onlyUpgrades: boolean
     minUpgrade: number
     olderThanDays: boolean
@@ -35,15 +34,6 @@ export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilte
                 return false
             }
 
-            // Works only if the droptimizer array is sorted by dropt.simInfo.date desc
-            if (filter.onlyLatest) {
-                const existingDropt = latestDroptimizersMap.get(dropt.ak)
-                if (!existingDropt || dropt.simInfo.date > existingDropt.simInfo.date) {
-                    latestDroptimizersMap.set(dropt.ak, dropt)
-                } else {
-                    return false
-                }
-            }
             return true
         })
 

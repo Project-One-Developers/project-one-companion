@@ -103,7 +103,6 @@ const BossPanel = ({
 export default function LootTable(): JSX.Element {
     const DEFAULT_FILTER: LootFilter = {
         selectedRaidDiff: 'Mythic',
-        onlyLatest: true,
         onlyUpgrades: false,
         minUpgrade: 1000,
         olderThanDays: false,

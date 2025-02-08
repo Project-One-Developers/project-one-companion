@@ -11,7 +11,6 @@ import { useMemo, useState, type JSX } from 'react'
 // Default filter values
 const DEFAULT_FILTER: LootFilter = {
     selectedRaidDiff: 'Mythic',
-    onlyLatest: true,
     onlyUpgrades: false,
     minUpgrade: 1000,
     olderThanDays: false,
