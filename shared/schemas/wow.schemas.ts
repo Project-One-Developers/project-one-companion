@@ -76,7 +76,7 @@ export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
 
 export const wowRaidDiffSchema = z.enum(['Normal', 'Heroic', 'Mythic'])
 
-export const wowItemTerziaryStatsSchema = z.enum(['Speed', 'Leech', 'Avoidance', 'Indestructible'])
+export const wowItemTertiaryStatsSchema = z.enum(['Speed', 'Leech', 'Avoidance', 'Indestructible'])
 
 export const wowRoleClassSchema = z.object({
     Tank: wowClassTankSchema,

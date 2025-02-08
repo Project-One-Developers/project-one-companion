@@ -4,7 +4,7 @@ import {
     wowClassSchema,
     wowItemSlotKeySchema,
     wowItemSlotSchema,
-    wowItemTerziaryStatsSchema,
+    wowItemTertiaryStatsSchema,
     wowRaidDiffSchema,
     wowRoleClassSchema,
     wowRolesSchema
@@ -22,7 +22,7 @@ export const ROLES_CLASSES_MAP = {
     DPS: wowRoleClassSchema.shape.DPS.options
 }
 
-export const TERZIARY_STATS = wowItemTerziaryStatsSchema.options
+export const TERTIARY_STATS = wowItemTertiaryStatsSchema.options
 export const ARMOR_TYPES = wowArmorTypeSchema.options
 export const ITEM_SLOTS = wowItemSlotSchema.options
 export const ITEM_SLOTS_KEY = wowItemSlotKeySchema.options
