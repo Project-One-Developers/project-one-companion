@@ -53,6 +53,23 @@ export const wowItemSlotSchema = z.enum([
     'Ranged'
 ])
 
+export const wowItemSlotKeySchema = z.enum([
+    'head',
+    'neck',
+    'shoulder',
+    'back',
+    'chest',
+    'wrist',
+    'hands',
+    'waist',
+    'legs',
+    'feet',
+    'finger',
+    'trinket',
+    'main_hand',
+    'off_hand'
+])
+
 export const wowArmorTypeSchema = z.enum(['Cloth', 'Leather', 'Mail', 'Plate'])
 
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])

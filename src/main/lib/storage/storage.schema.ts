@@ -1,4 +1,11 @@
-import { ARMOR_TYPES, CLASSES, ITEM_SLOTS, RAID_DIFF, ROLES } from '@shared/consts/wow.consts'
+import {
+    ARMOR_TYPES,
+    CLASSES,
+    ITEM_SLOTS,
+    ITEM_SLOTS_KEY,
+    RAID_DIFF,
+    ROLES
+} from '@shared/consts/wow.consts'
 import { relations } from 'drizzle-orm'
 import {
     boolean,
@@ -22,6 +29,7 @@ export const pgRaidDiffEnum = pgEnum('raid_diff', RAID_DIFF)
 
 export const pgItemArmorTypeEnum = pgEnum('item_armor_type', ARMOR_TYPES)
 export const pgItemSlotEnum = pgEnum('item_slot', ITEM_SLOTS)
+export const pgItemSlotKeyEnum = pgEnum('item_slot_key', ITEM_SLOTS_KEY)
 
 //////////////////////////////////////////////////////////
 //                   CHARACHTERS                        //
@@ -313,6 +321,7 @@ export const itemTable = pgTable('items', {
     ilvlNormal: integer('ilvl_normal').notNull(),
     itemClass: varchar('item_class', { length: 50 }),
     slot: pgItemSlotEnum('slot'),
+    slotKey: pgItemSlotKeyEnum('slot_key'),
     armorType: pgItemArmorTypeEnum('armor_type'),
     itemSubclass: varchar('item_subclass', { length: 50 }),
     token: boolean('token').notNull(), // se è un item che genera tierset

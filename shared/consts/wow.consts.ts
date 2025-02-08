@@ -2,6 +2,7 @@ import { WoWRole } from '@shared/types/types'
 import {
     wowArmorTypeSchema,
     wowClassSchema,
+    wowItemSlotKeySchema,
     wowItemSlotSchema,
     wowItemTerziaryStatsSchema,
     wowRaidDiffSchema,
@@ -24,6 +25,7 @@ export const ROLES_CLASSES_MAP = {
 export const TERZIARY_STATS = wowItemTerziaryStatsSchema.options
 export const ARMOR_TYPES = wowArmorTypeSchema.options
 export const ITEM_SLOTS = wowItemSlotSchema.options
+export const ITEM_SLOTS_KEY = wowItemSlotKeySchema.options
 
 export const PROFESSION_TYPES = new Set([
     'Alchemy',

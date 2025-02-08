@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { wowArmorTypeSchema, wowItemSlotSchema } from './wow.schemas'
+import { wowArmorTypeSchema, wowItemSlotKeySchema, wowItemSlotSchema } from './wow.schemas'
 
 export const itemSchema = z.object({
     id: z.number(),
@@ -9,6 +9,7 @@ export const itemSchema = z.object({
     ilvlNormal: z.number(),
     itemClass: z.string(),
     slot: wowItemSlotSchema.nullable(),
+    slotKey: wowItemSlotKeySchema.nullable(),
     itemSubclass: z.string().nullable(),
     armorType: wowArmorTypeSchema.nullable(),
     tiersetPrefix: z.string().nullable(),
