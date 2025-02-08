@@ -62,7 +62,7 @@ export const DroptimizersUpgradeForItem = ({
                         <div className="flex flex-col items-center">
                             <WowSpecIcon
                                 specId={upgrade.droptimizer.charInfo.specId}
-                                className="rounded-md full h-7 w-7 border border-background"
+                                className="rounded-md full h-8 w-8 border border-background"
                                 title={
                                     upgrade.droptimizer.charInfo.name +
                                     ' - ' +
@@ -88,7 +88,7 @@ export const DroptimizersUpgradeForItem = ({
                                         bonusString={equippedItem.bonus_id ?? undefined}
                                         enchantString={equippedItem.enchant_id ?? undefined}
                                         gemsString={equippedItem.gem_id ?? undefined}
-                                        className="rounded-md full h-7 w-7 border border-background"
+                                        className="rounded-md full h-8 w-8 border border-background"
                                     />
                                     <p className="text-bold text-[11px]">
                                         {equippedItem.itemLevel}

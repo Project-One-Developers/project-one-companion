@@ -100,6 +100,10 @@ export default function LootsEligibleChars({
                                 character.realm,
                                 selectedLoot.raidDifficulty
                             )
+                            const [weeklyChestDropt] = charDroptimizers
+                                .filter((c) => c.weeklyChest)
+                                .sort((a, b) => b.simInfo.date - a.simInfo.date)
+
                             const randomScore = Math.floor(Math.random() * (10000 - 10 + 1)) + 10
 
                             return (
@@ -131,7 +135,23 @@ export default function LootsEligibleChars({
                                             showUpgradeItem={true}
                                         />
                                     </TableCell>
-                                    <TableCell></TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-row 2">
+                                            {weeklyChestDropt?.weeklyChest &&
+                                                weeklyChestDropt.weeklyChest.map((wc) => (
+                                                    <div key={wc.id} className="flex ">
+                                                        {/* visualizzare solo weekly chest per lo slot in esame? */}
+                                                        <WowItemIcon
+                                                            item={wc.id}
+                                                            ilvl={wc.itemLevel}
+                                                            iconOnly={true}
+                                                            bonusString={wc.bonusString}
+                                                            iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                                                        />
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </TableCell>
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>
                                     <TableCell>{randomScore}</TableCell>
