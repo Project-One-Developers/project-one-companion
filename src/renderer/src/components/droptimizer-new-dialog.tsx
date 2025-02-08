@@ -51,7 +51,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
         onSuccess: (response) => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.droptimizers] })
             form.reset()
-            setOpen(false)
+            //setOpen(false)
             toast({
                 title: 'Droptimizer added',
                 description: `The droptimizer for character ${response.charInfo.name} has been successfully added.`
