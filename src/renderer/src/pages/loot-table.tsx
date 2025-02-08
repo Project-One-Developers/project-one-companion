@@ -52,7 +52,9 @@ const BossPanel = ({
     //     )
     // }
 
-    const itemHasDroptimizers = function (item: Item): boolean {
+    // todo: re-enable with filter
+    // eslint-disable-next-line
+    const itemHasDroptimizers = function (_: Item): boolean {
         return true
     }
 

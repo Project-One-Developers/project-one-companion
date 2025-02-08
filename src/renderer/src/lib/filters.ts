@@ -12,9 +12,6 @@ export type LootFilter = {
 }
 
 export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilter): Droptimizer[] {
-    // Using a Map to track the latest droptimizer for each characterName
-    const latestDroptimizersMap = new Map()
-
     const filterByDroptimizerFilters = droptimizers
         .sort((a, b) => b.simInfo.date - a.simInfo.date)
         .filter((dropt) => {
