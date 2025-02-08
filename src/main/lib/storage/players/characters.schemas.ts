@@ -134,8 +134,8 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
         enchant: {
             wrist: createEnchantPiece(data.enchantNameWrist, data.enchantQualityWrist),
             legs: createEnchantPiece(data.enchantNameLegs, data.enchantQualityLegs),
-            mainHand: createEnchantPiece(data.enchantNameMainHand, data.enchantQualityMainHand),
-            offHand: createEnchantPiece(data.enchantNameOffHand, data.enchantQualityOffHand),
+            main_hand: createEnchantPiece(data.enchantNameMainHand, data.enchantQualityMainHand),
+            off_hand: createEnchantPiece(data.enchantNameOffHand, data.enchantQualityOffHand),
             finger1: createEnchantPiece(data.enchantNameFinger1, data.enchantQualityFinger1),
             finger2: createEnchantPiece(data.enchantNameFinger2, data.enchantQualityFinger2),
             back: createEnchantPiece(data.enchantNameBack, data.enchantQualityBack),
@@ -175,8 +175,8 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
             finger2: createGearPiece(data.finger2Ilvl, data.finger2Id),
             trinket1: createGearPiece(data.trinket1Ilvl, data.trinket1Id),
             trinket2: createGearPiece(data.trinket2Ilvl, data.trinket2Id),
-            mainHand: createGearPiece(data.mainHandIlvl, data.mainHandId),
-            offHand: createGearPiece(data.offHandIlvl, data.offHandId)
+            main_hand: createGearPiece(data.mainHandIlvl, data.mainHandId),
+            off_hand: createGearPiece(data.offHandIlvl, data.offHandId)
         },
         bestGear: {
             head: createGearPiece(data.bestHeadIlvl, data.bestHeadId),
@@ -193,8 +193,8 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
             finger2: createGearPiece(data.bestFinger2Ilvl, data.bestFinger2Id),
             trinket1: createGearPiece(data.bestTrinket1Ilvl, data.bestTrinket1Id),
             trinket2: createGearPiece(data.bestTrinket2Ilvl, data.bestTrinket2Id),
-            mainHand: createGearPiece(data.bestMainHandIlvl, data.bestMainHandId),
-            offHand: createGearPiece(data.bestOffHandIlvl, data.bestOffHandId)
+            main_hand: createGearPiece(data.bestMainHandIlvl, data.bestMainHandId),
+            off_hand: createGearPiece(data.bestOffHandIlvl, data.bestOffHandId)
         }
     })
 )

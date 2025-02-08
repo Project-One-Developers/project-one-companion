@@ -79,8 +79,8 @@ export const charWowAuditSchema = z.object({
     enchant: z.object({
         wrist: wowauditEnchantSchema.nullable(),
         legs: wowauditEnchantSchema.nullable(),
-        mainHand: wowauditEnchantSchema.nullable(),
-        offHand: wowauditEnchantSchema.nullable(),
+        main_hand: wowauditEnchantSchema.nullable(),
+        off_hand: wowauditEnchantSchema.nullable(),
         finger1: wowauditEnchantSchema.nullable(),
         finger2: wowauditEnchantSchema.nullable(),
         back: wowauditEnchantSchema.nullable(),
@@ -120,8 +120,8 @@ export const charWowAuditSchema = z.object({
         finger2: wowauditGearItemSchema.nullish(),
         trinket1: wowauditGearItemSchema.nullish(),
         trinket2: wowauditGearItemSchema.nullish(),
-        mainHand: wowauditGearItemSchema.nullish(),
-        offHand: wowauditGearItemSchema.nullish()
+        main_hand: wowauditGearItemSchema.nullish(),
+        off_hand: wowauditGearItemSchema.nullish()
     }),
     bestGear: z.object({
         head: wowauditGearItemSchema.nullish(),
@@ -138,8 +138,8 @@ export const charWowAuditSchema = z.object({
         finger2: wowauditGearItemSchema.nullish(),
         trinket1: wowauditGearItemSchema.nullish(),
         trinket2: wowauditGearItemSchema.nullish(),
-        mainHand: wowauditGearItemSchema.nullish(),
-        offHand: wowauditGearItemSchema.nullish()
+        main_hand: wowauditGearItemSchema.nullish(),
+        off_hand: wowauditGearItemSchema.nullish()
     })
 })
 

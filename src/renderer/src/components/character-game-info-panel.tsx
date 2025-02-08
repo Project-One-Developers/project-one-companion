@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
+import { mapRaidbotSlotToWowSlot } from '@renderer/lib/wow-utils'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -176,9 +177,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                 {Object.entries(wowAudit.equippedGear).map(([key, value]) =>
                                     value ? (
                                         <TableRow key={key}>
-                                            <TableCell>
-                                                {key.charAt(0).toUpperCase() + key.slice(1)}
-                                            </TableCell>
+                                            <TableCell>{mapRaidbotSlotToWowSlot(key)}</TableCell>
                                             <TableCell>
                                                 <WowItemIcon
                                                     item={wowAudit.equippedGear[key].id}
@@ -239,9 +238,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                             <TableBody>
                                 {Object.entries(droptimizer.itemsEquipped).map(([key, item]) => (
                                     <TableRow key={key}>
-                                        <TableCell>
-                                            {key.charAt(0).toUpperCase() + key.slice(1)}
-                                        </TableCell>
+                                        <TableCell>{mapRaidbotSlotToWowSlot(key)}</TableCell>
                                         <TableCell>
                                             {item && (
                                                 <WowItemIcon

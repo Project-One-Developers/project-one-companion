@@ -8,27 +8,12 @@ import { getLootsBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
 import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
+import { mapRaidbotSlotToWowSlot } from '@renderer/lib/wow-utils'
+import { ITEM_SLOTS_KEY } from '@shared/consts/wow.consts'
 import { LootWithItem } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Calendar, LoaderCircle, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
-
-const SLOT_CATEGORIES = [
-    'Head',
-    'Neck',
-    'Shoulder',
-    'Back',
-    'Chest',
-    'Wrist',
-    'Hands',
-    'Waist',
-    'Legs',
-    'Feet',
-    'Finger',
-    'Trinket',
-    'MainHand',
-    'OffHand'
-]
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
@@ -93,7 +78,7 @@ export default function LootAssign() {
     }
 
     const renderLoots = (slot) => {
-        const filteredLoots = loots.filter((loot) => loot.item.slot === slot)
+        const filteredLoots = loots.filter((loot) => loot.item.slotKey === slot)
         if (filteredLoots.length === 0) {
             return <p className="text-gray-400">No loot in this category</p>
         }
@@ -168,17 +153,17 @@ export default function LootAssign() {
                         <div className="flex flex-col pr-5">
                             <Tabs defaultValue="Head">
                                 <TabsList className="flex space-x-2 overflow-x-auto pb-2">
-                                    {SLOT_CATEGORIES.map((slot) => (
+                                    {ITEM_SLOTS_KEY.map((slot) => (
                                         <TabsTrigger
                                             key={slot}
                                             value={slot}
                                             className="flex flex-col items-start gap-1 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
                                         >
-                                            {slot}
+                                            {mapRaidbotSlotToWowSlot(slot)}
                                         </TabsTrigger>
                                     ))}
                                 </TabsList>
-                                {SLOT_CATEGORIES.map((slot) => (
+                                {ITEM_SLOTS_KEY.map((slot) => (
                                     <TabsContent
                                         key={slot}
                                         value={slot}

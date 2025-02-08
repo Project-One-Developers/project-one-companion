@@ -22,10 +22,14 @@ export function mapRaidbotSlotToWowSlot(raidbotSlot: string): WowItemSlot {
             return 'Legs'
         case 'feet':
             return 'Feet'
+        case 'finger':
+            return 'Finger'
         case 'finger1':
             return 'Finger'
         case 'finger2':
             return 'Finger'
+        case 'trinket':
+            return 'Trinket'
         case 'trinket1':
             return 'Trinket'
         case 'trinket2':
@@ -34,20 +38,11 @@ export function mapRaidbotSlotToWowSlot(raidbotSlot: string): WowItemSlot {
             return 'Main Hand'
         case 'mainHand':
             return 'Main Hand'
+        case 'off_hand':
+            return 'Off Hand'
         case 'offHand':
             return 'Off Hand'
         default:
             throw new Error(`Unknown raidbot slot: ${raidbotSlot}`)
-    }
-}
-
-export function translateSlotToSlotProperties(slot: string): string {
-    switch (slot) {
-        case 'mainHand':
-            return 'main_hand'
-        case 'offHand':
-            return 'off_hand'
-        default:
-            return slot
     }
 }

@@ -107,8 +107,8 @@ export const raidBotSchema = z.object({
                         finger2: droptimizerGearItemSchema.nullish(),
                         trinket1: droptimizerGearItemSchema.nullish(),
                         trinket2: droptimizerGearItemSchema.nullish(),
-                        mainHand: droptimizerGearItemSchema.nullish(),
-                        offHand: droptimizerGearItemSchema.nullish()
+                        main_hand: droptimizerGearItemSchema.nullish(),
+                        off_hand: droptimizerGearItemSchema.nullish()
                     })
                 })
             })
@@ -212,11 +212,11 @@ export const raidbotParseAndTransform = raidBotSchema.transform((data) => {
             trinket2: droptimizerGearItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.trinket2
             ),
-            mainHand: droptimizerGearItemSchema.parse(
-                data.simbot.meta.rawFormData.droptimizer.equipped.mainHand
+            main_hand: droptimizerGearItemSchema.parse(
+                data.simbot.meta.rawFormData.droptimizer.equipped.main_hand
             ),
-            offHand: droptimizerGearItemSchema.parse(
-                data.simbot.meta.rawFormData.droptimizer.equipped.offHand
+            off_hand: droptimizerGearItemSchema.parse(
+                data.simbot.meta.rawFormData.droptimizer.equipped.off_hand
             )
         }
     }

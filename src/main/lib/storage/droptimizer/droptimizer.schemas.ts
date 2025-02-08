@@ -47,8 +47,8 @@ export const droptimizerStorageSchema = z.object({
         finger2: droptimizerGearItemSchema.nullish(),
         trinket1: droptimizerGearItemSchema.nullish(),
         trinket2: droptimizerGearItemSchema.nullish(),
-        mainHand: droptimizerGearItemSchema.nullish(),
-        offHand: droptimizerGearItemSchema.nullish()
+        main_hand: droptimizerGearItemSchema.nullish(),
+        off_hand: droptimizerGearItemSchema.nullish()
     })
 })
 
