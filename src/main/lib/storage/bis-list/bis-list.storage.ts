@@ -4,7 +4,7 @@ import { BisList } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { bisListTable } from '@storage/storage.schema'
 import { newUUID } from '@utils'
-import { eq, sql } from 'drizzle-orm'
+import { and, eq, sql } from 'drizzle-orm'
 
 export const getBisList = async (): Promise<BisList[]> => {
     const results = await db
@@ -29,6 +29,8 @@ export const assignBis = async (specId: number, itemId: number): Promise<void> =
     await db.insert(bisListTable).values({ id: newUUID(), specId, itemId })
 }
 
-export const unassignBis = async (bisItemId: string): Promise<void> => {
-    await db.delete(bisListTable).where(eq(bisListTable.id, bisItemId))
+export const unassignBis = async (specId: number, itemId: number): Promise<void> => {
+    await db
+        .delete(bisListTable)
+        .where(and(eq(bisListTable.specId, specId), eq(bisListTable.itemId, itemId)))
 }
