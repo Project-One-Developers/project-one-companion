@@ -5,9 +5,9 @@ import { readFileSync } from 'fs'
 import * as path from 'path'
 import { z } from 'zod'
 
-export const fetchRaidItems = (): Item[] => {
+export const fetchRaidItems = (season: number): Item[] => {
     const jsonData = JSON.parse(
-        readFileSync(path.join(__dirname, '../../resources/wow/items.json'), 'utf-8')
+        readFileSync(path.join(__dirname, `../../resources/wow/s${season}/items.json`), 'utf-8')
     )
 
     // cba validare qua
@@ -92,25 +92,31 @@ export const fetchNonRaidItems = (): Item[] => {
     return res
 }
 
-export const fetchRaidBosses = (): Boss[] => {
+export const fetchRaidBosses = (season: number): Boss[] => {
     const jsonData = JSON.parse(
-        readFileSync(path.join(__dirname, '../../resources/wow/bosses.json'), 'utf-8')
+        readFileSync(path.join(__dirname, `../../resources/wow/s${season}/bosses.json`), 'utf-8')
     )
 
     return z.array(bossSchema).parse(jsonData)
 }
 
-export const fetchItemsToTierset = (): ItemToTierset[] => {
+export const fetchItemsToTierset = (season: number): ItemToTierset[] => {
     const jsonData = JSON.parse(
-        readFileSync(path.join(__dirname, '../../resources/wow/items_to_tierset.json'), 'utf-8')
+        readFileSync(
+            path.join(__dirname, `../../resources/wow/s${season}/items_to_tierset.json`),
+            'utf-8'
+        )
     )
 
     return z.array(itemToTiersetSchema).parse(jsonData)
 }
 
-export const fetchItemsToCatalyst = (): ItemToCatalyst[] => {
+export const fetchItemsToCatalyst = (season: number): ItemToCatalyst[] => {
     const jsonData = JSON.parse(
-        readFileSync(path.join(__dirname, '../../resources/wow/items_to_catalyst.json'), 'utf-8')
+        readFileSync(
+            path.join(__dirname, `../../resources/wow/s${season}/items_to_catalyst.json`),
+            'utf-8'
+        )
     )
 
     return z.array(itemToCatalystSchema).parse(jsonData)

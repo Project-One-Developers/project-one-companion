@@ -10,7 +10,7 @@ import {
     wowRolesSchema
 } from '../schemas/wow.schemas'
 
-export const CURRENT_RAID_ID = 1273 // Nerubar palace
+export const CURRENT_RAID_ID = 1273 // Nerubar palace 1273, Undermine 1296
 
 export const CLASSES = wowClassSchema.options
 export const ROLES = wowRolesSchema.options

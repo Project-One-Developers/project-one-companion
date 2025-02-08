@@ -63,6 +63,7 @@ export const specIcon = new Map<number, string>([
 ])
 
 export const encounterIcon = new Map<number, string>([
+    // Nerubar Palace
     [2607, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/12/117772.webp'], // Ulgrax the Devourer
     [2611, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/165/117669.webp'], // The Bloodbound Horror
     [2599, 'https://wow.zamimg.com/modelviewer/live/webthumbs/npc/33/116257.webp'], // Sikran, Captain of the Sureki
@@ -74,6 +75,17 @@ export const encounterIcon = new Map<number, string>([
         'https://assets2.mythictrap.com/nerubar-palace/background_finals/silken-court-custom.png'
     ], // The Silken Court
     [2602, 'https://wow.zamimg.com/modelviewer/beta/webthumbs/npc/213/119253.png'], // Queen Ansurek
+    [-67, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'], // Trash Drop
+
+    // Liberation of Undermine
+    [2639, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/75/122443.webp'], // Vexie and the Geargrinders
+    [2640, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/126/121214.webp'], // Cauldron of Carnage
+    [2641, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/192/122816.webp'], // Rik Reverb
+    [2642, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/240/122352.webp'], // Stix Bunkjunker
+    [2653, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/127/122751.webp'], // Sprocketmonger Lockenstock
+    [2644, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/6/122886.webp'], // The One-Armed Bandit
+    [2645, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/206/124110.webp'], // Mug'Zee, Heads of Security
+    [2646, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/95/126047.webp'], // Chrome King Gallywix
     [-67, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
 ])
 

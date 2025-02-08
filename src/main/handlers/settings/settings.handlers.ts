@@ -39,16 +39,23 @@ export const resetAppSettingsHandler = async (): Promise<void> => {
 export const upsertJsonDataHandler = async (): Promise<void> => {
     console.log('Reloading resources/wow/*.json')
 
-    const raidItems = fetchRaidItems()
+    await upsertSeason(1)
+    await upsertSeason(2)
+
+    // es: Cyrcle's Circlet
     const nonRaidItems = fetchNonRaidItems()
-    const raidBosses = fetchRaidBosses()
-    const raidItemsToTierset = fetchItemsToTierset()
-    const raidItemsToCatalyst = fetchItemsToCatalyst()
+    await upsertItems(nonRaidItems)
+}
+
+const upsertSeason = async (season: number): Promise<void> => {
+    const raidItems = fetchRaidItems(season)
+    const raidBosses = fetchRaidBosses(season)
+    const raidItemsToTierset = fetchItemsToTierset(season)
+    const raidItemsToCatalyst = fetchItemsToCatalyst(season)
 
     // non rendere concorrente: i value hanno relazioni
     await upsertBosses(raidBosses)
     await upsertItems(raidItems)
-    await upsertItems(nonRaidItems)
     await upsertItemsToTierset(raidItemsToTierset)
     await upsertItemsToCatalyst(raidItemsToCatalyst)
 }
