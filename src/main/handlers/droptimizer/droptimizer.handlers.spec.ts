@@ -34,13 +34,13 @@ jest.mock('@storage/droptimizer/droptimizer.storage', () => {
     const originalModule = jest.requireActual('./droptimizer.utils')
     const getItemToTiersetMappingMock = jest.fn((): Promise<ItemToTierset[]> => {
         const tiersetMapping = JSON.parse(
-            fs.readFileSync('resources/wow/items_to_tierset.json', 'utf8')
+            fs.readFileSync('resources/wow/s1/items_to_tierset.json', 'utf8')
         )
         return Promise.resolve(tiersetMapping)
     })
     const getItemToCatalystMappingMock = jest.fn((): Promise<ItemToCatalyst[]> => {
         const catalystMapping = JSON.parse(
-            fs.readFileSync('resources/wow/items_to_catalyst.json', 'utf8')
+            fs.readFileSync('resources/wow/s1/items_to_catalyst.json', 'utf8')
         )
         return Promise.resolve(catalystMapping)
     })
