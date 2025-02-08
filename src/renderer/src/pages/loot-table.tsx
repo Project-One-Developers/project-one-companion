@@ -42,14 +42,20 @@ const BossPanel = ({
     droptimizers: Droptimizer[]
     diff: WowRaidDifficulty
 }) => {
-    const bossHasDroptimizers = droptimizers.some((dropt) =>
-        (dropt.upgrades ?? []).some((upgrade) => upgrade.item.bossId === boss.id)
-    )
+    const bossHasDroptimizers = true
+    // const bossHasDroptimizers = droptimizers.some((dropt) =>
+    //     (dropt.upgrades ?? []).some((upgrade) => upgrade.item.bossId === boss.id)
+    // )
+    // const itemHasDroptimizers = function (item: Item): boolean {
+    //     return droptimizers.some((dropt) =>
+    //         (dropt.upgrades ?? []).some((upgrade) => upgrade.item.id === item.id)
+    //     )
+    // }
+
     const itemHasDroptimizers = function (item: Item): boolean {
-        return droptimizers.some((dropt) =>
-            (dropt.upgrades ?? []).some((upgrade) => upgrade.item.id === item.id)
-        )
+        return true
     }
+
     return (
         <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[250px]">
             {/* Boss header: cover + name */}
