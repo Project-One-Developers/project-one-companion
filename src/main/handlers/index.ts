@@ -24,7 +24,9 @@ import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items
 import {
     addRaidLootsByManualInputHandler,
     addRaidLootsByRCLootCsvHandler,
-    getLootsBySessionIdHandler
+    assignLootHandler,
+    getLootsBySessionIdHandler,
+    unassignLootHandler
 } from './loots/loot.handlers'
 import {
     addRaidSessionHandler,
@@ -72,6 +74,8 @@ export const allHandlers = {
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,
     'loots-get-by-session': getLootsBySessionIdHandler,
+    'loots-assign': assignLootHandler,
+    'loots-unassign': unassignLootHandler,
     'app-settings-get': getAppSettingsHandler,
     'app-settings-edit': setAppSettingsHandler,
     'app-settings-reset': resetAppSettingsHandler

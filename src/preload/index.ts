@@ -117,6 +117,12 @@ export const api = {
     getLootsBySession(sessionId: string): Promise<LootWithItem[]> {
         return ipcRenderer.invoke('loots-get-by-session', sessionId)
     },
+    assignLoot(charId: string, lootId: string, score?: number) {
+        return ipcRenderer.invoke('loots-assign', charId, lootId, score)
+    },
+    unassignLoot(lootId: string) {
+        return ipcRenderer.invoke('loots-unassign', lootId)
+    },
     // App settings
     getAppSettings(): Promise<AppSettings> {
         return ipcRenderer.invoke('app-settings-get')

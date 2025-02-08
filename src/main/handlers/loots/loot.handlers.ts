@@ -1,5 +1,10 @@
 import { LootWithItem, NewLootsFromManualInput, NewLootsFromRc } from '@shared/types/types'
-import { addLoots, getLootsByRaidSessionId } from '@storage/loots/loots.storage'
+import {
+    addLoots,
+    assignLoot,
+    getLootsByRaidSessionId,
+    unassignLoot
+} from '@storage/loots/loots.storage'
 import { getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
 import { parseRaidSessionCsv } from './loot.utils'
 
@@ -24,4 +29,16 @@ export const getLootsBySessionIdHandler = async (
 ): Promise<LootWithItem[]> => {
     const res = await getLootsByRaidSessionId(raidSessionId)
     return res
+}
+
+export const assignLootHandler = async (
+    charId: string,
+    lootId: string,
+    score?: number
+): Promise<void> => {
+    await assignLoot(charId, lootId, score)
+}
+
+export const unassignLootHandler = async (lootId: string): Promise<void> => {
+    await unassignLoot(lootId)
 }

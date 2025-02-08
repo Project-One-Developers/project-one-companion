@@ -3,7 +3,7 @@ import type { Character, LootWithItem, NewLoot } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { lootTable } from '@storage/storage.schema'
 import { getUnixTimestamp, newUUID } from '@utils'
-import { InferInsertModel } from 'drizzle-orm'
+import { eq, InferInsertModel } from 'drizzle-orm'
 import { z } from 'zod'
 
 export const getLootsByRaidSessionId = async (raidSessionId: string): Promise<LootWithItem[]> => {
@@ -41,4 +41,22 @@ export const addLoots = async (
         .insert(lootTable)
         .values(lootValues)
         .onConflictDoNothing({ target: lootTable.rclootId }) // do nothing on item already inserted
+}
+
+export const assignLoot = async (charId: string, lootId: string, score?: number): Promise<void> => {
+    console.log(score)
+    await db
+        .update(lootTable)
+        .set({
+            assignedCharacterId: charId
+        })
+        .where(eq(lootTable.id, lootId))
+}
+export const unassignLoot = async (lootId: string): Promise<void> => {
+    await db
+        .update(lootTable)
+        .set({
+            assignedCharacterId: null
+        })
+        .where(eq(lootTable.id, lootId))
 }

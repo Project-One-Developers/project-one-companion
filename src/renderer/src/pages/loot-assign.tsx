@@ -4,14 +4,14 @@ import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
+import { getLootsBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
 import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
 import { LootWithItem } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Calendar, LoaderCircle, Users } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const SLOT_CATEGORIES = [
     'Head',
@@ -31,8 +31,7 @@ const SLOT_CATEGORIES = [
 ]
 
 export default function LootAssign() {
-    const [selectedSessions, setSelectedSessions] = useState(new Set())
-    const [loots, setLoots] = useState<LootWithItem[]>([])
+    const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
     const [selectedLoot, setSelectedLoot] = useState<LootWithItem | null>(null)
 
     const raidSessionsQuery = useQuery({
@@ -50,6 +49,24 @@ export default function LootAssign() {
         queryFn: fetchLatestDroptimizers
     })
 
+    const lootsQuery = useQuery({
+        queryKey: [queryKeys.lootsBySession, Array.from(selectedSessions)],
+        queryFn: () => getLootsBySessions(Array.from(selectedSessions)),
+        enabled: selectedSessions && selectedSessions.size > 0
+    })
+
+    useEffect(() => {
+        // update selected loot when loots are fetched / refetched
+        if (selectedLoot) {
+            if (lootsQuery.data) {
+                const updatedLoot = lootsQuery.data.find((loot) => loot.id === selectedLoot.id)
+                setSelectedLoot(updatedLoot ?? null)
+            } else {
+                setSelectedLoot(null)
+            }
+        }
+    }, [lootsQuery.data, selectedLoot])
+
     if (raidSessionsQuery.isLoading || charactersQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
@@ -61,22 +78,18 @@ export default function LootAssign() {
     const sessions = raidSessionsQuery.data ?? []
     const characters = charactersQuery.data ?? []
     const droptimizers = droptimizerRes.data ?? []
+    const loots = lootsQuery.data ?? []
 
     const toggleSession = async (sessionId) => {
         const newSelectedSessions = new Set(selectedSessions)
-        let updatedLoots = [...loots]
 
         if (newSelectedSessions.has(sessionId)) {
             newSelectedSessions.delete(sessionId)
-            updatedLoots = updatedLoots.filter((loot) => loot.raidSessionId !== sessionId)
         } else {
             newSelectedSessions.add(sessionId)
-            const newLoots = await getLootsBySession(sessionId)
-            updatedLoots = [...updatedLoots, ...newLoots.map((loot) => ({ ...loot, sessionId }))]
         }
 
         setSelectedSessions(newSelectedSessions)
-        setLoots(updatedLoots)
     }
 
     const getCharacterDetails = (characterId) => {
@@ -154,39 +167,46 @@ export default function LootAssign() {
             {/*  Body */}
 
             <div className="flex">
-                {/* Items List Col */}
-                <div className="flex flex-col pr-5">
-                    <Tabs defaultValue="Head">
-                        <TabsList className="flex space-x-2 overflow-x-auto pb-2">
-                            {SLOT_CATEGORIES.map((slot) => (
-                                <TabsTrigger
-                                    key={slot}
-                                    value={slot}
-                                    className="flex flex-col items-start gap-1 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                                >
-                                    {slot}
-                                </TabsTrigger>
-                            ))}
-                        </TabsList>
-                        {SLOT_CATEGORIES.map((slot) => (
-                            <TabsContent
-                                key={slot}
-                                value={slot}
-                                className="bg-muted p-4 rounded-lg shadow-md mt-2"
-                            >
-                                {renderLoots(slot)}
-                            </TabsContent>
-                        ))}
-                    </Tabs>
-                </div>
-                {/* Eligible Chars Col */}
-                <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
-                    <LootsEligibleChars
-                        roster={characters}
-                        droptimizers={droptimizers}
-                        selectedLoot={selectedLoot}
-                    />
-                </div>
+                {selectedSessions && selectedSessions.size > 0 ? (
+                    <>
+                        <div className="flex flex-col pr-5">
+                            <Tabs defaultValue="Head">
+                                <TabsList className="flex space-x-2 overflow-x-auto pb-2">
+                                    {SLOT_CATEGORIES.map((slot) => (
+                                        <TabsTrigger
+                                            key={slot}
+                                            value={slot}
+                                            className="flex flex-col items-start gap-1 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                                        >
+                                            {slot}
+                                        </TabsTrigger>
+                                    ))}
+                                </TabsList>
+                                {SLOT_CATEGORIES.map((slot) => (
+                                    <TabsContent
+                                        key={slot}
+                                        value={slot}
+                                        className="bg-muted p-4 rounded-lg shadow-md mt-2"
+                                    >
+                                        {renderLoots(slot)}
+                                    </TabsContent>
+                                ))}
+                            </Tabs>
+                        </div>
+                        {/* Eligible Chars Panel */}
+                        <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
+                            <LootsEligibleChars
+                                roster={characters}
+                                droptimizers={droptimizers}
+                                selectedLoot={selectedLoot}
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
+                        <p className="text-gray-400">Select a session to start browsing loots</p>
+                    </div>
+                )}
             </div>
         </div>
     )
