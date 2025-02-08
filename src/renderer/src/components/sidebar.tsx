@@ -4,6 +4,7 @@ import {
     LucideGauge,
     LucideMedal,
     LucideScrollText,
+    LucideStar,
     LucideSwords,
     Settings
 } from 'lucide-react'
@@ -38,6 +39,11 @@ const preparationItems = [
         title: 'Loot Table',
         url: '/loot-table',
         icon: LucideScrollText
+    },
+    {
+        title: 'Bis List',
+        url: '/bis-list',
+        icon: LucideStar
     }
 ]
 
@@ -56,18 +62,13 @@ const raidItems = [
 
 const weakaurasItems = [
     {
-        title: 'Nerubar',
+        title: 'Undermine P1',
         url: 'https://wago.io/F5xeJMMVb',
         icon: Code2Icon
     },
     {
-        title: 'Assignment LoU',
+        title: 'Undermine Reloe',
         url: 'https://wago.io/NSUndermine',
-        icon: Code2Icon
-    },
-    {
-        title: 'Generic LoU',
-        url: 'https://wago.io/Undermine',
         icon: Code2Icon
     }
 ]
