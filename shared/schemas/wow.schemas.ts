@@ -83,3 +83,58 @@ export const wowRoleClassSchema = z.object({
     Healer: wowClassHealerSchema,
     DPS: wowClassSchema
 })
+
+export const wowSpecSchema = z.enum([
+    // Death Knight
+    'Blood',
+    'Frost',
+    'Unholy',
+    // Demon Hunter
+    'Havoc',
+    'Vengeance',
+    // Druid
+    'Balance',
+    'Feral',
+    'Guardian',
+    'Restoration',
+    // Evoker
+    'Devastation',
+    'Preservation',
+    'Augmentation',
+    // Hunter
+    'Beast Mastery',
+    'Marksmanship',
+    'Survival',
+    // Mage
+    'Arcane',
+    'Fire',
+    'Frost',
+    // Monk
+    'Brewmaster',
+    'Mistweaver',
+    'Windwalker',
+    // Paladin
+    'Holy',
+    'Protection',
+    'Retribution',
+    // Priest
+    'Discipline',
+    'Holy',
+    'Shadow',
+    // Rogue
+    'Assassination',
+    'Outlaw',
+    'Subtlety',
+    // Shaman
+    'Elemental',
+    'Enhancement',
+    'Restoration',
+    // Warlock
+    'Affliction',
+    'Demonology',
+    'Destruction',
+    // Warrior
+    'Arms',
+    'Fury',
+    'Protection'
+])

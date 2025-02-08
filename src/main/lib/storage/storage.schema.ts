@@ -4,7 +4,8 @@ import {
     ITEM_SLOTS,
     ITEM_SLOTS_KEY,
     RAID_DIFF,
-    ROLES
+    ROLES,
+    SPECS
 } from '@shared/consts/wow.consts'
 import { relations } from 'drizzle-orm'
 import {
@@ -24,6 +25,7 @@ import {
 //////////////////////////////////////////////////////////
 
 export const pgClassEnum = pgEnum('class', CLASSES)
+export const pgSpecEnum = pgEnum('spec', SPECS)
 export const pgRoleEnum = pgEnum('role', ROLES)
 export const pgRaidDiffEnum = pgEnum('raid_diff', RAID_DIFF)
 
@@ -183,13 +185,15 @@ export const charWowAuditTable = pgTable(
     }
 )
 
-export const bisListTable = pgTable('bis_list', {
-    id: varchar('id').primaryKey(),
-    charId: varchar('char_id')
-        .references(() => charTable.id)
-        .notNull()
-    //itemList: text('item_list').array() // array of strings
-})
+export const bisListTable = pgTable(
+    'bis_list',
+    {
+        id: varchar('id').primaryKey(),
+        itemId: integer('item_id').notNull(),
+        specId: integer('spec_id').notNull()
+    },
+    (table) => [unique().on(table.itemId, table.specId)]
+)
 
 //////////////////////////////////////////////////////////
 //                   SIMULATIONS                        //

@@ -1,3 +1,4 @@
+import { bisListSchema } from '@shared/schemas/bis-list.schemas'
 import { bossSchema, bossWithItemsSchema } from '@shared/schemas/boss.schema'
 import { itemSchema, itemToCatalystSchema, itemToTiersetSchema } from '@shared/schemas/items.schema'
 import {
@@ -41,10 +42,12 @@ import {
     wowClassSchema,
     wowItemSlotSchema,
     wowRaidDiffSchema,
-    wowRolesSchema
+    wowRolesSchema,
+    wowSpecSchema
 } from '../schemas/wow.schemas'
 
 export type WowClass = z.infer<typeof wowClassSchema>
+export type WowSpec = z.infer<typeof wowSpecSchema>
 export type WowRaidDifficulty = z.infer<typeof wowRaidDiffSchema>
 export type WowItemSlot = z.infer<typeof wowItemSlotSchema>
 export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
@@ -76,6 +79,8 @@ export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>
 export type Item = z.infer<typeof itemSchema>
 export type ItemToTierset = z.infer<typeof itemToTiersetSchema>
 export type ItemToCatalyst = z.infer<typeof itemToCatalystSchema>
+
+export type BisList = z.infer<typeof bisListSchema>
 
 // encounter
 export type Boss = z.infer<typeof bossSchema>

@@ -7,12 +7,14 @@ import {
     wowItemTertiaryStatsSchema,
     wowRaidDiffSchema,
     wowRoleClassSchema,
-    wowRolesSchema
+    wowRolesSchema,
+    wowSpecSchema
 } from '../schemas/wow.schemas'
 
 export const CURRENT_RAID_ID = 1273 // Nerubar palace 1273, Undermine 1296
 
 export const CLASSES = wowClassSchema.options
+export const SPECS = wowSpecSchema.options
 export const ROLES = wowRolesSchema.options
 export const RAID_DIFF = wowRaidDiffSchema.options
 
