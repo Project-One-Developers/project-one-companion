@@ -11,7 +11,7 @@ import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
 import { LootWithItem } from '@shared/types/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
@@ -54,21 +54,22 @@ export default function LootAssign() {
                 title: 'Error',
                 description: `Unable to assign loot. Error: ${error.message}`
             })
-            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.lootsBySession, Array.from(selectedSessions)]
+            })
         }
     })
 
-    const handleItemAssign = useCallback(
-        (charId: string, lootId: string, score: number) => {
-            if (selectedLoot) {
-                const updatedLoot = { ...selectedLoot, assignedCharacterId: charId }
-                setSelectedLoot(updatedLoot)
+    const handleItemAssign = (charId: string, lootId: string, score: number) => {
+        if (selectedLoot) {
+            const updatedLoot = { ...selectedLoot, assignedCharacterId: charId }
+            setSelectedLoot(updatedLoot)
 
-                assignLootMutation.mutate({ charId, lootId, score })
-            }
-        },
-        [selectedLoot, assignLootMutation]
-    )
+            assignLootMutation.mutate({ charId, lootId, score })
+        }
+    }
 
     if (raidSessionsQuery.isLoading || charactersQuery.isLoading) {
         return (
