@@ -44,7 +44,7 @@ const LootsTabs = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
     }
 
     return (
-        <Tabs defaultValue="Head">
+        <Tabs defaultValue={ITEM_SLOTS_KEY[0]}>
             <TabsList className="flex space-x-2 overflow-x-auto pb-2">
                 {ITEM_SLOTS_KEY.map((slot) => (
                     <TabsTrigger
