@@ -124,6 +124,7 @@ export default function LootAssign() {
                         <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
                             <LootsEligibleChars
                                 roster={characters}
+                                allLoots={loots}
                                 droptimizers={droptimizers}
                                 selectedLoot={selectedLoot}
                                 onItemAssign={handleItemAssign}

@@ -8,6 +8,7 @@ import { WowItemIcon } from './ui/wowitem-icon'
 type LootsEligibleCharsProps = {
     roster: Character[]
     selectedLoot: LootWithItem | null
+    allLoots: LootWithItem[]
     droptimizers: Droptimizer[]
     onItemAssign: (charId: string, lootId: string, score: number) => void
 }
@@ -15,6 +16,7 @@ type LootsEligibleCharsProps = {
 export default function LootsEligibleChars({
     roster,
     selectedLoot,
+    allLoots,
     droptimizers,
     onItemAssign
 }: LootsEligibleCharsProps): JSX.Element {
@@ -80,6 +82,13 @@ export default function LootsEligibleChars({
                                 .filter((c) => c.weeklyChest)
                                 .sort((a, b) => b.simInfo.date - a.simInfo.date)
 
+                            const assignedLoots = allLoots.filter(
+                                (loot) =>
+                                    loot.id !== selectedLoot.id &&
+                                    loot.assignedCharacterId === character.id &&
+                                    loot.item.slotKey === selectedLoot.item.slotKey
+                            )
+
                             const randomScore = Math.floor(Math.random() * (10000 - 10 + 1)) + 10
 
                             return (
@@ -124,7 +133,28 @@ export default function LootsEligibleChars({
                                         </div>
                                     </TableCell>
                                     <TableCell></TableCell>
-                                    <TableCell></TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-row 2">
+                                            {assignedLoots.map((otherLoot) => (
+                                                <div
+                                                    key={otherLoot.id}
+                                                    className="flex flex-col items-center space-x-1"
+                                                >
+                                                    <WowItemIcon
+                                                        item={otherLoot.item}
+                                                        raidDiff={otherLoot.raidDifficulty}
+                                                        iconOnly={true}
+                                                        tierBanner={true}
+                                                        bonusString={otherLoot.bonusString}
+                                                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                                                    />
+                                                    <p className="text-bold text-[11px]">
+                                                        {otherLoot.raidDifficulty}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </TableCell>
                                     <TableCell>{randomScore}</TableCell>
                                 </TableRow>
                             )
