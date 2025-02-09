@@ -1,23 +1,22 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
+import { toast } from '@renderer/components/hooks/use-toast'
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
-import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
-import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
+import LootsTabs from '@renderer/components/loots-tab'
+import SessionCard from '@renderer/components/session-card'
 import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
+
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { getLootsBySessions } from '@renderer/lib/tanstack-query/loots'
+import { assignLoot, getLootsBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
 import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
-import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
-import { mapRaidbotSlotToWowSlot } from '@renderer/lib/wow-utils'
-import { ITEM_SLOTS_KEY } from '@shared/consts/wow.consts'
 import { LootWithItem } from '@shared/types/types'
-import { useQuery } from '@tanstack/react-query'
-import { Calendar, LoaderCircle, Users } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { LoaderCircle } from 'lucide-react'
+import { useCallback, useState } from 'react'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
     const [selectedLoot, setSelectedLoot] = useState<LootWithItem | null>(null)
+    const queryClient = useQueryClient()
 
     const raidSessionsQuery = useQuery({
         queryKey: [queryKeys.raidSessionsWithLoots],
@@ -40,13 +39,36 @@ export default function LootAssign() {
         enabled: selectedSessions && selectedSessions.size > 0
     })
 
-    useEffect(() => {
-        // update selected loot when loots are fetched / refetched
-        if (selectedLoot && lootsQuery.data) {
-            const updatedLoot = lootsQuery.data.find((loot) => loot.id === selectedLoot.id)
-            setSelectedLoot(updatedLoot ?? null)
+    const assignLootMutation = useMutation({
+        mutationFn: ({
+            charId,
+            lootId,
+            score
+        }: {
+            charId: string
+            lootId: string
+            score?: number
+        }) => assignLoot(charId, lootId, score),
+        onError: (error) => {
+            toast({
+                title: 'Error',
+                description: `Unable to assign loot. Error: ${error.message}`
+            })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
         }
-    }, [lootsQuery.data, selectedLoot])
+    })
+
+    const handleItemAssign = useCallback(
+        (charId: string, lootId: string, score: number) => {
+            if (selectedLoot) {
+                const updatedLoot = { ...selectedLoot, assignedCharacterId: charId }
+                setSelectedLoot(updatedLoot)
+
+                assignLootMutation.mutate({ charId, lootId, score })
+            }
+        },
+        [selectedLoot, assignLootMutation]
+    )
 
     if (raidSessionsQuery.isLoading || charactersQuery.isLoading) {
         return (
@@ -61,7 +83,7 @@ export default function LootAssign() {
     const droptimizers = droptimizerRes.data ?? []
     const loots = lootsQuery.data ?? []
 
-    const toggleSession = async (sessionId) => {
+    const toggleSession = (sessionId: string) => {
         const newSelectedSessions = new Set(selectedSessions)
 
         if (newSelectedSessions.has(sessionId)) {
@@ -73,133 +95,37 @@ export default function LootAssign() {
         setSelectedSessions(newSelectedSessions)
     }
 
-    const getCharacterDetails = (characterId) => {
-        return characters.find((c) => c.id === characterId)
-    }
-
-    const shouldShowSlot = (slot: string | null) => {
-        if (slot === 'finger' || slot === 'back') {
-            return true
-        }
-        return false
-    }
-
-    const renderLoots = (slot) => {
-        const filteredLoots = loots
-            .filter((loot) => loot.item.slotKey === slot)
-            .sort((a, b) => {
-                if (a.item.token !== b.item.token) {
-                    return a.item.token ? -1 : 1
-                }
-                if (a.item.armorType !== b.item.armorType) {
-                    if (a.item.armorType === null) return 1
-                    if (b.item.armorType === null) return -1
-                    return a.item.armorType.localeCompare(b.item.armorType)
-                }
-                return a.item.id - b.item.id
-            })
-        if (filteredLoots.length === 0) {
-            return <p className="text-gray-400">No loot in this category</p>
-        }
-
-        return filteredLoots.map((loot, index) => {
-            const characterDetails = getCharacterDetails(loot.assignedCharacterId)
-            const isSelected = selectedLoot && selectedLoot.id === loot.id
-            return (
-                <div
-                    key={index}
-                    className={`flex flex-row justify-between border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${isSelected ? 'bg-gray-700' : ''}`}
-                    onClick={(e) => {
-                        e.preventDefault()
-                        setSelectedLoot(loot)
-                    }}
-                >
-                    <WowItemIcon
-                        key={index}
-                        item={loot.item}
-                        iconOnly={false}
-                        showSlot={shouldShowSlot(loot.item.slotKey)}
-                        raidDiff={loot.raidDifficulty}
-                        bonusString={loot.bonusString}
-                        socketBanner={loot.socket}
-                        tierBanner={true}
-                        iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
-                    />
-
-                    {/* Assign to */}
-                    {characterDetails && (
-                        <div className="flex flex-row space-x-4 items-center ">
-                            <p className="text-sm -mr-2">{characterDetails.name}</p>
-                            <WowClassIcon
-                                wowClassName={characterDetails.class}
-                                charname={characterDetails.name}
-                                className="h-8 w-8 border-2 border-background rounded-lg"
-                            />
-                        </div>
-                    )}
-                </div>
-            )
-        })
-    }
-
     return (
         <div className="w-dvw h-dvh flex flex-col gap-y-8 p-8 relative">
             {/* Page Header */}
             <div className=" bg-muted rounded-lg p-6 mb-2 shadow-lg flex items-center">
                 {sessions.map((session) => (
-                    <div
-                        key={session.id}
-                        className={`bg-muted p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition-colors flex-shrink-0 w-64 ${selectedSessions.has(session.id) ? 'border border-primary' : ''}`}
-                        onClick={() => toggleSession(session.id)}
-                    >
-                        <h3 className="text-xl font-bold mb-2">{session.name}</h3>
-                        <div className="flex items-center text-gray-400 mb-1">
-                            <Calendar className="w-4 h-4 mr-2" />
-                            <span>{formatUnixTimestampForDisplay(session.raidDate)}</span>
-                        </div>
-                        <div className="flex items-center text-gray-400">
-                            <Users className="w-4 h-4 mr-2" />
-                            <span>{session.roster.length} participants</span>
-                        </div>
+                    <div key={session.id} onClick={() => toggleSession(session.id)}>
+                        <SessionCard
+                            session={session}
+                            className={` ${selectedSessions.has(session.id) ? 'border border-primary' : ''}`}
+                        />
                     </div>
                 ))}
             </div>
-
-            {/*  Body */}
 
             <div className="flex">
                 {selectedSessions && selectedSessions.size > 0 ? (
                     <>
                         <div className="flex flex-col pr-5">
-                            <Tabs defaultValue="Head">
-                                <TabsList className="flex space-x-2 overflow-x-auto pb-2">
-                                    {ITEM_SLOTS_KEY.map((slot) => (
-                                        <TabsTrigger
-                                            key={slot}
-                                            value={slot}
-                                            className="flex flex-col items-start gap-1 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                                        >
-                                            {mapRaidbotSlotToWowSlot(slot)}
-                                        </TabsTrigger>
-                                    ))}
-                                </TabsList>
-                                {ITEM_SLOTS_KEY.map((slot) => (
-                                    <TabsContent
-                                        key={slot}
-                                        value={slot}
-                                        className="bg-muted p-4 rounded-lg shadow-md mt-2"
-                                    >
-                                        {renderLoots(slot)}
-                                    </TabsContent>
-                                ))}
-                            </Tabs>
+                            <LootsTabs
+                                loots={loots}
+                                roster={characters}
+                                selectedLoot={selectedLoot}
+                                setSelectedLoot={setSelectedLoot}
+                            />
                         </div>
-                        {/* Eligible Chars Panel */}
                         <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
                             <LootsEligibleChars
                                 roster={characters}
                                 droptimizers={droptimizers}
                                 selectedLoot={selectedLoot}
+                                onItemAssign={handleItemAssign}
                             />
                         </div>
                     </>

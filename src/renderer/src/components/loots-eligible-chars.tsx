@@ -1,11 +1,6 @@
-import { queryClient } from '@renderer/lib/tanstack-query/client'
-import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { assignLoot } from '@renderer/lib/tanstack-query/loots'
 import type { Character, Droptimizer, LootWithItem, WowRaidDifficulty } from '@shared/types/types'
-import { useMutation } from '@tanstack/react-query'
 import { type JSX } from 'react'
 import { DroptimizersUpgradeForItem } from './droptimizer-upgrades-for-item'
-import { toast } from './hooks/use-toast'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowItemIcon } from './ui/wowitem-icon'
@@ -14,34 +9,15 @@ type LootsEligibleCharsProps = {
     roster: Character[]
     selectedLoot: LootWithItem | null
     droptimizers: Droptimizer[]
+    onItemAssign: (charId: string, lootId: string, score: number) => void
 }
 
 export default function LootsEligibleChars({
     roster,
     selectedLoot,
-    droptimizers
+    droptimizers,
+    onItemAssign
 }: LootsEligibleCharsProps): JSX.Element {
-    const assignLootMutation = useMutation({
-        mutationFn: ({
-            charId,
-            lootId,
-            score
-        }: {
-            charId: string
-            lootId: string
-            score?: number
-        }) => assignLoot(charId, lootId, score),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
-        },
-        onError: (error) => {
-            toast({
-                title: 'Error',
-                description: `Unable to assign loot. Error: ${error.message}`
-            })
-        }
-    })
-
     if (!selectedLoot) {
         return <p className="text-gray-400">Select an item to start assigning</p>
     }
@@ -111,11 +87,7 @@ export default function LootsEligibleChars({
                                     key={character.id}
                                     className={`cursor-pointer hover:bg-gray-700 ${selectedLoot.assignedCharacterId === character.id ? 'bg-gray-700' : ''}`}
                                     onClick={() =>
-                                        assignLootMutation.mutate({
-                                            charId: character.id,
-                                            lootId: selectedLoot.id,
-                                            score: randomScore
-                                        })
+                                        onItemAssign(character.id, selectedLoot.id, randomScore)
                                     }
                                 >
                                     <TableCell>
@@ -140,7 +112,6 @@ export default function LootsEligibleChars({
                                             {weeklyChestDropt?.weeklyChest &&
                                                 weeklyChestDropt.weeklyChest.map((wc) => (
                                                     <div key={wc.id} className="flex ">
-                                                        {/* visualizzare solo weekly chest per lo slot in esame? */}
                                                         <WowItemIcon
                                                             item={wc.id}
                                                             ilvl={wc.itemLevel}
