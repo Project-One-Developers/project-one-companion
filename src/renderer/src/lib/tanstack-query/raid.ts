@@ -1,7 +1,6 @@
 import type { EditRaidSession, NewRaidSession, RaidSession } from 'shared/types/types'
 
 export const fetchRaidSessions = async (): Promise<RaidSession[]> => {
-    console.log()
     return await window.api.getRaidSessions()
 }
 
