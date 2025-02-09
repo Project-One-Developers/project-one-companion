@@ -1,10 +1,20 @@
-import { lootWithItemSchema } from '@shared/schemas/loot.schema'
-import type { Character, LootWithItem, NewLoot } from '@shared/types/types'
+import { lootWithItemAndAssignedSchema, lootWithItemSchema } from '@shared/schemas/loot.schema'
+import type { Character, LootWithItem, LootWithItemAndAssigned, NewLoot } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { lootTable } from '@storage/storage.schema'
 import { getUnixTimestamp, newUUID } from '@utils'
 import { eq, InferInsertModel } from 'drizzle-orm'
 import { z } from 'zod'
+
+export const getLootById = async (lootId: string): Promise<LootWithItem> => {
+    const result = await db.query.lootTable.findFirst({
+        where: (lootTable, { eq }) => eq(lootTable.id, lootId),
+        with: {
+            item: true
+        }
+    })
+    return lootWithItemSchema.parse(result)
+}
 
 export const getLootsByRaidSessionId = async (raidSessionId: string): Promise<LootWithItem[]> => {
     const result = await db.query.lootTable.findMany({
@@ -14,6 +24,19 @@ export const getLootsByRaidSessionId = async (raidSessionId: string): Promise<Lo
         }
     })
     return z.array(lootWithItemSchema).parse(result)
+}
+
+export const getLootsByRaidSessionIdWithAssigned = async (
+    raidSessionId: string
+): Promise<LootWithItemAndAssigned[]> => {
+    const result = await db.query.lootTable.findMany({
+        where: (lootTable, { eq }) => eq(lootTable.raidSessionId, raidSessionId),
+        with: {
+            item: true,
+            assignedCharacter: true
+        }
+    })
+    return z.array(lootWithItemAndAssignedSchema).parse(result)
 }
 
 export const addLoots = async (

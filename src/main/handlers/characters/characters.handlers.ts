@@ -16,8 +16,8 @@ import {
     deleteAllCharacterWowAudit,
     deleteCharacter,
     editCharacter,
-    getCharacterById,
-    getCharactersList,
+    getCharacterWithPlayerById,
+    getCharactersWithPlayerList,
     getLastCharacterWowAudit
 } from '@storage/players/characters.storage'
 import {
@@ -34,15 +34,15 @@ import { fetchWowAuditData, parseWowAuditData } from './characters.utils'
 
 export const addCharacterHandler = async (character: NewCharacter): Promise<Character | null> => {
     const id = await addCharacter(character)
-    return await getCharacterById(id)
+    return await getCharacterWithPlayerById(id)
 }
 
 export const getCharacterHandler = async (id: string): Promise<CharacterWithPlayer | null> => {
-    return await getCharacterById(id)
+    return await getCharacterWithPlayerById(id)
 }
 
 export const getChracterListHandler = async (): Promise<Character[]> => {
-    const res = await getCharactersList()
+    const res = await getCharactersWithPlayerList()
     return res
 }
 
@@ -55,7 +55,7 @@ export const editCharacterHandler = async (edited: EditCharacter): Promise<Chara
     await editCharacter(edited)
 
     // retrieve updated entity
-    return await getCharacterById(edited.id)
+    return await getCharacterWithPlayerById(edited.id)
 }
 
 export const syncCharacterWowAudit = async (): Promise<void> => {

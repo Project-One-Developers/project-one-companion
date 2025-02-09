@@ -33,8 +33,6 @@ export const editPlayerSchema = newPlayerSchema.extend({
     id: playerSchema.shape.id
 })
 
-export const charactersListSchema = z.array(characterSchema)
-
 export const playersListSchema = z.object({
     players: z.array(playerSchema)
 })

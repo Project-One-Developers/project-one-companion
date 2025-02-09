@@ -12,7 +12,9 @@ import type {
     EditPlayer,
     EditRaidSession,
     Item,
+    LootAssignmentInfo,
     LootWithItem,
+    LootWithItemAndAssigned,
     NewCharacter,
     NewLootsFromManualInput,
     NewLootsFromRc,
@@ -116,6 +118,12 @@ export const api = {
     },
     getLootsBySession(sessionId: string): Promise<LootWithItem[]> {
         return ipcRenderer.invoke('loots-get-by-session', sessionId)
+    },
+    getLootsWithAssignedBySession(sessionId: string): Promise<LootWithItemAndAssigned[]> {
+        return ipcRenderer.invoke('loots-get-by-session-with-assigned', sessionId)
+    },
+    getLootAssignmentInfo(lootId: string): Promise<LootAssignmentInfo> {
+        return ipcRenderer.invoke('loots-assign-info', lootId)
     },
     assignLoot(charId: string, lootId: string, score?: number) {
         return ipcRenderer.invoke('loots-assign', charId, lootId, score)

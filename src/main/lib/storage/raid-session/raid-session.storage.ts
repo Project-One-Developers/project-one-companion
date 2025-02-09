@@ -1,4 +1,4 @@
-import { charactersListSchema } from '@shared/schemas/characters.schemas'
+import { characterSchema } from '@shared/schemas/characters.schemas'
 import { raidSessionSchema } from '@shared/schemas/raid.schemas'
 import type { Character, EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
 import { db } from '@storage/storage.config'
@@ -133,5 +133,5 @@ export const getRaidSessionRoster = async (id: string): Promise<Character[]> => 
         .innerJoin(charTable, eq(raidSessionRosterTable.charId, charTable.id))
         .where(eq(raidSessionRosterTable.raidSessionId, id))
 
-    return charactersListSchema.parse(result.flatMap((sr) => sr.characters))
+    return z.array(characterSchema).parse(result.flatMap((sr) => sr.characters))
 }

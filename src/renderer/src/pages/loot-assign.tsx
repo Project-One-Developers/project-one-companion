@@ -1,36 +1,21 @@
-import { toast } from '@renderer/components/hooks/use-toast'
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import LootsTabs from '@renderer/components/loots-tab'
 import SessionCard from '@renderer/components/session-card'
-import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
-
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { assignLoot, getLootsBySessions } from '@renderer/lib/tanstack-query/loots'
-import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
+import { getLootsBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
-import { LootWithItem } from '@shared/types/types'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { LootWithItemAndAssigned } from '@shared/types/types'
+import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
-    const [selectedLoot, setSelectedLoot] = useState<LootWithItem | null>(null)
-    const queryClient = useQueryClient()
+    const [selectedLoot, setSelectedLoot] = useState<LootWithItemAndAssigned | null>(null)
 
     const raidSessionsQuery = useQuery({
         queryKey: [queryKeys.raidSessionsWithLoots],
         queryFn: fetchRaidSessions
-    })
-
-    const charactersQuery = useQuery({
-        queryKey: [queryKeys.characters],
-        queryFn: fetchCharacters
-    })
-
-    const droptimizerRes = useQuery({
-        queryKey: [queryKeys.droptimizers],
-        queryFn: fetchLatestDroptimizers
     })
 
     const lootsQuery = useQuery({
@@ -39,39 +24,7 @@ export default function LootAssign() {
         enabled: selectedSessions && selectedSessions.size > 0
     })
 
-    const assignLootMutation = useMutation({
-        mutationFn: ({
-            charId,
-            lootId,
-            score
-        }: {
-            charId: string
-            lootId: string
-            score?: number
-        }) => assignLoot(charId, lootId, score),
-        onError: (error) => {
-            toast({
-                title: 'Error',
-                description: `Unable to assign loot. Error: ${error.message}`
-            })
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: [queryKeys.lootsBySession, Array.from(selectedSessions)]
-            })
-        }
-    })
-
-    const handleItemAssign = (charId: string, lootId: string, score: number) => {
-        if (selectedLoot) {
-            const updatedLoot = { ...selectedLoot, assignedCharacterId: charId }
-            setSelectedLoot(updatedLoot)
-
-            assignLootMutation.mutate({ charId, lootId, score })
-        }
-    }
-
-    if (raidSessionsQuery.isLoading || charactersQuery.isLoading) {
+    if (raidSessionsQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -80,8 +33,6 @@ export default function LootAssign() {
     }
 
     const sessions = raidSessionsQuery.data ?? []
-    const characters = charactersQuery.data ?? []
-    const droptimizers = droptimizerRes.data ?? []
     const loots = lootsQuery.data ?? []
 
     const toggleSession = (sessionId: string) => {
@@ -116,19 +67,20 @@ export default function LootAssign() {
                         <div className="flex flex-col pr-5">
                             <LootsTabs
                                 loots={loots}
-                                roster={characters}
                                 selectedLoot={selectedLoot}
                                 setSelectedLoot={setSelectedLoot}
                             />
                         </div>
                         <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
-                            <LootsEligibleChars
-                                roster={characters}
-                                allLoots={loots}
-                                droptimizers={droptimizers}
-                                selectedLoot={selectedLoot}
-                                onItemAssign={handleItemAssign}
-                            />
+                            {selectedLoot ? (
+                                <LootsEligibleChars
+                                    allLoots={loots}
+                                    selectedLoot={selectedLoot}
+                                    setSelectedLoot={setSelectedLoot}
+                                />
+                            ) : (
+                                <p className="text-gray-400">Select a loot to start assigning</p>
+                            )}
                         </div>
                     </>
                 ) : (

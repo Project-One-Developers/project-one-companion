@@ -3,6 +3,7 @@ import { bossSchema, bossWithItemsSchema } from '@shared/schemas/boss.schema'
 import { itemSchema, itemToCatalystSchema, itemToTiersetSchema } from '@shared/schemas/items.schema'
 import {
     lootSchema,
+    lootWithItemAndAssignedSchema,
     lootWithItemSchema,
     newLootSchema,
     newLootsFromManualInputSchema,
@@ -93,9 +94,21 @@ export type EditRaidSession = z.infer<typeof editRaidSessionSchema>
 // Raid loots
 export type Loot = z.infer<typeof lootSchema>
 export type LootWithItem = z.infer<typeof lootWithItemSchema>
+export type LootWithItemAndAssigned = z.infer<typeof lootWithItemAndAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootsFromRc = z.infer<typeof newLootsFromRcSchema>
 export type NewLootsFromManualInput = z.infer<typeof newLootsFromManualInputSchema>
+export type CharAssignmentInfo = {
+    character: Character
+    droptimizers: Droptimizer[]
+    weeklyChest: DroptimizerWeeklyChest[]
+    bis: boolean
+    score: number
+}
+export type LootAssignmentInfo = {
+    loot: LootWithItem
+    eligible: CharAssignmentInfo[]
+}
 
 // App config
 export type AppSettings = z.infer<typeof appSettingsSchema>

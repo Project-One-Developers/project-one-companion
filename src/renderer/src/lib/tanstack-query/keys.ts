@@ -12,5 +12,6 @@ export const queryKeys = {
     itemSearch: 'item-search',
     appSettings: 'app-settings',
     lootsBySession: 'loots-by-session',
+    lootsAssignInfo: 'loots-assign-info',
     bosses: 'boss-list'
 }

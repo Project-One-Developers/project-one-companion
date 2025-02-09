@@ -463,5 +463,9 @@ export const lootsRelations = relations(lootTable, ({ one }) => ({
     item: one(itemTable, {
         fields: [lootTable.itemId],
         references: [itemTable.id]
+    }),
+    assignedCharacter: one(charTable, {
+        fields: [lootTable.assignedCharacterId],
+        references: [charTable.id]
     })
 }))

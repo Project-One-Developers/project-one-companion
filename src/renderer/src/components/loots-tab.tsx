@@ -1,17 +1,16 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { mapRaidbotSlotToWowSlot } from '@renderer/lib/wow-utils'
 import { ITEM_SLOTS_KEY } from '@shared/consts/wow.consts'
-import { Character, LootWithItem } from '@shared/types/types'
+import { LootWithItemAndAssigned } from '@shared/types/types'
 import LootItem from './loots-item'
 
 type LootsTabsProps = {
-    loots: LootWithItem[]
-    selectedLoot: LootWithItem | null
-    setSelectedLoot: (loot: LootWithItem) => void
-    roster: Character[]
+    loots: LootWithItemAndAssigned[]
+    selectedLoot: LootWithItemAndAssigned | null
+    setSelectedLoot: (loot: LootWithItemAndAssigned) => void
 }
 
-const LootsTabs = ({ loots, selectedLoot, setSelectedLoot, roster }: LootsTabsProps) => {
+const LootsTabs = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => {
     const renderLoots = (slot) => {
         const filteredLoots = loots
             .filter((loot) => loot.item.slotKey === slot)
@@ -37,7 +36,6 @@ const LootsTabs = ({ loots, selectedLoot, setSelectedLoot, roster }: LootsTabsPr
                 loot={loot}
                 isSelected={selectedLoot != null && selectedLoot.id === loot.id}
                 setSelectedLoot={setSelectedLoot}
-                roster={roster}
             />
         ))
     }

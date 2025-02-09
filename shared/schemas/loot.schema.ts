@@ -26,6 +26,11 @@ export const lootWithItemSchema = lootSchema.extend({
     item: itemSchema
 })
 
+export const lootWithItemAndAssignedSchema = lootSchema.extend({
+    item: itemSchema,
+    assignedCharacter: characterSchema.nullable()
+})
+
 export const newLootsFromManualInputSchema = z
     .object({
         raidSessionId: z.string().uuid(),
