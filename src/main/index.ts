@@ -1,6 +1,7 @@
 import { is, optimizer } from '@electron-toolkit/utils'
-import { BrowserWindow, Menu, app, screen, shell } from 'electron'
-import { join } from 'path'
+import { BrowserWindow, Menu, app, screen, session, shell } from 'electron'
+import os from 'os'
+import path, { join } from 'path'
 import icon from '../../build/icon.png'
 import { menu } from './app/menu'
 import { store } from './app/store'
@@ -8,6 +9,35 @@ import { setZodErrorMap } from './config/zod'
 import { allHandlers } from './handlers'
 import { registerHandlers } from './handlers/handlers.utils'
 import { updateElectronApp } from './lib/autoupdater/autoupdater'
+
+async function loadReactDevTools() {
+    let reactDevToolsPath = ''
+    // on windows
+    console.log(process.platform)
+    if (process.platform == 'win32') {
+        reactDevToolsPath = path.join(
+            os.homedir(),
+            '/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.1.0.1_0'
+        )
+    }
+
+    // On linux
+    if (process.platform == 'linux') {
+        reactDevToolsPath = path.join(
+            os.homedir(),
+            '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.1.0.1_0'
+        )
+    }
+    // on macOS
+    if (process.platform == 'darwin') {
+        reactDevToolsPath = path.join(
+            os.homedir(),
+            '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.1.0.1_0'
+        )
+    }
+
+    await session.defaultSession.loadExtension(reactDevToolsPath)
+}
 
 function createWindow(): void {
     const savedBounds = store.getBounds()
@@ -75,7 +105,7 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     // Set app user model id for windows
     app.setAppUserModelId(import.meta.env.VITE_APPID)
 
@@ -89,6 +119,10 @@ app.whenReady().then(() => {
     registerHandlers(allHandlers)
 
     createWindow()
+
+    if (is.dev) {
+        await loadReactDevTools()
+    }
 
     if (process.platform === 'darwin') {
         app.dock.show()
