@@ -142,7 +142,10 @@ export default function LootsEligibleChars({
                                     <TableCell>
                                         <div className="flex flex-row 2">
                                             {charInfo.weeklyChest.map((wc) => (
-                                                <div key={wc.id} className="flex ">
+                                                <div
+                                                    key={wc.id}
+                                                    className="flex flex-col items-center"
+                                                >
                                                     <WowItemIcon
                                                         item={wc.id}
                                                         ilvl={wc.itemLevel}
@@ -150,6 +153,9 @@ export default function LootsEligibleChars({
                                                         bonusString={wc.bonusString}
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
+                                                    <p className="text-bold text-[11px]">
+                                                        {wc.itemLevel}
+                                                    </p>
                                                 </div>
                                             ))}
                                         </div>
