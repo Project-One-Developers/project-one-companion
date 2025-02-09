@@ -77,8 +77,27 @@ export default function LootAssign() {
         return characters.find((c) => c.id === characterId)
     }
 
+    const shouldShowSlot = (slot: string | null) => {
+        if (slot === 'finger' || slot === 'back') {
+            return true
+        }
+        return false
+    }
+
     const renderLoots = (slot) => {
-        const filteredLoots = loots.filter((loot) => loot.item.slotKey === slot)
+        const filteredLoots = loots
+            .filter((loot) => loot.item.slotKey === slot)
+            .sort((a, b) => {
+                if (a.item.token !== b.item.token) {
+                    return a.item.token ? -1 : 1
+                }
+                if (a.item.armorType !== b.item.armorType) {
+                    if (a.item.armorType === null) return 1
+                    if (b.item.armorType === null) return -1
+                    return a.item.armorType.localeCompare(b.item.armorType)
+                }
+                return a.item.id - b.item.id
+            })
         if (filteredLoots.length === 0) {
             return <p className="text-gray-400">No loot in this category</p>
         }
@@ -99,6 +118,7 @@ export default function LootAssign() {
                         key={index}
                         item={loot.item}
                         iconOnly={false}
+                        showSlot={shouldShowSlot(loot.item.slotKey)}
                         raidDiff={loot.raidDifficulty}
                         bonusString={loot.bonusString}
                         socketBanner={loot.socket}
