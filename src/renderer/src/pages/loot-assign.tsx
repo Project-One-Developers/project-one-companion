@@ -24,7 +24,7 @@ export default function LootAssign() {
         enabled: selectedSessions && selectedSessions.size > 0
     })
 
-    if (raidSessionsQuery.isLoading) {
+    if (raidSessionsQuery.isLoading || lootsQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -45,6 +45,7 @@ export default function LootAssign() {
         }
 
         setSelectedSessions(newSelectedSessions)
+        setSelectedLoot(null)
     }
 
     return (
