@@ -97,7 +97,8 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         weeklyChest: parsedJson.weeklyChest,
         itemsAverageItemLevel: parsedJson.itemsAverageItemLevel,
         itemsAverageItemLevelEquipped: parsedJson.itemsAverageItemLevelEquipped,
-        itemsEquipped: parsedJson.itemsEquipped
+        itemsEquipped: parsedJson.itemsEquipped,
+        itemsInBag: parsedJson.itemsInBag
     }
 
     return await addDroptimizer(droptimizer)

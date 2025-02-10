@@ -226,7 +226,8 @@ describe('Droptimizer Handlers', () => {
             ],
             itemsAverageItemLevel: null,
             itemsAverageItemLevelEquipped: null,
-            itemsEquipped: expect.any(Object)
+            itemsEquipped: expect.any(Object),
+            itemsInBag: expect.any(Object)
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)
@@ -423,6 +424,7 @@ describe('Droptimizer Handlers', () => {
             weeklyChest: [],
             currencies: [],
             itemsEquipped: expect.any(Object),
+            itemsInBag: expect.any(Object),
             itemsAverageItemLevel: 631,
             itemsAverageItemLevelEquipped: 631
         }

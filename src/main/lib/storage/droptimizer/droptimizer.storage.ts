@@ -183,7 +183,8 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 characterTalents: droptimizer.charInfo.talents,
                 weeklyChest: droptimizer.weeklyChest,
                 currencies: droptimizer.currencies,
-                itemsEquipped: droptimizer.itemsEquipped
+                itemsEquipped: droptimizer.itemsEquipped,
+                itemsInBag: droptimizer.itemsInBag
             })
             .returning({ url: droptimizerTable.url })
             .then(takeFirstResult)

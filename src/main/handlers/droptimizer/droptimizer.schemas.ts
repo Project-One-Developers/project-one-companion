@@ -1,5 +1,6 @@
-import { droptimizerGearItemSchema } from '@shared/schemas/simulations.schemas'
-import { WowClass, WowRaidDifficulty } from '@shared/types/types'
+import { droptimizerEquippedItemSchema } from '@shared/schemas/simulations.schemas'
+import { wowItemSlotKeySchema } from '@shared/schemas/wow.schemas'
+import { DroptimizerBagItem, WowClass, WowRaidDifficulty } from '@shared/types/types'
 import { z } from 'zod'
 
 const extractWeeklyRewardChoices = (
@@ -21,6 +22,48 @@ const extractWeeklyRewardChoices = (
             bonusString: itemMatch[3].replaceAll('/', ':'),
             itemLevel: parseInt(itemMatch[1], 10)
         })
+    }
+
+    return items
+}
+
+function parseGearFromBags(input: string): DroptimizerBagItem[] | null {
+    // Extract "Gear from Bags" section
+    const gearSectionMatch = input.match(/Gear from Bags[\s\S]*?(?=\n\n|$)/)
+    if (!gearSectionMatch) {
+        console.log("Unable to find 'Gear from Bags' section.")
+        return null
+    }
+
+    const gearSection = gearSectionMatch[0]
+    const itemLines = gearSection.split('\n').filter((line) => line.includes('='))
+
+    const items: DroptimizerBagItem[] = []
+
+    for (const line of itemLines) {
+        const slotMatch = line.match(/^# ([a-zA-Z_]+\d?)=/)
+        const itemIdMatch = line.match(/,id=(\d+)/)
+        const enchantIdMatch = line.match(/enchant_id=([\d/]+)/)
+        const gemIdMatch = line.match(/gem_id=([\d/]+)/)
+        const bonusIdMatch = line.match(/bonus_id=([\d/]+)/)
+        const craftedStatsMatch = line.match(/crafted_stats=([\d/]+)/)
+        const craftingQualityMatch = line.match(/crafting_quality=([\d/]+)/)
+
+        if (slotMatch && itemIdMatch && bonusIdMatch) {
+            const item: DroptimizerBagItem = {
+                id: parseInt(itemIdMatch[1], 10),
+                slot: wowItemSlotKeySchema.parse(
+                    slotMatch[1].replaceAll('1', '') // somehow the slot is sometimes finger1 instead of finger
+                ),
+                bonus_id: bonusIdMatch[1].replaceAll('/', ':') // bonus is mandatory or is a trash item
+            }
+            if (enchantIdMatch) item.enchant_id = enchantIdMatch[1].replaceAll('/', ':')
+            if (gemIdMatch) item.gem_id = gemIdMatch[1].replaceAll('/', ':')
+            if (craftedStatsMatch) item.craftedStats = craftedStatsMatch[1]
+            if (craftingQualityMatch) item.craftingQuality = craftingQualityMatch[1]
+
+            items.push(item)
+        }
     }
 
     return items
@@ -93,22 +136,22 @@ export const raidBotSchema = z.object({
                 droptimizer: z.object({
                     upgradeEquipped: z.boolean(),
                     equipped: z.object({
-                        head: droptimizerGearItemSchema.nullish(),
-                        neck: droptimizerGearItemSchema.nullish(),
-                        shoulder: droptimizerGearItemSchema.nullish(),
-                        back: droptimizerGearItemSchema.nullish(),
-                        chest: droptimizerGearItemSchema.nullish(),
-                        wrist: droptimizerGearItemSchema.nullish(),
-                        hands: droptimizerGearItemSchema.nullish(),
-                        waist: droptimizerGearItemSchema.nullish(),
-                        legs: droptimizerGearItemSchema.nullish(),
-                        feet: droptimizerGearItemSchema.nullish(),
-                        finger1: droptimizerGearItemSchema.nullish(),
-                        finger2: droptimizerGearItemSchema.nullish(),
-                        trinket1: droptimizerGearItemSchema.nullish(),
-                        trinket2: droptimizerGearItemSchema.nullish(),
-                        mainHand: droptimizerGearItemSchema.nullish(),
-                        offHand: droptimizerGearItemSchema.nullish()
+                        head: droptimizerEquippedItemSchema.nullish(),
+                        neck: droptimizerEquippedItemSchema.nullish(),
+                        shoulder: droptimizerEquippedItemSchema.nullish(),
+                        back: droptimizerEquippedItemSchema.nullish(),
+                        chest: droptimizerEquippedItemSchema.nullish(),
+                        wrist: droptimizerEquippedItemSchema.nullish(),
+                        hands: droptimizerEquippedItemSchema.nullish(),
+                        waist: droptimizerEquippedItemSchema.nullish(),
+                        legs: droptimizerEquippedItemSchema.nullish(),
+                        feet: droptimizerEquippedItemSchema.nullish(),
+                        finger1: droptimizerEquippedItemSchema.nullish(),
+                        finger2: droptimizerEquippedItemSchema.nullish(),
+                        trinket1: droptimizerEquippedItemSchema.nullish(),
+                        trinket2: droptimizerEquippedItemSchema.nullish(),
+                        mainHand: droptimizerEquippedItemSchema.nullish(),
+                        offHand: droptimizerEquippedItemSchema.nullish()
                     })
                 })
             })
@@ -163,6 +206,9 @@ export const raidbotParseAndTransform = raidBotSchema.transform((data) => {
         weeklyChest: data.simbot.meta.rawFormData.text
             ? extractWeeklyRewardChoices(data.simbot.meta.rawFormData.text)
             : [],
+        itemsInBag: data.simbot.meta.rawFormData.text
+            ? parseGearFromBags(data.simbot.meta.rawFormData.text)
+            : [],
         currencies: data.simbot.meta.rawFormData.character.upgradeCurrencies ?? [],
         upgrades: upgrades,
         itemsAverageItemLevel:
@@ -170,52 +216,52 @@ export const raidbotParseAndTransform = raidBotSchema.transform((data) => {
         itemsAverageItemLevelEquipped:
             data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
         itemsEquipped: {
-            head: droptimizerGearItemSchema.parse(
+            head: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.head
             ),
-            neck: droptimizerGearItemSchema.parse(
+            neck: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.neck
             ),
-            shoulder: droptimizerGearItemSchema.parse(
+            shoulder: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.shoulder
             ),
-            back: droptimizerGearItemSchema.parse(
+            back: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.back
             ),
-            chest: droptimizerGearItemSchema.parse(
+            chest: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.chest
             ),
-            wrist: droptimizerGearItemSchema.parse(
+            wrist: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.wrist
             ),
-            hands: droptimizerGearItemSchema.parse(
+            hands: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.hands
             ),
-            waist: droptimizerGearItemSchema.parse(
+            waist: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.waist
             ),
-            legs: droptimizerGearItemSchema.parse(
+            legs: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.legs
             ),
-            feet: droptimizerGearItemSchema.parse(
+            feet: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.feet
             ),
-            finger1: droptimizerGearItemSchema.parse(
+            finger1: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.finger1
             ),
-            finger2: droptimizerGearItemSchema.parse(
+            finger2: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.finger2
             ),
-            trinket1: droptimizerGearItemSchema.parse(
+            trinket1: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.trinket1
             ),
-            trinket2: droptimizerGearItemSchema.parse(
+            trinket2: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.trinket2
             ),
-            main_hand: droptimizerGearItemSchema.parse(
+            main_hand: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.mainHand
             ),
-            off_hand: droptimizerGearItemSchema.parse(
+            off_hand: droptimizerEquippedItemSchema.parse(
                 data.simbot.meta.rawFormData.droptimizer.equipped.offHand
             )
         }

@@ -73,6 +73,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         getLootById(lootId),
         getCharactersList(),
         getDroptimizerLatestList(),
+        //getCharacterWowAuditList(),
         getBisList()
     ])
 

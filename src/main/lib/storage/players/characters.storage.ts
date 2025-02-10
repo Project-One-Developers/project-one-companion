@@ -75,6 +75,11 @@ export const getLastCharacterWowAudit = async (
     return result ? charWowAuditStorageToCharacterWowAudit.parse(result) : null
 }
 
+export const getAllCharacterWowAudit = async (): Promise<CharacterWowAudit[]> => {
+    const result = await db.query.charWowAuditTable.findMany()
+    return z.array(charWowAuditStorageToCharacterWowAudit).parse(result)
+}
+
 export const deleteAllCharacterWowAudit = async (): Promise<void> => {
     await db.delete(charWowAuditTable)
 }

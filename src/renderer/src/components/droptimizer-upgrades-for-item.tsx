@@ -1,5 +1,5 @@
 import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
-import { Droptimizer, DroptimizerGearItem, Item } from '@shared/types/types'
+import { Droptimizer, DroptimizerEquippedItem, Item } from '@shared/types/types'
 import { ArrowRight } from 'lucide-react'
 import { WowItemIcon } from './ui/wowitem-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
@@ -54,7 +54,7 @@ export const DroptimizersUpgradeForItem = ({
     return (
         <div className="flex flex-col items-center gap-x-4">
             {itemDroptimizerUpgrades.map((upgrade) => {
-                const equippedItem: DroptimizerGearItem | undefined =
+                const equippedItem: DroptimizerEquippedItem | undefined =
                     upgrade.droptimizer.itemsEquipped[upgrade.slot]
 
                 return (

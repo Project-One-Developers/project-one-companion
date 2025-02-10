@@ -1,6 +1,7 @@
 import {
+    droptimizerBagItemSchema,
     droptimizerCurrenciesSchema,
-    droptimizerGearItemSchema,
+    droptimizerEquippedItemSchema,
     droptimizerUpgradeSchema,
     droptimizerWeeklyChestSchema
 } from '@shared/schemas/simulations.schemas'
@@ -32,23 +33,24 @@ export const droptimizerStorageSchema = z.object({
     currencies: z.array(droptimizerCurrenciesSchema).nullable(),
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
+    itemsInBag: z.array(droptimizerBagItemSchema).nullable(),
     itemsEquipped: z.object({
-        head: droptimizerGearItemSchema.nullish(),
-        neck: droptimizerGearItemSchema.nullish(),
-        shoulder: droptimizerGearItemSchema.nullish(),
-        back: droptimizerGearItemSchema.nullish(),
-        chest: droptimizerGearItemSchema.nullish(),
-        wrist: droptimizerGearItemSchema.nullish(),
-        hands: droptimizerGearItemSchema.nullish(),
-        waist: droptimizerGearItemSchema.nullish(),
-        legs: droptimizerGearItemSchema.nullish(),
-        feet: droptimizerGearItemSchema.nullish(),
-        finger1: droptimizerGearItemSchema.nullish(),
-        finger2: droptimizerGearItemSchema.nullish(),
-        trinket1: droptimizerGearItemSchema.nullish(),
-        trinket2: droptimizerGearItemSchema.nullish(),
-        main_hand: droptimizerGearItemSchema.nullish(),
-        off_hand: droptimizerGearItemSchema.nullish()
+        head: droptimizerEquippedItemSchema.nullish(),
+        neck: droptimizerEquippedItemSchema.nullish(),
+        shoulder: droptimizerEquippedItemSchema.nullish(),
+        back: droptimizerEquippedItemSchema.nullish(),
+        chest: droptimizerEquippedItemSchema.nullish(),
+        wrist: droptimizerEquippedItemSchema.nullish(),
+        hands: droptimizerEquippedItemSchema.nullish(),
+        waist: droptimizerEquippedItemSchema.nullish(),
+        legs: droptimizerEquippedItemSchema.nullish(),
+        feet: droptimizerEquippedItemSchema.nullish(),
+        finger1: droptimizerEquippedItemSchema.nullish(),
+        finger2: droptimizerEquippedItemSchema.nullish(),
+        trinket1: droptimizerEquippedItemSchema.nullish(),
+        trinket2: droptimizerEquippedItemSchema.nullish(),
+        main_hand: droptimizerEquippedItemSchema.nullish(),
+        off_hand: droptimizerEquippedItemSchema.nullish()
     })
 })
 
@@ -92,7 +94,8 @@ export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
             currencies: data.currencies,
             itemsAverageItemLevel: data.itemsAverageItemLevel,
             itemsAverageItemLevelEquipped: data.itemsAverageItemLevelEquipped,
-            itemsEquipped: data.itemsEquipped
+            itemsEquipped: data.itemsEquipped,
+            itemsInBag: data.itemsInBag
         }
     }
 )
