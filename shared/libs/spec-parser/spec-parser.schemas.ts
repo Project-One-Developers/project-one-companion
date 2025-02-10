@@ -1,79 +1,66 @@
-import { wowClassSchema, wowSpecSchema } from '@shared/schemas/wow.schemas'
-import { z } from 'zod'
-
-const specMappingSchema = z.record(
-    z.number(),
-    z.object({
-        wowClass: wowClassSchema,
-        wowSpec: wowSpecSchema
-    })
-)
-
-export const SPEC_ID_TO_CLASS_SPEC = specMappingSchema.parse({
+export const SPEC_ID_TO_CLASS_SPEC = {
     // Death Knight
-    250: { wowClass: 'DEATH_KNIGHT', wowSpec: 'BLOOD' },
-    251: { wowClass: 'DEATH_KNIGHT', wowSpec: 'FROST_DK' },
-    252: { wowClass: 'DEATH_KNIGHT', wowSpec: 'UNHOLY' },
+    250: { wowClass: 'Death Knight', wowSpec: 'Blood' },
+    251: { wowClass: 'Death Knight', wowSpec: 'Frost' },
+    252: { wowClass: 'Death Knight', wowSpec: 'Unholy' },
 
     // Demon Hunter
-    577: { wowClass: 'DEMON_HUNTER', wowSpec: 'HAVOC' },
-    581: { wowClass: 'DEMON_HUNTER', wowSpec: 'VENGEANCE' },
+    577: { wowClass: 'Demon Hunter', wowSpec: 'Havoc' },
+    581: { wowClass: 'Demon Hunter', wowSpec: 'Vengeance' },
 
     // Druid
-    102: { wowClass: 'DRUID', wowSpec: 'BALANCE' },
-    103: { wowClass: 'DRUID', wowSpec: 'FERAL' },
-    104: { wowClass: 'DRUID', wowSpec: 'GUARDIAN' },
-    105: { wowClass: 'DRUID', wowSpec: 'RESTO_DRUID' },
+    102: { wowClass: 'Druid', wowSpec: 'Balance' },
+    103: { wowClass: 'Druid', wowSpec: 'Feral' },
+    104: { wowClass: 'Druid', wowSpec: 'Guardian' },
+    105: { wowClass: 'Druid', wowSpec: 'Restoration' },
 
     // Evoker
-    1467: { wowClass: 'EVOKER', wowSpec: 'DEVASTATION' },
-    1468: { wowClass: 'EVOKER', wowSpec: 'PRESERVATION' },
-    1473: { wowClass: 'EVOKER', wowSpec: 'AUGMENTATION' },
+    1467: { wowClass: 'Evoker', wowSpec: 'Devastation' },
+    1468: { wowClass: 'Evoker', wowSpec: 'Preservation' },
+    1473: { wowClass: 'Evoker', wowSpec: 'Augmentation' },
 
     // Hunter
-    253: { wowClass: 'HUNTER', wowSpec: 'BEAST_MASTERY' },
-    254: { wowClass: 'HUNTER', wowSpec: 'MARKSMANSHIP' },
-    255: { wowClass: 'HUNTER', wowSpec: 'SURVIVAL' },
+    253: { wowClass: 'Hunter', wowSpec: 'Beast Mastery' },
+    254: { wowClass: 'Hunter', wowSpec: 'Marksmanship' },
+    255: { wowClass: 'Hunter', wowSpec: 'Survival' },
 
     // Mage
-    62: { wowClass: 'MAGE', wowSpec: 'ARCANE' },
-    63: { wowClass: 'MAGE', wowSpec: 'FIRE' },
-    64: { wowClass: 'MAGE', wowSpec: 'FROST_MAGE' },
+    62: { wowClass: 'Mage', wowSpec: 'Arcane' },
+    63: { wowClass: 'Mage', wowSpec: 'Fire' },
+    64: { wowClass: 'Mage', wowSpec: 'Frost' },
 
     // Monk
-    268: { wowClass: 'MONK', wowSpec: 'BREWMASTER' },
-    269: { wowClass: 'MONK', wowSpec: 'WINDWALKER' },
-    270: { wowClass: 'MONK', wowSpec: 'MISTWEAVER' },
+    268: { wowClass: 'Monk', wowSpec: 'Brewmaster' },
+    269: { wowClass: 'Monk', wowSpec: 'Windwalker' },
+    270: { wowClass: 'Monk', wowSpec: 'Mistweaver' },
 
     // Paladin
-    65: { wowClass: 'PALADIN', wowSpec: 'HOLY_PALADIN' },
-    66: { wowClass: 'PALADIN', wowSpec: 'PROT_PALADIN' },
-    70: { wowClass: 'PALADIN', wowSpec: 'RETRIBUTION' },
+    65: { wowClass: 'Paladin', wowSpec: 'Holy' },
+    66: { wowClass: 'Paladin', wowSpec: 'Protection' },
+    70: { wowClass: 'Paladin', wowSpec: 'Retribution' },
 
     // Priest
-    256: { wowClass: 'PRIEST', wowSpec: 'DISCIPLINE' },
-    257: { wowClass: 'PRIEST', wowSpec: 'HOLY_PRIEST' },
-    258: { wowClass: 'PRIEST', wowSpec: 'SHADOW' },
+    256: { wowClass: 'Priest', wowSpec: 'Discipline' },
+    257: { wowClass: 'Priest', wowSpec: 'Holy' },
+    258: { wowClass: 'Priest', wowSpec: 'Shadow' },
 
     // Rogue
-    259: { wowClass: 'ROGUE', wowSpec: 'ASSASSINATION' },
-    260: { wowClass: 'ROGUE', wowSpec: 'OUTLAW' },
-    261: { wowClass: 'ROGUE', wowSpec: 'SUBTLETY' },
+    259: { wowClass: 'Rogue', wowSpec: 'Assassination' },
+    260: { wowClass: 'Rogue', wowSpec: 'Outlaw' },
+    261: { wowClass: 'Rogue', wowSpec: 'Subtlety' },
 
     // Shaman
-    262: { wowClass: 'SHAMAN', wowSpec: 'ELEMENTAL' },
-    263: { wowClass: 'SHAMAN', wowSpec: 'ENHANCEMENT' },
-    264: { wowClass: 'SHAMAN', wowSpec: 'RESTO_SHAMAN' },
+    262: { wowClass: 'Shaman', wowSpec: 'Elemental' },
+    263: { wowClass: 'Shaman', wowSpec: 'Enhancement' },
+    264: { wowClass: 'Shaman', wowSpec: 'Restoration' },
 
     // Warlock
-    265: { wowClass: 'WARLOCK', wowSpec: 'AFFLICTION' },
-    266: { wowClass: 'WARLOCK', wowSpec: 'DEMONOLOGY' },
-    267: { wowClass: 'WARLOCK', wowSpec: 'DESTRUCTION' },
+    265: { wowClass: 'Warlock', wowSpec: 'Affliction' },
+    266: { wowClass: 'Warlock', wowSpec: 'Demonology' },
+    267: { wowClass: 'Warlock', wowSpec: 'Destruction' },
 
     // Warrior
-    71: { wowClass: 'WARRIOR', wowSpec: 'ARMS' },
-    72: { wowClass: 'WARRIOR', wowSpec: 'FURY' },
-    73: { wowClass: 'WARRIOR', wowSpec: 'PROT_WARRIOR' }
-})
-
-export type SpecIdMapping = z.infer<typeof specMappingSchema>
+    71: { wowClass: 'Warrior', wowSpec: 'Arms' },
+    72: { wowClass: 'Warrior', wowSpec: 'Fury' },
+    73: { wowClass: 'Warrior', wowSpec: 'Protection' }
+}

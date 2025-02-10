@@ -4,8 +4,7 @@ import {
     ITEM_SLOTS,
     ITEM_SLOTS_KEY,
     RAID_DIFF,
-    ROLES,
-    SPECS
+    ROLES
 } from '@shared/consts/wow.consts'
 import { relations } from 'drizzle-orm'
 import {
@@ -25,7 +24,6 @@ import {
 //////////////////////////////////////////////////////////
 
 export const pgClassEnum = pgEnum('class', CLASSES)
-export const pgSpecEnum = pgEnum('spec', SPECS)
 export const pgRoleEnum = pgEnum('role', ROLES)
 export const pgRaidDiffEnum = pgEnum('raid_diff', RAID_DIFF)
 
