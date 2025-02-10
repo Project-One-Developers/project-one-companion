@@ -5,6 +5,7 @@ import {
     NewLootsFromManualInput,
     NewLootsFromRc
 } from '@shared/types/types'
+import { getBisList } from '@storage/bis-list/bis-list.storage'
 import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.storage'
 import {
     addLoots,
@@ -68,10 +69,11 @@ export const unassignLootHandler = async (lootId: string): Promise<void> => {
 export const getLootAssignmentInfoHandler = async (lootId: string): Promise<LootAssignmentInfo> => {
     console.log('getLootAssignmentInfoHandler')
 
-    const [loot, roster, latestDroptimizer] = await Promise.all([
+    const [loot, roster, latestDroptimizer, bisList] = await Promise.all([
         getLootById(lootId),
         getCharactersList(),
-        getDroptimizerLatestList()
+        getDroptimizerLatestList(),
+        getBisList()
     ])
 
     const filteredRoster = roster.filter(
@@ -92,11 +94,15 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             .filter((c) => c.weeklyChest)
             .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
 
+        const isBis = bisList.some((bis) => {
+            return bis.itemIds.includes(loot.item.id) && bis.wowClass === char.class
+        })
+
         return {
             character: char,
             droptimizers: charDroptimizers,
             weeklyChest: droptWithWeeklyChest?.weeklyChest ?? [],
-            bis: false,
+            bis: isBis,
             score: Math.floor(Math.random() * (10000 - 10 + 1)) + 10
         }
     })
