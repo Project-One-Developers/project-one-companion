@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { itemSchema } from './items.schema'
+import { itemSchema, tiersetInfoSchema } from './items.schema'
 import { wowClassSchema, wowItemSlotKeySchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const droptimizerUpgradeSchema = z.object({
@@ -36,39 +36,37 @@ export const droptimizerCurrenciesSchema = z.object({
     amount: z.number()
 })
 
-export const droptimizerBagItemSchema = z
-    .object({
-        id: z.number(),
-        slot: wowItemSlotKeySchema,
-        bonus_id: z.preprocess((val) => {
+export const droptimizerBagItemSchema = z.object({
+    id: z.number(),
+    slot: wowItemSlotKeySchema,
+    bonus_id: z.preprocess((val) => {
+        // Convert numbers to strings
+        if (typeof val === 'number') {
+            return val.toString()
+        }
+        return val
+    }, z.string()),
+    enchant_id: z
+        .preprocess((val) => {
             // Convert numbers to strings
             if (typeof val === 'number') {
                 return val.toString()
             }
             return val
-        }, z.string()),
-        enchant_id: z
-            .preprocess((val) => {
-                // Convert numbers to strings
-                if (typeof val === 'number') {
-                    return val.toString()
-                }
-                return val
-            }, z.string())
-            .nullish(),
-        gem_id: z
-            .preprocess((val) => {
-                // Convert numbers to strings
-                if (typeof val === 'number') {
-                    return val.toString()
-                }
-                return val
-            }, z.string())
-            .nullish(),
-        craftedStats: z.string().nullish(),
-        craftingQuality: z.string().nullish()
-    })
-    .nullish()
+        }, z.string())
+        .nullish(),
+    gem_id: z
+        .preprocess((val) => {
+            // Convert numbers to strings
+            if (typeof val === 'number') {
+                return val.toString()
+            }
+            return val
+        }, z.string())
+        .nullish(),
+    craftedStats: z.string().nullish(),
+    craftingQuality: z.string().nullish()
+})
 
 export const droptimizerEquippedItemSchema = z
     .object({
@@ -112,6 +110,25 @@ export const droptimizerEquippedItemSchema = z
     })
     .nullish()
 
+export const droptimizerEquippedItemsSchema = z.object({
+    head: droptimizerEquippedItemSchema.nullish(),
+    neck: droptimizerEquippedItemSchema.nullish(),
+    shoulder: droptimizerEquippedItemSchema.nullish(),
+    back: droptimizerEquippedItemSchema.nullish(),
+    chest: droptimizerEquippedItemSchema.nullish(),
+    wrist: droptimizerEquippedItemSchema.nullish(),
+    hands: droptimizerEquippedItemSchema.nullish(),
+    waist: droptimizerEquippedItemSchema.nullish(),
+    legs: droptimizerEquippedItemSchema.nullish(),
+    feet: droptimizerEquippedItemSchema.nullish(),
+    finger1: droptimizerEquippedItemSchema.nullish(),
+    finger2: droptimizerEquippedItemSchema.nullish(),
+    trinket1: droptimizerEquippedItemSchema.nullish(),
+    trinket2: droptimizerEquippedItemSchema.nullish(),
+    main_hand: droptimizerEquippedItemSchema.nullish(),
+    off_hand: droptimizerEquippedItemSchema.nullish()
+})
+
 export const droptimizerSchema = z.object({
     url: z.string().url(),
     ak: z.string(),
@@ -143,24 +160,8 @@ export const droptimizerSchema = z.object({
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
     itemsInBag: z.array(droptimizerBagItemSchema).nullable(),
-    itemsEquipped: z.object({
-        head: droptimizerEquippedItemSchema.nullish(),
-        neck: droptimizerEquippedItemSchema.nullish(),
-        shoulder: droptimizerEquippedItemSchema.nullish(),
-        back: droptimizerEquippedItemSchema.nullish(),
-        chest: droptimizerEquippedItemSchema.nullish(),
-        wrist: droptimizerEquippedItemSchema.nullish(),
-        hands: droptimizerEquippedItemSchema.nullish(),
-        waist: droptimizerEquippedItemSchema.nullish(),
-        legs: droptimizerEquippedItemSchema.nullish(),
-        feet: droptimizerEquippedItemSchema.nullish(),
-        finger1: droptimizerEquippedItemSchema.nullish(),
-        finger2: droptimizerEquippedItemSchema.nullish(),
-        trinket1: droptimizerEquippedItemSchema.nullish(),
-        trinket2: droptimizerEquippedItemSchema.nullish(),
-        main_hand: droptimizerEquippedItemSchema.nullish(),
-        off_hand: droptimizerEquippedItemSchema.nullish()
-    })
+    itemsEquipped: droptimizerEquippedItemsSchema,
+    tiersetInfo: z.array(tiersetInfoSchema)
 })
 
 export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).extend({

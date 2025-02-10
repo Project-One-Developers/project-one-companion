@@ -1,10 +1,14 @@
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import type {
     Droptimizer,
+    DroptimizerBagItem,
+    DroptimizerEquippedItems,
+    Item,
     ItemToCatalyst,
     ItemToTierset,
     NewDroptimizer,
     NewDroptimizerUpgrade,
+    TiersetInfo,
     WowRaidDifficulty
 } from '@shared/types/types'
 import {
@@ -16,6 +20,7 @@ import {
     getItemToCatalystMapping,
     getItemToTiersetMapping
 } from '@storage/droptimizer/droptimizer.storage'
+import { getTiersetAndTokenList } from '@storage/items/items.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { getUnixTimestamp } from '@utils'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
@@ -24,6 +29,7 @@ import { fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 // Static cache variables
 let cachedItemsToTiersetMapping: ItemToTierset[]
 let cachedItemsToCatalystMapping: ItemToCatalyst[]
+let cachedTierset: Item[]
 
 const ensureMappingsLoaded = async () => {
     if (!cachedItemsToTiersetMapping) {
@@ -32,18 +38,21 @@ const ensureMappingsLoaded = async () => {
     if (!cachedItemsToCatalystMapping) {
         cachedItemsToCatalystMapping = await getItemToCatalystMapping()
     }
+    if (!cachedTierset) {
+        cachedTierset = await getTiersetAndTokenList()
+    }
 }
 
-export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> => {
-    console.log('Adding droptimizer from url', url)
-
-    const raidbotsURL = raidbotsURLSchema.parse(url)
-    const jsonData = await fetchRaidbotsData(raidbotsURL)
-    const parsedJson = parseRaidbotsData(jsonData)
-
-    await ensureMappingsLoaded()
-
-    const upgradesMap = parsedJson.upgrades
+const evalUpgrades = (
+    upgrades: {
+        dps: number
+        encounterId: number
+        itemId: number
+        ilvl: number
+        slot: string
+    }[]
+): NewDroptimizerUpgrade[] => {
+    const upgradesMap = upgrades
         // filter out item without dps gain
         .filter((item) => item.dps > 0)
         // remap itemid to tierset & catalyst
@@ -85,6 +94,68 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
             return acc
         }, new Map<number, NewDroptimizerUpgrade>())
 
+    return Array.from(upgradesMap.values())
+}
+
+const evalTiersets = (
+    equipped: DroptimizerEquippedItems,
+    bags: DroptimizerBagItem[]
+): TiersetInfo[] => {
+    const res: TiersetInfo[] = []
+
+    const addTiersetInfo = (
+        item: DroptimizerEquippedItems[keyof DroptimizerEquippedItems],
+        slot: string
+    ) => {
+        if (item) {
+            const match = cachedTierset.find((t) => t.id === item.id)
+            if (match != null) {
+                res.push({
+                    id: item.id,
+                    slot,
+                    source: 'equipped',
+                    isOmni: false,
+                    itemLevel: item.itemLevel,
+                    baseItemLevel: match.ilvlBase,
+                    bonusString: item.bonus_id ?? null
+                })
+            }
+        }
+    }
+
+    addTiersetInfo(equipped.head, 'head')
+    addTiersetInfo(equipped.shoulder, 'shoulder')
+    addTiersetInfo(equipped.chest, 'chest')
+    addTiersetInfo(equipped.hands, 'hands')
+    addTiersetInfo(equipped.legs, 'legs')
+
+    bags.map((bagItem) => {
+        const match = cachedTierset.find((t) => t.id === bagItem.id)
+        if (match != null) {
+            res.push({
+                id: match.id,
+                slot: match.slotKey,
+                isOmni: match.slotKey == null, // curio
+                source: 'bag',
+                itemLevel: null,
+                baseItemLevel: match.ilvlBase,
+                bonusString: bagItem.bonus_id
+            })
+        }
+    })
+
+    return res
+}
+
+export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> => {
+    console.log('Adding droptimizer from url', url)
+
+    const raidbotsURL = raidbotsURLSchema.parse(url)
+    const jsonData = await fetchRaidbotsData(raidbotsURL)
+    const parsedJson = parseRaidbotsData(jsonData)
+
+    await ensureMappingsLoaded()
+
     const droptimizer: NewDroptimizer = {
         ak: `${parsedJson.raidInfo.id},${parsedJson.raidInfo.difficulty},${parsedJson.charInfo.name},${parsedJson.charInfo.server},${parsedJson.charInfo.spec},${parsedJson.charInfo.class}`,
         url,
@@ -92,13 +163,14 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
         raidInfo: parsedJson.raidInfo,
         simInfo: parsedJson.simInfo,
         dateImported: getUnixTimestamp(),
-        upgrades: Array.from(upgradesMap.values()),
+        upgrades: evalUpgrades(parsedJson.upgrades),
         currencies: parsedJson.currencies,
         weeklyChest: parsedJson.weeklyChest,
         itemsAverageItemLevel: parsedJson.itemsAverageItemLevel,
         itemsAverageItemLevelEquipped: parsedJson.itemsAverageItemLevelEquipped,
         itemsEquipped: parsedJson.itemsEquipped,
-        itemsInBag: parsedJson.itemsInBag
+        itemsInBag: parsedJson.itemsInBag,
+        tiersetInfo: evalTiersets(parsedJson.itemsEquipped, parsedJson.itemsInBag ?? [])
     }
 
     return await addDroptimizer(droptimizer)

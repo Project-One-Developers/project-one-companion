@@ -12,6 +12,7 @@ import {
 } from '../schemas/wow.schemas'
 
 export const CURRENT_RAID_ID = 1273 // Nerubar palace 1273, Undermine 1296
+export const CURRENT_SEASON = -70 // Season 1 -70, Season 2 -71
 
 export const CLASSES = wowClassSchema.options
 export const SPECS = wowSpecSchema.options

@@ -1,3 +1,4 @@
+import { tiersetInfoSchema } from '@shared/schemas/items.schema'
 import {
     droptimizerBagItemSchema,
     droptimizerCurrenciesSchema,
@@ -51,7 +52,8 @@ export const droptimizerStorageSchema = z.object({
         trinket2: droptimizerEquippedItemSchema.nullish(),
         main_hand: droptimizerEquippedItemSchema.nullish(),
         off_hand: droptimizerEquippedItemSchema.nullish()
-    })
+    }),
+    tiersetInfo: z.array(tiersetInfoSchema)
 })
 
 export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
@@ -95,7 +97,8 @@ export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
             itemsAverageItemLevel: data.itemsAverageItemLevel,
             itemsAverageItemLevelEquipped: data.itemsAverageItemLevelEquipped,
             itemsEquipped: data.itemsEquipped,
-            itemsInBag: data.itemsInBag
+            itemsInBag: data.itemsInBag,
+            tiersetInfo: data.tiersetInfo
         }
     }
 )

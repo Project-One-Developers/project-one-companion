@@ -14,6 +14,7 @@ export const fetchRaidItems = (season: number): Item[] => {
     const transformRawItem = (itemRaw: any): Item => ({
         id: Number(itemRaw.itemId),
         name: itemRaw.name,
+        ilvlBase: Number(itemRaw.mythicLevel),
         ilvlMythic: Number(itemRaw.mythicLevel),
         ilvlHeroic: Number(itemRaw.heroicLevel),
         ilvlNormal: Number(itemRaw.normalLevel),
@@ -56,6 +57,7 @@ export const fetchNonRaidItems = (): Item[] => {
     res.push({
         id: 228411,
         name: "Cyrce's Circlet",
+        ilvlBase: 619,
         ilvlMythic: 619,
         ilvlHeroic: 619,
         ilvlNormal: 619,

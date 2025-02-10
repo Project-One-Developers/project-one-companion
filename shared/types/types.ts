@@ -1,6 +1,11 @@
 import { bisListSchema } from '@shared/schemas/bis-list.schemas'
 import { bossSchema, bossWithItemsSchema } from '@shared/schemas/boss.schema'
-import { itemSchema, itemToCatalystSchema, itemToTiersetSchema } from '@shared/schemas/items.schema'
+import {
+    itemSchema,
+    itemToCatalystSchema,
+    itemToTiersetSchema,
+    tiersetInfoSchema
+} from '@shared/schemas/items.schema'
 import {
     lootSchema,
     lootWithItemAndAssignedSchema,
@@ -32,6 +37,7 @@ import {
     droptimizerBagItemSchema,
     droptimizerCurrenciesSchema,
     droptimizerEquippedItemSchema,
+    droptimizerEquippedItemsSchema,
     droptimizerSchema,
     droptimizerUpgradeSchema,
     droptimizerWeeklyChestSchema,
@@ -72,6 +78,7 @@ export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
 export type DroptimizerWeeklyChest = z.infer<typeof droptimizerWeeklyChestSchema>
 export type DroptimizerCurrenciesUpgrade = z.infer<typeof droptimizerCurrenciesSchema>
+export type DroptimizerEquippedItems = z.infer<typeof droptimizerEquippedItemsSchema>
 export type DroptimizerEquippedItem = z.infer<typeof droptimizerEquippedItemSchema>
 export type DroptimizerBagItem = z.infer<typeof droptimizerBagItemSchema>
 
@@ -82,6 +89,7 @@ export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>
 export type Item = z.infer<typeof itemSchema>
 export type ItemToTierset = z.infer<typeof itemToTiersetSchema>
 export type ItemToCatalyst = z.infer<typeof itemToCatalystSchema>
+export type TiersetInfo = z.infer<typeof tiersetInfoSchema>
 
 export type BisList = z.infer<typeof bisListSchema>
 

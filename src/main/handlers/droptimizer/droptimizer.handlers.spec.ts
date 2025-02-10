@@ -1,6 +1,7 @@
 import { describe, expect, it, jest } from '@jest/globals'
 import { ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { addDroptimizer } from '@storage/droptimizer/droptimizer.storage'
+import { Item } from 'electron'
 import * as fs from 'fs'
 import { addDroptimizerHandler } from './droptimizer.handlers'
 
@@ -30,8 +31,18 @@ jest.mock('./droptimizer.utils', () => {
     }
 })
 
+jest.mock('@storage/items/items.storage', () => {
+    const getTiersetAndTokenListMock = jest.fn((): Promise<Item[]> => {
+        return Promise.resolve([])
+    })
+    return {
+        __esModule: true,
+        getTiersetAndTokenList: getTiersetAndTokenListMock
+    }
+})
+
 jest.mock('@storage/droptimizer/droptimizer.storage', () => {
-    const originalModule = jest.requireActual('./droptimizer.utils')
+    const originalModule = jest.requireActual('../../lib/storage/droptimizer/droptimizer.storage')
     const getItemToTiersetMappingMock = jest.fn((): Promise<ItemToTierset[]> => {
         const tiersetMapping = JSON.parse(
             fs.readFileSync('resources/wow/s1/items_to_tierset.json', 'utf8')
@@ -227,7 +238,8 @@ describe('Droptimizer Handlers', () => {
             itemsAverageItemLevel: null,
             itemsAverageItemLevelEquipped: null,
             itemsEquipped: expect.any(Object),
-            itemsInBag: expect.any(Object)
+            itemsInBag: expect.any(Object),
+            tiersetInfo: expect.any(Object)
         }
 
         expect(addDroptimizer).toHaveBeenCalledTimes(1)
@@ -425,6 +437,7 @@ describe('Droptimizer Handlers', () => {
             currencies: [],
             itemsEquipped: expect.any(Object),
             itemsInBag: expect.any(Object),
+            tiersetInfo: expect.any(Object),
             itemsAverageItemLevel: 631,
             itemsAverageItemLevelEquipped: 631
         }

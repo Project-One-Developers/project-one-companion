@@ -1,3 +1,4 @@
+import { CURRENT_RAID_ID, CURRENT_SEASON } from '@shared/consts/wow.consts'
 import { itemSchema } from '@shared/schemas/items.schema'
 import type { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { ilike } from 'drizzle-orm'
@@ -21,6 +22,28 @@ export const getItem = async (id: number): Promise<Item | null> => {
     }
 
     return itemSchema.parse(res)
+}
+
+export const getItemByIds = async (ids: number[]): Promise<Item[]> => {
+    const res = await db.query.itemTable.findFirst({
+        where: (itemTable, { inArray }) => inArray(itemTable.id, ids)
+    })
+    return z.array(itemSchema).parse(res)
+}
+
+/**
+ * Todo: it should returns the only the list of item from current season
+ * @returns
+ */
+export const getTiersetAndTokenList = async (): Promise<Item[]> => {
+    const res = await db.query.itemTable.findMany({
+        where: (itemTable, { inArray, eq, or, and }) =>
+            and(
+                inArray(itemTable.sourceId, [CURRENT_RAID_ID, CURRENT_SEASON]),
+                or(eq(itemTable.tierset, true), eq(itemTable.token, true))
+            )
+    })
+    return z.array(itemSchema).parse(res)
 }
 
 export const searchItems = async (searchTerm: string, limit: number): Promise<Item[]> => {

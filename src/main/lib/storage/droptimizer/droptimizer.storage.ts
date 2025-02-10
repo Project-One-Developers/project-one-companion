@@ -184,7 +184,8 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 weeklyChest: droptimizer.weeklyChest,
                 currencies: droptimizer.currencies,
                 itemsEquipped: droptimizer.itemsEquipped,
-                itemsInBag: droptimizer.itemsInBag
+                itemsInBag: droptimizer.itemsInBag,
+                tiersetInfo: droptimizer.tiersetInfo
             })
             .returning({ url: droptimizerTable.url })
             .then(takeFirstResult)

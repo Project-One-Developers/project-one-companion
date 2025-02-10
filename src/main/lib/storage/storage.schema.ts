@@ -6,6 +6,7 @@ import {
     RAID_DIFF,
     ROLES
 } from '@shared/consts/wow.consts'
+import { DroptimizerBagItem, TiersetInfo } from '@shared/types/types'
 import { relations } from 'drizzle-orm'
 import {
     boolean,
@@ -242,7 +243,8 @@ export const droptimizerTable = pgTable('droptimizers', {
     itemsAverageItemLevel: integer('items_average_ilvl'),
     itemsAverageItemLevelEquipped: integer('items_average_ilvl_equipped'),
     itemsEquipped: jsonb('items_equipped').notNull(),
-    itemsInBag: jsonb('items_in_bags')
+    itemsInBag: jsonb('items_in_bags').$type<DroptimizerBagItem[]>(),
+    tiersetInfo: jsonb('tierset_info').$type<TiersetInfo[]>()
 })
 
 //////////////////////////////////////////////////////////
@@ -319,6 +321,7 @@ export const bossTable = pgTable('bosses', {
 export const itemTable = pgTable('items', {
     id: integer('id').primaryKey(), // ricicliamo id fornito da wow api
     name: varchar('name', { length: 255 }).notNull(),
+    ilvlBase: integer('ilvl_base').notNull(),
     ilvlMythic: integer('ilvl_mythic').notNull(),
     ilvlHeroic: integer('ilvl_heroic').notNull(),
     ilvlNormal: integer('ilvl_normal').notNull(),

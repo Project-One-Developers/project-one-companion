@@ -4,6 +4,7 @@ import { wowArmorTypeSchema, wowItemSlotKeySchema, wowItemSlotSchema } from './w
 export const itemSchema = z.object({
     id: z.number(),
     name: z.string(),
+    ilvlBase: z.number(),
     ilvlMythic: z.number(),
     ilvlHeroic: z.number(),
     ilvlNormal: z.number(),
@@ -49,3 +50,13 @@ export const itemToCatalystSchema = z.object({
     catalyzedItemId: z.number()
 })
 export const itemToCatalystArraySchema = z.array(itemToCatalystSchema)
+
+export const tiersetInfoSchema = z.object({
+    id: z.number(),
+    slot: z.string().nullable(),
+    isOmni: z.boolean(),
+    source: z.enum(['equipped', 'bag']),
+    baseItemLevel: z.number(),
+    itemLevel: z.number().nullable(),
+    bonusString: z.string().nullable()
+})

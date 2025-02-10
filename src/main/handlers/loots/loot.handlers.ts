@@ -99,6 +99,8 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             return bis.itemIds.includes(loot.item.id) && bis.wowClass === char.class
         })
 
+        //tiersetInfo(charDroptimizers[0], charDroptimizers[0].itemsInBag)
+
         return {
             character: char,
             droptimizers: charDroptimizers,
