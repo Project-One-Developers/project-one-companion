@@ -112,6 +112,7 @@ export type CharAssignmentInfo = {
     character: Character
     droptimizers: Droptimizer[]
     weeklyChest: DroptimizerWeeklyChest[]
+    tierset: TiersetInfo[]
     bis: boolean
     score: number
 }

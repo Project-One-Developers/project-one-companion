@@ -3,7 +3,8 @@ import {
     LootAssignmentInfo,
     LootWithItem,
     NewLootsFromManualInput,
-    NewLootsFromRc
+    NewLootsFromRc,
+    TiersetInfo
 } from '@shared/types/types'
 import { getBisList } from '@storage/bis-list/bis-list.storage'
 import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.storage'
@@ -61,6 +62,36 @@ export const unassignLootHandler = async (lootId: string): Promise<void> => {
     await unassignLoot(lootId)
 }
 
+const parseTiersetInfo = (tiersetInfo: TiersetInfo[]): TiersetInfo[] => {
+    const maxItemLevelBySlot = new Map<string, TiersetInfo>()
+
+    tiersetInfo.forEach((item) => {
+        if (item.slot) {
+            const existingItem = maxItemLevelBySlot.get(item.slot)
+
+            let itemLevel = -1
+            if (item.itemLevel == null) {
+                itemLevel = 1 // todo: parse from bonusString
+            } else {
+                itemLevel = item.itemLevel
+            }
+
+            if (
+                !existingItem ||
+                (item.itemLevel &&
+                    (existingItem.itemLevel == null || itemLevel > existingItem.itemLevel))
+            ) {
+                maxItemLevelBySlot.set(item.slot, { ...item, itemLevel })
+            }
+        }
+    })
+
+    return [
+        ...Array.from(maxItemLevelBySlot.values()),
+        ...tiersetInfo.filter((t) => t.slot === null)
+    ]
+}
+
 /**
  * Retrieve all the information to evaluate the loot assignments
  * @param lootId Loot ID
@@ -95,16 +126,19 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             .filter((c) => c.weeklyChest)
             .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
 
+        const droptWithTiersetInfo = charDroptimizers
+            .filter((c) => c.tiersetInfo != null && c.tiersetInfo.length > 0)
+            .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+
         const isBis = bisList.some((bis) => {
             return bis.itemIds.includes(loot.item.id) && bis.wowClass === char.class
         })
-
-        //tiersetInfo(charDroptimizers[0], charDroptimizers[0].itemsInBag)
 
         return {
             character: char,
             droptimizers: charDroptimizers,
             weeklyChest: droptWithWeeklyChest?.weeklyChest ?? [],
+            tierset: parseTiersetInfo(droptWithTiersetInfo?.tiersetInfo ?? []),
             bis: isBis,
             score: Math.floor(Math.random() * (10000 - 10 + 1)) + 10
         }
