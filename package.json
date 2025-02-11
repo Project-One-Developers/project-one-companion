@@ -48,7 +48,7 @@
         "cmdk": "1.0.4",
         "discord.js": "14.18.0",
         "drizzle-kit": "0.30.4",
-        "drizzle-orm": "0.39.2",
+        "drizzle-orm": "0.39.3",
         "electron-updater": "6.3.9",
         "framer-motion": "12.4.1",
         "lucide-react": "0.475.0",
