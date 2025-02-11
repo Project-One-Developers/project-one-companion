@@ -29,7 +29,7 @@ export const DroptimizerUpgradeForItemEquipped = ({
                         }
                     />
                     <p className="text-bold text-[11px]">
-                        {upgrade ? getDpsHumanReadable(upgrade.dps) : 'No Gain'}
+                        {upgrade ? getDpsHumanReadable(upgrade.dps) : '0'}
                     </p>
                 </div>
                 <div className="flex flex-col items-center -mt-4">

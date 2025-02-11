@@ -95,9 +95,9 @@ export default function LootsEligibleChars({
                             <TableHead>Name</TableHead>
                             <TableHead>Droptimizer</TableHead>
                             <TableHead>Weekly Chest</TableHead>
-                            <TableHead>BiS</TableHead>
-                            <TableHead>Already Assigned</TableHead>
-                            <TableHead>Score</TableHead>
+                            <TableHead>Other Assignment</TableHead>
+                            <TableHead>Highest</TableHead>
+                            <TableHead>Tierset</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -127,9 +127,12 @@ export default function LootsEligibleChars({
                                                 charname={charInfo.character.name}
                                                 className="h-8 w-8 border-2 border-background rounded-lg"
                                             />
-                                            <h1 className="font-bold mb-2">
-                                                {charInfo.character.name}
-                                            </h1>
+                                            <div className="flex flex-col">
+                                                <h1 className="font-bold">
+                                                    {charInfo.character.name}
+                                                </h1>
+                                                <p className="text-xs">{charInfo.score}</p>
+                                            </div>
                                         </div>
                                     </TableCell>
                                     <TableCell>
@@ -164,7 +167,6 @@ export default function LootsEligibleChars({
                                             ))}
                                         </div>
                                     </TableCell>
-                                    <TableCell>${'' + charInfo.bis}</TableCell>
                                     <TableCell>
                                         <div className="flex flex-row 2">
                                             {assignedLoots.map((otherLoot) => (
@@ -187,7 +189,49 @@ export default function LootsEligibleChars({
                                             ))}
                                         </div>
                                     </TableCell>
-                                    <TableCell>{charInfo.score}</TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-row 2">
+                                            {charInfo.bestItemInSlot && (
+                                                <div className="flex flex-col items-center">
+                                                    <WowItemIcon
+                                                        item={charInfo.bestItemInSlot.item.id}
+                                                        ilvl={charInfo.bestItemInSlot.itemLevel}
+                                                        iconOnly={true}
+                                                        tierBanner={true}
+                                                        bonusString={
+                                                            charInfo.bestItemInSlot.bonusString
+                                                        }
+                                                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                                                    />
+                                                    <p className="text-bold text-[11px]">
+                                                        {charInfo.bestItemInSlot.itemLevel}
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-row 2">
+                                            {charInfo.tierset.map((tierset) => (
+                                                <div
+                                                    key={tierset.item.id}
+                                                    className="flex flex-col items-center space-x-1"
+                                                >
+                                                    <WowItemIcon
+                                                        item={tierset.item.id}
+                                                        ilvl={tierset.itemLevel}
+                                                        iconOnly={true}
+                                                        tierBanner={true}
+                                                        bonusString={tierset.bonusString}
+                                                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                                                    />
+                                                    <p className="text-bold text-[11px]">
+                                                        {tierset.itemLevel}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </TableCell>
                                 </TableRow>
                             )
                         })}
