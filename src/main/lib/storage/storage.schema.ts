@@ -6,7 +6,7 @@ import {
     RAID_DIFF,
     ROLES
 } from '@shared/consts/wow.consts'
-import { DroptimizerBagItem, TiersetInfo } from '@shared/types/types'
+import { GearItem } from '@shared/types/types'
 import { relations } from 'drizzle-orm'
 import {
     boolean,
@@ -237,14 +237,13 @@ export const droptimizerTable = pgTable('droptimizers', {
     characterSpec: varchar('character_spec').notNull(),
     characterSpecId: integer('character_specId').notNull(),
     characterTalents: varchar('character_talents').notNull(),
-    weeklyChest:
-        jsonb('weekly_chest').$type<{ id: number; bonusString: string; itemLevel: number }[]>(),
+    weeklyChest: jsonb('weekly_chest').$type<GearItem[]>(),
     currencies: jsonb('currencies').$type<{ id: number; type: string; amount: number }[]>(),
     itemsAverageItemLevel: integer('items_average_ilvl'),
     itemsAverageItemLevelEquipped: integer('items_average_ilvl_equipped'),
     itemsEquipped: jsonb('items_equipped').notNull(),
-    itemsInBag: jsonb('items_in_bags').$type<DroptimizerBagItem[]>(),
-    tiersetInfo: jsonb('tierset_info').$type<TiersetInfo[]>()
+    itemsInBag: jsonb('items_in_bags').$type<GearItem[]>(),
+    tiersetInfo: jsonb('tierset_info').$type<GearItem[]>()
 })
 
 //////////////////////////////////////////////////////////
@@ -326,8 +325,8 @@ export const itemTable = pgTable('items', {
     ilvlHeroic: integer('ilvl_heroic').notNull(),
     ilvlNormal: integer('ilvl_normal').notNull(),
     itemClass: varchar('item_class', { length: 50 }),
-    slot: pgItemSlotEnum('slot'),
-    slotKey: pgItemSlotKeyEnum('slot_key'),
+    slot: pgItemSlotEnum('slot').notNull(),
+    slotKey: pgItemSlotKeyEnum('slot_key').notNull(),
     armorType: pgItemArmorTypeEnum('armor_type'),
     itemSubclass: varchar('item_subclass', { length: 50 }),
     token: boolean('token').notNull(), // se è un item che genera tierset

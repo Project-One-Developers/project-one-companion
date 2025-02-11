@@ -9,8 +9,8 @@ export const itemSchema = z.object({
     ilvlHeroic: z.number(),
     ilvlNormal: z.number(),
     itemClass: z.string(),
-    slot: wowItemSlotSchema.nullable(),
-    slotKey: wowItemSlotKeySchema.nullable(),
+    slot: wowItemSlotSchema,
+    slotKey: wowItemSlotKeySchema,
     itemSubclass: z.string().nullable(),
     armorType: wowArmorTypeSchema.nullable(),
     tiersetPrefix: z.string().nullable(),
@@ -51,12 +51,43 @@ export const itemToCatalystSchema = z.object({
 })
 export const itemToCatalystArraySchema = z.array(itemToCatalystSchema)
 
-export const tiersetInfoSchema = z.object({
-    id: z.number(),
-    slot: z.string().nullable(),
-    isOmni: z.boolean(),
-    source: z.enum(['equipped', 'bag']),
-    baseItemLevel: z.number(),
-    itemLevel: z.number().nullable(),
-    bonusString: z.string().nullable()
+/**
+ * Rapresents a looted version of an item (so with bonus and actual ilvl)
+ */
+export const gearItemSchema = z.object({
+    item: z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        baseItemLevel: z.number().optional(),
+        slotKey: wowItemSlotKeySchema.optional()
+    }),
+    source: z.enum(['equipped', 'bag', 'great-vault']),
+    itemLevel: z.number().optional(),
+    bonusString: z.preprocess((val) => {
+        // Convert numbers to strings
+        if (typeof val === 'number') {
+            return val.toString()
+        }
+        return val
+    }, z.string().optional()),
+    enchantId: z
+        .preprocess((val) => {
+            // Convert numbers to strings
+            if (typeof val === 'number') {
+                return val.toString()
+            }
+            return val
+        }, z.string())
+        .optional(),
+    gemId: z
+        .preprocess((val) => {
+            // Convert numbers to strings
+            if (typeof val === 'number') {
+                return val.toString()
+            }
+            return val
+        }, z.string())
+        .optional(),
+    craftedStats: z.string().optional(),
+    craftingQuality: z.string().optional()
 })

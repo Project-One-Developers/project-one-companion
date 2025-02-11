@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { itemSchema, tiersetInfoSchema } from './items.schema'
-import { wowClassSchema, wowItemSlotKeySchema, wowRaidDiffSchema } from './wow.schemas'
+import { gearItemSchema, itemSchema } from './items.schema'
+import { wowClassSchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const droptimizerUpgradeSchema = z.object({
     id: z.string(),
@@ -24,109 +24,29 @@ export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema
         catalyzedItemId: z.number().nullable()
     })
 
-export const droptimizerWeeklyChestSchema = z.object({
-    id: z.number(),
-    bonusString: z.string(),
-    itemLevel: z.number()
-})
-
 export const droptimizerCurrenciesSchema = z.object({
     id: z.number(),
     type: z.string(),
     amount: z.number()
 })
 
-export const droptimizerBagItemSchema = z.object({
-    id: z.number(),
-    slot: wowItemSlotKeySchema,
-    bonus_id: z.preprocess((val) => {
-        // Convert numbers to strings
-        if (typeof val === 'number') {
-            return val.toString()
-        }
-        return val
-    }, z.string()),
-    enchant_id: z
-        .preprocess((val) => {
-            // Convert numbers to strings
-            if (typeof val === 'number') {
-                return val.toString()
-            }
-            return val
-        }, z.string())
-        .nullish(),
-    gem_id: z
-        .preprocess((val) => {
-            // Convert numbers to strings
-            if (typeof val === 'number') {
-                return val.toString()
-            }
-            return val
-        }, z.string())
-        .nullish(),
-    craftedStats: z.string().nullish(),
-    craftingQuality: z.string().nullish()
-})
-
-export const droptimizerEquippedItemSchema = z
-    .object({
-        itemLevel: z.number(),
-        id: z.number(),
-        name: z.string(),
-        bonus_id: z
-            .preprocess((val) => {
-                // Convert numbers to strings
-                if (typeof val === 'number') {
-                    return val.toString()
-                }
-                return val
-            }, z.string())
-            .nullish(),
-        enchant_id: z
-            .preprocess((val) => {
-                // Convert numbers to strings
-                if (typeof val === 'number') {
-                    return val.toString()
-                }
-                return val
-            }, z.string())
-            .nullish(),
-        gem_id: z
-            .preprocess((val) => {
-                // Convert numbers to strings
-                if (typeof val === 'number') {
-                    return val.toString()
-                }
-                return val
-            }, z.string())
-            .nullish(),
-        upgrade: z
-            .object({
-                level: z.number(),
-                max: z.number(),
-                name: z.string()
-            })
-            .nullish()
-    })
-    .nullish()
-
 export const droptimizerEquippedItemsSchema = z.object({
-    head: droptimizerEquippedItemSchema.nullish(),
-    neck: droptimizerEquippedItemSchema.nullish(),
-    shoulder: droptimizerEquippedItemSchema.nullish(),
-    back: droptimizerEquippedItemSchema.nullish(),
-    chest: droptimizerEquippedItemSchema.nullish(),
-    wrist: droptimizerEquippedItemSchema.nullish(),
-    hands: droptimizerEquippedItemSchema.nullish(),
-    waist: droptimizerEquippedItemSchema.nullish(),
-    legs: droptimizerEquippedItemSchema.nullish(),
-    feet: droptimizerEquippedItemSchema.nullish(),
-    finger1: droptimizerEquippedItemSchema.nullish(),
-    finger2: droptimizerEquippedItemSchema.nullish(),
-    trinket1: droptimizerEquippedItemSchema.nullish(),
-    trinket2: droptimizerEquippedItemSchema.nullish(),
-    main_hand: droptimizerEquippedItemSchema.nullish(),
-    off_hand: droptimizerEquippedItemSchema.nullish()
+    head: gearItemSchema.optional(),
+    neck: gearItemSchema.optional(),
+    shoulder: gearItemSchema.optional(),
+    back: gearItemSchema.optional(),
+    chest: gearItemSchema.optional(),
+    wrist: gearItemSchema.optional(),
+    hands: gearItemSchema.optional(),
+    waist: gearItemSchema.optional(),
+    legs: gearItemSchema.optional(),
+    feet: gearItemSchema.optional(),
+    finger1: gearItemSchema.optional(),
+    finger2: gearItemSchema.optional(),
+    trinket1: gearItemSchema.optional(),
+    trinket2: gearItemSchema.optional(),
+    main_hand: gearItemSchema.optional(),
+    off_hand: gearItemSchema.optional()
 })
 
 export const droptimizerSchema = z.object({
@@ -155,13 +75,13 @@ export const droptimizerSchema = z.object({
         talents: z.string()
     }),
     upgrades: z.array(droptimizerUpgradeSchema).nullable(),
-    weeklyChest: z.array(droptimizerWeeklyChestSchema).nullable(),
+    weeklyChest: z.array(gearItemSchema).nullable(),
     currencies: z.array(droptimizerCurrenciesSchema).nullable(),
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
-    itemsInBag: z.array(droptimizerBagItemSchema).nullable(),
+    itemsInBag: z.array(gearItemSchema).nullable(),
     itemsEquipped: droptimizerEquippedItemsSchema,
-    tiersetInfo: z.array(tiersetInfoSchema)
+    tiersetInfo: z.array(gearItemSchema)
 })
 
 export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).extend({

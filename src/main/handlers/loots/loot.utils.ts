@@ -6,7 +6,18 @@ import {
     parseItemString
 } from '@shared/libs/item-string-parser/item-string-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
-import { NewLoot, WowRaidDifficulty } from '@shared/types/types'
+import {
+    BisList,
+    Character,
+    Droptimizer,
+    DroptimizerUpgrade,
+    GearItem,
+    Item,
+    LootWithItem,
+    NewLoot,
+    WowItemSlotKey,
+    WowRaidDifficulty
+} from '@shared/types/types'
 import { parse } from 'papaparse'
 import { z } from 'zod'
 import { rawLootRecordSchema } from '../raid-session/raid-session.schemas'
@@ -82,4 +93,102 @@ const parseDateTime = (dateStr: string, timeStr: string): number => {
     }
 
     return dateTime.getTime() / 1000
+}
+
+export const parseBestItemInSlot = (
+    slot: WowItemSlotKey | null,
+    droptimizers: Droptimizer[]
+): GearItem | null => {
+    // slot null = omni token
+    if (slot == null) return null
+
+    const droptWithItem = droptimizers
+        .filter((c) => c.itemsEquipped != null && c.itemsEquipped[slot] != null)
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+
+    return droptWithItem?.itemsEquipped[slot] ?? null
+}
+
+export const parseLootIsBis = (
+    bisList: BisList[],
+    loot: LootWithItem,
+    char: Character
+): boolean => {
+    return bisList.some((bis) => {
+        return bis.itemIds.includes(loot.item.id) && bis.wowClass === char.class
+    })
+}
+
+/**
+ * Todo: include assigned loot in the calculation
+ * @param tiersetInfo
+ * @returns
+ */
+export const parseTiersetInfo = (charDroptimizers: Droptimizer[]): GearItem[] => {
+    const droptWithTierInfo = charDroptimizers
+        .filter((c) => c.tiersetInfo != null && c.tiersetInfo.length > 0)
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+
+    if (droptWithTierInfo == null) return []
+
+    const maxItemLevelBySlot = new Map<string, GearItem>()
+
+    droptWithTierInfo.tiersetInfo.forEach((gear) => {
+        if (gear.item.slotKey) {
+            const existingItem = maxItemLevelBySlot.get(gear.item.slotKey)
+
+            let itemLevel = -1
+            if (gear.itemLevel == null) {
+                itemLevel = 1 // todo: parse from bonusString
+            } else {
+                itemLevel = gear.itemLevel
+            }
+
+            if (
+                !existingItem ||
+                (gear.itemLevel &&
+                    (existingItem.itemLevel == null || itemLevel > existingItem.itemLevel))
+            ) {
+                maxItemLevelBySlot.set(gear.item.slotKey, { ...gear, itemLevel })
+            }
+        }
+    })
+
+    return [
+        ...Array.from(maxItemLevelBySlot.values()), // tierset found
+        ...droptWithTierInfo.tiersetInfo.filter((t) => t.item.slotKey === 'omni') // omni tokens
+    ]
+}
+
+export const parseDroptimizersInfo = (
+    lootItem: Item,
+    raidDiff: WowRaidDifficulty,
+    droptimizers: Droptimizer[]
+): {
+    upgrade: DroptimizerUpgrade | null
+    itemEquipped: GearItem
+    droptimizer: Droptimizer
+}[] => {
+    return droptimizers
+        .filter(({ raidInfo }) => raidInfo.difficulty === raidDiff)
+        .map((droptimizer) => {
+            const upgrade =
+                droptimizer.upgrades?.find(({ item }) => item.id === lootItem.id) || null
+            const itemEquipped = droptimizer.itemsEquipped[lootItem.slotKey]
+            return { upgrade, itemEquipped, droptimizer }
+        })
+        .sort((a, b) => (b.upgrade?.dps || 0) - (a.upgrade?.dps || 0))
+}
+
+/**
+ * // more recent droptimizer with weekly chest info
+ * // todo: exclude if not in the current wow reset?
+ * @param droptimizers
+ * @returns
+ */
+export const parseWeeklyChest = (droptimizers: Droptimizer[]): GearItem[] => {
+    return (
+        droptimizers.filter((c) => c.weeklyChest).sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+            ?.weeklyChest ?? []
+    )
 }

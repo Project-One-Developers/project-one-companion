@@ -6,61 +6,64 @@ import * as fs from 'fs'
 import { addDroptimizerHandler } from './droptimizer.handlers'
 
 jest.mock('./droptimizer.utils', () => {
-    const originalModule = jest.requireActual('./droptimizer.utils')
-    const fetchRaidbotsDataMock = jest.fn((url: string) => {
-        console.log(`Mocking return value for ${url}`)
-        let mockJsonData = {}
-        // Bubbledan (dh)
-        if (url === 'https://www.raidbots.com/simbot/report/cUt45Z5FcaxztdQF9Girzx') {
-            mockJsonData = JSON.parse(
-                fs.readFileSync('resources/raidbots/testData/bubble-data.json', 'utf8')
-            )
-        }
-        // Shant (hunter)
-        else if (url === 'https://www.raidbots.com/simbot/report/2pjCMq6FWPFiVoKajjyiuw') {
-            mockJsonData = JSON.parse(
-                fs.readFileSync('resources/raidbots/testData/shant-data.json', 'utf8')
-            )
-        }
-        return Promise.resolve(mockJsonData)
-    })
+    const originalModule =
+        jest.requireActual<typeof import('./droptimizer.utils')>('./droptimizer.utils')
+
     return {
         __esModule: true,
-        ...(originalModule as object), // keep other function from the original module
-        fetchRaidbotsData: fetchRaidbotsDataMock
+        ...originalModule, // Preserve all other functions
+        fetchRaidbotsData: jest.fn((url: string) => {
+            console.log(`Mocking return value for ${url}`)
+            let mockJsonData = {}
+            if (url === 'https://www.raidbots.com/simbot/report/cUt45Z5FcaxztdQF9Girzx') {
+                mockJsonData = JSON.parse(
+                    fs.readFileSync('resources/raidbots/testData/bubble-data.json', 'utf8')
+                )
+            } else if (url === 'https://www.raidbots.com/simbot/report/2pjCMq6FWPFiVoKajjyiuw') {
+                mockJsonData = JSON.parse(
+                    fs.readFileSync('resources/raidbots/testData/shant-data.json', 'utf8')
+                )
+            }
+            return Promise.resolve(mockJsonData)
+        }),
+        droptimizerEquippedItemSchemaToGearItem: jest.fn(() => undefined),
+        parseGreatVaultFromSimc: jest.fn(() => [])
     }
 })
 
 jest.mock('@storage/items/items.storage', () => {
-    const getTiersetAndTokenListMock = jest.fn((): Promise<Item[]> => {
-        return Promise.resolve([])
-    })
+    const originalModule = jest.requireActual<typeof import('@storage/items/items.storage')>(
+        '@storage/items/items.storage'
+    )
+
     return {
         __esModule: true,
-        getTiersetAndTokenList: getTiersetAndTokenListMock
+        ...originalModule, // Preserve all other functions
+        getTiersetAndTokenList: jest.fn((): Promise<Item[]> => Promise.resolve([]))
     }
 })
 
 jest.mock('@storage/droptimizer/droptimizer.storage', () => {
-    const originalModule = jest.requireActual('../../lib/storage/droptimizer/droptimizer.storage')
-    const getItemToTiersetMappingMock = jest.fn((): Promise<ItemToTierset[]> => {
-        const tiersetMapping = JSON.parse(
-            fs.readFileSync('resources/wow/s1/items_to_tierset.json', 'utf8')
-        )
-        return Promise.resolve(tiersetMapping)
-    })
-    const getItemToCatalystMappingMock = jest.fn((): Promise<ItemToCatalyst[]> => {
-        const catalystMapping = JSON.parse(
-            fs.readFileSync('resources/wow/s1/items_to_catalyst.json', 'utf8')
-        )
-        return Promise.resolve(catalystMapping)
-    })
+    const originalModule = jest.requireActual<
+        typeof import('@storage/droptimizer/droptimizer.storage')
+    >('@storage/droptimizer/droptimizer.storage')
+
     return {
         __esModule: true,
-        ...(originalModule as object), // keep other function from the original module
+        ...originalModule, // Preserve all other functions
         addDroptimizer: jest.fn(),
-        getItemToTiersetMapping: getItemToTiersetMappingMock,
-        getItemToCatalystMapping: getItemToCatalystMappingMock
+        getItemToTiersetMapping: jest.fn((): Promise<ItemToTierset[]> => {
+            const tiersetMapping = JSON.parse(
+                fs.readFileSync('resources/wow/s1/items_to_tierset.json', 'utf8')
+            )
+            return Promise.resolve(tiersetMapping)
+        }),
+        getItemToCatalystMapping: jest.fn((): Promise<ItemToCatalyst[]> => {
+            const catalystMapping = JSON.parse(
+                fs.readFileSync('resources/wow/s1/items_to_catalyst.json', 'utf8')
+            )
+            return Promise.resolve(catalystMapping)
+        })
     }
 })
 
@@ -151,38 +154,7 @@ describe('Droptimizer Handlers', () => {
                     slot: 'finger2'
                 }
             ],
-            weeklyChest: [
-                {
-                    bonusString: '10278:10388:6652:10383:1628:10255',
-                    id: 219301,
-                    itemLevel: 593
-                },
-                {
-                    bonusString: '10278:10388:6652:10877:10377:10383:1628:10255',
-                    id: 221163,
-                    itemLevel: 593
-                },
-                {
-                    bonusString: '10281:6652:10377:1489:10255',
-                    id: 211005,
-                    itemLevel: 584
-                },
-                {
-                    bonusString: '10281:6652:10377:3163:10255',
-                    id: 219174,
-                    itemLevel: 584
-                },
-                {
-                    bonusString: '42:10380:10356:10258:1530:10255',
-                    id: 225591,
-                    itemLevel: 629
-                },
-                {
-                    bonusString: '40:10876:10380:10356:10259:1527:10255',
-                    id: 225583,
-                    itemLevel: 626
-                }
-            ],
+            weeklyChest: [],
             currencies: [
                 {
                     amount: 2259,

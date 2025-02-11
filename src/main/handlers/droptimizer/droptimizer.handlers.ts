@@ -1,14 +1,15 @@
+import { gearItemSchema } from '@shared/schemas/items.schema'
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import type {
     Droptimizer,
-    DroptimizerBagItem,
     DroptimizerEquippedItems,
+    GearItem,
     Item,
     ItemToCatalyst,
     ItemToTierset,
     NewDroptimizer,
     NewDroptimizerUpgrade,
-    TiersetInfo,
+    WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
 import {
@@ -97,29 +98,28 @@ const evalUpgrades = (
     return Array.from(upgradesMap.values())
 }
 
-const evalTiersets = (
-    equipped: DroptimizerEquippedItems,
-    bags: DroptimizerBagItem[]
-): TiersetInfo[] => {
-    const res: TiersetInfo[] = []
+const evalTiersets = (equipped: DroptimizerEquippedItems, bags: GearItem[]): GearItem[] => {
+    const res: GearItem[] = []
 
     const addTiersetInfo = (
-        item: DroptimizerEquippedItems[keyof DroptimizerEquippedItems],
-        slot: string
+        equippedGear: DroptimizerEquippedItems[keyof DroptimizerEquippedItems],
+        slot: WowItemSlotKey
     ) => {
-        if (item) {
-            const match = cachedTierset.find((t) => t.id === item.id)
-            if (match != null) {
-                res.push({
-                    id: item.id,
-                    slot,
+        if (!equippedGear) return
+        const match = cachedTierset.find((t) => t.id === equippedGear.item.id) ?? null
+        if (match != null) {
+            res.push(
+                gearItemSchema.parse({
+                    item: {
+                        id: equippedGear.item.id,
+                        slot: slot,
+                        baseItemLevel: match.ilvlBase
+                    },
                     source: 'equipped',
-                    isOmni: false,
-                    itemLevel: item.itemLevel,
-                    baseItemLevel: match.ilvlBase,
-                    bonusString: item.bonus_id ?? null
-                })
-            }
+                    itemLevel: equippedGear.itemLevel,
+                    bonusString: equippedGear.bonusString
+                } as GearItem)
+            )
         }
     }
 
@@ -130,17 +130,15 @@ const evalTiersets = (
     addTiersetInfo(equipped.legs, 'legs')
 
     bags.map((bagItem) => {
-        const match = cachedTierset.find((t) => t.id === bagItem.id)
+        const match = cachedTierset.find((t) => t.id === bagItem.item.id)
         if (match != null) {
-            res.push({
-                id: match.id,
-                slot: match.slotKey,
-                isOmni: match.slotKey == null, // curio
-                source: 'bag',
-                itemLevel: null,
-                baseItemLevel: match.ilvlBase,
-                bonusString: bagItem.bonus_id
-            })
+            res.push(
+                gearItemSchema.parse({
+                    item: { id: match.id, slot: match.slotKey, baseItemLevel: match.ilvlBase },
+                    source: 'bag',
+                    bonusString: bagItem.bonusString
+                } as GearItem)
+            )
         }
     })
 

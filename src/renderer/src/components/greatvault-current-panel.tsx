@@ -25,8 +25,8 @@ export const CurrentGreatVaultPanel = ({ droptimizer }: CurrentGreatVaultPanelPr
                 {isValidWeek ? (
                     weeklyChests.map((wc) => (
                         <WowItemIcon
-                            key={wc.id}
-                            item={wc.id}
+                            key={wc.item.id}
+                            item={wc.item.id}
                             iconOnly={false}
                             bonusString={wc.bonusString}
                             ilvl={wc.itemLevel}

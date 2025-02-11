@@ -50,7 +50,8 @@ export const wowItemSlotSchema = z.enum([
     'Main Hand',
     'Off Hand',
     'Two Hand',
-    'Ranged'
+    'Ranged',
+    'Omni'
 ])
 
 export const wowItemSlotKeySchema = z.enum([
@@ -67,7 +68,8 @@ export const wowItemSlotKeySchema = z.enum([
     'finger',
     'trinket',
     'main_hand',
-    'off_hand'
+    'off_hand',
+    'omni'
 ])
 
 export const wowArmorTypeSchema = z.enum(['Cloth', 'Leather', 'Mail', 'Plate'])

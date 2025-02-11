@@ -5,7 +5,7 @@ import type { LootWithItemAndAssigned } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { type JSX } from 'react'
-import { DroptimizersUpgradeForItem } from './droptimizer-upgrades-for-item'
+import { DroptimizerUpgradeForItemEquipped } from './droptimizer-upgrade-for-item'
 import { toast } from './hooks/use-toast'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowClassIcon } from './ui/wowclass-icon'
@@ -133,21 +133,25 @@ export default function LootsEligibleChars({
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <DroptimizersUpgradeForItem
-                                            item={selectedLoot.item}
-                                            droptimizers={charInfo.droptimizers}
-                                            showUpgradeItem={true}
-                                        />
+                                        {charInfo.droptimizers &&
+                                            charInfo.droptimizers.map((droptWithUpgrade) => (
+                                                <DroptimizerUpgradeForItemEquipped
+                                                    key={droptWithUpgrade.itemEquipped.item.id}
+                                                    upgrade={droptWithUpgrade.upgrade}
+                                                    droptimizer={droptWithUpgrade.droptimizer}
+                                                    itemEquipped={droptWithUpgrade.itemEquipped}
+                                                />
+                                            ))}
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex flex-row 2">
                                             {charInfo.weeklyChest.map((wc) => (
                                                 <div
-                                                    key={wc.id}
+                                                    key={wc.item.id}
                                                     className="flex flex-col items-center"
                                                 >
                                                     <WowItemIcon
-                                                        item={wc.id}
+                                                        item={wc.item.id}
                                                         ilvl={wc.itemLevel}
                                                         iconOnly={true}
                                                         bonusString={wc.bonusString}

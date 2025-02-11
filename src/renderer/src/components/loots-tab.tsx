@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
-import { mapRaidbotSlotToWowSlot } from '@renderer/lib/wow-utils'
+import { formatWowSlotKey } from '@renderer/lib/wow-utils'
 import { ITEM_SLOTS_KEY } from '@shared/consts/wow.consts'
 import { LootWithItemAndAssigned } from '@shared/types/types'
 import LootItem from './loots-item'
@@ -52,7 +52,7 @@ const LootsTabs = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                         value={slot}
                         className="flex flex-col items-start gap-1 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
                     >
-                        {mapRaidbotSlotToWowSlot(slot)}
+                        {formatWowSlotKey(slot)}
                     </TabsTrigger>
                 ))}
             </TabsList>

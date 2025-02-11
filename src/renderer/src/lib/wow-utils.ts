@@ -1,6 +1,6 @@
 import type { WowItemSlot } from 'shared/types/types'
 
-export function mapRaidbotSlotToWowSlot(raidbotSlot: string): WowItemSlot {
+export function formatWowSlotKey(raidbotSlot: string): WowItemSlot {
     switch (raidbotSlot) {
         case 'head':
             return 'Head'
@@ -42,6 +42,8 @@ export function mapRaidbotSlotToWowSlot(raidbotSlot: string): WowItemSlot {
             return 'Off Hand'
         case 'offHand':
             return 'Off Hand'
+        case 'omni':
+            return 'Omni'
         default:
             throw new Error(`Unknown raidbot slot: ${raidbotSlot}`)
     }

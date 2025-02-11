@@ -1,10 +1,10 @@
 import { bisListSchema } from '@shared/schemas/bis-list.schemas'
 import { bossSchema, bossWithItemsSchema } from '@shared/schemas/boss.schema'
 import {
+    gearItemSchema,
     itemSchema,
     itemToCatalystSchema,
-    itemToTiersetSchema,
-    tiersetInfoSchema
+    itemToTiersetSchema
 } from '@shared/schemas/items.schema'
 import {
     lootSchema,
@@ -34,13 +34,10 @@ import {
     playerWithCharacterSchema
 } from '../schemas/characters.schemas'
 import {
-    droptimizerBagItemSchema,
     droptimizerCurrenciesSchema,
-    droptimizerEquippedItemSchema,
     droptimizerEquippedItemsSchema,
     droptimizerSchema,
     droptimizerUpgradeSchema,
-    droptimizerWeeklyChestSchema,
     newDroptimizerSchema,
     newDroptimizerUpgradeSchema,
     raidbotsURLSchema
@@ -48,6 +45,7 @@ import {
 import {
     wowArmorTypeSchema,
     wowClassSchema,
+    wowItemSlotKeySchema,
     wowItemSlotSchema,
     wowRaidDiffSchema,
     wowRolesSchema,
@@ -58,6 +56,7 @@ export type WowClass = z.infer<typeof wowClassSchema>
 export type WowSpec = z.infer<typeof wowSpecSchema>
 export type WowRaidDifficulty = z.infer<typeof wowRaidDiffSchema>
 export type WowItemSlot = z.infer<typeof wowItemSlotSchema>
+export type WowItemSlotKey = z.infer<typeof wowItemSlotKeySchema>
 export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
 export type WoWRole = z.infer<typeof wowRolesSchema>
 
@@ -76,21 +75,20 @@ export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
-export type DroptimizerWeeklyChest = z.infer<typeof droptimizerWeeklyChestSchema>
 export type DroptimizerCurrenciesUpgrade = z.infer<typeof droptimizerCurrenciesSchema>
 export type DroptimizerEquippedItems = z.infer<typeof droptimizerEquippedItemsSchema>
-export type DroptimizerEquippedItem = z.infer<typeof droptimizerEquippedItemSchema>
-export type DroptimizerBagItem = z.infer<typeof droptimizerBagItemSchema>
 
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
 export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>
 
 export type Item = z.infer<typeof itemSchema>
+export type GearItem = z.infer<typeof gearItemSchema>
+
 export type ItemToTierset = z.infer<typeof itemToTiersetSchema>
 export type ItemToCatalyst = z.infer<typeof itemToCatalystSchema>
-export type TiersetInfo = z.infer<typeof tiersetInfoSchema>
 
+// bis list
 export type BisList = z.infer<typeof bisListSchema>
 
 // encounter
@@ -110,9 +108,13 @@ export type NewLootsFromRc = z.infer<typeof newLootsFromRcSchema>
 export type NewLootsFromManualInput = z.infer<typeof newLootsFromManualInputSchema>
 export type CharAssignmentInfo = {
     character: Character
-    droptimizers: Droptimizer[]
-    weeklyChest: DroptimizerWeeklyChest[]
-    tierset: TiersetInfo[]
+    droptimizers: {
+        upgrade: DroptimizerUpgrade | null // dps gain info
+        itemEquipped: GearItem // item that is going to be replaced by the upgrade
+        droptimizer: Droptimizer // droptimizer source
+    }[]
+    weeklyChest: GearItem[]
+    tierset: GearItem[]
     bis: boolean
     score: number
 }

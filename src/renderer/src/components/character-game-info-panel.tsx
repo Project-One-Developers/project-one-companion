@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
-import { mapRaidbotSlotToWowSlot } from '@renderer/lib/wow-utils'
+import { formatWowSlotKey } from '@renderer/lib/wow-utils'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -177,7 +177,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                 {Object.entries(wowAudit.equippedGear).map(([key, value]) =>
                                     value ? (
                                         <TableRow key={key}>
-                                            <TableCell>{mapRaidbotSlotToWowSlot(key)}</TableCell>
+                                            <TableCell>{formatWowSlotKey(key)}</TableCell>
                                             <TableCell>
                                                 <WowItemIcon
                                                     item={wowAudit.equippedGear[key].id}
@@ -236,28 +236,30 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {Object.entries(droptimizer.itemsEquipped).map(([key, item]) => (
-                                    <TableRow key={key}>
-                                        <TableCell>{mapRaidbotSlotToWowSlot(key)}</TableCell>
-                                        <TableCell>
-                                            {item && (
-                                                <WowItemIcon
-                                                    item={item.id}
-                                                    ilvl={item.itemLevel}
-                                                    bonusString={item.bonus_id ?? undefined}
-                                                    enchantString={item.enchant_id ?? undefined}
-                                                    gemsString={item.gem_id ?? undefined}
-                                                    iconOnly={false}
-                                                    showIlvl={true}
-                                                    showSlot={false}
-                                                    showSubclass={false}
-                                                    tierBanner={true}
-                                                    iconClassName="rounded-lg h-10 w-10 border border-background"
-                                                />
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                {Object.entries(droptimizer.itemsEquipped).map(
+                                    ([key, gearItem]) => (
+                                        <TableRow key={key}>
+                                            <TableCell>{formatWowSlotKey(key)}</TableCell>
+                                            <TableCell>
+                                                {gearItem && (
+                                                    <WowItemIcon
+                                                        item={gearItem.item.id}
+                                                        ilvl={gearItem.itemLevel}
+                                                        bonusString={gearItem.bonusString}
+                                                        enchantString={gearItem.enchantId}
+                                                        gemsString={gearItem.gemId}
+                                                        iconOnly={false}
+                                                        showIlvl={true}
+                                                        showSlot={false}
+                                                        showSubclass={false}
+                                                        tierBanner={true}
+                                                        iconClassName="rounded-lg h-10 w-10 border border-background"
+                                                    />
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                )}
                             </TableBody>
                         </Table>
                     )}

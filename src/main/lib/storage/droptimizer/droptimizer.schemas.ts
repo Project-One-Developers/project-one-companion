@@ -1,10 +1,7 @@
-import { tiersetInfoSchema } from '@shared/schemas/items.schema'
+import { gearItemSchema } from '@shared/schemas/items.schema'
 import {
-    droptimizerBagItemSchema,
     droptimizerCurrenciesSchema,
-    droptimizerEquippedItemSchema,
-    droptimizerUpgradeSchema,
-    droptimizerWeeklyChestSchema
+    droptimizerUpgradeSchema
 } from '@shared/schemas/simulations.schemas'
 import { wowClassSchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import { Droptimizer } from '@shared/types/types'
@@ -30,30 +27,30 @@ export const droptimizerStorageSchema = z.object({
     characterSpecId: z.number(),
     characterTalents: z.string(),
     upgrades: z.array(droptimizerUpgradeSchema),
-    weeklyChest: z.array(droptimizerWeeklyChestSchema).nullable(),
+    weeklyChest: z.array(gearItemSchema).nullable(),
     currencies: z.array(droptimizerCurrenciesSchema).nullable(),
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
-    itemsInBag: z.array(droptimizerBagItemSchema).nullable(),
+    itemsInBag: z.array(gearItemSchema).nullable(),
     itemsEquipped: z.object({
-        head: droptimizerEquippedItemSchema.nullish(),
-        neck: droptimizerEquippedItemSchema.nullish(),
-        shoulder: droptimizerEquippedItemSchema.nullish(),
-        back: droptimizerEquippedItemSchema.nullish(),
-        chest: droptimizerEquippedItemSchema.nullish(),
-        wrist: droptimizerEquippedItemSchema.nullish(),
-        hands: droptimizerEquippedItemSchema.nullish(),
-        waist: droptimizerEquippedItemSchema.nullish(),
-        legs: droptimizerEquippedItemSchema.nullish(),
-        feet: droptimizerEquippedItemSchema.nullish(),
-        finger1: droptimizerEquippedItemSchema.nullish(),
-        finger2: droptimizerEquippedItemSchema.nullish(),
-        trinket1: droptimizerEquippedItemSchema.nullish(),
-        trinket2: droptimizerEquippedItemSchema.nullish(),
-        main_hand: droptimizerEquippedItemSchema.nullish(),
-        off_hand: droptimizerEquippedItemSchema.nullish()
+        head: gearItemSchema.optional(),
+        neck: gearItemSchema.optional(),
+        shoulder: gearItemSchema.optional(),
+        back: gearItemSchema.optional(),
+        chest: gearItemSchema.optional(),
+        wrist: gearItemSchema.optional(),
+        hands: gearItemSchema.optional(),
+        waist: gearItemSchema.optional(),
+        legs: gearItemSchema.optional(),
+        feet: gearItemSchema.optional(),
+        finger1: gearItemSchema.optional(),
+        finger2: gearItemSchema.optional(),
+        trinket1: gearItemSchema.optional(),
+        trinket2: gearItemSchema.optional(),
+        main_hand: gearItemSchema.optional(),
+        off_hand: gearItemSchema.optional()
     }),
-    tiersetInfo: z.array(tiersetInfoSchema)
+    tiersetInfo: z.array(gearItemSchema)
 })
 
 export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
