@@ -50,7 +50,7 @@
         "drizzle-kit": "0.30.4",
         "drizzle-orm": "0.39.3",
         "electron-updater": "6.3.9",
-        "framer-motion": "12.4.1",
+        "framer-motion": "12.4.2",
         "lucide-react": "0.475.0",
         "papaparse": "^5.5.2",
         "postgres": "3.4.5",
