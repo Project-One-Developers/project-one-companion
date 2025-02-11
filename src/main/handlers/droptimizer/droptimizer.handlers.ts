@@ -112,7 +112,7 @@ const evalTiersets = (equipped: DroptimizerEquippedItems, bags: GearItem[]): Gea
                 gearItemSchema.parse({
                     item: {
                         id: equippedGear.item.id,
-                        slot: slot,
+                        slotKey: slot,
                         baseItemLevel: match.ilvlBase
                     },
                     source: 'equipped',
@@ -134,7 +134,7 @@ const evalTiersets = (equipped: DroptimizerEquippedItems, bags: GearItem[]): Gea
         if (match != null) {
             res.push(
                 gearItemSchema.parse({
-                    item: { id: match.id, slot: match.slotKey, baseItemLevel: match.ilvlBase },
+                    item: { id: match.id, slotKey: match.slotKey, baseItemLevel: match.ilvlBase },
                     source: 'bag',
                     bonusString: bagItem.bonusString
                 } as GearItem)
