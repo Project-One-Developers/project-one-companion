@@ -1,4 +1,5 @@
 import { PROFESSION_TYPES } from '@shared/consts/wow.consts'
+import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import {
     doesItemHaveSocket,
     doesItemHaveTertiaryStat,
@@ -178,12 +179,15 @@ export const parseDroptimizersInfo = (
             const upgrade =
                 droptimizer.upgrades?.find(({ item }) => item.id === lootItem.id) || null
 
-            if (upgrade != null) {
-                const itemEquipped = droptimizer.itemsEquipped[upgrade?.slot] || null
-                return { upgrade, itemEquipped, droptimizer }
-            }
+            const itemEquipped = upgrade
+                ? droptimizer.itemsEquipped.find(
+                      (gearItem) => gearItem.equippedInSlot === upgrade.slot
+                  )!
+                : droptimizer.itemsEquipped.find(
+                      (gearItem) =>
+                          equippedSlotToSlot(gearItem.equippedInSlot!) === lootItem.slotKey
+                  )!
 
-            const itemEquipped = droptimizer.itemsEquipped[lootItem.slotKey] || null
             return { upgrade, itemEquipped, droptimizer }
         })
         .sort((a, b) => (b.upgrade?.dps || 0) - (a.upgrade?.dps || 0))
