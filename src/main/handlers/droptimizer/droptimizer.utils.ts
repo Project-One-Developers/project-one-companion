@@ -14,7 +14,12 @@ export const fetchRaidbotsData = async (url: RaidbotsURL): Promise<unknown> => {
     return await responseJson.json()
 }
 
-export const parseRaidbotsData = (jsonData: unknown): z.infer<typeof raidbotParseAndTransform> => {
+export const parseRaidbotsData = (jsonData: any): z.infer<typeof raidbotParseAndTransform> => {
+    if (jsonData?.simbot?.publicTitle === 'Top Gear') {
+        throw new Error(
+            `Skipping invalid droptimizer for ${jsonData.simbot.player} (Top Gear): ${jsonData.simbot.parentSimId}`
+        )
+    }
     return raidbotParseAndTransform.parse(jsonData)
 }
 
