@@ -4,7 +4,7 @@ import {
     doesItemHaveTertiaryStat,
     getItemBonusString,
     parseItemString
-} from '@shared/libs/item-string-parser/item-string-parser'
+} from '@shared/libs/items/item-string-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
     BisList,
@@ -177,6 +177,12 @@ export const parseDroptimizersInfo = (
         .map((droptimizer) => {
             const upgrade =
                 droptimizer.upgrades?.find(({ item }) => item.id === lootItem.id) || null
+
+            if (upgrade != null) {
+                const itemEquipped = droptimizer.itemsEquipped[upgrade?.slot] || null
+                return { upgrade, itemEquipped, droptimizer }
+            }
+
             const itemEquipped = droptimizer.itemsEquipped[lootItem.slotKey] || null
             return { upgrade, itemEquipped, droptimizer }
         })

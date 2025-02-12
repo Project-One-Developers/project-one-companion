@@ -32,24 +32,7 @@ export const droptimizerStorageSchema = z.object({
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
     itemsInBag: z.array(gearItemSchema).nullable(),
-    itemsEquipped: z.object({
-        head: gearItemSchema.optional(),
-        neck: gearItemSchema.optional(),
-        shoulder: gearItemSchema.optional(),
-        back: gearItemSchema.optional(),
-        chest: gearItemSchema.optional(),
-        wrist: gearItemSchema.optional(),
-        hands: gearItemSchema.optional(),
-        waist: gearItemSchema.optional(),
-        legs: gearItemSchema.optional(),
-        feet: gearItemSchema.optional(),
-        finger1: gearItemSchema.optional(),
-        finger2: gearItemSchema.optional(),
-        trinket1: gearItemSchema.optional(),
-        trinket2: gearItemSchema.optional(),
-        main_hand: gearItemSchema.optional(),
-        off_hand: gearItemSchema.optional()
-    }),
+    itemsEquipped: z.array(gearItemSchema),
     tiersetInfo: z.array(gearItemSchema)
 })
 

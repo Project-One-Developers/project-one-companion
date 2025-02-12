@@ -1,8 +1,13 @@
+import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { gearItemSchema } from '@shared/schemas/items.schema'
-import { wowItemSlotKeySchema } from '@shared/schemas/wow.schemas'
+import { wowItemEquippedSlotKeySchema, wowItemSlotKeySchema } from '@shared/schemas/wow.schemas'
 import type { GearItem, RaidbotsURL, WowItemSlotKey } from '@shared/types/types'
 import { z } from 'zod'
-import { droptimizerEquippedItemSchema, raidbotParseAndTransform } from './droptimizer.schemas'
+import {
+    droptimizerEquippedItemSchema,
+    droptimizerEquippedItemsSchema,
+    raidbotParseAndTransform
+} from './droptimizer.schemas'
 
 export const fetchRaidbotsData = async (url: RaidbotsURL): Promise<unknown> => {
     const responseJson = await fetch(`${url}/data.json`)
@@ -93,6 +98,30 @@ export function parseBagGearsFromSimc(simc: string): GearItem[] | null {
     }
 
     return items
+}
+
+export const parseEquippedGear = (
+    droptEquipped: z.infer<typeof droptimizerEquippedItemsSchema>
+): GearItem[] => {
+    const res = Object.entries(droptEquipped).map(([slot, gearItem]) => {
+        let realSlot = slot
+
+        if (slot === 'mainHand') realSlot = 'main_hand'
+        else if (slot === 'offHand') realSlot = 'off_hand'
+
+        return gearItemSchema.parse({
+            item: {
+                id: gearItem.id,
+                name: gearItem.name,
+                slotKey: equippedSlotToSlot(wowItemEquippedSlotKeySchema.parse(realSlot))
+            },
+            source: 'equipped',
+            equippedInSlot: realSlot,
+            itemLevel: gearItem.itemLevel,
+            bonusString: gearItem.bonus_id
+        } as GearItem)
+    })
+    return res
 }
 
 export const droptimizerEquippedItemSchemaToGearItem = (

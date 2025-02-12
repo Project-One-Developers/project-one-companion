@@ -1,13 +1,13 @@
 import { z } from 'zod'
 import { gearItemSchema, itemSchema } from './items.schema'
-import { wowClassSchema, wowRaidDiffSchema } from './wow.schemas'
+import { wowClassSchema, wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const droptimizerUpgradeSchema = z.object({
     id: z.string(),
     dps: z.number(),
     item: itemSchema,
     ilvl: z.number(),
-    slot: z.string(),
+    slot: wowItemEquippedSlotKeySchema,
     catalyzedItem: itemSchema.nullable(),
     droptimizerId: z.string()
 })
@@ -28,25 +28,6 @@ export const droptimizerCurrenciesSchema = z.object({
     id: z.number(),
     type: z.string(),
     amount: z.number()
-})
-
-export const droptimizerEquippedItemsSchema = z.object({
-    head: gearItemSchema.optional(),
-    neck: gearItemSchema.optional(),
-    shoulder: gearItemSchema.optional(),
-    back: gearItemSchema.optional(),
-    chest: gearItemSchema.optional(),
-    wrist: gearItemSchema.optional(),
-    hands: gearItemSchema.optional(),
-    waist: gearItemSchema.optional(),
-    legs: gearItemSchema.optional(),
-    feet: gearItemSchema.optional(),
-    finger1: gearItemSchema.optional(),
-    finger2: gearItemSchema.optional(),
-    trinket1: gearItemSchema.optional(),
-    trinket2: gearItemSchema.optional(),
-    main_hand: gearItemSchema.optional(),
-    off_hand: gearItemSchema.optional()
 })
 
 export const droptimizerSchema = z.object({
@@ -80,7 +61,7 @@ export const droptimizerSchema = z.object({
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
     itemsInBag: z.array(gearItemSchema).nullable(),
-    itemsEquipped: droptimizerEquippedItemsSchema,
+    itemsEquipped: z.array(gearItemSchema),
     tiersetInfo: z.array(gearItemSchema)
 })
 

@@ -2,14 +2,13 @@ import { gearItemSchema } from '@shared/schemas/items.schema'
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import type {
     Droptimizer,
-    DroptimizerEquippedItems,
     GearItem,
     Item,
     ItemToCatalyst,
     ItemToTierset,
     NewDroptimizer,
     NewDroptimizerUpgrade,
-    WowItemSlotKey,
+    WowItemEquippedSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
 import {
@@ -50,7 +49,7 @@ const evalUpgrades = (
         encounterId: number
         itemId: number
         ilvl: number
-        slot: string
+        slot: WowItemEquippedSlotKey
     }[]
 ): NewDroptimizerUpgrade[] => {
     const upgradesMap = upgrades
@@ -98,45 +97,32 @@ const evalUpgrades = (
     return Array.from(upgradesMap.values())
 }
 
-const evalTiersets = (equipped: DroptimizerEquippedItems, bags: GearItem[]): GearItem[] => {
+const evalTiersets = (equipped: GearItem[], bags: GearItem[]): GearItem[] => {
     const res: GearItem[] = []
 
-    const addTiersetInfo = (
-        equippedGear: DroptimizerEquippedItems[keyof DroptimizerEquippedItems],
-        slot: WowItemSlotKey
-    ) => {
-        if (!equippedGear) return
-        const match = cachedTierset.find((t) => t.id === equippedGear.item.id) ?? null
+    // tierset equipped
+    equipped.map((equippedItem) => {
+        const match = cachedTierset.find((t) => t.id === equippedItem.item.id)
         if (match != null) {
             res.push(
                 gearItemSchema.parse({
-                    item: {
-                        id: equippedGear.item.id,
-                        slotKey: slot,
-                        baseItemLevel: match.ilvlBase
-                    },
-                    source: 'equipped',
-                    itemLevel: equippedGear.itemLevel,
-                    bonusString: equippedGear.bonusString
+                    ...equippedItem,
+                    item: { id: match.id, slotKey: match.slotKey, baseItemLevel: match.ilvlBase },
+                    source: 'equipped'
                 } as GearItem)
             )
         }
-    }
+    })
 
-    addTiersetInfo(equipped.head, 'head')
-    addTiersetInfo(equipped.shoulder, 'shoulder')
-    addTiersetInfo(equipped.chest, 'chest')
-    addTiersetInfo(equipped.hands, 'hands')
-    addTiersetInfo(equipped.legs, 'legs')
-
+    // tierset/token/omni in bags
     bags.map((bagItem) => {
         const match = cachedTierset.find((t) => t.id === bagItem.item.id)
         if (match != null) {
             res.push(
                 gearItemSchema.parse({
+                    ...bagItem,
                     item: { id: match.id, slotKey: match.slotKey, baseItemLevel: match.ilvlBase },
-                    source: 'bag',
-                    bonusString: bagItem.bonusString
+                    source: 'bag'
                 } as GearItem)
             )
         }

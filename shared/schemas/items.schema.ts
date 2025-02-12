@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { wowArmorTypeSchema, wowItemSlotKeySchema, wowItemSlotSchema } from './wow.schemas'
+import {
+    wowArmorTypeSchema,
+    wowItemEquippedSlotKeySchema,
+    wowItemSlotKeySchema,
+    wowItemSlotSchema
+} from './wow.schemas'
 
 export const itemSchema = z.object({
     id: z.number(),
@@ -62,6 +67,7 @@ export const gearItemSchema = z.object({
         slotKey: wowItemSlotKeySchema.optional()
     }),
     source: z.enum(['equipped', 'bag', 'great-vault']),
+    equippedInSlot: wowItemEquippedSlotKeySchema.optional(),
     itemLevel: z.number().optional(),
     bonusString: z.preprocess((val) => {
         // Convert numbers to strings

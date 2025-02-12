@@ -27,7 +27,8 @@ jest.mock('./droptimizer.utils', () => {
             return Promise.resolve(mockJsonData)
         }),
         droptimizerEquippedItemSchemaToGearItem: jest.fn(() => undefined),
-        parseGreatVaultFromSimc: jest.fn(() => [])
+        parseGreatVaultFromSimc: jest.fn(() => []),
+        parseEquippedGear: jest.fn(() => [])
     }
 })
 

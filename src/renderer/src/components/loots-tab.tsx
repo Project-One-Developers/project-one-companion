@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
-import { formatWowSlotKey } from '@renderer/lib/wow-utils'
 import { ITEM_SLOTS_KEY } from '@shared/consts/wow.consts'
+import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
 import { LootWithItemAndAssigned } from '@shared/types/types'
 import LootItem from './loots-item'
 

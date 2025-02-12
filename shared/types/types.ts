@@ -35,7 +35,6 @@ import {
 } from '../schemas/characters.schemas'
 import {
     droptimizerCurrenciesSchema,
-    droptimizerEquippedItemsSchema,
     droptimizerSchema,
     droptimizerUpgradeSchema,
     newDroptimizerSchema,
@@ -45,6 +44,7 @@ import {
 import {
     wowArmorTypeSchema,
     wowClassSchema,
+    wowItemEquippedSlotKeySchema,
     wowItemSlotKeySchema,
     wowItemSlotSchema,
     wowRaidDiffSchema,
@@ -57,6 +57,7 @@ export type WowSpec = z.infer<typeof wowSpecSchema>
 export type WowRaidDifficulty = z.infer<typeof wowRaidDiffSchema>
 export type WowItemSlot = z.infer<typeof wowItemSlotSchema>
 export type WowItemSlotKey = z.infer<typeof wowItemSlotKeySchema>
+export type WowItemEquippedSlotKey = z.infer<typeof wowItemEquippedSlotKeySchema>
 export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
 export type WoWRole = z.infer<typeof wowRolesSchema>
 
@@ -76,7 +77,6 @@ export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
 export type DroptimizerCurrenciesUpgrade = z.infer<typeof droptimizerCurrenciesSchema>
-export type DroptimizerEquippedItems = z.infer<typeof droptimizerEquippedItemsSchema>
 
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
