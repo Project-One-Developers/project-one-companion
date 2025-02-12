@@ -106,154 +106,176 @@ describe('Droptimizer Handlers', () => {
                     slot: 'main_hand',
                     dps: 5602,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225574,
                     slot: 'back',
                     dps: 7725,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212399,
                     slot: 'main_hand',
                     dps: 6035,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225578,
                     slot: 'finger2',
                     dps: 30069,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225576,
                     slot: 'finger2',
                     dps: 10625,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212431,
                     slot: 'feet',
                     dps: 5575,
                     ilvl: 639,
-                    catalyzedItemId: 212022
+                    catalyzedItemId: 212022,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212456,
                     slot: 'trinket2',
                     dps: 2372,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212447,
                     slot: 'finger2',
                     dps: 12692,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212415,
                     slot: 'wrist',
                     dps: 4847,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225586,
                     slot: 'feet',
                     dps: 6038,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212429,
                     slot: 'shoulder',
                     dps: 2804,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225581,
                     slot: 'wrist',
                     dps: 5977,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212454,
                     slot: 'trinket2',
                     dps: 12422,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225725,
                     slot: 'waist',
                     dps: 2617,
                     ilvl: 639,
-                    catalyzedItemId: 212017
+                    catalyzedItemId: 212017,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212414,
                     slot: 'waist',
                     dps: 2268,
                     ilvl: 639,
-                    catalyzedItemId: 212017
+                    catalyzedItemId: 212017,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 220305,
                     slot: 'trinket2',
                     dps: 2794,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212435,
                     slot: 'legs',
                     dps: 1261,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225724,
                     slot: 'shoulder',
                     dps: 303,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225577,
                     slot: 'neck',
                     dps: 3834,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212448,
                     slot: 'neck',
                     dps: 10422,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 225580,
                     slot: 'waist',
                     dps: 2309,
                     ilvl: 639,
-                    catalyzedItemId: 212017
+                    catalyzedItemId: 212017,
+                    tiersetItemId: null
                 },
                 {
                     itemId: 212446,
                     slot: 'back',
                     dps: 5867,
                     ilvl: 639,
-                    catalyzedItemId: null
+                    catalyzedItemId: null,
+                    tiersetItemId: null
                 }
             ],
             weeklyChest: [],

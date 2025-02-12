@@ -165,14 +165,38 @@ export const parseDroptimizersInfo = (
     itemEquipped: GearItem
     droptimizer: Droptimizer
 }[] => {
-    // todo: what to do when omni token?
-    // we could take every tierset in upgrades and take the one with max gain
+    // filter the correct droptimizer difficulty
+    const filteredDropt = droptimizers.filter((d) => d.raidInfo.difficulty === raidDiff)
 
-    return droptimizers
-        .filter(({ raidInfo }) => raidInfo.difficulty === raidDiff) // filter the correct droptimizer difficulty
+    // omni token edge scenario
+    // we take every tierset in upgrades and take the one with max gain
+    if (lootItem.slotKey === 'omni') {
+        // find the the tierset with the max gain
+        return filteredDropt
+            .map((droptimizer) => {
+                const upgrades = droptimizer.upgrades
+                    .filter((up) => up.tiersetItemId)
+                    .sort((a, b) => b.dps - a.dps)
+                if (upgrades.length > 0) {
+                    const itemEquipped = droptimizer.itemsEquipped.find(
+                        (gearItem) => gearItem.equippedInSlot === upgrades[0].slot
+                    )!
+                    return { upgrade: upgrades[0], itemEquipped, droptimizer }
+                } else {
+                    return { upgrade: null, itemEquipped: null, droptimizer }
+                }
+            })
+            .filter((dropt) => dropt.itemEquipped != null)
+            .sort((a, b) => (b.upgrade?.dps || 0) - (a.upgrade?.dps || 0)) // sort droptimizers info by dps gain desc
+    }
+
+    return filteredDropt
         .map((droptimizer) => {
             const upgrade = droptimizer.upgrades.find(({ item }) => item.id === lootItem.id) || null
 
+            // logic here:
+            // if an upgrade exists in that droptimizer -> take slot information from droptimizer
+            // else we take the first item equipped in that slot (it does matter in finger1/2 and trinket1/2 scenario)
             const itemEquipped = upgrade
                 ? droptimizer.itemsEquipped.find(
                       (gearItem) => gearItem.equippedInSlot === upgrade.slot
@@ -184,7 +208,7 @@ export const parseDroptimizersInfo = (
 
             return { upgrade, itemEquipped, droptimizer }
         })
-        .sort((a, b) => (b.upgrade?.dps || 0) - (a.upgrade?.dps || 0))
+        .sort((a, b) => (b.upgrade?.dps || 0) - (a.upgrade?.dps || 0)) // sort droptimizers info by dps gain desc
 }
 
 /**

@@ -69,7 +69,8 @@ export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
                 dps: up.dps,
                 ilvl: up.ilvl,
                 slot: up.slot,
-                catalyzedItem: up.catalyzedItem,
+                catalyzedItemId: up.catalyzedItemId,
+                tiersetItemId: up.tiersetItemId,
                 droptimizerId: up.droptimizerId
             })),
             weeklyChest: data.weeklyChest,

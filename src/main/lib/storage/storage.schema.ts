@@ -208,6 +208,7 @@ export const droptimizerUpgradesTable = pgTable(
         itemId: integer('item_id')
             .references(() => itemTable.id)
             .notNull(),
+        tiersetItemId: integer('tierset_item_id').references(() => itemTable.id),
         catalyzedItemId: integer('catalyzed_item_id').references(() => itemTable.id),
         droptimizerId: varchar('droptimizer_id')
             .references(() => droptimizerTable.url, { onDelete: 'cascade' })

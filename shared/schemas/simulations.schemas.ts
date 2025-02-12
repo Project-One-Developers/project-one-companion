@@ -8,7 +8,8 @@ export const droptimizerUpgradeSchema = z.object({
     item: itemSchema,
     ilvl: z.number(),
     slot: wowItemEquippedSlotKeySchema,
-    catalyzedItem: itemSchema.nullable(),
+    catalyzedItemId: itemSchema.shape.id.nullable(),
+    tiersetItemId: itemSchema.shape.id.nullable(),
     droptimizerId: z.string()
 })
 
@@ -16,12 +17,10 @@ export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema
     .omit({
         id: true,
         item: true,
-        catalyzedItem: true,
         droptimizerId: true
     })
     .extend({
-        itemId: z.number(),
-        catalyzedItemId: z.number().nullable()
+        itemId: z.number()
     })
 
 export const droptimizerCurrenciesSchema = z.object({

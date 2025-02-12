@@ -72,11 +72,16 @@ const evalUpgrades = (
                 : null
 
             const res: NewDroptimizerUpgrade = {
-                itemId: tiersetMapping ? tiersetMapping.tokenId : up.itemId, // boss drops token id, not the specific tierset
+                itemId: up.itemId,
                 slot: up.slot,
                 dps: up.dps,
                 ilvl: up.ilvl,
                 catalyzedItemId: null,
+                tiersetItemId: null,
+                ...(tiersetMapping && {
+                    itemId: tiersetMapping.tokenId, // boss drops token id, not the specific tierset
+                    tiersetItemId: tiersetMapping.itemId // itemId converted by token
+                }),
                 ...(catalystMapping && {
                     itemId: catalystMapping.itemId, // itemId looted by boss
                     catalyzedItemId: catalystMapping.catalyzedItemId // itemId converted by catalyst

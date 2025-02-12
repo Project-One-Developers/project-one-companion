@@ -48,12 +48,10 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
         with: {
             upgrades: {
                 columns: {
-                    catalyzedItemId: false, //ignored
                     itemId: false //ignored
                 },
                 with: {
-                    item: true,
-                    catalyzedItem: true
+                    item: true
                 }
             }
         }
@@ -68,12 +66,10 @@ export const getDroptimizerByIdsList = async (ids: string[]): Promise<Droptimize
         with: {
             upgrades: {
                 columns: {
-                    catalyzedItemId: false, //ignored
                     itemId: false //ignored
                 },
                 with: {
-                    item: true,
-                    catalyzedItem: true
+                    item: true
                 }
             }
         }
@@ -115,12 +111,10 @@ export const getDroptimizerLastByCharAndDiff = async (
         with: {
             upgrades: {
                 columns: {
-                    catalyzedItemId: false, //ignored
                     itemId: false //ignored
                 },
                 with: {
-                    item: true,
-                    catalyzedItem: true
+                    item: true
                 }
             }
         }
@@ -142,12 +136,10 @@ export const getDroptimizerLastByChar = async (
         with: {
             upgrades: {
                 columns: {
-                    catalyzedItemId: false, //ignored
                     itemId: false //ignored
                 },
                 with: {
-                    item: true,
-                    catalyzedItem: true
+                    item: true
                 }
             }
         }
@@ -215,12 +207,10 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         with: {
             upgrades: {
                 columns: {
-                    catalyzedItemId: false, //ignored
                     itemId: false //ignored
                 },
                 with: {
-                    item: true,
-                    catalyzedItem: true
+                    item: true
                 }
             }
         }

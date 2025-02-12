@@ -62,7 +62,7 @@ export default function DroptimizerDetailDialog({
                                                 item={foundItem}
                                                 iconOnly={true}
                                                 ilvl={upgrade.ilvl}
-                                                catalystBanner={upgrade.catalyzedItem != null}
+                                                catalystBanner={upgrade.catalyzedItemId != null}
                                                 className="mt-2"
                                                 iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
                                             />

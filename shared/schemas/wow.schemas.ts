@@ -91,6 +91,8 @@ export const wowItemEquippedSlotKeySchema = z.enum([
     'off_hand'
 ])
 
+export const wowTiersetSlotSchema = z.enum(['head', 'shoulder', 'chest', 'hands', 'legs'])
+
 export const wowArmorTypeSchema = z.enum(['Cloth', 'Leather', 'Mail', 'Plate'])
 
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
