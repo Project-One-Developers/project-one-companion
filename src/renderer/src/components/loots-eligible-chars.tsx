@@ -139,7 +139,7 @@ export default function LootsEligibleChars({
                                         {charInfo.droptimizers &&
                                             charInfo.droptimizers.map((droptWithUpgrade) => (
                                                 <DroptimizerUpgradeForItemEquipped
-                                                    key={droptWithUpgrade.itemEquipped.item.id}
+                                                    key={droptWithUpgrade.id}
                                                     upgrade={droptWithUpgrade.upgrade}
                                                     droptimizer={droptWithUpgrade.droptimizer}
                                                     itemEquipped={droptWithUpgrade.itemEquipped}

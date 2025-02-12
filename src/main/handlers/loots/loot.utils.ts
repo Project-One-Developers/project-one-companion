@@ -169,12 +169,15 @@ export const parseDroptimizersInfo = (
     itemEquipped: GearItem
     droptimizer: Droptimizer
 }[] => {
+    // todo: what to do when omni token?
+    // we could take every tierset in upgrades and take the one with max gain
+
     return droptimizers
         .filter(({ raidInfo }) => raidInfo.difficulty === raidDiff)
         .map((droptimizer) => {
             const upgrade =
                 droptimizer.upgrades?.find(({ item }) => item.id === lootItem.id) || null
-            const itemEquipped = droptimizer.itemsEquipped[lootItem.slotKey]
+            const itemEquipped = droptimizer.itemsEquipped[lootItem.slotKey] || null
             return { upgrade, itemEquipped, droptimizer }
         })
         .sort((a, b) => (b.upgrade?.dps || 0) - (a.upgrade?.dps || 0))
