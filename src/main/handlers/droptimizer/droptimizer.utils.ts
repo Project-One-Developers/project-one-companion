@@ -1,3 +1,4 @@
+import { parseItemTrack } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { gearItemSchema } from '@shared/schemas/items.schema'
 import { wowItemEquippedSlotKeySchema, wowItemSlotKeySchema } from '@shared/schemas/wow.schemas'
@@ -40,6 +41,7 @@ export const parseGreatVaultFromSimc = (simc: string): GearItem[] => {
     let itemMatch: string[] | null
 
     while ((itemMatch = itemRegex.exec(match[1])) !== null) {
+        const bonusString = itemMatch[3].replaceAll('/', ':')
         items.push({
             item: {
                 id: parseInt(itemMatch[2], 10)
@@ -48,7 +50,8 @@ export const parseGreatVaultFromSimc = (simc: string): GearItem[] => {
             },
             source: 'great-vault',
             itemLevel: parseInt(itemMatch[1], 10),
-            bonusString: itemMatch[3].replaceAll('/', ':')
+            bonusString: bonusString,
+            itemTrack: parseItemTrack(bonusString)
         })
     }
 
@@ -78,6 +81,7 @@ export function parseBagGearsFromSimc(simc: string): GearItem[] | null {
         const craftingQualityMatch = line.match(/crafting_quality=([\d/]+)/)
 
         if (slotMatch && itemIdMatch && bonusIdMatch) {
+            const bonusString = bonusIdMatch[1].replaceAll('/', ':')
             const item: GearItem = gearItemSchema.parse({
                 item: {
                     id: parseInt(itemIdMatch[1], 10),
@@ -86,7 +90,8 @@ export function parseBagGearsFromSimc(simc: string): GearItem[] | null {
                     )
                 },
                 source: 'bag',
-                bonusString: bonusIdMatch[1].replaceAll('/', ':') // bonus is mandatory or is a trash item
+                bonusString: bonusString, // bonus is mandatory or is a trash item
+                itemTrack: parseItemTrack(bonusString)
             } as GearItem)
             if (enchantIdMatch) item.enchantId = enchantIdMatch[1].replaceAll('/', ':')
             if (gemIdMatch) item.gemId = gemIdMatch[1].replaceAll('/', ':')
@@ -118,7 +123,8 @@ export const parseEquippedGear = (
             source: 'equipped',
             equippedInSlot: realSlot,
             itemLevel: gearItem.itemLevel,
-            bonusString: gearItem.bonus_id
+            bonusString: gearItem.bonus_id,
+            itemTrack: gearItem.bonus_id ? parseItemTrack(gearItem.bonus_id) : undefined
         } as GearItem)
     })
     return res

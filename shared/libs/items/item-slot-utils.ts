@@ -54,6 +54,5 @@ export function formatWowEquippedSlotKey(slot: WowItemEquippedSlotKey): string {
             return 'Trinket'
         default:
             return formatWowSlotKey(slot)
-        //throw new Error(`Unknown equipped slot: ${raidbotSlot}`)
     }
 }

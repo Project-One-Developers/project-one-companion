@@ -157,7 +157,7 @@ export default function LootsEligibleChars({
                                                         item={wc.item.id}
                                                         ilvl={wc.itemLevel}
                                                         iconOnly={true}
-                                                        bonusString={wc.bonusString}
+                                                        bonusString={wc.bonusString ?? undefined}
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                     <p className="text-bold text-[11px]">
@@ -198,8 +198,13 @@ export default function LootsEligibleChars({
                                                         ilvl={charInfo.bestItemInSlot.itemLevel}
                                                         iconOnly={true}
                                                         tierBanner={true}
+                                                        itemTrack={
+                                                            charInfo.bestItemInSlot.itemTrack ??
+                                                            undefined
+                                                        }
                                                         bonusString={
-                                                            charInfo.bestItemInSlot.bonusString
+                                                            charInfo.bestItemInSlot.bonusString ??
+                                                            undefined
                                                         }
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
@@ -211,7 +216,7 @@ export default function LootsEligibleChars({
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex flex-row 2">
+                                        <div className="flex flex-row gap-1">
                                             {charInfo.tierset.map((tierset) => (
                                                 <div
                                                     key={tierset.item.id}
@@ -221,12 +226,17 @@ export default function LootsEligibleChars({
                                                         item={tierset.item.id}
                                                         ilvl={tierset.itemLevel}
                                                         iconOnly={true}
-                                                        tierBanner={true}
-                                                        bonusString={tierset.bonusString}
+                                                        tierBanner={false}
+                                                        itemTrack={tierset.itemTrack ?? undefined}
+                                                        bonusString={
+                                                            tierset.bonusString ?? undefined
+                                                        }
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                     <p className="text-bold text-[11px]">
-                                                        {tierset.itemLevel}
+                                                        {tierset.itemLevel ??
+                                                            tierset.itemTrack?.itemLevel}
+                                                        {tierset.itemTrack?.name.charAt(0)}
                                                     </p>
                                                 </div>
                                             ))}

@@ -56,6 +56,14 @@ export const itemToCatalystSchema = z.object({
 })
 export const itemToCatalystArraySchema = z.array(itemToCatalystSchema)
 
+export const itemTrackSchema = z.object({
+    name: z.string(),
+    fullName: z.string(),
+    level: z.number(),
+    max: z.number(),
+    itemLevel: z.number()
+})
+
 /**
  * Rapresents a looted version of an item (so with bonus and actual ilvl)
  */
@@ -69,13 +77,14 @@ export const gearItemSchema = z.object({
     source: z.enum(['equipped', 'bag', 'great-vault']),
     equippedInSlot: wowItemEquippedSlotKeySchema.optional(),
     itemLevel: z.number().optional(),
+    itemTrack: itemTrackSchema.nullable(),
     bonusString: z.preprocess((val) => {
         // Convert numbers to strings
         if (typeof val === 'number') {
             return val.toString()
         }
         return val
-    }, z.string().optional()),
+    }, z.string().nullable()),
     enchantId: z
         .preprocess((val) => {
             // Convert numbers to strings

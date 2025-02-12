@@ -1,5 +1,5 @@
 import { fetchItem } from '@renderer/lib/tanstack-query/items'
-import { Item, WowRaidDifficulty } from '@shared/types/types'
+import { Item, ItemTrack, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
@@ -9,8 +9,9 @@ export const WowItemIcon = ({
     catalystBanner = false,
     socketBanner = false,
     tierBanner = false,
-    raidDiff = 'Heroic',
+    raidDiff,
     ilvl,
+    itemTrack,
     bonusString,
     enchantString,
     gemsString,
@@ -27,6 +28,7 @@ export const WowItemIcon = ({
     tierBanner?: boolean
     raidDiff?: WowRaidDifficulty
     ilvl?: number
+    itemTrack?: ItemTrack
     bonusString?: string
     enchantString?: string
     gemsString?: string
@@ -68,6 +70,7 @@ export const WowItemIcon = ({
 
     const getIlvl = () => {
         if (ilvl !== undefined) return ilvl
+        if (itemTrack !== undefined) return itemTrack.itemLevel
         switch (raidDiff) {
             case 'Heroic':
                 return itemData.ilvlHeroic
@@ -76,7 +79,7 @@ export const WowItemIcon = ({
             case 'Normal':
                 return itemData.ilvlNormal
             default:
-                return itemData.ilvlHeroic
+                return itemData.ilvlBase
         }
     }
 

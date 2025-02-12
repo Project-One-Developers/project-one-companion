@@ -134,26 +134,21 @@ export const parseTiersetInfo = (charDroptimizers: Droptimizer[]): GearItem[] =>
 
     const maxItemLevelBySlot = new Map<string, GearItem>()
 
-    droptWithTierInfo.tiersetInfo.forEach((gear) => {
-        if (gear.item.slotKey) {
-            const existingItem = maxItemLevelBySlot.get(gear.item.slotKey)
-
-            let itemLevel = -1
-            if (gear.itemLevel == null) {
-                itemLevel = 1 // todo: parse from bonusString
+    droptWithTierInfo.tiersetInfo
+        .filter((t) => t.item.slotKey !== 'omni') // omni will be counted later
+        .forEach((gear) => {
+            if (gear.item.slotKey && gear.itemTrack) {
+                const existingItem = maxItemLevelBySlot.get(gear.item.slotKey)
+                if (
+                    !existingItem ||
+                    gear.itemTrack.itemLevel > (existingItem.itemTrack?.itemLevel ?? 0)
+                ) {
+                    maxItemLevelBySlot.set(gear.item.slotKey, gear)
+                }
             } else {
-                itemLevel = gear.itemLevel
+                throw new Error('Found tierset without track infos: ' + gear)
             }
-
-            if (
-                !existingItem ||
-                (gear.itemLevel &&
-                    (existingItem.itemLevel == null || itemLevel > existingItem.itemLevel))
-            ) {
-                maxItemLevelBySlot.set(gear.item.slotKey, { ...gear, itemLevel })
-            }
-        }
-    })
+        })
 
     return [
         ...Array.from(maxItemLevelBySlot.values()), // tierset found

@@ -255,7 +255,8 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                                 <WowItemIcon
                                                     item={gearItem.item.id}
                                                     ilvl={gearItem.itemLevel}
-                                                    bonusString={gearItem.bonusString}
+                                                    itemTrack={gearItem.itemTrack ?? undefined}
+                                                    bonusString={gearItem.bonusString ?? undefined}
                                                     enchantString={gearItem.enchantId}
                                                     gemsString={gearItem.gemId}
                                                     iconOnly={false}

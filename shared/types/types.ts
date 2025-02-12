@@ -4,7 +4,8 @@ import {
     gearItemSchema,
     itemSchema,
     itemToCatalystSchema,
-    itemToTiersetSchema
+    itemToTiersetSchema,
+    itemTrackSchema
 } from '@shared/schemas/items.schema'
 import {
     lootSchema,
@@ -83,6 +84,7 @@ export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
 export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>
 
 export type Item = z.infer<typeof itemSchema>
+export type ItemTrack = z.infer<typeof itemTrackSchema>
 export type GearItem = z.infer<typeof gearItemSchema>
 
 export type ItemToTierset = z.infer<typeof itemToTiersetSchema>

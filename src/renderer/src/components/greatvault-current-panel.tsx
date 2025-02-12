@@ -28,7 +28,7 @@ export const CurrentGreatVaultPanel = ({ droptimizer }: CurrentGreatVaultPanelPr
                             key={wc.item.id}
                             item={wc.item.id}
                             iconOnly={false}
-                            bonusString={wc.bonusString}
+                            bonusString={wc.bonusString ?? undefined}
                             ilvl={wc.itemLevel}
                             iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                         />
