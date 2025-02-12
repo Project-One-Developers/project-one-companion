@@ -46,7 +46,7 @@ const DroptimizerInfo = ({ dropt, bosses }: { dropt: Droptimizer; bosses: BossWi
             <Dialog open={isOpen} onOpenChange={setOpen}>
                 <DialogTrigger asChild className="cursor-pointer q3 links">
                     <p>
-                        <strong>Upgrades:</strong> {dropt.upgrades?.length}
+                        <strong>Upgrades:</strong> {dropt.upgrades.length}
                     </p>
                 </DialogTrigger>
                 <DroptimizerDetailDialog droptimizer={dropt} bosses={bosses} />

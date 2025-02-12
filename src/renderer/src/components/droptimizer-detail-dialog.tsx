@@ -16,7 +16,7 @@ export default function DroptimizerDetailDialog({
 }: DroptimizerDetailDialogProps): JSX.Element {
     const bossMap: Map<BossWithItems, DroptimizerUpgrade[]> = new Map()
 
-    droptimizer.upgrades?.forEach((up) => {
+    droptimizer.upgrades.forEach((up) => {
         for (let index = 0; index < bosses.length; index++) {
             const boss = bosses[index]
             const bossUpgrade = boss.items.find((i) => i.id === up.item.id)

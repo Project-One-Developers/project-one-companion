@@ -169,10 +169,9 @@ export const parseDroptimizersInfo = (
     // we could take every tierset in upgrades and take the one with max gain
 
     return droptimizers
-        .filter(({ raidInfo }) => raidInfo.difficulty === raidDiff)
+        .filter(({ raidInfo }) => raidInfo.difficulty === raidDiff) // filter the correct droptimizer difficulty
         .map((droptimizer) => {
-            const upgrade =
-                droptimizer.upgrades?.find(({ item }) => item.id === lootItem.id) || null
+            const upgrade = droptimizer.upgrades.find(({ item }) => item.id === lootItem.id) || null
 
             const itemEquipped = upgrade
                 ? droptimizer.itemsEquipped.find(

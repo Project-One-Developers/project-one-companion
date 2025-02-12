@@ -55,7 +55,7 @@ export const droptimizerSchema = z.object({
         specId: z.number(), // https://wowpedia.fandom.com/wiki/SpecializationID
         talents: z.string()
     }),
-    upgrades: z.array(droptimizerUpgradeSchema).nullable(),
+    upgrades: z.array(droptimizerUpgradeSchema),
     weeklyChest: z.array(gearItemSchema).nullable(),
     currencies: z.array(droptimizerCurrenciesSchema).nullable(),
     itemsAverageItemLevel: z.number().nullable(),
