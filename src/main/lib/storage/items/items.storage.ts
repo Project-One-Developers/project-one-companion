@@ -1,5 +1,9 @@
 import { CURRENT_RAID_ID, CURRENT_SEASON } from '@shared/consts/wow.consts'
-import { itemSchema } from '@shared/schemas/items.schema'
+import {
+    itemSchema,
+    itemToCatalystArraySchema,
+    itemToTiersetArraySchema
+} from '@shared/schemas/items.schema'
 import type { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
 import { ilike } from 'drizzle-orm'
 import { z } from 'zod'
@@ -7,9 +11,18 @@ import { db } from '../storage.config'
 import { itemTable, itemToCatalystTable, itemToTiersetTable } from '../storage.schema'
 import { conflictUpdateAllExcept } from '../storage.utils'
 
+// Static cache variables
+let cachedItemsToTiersetMapping: ItemToTierset[] | null = null
+let cachedItemsToCatalystMapping: ItemToCatalyst[] | null = null
+let allItems: Item[] | null = null
+let cachedTierset: Item[] | null = null
+
 export const getItems = async (): Promise<Item[]> => {
-    const items = await db.query.itemTable.findMany()
-    return z.array(itemSchema).parse(items)
+    if (!allItems) {
+        const items = await db.query.itemTable.findMany()
+        allItems = z.array(itemSchema).parse(items)
+    }
+    return allItems
 }
 
 export const getItem = async (id: number): Promise<Item | null> => {
@@ -31,19 +44,33 @@ export const getItemByIds = async (ids: number[]): Promise<Item[]> => {
     return z.array(itemSchema).parse(res)
 }
 
-/**
- * Todo: it should returns the only the list of item from current season
- * @returns
- */
+export const getItemToTiersetMapping = async (): Promise<ItemToTierset[]> => {
+    if (!cachedItemsToTiersetMapping) {
+        const result = await db.query.itemToTiersetTable.findMany()
+        cachedItemsToTiersetMapping = itemToTiersetArraySchema.parse(result)
+    }
+    return cachedItemsToTiersetMapping
+}
+export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
+    if (!cachedItemsToCatalystMapping) {
+        const result = await db.query.itemToCatalystTable.findMany()
+        cachedItemsToCatalystMapping = itemToCatalystArraySchema.parse(result)
+    }
+    return cachedItemsToCatalystMapping
+}
+
 export const getTiersetAndTokenList = async (): Promise<Item[]> => {
-    const res = await db.query.itemTable.findMany({
-        where: (itemTable, { inArray, eq, or, and }) =>
-            and(
-                inArray(itemTable.sourceId, [CURRENT_RAID_ID, CURRENT_SEASON]),
-                or(eq(itemTable.tierset, true), eq(itemTable.token, true))
-            )
-    })
-    return z.array(itemSchema).parse(res)
+    if (!cachedTierset) {
+        const res = await db.query.itemTable.findMany({
+            where: (itemTable, { inArray, eq, or, and }) =>
+                and(
+                    inArray(itemTable.sourceId, [CURRENT_RAID_ID, CURRENT_SEASON]),
+                    or(eq(itemTable.tierset, true), eq(itemTable.token, true))
+                )
+        })
+        cachedTierset = z.array(itemSchema).parse(res)
+    }
+    return cachedTierset
 }
 
 export const searchItems = async (searchTerm: string, limit: number): Promise<Item[]> => {
@@ -73,4 +100,11 @@ export const upsertItemsToTierset = async (itemsToTierset: ItemToTierset[]): Pro
 export const upsertItemsToCatalyst = async (itemsToTierset: ItemToCatalyst[]): Promise<void> => {
     await db.delete(itemToCatalystTable)
     await db.insert(itemToCatalystTable).values(itemsToTierset)
+}
+
+export const invalidateCache = (): void => {
+    cachedItemsToTiersetMapping = null
+    cachedItemsToCatalystMapping = null
+    allItems = null
+    cachedTierset = null
 }

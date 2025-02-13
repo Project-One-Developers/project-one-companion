@@ -2,7 +2,7 @@
 // parse tww item tracks:
 // jq 'map(select(.upgrade.fullName != null and (.upgrade.seasonId == 24 or .upgrade.seasonId == 25)) | {id, level: .upgrade.level, max: .upgrade.max, name: .upgrade.name, fullName: .upgrade.fullName, itemLevel: .upgrade.itemLevel})' bonus.json > parsed_bonus.json
 
-import { ItemTrack, WowRaidDifficulty } from '@shared/types/types'
+import { Item, ItemTrack, WowRaidDifficulty } from '@shared/types/types'
 import { readFileSync } from 'fs'
 import path from 'path'
 
@@ -19,19 +19,19 @@ function loadBonusList(): void {
     }
 }
 
-export function parseItemLevel(bonusIds: number[]): number | null {
-    const itemTrack = parseItemTrack(bonusIds)
-    if (itemTrack == null) {
-        console.log('No item track infos in ' + bonusIds)
-    }
-    return itemTrack?.itemLevel ?? null
-}
-
 export function parseItemDiff(bonusIds: number[]): WowRaidDifficulty | null {
-    const itemTrack = parseItemTrack(bonusIds)
-    if (itemTrack == null) {
-        console.log('No item track infos in ' + bonusIds)
+    if (bonusIds.includes(10356)) {
+        // bonus id for Mythic
+        return 'Mythic'
+    } else if (bonusIds.includes(10355)) {
+        // bonus id for Heroic
+        return 'Heroic'
     }
+    // else if (bonusIds.includes(10353)){
+    //     return 'Raid Finder'
+    // }
+
+    const itemTrack = parseItemTrack(bonusIds)
     switch (itemTrack?.name) {
         case 'Champion':
             return 'Normal'
@@ -42,6 +42,45 @@ export function parseItemDiff(bonusIds: number[]): WowRaidDifficulty | null {
         default:
             return null
     }
+}
+
+export function parseItemLevelFromTrack(
+    item: Item,
+    itemTrack: ItemTrack | null,
+    bonusIds: number[]
+): number | null {
+    const diff = parseItemDiff(bonusIds)
+
+    if (itemTrack == null && diff != null) {
+        switch (diff) {
+            case 'Normal':
+                return item.ilvlNormal
+            case 'Heroic':
+                return item.ilvlHeroic
+            case 'Mythic':
+                return item.ilvlMythic
+            default:
+                return null
+        }
+    }
+
+    if (itemTrack != null) {
+        return itemTrack.itemLevel
+    }
+
+    // crafted items ilvl
+    if (bonusIds.includes(11144)) {
+        // tww season 1 rank 5
+        return 636
+    }
+
+    // edge items (not worth mapping all possible states with bonus id)
+    if (item.id === 228411) {
+        // tww season 1 -  Cyrce's Circlet (Siren Isles)
+        return 658
+    }
+
+    return null
 }
 
 export function parseItemTrack(input: number[] | string): ItemTrack | null {
@@ -67,6 +106,5 @@ export function parseItemTrack(input: number[] | string): ItemTrack | null {
         }
     }
 
-    console.log('No item track found for ' + input)
     return null // Return null if no match is found
 }

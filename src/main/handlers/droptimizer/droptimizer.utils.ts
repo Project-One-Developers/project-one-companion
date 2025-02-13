@@ -1,13 +1,27 @@
-import { parseItemTrack } from '@shared/libs/items/item-bonus-utils'
-import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
-import { gearItemSchema } from '@shared/schemas/items.schema'
-import { wowItemEquippedSlotKeySchema, wowItemSlotKeySchema } from '@shared/schemas/wow.schemas'
-import type { GearItem, RaidbotsURL, WowItemSlotKey } from '@shared/types/types'
+import { parseItemLevelFromTrack, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
+import { wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
+import type {
+    GearItem,
+    Item,
+    ItemTrack,
+    NewDroptimizer,
+    NewDroptimizerUpgrade,
+    RaidbotsURL,
+    WowClass,
+    WowItemEquippedSlotKey
+} from '@shared/types/types'
+import {
+    getItems,
+    getItemToCatalystMapping,
+    getItemToTiersetMapping,
+    getTiersetAndTokenList
+} from '@storage/items/items.storage'
+import { getUnixTimestamp } from '@utils'
 import { z } from 'zod'
 import {
-    droptimizerEquippedItemSchema,
     droptimizerEquippedItemsSchema,
-    raidbotParseAndTransform
+    RaidbotJson,
+    raidbotJsonSchema
 } from './droptimizer.schemas'
 
 export const fetchRaidbotsData = async (url: RaidbotsURL): Promise<unknown> => {
@@ -20,16 +34,163 @@ export const fetchRaidbotsData = async (url: RaidbotsURL): Promise<unknown> => {
     return await responseJson.json()
 }
 
-export const parseRaidbotsData = (jsonData: any): z.infer<typeof raidbotParseAndTransform> => {
+export const parseRaidbotsData = (jsonData: any): RaidbotJson => {
     if (jsonData?.simbot?.publicTitle === 'Top Gear') {
         throw new Error(
             `Skipping invalid droptimizer for ${jsonData.simbot.player} (Top Gear): ${jsonData.simbot.parentSimId}`
         )
     }
-    return raidbotParseAndTransform.parse(jsonData)
+    return raidbotJsonSchema.parse(jsonData)
 }
 
-export const parseGreatVaultFromSimc = (simc: string): GearItem[] => {
+const parseUpgrades = async (
+    upgrades: {
+        dps: number
+        encounterId: number
+        itemId: number
+        ilvl: number
+        slot: WowItemEquippedSlotKey
+    }[]
+): Promise<NewDroptimizerUpgrade[]> => {
+    const itemToTiersetMapping = await getItemToTiersetMapping()
+    const itemToCatalystMapping = await getItemToCatalystMapping()
+
+    const upgradesMap = upgrades
+        // filter out item without dps gain
+        .filter((item) => item.dps > 0)
+        // remap itemid to tierset & catalyst
+        .map((up) => {
+            // ci serve questo mapping perchè in data.csv è presente l'upgrade per l'itemid del pezzo del tierset finale (es: guanti warlock)
+            // ma questo itemid non appartiene alla loot table del boss, che può lootare solo token per gruppi di classi
+            const tiersetMapping = itemToTiersetMapping?.find((i) => i.itemId === up.itemId)
+
+            // ci serve questo reverse lookup perchè in data.csv di droptimizer per un upgrade di tipo catalizzato è presente:
+            // 1. l'item id finale dopo la trasformazione catalyst (che non appartiene alla loot table del boss)
+            // 2. il boss encounter id dove esce l'item da catalizzare
+            // tramite la tabella di mapping ItemToCatalyst riusciamo a ricavare l'item id "originale" della loot table del boss
+            const catalystMapping = !tiersetMapping
+                ? itemToCatalystMapping?.find(
+                      (i) => i.catalyzedItemId === up.itemId && i.encounterId === up.encounterId
+                  )
+                : null
+
+            const res: NewDroptimizerUpgrade = {
+                itemId: up.itemId,
+                slot: up.slot,
+                dps: up.dps,
+                ilvl: up.ilvl,
+                catalyzedItemId: null,
+                tiersetItemId: null,
+                ...(tiersetMapping && {
+                    itemId: tiersetMapping.tokenId, // boss drops token id, not the specific tierset
+                    tiersetItemId: tiersetMapping.itemId // itemId converted by token
+                }),
+                ...(catalystMapping && {
+                    itemId: catalystMapping.itemId, // itemId looted by boss
+                    catalyzedItemId: catalystMapping.catalyzedItemId // itemId converted by catalyst
+                })
+            }
+
+            return res
+        })
+        // for a given itemid upgrade, keep the max dps gain
+        .reduce((acc, item) => {
+            const existingItem = acc.get(item.itemId)
+            if (!existingItem || item.dps > existingItem.dps) {
+                acc.set(item.itemId, item)
+            }
+            return acc
+        }, new Map<number, NewDroptimizerUpgrade>())
+
+    return Array.from(upgradesMap.values())
+}
+
+const parseTiersets = async (equipped: GearItem[], bags: GearItem[]): Promise<GearItem[]> => {
+    const res: GearItem[] = []
+    const tiersetItems = await getTiersetAndTokenList()
+
+    const checkAndAddItem = (item: GearItem) => {
+        const match = tiersetItems.find((t) => t.id === item.item.id)
+        if (match != null) {
+            res.push(item)
+        }
+    }
+
+    equipped.forEach(checkAndAddItem)
+    bags.forEach(checkAndAddItem)
+
+    return res
+}
+
+export const convertJsonToDroptimizer = async (
+    url: string,
+    data: RaidbotJson
+): Promise<NewDroptimizer> => {
+    // transform
+    const raidId = Number(data.sim.profilesets.results[0].name.split('/')[0])
+    const raidDiff = wowRaidDiffSchema.parse(
+        data.simbot.publicTitle.split('•')[2].replaceAll(' ', '')
+    )
+    const dpsMean = data.sim.players[0].collected_data.dps.mean
+    const upgrades = data.sim.profilesets.results.map((item) => ({
+        dps: Math.round(item.mean - dpsMean),
+        encounterId: Number(item.name.split('/')[1]),
+        itemId: Number(item.name.split('/')[3]),
+        ilvl: Number(item.name.split('/')[4]),
+        slot: wowItemEquippedSlotKeySchema.parse(item.name.split('/')[6])
+    }))
+    const charInfo = {
+        name: data.simbot.meta.rawFormData.character.name,
+        // non si capisce un cazzo: a volte arriva rng: pozzo-delleternità, pozzo dell'eternità, pozzo_dell'eternità
+        server: data.simbot.meta.rawFormData.character.realm
+            .toLowerCase()
+            .replaceAll('_', '-')
+            .replaceAll(' ', '-')
+            .replaceAll("'", ''),
+        class: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents
+            .className as WowClass,
+        classId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.classId,
+        spec: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.specName,
+        specId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.specId,
+        talents: data.sim.players[0].talents
+    }
+
+    const itemsEquipped = await parseEquippedGear(data.simbot.meta.rawFormData.droptimizer.equipped)
+    const itemsInBag = await parseBagGearsFromSimc(data.simbot.meta.rawFormData.text)
+
+    return {
+        ak: `${raidId},${raidDiff},${charInfo.name},${charInfo.server},${charInfo.spec},${charInfo.class}`,
+        url: url,
+        charInfo: charInfo,
+        raidInfo: {
+            id: raidId,
+            difficulty: raidDiff // Difficulty is the third element
+        },
+        simInfo: {
+            date: data.timestamp,
+            fightstyle: data.sim.options.fight_style,
+            duration: data.sim.options.max_time,
+            nTargets: data.sim.options.desired_targets,
+            upgradeEquipped: data.simbot.meta.rawFormData.droptimizer.upgradeEquipped,
+            raidbotInput: data.simbot.meta.rawFormData.text
+                ? data.simbot.meta.rawFormData.text
+                : data.simbot.input
+        },
+        dateImported: getUnixTimestamp(),
+        upgrades: await parseUpgrades(upgrades),
+        currencies: data.simbot.meta.rawFormData.character.upgradeCurrencies ?? [],
+        weeklyChest: await parseGreatVaultFromSimc(data.simbot.meta.rawFormData.text),
+        itemsAverageItemLevel:
+            data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
+        itemsAverageItemLevelEquipped:
+            data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
+        itemsEquipped: itemsEquipped,
+        itemsInBag: itemsInBag,
+        tiersetInfo: await parseTiersets(itemsEquipped, itemsInBag)
+    }
+}
+
+export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]> => {
     const rewardSectionRegex =
         /### Weekly Reward Choices\n([\s\S]*?)\n### End of Weekly Reward Choices/
     const match = simc.match(rewardSectionRegex)
@@ -37,38 +198,70 @@ export const parseGreatVaultFromSimc = (simc: string): GearItem[] => {
     if (!match) return []
 
     const items: GearItem[] = []
+    const itemsInDb: Item[] = await getItems()
     const itemRegex = /# .*?\((\d+)\)\n#.*?id=(\d+),bonus_id=([\d/]+)/g
     let itemMatch: string[] | null
 
     while ((itemMatch = itemRegex.exec(match[1])) !== null) {
         const bonusString = itemMatch[3].replaceAll('/', ':')
+        const itemId = parseInt(itemMatch[2], 10)
+
+        // we dont have enough infos, we are forced to check on our db
+        const wowItem = itemsInDb.find((i) => i.id === itemId)
+
+        if (wowItem == null) {
+            console.log(
+                '[warn] parseGreatVaultFromSimc: Skipping weekly reward for item ' +
+                    itemId +
+                    ' - https://www.wowhead.com/item=' +
+                    itemId +
+                    '?bonus=' +
+                    bonusString
+            )
+            continue
+        }
+
+        const itemTrack = parseItemTrack(bonusString)
+        if (itemTrack == null) {
+            throw new Error(
+                'parseGreatVaultFromSimc: Detected Vault item without item track... check import'
+            )
+        }
+
         items.push({
             item: {
-                id: parseInt(itemMatch[2], 10)
-                //baseItemLevel: null,
-                //slotKey: null
+                id: itemId,
+                name: wowItem.name,
+                armorType: wowItem.armorType,
+                slotKey: wowItem.slotKey,
+                token: wowItem.token,
+                tierset: wowItem.tierset,
+                boe: wowItem.boe,
+                veryRare: wowItem.veryRare,
+                iconName: wowItem.iconName
             },
             source: 'great-vault',
             itemLevel: parseInt(itemMatch[1], 10),
             bonusString: bonusString,
-            itemTrack: parseItemTrack(bonusString)
+            itemTrack: itemTrack
         })
     }
 
     return items
 }
 
-export function parseBagGearsFromSimc(simc: string): GearItem[] | null {
+export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
     // Extract "Gear from Bags" section
     const gearSectionMatch = simc.match(/Gear from Bags[\s\S]*?(?=\n\n|$)/)
     if (!gearSectionMatch) {
         console.log("Unable to find 'Gear from Bags' section.")
-        return null
+        return []
     }
 
     const gearSection = gearSectionMatch[0]
     const itemLines = gearSection.split('\n').filter((line) => line.includes('='))
 
+    const itemsInDb: Item[] = await getItems()
     const items: GearItem[] = []
 
     for (const line of itemLines) {
@@ -81,18 +274,70 @@ export function parseBagGearsFromSimc(simc: string): GearItem[] | null {
         const craftingQualityMatch = line.match(/crafting_quality=([\d/]+)/)
 
         if (slotMatch && itemIdMatch && bonusIdMatch) {
+            const itemId = parseInt(itemIdMatch[1], 10)
             const bonusString = bonusIdMatch[1].replaceAll('/', ':')
-            const item: GearItem = gearItemSchema.parse({
+            const wowItem = itemsInDb.find((i) => i.id === itemId)
+
+            if (wowItem == null) {
+                console.log(
+                    'parseBagGearsFromSimc: skipping bag item not in db: ' +
+                        itemId +
+                        ' https://www.wowhead.com/item=' +
+                        itemId
+                )
+                continue
+            }
+
+            // skip importing pvp gear (for now)
+            if (wowItem.name.startsWith('Algari Competitor')) {
+                // Tww Season 1 PvP
+                console.log(
+                    'parseBagGearsFromSimc: skipping bag PvP item: ' +
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusString
+                )
+                continue
+            }
+
+            const itemTrack = parseItemTrack(bonusString)
+            const itemLevel = parseItemLevelFromTrack(
+                wowItem,
+                itemTrack,
+                bonusString.split(':').map(Number)
+            )
+
+            if (itemLevel == null) {
+                console.log(
+                    'parseBagGearsFromSimc: skipping bag item without ilvl: ' +
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusString
+                )
+                continue
+            }
+
+            const item: GearItem = {
                 item: {
-                    id: parseInt(itemIdMatch[1], 10),
-                    slotKey: wowItemSlotKeySchema.parse(
-                        slotMatch[1].replaceAll('1', '') // somehow the slot is sometimes finger1 instead of finger
-                    )
+                    id: wowItem.id,
+                    name: wowItem.name,
+                    armorType: wowItem.armorType,
+                    slotKey: wowItem.slotKey,
+                    token: wowItem.token,
+                    tierset: wowItem.tierset,
+                    boe: wowItem.boe,
+                    veryRare: wowItem.veryRare,
+                    iconName: wowItem.iconName
                 },
                 source: 'bag',
-                bonusString: bonusString, // bonus is mandatory or is a trash item
-                itemTrack: parseItemTrack(bonusString)
-            } as GearItem)
+                itemLevel: itemLevel,
+                bonusString: bonusString,
+                itemTrack: itemTrack
+            }
             if (enchantIdMatch) item.enchantId = enchantIdMatch[1].replaceAll('/', ':')
             if (gemIdMatch) item.gemId = gemIdMatch[1].replaceAll('/', ':')
             if (craftedStatsMatch) item.craftedStats = craftedStatsMatch[1]
@@ -105,47 +350,71 @@ export function parseBagGearsFromSimc(simc: string): GearItem[] | null {
     return items
 }
 
-export const parseEquippedGear = (
+export const parseEquippedGear = async (
     droptEquipped: z.infer<typeof droptimizerEquippedItemsSchema>
-): GearItem[] => {
-    const res = Object.entries(droptEquipped).map(([slot, gearItem]) => {
-        let realSlot = slot
+): Promise<GearItem[]> => {
+    const itemsInDb: Item[] = await getItems()
+    const res: GearItem[] = []
 
+    for (const [slot, droptGearItem] of Object.entries(droptEquipped)) {
+        if (!droptGearItem.bonus_id) {
+            throw new Error(
+                '[error] parseEquippedGear: found equipped item without bonus_id ' +
+                    droptGearItem.id +
+                    ' - https://www.wowhead.com/item=' +
+                    droptGearItem.id
+            )
+        }
+
+        const wowItem = itemsInDb.find((i) => i.id === droptGearItem.id)
+        if (wowItem == null) {
+            throw new Error(
+                '[error] parseEquippedGear: skipping equipped item not in db: ' +
+                    droptGearItem.id +
+                    ' - https://www.wowhead.com/item=' +
+                    droptGearItem.id +
+                    '?bonus=' +
+                    droptGearItem.bonus_id.replace('/', ':')
+            )
+        }
+
+        let itemTrack: ItemTrack | null = null
+        if (wowItem.sourceName !== 'Professions - Epic') {
+            itemTrack = parseItemTrack(droptGearItem.bonus_id)
+            if (!itemTrack) {
+                console.log(
+                    '[warn] parseEquippedGear: found equipped item without item track ' +
+                        droptGearItem.id +
+                        ' - https://www.wowhead.com/item=' +
+                        droptGearItem.id +
+                        '?bonus=' +
+                        droptGearItem.bonus_id
+                )
+            }
+        }
+
+        let realSlot = slot
         if (slot === 'mainHand') realSlot = 'main_hand'
         else if (slot === 'offHand') realSlot = 'off_hand'
 
-        return gearItemSchema.parse({
+        res.push({
             item: {
-                id: gearItem.id,
-                name: gearItem.name,
-                slotKey: equippedSlotToSlot(wowItemEquippedSlotKeySchema.parse(realSlot))
+                id: wowItem.id,
+                name: wowItem.name,
+                armorType: wowItem.armorType,
+                slotKey: wowItem.slotKey,
+                token: wowItem.token,
+                tierset: wowItem.tierset,
+                boe: wowItem.boe,
+                veryRare: wowItem.veryRare,
+                iconName: wowItem.iconName
             },
             source: 'equipped',
-            equippedInSlot: realSlot,
-            itemLevel: gearItem.itemLevel,
-            bonusString: gearItem.bonus_id,
-            itemTrack: gearItem.bonus_id ? parseItemTrack(gearItem.bonus_id) : undefined
-        } as GearItem)
-    })
-    return res
-}
-
-export const droptimizerEquippedItemSchemaToGearItem = (
-    slot: WowItemSlotKey,
-    droptItem: z.infer<typeof droptimizerEquippedItemSchema> | undefined
-): GearItem | undefined => {
-    if (!droptItem) return undefined
-
-    const res = gearItemSchema.parse({
-        item: {
-            id: droptItem.id,
-            name: droptItem.name,
-            slotKey: slot
-        },
-        source: 'equipped',
-        itemLevel: droptItem.itemLevel,
-        bonusString: droptItem.bonus_id
-    } as GearItem)
-
+            equippedInSlot: wowItemEquippedSlotKeySchema.parse(realSlot),
+            itemLevel: droptGearItem.itemLevel,
+            bonusString: droptGearItem.bonus_id,
+            itemTrack: itemTrack
+        })
+    }
     return res
 }
