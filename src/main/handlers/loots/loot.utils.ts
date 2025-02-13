@@ -103,18 +103,11 @@ export const parseBestItemInSlot = (
     if (slot == 'omni') return []
 
     const allItemsEquipped: GearItem[] = droptimizers.flatMap((d) => d.itemsEquipped)
-    const allItemsInBag: GearItem[] = droptimizers.flatMap((d) => d.itemsInBag || [])
+    const allItemsInBag: GearItem[] = droptimizers.flatMap((d) => d.itemsInBag)
     const allItems = [...allItemsEquipped, ...allItemsInBag]
 
-    const filteredItems = allItems.filter(
-        (gear) => gear.item.slotKey != null && gear.item.slotKey === slot
-    )
-
-    const sortedItems = filteredItems.sort(
-        (a, b) =>
-            (b.itemLevel || b.itemTrack?.itemLevel || 0) -
-            (a.itemLevel || a.itemTrack?.itemLevel || 0)
-    )
+    const filteredItems = allItems.filter((gear) => gear.item.slotKey === slot)
+    const sortedItems = filteredItems.sort((a, b) => b.itemLevel - a.itemLevel)
 
     if (slot === 'finger' || slot === 'trinket') {
         return sortedItems.slice(0, 2)
@@ -140,7 +133,7 @@ export const parseLootIsBis = (
  */
 export const parseTiersetInfo = (charDroptimizers: Droptimizer[]): GearItem[] => {
     const droptWithTierInfo = charDroptimizers
-        .filter((c) => c.tiersetInfo != null && c.tiersetInfo.length > 0)
+        .filter((c) => c.tiersetInfo.length > 0)
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
 
     if (droptWithTierInfo == null) return []
@@ -150,12 +143,11 @@ export const parseTiersetInfo = (charDroptimizers: Droptimizer[]): GearItem[] =>
     droptWithTierInfo.tiersetInfo
         .filter((t) => t.item.slotKey !== 'omni') // omni will be counted later
         .forEach((gear) => {
-            if (gear.item.slotKey && gear.itemTrack) {
+            if (gear.itemTrack) {
                 const existingItem = maxItemLevelBySlot.get(gear.item.slotKey)
-                if (
-                    !existingItem ||
-                    gear.itemTrack.itemLevel > (existingItem.itemTrack?.itemLevel ?? 0)
-                ) {
+                // todo: should consider also item with bigger track
+                // es: 626HC vs 626M
+                if (!existingItem || gear.itemLevel > existingItem.itemLevel) {
                     maxItemLevelBySlot.set(gear.item.slotKey, gear)
                 }
             } else {
@@ -232,7 +224,8 @@ export const parseDroptimizersInfo = (
  */
 export const parseWeeklyChest = (droptimizers: Droptimizer[]): GearItem[] => {
     return (
-        droptimizers.filter((c) => c.weeklyChest).sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
-            ?.weeklyChest ?? []
+        droptimizers
+            .filter((c) => c.weeklyChest.length > 0)
+            .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.weeklyChest ?? []
     )
 }
