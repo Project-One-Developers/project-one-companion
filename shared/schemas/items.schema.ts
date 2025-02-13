@@ -69,9 +69,15 @@ export const itemTrackSchema = z.object({
  */
 export const gearItemSchema = z.object({
     item: z.object({
-        id: z.number(),
-        name: z.string().optional(),
-        slotKey: wowItemSlotKeySchema
+        id: itemSchema.shape.id,
+        name: itemSchema.shape.name,
+        armorType: itemSchema.shape.armorType,
+        slotKey: itemSchema.shape.slotKey,
+        token: itemSchema.shape.token,
+        tierset: itemSchema.shape.tierset,
+        boe: itemSchema.shape.boe,
+        veryRare: itemSchema.shape.veryRare,
+        iconName: itemSchema.shape.iconName
     }),
     source: z.enum(['equipped', 'bag', 'great-vault']),
     equippedInSlot: wowItemEquippedSlotKeySchema.optional(),

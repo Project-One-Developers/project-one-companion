@@ -19,14 +19,6 @@ function loadBonusList(): void {
     }
 }
 
-// export function parseItemLevel(bonusIds: number[]): number | null {
-//     const itemTrack = parseItemTrack(bonusIds)
-//     if (itemTrack == null) {
-//         console.log('No item track infos in ' + bonusIds)
-//     }
-//     return itemTrack?.itemLevel ?? null
-// }
-
 export function parseItemDiff(bonusIds: number[]): WowRaidDifficulty | null {
     if (bonusIds.includes(10356)) {
         // bonus id for Mythic
@@ -40,9 +32,6 @@ export function parseItemDiff(bonusIds: number[]): WowRaidDifficulty | null {
     // }
 
     const itemTrack = parseItemTrack(bonusIds)
-    if (itemTrack == null) {
-        console.log('No item track infos in ' + bonusIds)
-    }
     switch (itemTrack?.name) {
         case 'Champion':
             return 'Normal'
@@ -77,6 +66,18 @@ export function parseItemLevelFromTrack(
 
     if (itemTrack != null) {
         return itemTrack.itemLevel
+    }
+
+    // crafted items ilvl
+    if (bonusIds.includes(11144)) {
+        // tww season 1 rank 5
+        return 636
+    }
+
+    // edge items (not worth mapping all possible states with bonus id)
+    if (item.id === 228411) {
+        // tww season 1 -  Cyrce's Circlet (Siren Isles)
+        return 658
     }
 
     return null

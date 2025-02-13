@@ -21,7 +21,11 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
 
     const droptimizer = await convertJsonToDroptimizer(url, parsedJson)
 
-    return await addDroptimizer(droptimizer)
+    const addedDropt = await addDroptimizer(droptimizer)
+
+    console.log('====')
+
+    return addedDropt
 }
 
 export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
@@ -72,7 +76,6 @@ export const syncDroptimizersFromDiscord = async (): Promise<void> => {
     for (const url of uniqueUrls) {
         try {
             await addDroptimizerHandler(url)
-            console.log(`Successfully added droptimizer for URL: ${url}`)
         } catch (error) {
             console.error(`Failed to add droptimizer for URL: ${url}`, error)
         }
