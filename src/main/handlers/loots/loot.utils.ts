@@ -97,17 +97,30 @@ const parseDateTime = (dateStr: string, timeStr: string): number => {
 }
 
 export const parseBestItemInSlot = (
-    slot: WowItemSlotKey | null,
+    slot: WowItemSlotKey,
     droptimizers: Droptimizer[]
-): GearItem | null => {
-    // slot null = omni token
-    if (slot == null) return null
+): GearItem[] => {
+    if (slot == 'omni') return []
 
-    const droptWithItem = droptimizers
-        .filter((c) => c.itemsEquipped != null && c.itemsEquipped[slot] != null)
-        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+    const allItemsEquipped: GearItem[] = droptimizers.flatMap((d) => d.itemsEquipped)
+    const allItemsInBag: GearItem[] = droptimizers.flatMap((d) => d.itemsInBag || [])
+    const allItems = [...allItemsEquipped, ...allItemsInBag]
 
-    return droptWithItem?.itemsEquipped[slot] ?? null
+    const filteredItems = allItems.filter(
+        (gear) => gear.item.slotKey != null && gear.item.slotKey === slot
+    )
+
+    const sortedItems = filteredItems.sort(
+        (a, b) =>
+            (b.itemLevel || b.itemTrack?.itemLevel || 0) -
+            (a.itemLevel || a.itemTrack?.itemLevel || 0)
+    )
+
+    if (slot === 'finger' || slot === 'trinket') {
+        return sortedItems.slice(0, 2)
+    }
+
+    return sortedItems.slice(0, 1)
 }
 
 export const parseLootIsBis = (

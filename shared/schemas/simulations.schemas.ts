@@ -55,11 +55,11 @@ export const droptimizerSchema = z.object({
         talents: z.string()
     }),
     upgrades: z.array(droptimizerUpgradeSchema),
-    weeklyChest: z.array(gearItemSchema).nullable(),
-    currencies: z.array(droptimizerCurrenciesSchema).nullable(),
+    weeklyChest: z.array(gearItemSchema),
+    currencies: z.array(droptimizerCurrenciesSchema),
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
-    itemsInBag: z.array(gearItemSchema).nullable(),
+    itemsInBag: z.array(gearItemSchema),
     itemsEquipped: z.array(gearItemSchema),
     tiersetInfo: z.array(gearItemSchema)
 })

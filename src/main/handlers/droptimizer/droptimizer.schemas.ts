@@ -1,11 +1,4 @@
-import { wowItemEquippedSlotKeySchema } from '@shared/schemas/wow.schemas'
-import { WowClass, WowRaidDifficulty } from '@shared/types/types'
 import { z } from 'zod'
-import {
-    parseBagGearsFromSimc,
-    parseEquippedGear,
-    parseGreatVaultFromSimc
-} from './droptimizer.utils'
 
 export const droptimizerEquippedItemSchema = z.object({
     itemLevel: z.number(),
@@ -66,7 +59,9 @@ export const droptimizerEquippedItemsSchema = z.object({
     offHand: droptimizerEquippedItemSchema.optional()
 })
 
-export const raidBotSchema = z.object({
+export type RaidbotJson = z.infer<typeof raidbotJsonSchema>
+
+export const raidbotJsonSchema = z.object({
     sim: z.object({
         options: z.object({
             fight_style: z.string(),
@@ -138,63 +133,4 @@ export const raidBotSchema = z.object({
         })
     }),
     timestamp: z.number()
-})
-
-export const raidbotParseAndTransform = raidBotSchema.transform((data) => {
-    const raidId = Number(data.sim.profilesets.results[0].name.split('/')[0])
-    const dpsMean = data.sim.players[0].collected_data.dps.mean
-    const upgrades = data.sim.profilesets.results.map((item) => ({
-        dps: Math.round(item.mean - dpsMean),
-        encounterId: Number(item.name.split('/')[1]),
-        itemId: Number(item.name.split('/')[3]),
-        ilvl: Number(item.name.split('/')[4]),
-        slot: wowItemEquippedSlotKeySchema.parse(item.name.split('/')[6])
-    }))
-
-    return {
-        simInfo: {
-            date: data.timestamp,
-            fightstyle: data.sim.options.fight_style,
-            duration: data.sim.options.max_time,
-            nTargets: data.sim.options.desired_targets,
-            upgradeEquipped: data.simbot.meta.rawFormData.droptimizer.upgradeEquipped,
-            raidbotInput: data.simbot.meta.rawFormData.text
-                ? data.simbot.meta.rawFormData.text
-                : data.simbot.input
-        },
-        raidInfo: {
-            id: raidId,
-            difficulty: data.simbot.publicTitle
-                .split('•')[2]
-                .replaceAll(' ', '') as WowRaidDifficulty // Difficulty is the third element
-        },
-        charInfo: {
-            name: data.simbot.meta.rawFormData.character.name,
-            // non si capisce un cazzo: a volte arriva rng: pozzo-delleternità, pozzo dell'eternità, pozzo_dell'eternità
-            server: data.simbot.meta.rawFormData.character.realm
-                .toLowerCase()
-                .replaceAll('_', '-')
-                .replaceAll(' ', '-')
-                .replaceAll("'", ''),
-            class: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents
-                .className as WowClass,
-            classId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.classId,
-            spec: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.specName,
-            specId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.specId,
-            talents: data.sim.players[0].talents
-        },
-        weeklyChest: data.simbot.meta.rawFormData.text
-            ? parseGreatVaultFromSimc(data.simbot.meta.rawFormData.text)
-            : [],
-        itemsInBag: data.simbot.meta.rawFormData.text
-            ? parseBagGearsFromSimc(data.simbot.meta.rawFormData.text)
-            : [],
-        currencies: data.simbot.meta.rawFormData.character.upgradeCurrencies ?? [],
-        upgrades: upgrades,
-        itemsAverageItemLevel:
-            data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
-        itemsAverageItemLevelEquipped:
-            data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
-        itemsEquipped: parseEquippedGear(data.simbot.meta.rawFormData.droptimizer.equipped)
-    }
 })

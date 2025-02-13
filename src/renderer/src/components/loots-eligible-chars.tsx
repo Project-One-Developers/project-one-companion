@@ -191,28 +191,29 @@ export default function LootsEligibleChars({
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex flex-row 2">
-                                            {charInfo.bestItemInSlot && (
-                                                <div className="flex flex-col items-center">
+                                            {charInfo.bestItemInSlot.map((bestInSlot) => (
+                                                <div
+                                                    key={bestInSlot.item.id}
+                                                    className="flex flex-col items-center space-x-1"
+                                                >
                                                     <WowItemIcon
-                                                        item={charInfo.bestItemInSlot.item.id}
-                                                        ilvl={charInfo.bestItemInSlot.itemLevel}
+                                                        item={bestInSlot.item.id}
+                                                        ilvl={bestInSlot.itemLevel}
                                                         iconOnly={true}
                                                         tierBanner={true}
                                                         itemTrack={
-                                                            charInfo.bestItemInSlot.itemTrack ??
-                                                            undefined
+                                                            bestInSlot.itemTrack ?? undefined
                                                         }
                                                         bonusString={
-                                                            charInfo.bestItemInSlot.bonusString ??
-                                                            undefined
+                                                            bestInSlot.bonusString ?? undefined
                                                         }
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                     <p className="text-bold text-[11px]">
-                                                        {charInfo.bestItemInSlot.itemLevel}
+                                                        {bestInSlot.itemLevel}
                                                     </p>
                                                 </div>
-                                            )}
+                                            ))}
                                         </div>
                                     </TableCell>
                                     <TableCell>

@@ -1,6 +1,7 @@
 import { AppSettings } from '@shared/types/types'
 import { upsertBosses } from '@storage/bosses/bosses.storage'
 import {
+    invalidateCache,
     upsertItems,
     upsertItemsToCatalyst,
     upsertItemsToTierset
@@ -58,4 +59,7 @@ const upsertSeason = async (season: number): Promise<void> => {
     await upsertItems(raidItems)
     await upsertItemsToTierset(raidItemsToTierset)
     await upsertItemsToCatalyst(raidItemsToCatalyst)
+
+    // invalidate items in cache
+    invalidateCache()
 }

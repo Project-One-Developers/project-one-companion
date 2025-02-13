@@ -1,11 +1,4 @@
-import { itemToCatalystArraySchema, itemToTiersetArraySchema } from '@shared/schemas/items.schema'
-import type {
-    Droptimizer,
-    ItemToCatalyst,
-    ItemToTierset,
-    NewDroptimizer,
-    WowRaidDifficulty
-} from '@shared/types/types'
+import type { Droptimizer, NewDroptimizer, WowRaidDifficulty } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
@@ -32,15 +25,6 @@ export const getDroptimizer = async (url: string): Promise<Droptimizer | null> =
     }
 
     return droptimizerStorageToSchema.parse(result)
-}
-
-export const getItemToTiersetMapping = async (): Promise<ItemToTierset[]> => {
-    const result = await db.query.itemToTiersetTable.findMany()
-    return itemToTiersetArraySchema.parse(result)
-}
-export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
-    const result = await db.query.itemToCatalystTable.findMany()
-    return itemToCatalystArraySchema.parse(result)
 }
 
 export const getDroptimizerList = async (): Promise<Droptimizer[]> => {

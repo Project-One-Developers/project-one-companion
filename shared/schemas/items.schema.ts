@@ -71,12 +71,11 @@ export const gearItemSchema = z.object({
     item: z.object({
         id: z.number(),
         name: z.string().optional(),
-        baseItemLevel: z.number().optional(),
-        slotKey: wowItemSlotKeySchema.optional()
+        slotKey: wowItemSlotKeySchema
     }),
     source: z.enum(['equipped', 'bag', 'great-vault']),
     equippedInSlot: wowItemEquippedSlotKeySchema.optional(),
-    itemLevel: z.number().optional(),
+    itemLevel: z.number(),
     itemTrack: itemTrackSchema.nullable(),
     bonusString: z.preprocess((val) => {
         // Convert numbers to strings
