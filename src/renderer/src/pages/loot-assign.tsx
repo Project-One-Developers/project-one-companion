@@ -21,7 +21,7 @@ export default function LootAssign() {
     const lootsQuery = useQuery({
         queryKey: [queryKeys.lootsBySession, Array.from(selectedSessions)],
         queryFn: () => getLootsBySessions(Array.from(selectedSessions)),
-        enabled: selectedSessions && selectedSessions.size > 0
+        enabled: selectedSessions.size > 0
     })
 
     if (raidSessionsQuery.isLoading || lootsQuery.isLoading) {
@@ -32,7 +32,9 @@ export default function LootAssign() {
         )
     }
 
-    const sessions = raidSessionsQuery.data ?? []
+    const sessions = raidSessionsQuery.data
+        ? [...raidSessionsQuery.data].sort((a, b) => b.raidDate - a.raidDate)
+        : []
     const loots = lootsQuery.data ?? []
 
     const toggleSession = (sessionId: string) => {
@@ -63,7 +65,7 @@ export default function LootAssign() {
             </div>
 
             <div className="flex">
-                {selectedSessions && selectedSessions.size > 0 ? (
+                {selectedSessions.size > 0 ? (
                     <>
                         <div className="flex flex-col pr-5">
                             <LootsTabs
