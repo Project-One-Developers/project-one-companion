@@ -89,7 +89,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                                         key={index}
                                                         item={loot.gearItem}
                                                         tierBanner={true}
-                                                        className="mt-1"
+                                                        className="space-y-1"
                                                         iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
                                                     />
                                                 )
