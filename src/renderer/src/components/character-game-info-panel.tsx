@@ -254,7 +254,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                         <TableCell>
                                             <WowGearIcon
                                                 item={gearItem}
-                                                tierBanner={true}
+                                                showTierBanner={true}
                                                 iconClassName="rounded-lg h-10 w-10 border border-background"
                                             />
                                         </TableCell>

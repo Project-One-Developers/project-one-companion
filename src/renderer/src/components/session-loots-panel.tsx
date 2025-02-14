@@ -88,7 +88,8 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                                     <WowGearIcon
                                                         key={index}
                                                         item={loot.gearItem}
-                                                        tierBanner={true}
+                                                        showTierBanner={true}
+                                                        showItemTrackDiff={false}
                                                         className="space-y-1"
                                                         iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
                                                     />

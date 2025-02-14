@@ -81,7 +81,7 @@ export default function LootsEligibleChars({
             <div className="flex flex-row justify-center">
                 <WowGearIcon
                     item={selectedLoot.gearItem}
-                    tierBanner={true}
+                    showTierBanner={true}
                     iconClassName="object-cover object-top rounded-lg h-12 w-12 border border-background"
                 />
             </div>
@@ -184,7 +184,7 @@ export default function LootsEligibleChars({
                                                 >
                                                     <WowGearIcon
                                                         item={bestInSlot}
-                                                        tierBanner={true}
+                                                        showTierBanner={true}
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                 </div>
@@ -200,7 +200,7 @@ export default function LootsEligibleChars({
                                                 >
                                                     <WowGearIcon
                                                         item={tierset}
-                                                        tierBanner={false}
+                                                        showTierBanner={false}
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                 </div>
