@@ -67,11 +67,5 @@ export const parseItemString = (itemString: string): ItemStringData => {
     return itemStringDataSchema.parse(rawItemInfo)
 }
 
-export const doesItemHaveSocket = (itemStringData: ItemStringData): boolean =>
-    itemStringData.bonusIds.includes(10397)
-
-export const doesItemHaveTertiaryStat = (itemStringData: ItemStringData): boolean =>
-    itemStringData.bonusIds.some((id) => id === 3) // Assuming +3 is bonus ID 3
-
 export const getItemBonusString = (itemStringData: ItemStringData): string =>
     itemStringData.bonusIds.join(':')

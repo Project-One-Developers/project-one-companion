@@ -3,21 +3,7 @@
 // jq 'map(select(.upgrade.fullName != null and (.upgrade.seasonId == 24 or .upgrade.seasonId == 25)) | {id, level: .upgrade.level, max: .upgrade.max, name: .upgrade.name, fullName: .upgrade.fullName, itemLevel: .upgrade.itemLevel})' bonus.json > parsed_bonus.json
 
 import { Item, ItemTrack, WowRaidDifficulty } from '@shared/types/types'
-import { readFileSync } from 'fs'
-import path from 'path'
-
-let bonusList: Record<number, any> | null = null
-
-function loadBonusList(): void {
-    if (!bonusList) {
-        bonusList = JSON.parse(
-            readFileSync(
-                path.join(__dirname, `../../resources/wow/bonus-item-tracks.json`),
-                'utf-8'
-            )
-        )
-    }
-}
+import bonusItemTracks from './item-tracks'
 
 export function parseItemDiff(bonusIds: number[]): WowRaidDifficulty | null {
     if (bonusIds.includes(10356)) {
@@ -74,7 +60,7 @@ export function parseItemLevelFromTrack(
         return 636
     }
 
-    // edge items (not worth mapping all possible states with bonus id)
+    // edge case items (not worth mapping all possible states with bonus id)
     if (item.id === 228411) {
         // tww season 1 -  Cyrce's Circlet (Siren Isles)
         return 658
@@ -84,19 +70,34 @@ export function parseItemLevelFromTrack(
 }
 
 export function parseItemTrack(input: number[]): ItemTrack | null {
-    loadBonusList()
-
     for (const bonus of input) {
-        if (bonusList && bonus in bonusList) {
+        if (bonus in bonusItemTracks) {
             return {
-                level: bonusList[bonus].level,
-                max: bonusList[bonus].max,
-                name: bonusList[bonus].name,
-                fullName: bonusList[bonus].fullName,
-                itemLevel: bonusList[bonus].itemLevel
+                level: bonusItemTracks[bonus].level,
+                max: bonusItemTracks[bonus].max,
+                name: bonusItemTracks[bonus].name,
+                fullName: bonusItemTracks[bonus].fullName,
+                itemLevel: bonusItemTracks[bonus].itemLevel
             }
         }
     }
 
     return null // Return null if no match is found
 }
+
+export const gearHasAvoidance = (input: number[] | null): boolean =>
+    input ? input.includes(40) : false
+
+export const gearHasLeech = (input: number[] | null): boolean =>
+    input ? input.includes(41) : false
+
+export const gearHasSpeed = (input: number[] | null): boolean =>
+    input ? input.includes(42) : false
+
+// 10397 Primastic Socket
+// 11307 Socket on Crafted Gear
+export const gearhasSocket = (input: number[] | null): boolean =>
+    input ? [10397, 11307].some((value) => input.includes(value)) : false
+
+export const gearTertiary = (input: number[] | null): boolean =>
+    gearHasAvoidance(input) || gearHasLeech(input) || gearHasSpeed(input)
