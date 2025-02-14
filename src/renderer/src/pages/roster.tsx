@@ -3,6 +3,7 @@ import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
 import PlayerDialog from '@renderer/components/player-dialog'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
 import { Button } from '@renderer/components/ui/button'
+import { Input } from '@renderer/components/ui/input'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { Player } from '@shared/types/types'
@@ -17,6 +18,7 @@ export default function RosterPage(): JSX.Element {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [isNewCharDialogOpen, setIsNewCharDialogOpen] = useState(false)
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
+    const [searchQuery, setSearchQuery] = useState('')
 
     const characterQuery = useQuery({
         queryKey: [queryKeys.players],
@@ -33,6 +35,18 @@ export default function RosterPage(): JSX.Element {
 
     const players = characterQuery.data ?? []
 
+    // Filter players based on the search query
+    const filteredPlayers = players
+        .sort((a, b) => a.name.localeCompare(b.name)) // sort player by name
+        .filter((player) => {
+            const playerMatches =
+                player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                player.characters?.some((character) =>
+                    character.name.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+            return playerMatches
+        })
+
     const handleDeleteClick = (player: Player) => {
         setSelectedPlayer(player)
         setIsDeleteDialogOpen(true)
@@ -45,8 +59,19 @@ export default function RosterPage(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
+            {/* Search Bar */}
+            <div className="w-full mb-4">
+                <Input
+                    type="text"
+                    placeholder="Search players or characters..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                />
+            </div>
+
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {players.map((player) => (
+                {filteredPlayers.map((player) => (
                     // Player Card
                     <div
                         key={player.id}
