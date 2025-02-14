@@ -106,7 +106,10 @@ export default function CharacterDialog({
         if (mode === 'edit' && existingCharacter) {
             editMutation.mutate({ id: existingCharacter.id, ...values })
         } else {
-            addMutation.mutate(values)
+            if (!player) {
+                throw Error('Unable to add char without selecting a player')
+            }
+            addMutation.mutate({ ...values, playerId: player.id })
         }
     }
 
