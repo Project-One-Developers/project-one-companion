@@ -94,7 +94,7 @@ export default function LootsEligibleChars({
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Droptimizer</TableHead>
-                            <TableHead>Weekly Chest</TableHead>
+                            <TableHead>Vault</TableHead>
                             <TableHead>Other Assignment</TableHead>
                             <TableHead>Highest</TableHead>
                             <TableHead>Tierset</TableHead>
