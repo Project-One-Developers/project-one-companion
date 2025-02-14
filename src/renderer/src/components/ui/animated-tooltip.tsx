@@ -28,7 +28,7 @@ export const AnimatedTooltip = ({
 
     return (
         <div className={cn('flex items-center gap-2', className)}>
-            {items.slice(0, 5).map((item) => (
+            {items.map((item) => (
                 <div
                     className="-mr-4 relative group"
                     key={item.id}
@@ -63,6 +63,9 @@ export const AnimatedTooltip = ({
                                     {item.name}
                                 </div>
                                 <div className="text-muted-foreground text-xs">{item.class}</div>
+                                <div className="text-muted-foreground text-xs">
+                                    {item.realm.replaceAll('-', ' ')}
+                                </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
