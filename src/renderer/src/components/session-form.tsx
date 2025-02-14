@@ -29,6 +29,7 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
                 <WowClassIcon
                     key={char.id}
                     wowClassName={char.class}
+                    charname={char.name}
                     className={`object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200 ${
                         selectedCharacters.includes(char.id)
                             ? 'scale-110 ring-2 ring-blue-500'
