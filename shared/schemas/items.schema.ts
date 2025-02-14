@@ -79,7 +79,7 @@ export const gearItemSchema = z.object({
         veryRare: itemSchema.shape.veryRare,
         iconName: itemSchema.shape.iconName
     }),
-    source: z.enum(['equipped', 'bag', 'great-vault']),
+    source: z.enum(['equipped', 'bag', 'great-vault', 'loot']),
     equippedInSlot: wowItemEquippedSlotKeySchema.optional(),
     itemLevel: z.number(),
     itemTrack: itemTrackSchema.nullable(),

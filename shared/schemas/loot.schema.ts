@@ -1,18 +1,16 @@
 import { z } from 'zod'
 import { characterSchema } from './characters.schemas'
-import { itemSchema } from './items.schema'
+import { gearItemSchema, itemSchema } from './items.schema'
 import { raidSessionSchema } from './raid.schemas'
 import { wowRaidDiffSchema } from './wow.schemas'
 
 export const newLootSchema = z.object({
     itemId: itemSchema.shape.id,
-    dropDate: z.number().optional(),
+    gearItem: gearItemSchema,
+    dropDate: z.number(),
     raidDifficulty: wowRaidDiffSchema,
-    itemString: z.string().optional(),
-    bonusString: z.string().optional(), // Leech, Speed, etc
-    socket: z.boolean().optional(),
-    rclootId: z.string().optional(),
-    tertiaryStat: z.boolean().optional()
+    itemString: z.string().optional(), // only in rc csv import
+    rclootId: z.string().optional() // only in rc csv import
 })
 
 export const lootSchema = newLootSchema.extend({

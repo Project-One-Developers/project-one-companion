@@ -1,11 +1,7 @@
 import { PROFESSION_TYPES } from '@shared/consts/wow.consts'
+import { parseItemLevelFromTrack, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
-import {
-    doesItemHaveSocket,
-    doesItemHaveTertiaryStat,
-    getItemBonusString,
-    parseItemString
-} from '@shared/libs/items/item-string-parser'
+import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
     BisList,
@@ -19,6 +15,7 @@ import {
     WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
+import { getItems } from '@storage/items/items.storage'
 import { parse } from 'papaparse'
 import { z } from 'zod'
 import { rawLootRecordSchema } from '../raid-session/raid-session.schemas'
@@ -55,24 +52,78 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
     )
 
     const rawRecords = z.array(rawLootRecordSchema).parse(filteredData)
+    const allItemsInDb = await getItems()
+    const loots: NewLoot[] = []
 
-    const loots = rawRecords.map((record) => {
-        const parsedItem = parseItemString(record.itemString)
-        const { date, time, itemString, difficultyID, itemID, id } = record
+    for (const record of rawRecords) {
+        try {
+            const parsedItem = parseItemString(record.itemString)
+            const { date, time, itemString, difficultyID, itemID: itemId, id } = record
 
-        const loot: NewLoot = {
-            dropDate: parseDateTime(date, time),
-            bonusString: getItemBonusString(parsedItem),
-            itemString,
-            tertiaryStat: doesItemHaveTertiaryStat(parsedItem),
-            socket: doesItemHaveSocket(parsedItem),
-            raidDifficulty: parseWowDiff(difficultyID),
-            itemId: itemID,
-            rclootId: id
+            const bonusIds = getItemBonusString(parsedItem).split(':').map(Number)
+            const wowItem = allItemsInDb.find((i) => i.id === itemId)
+
+            if (!wowItem) {
+                console.log(
+                    'parseRaidSessionCsv: skipping loot item not in db: ' +
+                        itemId +
+                        ' https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds
+                )
+                continue
+            }
+
+            const itemTrack = parseItemTrack(bonusIds)
+            const itemLevel = parseItemLevelFromTrack(wowItem, itemTrack, bonusIds)
+
+            if (itemLevel == null) {
+                console.log(
+                    'parseRaidSessionCsv: skipping loot item without ilvl: ' +
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds
+                )
+                continue
+            }
+
+            const gearItem: GearItem = {
+                item: {
+                    id: wowItem.id,
+                    name: wowItem.name,
+                    armorType: wowItem.armorType,
+                    slotKey: wowItem.slotKey,
+                    token: wowItem.token,
+                    tierset: wowItem.tierset,
+                    boe: wowItem.boe,
+                    veryRare: wowItem.veryRare,
+                    iconName: wowItem.iconName
+                },
+                source: 'loot',
+                itemLevel: itemLevel,
+                bonusIds: bonusIds,
+                itemTrack: itemTrack,
+                gemIds: null,
+                enchantIds: null
+            }
+
+            const loot: NewLoot = {
+                itemId: wowItem.id,
+                gearItem: gearItem,
+                dropDate: parseDateTime(date, time),
+                itemString: itemString,
+                raidDifficulty: parseWowDiff(difficultyID),
+                rclootId: id
+            }
+
+            loots.push(newLootSchema.parse(loot))
+        } catch (error) {
+            console.log('Error processing record:', record, error)
         }
-
-        return newLootSchema.parse(loot)
-    })
+    }
 
     return loots
 }

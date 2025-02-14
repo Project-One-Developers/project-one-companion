@@ -79,12 +79,8 @@ export default function LootsEligibleChars({
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-row justify-center">
-                <WowItemIcon
-                    item={selectedLoot.item}
-                    iconOnly={false}
-                    raidDiff={selectedLoot.raidDifficulty}
-                    bonusString={selectedLoot.bonusString}
-                    socketBanner={selectedLoot.socket}
+                <WowGearIcon
+                    item={selectedLoot.gearItem}
                     tierBanner={true}
                     iconClassName="object-cover object-top rounded-lg h-12 w-12 border border-background"
                 />
@@ -170,7 +166,6 @@ export default function LootsEligibleChars({
                                                         raidDiff={otherLoot.raidDifficulty}
                                                         iconOnly={true}
                                                         tierBanner={true}
-                                                        bonusString={otherLoot.bonusString}
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                     <p className="text-bold text-[11px]">

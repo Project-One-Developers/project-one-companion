@@ -5,7 +5,7 @@ import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithItem } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
-import { WowItemIcon } from './ui/wowitem-icon'
+import { WowGearIcon } from './ui/wowgear-icon'
 
 type SessionLootsPanelProps = {
     raidSessionId: string
@@ -85,13 +85,9 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                         <div className="flex flex-wrap gap-1">
                                             {groupedLoots[boss.id]?.[difficulty]?.map(
                                                 (loot, index) => (
-                                                    <WowItemIcon
+                                                    <WowGearIcon
                                                         key={index}
-                                                        item={loot.item}
-                                                        iconOnly={true}
-                                                        raidDiff={loot.raidDifficulty}
-                                                        bonusString={loot.bonusString}
-                                                        socketBanner={loot.socket}
+                                                        item={loot.gearItem}
                                                         tierBanner={true}
                                                         className="mt-1"
                                                         iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"

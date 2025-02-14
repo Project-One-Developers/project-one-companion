@@ -28,8 +28,8 @@ const LootItem = ({ loot, isSelected, setSelectedLoot }: LootItemProps) => {
                 iconOnly={false}
                 showSlot={shouldShowSlot(loot.item.slotKey)}
                 raidDiff={loot.raidDifficulty}
-                bonusString={loot.bonusString}
-                socketBanner={loot.socket}
+                bonusString={loot.gearItem.bonusIds?.join(':')}
+                // socketBanner={loot.socket} // todo: re-implement later
                 tierBanner={true}
                 iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
             />

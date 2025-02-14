@@ -5,7 +5,7 @@ import { searchItems } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addLootsFromRc, addLootsManual } from '@renderer/lib/tanstack-query/loots'
 import { newLootSchema } from '@shared/schemas/loot.schema'
-import { Item, RaidSession } from '@shared/types/types'
+import { GearItem, Item, RaidSession } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Loader2, LoaderCircle, X } from 'lucide-react'
 import { useState, type JSX } from 'react'
@@ -13,7 +13,6 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
-import { Checkbox } from './ui/checkbox'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
@@ -28,7 +27,7 @@ type SessionLootNewDialogProps = {
 }
 
 const manualFormSchema = z.object({
-    items: z.array(newLootSchema)
+    loots: z.array(newLootSchema)
 })
 
 const rcLootFormSchema = z.object({
@@ -44,12 +43,12 @@ export default function SessionLootNewDialog({
     raidSession
 }: SessionLootNewDialogProps): JSX.Element {
     const [searchTerm, setSearchTerm] = useState('')
-    const [selectedItems, setSelectedItems] = useState<Item[]>([])
+    const [selectedItems, setSelectedItems] = useState<GearItem[]>([])
 
     const manualForm = useForm<ManualFormValues>({
         resolver: zodResolver(manualFormSchema),
         defaultValues: {
-            items: []
+            loots: []
         }
     })
 
@@ -60,9 +59,13 @@ export default function SessionLootNewDialog({
         }
     })
 
-    const { fields, append, remove } = useFieldArray({
+    // const { fields, append, remove } = useFieldArray({
+    //     control: manualForm.control,
+    //     name: 'loots'
+    // })
+    const { fields, remove } = useFieldArray({
         control: manualForm.control,
-        name: 'items'
+        name: 'loots'
     })
 
     const { data: items, isLoading } = useQuery({
@@ -112,7 +115,7 @@ export default function SessionLootNewDialog({
     })
 
     function onManualSubmit(values: ManualFormValues): void {
-        addManualLootsMutation.mutate({ raidSessionId: raidSession.id, loots: values.items })
+        addManualLootsMutation.mutate({ raidSessionId: raidSession.id, loots: values.loots })
     }
 
     function onRcLootSubmit(values: RcLootFormValues): void {
@@ -120,8 +123,28 @@ export default function SessionLootNewDialog({
     }
 
     const handleItemSelect = (item: Item) => {
-        setSelectedItems([...selectedItems, item])
-        append({ itemId: item.id, bonusString: '', socket: false, raidDifficulty: 'Normal' })
+        const gearItem: GearItem = {
+            item: {
+                id: item.id,
+                name: item.name,
+                armorType: item.armorType,
+                slotKey: item.slotKey,
+                token: item.token,
+                tierset: item.tierset,
+                boe: item.boe,
+                veryRare: item.veryRare,
+                iconName: item.iconName
+            },
+            source: 'loot',
+            itemLevel: item.ilvlMythic,
+            bonusIds: null,
+            itemTrack: null,
+            gemIds: null,
+            enchantIds: null
+        }
+        //const newLoot: NewLoot
+        setSelectedItems([...selectedItems, gearItem])
+        //append(gearItem as GearItem)
         setSearchTerm('')
     }
 
@@ -201,14 +224,14 @@ export default function SessionLootNewDialog({
                                             className="flex items-center space-x-2 p-2 border rounded"
                                         >
                                             <WowItemIcon
-                                                item={selectedItems[index]}
+                                                item={selectedItems[index].item.id}
                                                 iconOnly={false}
                                                 raidDiff="Heroic"
                                                 className="mt-2"
                                                 iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
                                             />
 
-                                            <FormField
+                                            {/* <FormField
                                                 control={manualForm.control}
                                                 name={`items.${index}.socket`}
                                                 render={({ field }) => (
@@ -242,10 +265,10 @@ export default function SessionLootNewDialog({
                                                         </FormControl>
                                                     </FormItem>
                                                 )}
-                                            />
+                                            /> */}
                                             <FormField
                                                 control={manualForm.control}
-                                                name={`items.${index}.raidDifficulty`}
+                                                name={`loots.${index}.raidDifficulty`}
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <Select
