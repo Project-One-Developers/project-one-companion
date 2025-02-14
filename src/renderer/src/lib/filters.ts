@@ -5,7 +5,8 @@ export type LootFilter = {
     selectedRaidDiff: WowRaidDifficulty
     onlyUpgrades: boolean
     minUpgrade: number
-    olderThanDays: boolean
+    hideOlderThanDays: boolean
+    hideAlts: boolean
     maxDays: number
     selectedSlots: WowItemSlot[]
     selectedArmorTypes: WowArmorType[]
@@ -25,7 +26,7 @@ export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilte
 
             // Filter droptimizer older than X days
             if (
-                filter.olderThanDays &&
+                filter.hideOlderThanDays &&
                 unixTimestampToRelativeDays(dropt.simInfo.date) > filter.maxDays
             ) {
                 return false

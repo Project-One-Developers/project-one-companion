@@ -13,7 +13,8 @@ const DEFAULT_FILTER: LootFilter = {
     selectedRaidDiff: 'Mythic',
     onlyUpgrades: false,
     minUpgrade: 1000,
-    olderThanDays: false,
+    hideOlderThanDays: false,
+    hideAlts: true, // todo: implement actual filter & create control in filter panel
     maxDays: 7,
     selectedArmorTypes: [],
     selectedSlots: []

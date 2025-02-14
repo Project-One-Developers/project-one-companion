@@ -79,25 +79,25 @@ export const DroptimizersForItem = ({ item, droptimizers }: DroptimizersForItems
 const BossPanel = ({
     boss,
     droptimizers,
-    diff
+    diff,
+    hideItemsWithoutDropt
 }: {
     boss: BossWithItems
     droptimizers: Droptimizer[]
     diff: WowRaidDifficulty
+    hideItemsWithoutDropt: boolean
 }) => {
     const bossHasDroptimizers = true
     // const bossHasDroptimizers = droptimizers.some((dropt) =>
     //     (dropt.upgrades ?? []).some((upgrade) => upgrade.item.bossId === boss.id)
     // )
-    // const itemHasDroptimizers = function (item: Item): boolean {
-    //     return droptimizers.some((dropt) =>
-    //         (dropt.upgrades ?? []).some((upgrade) => upgrade.item.id === item.id)
-    //     )
-    // }
 
-    // todo: re-enable with filter
-    // eslint-disable-next-line
-    const itemHasDroptimizers = function (_: Item): boolean {
+    const itemHasDroptimizers = function (item: Item): boolean {
+        if (hideItemsWithoutDropt) {
+            return droptimizers.some((dropt) =>
+                (dropt.upgrades ?? []).some((upgrade) => upgrade.item.id === item.id)
+            )
+        }
         return true
     }
 
@@ -147,7 +147,8 @@ export default function LootTable(): JSX.Element {
         selectedRaidDiff: 'Mythic',
         onlyUpgrades: false,
         minUpgrade: 1000,
-        olderThanDays: false,
+        hideOlderThanDays: false,
+        hideAlts: true, // todo: implement actual filter & create control in filter panel
         maxDays: 7,
         selectedArmorTypes: [],
         selectedSlots: []
@@ -187,6 +188,7 @@ export default function LootTable(): JSX.Element {
                         boss={boss}
                         droptimizers={filteredDroptimizers}
                         diff={filter.selectedRaidDiff}
+                        hideItemsWithoutDropt={false}
                     />
                 ))}
             </div>

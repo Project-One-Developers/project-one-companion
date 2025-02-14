@@ -82,11 +82,13 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                     <div className="flex flex-row items-center gap-3">
                         <Checkbox
                             id="older-than-days"
-                            checked={filter.olderThanDays as CheckedState}
-                            onCheckedChange={(checked) => updateFilter('olderThanDays', !!checked)}
+                            checked={filter.hideOlderThanDays as CheckedState}
+                            onCheckedChange={(checked) =>
+                                updateFilter('hideOlderThanDays', !!checked)
+                            }
                             className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
                         >
-                            {filter.olderThanDays && <Check className="text-white w-4 h-4" />}
+                            {filter.hideOlderThanDays && <Check className="text-white w-4 h-4" />}
                         </Checkbox>
                         <label htmlFor="older-than-days" className="text-sm font-semibold">
                             Ignore droptimizer older than days
@@ -98,8 +100,8 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                             step="1"
                             value={filter.maxDays}
                             onChange={(e) => updateFilter('maxDays', Number(e.target.value))}
-                            disabled={!filter.olderThanDays}
-                            className={`border rounded-md p-2 bg-gray-700 text-white w-14 ${!filter.olderThanDays ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={!filter.hideOlderThanDays}
+                            className={`border rounded-md p-2 bg-gray-700 text-white w-14 ${!filter.hideOlderThanDays ? 'opacity-50 cursor-not-allowed' : ''}`}
                         />
                     </div>
 
