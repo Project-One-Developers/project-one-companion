@@ -83,18 +83,10 @@ export function parseItemLevelFromTrack(
     return null
 }
 
-export function parseItemTrack(input: number[] | string): ItemTrack | null {
+export function parseItemTrack(input: number[]): ItemTrack | null {
     loadBonusList()
 
-    let bonusIds: number[]
-    if (typeof input === 'string') {
-        if (input.indexOf('/') > -1) bonusIds = input.split('/').map(Number)
-        else bonusIds = input.split(':').map(Number)
-    } else {
-        bonusIds = input
-    }
-
-    for (const bonus of bonusIds) {
+    for (const bonus of input) {
         if (bonusList && bonus in bonusList) {
             return {
                 level: bonusList[bonus].level,

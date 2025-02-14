@@ -15,6 +15,7 @@ import { CurrentGreatVaultPanel } from './greatvault-current-panel'
 import { NextGreatVaultPanel } from './greatvault-next-panel'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
+import { WowGearIcon } from './ui/wowgear-icon'
 import { WowItemIcon } from './ui/wowitem-icon'
 
 type CharGameInfoPanelProps = {
@@ -251,22 +252,11 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                             {formatWowEquippedSlotKey(gearItem.equippedInSlot!)}
                                         </TableCell>
                                         <TableCell>
-                                            {gearItem && (
-                                                <WowItemIcon
-                                                    item={gearItem.item.id}
-                                                    ilvl={gearItem.itemLevel}
-                                                    itemTrack={gearItem.itemTrack ?? undefined}
-                                                    bonusString={gearItem.bonusString ?? undefined}
-                                                    enchantString={gearItem.enchantId}
-                                                    gemsString={gearItem.gemId}
-                                                    iconOnly={false}
-                                                    showIlvl={true}
-                                                    showSlot={false}
-                                                    showSubclass={false}
-                                                    tierBanner={true}
-                                                    iconClassName="rounded-lg h-10 w-10 border border-background"
-                                                />
-                                            )}
+                                            <WowGearIcon
+                                                item={gearItem}
+                                                tierBanner={true}
+                                                iconClassName="rounded-lg h-10 w-10 border border-background"
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}

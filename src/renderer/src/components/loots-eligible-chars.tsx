@@ -9,6 +9,7 @@ import { DroptimizerUpgradeForItemEquipped } from './droptimizer-upgrade-for-ite
 import { toast } from './hooks/use-toast'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowClassIcon } from './ui/wowclass-icon'
+import { WowGearIcon } from './ui/wowgear-icon'
 import { WowItemIcon } from './ui/wowitem-icon'
 
 type LootsEligibleCharsProps = {
@@ -147,28 +148,18 @@ export default function LootsEligibleChars({
                                             ))}
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex flex-row 2">
-                                            {charInfo.weeklyChest.map((wc) => (
-                                                <div
-                                                    key={wc.item.id}
-                                                    className="flex flex-col items-center"
-                                                >
-                                                    <WowItemIcon
-                                                        item={wc.item.id}
-                                                        ilvl={wc.itemLevel}
-                                                        iconOnly={true}
-                                                        bonusString={wc.bonusString ?? undefined}
-                                                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
-                                                    />
-                                                    <p className="text-bold text-[11px]">
-                                                        {wc.itemLevel}
-                                                    </p>
-                                                </div>
+                                        <div className="flex flex-row space-x-1">
+                                            {charInfo.weeklyChest.map((gear) => (
+                                                <WowGearIcon
+                                                    key={gear.item.id}
+                                                    item={gear}
+                                                    iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                                                />
                                             ))}
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex flex-row 2">
+                                        <div className="flex flex-row">
                                             {assignedLoots.map((otherLoot) => (
                                                 <div
                                                     key={otherLoot.id}
@@ -196,22 +187,11 @@ export default function LootsEligibleChars({
                                                     key={bestInSlot.item.id}
                                                     className="flex flex-col items-center space-x-1"
                                                 >
-                                                    <WowItemIcon
-                                                        item={bestInSlot.item.id}
-                                                        ilvl={bestInSlot.itemLevel}
-                                                        iconOnly={true}
+                                                    <WowGearIcon
+                                                        item={bestInSlot}
                                                         tierBanner={true}
-                                                        itemTrack={
-                                                            bestInSlot.itemTrack ?? undefined
-                                                        }
-                                                        bonusString={
-                                                            bestInSlot.bonusString ?? undefined
-                                                        }
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
-                                                    <p className="text-bold text-[11px]">
-                                                        {bestInSlot.itemLevel}
-                                                    </p>
                                                 </div>
                                             ))}
                                         </div>
@@ -223,22 +203,11 @@ export default function LootsEligibleChars({
                                                     key={tierset.item.id}
                                                     className="flex flex-col items-center space-x-1"
                                                 >
-                                                    <WowItemIcon
-                                                        item={tierset.item.id}
-                                                        ilvl={tierset.itemLevel}
-                                                        iconOnly={true}
+                                                    <WowGearIcon
+                                                        item={tierset}
                                                         tierBanner={false}
-                                                        itemTrack={tierset.itemTrack ?? undefined}
-                                                        bonusString={
-                                                            tierset.bonusString ?? undefined
-                                                        }
                                                         iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
-                                                    <p className="text-bold text-[11px]">
-                                                        {tierset.itemLevel ??
-                                                            tierset.itemTrack?.itemLevel}
-                                                        {tierset.itemTrack?.name.charAt(0)}
-                                                    </p>
                                                 </div>
                                             ))}
                                         </div>

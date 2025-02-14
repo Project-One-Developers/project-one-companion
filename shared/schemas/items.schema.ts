@@ -83,31 +83,9 @@ export const gearItemSchema = z.object({
     equippedInSlot: wowItemEquippedSlotKeySchema.optional(),
     itemLevel: z.number(),
     itemTrack: itemTrackSchema.nullable(),
-    bonusString: z.preprocess((val) => {
-        // Convert numbers to strings
-        if (typeof val === 'number') {
-            return val.toString()
-        }
-        return val
-    }, z.string().nullable()),
-    enchantId: z
-        .preprocess((val) => {
-            // Convert numbers to strings
-            if (typeof val === 'number') {
-                return val.toString()
-            }
-            return val
-        }, z.string())
-        .optional(),
-    gemId: z
-        .preprocess((val) => {
-            // Convert numbers to strings
-            if (typeof val === 'number') {
-                return val.toString()
-            }
-            return val
-        }, z.string())
-        .optional(),
+    bonusIds: z.array(z.number()).nullable(),
+    enchantIds: z.array(z.number()).nullable(),
+    gemIds: z.array(z.number()).nullable(),
     craftedStats: z.string().optional(),
     craftingQuality: z.string().optional()
 })

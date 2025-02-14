@@ -1,6 +1,6 @@
 import { currentWowWeek, unixTimestampToWowWeek } from '@renderer/lib/utils'
 import { Droptimizer } from '@shared/types/types'
-import { WowItemIcon } from './ui/wowitem-icon'
+import { WowGearIcon } from './ui/wowgear-icon'
 
 type CurrentGreatVaultPanelProps = {
     droptimizer: Droptimizer | null
@@ -23,13 +23,10 @@ export const CurrentGreatVaultPanel = ({ droptimizer }: CurrentGreatVaultPanelPr
             {/* Chest Items */}
             <div className="flex flex-wrap gap-2">
                 {isValidWeek ? (
-                    weeklyChests.map((wc) => (
-                        <WowItemIcon
-                            key={wc.item.id}
-                            item={wc.item.id}
-                            iconOnly={false}
-                            bonusString={wc.bonusString ?? undefined}
-                            ilvl={wc.itemLevel}
+                    weeklyChests.map((gear) => (
+                        <WowGearIcon
+                            key={gear.item.id} // todo: what happends if same item in valt?
+                            item={gear}
                             iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                         />
                     ))

@@ -203,7 +203,7 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
     let itemMatch: string[] | null
 
     while ((itemMatch = itemRegex.exec(match[1])) !== null) {
-        const bonusString = itemMatch[3].replaceAll('/', ':')
+        const bonusIds = itemMatch[3].split('/').map(Number)
         const itemId = parseInt(itemMatch[2], 10)
 
         // we dont have enough infos, we are forced to check on our db
@@ -216,12 +216,12 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
                     ' - https://www.wowhead.com/item=' +
                     itemId +
                     '?bonus=' +
-                    bonusString
+                    bonusIds
             )
             continue
         }
 
-        const itemTrack = parseItemTrack(bonusString)
+        const itemTrack = parseItemTrack(bonusIds)
         if (itemTrack == null) {
             throw new Error(
                 'parseGreatVaultFromSimc: Detected Vault item without item track... check import'
@@ -242,7 +242,9 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
             },
             source: 'great-vault',
             itemLevel: parseInt(itemMatch[1], 10),
-            bonusString: bonusString,
+            bonusIds: bonusIds,
+            enchantIds: null,
+            gemIds: null,
             itemTrack: itemTrack
         })
     }
@@ -275,7 +277,7 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
 
         if (slotMatch && itemIdMatch && bonusIdMatch) {
             const itemId = parseInt(itemIdMatch[1], 10)
-            const bonusString = bonusIdMatch[1].replaceAll('/', ':')
+            const bonusIds = bonusIdMatch[1].split('/').map(Number)
             const wowItem = itemsInDb.find((i) => i.id === itemId)
 
             if (wowItem == null) {
@@ -297,17 +299,13 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
                         ' - https://www.wowhead.com/item=' +
                         itemId +
                         '?bonus=' +
-                        bonusString
+                        bonusIds
                 )
                 continue
             }
 
-            const itemTrack = parseItemTrack(bonusString)
-            const itemLevel = parseItemLevelFromTrack(
-                wowItem,
-                itemTrack,
-                bonusString.split(':').map(Number)
-            )
+            const itemTrack = parseItemTrack(bonusIds)
+            const itemLevel = parseItemLevelFromTrack(wowItem, itemTrack, bonusIds)
 
             if (itemLevel == null) {
                 console.log(
@@ -316,7 +314,7 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
                         ' - https://www.wowhead.com/item=' +
                         itemId +
                         '?bonus=' +
-                        bonusString
+                        bonusIds
                 )
                 continue
             }
@@ -335,11 +333,11 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
                 },
                 source: 'bag',
                 itemLevel: itemLevel,
-                bonusString: bonusString,
-                itemTrack: itemTrack
+                bonusIds: bonusIds,
+                itemTrack: itemTrack,
+                gemIds: gemIdMatch ? gemIdMatch[1].split('/').map(Number) : null,
+                enchantIds: enchantIdMatch ? enchantIdMatch[1].split('/').map(Number) : null
             }
-            if (enchantIdMatch) item.enchantId = enchantIdMatch[1].replaceAll('/', ':')
-            if (gemIdMatch) item.gemId = gemIdMatch[1].replaceAll('/', ':')
             if (craftedStatsMatch) item.craftedStats = craftedStatsMatch[1]
             if (craftingQualityMatch) item.craftingQuality = craftingQualityMatch[1]
 
@@ -365,7 +363,7 @@ export const parseEquippedGear = async (
                     droptGearItem.id
             )
         }
-
+        const bonusIds = droptGearItem.bonus_id.split('/').map(Number)
         const wowItem = itemsInDb.find((i) => i.id === droptGearItem.id)
         if (wowItem == null) {
             throw new Error(
@@ -380,7 +378,7 @@ export const parseEquippedGear = async (
 
         let itemTrack: ItemTrack | null = null
         if (wowItem.sourceName !== 'Professions - Epic') {
-            itemTrack = parseItemTrack(droptGearItem.bonus_id)
+            itemTrack = parseItemTrack(bonusIds)
             if (!itemTrack) {
                 console.log(
                     '[warn] parseEquippedGear: found equipped item without item track ' +
@@ -412,7 +410,9 @@ export const parseEquippedGear = async (
             source: 'equipped',
             equippedInSlot: wowItemEquippedSlotKeySchema.parse(realSlot),
             itemLevel: droptGearItem.itemLevel,
-            bonusString: droptGearItem.bonus_id,
+            bonusIds: droptGearItem.bonus_id ? bonusIds : null,
+            enchantIds: null,
+            gemIds: null,
             itemTrack: itemTrack
         })
     }
