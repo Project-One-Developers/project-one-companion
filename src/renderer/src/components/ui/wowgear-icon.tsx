@@ -17,18 +17,20 @@ export const WowGearIcon = ({
     iconClassName
 }: WowGearIconProps) => {
     const hasSocket = gearhasSocket(gear.bonusIds)
-    const hasSpecials = gearhasSocket(gear.bonusIds) || gearTertiary(gear.bonusIds)
+    const hasSpecials = hasSocket || gearTertiary(gear.bonusIds)
     const iconUrl = `https://wow.zamimg.com/images/wow/icons/large/${gear.item.iconName}.jpg`
+
+    // todo: avoid setting explicit ilvl if bonus id is present
     const hrefString = `https://www.wowhead.com/item=${gear.item.id}&ilvl=${gear.itemLevel}${gear.bonusIds ? `&bonus=${gear.bonusIds.join(':')}` : ''}${gear.enchantIds ? `&ench=${gear.enchantIds.join(':')}` : ''}${gear.gemIds ? `&gems=${gear.gemIds.join(':')}` : ''}`
 
     return (
         <a className="" href={hrefString} rel="noreferrer" target="_blank">
-            <div className={`flex flex-col items-center ${className}`}>
+            <div className={`flex flex-col items-center ${className ?? ''}`}>
                 <div className="relative inline-block">
                     <img
                         src={iconUrl}
                         alt=""
-                        className={`${hasSpecials ? 'border-white' : ''} ${iconClassName} block`}
+                        className={`object-cover object-top rounded-lg h-8 w-8 border border-background ${hasSpecials ? 'border-white' : ''} ${iconClassName} block`}
                     />
                     {showTierBanner && (gear.item.tierset || gear.item.token) && (
                         <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>

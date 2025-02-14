@@ -133,15 +133,14 @@ export default function LootsEligibleChars({
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        {charInfo.droptimizers &&
-                                            charInfo.droptimizers.map((droptWithUpgrade) => (
-                                                <DroptimizerUpgradeForItemEquipped
-                                                    key={droptWithUpgrade.droptimizer.url}
-                                                    upgrade={droptWithUpgrade.upgrade}
-                                                    droptimizer={droptWithUpgrade.droptimizer}
-                                                    itemEquipped={droptWithUpgrade.itemEquipped}
-                                                />
-                                            ))}
+                                        {charInfo.droptimizers.map((droptWithUpgrade) => (
+                                            <DroptimizerUpgradeForItemEquipped
+                                                key={droptWithUpgrade.droptimizer.url}
+                                                upgrade={droptWithUpgrade.upgrade}
+                                                droptimizer={droptWithUpgrade.droptimizer}
+                                                itemEquipped={droptWithUpgrade.itemEquipped}
+                                            />
+                                        ))}
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex flex-row space-x-1">
@@ -149,7 +148,7 @@ export default function LootsEligibleChars({
                                                 <WowGearIcon
                                                     key={gear.item.id}
                                                     item={gear}
-                                                    iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                                                    iconClassName=""
                                                 />
                                             ))}
                                         </div>
@@ -185,7 +184,6 @@ export default function LootsEligibleChars({
                                                     <WowGearIcon
                                                         item={bestInSlot}
                                                         showTierBanner={true}
-                                                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                 </div>
                                             ))}
@@ -201,7 +199,6 @@ export default function LootsEligibleChars({
                                                     <WowGearIcon
                                                         item={tierset}
                                                         showTierBanner={false}
-                                                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                     />
                                                 </div>
                                             ))}
