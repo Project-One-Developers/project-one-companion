@@ -81,7 +81,7 @@ export default function LootsEligibleChars({
             <div className="flex flex-row justify-center">
                 <WowGearIcon
                     item={selectedLoot.gearItem}
-                    showSlot={false}
+                    showSlot={true}
                     showTierBanner={true}
                     showExtendedInfo={true}
                     showArmorType={true}

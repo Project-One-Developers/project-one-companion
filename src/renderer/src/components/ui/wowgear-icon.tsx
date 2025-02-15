@@ -1,5 +1,6 @@
 import { cn } from '@renderer/lib/utils'
 import { gearhasSocket, gearTertiary } from '@shared/libs/items/item-bonus-utils'
+import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
 import { GearItem } from '@shared/types/types'
 
 type WowGearIconProps = {
@@ -66,8 +67,10 @@ export const WowGearIcon = ({
                     <div id="item-info" className="flex flex-col ml-3">
                         <p className="font-black text-xs">{gear.item.name}</p>
                         <div className="flex">
-                            {showSlot && gear.item.slotKey !== 'trinket' && (
-                                <p className="text-xs mr-1">{gear.item.slotKey}</p>
+                            {showSlot && (
+                                <p className="text-xs mr-1">
+                                    {formatWowSlotKey(gear.item.slotKey)}
+                                </p>
                             )}
                             {showArmorType && (gear.item.armorType || gear.item.token) && (
                                 <p className="text-xs mr-1">
