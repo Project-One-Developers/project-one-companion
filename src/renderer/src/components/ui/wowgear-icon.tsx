@@ -1,3 +1,4 @@
+import { cn } from '@renderer/lib/utils'
 import { gearhasSocket, gearTertiary } from '@shared/libs/items/item-bonus-utils'
 import { GearItem } from '@shared/types/types'
 
@@ -31,13 +32,16 @@ export const WowGearIcon = ({
 
     return (
         <a className="" href={hrefString} rel="noreferrer" target="_blank">
-            <div className="flex flex-row">
-                <div className={`flex flex-col items-center ${className ?? ''}`}>
+            <div className={cn(`flex flex-row items-center`, className)}>
+                <div className="flex flex-col items-center">
                     <div className="relative inline-block">
                         <img
                             src={iconUrl}
                             alt=""
-                            className={`object-cover object-top rounded-lg h-8 w-8 border border-background ${hasSpecials ? 'border-white' : ''} ${iconClassName} block`}
+                            className={cn(
+                                `object-cover object-top rounded-lg h-8 w-8 border border-background block ${hasSpecials ? 'border-white' : ''}`,
+                                iconClassName
+                            )}
                         />
                         {showTierBanner && (gear.item.tierset || gear.item.token) && (
                             <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
@@ -51,21 +55,32 @@ export const WowGearIcon = ({
                             </div>
                         )}
                     </div>
-                    <p className="flex text-bold text-[11px]">
-                        {gear.itemLevel}
-                        {showItemTrackDiff ? gear.itemTrack?.name.charAt(0) : ''}
-                    </p>
+                    {!showExtendedInfo && (
+                        <p className="flex text-bold text-[11px]">
+                            {gear.itemLevel}
+                            {showItemTrackDiff ? gear.itemTrack?.name.charAt(0) : ''}
+                        </p>
+                    )}
                 </div>
                 {showExtendedInfo && (
-                    <div className="flex flex-col ml-3">
+                    <div id="item-info" className="flex flex-col ml-3">
                         <p className="font-black text-xs">{gear.item.name}</p>
                         <div className="flex">
                             {showSlot && gear.item.slotKey !== 'trinket' && (
                                 <p className="text-xs mr-1">{gear.item.slotKey}</p>
                             )}
-                            {showArmorType && ( // Only render if either subclass or ilvl is visible
-                                <p className="text-xs">{showArmorType && gear.item.armorType} </p>
+                            {showArmorType && (gear.item.armorType || gear.item.token) && (
+                                <p className="text-xs mr-1">
+                                    {gear.item.token ? 'Token' : gear.item.armorType}
+                                    {' • '}
+                                </p>
                             )}
+                            <p className="flex  text-bold text-[11px]">
+                                {gear.itemLevel}
+                                {showItemTrackDiff && gear.itemTrack
+                                    ? gear.itemTrack.name.charAt(0)
+                                    : ''}
+                            </p>
                         </div>
                     </div>
                 )}

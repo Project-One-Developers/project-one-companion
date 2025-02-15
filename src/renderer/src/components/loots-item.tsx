@@ -9,12 +9,6 @@ type LootItemProps = {
 }
 
 const LootItem = ({ loot, isSelected, setSelectedLoot }: LootItemProps) => {
-    const shouldShowSlot = (slot) => {
-        if (slot === 'finger' || slot === 'back') {
-            return true
-        }
-        return false
-    }
     return (
         <div
             className={`flex flex-row justify-between border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${isSelected ? 'bg-gray-700' : ''}`}
@@ -25,7 +19,8 @@ const LootItem = ({ loot, isSelected, setSelectedLoot }: LootItemProps) => {
         >
             <WowGearIcon
                 item={loot.gearItem}
-                showSlot={shouldShowSlot(loot.item.slotKey)}
+                showSlot={false}
+                showTierBanner={true}
                 showExtendedInfo={true}
                 showArmorType={true}
             />
