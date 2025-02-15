@@ -111,7 +111,6 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
             }
 
             const loot: NewLoot = {
-                itemId: wowItem.id,
                 gearItem: gearItem,
                 dropDate: parseDateTime(date, time),
                 itemString: itemString,

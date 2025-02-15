@@ -11,9 +11,8 @@ import {
     lootSchema,
     lootWithItemAndAssignedSchema,
     lootWithItemSchema,
-    newLootSchema,
-    newLootsFromManualInputSchema,
-    newLootsFromRcSchema
+    newLootManualSchema,
+    newLootSchema
 } from '@shared/schemas/loot.schema'
 import {
     editRaidSessionSchema,
@@ -108,8 +107,7 @@ export type Loot = z.infer<typeof lootSchema>
 export type LootWithItem = z.infer<typeof lootWithItemSchema>
 export type LootWithItemAndAssigned = z.infer<typeof lootWithItemAndAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
-export type NewLootsFromRc = z.infer<typeof newLootsFromRcSchema>
-export type NewLootsFromManualInput = z.infer<typeof newLootsFromManualInputSchema>
+export type NewLootManual = z.infer<typeof newLootManualSchema>
 export type CharAssignmentInfo = {
     character: Character
     droptimizers: {

@@ -16,8 +16,7 @@ import type {
     LootWithItem,
     LootWithItemAndAssigned,
     NewCharacter,
-    NewLootsFromManualInput,
-    NewLootsFromRc,
+    NewLootManual,
     NewPlayer,
     NewRaidSession,
     Player,
@@ -110,11 +109,11 @@ export const api = {
         return ipcRenderer.invoke('raid-session-delete', id)
     },
     // Loots
-    addLootsManual(loots: NewLootsFromManualInput): Promise<void> {
-        return ipcRenderer.invoke('loots-add-manual', loots)
+    addLootsManual(raidSessionId: string, loots: NewLootManual[]): Promise<void> {
+        return ipcRenderer.invoke('loots-add-manual', raidSessionId, loots)
     },
-    addLootsFromRc(loots: NewLootsFromRc): Promise<void> {
-        return ipcRenderer.invoke('loots-add-rcloot', loots)
+    addLootsFromRc(raidSessionId: string, csv: string): Promise<void> {
+        return ipcRenderer.invoke('loots-add-rcloot', raidSessionId, csv)
     },
     getLootsBySession(sessionId: string): Promise<LootWithItem[]> {
         return ipcRenderer.invoke('loots-get-by-session', sessionId)
