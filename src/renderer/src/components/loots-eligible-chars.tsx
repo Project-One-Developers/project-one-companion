@@ -10,7 +10,6 @@ import { toast } from './hooks/use-toast'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
-import { WowItemIcon } from './ui/wowitem-icon'
 
 type LootsEligibleCharsProps = {
     selectedLoot: LootWithItemAndAssigned
@@ -148,47 +147,28 @@ export default function LootsEligibleChars({
                                     <TableCell>
                                         <div className="flex flex-row space-x-1">
                                             {charInfo.weeklyChest.map((gear) => (
+                                                <WowGearIcon key={gear.item.id} item={gear} />
+                                            ))}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-row space-x-1">
+                                            {assignedLoots.map((otherLoot) => (
                                                 <WowGearIcon
-                                                    key={gear.item.id}
-                                                    item={gear}
-                                                    iconClassName=""
+                                                    key={otherLoot.id}
+                                                    item={otherLoot.gearItem}
                                                 />
                                             ))}
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex flex-row">
-                                            {assignedLoots.map((otherLoot) => (
-                                                <div
-                                                    key={otherLoot.id}
-                                                    className="flex flex-col items-center space-x-1"
-                                                >
-                                                    <WowItemIcon
-                                                        item={otherLoot.item}
-                                                        raidDiff={otherLoot.raidDifficulty}
-                                                        iconOnly={true}
-                                                        tierBanner={true}
-                                                        iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
-                                                    />
-                                                    <p className="text-bold text-[11px]">
-                                                        {otherLoot.raidDifficulty}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex flex-row 2">
+                                        <div className="flex flex-row space-x-1">
                                             {charInfo.bestItemInSlot.map((bestInSlot) => (
-                                                <div
+                                                <WowGearIcon
                                                     key={bestInSlot.item.id}
-                                                    className="flex flex-col items-center space-x-1"
-                                                >
-                                                    <WowGearIcon
-                                                        item={bestInSlot}
-                                                        showTierBanner={true}
-                                                    />
-                                                </div>
+                                                    item={bestInSlot}
+                                                    showTierBanner={true}
+                                                />
                                             ))}
                                         </div>
                                     </TableCell>
