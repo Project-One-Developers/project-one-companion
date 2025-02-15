@@ -1,6 +1,6 @@
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
-import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { LootWithItemAndAssigned } from '@shared/types/types'
+import { WowGearIcon } from './ui/wowgear-icon'
 
 type LootItemProps = {
     loot: LootWithItemAndAssigned
@@ -23,15 +23,11 @@ const LootItem = ({ loot, isSelected, setSelectedLoot }: LootItemProps) => {
                 setSelectedLoot(loot)
             }}
         >
-            <WowItemIcon
-                item={loot.item}
-                iconOnly={false}
+            <WowGearIcon
+                item={loot.gearItem}
                 showSlot={shouldShowSlot(loot.item.slotKey)}
-                raidDiff={loot.raidDifficulty}
-                bonusString={loot.gearItem.bonusIds?.join(':')}
-                // socketBanner={loot.socket} // todo: re-implement later
-                tierBanner={true}
-                iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                showExtendedInfo={true}
+                showArmorType={true}
             />
 
             {loot.assignedCharacter && (

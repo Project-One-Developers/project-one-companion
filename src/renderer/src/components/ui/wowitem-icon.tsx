@@ -7,14 +7,10 @@ export const WowItemIcon = ({
     item,
     iconOnly,
     catalystBanner = false,
-    socketBanner = false,
     tierBanner = false,
     raidDiff,
     ilvl,
     itemTrack,
-    bonusString,
-    enchantString,
-    gemsString,
     className,
     iconClassName,
     showSlot = true,
@@ -29,9 +25,6 @@ export const WowItemIcon = ({
     raidDiff?: WowRaidDifficulty
     ilvl?: number
     itemTrack?: ItemTrack
-    bonusString?: string
-    enchantString?: string
-    gemsString?: string
     className?: string
     iconClassName?: string
     showSlot?: boolean
@@ -83,22 +76,8 @@ export const WowItemIcon = ({
         }
     }
 
-    // refine bonus string if needed
-    if (bonusString) {
-        // same sources like droptimizer uses / instead of : notation
-        bonusString = bonusString.replaceAll('/', ':')
-    }
-    if (enchantString) {
-        // same sources like droptimizer uses / instead of : notation
-        enchantString = enchantString.replaceAll('/', ':')
-    }
-    if (gemsString) {
-        // same sources like droptimizer uses / instead of : notation
-        gemsString = gemsString.replaceAll('/', ':')
-    }
-
     const currentIlvl = getIlvl()
-    const hrefString = `${itemData.wowheadUrl}&ilvl=${currentIlvl}${bonusString ? `&bonus=${bonusString}` : ''}${enchantString ? `&ench=${enchantString}` : ''}${gemsString ? `&gems=${gemsString}` : ''}`
+    const hrefString = `${itemData.wowheadUrl}&ilvl=${currentIlvl}}`
 
     return (
         <a className="" href={hrefString} rel="noreferrer" target="_blank">
@@ -112,14 +91,6 @@ export const WowItemIcon = ({
                     )}
                     {tierBanner && (itemData.tierset || itemData.token) && (
                         <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
-                    )}
-                    {socketBanner && (
-                        <div className="absolute bottom-0 right-0">
-                            <img
-                                className="w-3 h-3 border"
-                                src="https://www.raidbots.com/frontend/c6217d2ee6dd7647cbfa.png"
-                            />
-                        </div>
                     )}
                 </div>
                 {!iconOnly && (

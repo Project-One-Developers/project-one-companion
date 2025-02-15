@@ -5,6 +5,9 @@ type WowGearIconProps = {
     item: GearItem
     showTierBanner?: boolean
     showItemTrackDiff?: boolean
+    showExtendedInfo?: boolean
+    showSlot?: boolean
+    showArmorType?: boolean
     className?: string
     iconClassName?: string
 }
@@ -13,6 +16,9 @@ export const WowGearIcon = ({
     item: gear,
     showTierBanner = false,
     showItemTrackDiff = true,
+    showExtendedInfo = false,
+    showSlot = false,
+    showArmorType = false,
     className,
     iconClassName
 }: WowGearIconProps) => {
@@ -25,29 +31,44 @@ export const WowGearIcon = ({
 
     return (
         <a className="" href={hrefString} rel="noreferrer" target="_blank">
-            <div className={`flex flex-col items-center ${className ?? ''}`}>
-                <div className="relative inline-block">
-                    <img
-                        src={iconUrl}
-                        alt=""
-                        className={`object-cover object-top rounded-lg h-8 w-8 border border-background ${hasSpecials ? 'border-white' : ''} ${iconClassName} block`}
-                    />
-                    {showTierBanner && (gear.item.tierset || gear.item.token) && (
-                        <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
-                    )}
-                    {hasSocket && (
-                        <div className="absolute bottom-0 right-0">
-                            <img
-                                className="w-3 h-3 border"
-                                src="https://www.raidbots.com/frontend/c6217d2ee6dd7647cbfa.png"
-                            />
-                        </div>
-                    )}
+            <div className="flex flex-row">
+                <div className={`flex flex-col items-center ${className ?? ''}`}>
+                    <div className="relative inline-block">
+                        <img
+                            src={iconUrl}
+                            alt=""
+                            className={`object-cover object-top rounded-lg h-8 w-8 border border-background ${hasSpecials ? 'border-white' : ''} ${iconClassName} block`}
+                        />
+                        {showTierBanner && (gear.item.tierset || gear.item.token) && (
+                            <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
+                        )}
+                        {hasSocket && (
+                            <div className="absolute bottom-0 right-0">
+                                <img
+                                    className="w-3 h-3 border"
+                                    src="https://www.raidbots.com/frontend/c6217d2ee6dd7647cbfa.png"
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <p className="flex text-bold text-[11px]">
+                        {gear.itemLevel}
+                        {showItemTrackDiff ? gear.itemTrack?.name.charAt(0) : ''}
+                    </p>
                 </div>
-                <p className="flex text-bold text-[11px]">
-                    {gear.itemLevel}
-                    {showItemTrackDiff ? gear.itemTrack?.name.charAt(0) : ''}
-                </p>
+                {showExtendedInfo && (
+                    <div className="flex flex-col ml-3">
+                        <p className="font-black text-xs">{gear.item.name}</p>
+                        <div className="flex">
+                            {showSlot && gear.item.slotKey !== 'trinket' && (
+                                <p className="text-xs mr-1">{gear.item.slotKey}</p>
+                            )}
+                            {showArmorType && ( // Only render if either subclass or ilvl is visible
+                                <p className="text-xs">{showArmorType && gear.item.armorType} </p>
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
         </a>
     )
