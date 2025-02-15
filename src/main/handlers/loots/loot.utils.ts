@@ -1,5 +1,12 @@
 import { PROFESSION_TYPES } from '@shared/consts/wow.consts'
-import { parseItemLevelFromTrack, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
+import {
+    applyAvoidance,
+    applyLeech,
+    applySocket,
+    applySpeed,
+    parseItemLevelFromTrack,
+    parseItemTrack
+} from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
@@ -12,10 +19,12 @@ import {
     Item,
     LootWithItem,
     NewLoot,
+    NewLootManual,
     WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
 import { getItems } from '@storage/items/items.storage'
+import { getUnixTimestamp } from '@utils'
 import { parse } from 'papaparse'
 import { z } from 'zod'
 import { rawLootRecordSchema } from '../raid-session/raid-session.schemas'
@@ -33,7 +42,7 @@ const parseWowDiff = (wowDiff: number): WowRaidDifficulty => {
     }
 }
 
-export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
+export const parseRcLoots = async (csv: string): Promise<NewLoot[]> => {
     const parsedData = parse(csv, {
         header: true,
         dynamicTyping: true,
@@ -53,7 +62,7 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
 
     const rawRecords = z.array(rawLootRecordSchema).parse(filteredData)
     const allItemsInDb = await getItems()
-    const loots: NewLoot[] = []
+    const res: NewLoot[] = []
 
     for (const record of rawRecords) {
         try {
@@ -65,7 +74,7 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
 
             if (!wowItem) {
                 console.log(
-                    'parseRaidSessionCsv: skipping loot item not in db: ' +
+                    'parseRcLoots: skipping loot item not in db: ' +
                         itemId +
                         ' https://www.wowhead.com/item=' +
                         itemId +
@@ -80,7 +89,7 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
 
             if (itemLevel == null) {
                 console.log(
-                    'parseRaidSessionCsv: skipping loot item without ilvl: ' +
+                    'parseRcLoots: skipping loot item without ilvl: ' +
                         itemId +
                         ' - https://www.wowhead.com/item=' +
                         itemId +
@@ -118,13 +127,104 @@ export const parseRaidSessionCsv = async (csv: string): Promise<NewLoot[]> => {
                 rclootId: id
             }
 
-            loots.push(newLootSchema.parse(loot))
+            res.push(newLootSchema.parse(loot))
         } catch (error) {
             console.log('Error processing record:', record, error)
         }
     }
 
-    return loots
+    return res
+}
+
+export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[]> => {
+    const allItemsInDb = await getItems()
+    const res: NewLoot[] = []
+
+    for (const loot of loots) {
+        try {
+            const wowItem = allItemsInDb.find((i) => i.id === loot.itemId)
+
+            if (!wowItem) {
+                console.log(
+                    'parseManualLoots: skipping loot item not in db: ' +
+                        loot.itemId +
+                        ' https://www.wowhead.com/item=' +
+                        loot.itemId
+                )
+                continue
+            }
+
+            // todo: handle item track?
+            // const itemTrack = parseItemTrack(bonusIds)
+
+            let itemLevel
+            switch (loot.raidDifficulty) {
+                case 'Heroic':
+                    itemLevel = wowItem.ilvlHeroic
+                    break
+                case 'Mythic':
+                    itemLevel = wowItem.ilvlMythic
+                    break
+                case 'Normal':
+                    itemLevel = wowItem.ilvlNormal
+                    break
+                default:
+                    itemLevel = wowItem.ilvlBase
+                    break
+            }
+
+            const bonusIds: number[] = []
+
+            if (loot.hasSocket) applySocket(bonusIds)
+            if (loot.hasAvoidance) applyAvoidance(bonusIds)
+            if (loot.hasLeech) applyLeech(bonusIds)
+            if (loot.hasSpeed) applySpeed(bonusIds)
+
+            if (itemLevel == null) {
+                console.log(
+                    'parseManualLoots: skipping loot item without ilvl: ' +
+                        loot.itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        loot.itemId
+                )
+                continue
+            }
+
+            const gearItem: GearItem = {
+                item: {
+                    id: wowItem.id,
+                    name: wowItem.name,
+                    armorType: wowItem.armorType,
+                    slotKey: wowItem.slotKey,
+                    token: wowItem.token,
+                    tierset: wowItem.tierset,
+                    boe: wowItem.boe,
+                    veryRare: wowItem.veryRare,
+                    iconName: wowItem.iconName
+                },
+                source: 'loot',
+                itemLevel: itemLevel,
+                bonusIds: bonusIds,
+                itemTrack: null,
+                gemIds: null,
+                enchantIds: null
+            }
+
+            const nl: NewLoot = {
+                ...loot,
+                gearItem: gearItem,
+                rclootId: null,
+                itemString: null,
+                dropDate: getUnixTimestamp() // now
+            }
+
+            res.push(newLootSchema.parse(nl))
+        } catch (error) {
+            console.log('Error processing record:', loot, error)
+        }
+    }
+
+    return res
 }
 
 const parseDateTime = (dateStr: string, timeStr: string): number => {

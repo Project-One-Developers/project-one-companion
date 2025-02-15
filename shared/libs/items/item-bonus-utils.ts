@@ -101,3 +101,17 @@ export const gearhasSocket = (input: number[] | null): boolean =>
 
 export const gearTertiary = (input: number[] | null): boolean =>
     gearHasAvoidance(input) || gearHasLeech(input) || gearHasSpeed(input)
+
+// gear manipolation
+export function applySocket(input: number[]): void {
+    input.push(10397)
+}
+export function applyAvoidance(input: number[]): void {
+    input.push(40)
+}
+export function applyLeech(input: number[]): void {
+    input.push(41)
+}
+export function applySpeed(input: number[]): void {
+    input.push(42)
+}

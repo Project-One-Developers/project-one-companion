@@ -20,7 +20,8 @@ import {
     parseBestItemInSlot,
     parseDroptimizersInfo,
     parseLootIsBis,
-    parseRaidSessionCsv,
+    parseManualLoots,
+    parseRcLoots,
     parseTiersetInfo,
     parseWeeklyChest
 } from './loot.utils'
@@ -29,9 +30,8 @@ export const addRaidLootsByRCLootCsvHandler = async (
     raidSessionId: string,
     csv: string
 ): Promise<void> => {
-    const parsedData = await parseRaidSessionCsv(csv)
+    const parsedData = await parseRcLoots(csv)
     const elegibleCharacters = await getRaidSessionRoster(raidSessionId)
-
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
@@ -39,10 +39,9 @@ export const addRaidLootsByManualInputHandler = async (
     raidSessionId: string,
     loots: NewLootManual[]
 ): Promise<void> => {
-    //const parsedData = await parseRaidSessionCsv(loot.raidSessionId, loot.csv)
-    console.log(raidSessionId, loots)
-
-    // TODO: insertion
+    const parsedData = await parseManualLoots(loots)
+    const elegibleCharacters = await getRaidSessionRoster(raidSessionId)
+    await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
 export const getLootsBySessionIdHandler = async (

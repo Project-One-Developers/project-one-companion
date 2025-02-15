@@ -8,8 +8,8 @@ export const newLootSchema = z.object({
     gearItem: gearItemSchema,
     dropDate: z.number(),
     raidDifficulty: wowRaidDiffSchema,
-    itemString: z.string().optional(), // only in rc csv import
-    rclootId: z.string().optional() // only in rc csv import
+    itemString: z.string().nullable(), // only in rc csv import
+    rclootId: z.string().nullable() // only in rc csv import
 })
 
 export const newLootManualSchema = z.object({
@@ -21,11 +21,17 @@ export const newLootManualSchema = z.object({
     hasSpeed: z.boolean()
 })
 
-export const lootSchema = newLootSchema.extend({
+export const lootSchema = z.object({
     id: z.string().uuid(),
+    raidSessionId: raidSessionSchema.shape.id,
+    itemId: itemSchema.shape.id,
+    gearItem: gearItemSchema,
+    dropDate: z.number(),
+    raidDifficulty: wowRaidDiffSchema,
+    itemString: z.string().nullable(), // only in rc csv import
+    rclootId: z.string().nullable(), // only in rc csv import
     charsEligibility: z.string().array(),
-    assignedCharacterId: characterSchema.shape.id.nullable(),
-    raidSessionId: raidSessionSchema.shape.id
+    assignedCharacterId: characterSchema.shape.id.nullable()
 })
 
 export const lootWithItemSchema = lootSchema.extend({
