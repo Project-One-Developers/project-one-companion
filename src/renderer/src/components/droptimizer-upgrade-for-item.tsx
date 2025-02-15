@@ -37,14 +37,7 @@ export const DroptimizerUpgradeForItemEquipped = ({
                 <ArrowRight className="h-4 w-4 text-gray-400" />
             </div>
             {/* Item upgraded */}
-            <div className="flex">
-                {itemEquipped && (
-                    <WowGearIcon
-                        item={itemEquipped}
-                        className="rounded-md full h-8 w-8 border border-background"
-                    />
-                )}
-            </div>
+            <div className="flex">{itemEquipped && <WowGearIcon item={itemEquipped} />}</div>
         </div>
     )
 }
