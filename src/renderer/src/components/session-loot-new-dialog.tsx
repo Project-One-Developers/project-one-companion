@@ -1,4 +1,5 @@
 import * as Tabs from '@radix-ui/react-tabs'
+import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { searchItems } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -146,8 +147,7 @@ export default function SessionLootNewDialog({
                                         value={selectedItem.raidDifficulty}
                                         onValueChange={(value: WowRaidDifficulty) => {
                                             const updatedItems = [...selectedItems]
-                                            const lootToUpdate: NewLootManual = updatedItems[index]
-                                            lootToUpdate.raidDifficulty = value
+                                            updatedItems[index].raidDifficulty = value
                                             setSelectedItems(updatedItems)
                                         }}
                                     >
@@ -162,9 +162,51 @@ export default function SessionLootNewDialog({
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                    <ToggleGroup.Root
+                                        type="multiple"
+                                        className="flex gap-2"
+                                        value={Object.keys(selectedItem).filter(
+                                            (key) => selectedItem[key]
+                                        )}
+                                        onValueChange={(values) => {
+                                            const updatedItems = [...selectedItems]
+                                            updatedItems[index] = {
+                                                ...updatedItems[index],
+                                                hasSocket: values.includes('hasSocket'),
+                                                hasAvoidance: values.includes('hasAvoidance'),
+                                                hasLeech: values.includes('hasLeech'),
+                                                hasSpeed: values.includes('hasSpeed')
+                                            }
+                                            setSelectedItems(updatedItems)
+                                        }}
+                                    >
+                                        <ToggleGroup.Item
+                                            value="hasSocket"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            Socket
+                                        </ToggleGroup.Item>
+                                        <ToggleGroup.Item
+                                            value="hasAvoidance"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            A
+                                        </ToggleGroup.Item>
+                                        <ToggleGroup.Item
+                                            value="hasLeech"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            L
+                                        </ToggleGroup.Item>
+                                        <ToggleGroup.Item
+                                            value="hasSpeed"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            S
+                                        </ToggleGroup.Item>
+                                    </ToggleGroup.Root>
 
                                     <Button
-                                        type="button"
                                         variant="ghost"
                                         onClick={() =>
                                             setSelectedItems(
@@ -177,7 +219,6 @@ export default function SessionLootNewDialog({
                                 </div>
                             ))}
                         </div>
-
                         <Button
                             className="w-full mt-4"
                             onClick={() =>
