@@ -46,7 +46,7 @@ export const specIcon = new Map<number, string>([
     [257, 'https://wow.zamimg.com/images/wow/icons/medium/spell_holy_guardianspirit.jpg'], // Holy Priest
     [258, 'https://wow.zamimg.com/images/wow/icons/medium/spell_shadow_shadowwordpain.jpg'], // Shadow Priest
     [259, 'https://wow.zamimg.com/images/wow/icons/medium/ability_rogue_eviscerate.jpg'], // Assassination Rogue
-    [260, 'https://wow.zamimg.com/images/wow/icons/medium/ability_rogue_sinisterstrike.jpg'], // Outlaw Rogue
+    [260, 'https://wow.zamimg.com/images/wow/icons/medium/ability_backstab.jpg'], // Outlaw Rogue
     [261, 'https://wow.zamimg.com/images/wow/icons/medium/ability_stealth.jpg'], // Subtlety Rogue
     [262, 'https://wow.zamimg.com/images/wow/icons/medium/spell_nature_lightning.jpg'], // Elemental Shaman
     [263, 'https://wow.zamimg.com/images/wow/icons/medium/spell_shaman_improvedstormstrike.jpg'], // Enhancement Shaman
