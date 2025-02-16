@@ -3,7 +3,7 @@
 // jq 'map(select(.upgrade.fullName != null and (.upgrade.seasonId == 24 or .upgrade.seasonId == 25)) | {id, level: .upgrade.level, max: .upgrade.max, name: .upgrade.name, fullName: .upgrade.fullName, itemLevel: .upgrade.itemLevel})' bonus.json > parsed_bonus.json
 
 import { Item, ItemTrack, WowRaidDifficulty } from '@shared/types/types'
-import bonusItemTracks from './item-tracks'
+import bonusItemTracks, { queryByItemLevelAndName } from './item-tracks'
 
 export function parseItemDiff(bonusIds: number[]): WowRaidDifficulty | null {
     if (bonusIds.includes(10356)) {
@@ -101,3 +101,48 @@ export const gearhasSocket = (input: number[] | null): boolean =>
 
 export const gearTertiary = (input: number[] | null): boolean =>
     gearHasAvoidance(input) || gearHasLeech(input) || gearHasSpeed(input)
+
+export function getItemTrack(ilvl: number, diff: WowRaidDifficulty): ItemTrack | null {
+    let diffName
+
+    switch (diff) {
+        case 'Normal':
+            diffName = 'Champion'
+            break
+        case 'Heroic':
+            diffName = 'Hero'
+            break
+        case 'Mythic':
+            diffName = 'Myth'
+            break
+        default:
+            throw new Error('getItemTrack: diff not mapped')
+    }
+
+    return queryByItemLevelAndName(ilvl, diffName)
+}
+
+// gear manipolation
+export function applyTokenDiff(input: number[], diff: WowRaidDifficulty): void {
+    switch (diff) {
+        case 'Heroic':
+            input.push(10355)
+            break
+        case 'Mythic':
+            input.push(10356)
+            break
+    }
+}
+
+export function applySocket(input: number[]): void {
+    input.push(10397)
+}
+export function applyAvoidance(input: number[]): void {
+    input.push(40)
+}
+export function applyLeech(input: number[]): void {
+    input.push(41)
+}
+export function applySpeed(input: number[]): void {
+    input.push(42)
+}

@@ -54,7 +54,7 @@ export const addLoots = async (
             charsEligibility: elegibleCharacters.map((c) => c.id),
             raidSessionId: raidSessionId,
             rclootId: loot.rclootId,
-            itemId: loot.itemId
+            itemId: loot.gearItem.item.id
         }
     })
 

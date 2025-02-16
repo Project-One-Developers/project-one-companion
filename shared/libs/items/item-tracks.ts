@@ -6,6 +6,14 @@ interface BonusItemTrack {
     itemLevel: number
 }
 
+export function queryByItemLevelAndName(itemLevel: number, name: string): BonusItemTrack | null {
+    return (
+        Object.values(bonusItemTracks).find(
+            (track) => track.itemLevel === itemLevel && track.name === name
+        ) ?? null
+    )
+}
+
 export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
     '10256': {
         level: 6,

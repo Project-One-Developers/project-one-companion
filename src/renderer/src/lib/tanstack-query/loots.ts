@@ -2,24 +2,24 @@ import {
     LootAssignmentInfo,
     LootWithItem,
     LootWithItemAndAssigned,
-    NewLootsFromManualInput,
-    NewLootsFromRc
+    NewLootManual
 } from '@shared/types/types'
 
-export const addLootsManual = async (loots: NewLootsFromManualInput): Promise<void> => {
-    //const response = await window.api.searchItems(searchTerm, 10)
-    if (!loots.raidSessionId) {
+export const addLootsManual = async (
+    raidSessionId: string,
+    loots: NewLootManual[]
+): Promise<void> => {
+    if (!raidSessionId) {
         throw new Error('No raid session id provided')
     }
-    return await window.api.addLootsManual(loots)
+    return await window.api.addLootsManual(raidSessionId, loots)
 }
 
-export const addLootsFromRc = async (loots: NewLootsFromRc): Promise<void> => {
-    //const response = await window.api.searchItems(searchTerm, 10)
-    if (!loots.raidSessionId) {
+export const addLootsFromRc = async (raidSessionId: string, csv: string): Promise<void> => {
+    if (!raidSessionId) {
         throw new Error('No raid session id provided')
     }
-    return await window.api.addLootsFromRc(loots)
+    return await window.api.addLootsFromRc(raidSessionId, csv)
 }
 
 export const getLootsBySession = async (raidSessionId: string): Promise<LootWithItem[]> => {

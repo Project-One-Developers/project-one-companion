@@ -1,72 +1,34 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import * as Tabs from '@radix-ui/react-tabs'
+import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { searchItems } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addLootsFromRc, addLootsManual } from '@renderer/lib/tanstack-query/loots'
-import { newLootSchema } from '@shared/schemas/loot.schema'
-import { GearItem, Item, RaidSession } from '@shared/types/types'
+import { RAID_DIFF } from '@shared/consts/wow.consts'
+import { Item, NewLootManual, RaidSession, WowRaidDifficulty } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Loader2, LoaderCircle, X } from 'lucide-react'
+import { LoaderCircle, X } from 'lucide-react'
 import { useState, type JSX } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Textarea } from './ui/text-area'
 import { WowItemIcon } from './ui/wowitem-icon'
 
-type SessionLootNewDialogProps = {
-    isOpen: boolean
-    setOpen: (open: boolean) => void
-    raidSession: RaidSession
-}
-
-const manualFormSchema = z.object({
-    loots: z.array(newLootSchema)
-})
-
-const rcLootFormSchema = z.object({
-    csvData: z.string().min(1, 'CSV data is required')
-})
-
-type ManualFormValues = z.infer<typeof manualFormSchema>
-type RcLootFormValues = z.infer<typeof rcLootFormSchema>
-
 export default function SessionLootNewDialog({
     isOpen,
     setOpen,
     raidSession
-}: SessionLootNewDialogProps): JSX.Element {
+}: {
+    isOpen: boolean
+    setOpen: (open: boolean) => void
+    raidSession: RaidSession
+}): JSX.Element {
     const [searchTerm, setSearchTerm] = useState('')
-    const [selectedItems, setSelectedItems] = useState<GearItem[]>([])
-
-    const manualForm = useForm<ManualFormValues>({
-        resolver: zodResolver(manualFormSchema),
-        defaultValues: {
-            loots: []
-        }
-    })
-
-    const rcLootForm = useForm<RcLootFormValues>({
-        resolver: zodResolver(rcLootFormSchema),
-        defaultValues: {
-            csvData: ''
-        }
-    })
-
-    // const { fields, append, remove } = useFieldArray({
-    //     control: manualForm.control,
-    //     name: 'loots'
-    // })
-    const { fields, remove } = useFieldArray({
-        control: manualForm.control,
-        name: 'loots'
-    })
+    const [selectedItems, setSelectedItems] = useState<NewLootManual[]>([])
+    const [csvData, setCsvData] = useState('')
 
     const { data: items, isLoading } = useQuery({
         queryKey: [queryKeys.itemSearch, searchTerm],
@@ -75,76 +37,43 @@ export default function SessionLootNewDialog({
     })
 
     const addManualLootsMutation = useMutation({
-        mutationFn: addLootsManual,
+        mutationFn: ({ raidSessionId, loots }: { raidSessionId: string; loots: NewLootManual[] }) =>
+            addLootsManual(raidSessionId, loots),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
-            manualForm.reset()
             setSelectedItems([])
             setOpen(false)
-            toast({
-                title: 'Loots added',
-                description: 'The loots have been successfully added to the raid session.'
-            })
+            toast({ title: 'Loots added', description: 'Loots successfully added.' })
         },
-        onError: (error: Error) => {
-            toast({
-                title: 'Error',
-                description: `Unable to add the loots. Error: ${error.message}`
-            })
+        onError: (error) => {
+            toast({ title: 'Error', description: `Failed to add loots. ${error.message}` })
         }
     })
 
     const addRcLootsMutation = useMutation({
-        mutationFn: addLootsFromRc,
+        mutationFn: ({ raidSessionId, csv }: { raidSessionId: string; csv: string }) =>
+            addLootsFromRc(raidSessionId, csv),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
-            rcLootForm.reset()
+            setCsvData('')
             setOpen(false)
-            toast({
-                title: 'RCLoot CSV imported',
-                description:
-                    'The loots from RCLoot CSV have been successfully added to the raid session.'
-            })
+            toast({ title: 'RCLoot CSV imported', description: 'Loots successfully imported.' })
         },
-        onError: (error: Error) => {
-            toast({
-                title: 'Error',
-                description: `Unable to import RCLoot CSV. Error: ${error.message}`
-            })
+        onError: (error) => {
+            toast({ title: 'Error', description: `Failed to import CSV. ${error.message}` })
         }
     })
 
-    function onManualSubmit(values: ManualFormValues): void {
-        addManualLootsMutation.mutate({ raidSessionId: raidSession.id, loots: values.loots })
-    }
-
-    function onRcLootSubmit(values: RcLootFormValues): void {
-        addRcLootsMutation.mutate({ raidSessionId: raidSession.id, csv: values.csvData })
-    }
-
     const handleItemSelect = (item: Item) => {
-        const gearItem: GearItem = {
-            item: {
-                id: item.id,
-                name: item.name,
-                armorType: item.armorType,
-                slotKey: item.slotKey,
-                token: item.token,
-                tierset: item.tierset,
-                boe: item.boe,
-                veryRare: item.veryRare,
-                iconName: item.iconName
-            },
-            source: 'loot',
-            itemLevel: item.ilvlMythic,
-            bonusIds: null,
-            itemTrack: null,
-            gemIds: null,
-            enchantIds: null
+        const newloot: NewLootManual = {
+            itemId: item.id,
+            raidDifficulty: 'Heroic',
+            hasSocket: false,
+            hasAvoidance: false,
+            hasLeech: false,
+            hasSpeed: false
         }
-        //const newLoot: NewLoot
-        setSelectedItems([...selectedItems, gearItem])
-        //append(gearItem as GearItem)
+        setSelectedItems([...selectedItems, newloot])
         setSearchTerm('')
     }
 
@@ -161,198 +90,165 @@ export default function SessionLootNewDialog({
                     <Tabs.List className="flex border-b mb-4">
                         <Tabs.Trigger
                             value="manual"
-                            className="px-4 py-2 flex-1 text-center hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                            className="px-4 py-2 flex-1 text-center hover:bg-muted"
                         >
                             Manual Entry
                         </Tabs.Trigger>
                         <Tabs.Trigger
                             value="rcloot"
-                            className="px-4 py-2 flex-1 flex items-center justify-center space-x-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                            className="px-4 py-2 flex-1 text-center hover:bg-muted"
                         >
-                            <img
-                                className="w-6 h-6"
-                                src="https://c10.patreonusercontent.com/4/patreon-media/p/campaign/2992019/d12a606658904befb227df7926aa076d/eyJoIjoxMDgwLCJ3IjoxMDgwfQ%3D%3D/1.png?token-time=1738540800&token-hash=lk4XeKgnSfqKBtsVG1iAHy5m4MtFdo-lr3cYMcjeego%3D"
-                                alt="RCLoot CSV"
-                            />
-                            <span>RCLoot CSV</span>
+                            RCLoot CSV
                         </Tabs.Trigger>
                     </Tabs.List>
                     <Tabs.Content value="manual" className="p-4">
-                        <Form {...manualForm}>
-                            <form
-                                onSubmit={manualForm.handleSubmit(onManualSubmit)}
-                                className="space-y-4"
-                            >
-                                <div>
-                                    <Input
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        placeholder="Search for an item..."
-                                    />
-                                    {isLoading && (
-                                        <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
-                                            <LoaderCircle className="animate-spin text-5xl" />
-                                        </div>
-                                    )}
-                                    {items && (
-                                        <ul className="mt-2 max-h-60 overflow-y-auto">
-                                            {items.map((item) => (
-                                                <li
-                                                    key={item.id}
-                                                    className="cursor-pointer hover:bg-muted p-2"
-                                                    onClick={(e) => {
-                                                        e.preventDefault()
-                                                        handleItemSelect(item)
-                                                    }}
-                                                >
-                                                    <WowItemIcon
-                                                        item={item}
-                                                        iconOnly={false}
-                                                        raidDiff="Heroic"
-                                                        className="mt-2"
-                                                        iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
-                                                    />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-                                <div className="space-y-2">
-                                    {fields.map((field, index) => (
-                                        <div
-                                            key={field.id}
-                                            className="flex items-center space-x-2 p-2 border rounded"
-                                        >
-                                            <WowItemIcon
-                                                item={selectedItems[index].item.id}
-                                                iconOnly={false}
-                                                raidDiff="Heroic"
-                                                className="mt-2"
-                                                iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
-                                            />
-
-                                            {/* <FormField
-                                                control={manualForm.control}
-                                                name={`items.${index}.socket`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormControl>
-                                                            <Checkbox
-                                                                checked={field.value}
-                                                                onCheckedChange={field.onChange}
-                                                            />
-                                                        </FormControl>
-                                                        <FormLabel>Socket</FormLabel>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={manualForm.control}
-                                                name={`items.${index}.bonusString`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                value={field.value || ''}
-                                                                onChange={(e) =>
-                                                                    field.onChange(
-                                                                        e.target.value || null
-                                                                    )
-                                                                }
-                                                                placeholder="Item Bonus (optional)"
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            /> */}
-                                            <FormField
-                                                control={manualForm.control}
-                                                name={`loots.${index}.raidDifficulty`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <Select
-                                                            onValueChange={field.onChange}
-                                                            defaultValue={field.value}
-                                                        >
-                                                            <SelectTrigger>
-                                                                <SelectValue placeholder="Raid Difficulty" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="Normal">
-                                                                    Normal
-                                                                </SelectItem>
-                                                                <SelectItem value="Heroic">
-                                                                    Heroic
-                                                                </SelectItem>
-                                                                <SelectItem value="Mythic">
-                                                                    Mythic
-                                                                </SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                onClick={() => remove(index)}
-                                            >
-                                                <X className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    ))}
-                                </div>
-                                <Button
-                                    type="submit"
-                                    className="w-full"
-                                    disabled={addManualLootsMutation.isPending}
+                        <Input
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Search for an item..."
+                        />
+                        {isLoading && <LoaderCircle className="animate-spin text-5xl" />}
+                        {items && (
+                            <ul className="mt-2 max-h-60 overflow-y-auto">
+                                {items.map((item) => (
+                                    <li
+                                        key={item.id}
+                                        className="cursor-pointer hover:bg-muted p-2"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            handleItemSelect(item)
+                                        }}
+                                    >
+                                        <WowItemIcon
+                                            item={item}
+                                            iconOnly={false}
+                                            raidDiff="Heroic"
+                                            className="mt-2"
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        <div className="space-y-2 mt-2">
+                            {selectedItems.map((selectedItem, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-center space-x-2 p-2 border rounded"
                                 >
-                                    {addManualLootsMutation.isPending ? (
-                                        <Loader2 className="animate-spin" />
-                                    ) : (
-                                        'Add Loots'
-                                    )}
-                                </Button>
-                            </form>
-                        </Form>
+                                    <WowItemIcon
+                                        item={selectedItem.itemId}
+                                        iconOnly={false}
+                                        raidDiff={selectedItem.raidDifficulty}
+                                        className="mt-2"
+                                    />
+
+                                    {/* Raid Difficulty Selection */}
+                                    <Select
+                                        value={selectedItem.raidDifficulty}
+                                        onValueChange={(value: WowRaidDifficulty) => {
+                                            const updatedItems = [...selectedItems]
+                                            updatedItems[index].raidDifficulty = value
+                                            setSelectedItems(updatedItems)
+                                        }}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select difficulty" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {RAID_DIFF.map((difficulty) => (
+                                                <SelectItem key={difficulty} value={difficulty}>
+                                                    {difficulty}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <ToggleGroup.Root
+                                        type="multiple"
+                                        className="flex gap-2"
+                                        value={Object.keys(selectedItem).filter(
+                                            (key) => selectedItem[key]
+                                        )}
+                                        onValueChange={(values) => {
+                                            const updatedItems = [...selectedItems]
+                                            updatedItems[index] = {
+                                                ...updatedItems[index],
+                                                hasSocket: values.includes('hasSocket'),
+                                                hasAvoidance: values.includes('hasAvoidance'),
+                                                hasLeech: values.includes('hasLeech'),
+                                                hasSpeed: values.includes('hasSpeed')
+                                            }
+                                            setSelectedItems(updatedItems)
+                                        }}
+                                    >
+                                        <ToggleGroup.Item
+                                            value="hasSocket"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            Socket
+                                        </ToggleGroup.Item>
+                                        <ToggleGroup.Item
+                                            value="hasAvoidance"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            A
+                                        </ToggleGroup.Item>
+                                        <ToggleGroup.Item
+                                            value="hasLeech"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            L
+                                        </ToggleGroup.Item>
+                                        <ToggleGroup.Item
+                                            value="hasSpeed"
+                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                        >
+                                            S
+                                        </ToggleGroup.Item>
+                                    </ToggleGroup.Root>
+
+                                    <Button
+                                        variant="ghost"
+                                        onClick={() =>
+                                            setSelectedItems(
+                                                selectedItems.filter((_, i) => i !== index)
+                                            )
+                                        }
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                        <Button
+                            className="w-full mt-4"
+                            onClick={() =>
+                                addManualLootsMutation.mutate({
+                                    raidSessionId: raidSession.id,
+                                    loots: selectedItems
+                                })
+                            }
+                        >
+                            Add Loots
+                        </Button>
                     </Tabs.Content>
                     <Tabs.Content value="rcloot" className="p-4">
-                        <Form {...rcLootForm}>
-                            <form
-                                onSubmit={rcLootForm.handleSubmit(onRcLootSubmit)}
-                                className="space-y-4"
-                            >
-                                <FormField
-                                    control={rcLootForm.control}
-                                    name="csvData"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>RCLoot CSV Data</FormLabel>
-                                            <FormControl>
-                                                <Textarea
-                                                    {...field}
-                                                    placeholder="Paste your RCLoot CSV data here..."
-                                                    rows={10}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button
-                                    type="submit"
-                                    className="w-full"
-                                    disabled={addRcLootsMutation.isPending}
-                                >
-                                    {addRcLootsMutation.isPending ? (
-                                        <Loader2 className="animate-spin" />
-                                    ) : (
-                                        'Import Loots'
-                                    )}
-                                </Button>
-                            </form>
-                        </Form>
+                        <Textarea
+                            value={csvData}
+                            onChange={(e) => setCsvData(e.target.value)}
+                            placeholder="Paste RCLoot CSV data here..."
+                            rows={10}
+                        />
+                        <Button
+                            className="w-full mt-4"
+                            onClick={() =>
+                                addRcLootsMutation.mutate({
+                                    raidSessionId: raidSession.id,
+                                    csv: csvData
+                                })
+                            }
+                        >
+                            Import Loots
+                        </Button>
                     </Tabs.Content>
                 </Tabs.Root>
             </DialogContent>

@@ -2,8 +2,7 @@ import {
     CharAssignmentInfo,
     LootAssignmentInfo,
     LootWithItem,
-    NewLootsFromManualInput,
-    NewLootsFromRc
+    NewLootManual
 } from '@shared/types/types'
 import { getBisList } from '@storage/bis-list/bis-list.storage'
 import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.storage'
@@ -21,25 +20,28 @@ import {
     parseBestItemInSlot,
     parseDroptimizersInfo,
     parseLootIsBis,
-    parseRaidSessionCsv,
+    parseManualLoots,
+    parseRcLoots,
     parseTiersetInfo,
     parseWeeklyChest
 } from './loot.utils'
 
-export const addRaidLootsByRCLootCsvHandler = async (loot: NewLootsFromRc): Promise<void> => {
-    const parsedData = await parseRaidSessionCsv(loot.csv)
-    const elegibleCharacters = await getRaidSessionRoster(loot.raidSessionId)
-
-    await addLoots(loot.raidSessionId, parsedData, elegibleCharacters)
+export const addRaidLootsByRCLootCsvHandler = async (
+    raidSessionId: string,
+    csv: string
+): Promise<void> => {
+    const parsedData = await parseRcLoots(csv)
+    const elegibleCharacters = await getRaidSessionRoster(raidSessionId)
+    await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
 export const addRaidLootsByManualInputHandler = async (
-    loot: NewLootsFromManualInput
+    raidSessionId: string,
+    loots: NewLootManual[]
 ): Promise<void> => {
-    //const parsedData = await parseRaidSessionCsv(loot.raidSessionId, loot.csv)
-    console.log(loot)
-
-    // TODO: insertion
+    const parsedData = await parseManualLoots(loots)
+    const elegibleCharacters = await getRaidSessionRoster(raidSessionId)
+    await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
 export const getLootsBySessionIdHandler = async (
