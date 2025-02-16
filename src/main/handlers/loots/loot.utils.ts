@@ -4,6 +4,8 @@ import {
     applyLeech,
     applySocket,
     applySpeed,
+    applyTokenDiff,
+    getItemTrack,
     parseItemLevelFromTrack,
     parseItemTrack
 } from '@shared/libs/items/item-bonus-utils'
@@ -17,6 +19,7 @@ import {
     DroptimizerUpgrade,
     GearItem,
     Item,
+    ItemTrack,
     LootWithItem,
     NewLoot,
     NewLootManual,
@@ -154,9 +157,6 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
                 continue
             }
 
-            // todo: handle item track?
-            // const itemTrack = parseItemTrack(bonusIds)
-
             let itemLevel
             switch (loot.raidDifficulty) {
                 case 'Heroic':
@@ -179,6 +179,14 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
             if (loot.hasAvoidance) applyAvoidance(bonusIds)
             if (loot.hasLeech) applyLeech(bonusIds)
             if (loot.hasSpeed) applySpeed(bonusIds)
+
+            let itemTrack: ItemTrack | null = null
+            if (wowItem.token) {
+                // apply bonus id to token (Mythic/Heroic tag)
+                applyTokenDiff(bonusIds, loot.raidDifficulty)
+            } else {
+                itemTrack = getItemTrack(itemLevel, loot.raidDifficulty)
+            }
 
             if (itemLevel == null) {
                 console.log(
@@ -205,7 +213,7 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
                 source: 'loot',
                 itemLevel: itemLevel,
                 bonusIds: bonusIds,
-                itemTrack: null,
+                itemTrack: itemTrack,
                 gemIds: null,
                 enchantIds: null
             }
