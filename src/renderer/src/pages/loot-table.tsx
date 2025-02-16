@@ -124,9 +124,7 @@ const BossPanel = ({
                                 item={item}
                                 iconOnly={false}
                                 raidDiff={diff}
-                                className=""
                                 tierBanner={true}
-                                iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
                             />
                             <div className="flex flex-row items-center gap-x-2">
                                 <DroptimizersForItem item={item} droptimizers={droptimizers} />

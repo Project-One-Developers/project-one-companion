@@ -1,4 +1,5 @@
 import { fetchItem } from '@renderer/lib/tanstack-query/items'
+import { cn } from '@renderer/lib/utils'
 import { Item, ItemTrack, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -81,9 +82,16 @@ export const WowItemIcon = ({
 
     return (
         <a className="" href={hrefString} rel="noreferrer" target="_blank">
-            <div className={`flex items-center ${className}`}>
+            <div className={cn(`flex items-center`, className)}>
                 <div className="relative inline-block">
-                    <img src={itemData.iconUrl} alt="" className={`${iconClassName} block`} />
+                    <img
+                        src={itemData.iconUrl}
+                        alt=""
+                        className={cn(
+                            'object-cover object-top rounded-full h-10 w-10 border border-background block',
+                            iconClassName
+                        )}
+                    />
                     {catalystBanner && (
                         <div className="absolute top-0 right-1 bg-red-600 text-white text-[7px] font-bold px-2 rounded-b-sm border border-background">
                             CAT
