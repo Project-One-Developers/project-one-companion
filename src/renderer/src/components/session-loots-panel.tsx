@@ -82,7 +82,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                 <td className="p-2 font-semibold">{boss.name}</td>
                                 {allDifficulties.map((difficulty) => (
                                     <td key={difficulty} className="p-2">
-                                        <div className="flex flex-wrap gap-1">
+                                        <div className="flex flex-row gap-2">
                                             {groupedLoots[boss.id]?.[difficulty]?.map(
                                                 (loot, index) => (
                                                     <WowGearIcon
@@ -90,8 +90,6 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                                         item={loot.gearItem}
                                                         showTierBanner={true}
                                                         showItemTrackDiff={false}
-                                                        className="space-y-1"
-                                                        iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
                                                     />
                                                 )
                                             ) || <span className="text-gray-400">-</span>}
