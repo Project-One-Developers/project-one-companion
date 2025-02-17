@@ -122,7 +122,8 @@ export default function SessionLootNewDialog({
                                         <WowItemIcon
                                             item={item}
                                             iconOnly={false}
-                                            raidDiff="Heroic"
+                                            raidDiff="Mythic"
+                                            showIlvl={false}
                                             className="mt-2"
                                         />
                                     </li>
@@ -135,87 +136,97 @@ export default function SessionLootNewDialog({
                                     key={index}
                                     className="flex items-center space-x-2 p-2 border rounded"
                                 >
-                                    <WowItemIcon
-                                        item={selectedItem.itemId}
-                                        iconOnly={false}
-                                        raidDiff={selectedItem.raidDifficulty}
-                                        className="mt-2"
-                                    />
+                                    <div className="flex">
+                                        <WowItemIcon
+                                            item={selectedItem.itemId}
+                                            iconOnly={false}
+                                            raidDiff={selectedItem.raidDifficulty}
+                                            className=""
+                                        />
+                                    </div>
 
                                     {/* Raid Difficulty Selection */}
-                                    <Select
-                                        value={selectedItem.raidDifficulty}
-                                        onValueChange={(value: WowRaidDifficulty) => {
-                                            const updatedItems = [...selectedItems]
-                                            updatedItems[index].raidDifficulty = value
-                                            setSelectedItems(updatedItems)
-                                        }}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select difficulty" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {RAID_DIFF.map((difficulty) => (
-                                                <SelectItem key={difficulty} value={difficulty}>
-                                                    {difficulty}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <ToggleGroup.Root
-                                        type="multiple"
-                                        className="flex gap-2"
-                                        value={Object.keys(selectedItem).filter(
-                                            (key) => selectedItem[key]
-                                        )}
-                                        onValueChange={(values) => {
-                                            const updatedItems = [...selectedItems]
-                                            updatedItems[index] = {
-                                                ...updatedItems[index],
-                                                hasSocket: values.includes('hasSocket'),
-                                                hasAvoidance: values.includes('hasAvoidance'),
-                                                hasLeech: values.includes('hasLeech'),
-                                                hasSpeed: values.includes('hasSpeed')
-                                            }
-                                            setSelectedItems(updatedItems)
-                                        }}
-                                    >
-                                        <ToggleGroup.Item
-                                            value="hasSocket"
-                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                    <div className="flex">
+                                        <Select
+                                            value={selectedItem.raidDifficulty}
+                                            onValueChange={(value: WowRaidDifficulty) => {
+                                                const updatedItems = [...selectedItems]
+                                                updatedItems[index].raidDifficulty = value
+                                                setSelectedItems(updatedItems)
+                                            }}
                                         >
-                                            Socket
-                                        </ToggleGroup.Item>
-                                        <ToggleGroup.Item
-                                            value="hasAvoidance"
-                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
-                                        >
-                                            A
-                                        </ToggleGroup.Item>
-                                        <ToggleGroup.Item
-                                            value="hasLeech"
-                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
-                                        >
-                                            L
-                                        </ToggleGroup.Item>
-                                        <ToggleGroup.Item
-                                            value="hasSpeed"
-                                            className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
-                                        >
-                                            S
-                                        </ToggleGroup.Item>
-                                    </ToggleGroup.Root>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select difficulty" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {RAID_DIFF.map((difficulty) => (
+                                                    <SelectItem key={difficulty} value={difficulty}>
+                                                        {difficulty}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
 
-                                    <Button
-                                        variant="ghost"
-                                        onClick={() =>
-                                            setSelectedItems(
-                                                selectedItems.filter((_, i) => i !== index)
-                                            )
-                                        }
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </Button>
+                                    {/* Item bonus */}
+                                    <div className="flex">
+                                        <ToggleGroup.Root
+                                            type="multiple"
+                                            className="flex gap-2"
+                                            value={Object.keys(selectedItem).filter(
+                                                (key) => selectedItem[key]
+                                            )}
+                                            onValueChange={(values) => {
+                                                const updatedItems = [...selectedItems]
+                                                updatedItems[index] = {
+                                                    ...updatedItems[index],
+                                                    hasSocket: values.includes('hasSocket'),
+                                                    hasAvoidance: values.includes('hasAvoidance'),
+                                                    hasLeech: values.includes('hasLeech'),
+                                                    hasSpeed: values.includes('hasSpeed')
+                                                }
+                                                setSelectedItems(updatedItems)
+                                            }}
+                                        >
+                                            <ToggleGroup.Item
+                                                value="hasSocket"
+                                                className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                            >
+                                                Socket
+                                            </ToggleGroup.Item>
+                                            <ToggleGroup.Item
+                                                value="hasAvoidance"
+                                                className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                            >
+                                                A
+                                            </ToggleGroup.Item>
+                                            <ToggleGroup.Item
+                                                value="hasLeech"
+                                                className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                            >
+                                                L
+                                            </ToggleGroup.Item>
+                                            <ToggleGroup.Item
+                                                value="hasSpeed"
+                                                className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                            >
+                                                S
+                                            </ToggleGroup.Item>
+                                        </ToggleGroup.Root>
+                                    </div>
+
+                                    <div className="flex ml-auto">
+                                        <Button
+                                            variant="ghost"
+                                            onClick={() =>
+                                                setSelectedItems(
+                                                    selectedItems.filter((_, i) => i !== index)
+                                                )
+                                            }
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </Button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
