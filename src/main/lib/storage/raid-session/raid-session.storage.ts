@@ -19,7 +19,7 @@ const flattenRaidPartecipation = (result: any): RaidSession => {
 }
 
 export const getRaidSession = async (id: string): Promise<RaidSession> => {
-    const result = await db.query.raidSessionTable.findFirst({
+    const result = await db().query.raidSessionTable.findFirst({
         where: (raidSessionTable, { eq }) => eq(raidSessionTable.id, id),
         with: {
             charPartecipation: {
@@ -40,7 +40,7 @@ export const getRaidSession = async (id: string): Promise<RaidSession> => {
 
 export const getRaidSessionList = async (): Promise<RaidSession[]> => {
     // todo: switchare in query raid session + count loot + count partecipation
-    const result = await db.query.raidSessionTable.findMany({
+    const result = await db().query.raidSessionTable.findMany({
         with: {
             charPartecipation: {
                 with: {
@@ -55,7 +55,7 @@ export const getRaidSessionList = async (): Promise<RaidSession[]> => {
 }
 
 export const editRaidSession = async (editedRaidSession: EditRaidSession): Promise<string> => {
-    return await db.transaction(async (tx) => {
+    return await db().transaction(async (tx) => {
         const res = await tx
             .update(raidSessionTable)
             .set({
@@ -91,7 +91,7 @@ export const editRaidSession = async (editedRaidSession: EditRaidSession): Promi
 }
 
 export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<string> => {
-    return await db.transaction(async (tx) => {
+    return await db().transaction(async (tx) => {
         const res = await tx
             .insert(raidSessionTable)
             .values({
@@ -123,11 +123,11 @@ export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<st
 }
 
 export const deleteRaidSession = async (id: string): Promise<void> => {
-    await db.delete(raidSessionTable).where(eq(raidSessionTable.id, id))
+    await db().delete(raidSessionTable).where(eq(raidSessionTable.id, id))
 }
 
 export const getRaidSessionRoster = async (id: string): Promise<Character[]> => {
-    const result = await db
+    const result = await db()
         .select()
         .from(raidSessionRosterTable)
         .innerJoin(charTable, eq(raidSessionRosterTable.charId, charTable.id))

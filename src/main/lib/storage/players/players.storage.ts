@@ -8,7 +8,7 @@ import { newUUID } from '../../utils'
 import { playersListStorageSchema } from './players.schemas'
 
 export const getPlayerWithCharactersList = async (): Promise<PlayerWithCharacters[]> => {
-    const result = await db.query.playerTable.findMany({
+    const result = await db().query.playerTable.findMany({
         with: {
             characters: true
         }
@@ -17,7 +17,7 @@ export const getPlayerWithCharactersList = async (): Promise<PlayerWithCharacter
 }
 
 export const getPlayerById = async (id: string): Promise<Player | null> => {
-    const result = await db
+    const result = await db()
         .select()
         .from(playerTable)
         .where(eq(playerTable.id, id))
@@ -33,7 +33,7 @@ export const getPlayerById = async (id: string): Promise<Player | null> => {
 export const addPlayer = async (player: NewPlayer): Promise<string> => {
     const id = newUUID()
 
-    await db.insert(playerTable).values({
+    await db().insert(playerTable).values({
         id: id,
         name: player.name
     })
@@ -42,7 +42,7 @@ export const addPlayer = async (player: NewPlayer): Promise<string> => {
 }
 
 export const editPlayer = async (edited: EditPlayer): Promise<void> => {
-    await db
+    await db()
         .update(playerTable)
         .set({
             name: edited.name
@@ -51,6 +51,6 @@ export const editPlayer = async (edited: EditPlayer): Promise<void> => {
 }
 
 export const deletePlayer = async (id: string): Promise<void> => {
-    await db.delete(charTable).where(eq(charTable.playerId, id))
-    await db.delete(playerTable).where(eq(playerTable.id, id))
+    await db().delete(charTable).where(eq(charTable.playerId, id))
+    await db().delete(playerTable).where(eq(playerTable.id, id))
 }

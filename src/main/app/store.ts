@@ -1,3 +1,4 @@
+import { dbUrlSchema } from '@storage/storage.config'
 import type { Rectangle } from 'electron'
 import Store from 'electron-store'
 
@@ -35,7 +36,13 @@ class AppStore {
 
     // database url
     public setDatabaseUrl(url: string) {
-        this.store.set('databaseUrl', url)
+        const result = dbUrlSchema.safeParse(url)
+
+        if (!result.success) {
+            throw new Error(`Invalid database URL: ${result.error.message}`)
+        }
+
+        this.store.set('databaseUrl', result.data)
     }
     public getDatabaseUrl() {
         return this.store.get('databaseUrl')

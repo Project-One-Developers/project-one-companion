@@ -5,7 +5,7 @@ import { newUUID } from '@utils'
 import { eq, sql } from 'drizzle-orm'
 
 export const getBisList = async (): Promise<BisList[]> => {
-    const results = await db
+    const results = await db()
         .select({
             itemId: bisListTable.itemId,
             specIds: sql<number[]>`array_agg(${bisListTable.specId})`
@@ -17,7 +17,7 @@ export const getBisList = async (): Promise<BisList[]> => {
 }
 
 export const updateItemBisSpec = async (itemId: number, specIds: number[]): Promise<void> => {
-    await db.delete(bisListTable).where(eq(bisListTable.itemId, itemId))
+    await db().delete(bisListTable).where(eq(bisListTable.itemId, itemId))
 
     const values = specIds.map((spec) => ({
         id: newUUID(),
@@ -25,5 +25,5 @@ export const updateItemBisSpec = async (itemId: number, specIds: number[]): Prom
         itemId: itemId
     }))
 
-    await db.insert(bisListTable).values(values)
+    await db().insert(bisListTable).values(values)
 }

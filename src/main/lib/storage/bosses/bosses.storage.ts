@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { db } from '../storage.config'
 
 export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
-    await db
+    await db()
         .insert(bossTable)
         .values(bosses)
         .onConflictDoUpdate({
@@ -16,7 +16,7 @@ export const upsertBosses = async (bosses: Boss[]): Promise<void> => {
 }
 
 export const getRaidLootTable = async (raidId: number): Promise<BossWithItems[]> => {
-    const result = await db.query.bossTable.findMany({
+    const result = await db().query.bossTable.findMany({
         where: (bossTable, { eq }) => {
             return eq(bossTable.instanceId, raidId)
         },
@@ -28,7 +28,7 @@ export const getRaidLootTable = async (raidId: number): Promise<BossWithItems[]>
 }
 
 export const getBosses = async (raidId: number): Promise<Boss[]> => {
-    const result = await db.query.bossTable.findMany({
+    const result = await db().query.bossTable.findMany({
         where: (bossTable, { eq }) => {
             return eq(bossTable.instanceId, raidId)
         }

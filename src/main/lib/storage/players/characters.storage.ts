@@ -16,7 +16,7 @@ import { charWowAuditStorageToCharacterWowAudit, NewCharacterWowAudit } from './
 export const getCharacterWithPlayerById = async (
     id: string
 ): Promise<CharacterWithPlayer | null> => {
-    const result = await db.query.charTable.findFirst({
+    const result = await db().query.charTable.findFirst({
         where: (char, { eq }) => eq(char.id, id),
         with: {
             player: true
@@ -31,7 +31,7 @@ export const getCharacterWithPlayerById = async (
 }
 
 export const getCharactersWithPlayerList = async (): Promise<CharacterWithPlayer[]> => {
-    const result = await db.query.charTable.findMany({
+    const result = await db().query.charTable.findMany({
         with: {
             player: true
         }
@@ -40,14 +40,14 @@ export const getCharactersWithPlayerList = async (): Promise<CharacterWithPlayer
 }
 
 export const getCharactersList = async (): Promise<Character[]> => {
-    const result = await db.query.charTable.findMany()
+    const result = await db().query.charTable.findMany()
     return z.array(characterSchema).parse(result)
 }
 
 export const addCharacter = async (character: NewCharacter): Promise<string> => {
     const id = newUUID()
 
-    await db.insert(charTable).values({
+    await db().insert(charTable).values({
         id,
         name: character.name,
         realm: character.realm,
@@ -61,14 +61,14 @@ export const addCharacter = async (character: NewCharacter): Promise<string> => 
 }
 
 export const addCharacterWowAudit = async (characters: NewCharacterWowAudit[]): Promise<void> => {
-    await db.insert(charWowAuditTable).values(characters)
+    await db().insert(charWowAuditTable).values(characters)
 }
 
 export const getLastCharacterWowAudit = async (
     charName: string,
     charRealm: string
 ): Promise<CharacterWowAudit | null> => {
-    const result = await db.query.charWowAuditTable.findFirst({
+    const result = await db().query.charWowAuditTable.findFirst({
         where: (charWowAuditTable, { eq, and }) =>
             and(eq(charWowAuditTable.name, charName), eq(charWowAuditTable.realm, charRealm))
     })
@@ -76,16 +76,16 @@ export const getLastCharacterWowAudit = async (
 }
 
 export const getAllCharacterWowAudit = async (): Promise<CharacterWowAudit[]> => {
-    const result = await db.query.charWowAuditTable.findMany()
+    const result = await db().query.charWowAuditTable.findMany()
     return z.array(charWowAuditStorageToCharacterWowAudit).parse(result)
 }
 
 export const deleteAllCharacterWowAudit = async (): Promise<void> => {
-    await db.delete(charWowAuditTable)
+    await db().delete(charWowAuditTable)
 }
 
 export const editCharacter = async (edited: EditCharacter): Promise<void> => {
-    await db
+    await db()
         .update(charTable)
         .set({
             name: edited.name,
@@ -98,5 +98,5 @@ export const editCharacter = async (edited: EditCharacter): Promise<void> => {
 }
 
 export const deleteCharacter = async (id: string): Promise<void> => {
-    await db.delete(charTable).where(eq(charTable.id, id))
+    await db().delete(charTable).where(eq(charTable.id, id))
 }

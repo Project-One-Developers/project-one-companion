@@ -19,14 +19,14 @@ let cachedTierset: Item[] | null = null
 
 export const getItems = async (): Promise<Item[]> => {
     if (!allItems) {
-        const items = await db.query.itemTable.findMany()
+        const items = await db().query.itemTable.findMany()
         allItems = z.array(itemSchema).parse(items)
     }
     return allItems
 }
 
 export const getItem = async (id: number): Promise<Item | null> => {
-    const res = await db.query.itemTable.findFirst({
+    const res = await db().query.itemTable.findFirst({
         where: (itemTable, { eq }) => eq(itemTable.id, id)
     })
 
@@ -38,7 +38,7 @@ export const getItem = async (id: number): Promise<Item | null> => {
 }
 
 export const getItemByIds = async (ids: number[]): Promise<Item[]> => {
-    const res = await db.query.itemTable.findFirst({
+    const res = await db().query.itemTable.findFirst({
         where: (itemTable, { inArray }) => inArray(itemTable.id, ids)
     })
     return z.array(itemSchema).parse(res)
@@ -46,14 +46,14 @@ export const getItemByIds = async (ids: number[]): Promise<Item[]> => {
 
 export const getItemToTiersetMapping = async (): Promise<ItemToTierset[]> => {
     if (!cachedItemsToTiersetMapping) {
-        const result = await db.query.itemToTiersetTable.findMany()
+        const result = await db().query.itemToTiersetTable.findMany()
         cachedItemsToTiersetMapping = itemToTiersetArraySchema.parse(result)
     }
     return cachedItemsToTiersetMapping
 }
 export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
     if (!cachedItemsToCatalystMapping) {
-        const result = await db.query.itemToCatalystTable.findMany()
+        const result = await db().query.itemToCatalystTable.findMany()
         cachedItemsToCatalystMapping = itemToCatalystArraySchema.parse(result)
     }
     return cachedItemsToCatalystMapping
@@ -61,7 +61,7 @@ export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
 
 export const getTiersetAndTokenList = async (): Promise<Item[]> => {
     if (!cachedTierset) {
-        const res = await db.query.itemTable.findMany({
+        const res = await db().query.itemTable.findMany({
             where: (itemTable, { inArray, eq, or, and }) =>
                 and(
                     inArray(itemTable.sourceId, [CURRENT_RAID_ID, CURRENT_SEASON]),
@@ -74,7 +74,7 @@ export const getTiersetAndTokenList = async (): Promise<Item[]> => {
 }
 
 export const searchItems = async (searchTerm: string, limit: number): Promise<Item[]> => {
-    const res = await db
+    const res = await db()
         .select()
         .from(itemTable)
         .where(ilike(itemTable.name, '%' + searchTerm + '%'))
@@ -83,7 +83,7 @@ export const searchItems = async (searchTerm: string, limit: number): Promise<It
 }
 
 export const upsertItems = async (items: Item[]): Promise<void> => {
-    await db
+    await db()
         .insert(itemTable)
         .values(items)
         .onConflictDoUpdate({
@@ -93,13 +93,13 @@ export const upsertItems = async (items: Item[]): Promise<void> => {
 }
 
 export const upsertItemsToTierset = async (itemsToTierset: ItemToTierset[]): Promise<void> => {
-    await db.delete(itemToTiersetTable)
-    await db.insert(itemToTiersetTable).values(itemsToTierset)
+    await db().delete(itemToTiersetTable)
+    await db().insert(itemToTiersetTable).values(itemsToTierset)
 }
 
 export const upsertItemsToCatalyst = async (itemsToTierset: ItemToCatalyst[]): Promise<void> => {
-    await db.delete(itemToCatalystTable)
-    await db.insert(itemToCatalystTable).values(itemsToTierset)
+    await db().delete(itemToCatalystTable)
+    await db().insert(itemToCatalystTable).values(itemsToTierset)
 }
 
 export const invalidateCache = (): void => {

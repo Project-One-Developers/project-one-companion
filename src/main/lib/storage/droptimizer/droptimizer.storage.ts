@@ -13,7 +13,7 @@ import { droptimizerStorageListToSchema, droptimizerStorageToSchema } from './dr
  * @returns A Promise that resolves to the Droptimizer object if found, or null if not found.
  */
 export const getDroptimizer = async (url: string): Promise<Droptimizer | null> => {
-    const result = await db.query.droptimizerTable.findFirst({
+    const result = await db().query.droptimizerTable.findFirst({
         where: (droptimizerTable, { eq }) => eq(droptimizerTable.url, url),
         with: {
             upgrades: true
@@ -28,7 +28,7 @@ export const getDroptimizer = async (url: string): Promise<Droptimizer | null> =
 }
 
 export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
-    const result = await db.query.droptimizerTable.findMany({
+    const result = await db().query.droptimizerTable.findMany({
         with: {
             upgrades: {
                 columns: {
@@ -45,7 +45,7 @@ export const getDroptimizerList = async (): Promise<Droptimizer[]> => {
 }
 
 export const getDroptimizerByIdsList = async (ids: string[]): Promise<Droptimizer[]> => {
-    const result = await db.query.droptimizerTable.findMany({
+    const result = await db().query.droptimizerTable.findMany({
         where: (droptimizerTable, { inArray }) => inArray(droptimizerTable.url, ids), // Filter by URLs in the ids array
         with: {
             upgrades: {
@@ -64,7 +64,7 @@ export const getDroptimizerByIdsList = async (ids: string[]): Promise<Droptimize
 
 export const getDroptimizerLatestList = async (): Promise<Droptimizer[]> => {
     // Execute the SQL query and explicitly type the results as { url: string }[]
-    const latestDroptimizers: { url: string }[] = await db.execute(
+    const latestDroptimizers: { url: string }[] = await db().execute(
         sql`
             SELECT DISTINCT ON (${droptimizerTable.ak}) url
             FROM ${droptimizerTable}
@@ -84,7 +84,7 @@ export const getDroptimizerLastByCharAndDiff = async (
     charRealm: string,
     raidDiff: WowRaidDifficulty
 ): Promise<Droptimizer | null> => {
-    const result = await db.query.droptimizerTable.findFirst({
+    const result = await db().query.droptimizerTable.findFirst({
         where: (droptimizerTable, { eq, and }) =>
             and(
                 eq(droptimizerTable.characterName, charName),
@@ -110,7 +110,7 @@ export const getDroptimizerLastByChar = async (
     charName: string,
     charRealm: string
 ): Promise<Droptimizer | null> => {
-    const result = await db.query.droptimizerTable.findFirst({
+    const result = await db().query.droptimizerTable.findFirst({
         where: (droptimizerTable, { eq, and }) =>
             and(
                 eq(droptimizerTable.characterName, charName),
@@ -132,7 +132,7 @@ export const getDroptimizerLastByChar = async (
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
-    const droptimizerId = await db.transaction(async (tx) => {
+    const droptimizerId = await db().transaction(async (tx) => {
         // se è già stato importato, per ora sovrascrivo poi vedremo
         await tx.delete(droptimizerTable).where(eq(droptimizerTable.url, droptimizer.url))
 
@@ -186,7 +186,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         return droptimizerRes.url
     })
 
-    const result = await db.query.droptimizerTable.findFirst({
+    const result = await db().query.droptimizerTable.findFirst({
         where: (droptimizerTable, { eq }) => eq(droptimizerTable.url, droptimizerId),
         with: {
             upgrades: {
@@ -205,5 +205,5 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
 
 export const deleteDroptimizer = async (url: string): Promise<void> => {
     // droptimizerUpgradesTable will be deleted on "cascade"
-    await db.delete(droptimizerTable).where(eq(droptimizerTable.url, url))
+    await db().delete(droptimizerTable).where(eq(droptimizerTable.url, url))
 }

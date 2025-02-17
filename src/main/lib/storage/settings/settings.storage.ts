@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm'
 import { db } from '../storage.config'
 
 export const getConfig = async (key: string): Promise<string | null> => {
-    const result = await db
+    const result = await db()
         .select()
         .from(appConfigTable)
         .where(eq(appConfigTable.key, key))

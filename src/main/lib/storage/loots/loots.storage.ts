@@ -7,14 +7,14 @@ import { eq, InferInsertModel } from 'drizzle-orm'
 import { z } from 'zod'
 
 export const getLootById = async (lootId: string): Promise<Loot> => {
-    const result = await db.query.lootTable.findFirst({
+    const result = await db().query.lootTable.findFirst({
         where: (lootTable, { eq }) => eq(lootTable.id, lootId)
     })
     return lootSchema.parse(result)
 }
 
 export const getLootWithItemById = async (lootId: string): Promise<LootWithItem> => {
-    const result = await db.query.lootTable.findFirst({
+    const result = await db().query.lootTable.findFirst({
         where: (lootTable, { eq }) => eq(lootTable.id, lootId),
         with: {
             item: true
@@ -24,7 +24,7 @@ export const getLootWithItemById = async (lootId: string): Promise<LootWithItem>
 }
 
 export const getLootsByRaidSessionId = async (raidSessionId: string): Promise<Loot[]> => {
-    const result = await db.query.lootTable.findMany({
+    const result = await db().query.lootTable.findMany({
         where: (lootTable, { eq }) => eq(lootTable.raidSessionId, raidSessionId)
     })
     return z.array(lootSchema).parse(result)
@@ -33,7 +33,7 @@ export const getLootsByRaidSessionId = async (raidSessionId: string): Promise<Lo
 export const getLootsByRaidSessionIdWithAssigned = async (
     raidSessionId: string
 ): Promise<LootWithAssigned[]> => {
-    const result = await db.query.lootTable.findMany({
+    const result = await db().query.lootTable.findMany({
         where: (lootTable, { eq }) => eq(lootTable.raidSessionId, raidSessionId),
         with: {
             assignedCharacter: true
@@ -45,7 +45,7 @@ export const getLootsByRaidSessionIdWithAssigned = async (
 export const getLootsByRaidSessionIdWithItem = async (
     raidSessionId: string
 ): Promise<LootWithItem[]> => {
-    const result = await db.query.lootTable.findMany({
+    const result = await db().query.lootTable.findMany({
         where: (lootTable, { eq }) => eq(lootTable.raidSessionId, raidSessionId),
         with: {
             item: true
@@ -73,7 +73,7 @@ export const addLoots = async (
         }
     })
 
-    await db
+    await db()
         .insert(lootTable)
         .values(lootValues)
         .onConflictDoNothing({ target: lootTable.rclootId }) // do nothing on item already inserted
@@ -81,7 +81,7 @@ export const addLoots = async (
 
 export const assignLoot = async (charId: string, lootId: string, score?: number): Promise<void> => {
     console.log(score)
-    await db
+    await db()
         .update(lootTable)
         .set({
             assignedCharacterId: charId
@@ -89,7 +89,7 @@ export const assignLoot = async (charId: string, lootId: string, score?: number)
         .where(eq(lootTable.id, lootId))
 }
 export const unassignLoot = async (lootId: string): Promise<void> => {
-    await db
+    await db()
         .update(lootTable)
         .set({
             assignedCharacterId: null
