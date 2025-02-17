@@ -15,7 +15,7 @@ import { Loader2, LoaderCircle, PlusIcon, X } from 'lucide-react'
 import { useState, type JSX } from 'react'
 
 const syncWowAudit = async () => {
-    return window.api.syncWowAudit()
+    return await window.api.syncWowAudit()
 }
 
 export default function RosterPage(): JSX.Element {
