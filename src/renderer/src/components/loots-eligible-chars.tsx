@@ -149,9 +149,18 @@ export default function LootsEligibleChars({
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-row space-x-1">
-                                                {charInfo.weeklyChest.map((gear) => (
-                                                    <WowGearIcon key={gear.item.id} item={gear} />
-                                                ))}
+                                                {charInfo.weeklyChest
+                                                    .filter(
+                                                        (vault) =>
+                                                            vault.item.slotKey ===
+                                                            selectedLoot.gearItem.item.slotKey
+                                                    )
+                                                    .map((gear) => (
+                                                        <WowGearIcon
+                                                            key={gear.item.id}
+                                                            item={gear}
+                                                        />
+                                                    ))}
                                             </div>
                                         </TableCell>
                                         <TableCell>
