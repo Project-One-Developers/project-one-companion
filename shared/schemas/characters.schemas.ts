@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { droptimizerSchema } from './simulations.schemas'
-import { wowClassSchema, wowRaidDiffSchema, wowRolesSchema } from './wow.schemas'
+import { wowClassNameSchema, wowRaidDiffSchema, wowRolesSchema } from './wow.schemas'
 
 export const playerSchema = z.object({
     id: z.string().uuid(),
@@ -11,7 +11,7 @@ export const characterSchema = z.object({
     id: z.string().uuid(),
     name: z.string().min(1),
     realm: z.string().min(1),
-    class: wowClassSchema,
+    class: wowClassNameSchema,
     role: wowRolesSchema,
     main: z.boolean(),
     playerId: playerSchema.shape.id

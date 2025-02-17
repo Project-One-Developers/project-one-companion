@@ -7,7 +7,7 @@ import type {
     NewDroptimizer,
     NewDroptimizerUpgrade,
     RaidbotsURL,
-    WowClass,
+    WowClassName,
     WowItemEquippedSlotKey
 } from '@shared/types/types'
 import {
@@ -148,7 +148,7 @@ export const convertJsonToDroptimizer = async (
             .replaceAll(' ', '-')
             .replaceAll("'", ''),
         class: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents
-            .className as WowClass,
+            .className as WowClassName,
         classId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.classId,
         spec: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.specName,
         specId: data.simbot.meta.rawFormData.character.talentLoadouts[0].talents.specId,

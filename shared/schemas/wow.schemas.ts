@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const wowClassSchema = z.enum([
+export const wowClassNameSchema = z.enum([
     'Death Knight',
     'Demon Hunter',
     'Druid',
@@ -104,10 +104,10 @@ export const wowItemTertiaryStatsSchema = z.enum(['Speed', 'Leech', 'Avoidance',
 export const wowRoleClassSchema = z.object({
     Tank: wowClassTankSchema,
     Healer: wowClassHealerSchema,
-    DPS: wowClassSchema
+    DPS: wowClassNameSchema
 })
 
-export const wowSpecSchema = z.enum([
+export const wowSpecNameSchema = z.enum([
     // Death Knight
     'Blood',
     'Frost',

@@ -1,4 +1,4 @@
-import { wowClassSchema, wowRolesSchema } from '@shared/schemas/wow.schemas'
+import { wowClassNameSchema, wowRolesSchema } from '@shared/schemas/wow.schemas'
 import { z } from 'zod'
 
 const playerStorageSchema = z
@@ -10,7 +10,7 @@ const playerStorageSchema = z
                 id: z.string(),
                 name: z.string(),
                 realm: z.string(),
-                class: wowClassSchema,
+                class: wowClassNameSchema,
                 role: wowRolesSchema,
                 main: z.boolean(),
                 playerId: z.string()

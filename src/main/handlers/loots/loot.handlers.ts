@@ -6,6 +6,7 @@ import {
     LootWithItem,
     NewLootManual
 } from '@shared/types/types'
+import { getBisList } from '@storage/bis-list/bis-list.storage'
 import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.storage'
 import {
     addLoots,
@@ -19,8 +20,10 @@ import {
 import { getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
 import {
+    evalScore,
     parseBestItemInSlot,
     parseDroptimizersInfo,
+    parseLootBisForClass,
     parseManualLoots,
     parseRcLoots,
     parseTiersetInfo,
@@ -84,12 +87,12 @@ export const unassignLootHandler = async (lootId: string): Promise<void> => {
 export const getLootAssignmentInfoHandler = async (lootId: string): Promise<LootAssignmentInfo> => {
     console.log('getLootAssignmentInfoHandler')
 
-    const [loot, roster, latestDroptimizer] = await Promise.all([
+    const [loot, roster, latestDroptimizer, bisList] = await Promise.all([
         getLootWithItemById(lootId),
         getCharactersList(),
-        getDroptimizerLatestList()
+        getDroptimizerLatestList(),
         //getCharacterWowAuditList(),
-        //getBisList()
+        getBisList()
     ])
 
     const filteredRoster = roster.filter(
@@ -103,16 +106,20 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         const charDroptimizers = latestDroptimizer.filter(
             (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
-        return {
+        const res = {
             character: char,
             droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
             weeklyChest: parseWeeklyChest(charDroptimizers),
             tierset: parseTiersetInfo(charDroptimizers),
             bestItemInSlot: parseBestItemInSlot(loot.item.slotKey, charDroptimizers),
-            bis: false,
-            //bis: parseLootIsBis(bisList, loot, char),
+            bis: parseLootBisForClass(bisList, loot.item.id, char.class),
             score: Math.floor(Math.random() * (10000 - 10 + 1)) + 10
         }
+
+        // project one score
+        res.score = evalScore(loot, res)
+
+        return res
     })
 
     return {

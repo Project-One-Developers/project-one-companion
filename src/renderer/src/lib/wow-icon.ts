@@ -1,9 +1,9 @@
 import heroicIcon from '@renderer/assets/icons/diff-heroic.png'
 import mythicIcon from '@renderer/assets/icons/diff-mythic.png'
 import normalIcon from '@renderer/assets/icons/diff-normal.png'
-import type { WowArmorType, WowClass, WowItemSlot, WowRaidDifficulty } from 'shared/types/types'
+import type { WowArmorType, WowClassName, WowItemSlot, WowRaidDifficulty } from 'shared/types/types'
 
-export const classIcon = new Map<WowClass, string>([
+export const classIcon = new Map<WowClassName, string>([
     ['Death Knight', 'https://wow.zamimg.com/images/wow/icons/medium/class_deathknight.jpg'],
     ['Demon Hunter', 'https://wow.zamimg.com/images/wow/icons/medium/class_demonhunter.jpg'],
     ['Druid', 'https://wow.zamimg.com/images/wow/icons/medium/class_druid.jpg'],

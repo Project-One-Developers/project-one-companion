@@ -1,11 +1,11 @@
 import { TooltipArrow } from '@radix-ui/react-tooltip'
 import { classIcon } from '@renderer/lib/wow-icon'
-import { WowClass } from '@shared/types/types'
+import { WowClassName } from '@shared/types/types'
 import React from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
 
 interface WowClassIconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-    wowClassName: WowClass
+    wowClassName: WowClassName
     charname?: string
 }
 

@@ -11,15 +11,20 @@ import {
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
+import { getClassSpecs } from '@shared/libs/spec-parser/spec-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
+    BisList,
+    CharAssignmentInfo,
     Droptimizer,
     DroptimizerUpgrade,
     GearItem,
     Item,
     ItemTrack,
+    LootWithItem,
     NewLoot,
     NewLootManual,
+    WowClassName,
     WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
@@ -271,17 +276,16 @@ export const parseBestItemInSlot = (
     return sortedItems.slice(0, 1)
 }
 
-// export const parseLootIsBis = (
-//     bisList: BisList[],
-//     loot: LootWithItem,
-//     wowClass: WowClass
-// ): boolean => {
-//     //return true
-//     // todo: re-implement
-//     // return bisList.some((bis) => {
-//     //     return bis.itemIds.includes(loot.item.id) && bis.wowClass === char.class
-//     // })
-// }
+export const parseLootBisForClass = (
+    bisList: BisList[],
+    lootId: number,
+    wowClass: WowClassName
+): BisList[] => {
+    const classSpecs = getClassSpecs(wowClass).map((s) => s.id)
+    return bisList.filter(
+        (b) => b.itemId === lootId && b.specIds.some((specId) => classSpecs.includes(specId))
+    )
+}
 
 /**
  * Todo: include assigned loot in the calculation
@@ -385,4 +389,39 @@ export const parseWeeklyChest = (droptimizers: Droptimizer[]): GearItem[] => {
             .filter((c) => c.weeklyChest.length > 0)
             .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.weeklyChest ?? []
     )
+}
+
+export const evalScore = (loot: LootWithItem, input: CharAssignmentInfo): number => {
+    let res = 0
+
+    // is alt?
+    if (!input.character.main) return res
+
+    // main char
+    res += 10
+
+    // take max upgrade from available dropt
+    const maxUpgrade = input.droptimizers
+        .map((d) => d.upgrade?.dps ?? 0)
+        .reduce((max, upgrade) => (upgrade > max ? upgrade : max), 0)
+    res += maxUpgrade
+
+    // check tiersets completion status
+    if (loot.item.token) {
+        const tokenCoverMissingSlot =
+            loot.item.slotKey === 'omni'
+                ? true
+                : input.tierset.findIndex((t) => t.item.slotKey === loot.item.slotKey) === -1
+
+        if (tokenCoverMissingSlot && input.tierset.length === 1) {
+            // closes 2p
+            res += 20000 // todo: refine with multiplicative increase
+        }
+        if (tokenCoverMissingSlot && input.tierset.length === 3) {
+            // closes 4p
+            res += 40000 // todo: refine with multiplicative increase
+        }
+    }
+
+    return res
 }

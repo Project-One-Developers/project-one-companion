@@ -100,97 +100,99 @@ export default function LootsEligibleChars({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {lootAssignmentInfoQuery.data?.eligible.map((charInfo) => {
-                            const assignedLoots = allLoots.filter(
-                                (loot) =>
-                                    loot.id !== selectedLoot.id &&
-                                    loot.assignedCharacterId === charInfo.character.id &&
-                                    loot.gearItem.item.slotKey ===
-                                        selectedLoot.gearItem.item.slotKey
-                            )
-                            return (
-                                <TableRow
-                                    key={charInfo.character.id}
-                                    className={`cursor-pointer hover:bg-gray-700 ${selectedLoot.assignedCharacterId === charInfo.character.id ? 'bg-gray-700' : ''}`}
-                                    onClick={() =>
-                                        assignLootMutation.mutate({
-                                            charId: charInfo.character.id,
-                                            lootId: selectedLoot.id,
-                                            score: charInfo.score
-                                        })
-                                    }
-                                >
-                                    <TableCell>
-                                        <div className="flex flex-row space-x-4 items-center">
-                                            <WowClassIcon
-                                                wowClassName={charInfo.character.class}
-                                                charname={charInfo.character.name}
-                                                className="h-8 w-8 border-2 border-background rounded-lg"
-                                            />
-                                            <div className="flex flex-col">
-                                                <h1 className="font-bold">
-                                                    {charInfo.character.name}
-                                                </h1>
-                                                <p className="text-xs">{charInfo.score}</p>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        {charInfo.droptimizers.map((droptWithUpgrade) => (
-                                            <DroptimizerUpgradeForItemEquipped
-                                                key={droptWithUpgrade.droptimizer.url}
-                                                upgrade={droptWithUpgrade.upgrade}
-                                                droptimizer={droptWithUpgrade.droptimizer}
-                                                itemEquipped={droptWithUpgrade.itemEquipped}
-                                            />
-                                        ))}
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex flex-row space-x-1">
-                                            {charInfo.weeklyChest.map((gear) => (
-                                                <WowGearIcon key={gear.item.id} item={gear} />
-                                            ))}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex flex-row space-x-1">
-                                            {assignedLoots.map((otherLoot) => (
-                                                <WowGearIcon
-                                                    key={otherLoot.id}
-                                                    item={otherLoot.gearItem}
+                        {lootAssignmentInfoQuery.data?.eligible
+                            .sort((a, b) => b.score - a.score)
+                            .map((charInfo) => {
+                                const assignedLoots = allLoots.filter(
+                                    (loot) =>
+                                        loot.id !== selectedLoot.id &&
+                                        loot.assignedCharacterId === charInfo.character.id &&
+                                        loot.gearItem.item.slotKey ===
+                                            selectedLoot.gearItem.item.slotKey
+                                )
+                                return (
+                                    <TableRow
+                                        key={charInfo.character.id}
+                                        className={`cursor-pointer hover:bg-gray-700 ${selectedLoot.assignedCharacterId === charInfo.character.id ? 'bg-gray-700' : ''}`}
+                                        onClick={() =>
+                                            assignLootMutation.mutate({
+                                                charId: charInfo.character.id,
+                                                lootId: selectedLoot.id,
+                                                score: charInfo.score
+                                            })
+                                        }
+                                    >
+                                        <TableCell>
+                                            <div className="flex flex-row space-x-4 items-center">
+                                                <WowClassIcon
+                                                    wowClassName={charInfo.character.class}
+                                                    charname={charInfo.character.name}
+                                                    className="h-8 w-8 border-2 border-background rounded-lg"
                                                 />
-                                            ))}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex flex-row space-x-1">
-                                            {charInfo.bestItemInSlot.map((bestInSlot) => (
-                                                <WowGearIcon
-                                                    key={bestInSlot.item.id}
-                                                    item={bestInSlot}
-                                                    showTierBanner={true}
-                                                />
-                                            ))}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex flex-row gap-1">
-                                            {charInfo.tierset.map((tierset) => (
-                                                <div
-                                                    key={tierset.item.id}
-                                                    className="flex flex-col items-center space-x-1"
-                                                >
-                                                    <WowGearIcon
-                                                        item={tierset}
-                                                        showTierBanner={false}
-                                                    />
+                                                <div className="flex flex-col">
+                                                    <h1 className="font-bold">
+                                                        {charInfo.character.name}
+                                                    </h1>
+                                                    <p className="text-xs">{charInfo.score}</p>
                                                 </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            {charInfo.droptimizers.map((droptWithUpgrade) => (
+                                                <DroptimizerUpgradeForItemEquipped
+                                                    key={droptWithUpgrade.droptimizer.url}
+                                                    upgrade={droptWithUpgrade.upgrade}
+                                                    droptimizer={droptWithUpgrade.droptimizer}
+                                                    itemEquipped={droptWithUpgrade.itemEquipped}
+                                                />
                                             ))}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        })}
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-row space-x-1">
+                                                {charInfo.weeklyChest.map((gear) => (
+                                                    <WowGearIcon key={gear.item.id} item={gear} />
+                                                ))}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-row space-x-1">
+                                                {assignedLoots.map((otherLoot) => (
+                                                    <WowGearIcon
+                                                        key={otherLoot.id}
+                                                        item={otherLoot.gearItem}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-row space-x-1">
+                                                {charInfo.bestItemInSlot.map((bestInSlot) => (
+                                                    <WowGearIcon
+                                                        key={bestInSlot.item.id}
+                                                        item={bestInSlot}
+                                                        showTierBanner={true}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-row gap-1">
+                                                {charInfo.tierset.map((tierset) => (
+                                                    <div
+                                                        key={tierset.item.id}
+                                                        className="flex flex-col items-center space-x-1"
+                                                    >
+                                                        <WowGearIcon
+                                                            item={tierset}
+                                                            showTierBanner={false}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
                     </TableBody>
                 </Table>
             </div>

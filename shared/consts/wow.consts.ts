@@ -1,21 +1,21 @@
 import { WoWRole } from '@shared/types/types'
 import {
     wowArmorTypeSchema,
-    wowClassSchema,
+    wowClassNameSchema,
     wowItemSlotKeySchema,
     wowItemSlotSchema,
     wowItemTertiaryStatsSchema,
     wowRaidDiffSchema,
     wowRoleClassSchema,
     wowRolesSchema,
-    wowSpecSchema
+    wowSpecNameSchema
 } from '../schemas/wow.schemas'
 
 export const CURRENT_RAID_ID = 1273 // Nerubar palace 1273, Undermine 1296
 export const CURRENT_SEASON = -70 // Season 1 -70, Season 2 -71
 
-export const CLASSES = wowClassSchema.options
-export const SPECS = wowSpecSchema.options
+export const CLASSES = wowClassNameSchema.options
+export const SPECS = wowSpecNameSchema.options
 export const ROLES = wowRolesSchema.options
 export const RAID_DIFF = wowRaidDiffSchema.options
 

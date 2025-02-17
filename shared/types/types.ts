@@ -43,18 +43,29 @@ import {
 } from '../schemas/simulations.schemas'
 import {
     wowArmorTypeSchema,
-    wowClassSchema,
+    wowClassNameSchema,
     wowItemEquippedSlotKeySchema,
     wowItemSlotKeySchema,
     wowItemSlotSchema,
     wowRaidDiffSchema,
     wowRolesSchema,
-    wowSpecSchema,
+    wowSpecNameSchema,
     wowTiersetSlotSchema
 } from '../schemas/wow.schemas'
 
-export type WowClass = z.infer<typeof wowClassSchema>
-export type WowSpec = z.infer<typeof wowSpecSchema>
+export type WowClassName = z.infer<typeof wowClassNameSchema>
+export type WowSpecName = z.infer<typeof wowSpecNameSchema>
+export type WowSpec = {
+    id: number
+    name: WowSpecName
+}
+
+export type WowClass = {
+    id: number
+    name: WowClassName
+    specs: WowSpec[]
+}
+
 export type WowRaidDifficulty = z.infer<typeof wowRaidDiffSchema>
 export type WowItemSlot = z.infer<typeof wowItemSlotSchema>
 export type WowItemSlotKey = z.infer<typeof wowItemSlotKeySchema>
@@ -118,7 +129,7 @@ export type CharAssignmentInfo = {
     weeklyChest: GearItem[]
     tierset: GearItem[]
     bestItemInSlot: GearItem[]
-    bis: boolean
+    bis: BisList[]
     score: number
 }
 export type LootAssignmentInfo = {

@@ -1,17 +1,6 @@
 import { WowClass } from '@shared/types/types'
 
-export type Spec = {
-    id: number
-    name: string
-}
-
-export type ClassWithSpecs = {
-    id: number
-    name: WowClass
-    specs: Spec[]
-}
-
-export const WOW_CLASS_WITH_SPECS: ClassWithSpecs[] = [
+export const WOW_CLASS_WITH_SPECS: WowClass[] = [
     {
         id: 1,
         name: 'Warrior',

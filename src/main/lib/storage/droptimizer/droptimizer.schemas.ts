@@ -3,7 +3,7 @@ import {
     droptimizerCurrenciesSchema,
     droptimizerUpgradeSchema
 } from '@shared/schemas/simulations.schemas'
-import { wowClassSchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
+import { wowClassNameSchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import { Droptimizer } from '@shared/types/types'
 import { z } from 'zod'
 
@@ -21,7 +21,7 @@ export const droptimizerStorageSchema = z.object({
     raidDifficulty: wowRaidDiffSchema,
     characterName: z.string(),
     characterServer: z.string(),
-    characterClass: wowClassSchema,
+    characterClass: wowClassNameSchema,
     characterClassId: z.number(),
     characterSpec: z.string(),
     characterSpecId: z.number(),

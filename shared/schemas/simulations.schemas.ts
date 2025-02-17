@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { gearItemSchema, itemSchema } from './items.schema'
-import { wowClassSchema, wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from './wow.schemas'
+import { wowClassNameSchema, wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const droptimizerUpgradeSchema = z.object({
     id: z.string(),
@@ -48,7 +48,7 @@ export const droptimizerSchema = z.object({
     charInfo: z.object({
         name: z.string(),
         server: z.string(),
-        class: wowClassSchema,
+        class: wowClassNameSchema,
         classId: z.number().min(1).max(13), // https://wowpedia.fandom.com/wiki/ClassId
         spec: z.string(),
         specId: z.number(), // https://wowpedia.fandom.com/wiki/SpecializationID
