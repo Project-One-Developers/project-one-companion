@@ -13,14 +13,11 @@ import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
-    BisList,
-    Character,
     Droptimizer,
     DroptimizerUpgrade,
     GearItem,
     Item,
     ItemTrack,
-    LootWithItem,
     NewLoot,
     NewLootManual,
     WowItemSlotKey,
@@ -274,15 +271,17 @@ export const parseBestItemInSlot = (
     return sortedItems.slice(0, 1)
 }
 
-export const parseLootIsBis = (
-    bisList: BisList[],
-    loot: LootWithItem,
-    char: Character
-): boolean => {
-    return bisList.some((bis) => {
-        return bis.itemIds.includes(loot.item.id) && bis.wowClass === char.class
-    })
-}
+// export const parseLootIsBis = (
+//     bisList: BisList[],
+//     loot: LootWithItem,
+//     wowClass: WowClass
+// ): boolean => {
+//     //return true
+//     // todo: re-implement
+//     // return bisList.some((bis) => {
+//     //     return bis.itemIds.includes(loot.item.id) && bis.wowClass === char.class
+//     // })
+// }
 
 /**
  * Todo: include assigned loot in the calculation

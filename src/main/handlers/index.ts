@@ -1,3 +1,4 @@
+import { getBisListHandler, updateItemBisSpecHandler } from './bis-list/bis-list.handlers'
 import { getBossesHandler, getRaidLootTableHandler } from './bosses/bosses.handlers'
 import {
     addCharacterHandler,
@@ -82,5 +83,7 @@ export const allHandlers = {
     'loots-unassign': unassignLootHandler,
     'app-settings-get': getAppSettingsHandler,
     'app-settings-edit': setAppSettingsHandler,
-    'app-settings-reset': resetAppSettingsHandler
+    'app-settings-reset': resetAppSettingsHandler,
+    'bis-list-get': getBisListHandler,
+    'bis-list-edit': updateItemBisSpecHandler
 }

@@ -2,6 +2,7 @@
 import { electronAPI } from '@electron-toolkit/preload'
 import type {
     AppSettings,
+    BisList,
     Boss,
     BossWithItems,
     Character,
@@ -153,6 +154,13 @@ export const api = {
     },
     searchItems(searchTerm: string, limit: number): Promise<Item[]> {
         return ipcRenderer.invoke('items-search', searchTerm, limit)
+    },
+    // bis list
+    getBisList(): Promise<BisList[]> {
+        return ipcRenderer.invoke('bis-list-get')
+    },
+    updateItemBisSpecs(itemId: number, specIds: number[]): Promise<void> {
+        return ipcRenderer.invoke('bis-list-edit', itemId, specIds)
     }
 }
 

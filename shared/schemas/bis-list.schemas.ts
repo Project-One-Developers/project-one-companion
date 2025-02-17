@@ -1,8 +1,7 @@
 import { z } from 'zod'
-import { wowClassSchema, wowSpecSchema } from './wow.schemas'
+import { itemSchema } from './items.schema'
 
 export const bisListSchema = z.object({
-    wowClass: wowClassSchema,
-    wowSpec: wowSpecSchema,
-    itemIds: z.array(z.coerce.number())
+    itemId: itemSchema.shape.id,
+    specIds: z.array(z.coerce.number())
 })

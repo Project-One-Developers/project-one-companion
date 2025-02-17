@@ -1,3 +1,136 @@
+import { WowClass } from '@shared/types/types'
+
+export type Spec = {
+    id: number
+    name: string
+}
+
+export type ClassWithSpecs = {
+    id: number
+    name: WowClass
+    specs: Spec[]
+}
+
+export const WOW_CLASS_WITH_SPECS: ClassWithSpecs[] = [
+    {
+        id: 1,
+        name: 'Warrior',
+        specs: [
+            { id: 71, name: 'Arms' },
+            { id: 72, name: 'Fury' },
+            { id: 73, name: 'Protection' }
+        ]
+    },
+    {
+        id: 2,
+        name: 'Paladin',
+        specs: [
+            { id: 65, name: 'Holy' },
+            { id: 66, name: 'Protection' },
+            { id: 70, name: 'Retribution' }
+        ]
+    },
+    {
+        id: 3,
+        name: 'Hunter',
+        specs: [
+            { id: 253, name: 'Beast Mastery' },
+            { id: 254, name: 'Marksmanship' },
+            { id: 255, name: 'Survival' }
+        ]
+    },
+    {
+        id: 4,
+        name: 'Rogue',
+        specs: [
+            { id: 259, name: 'Assassination' },
+            { id: 260, name: 'Outlaw' },
+            { id: 261, name: 'Subtlety' }
+        ]
+    },
+    {
+        id: 5,
+        name: 'Priest',
+        specs: [
+            { id: 256, name: 'Discipline' },
+            { id: 257, name: 'Holy' },
+            { id: 258, name: 'Shadow' }
+        ]
+    },
+    {
+        id: 6,
+        name: 'Death Knight',
+        specs: [
+            { id: 250, name: 'Blood' },
+            { id: 251, name: 'Frost' },
+            { id: 252, name: 'Unholy' }
+        ]
+    },
+    {
+        id: 7,
+        name: 'Shaman',
+        specs: [
+            { id: 262, name: 'Elemental' },
+            { id: 263, name: 'Enhancement' },
+            { id: 264, name: 'Restoration' }
+        ]
+    },
+    {
+        id: 8,
+        name: 'Mage',
+        specs: [
+            { id: 62, name: 'Arcane' },
+            { id: 63, name: 'Fire' },
+            { id: 64, name: 'Frost' }
+        ]
+    },
+    {
+        id: 9,
+        name: 'Warlock',
+        specs: [
+            { id: 265, name: 'Affliction' },
+            { id: 266, name: 'Demonology' },
+            { id: 267, name: 'Destruction' }
+        ]
+    },
+    {
+        id: 10,
+        name: 'Monk',
+        specs: [
+            { id: 268, name: 'Brewmaster' },
+            { id: 269, name: 'Windwalker' },
+            { id: 270, name: 'Mistweaver' }
+        ]
+    },
+    {
+        id: 11,
+        name: 'Druid',
+        specs: [
+            { id: 102, name: 'Balance' },
+            { id: 103, name: 'Feral' },
+            { id: 104, name: 'Guardian' },
+            { id: 105, name: 'Restoration' }
+        ]
+    },
+    {
+        id: 12,
+        name: 'Demon Hunter',
+        specs: [
+            { id: 577, name: 'Havoc' },
+            { id: 581, name: 'Vengeance' }
+        ]
+    },
+    {
+        id: 13,
+        name: 'Evoker',
+        specs: [
+            { id: 1467, name: 'Devastation' },
+            { id: 1468, name: 'Preservation' },
+            { id: 1473, name: 'Augmentation' }
+        ]
+    }
+]
+
 export const SPEC_ID_TO_CLASS_SPEC = {
     // Death Knight
     250: { wowClass: 'Death Knight', wowSpec: 'Blood' },

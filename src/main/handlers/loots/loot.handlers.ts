@@ -4,7 +4,6 @@ import {
     LootWithItem,
     NewLootManual
 } from '@shared/types/types'
-import { getBisList } from '@storage/bis-list/bis-list.storage'
 import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.storage'
 import {
     addLoots,
@@ -19,7 +18,6 @@ import { getRaidSessionRoster } from '@storage/raid-session/raid-session.storage
 import {
     parseBestItemInSlot,
     parseDroptimizersInfo,
-    parseLootIsBis,
     parseManualLoots,
     parseRcLoots,
     parseTiersetInfo,
@@ -78,12 +76,12 @@ export const unassignLootHandler = async (lootId: string): Promise<void> => {
 export const getLootAssignmentInfoHandler = async (lootId: string): Promise<LootAssignmentInfo> => {
     console.log('getLootAssignmentInfoHandler')
 
-    const [loot, roster, latestDroptimizer, bisList] = await Promise.all([
+    const [loot, roster, latestDroptimizer] = await Promise.all([
         getLootById(lootId),
         getCharactersList(),
-        getDroptimizerLatestList(),
+        getDroptimizerLatestList()
         //getCharacterWowAuditList(),
-        getBisList()
+        //getBisList()
     ])
 
     const filteredRoster = roster.filter(
@@ -103,7 +101,8 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             weeklyChest: parseWeeklyChest(charDroptimizers),
             tierset: parseTiersetInfo(charDroptimizers),
             bestItemInSlot: parseBestItemInSlot(loot.item.slotKey, charDroptimizers),
-            bis: parseLootIsBis(bisList, loot, char),
+            bis: false,
+            //bis: parseLootIsBis(bisList, loot, char),
             score: Math.floor(Math.random() * (10000 - 10 + 1)) + 10
         }
     })

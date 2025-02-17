@@ -13,5 +13,7 @@ export const queryKeys = {
     appSettings: 'app-settings',
     lootsBySession: 'loots-by-session',
     lootsAssignInfo: 'loots-assign-info',
-    bosses: 'boss-list'
+    bosses: 'boss-list',
+    //bis list,
+    bisList: 'bis-list-get'
 }
