@@ -28,7 +28,7 @@ export const fetchRaidItems = (season: number): Item[] => {
         tokenPrefix: itemRaw.tokenPrefix,
         tierset: itemRaw.tierset,
         tiersetPrefix: itemRaw.tiersetPrefix,
-        veryRare: itemRaw.bonusId === 'Very Rare',
+        veryRare: itemRaw.veryRare,
         catalyzed: itemRaw.catalyst,
         specs: itemRaw.specs?.split(',') ?? null,
         specIds: itemRaw.specIds?.split('|') ?? null,
