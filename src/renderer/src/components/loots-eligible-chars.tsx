@@ -1,6 +1,7 @@
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { assignLoot, getLootAssignmentInfo } from '@renderer/lib/tanstack-query/loots'
+import { ITEM_SLOTS_KEY_TIERSET } from '@shared/consts/wow.consts'
 import type { LootWithAssigned } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -75,6 +76,11 @@ export default function LootsEligibleChars({
         )
     }
 
+    const showTiersetInfo =
+        selectedLoot.gearItem.item.slotKey === 'omni' ||
+        ITEM_SLOTS_KEY_TIERSET.find((i) => i === selectedLoot.gearItem.item.slotKey) != null
+    const showHightestInSlot = selectedLoot.gearItem.item.slotKey !== 'omni'
+
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-row justify-center">
@@ -95,8 +101,8 @@ export default function LootsEligibleChars({
                             <TableHead>Droptimizer</TableHead>
                             <TableHead>Vault</TableHead>
                             <TableHead>Other Assignment</TableHead>
-                            <TableHead>Highest</TableHead>
-                            <TableHead>Tierset</TableHead>
+                            {showHightestInSlot && <TableHead>Highest</TableHead>}
+                            {showTiersetInfo && <TableHead>Tierset</TableHead>}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -175,28 +181,30 @@ export default function LootsEligibleChars({
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-row space-x-1">
-                                                {charInfo.bestItemInSlot.map((bestInSlot) => (
-                                                    <WowGearIcon
-                                                        key={bestInSlot.item.id}
-                                                        item={bestInSlot}
-                                                        showTierBanner={true}
-                                                    />
-                                                ))}
+                                                {showHightestInSlot &&
+                                                    charInfo.bestItemInSlot.map((bestInSlot) => (
+                                                        <WowGearIcon
+                                                            key={bestInSlot.item.id}
+                                                            item={bestInSlot}
+                                                            showTierBanner={true}
+                                                        />
+                                                    ))}
                                             </div>
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-row gap-1">
-                                                {charInfo.tierset.map((tierset) => (
-                                                    <div
-                                                        key={tierset.item.id}
-                                                        className="flex flex-col items-center space-x-1"
-                                                    >
-                                                        <WowGearIcon
-                                                            item={tierset}
-                                                            showTierBanner={false}
-                                                        />
-                                                    </div>
-                                                ))}
+                                                {showTiersetInfo &&
+                                                    charInfo.tierset.map((tierset) => (
+                                                        <div
+                                                            key={tierset.item.id}
+                                                            className="flex flex-col items-center space-x-1"
+                                                        >
+                                                            <WowGearIcon
+                                                                item={tierset}
+                                                                showTierBanner={false}
+                                                            />
+                                                        </div>
+                                                    ))}
                                             </div>
                                         </TableCell>
                                     </TableRow>

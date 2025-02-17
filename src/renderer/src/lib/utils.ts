@@ -1,4 +1,4 @@
-import { CLASSES } from '@shared/consts/wow.consts'
+import { CLASSES_NAME } from '@shared/consts/wow.consts'
 import { WowClassName } from '@shared/types/types'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]): string {
 }
 
 export function getClassColor(className: WowClassName): string {
-    const classColor = CLASSES.find((classItem) => classItem === className)
+    const classColor = CLASSES_NAME.find((classItem) => classItem === className)
     if (classColor) {
         return 'bg-' + classColor.replace(' ', '').toLowerCase()
     }
