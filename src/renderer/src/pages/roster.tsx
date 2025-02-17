@@ -1,4 +1,5 @@
 import CharacterDialog from '@renderer/components/character-dialog'
+import { toast } from '@renderer/components/hooks/use-toast'
 import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
 import PlayerDialog from '@renderer/components/player-dialog'
 import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
@@ -7,11 +8,15 @@ import { Input } from '@renderer/components/ui/input'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { Player } from '@shared/types/types'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { LoaderCircle, PlusIcon, X } from 'lucide-react'
+import { Loader2, LoaderCircle, PlusIcon, X } from 'lucide-react'
 
 import { useState, type JSX } from 'react'
+
+const syncWowAudit = async () => {
+    return window.api.syncWowAudit()
+}
 
 export default function RosterPage(): JSX.Element {
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
@@ -23,6 +28,22 @@ export default function RosterPage(): JSX.Element {
     const characterQuery = useQuery({
         queryKey: [queryKeys.players],
         queryFn: fetchPlayers
+    })
+
+    const syncWowAuditMutation = useMutation({
+        mutationFn: syncWowAudit,
+        onSuccess: () => {
+            toast({
+                title: 'Sync',
+                description: `WowAudit data synced successfully!`
+            })
+        },
+        onError: (error) => {
+            toast({
+                title: 'Error',
+                description: `Unable to sync wowaudit. Error: ${error.message}`
+            })
+        }
     })
 
     if (characterQuery.isLoading) {
@@ -102,25 +123,32 @@ export default function RosterPage(): JSX.Element {
 
             {/* Bottom Right Icons */}
             <div className="fixed bottom-6 right-6 space-y-2">
-                <div
+                {/* Raider Io */}
+                <a
+                    href="https://raider.io/guilds/eu/pozzo-delleternit%C3%A0/Project%20One"
+                    rel="noreferrer"
+                    target="_blank"
                     className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
-                    onClick={() => setIsAddDialogOpen(true)}
                 >
                     <img
                         src="https://cdn.raiderio.net/images/mstile-150x150.png"
-                        title="Sync Raider.io"
+                        title="ProjectOne Raider.io"
                         className=" hover:scale-125 ease-linear transition-transform "
                     ></img>
-                </div>
+                </a>
                 <div
                     className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
-                    onClick={() => window.api.syncWowAudit()}
+                    onClick={() => syncWowAuditMutation.mutate()}
                 >
-                    <img
-                        src="https://data.wowaudit.com/img/new-logo-icon.svg"
-                        title="Sync WowAudit"
-                        className=" hover:scale-125 ease-linear transition-transform "
-                    ></img>
+                    {syncWowAuditMutation.isPending ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        <img
+                            src="https://data.wowaudit.com/img/new-logo-icon.svg"
+                            title="Sync WowAudit Data"
+                            className=" hover:scale-125 ease-linear transition-transform "
+                        />
+                    )}
                 </div>
                 <div
                     className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
