@@ -1,30 +1,30 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { ITEM_SLOTS_KEY } from '@shared/consts/wow.consts'
 import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
-import { LootWithItemAndAssigned } from '@shared/types/types'
+import { LootWithAssigned } from '@shared/types/types'
 import LootItem from './loots-item'
 
 type LootsTabsProps = {
-    loots: LootWithItemAndAssigned[]
-    selectedLoot: LootWithItemAndAssigned | null
-    setSelectedLoot: (loot: LootWithItemAndAssigned) => void
+    loots: LootWithAssigned[]
+    selectedLoot: LootWithAssigned | null
+    setSelectedLoot: (loot: LootWithAssigned) => void
 }
 
 const LootsTabs = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => {
     const renderLoots = (slot) => {
         const filteredLoots = loots
-            .filter((loot) => loot.item.slotKey === slot)
+            .filter((loot) => loot.gearItem.item.slotKey === slot)
             .sort((a, b) => {
-                if (a.item.token !== b.item.token) {
-                    return a.item.token ? -1 : 1
+                if (a.gearItem.item.token !== b.gearItem.item.token) {
+                    return a.gearItem.item.token ? -1 : 1
                 }
-                if (a.item.armorType !== b.item.armorType) {
-                    if (a.item.armorType === null) return 1
-                    if (b.item.armorType === null) return -1
-                    return a.item.armorType.localeCompare(b.item.armorType)
+                if (a.gearItem.item.armorType !== b.gearItem.item.armorType) {
+                    if (a.gearItem.item.armorType === null) return 1
+                    if (b.gearItem.item.armorType === null) return -1
+                    return a.gearItem.item.armorType.localeCompare(b.gearItem.item.armorType)
                 }
-                if (a.item.id !== b.item.id) {
-                    return a.item.id - b.item.id
+                if (a.gearItem.item.id !== b.gearItem.item.id) {
+                    return a.gearItem.item.id - b.gearItem.item.id
                 }
                 return a.id.localeCompare(b.id)
             })

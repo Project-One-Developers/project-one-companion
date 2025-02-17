@@ -29,6 +29,7 @@ import {
     getLootAssignmentInfoHandler,
     getLootsBySessionIdHandler,
     getLootsBySessionIdWithAssignedHandler,
+    getLootsBySessionIdWithItemHandler,
     unassignLootHandler
 } from './loots/loot.handlers'
 import {
@@ -78,6 +79,7 @@ export const allHandlers = {
     'loots-add-manual': addRaidLootsByManualInputHandler,
     'loots-get-by-session': getLootsBySessionIdHandler,
     'loots-get-by-session-with-assigned': getLootsBySessionIdWithAssignedHandler,
+    'loots-get-by-session-with-item': getLootsBySessionIdWithItemHandler,
     'loots-assign-info': getLootAssignmentInfoHandler,
     'loots-assign': assignLootHandler,
     'loots-unassign': unassignLootHandler,

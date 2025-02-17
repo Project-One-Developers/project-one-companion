@@ -1,7 +1,7 @@
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { assignLoot, getLootAssignmentInfo } from '@renderer/lib/tanstack-query/loots'
-import type { LootWithItemAndAssigned } from '@shared/types/types'
+import type { LootWithAssigned } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { type JSX } from 'react'
@@ -12,9 +12,9 @@ import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
 
 type LootsEligibleCharsProps = {
-    selectedLoot: LootWithItemAndAssigned
-    setSelectedLoot: (loot: LootWithItemAndAssigned) => void
-    allLoots: LootWithItemAndAssigned[]
+    selectedLoot: LootWithAssigned
+    setSelectedLoot: (loot: LootWithAssigned) => void
+    allLoots: LootWithAssigned[]
 }
 
 export default function LootsEligibleChars({
@@ -105,7 +105,8 @@ export default function LootsEligibleChars({
                                 (loot) =>
                                     loot.id !== selectedLoot.id &&
                                     loot.assignedCharacterId === charInfo.character.id &&
-                                    loot.item.slotKey === selectedLoot.item.slotKey
+                                    loot.gearItem.item.slotKey ===
+                                        selectedLoot.gearItem.item.slotKey
                             )
                             return (
                                 <TableRow

@@ -1,7 +1,8 @@
 import {
+    Loot,
     LootAssignmentInfo,
+    LootWithAssigned,
     LootWithItem,
-    LootWithItemAndAssigned,
     NewLootManual
 } from '@shared/types/types'
 
@@ -22,20 +23,24 @@ export const addLootsFromRc = async (raidSessionId: string, csv: string): Promis
     return await window.api.addLootsFromRc(raidSessionId, csv)
 }
 
-export const getLootsBySession = async (raidSessionId: string): Promise<LootWithItem[]> => {
+export const getLootsBySession = async (raidSessionId: string): Promise<Loot[]> => {
     return await window.api.getLootsBySession(raidSessionId)
 }
 
-export const getLootsWithAssignedBySession = async (
-    raidSessionId: string
-): Promise<LootWithItemAndAssigned[]> => {
-    return await window.api.getLootsWithAssignedBySession(raidSessionId)
+export const getLootsBySessionWithItem = async (raidSessionId: string): Promise<LootWithItem[]> => {
+    return await window.api.getLootsBySessionWithItem(raidSessionId)
 }
 
-export const getLootsBySessions = async (
+export const getLootsBySessionWithAssigned = async (
+    raidSessionId: string
+): Promise<LootWithAssigned[]> => {
+    return await window.api.getLootsBySessionWithAssigned(raidSessionId)
+}
+
+export const getLootsWithAssignedBySessions = async (
     raidSessionIds: string[]
-): Promise<LootWithItemAndAssigned[]> => {
-    const lootsPromises = raidSessionIds.map((id) => getLootsWithAssignedBySession(id))
+): Promise<LootWithAssigned[]> => {
+    const lootsPromises = raidSessionIds.map((id) => getLootsBySessionWithAssigned(id))
     const lootsArrays = await Promise.all(lootsPromises)
     return lootsArrays.flat()
 }

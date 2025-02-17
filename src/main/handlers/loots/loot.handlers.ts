@@ -1,6 +1,8 @@
 import {
     CharAssignmentInfo,
+    Loot,
     LootAssignmentInfo,
+    LootWithAssigned,
     LootWithItem,
     NewLootManual
 } from '@shared/types/types'
@@ -8,9 +10,10 @@ import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.stora
 import {
     addLoots,
     assignLoot,
-    getLootById,
     getLootsByRaidSessionId,
     getLootsByRaidSessionIdWithAssigned,
+    getLootsByRaidSessionIdWithItem,
+    getLootWithItemById,
     unassignLoot
 } from '@storage/loots/loots.storage'
 import { getCharactersList } from '@storage/players/characters.storage'
@@ -42,16 +45,21 @@ export const addRaidLootsByManualInputHandler = async (
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
-export const getLootsBySessionIdHandler = async (
+export const getLootsBySessionIdHandler = async (raidSessionId: string): Promise<Loot[]> => {
+    const res = await getLootsByRaidSessionId(raidSessionId)
+    return res
+}
+
+export const getLootsBySessionIdWithItemHandler = async (
     raidSessionId: string
 ): Promise<LootWithItem[]> => {
-    const res = await getLootsByRaidSessionId(raidSessionId)
+    const res = await getLootsByRaidSessionIdWithItem(raidSessionId)
     return res
 }
 
 export const getLootsBySessionIdWithAssignedHandler = async (
     raidSessionId: string
-): Promise<LootWithItem[]> => {
+): Promise<LootWithAssigned[]> => {
     const res = await getLootsByRaidSessionIdWithAssigned(raidSessionId)
     return res
 }
@@ -77,7 +85,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
     console.log('getLootAssignmentInfoHandler')
 
     const [loot, roster, latestDroptimizer] = await Promise.all([
-        getLootById(lootId),
+        getLootWithItemById(lootId),
         getCharactersList(),
         getDroptimizerLatestList()
         //getCharacterWowAuditList(),

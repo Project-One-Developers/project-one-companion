@@ -2,16 +2,16 @@ import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import LootsTabs from '@renderer/components/loots-tab'
 import SessionCard from '@renderer/components/session-card'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { getLootsBySessions } from '@renderer/lib/tanstack-query/loots'
+import { getLootsWithAssignedBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
-import { LootWithItemAndAssigned } from '@shared/types/types'
+import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
-    const [selectedLoot, setSelectedLoot] = useState<LootWithItemAndAssigned | null>(null)
+    const [selectedLoot, setSelectedLoot] = useState<LootWithAssigned | null>(null)
 
     const raidSessionsQuery = useQuery({
         queryKey: [queryKeys.raidSessionsWithLoots],
@@ -20,7 +20,7 @@ export default function LootAssign() {
 
     const lootsQuery = useQuery({
         queryKey: [queryKeys.lootsBySession, Array.from(selectedSessions)],
-        queryFn: () => getLootsBySessions(Array.from(selectedSessions)),
+        queryFn: () => getLootsWithAssignedBySessions(Array.from(selectedSessions)),
         enabled: selectedSessions.size > 0
     })
 

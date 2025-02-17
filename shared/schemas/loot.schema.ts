@@ -38,8 +38,7 @@ export const lootWithItemSchema = lootSchema.extend({
     item: itemSchema
 })
 
-export const lootWithItemAndAssignedSchema = lootSchema.extend({
-    item: itemSchema,
+export const lootWithAssignedSchema = lootSchema.extend({
     assignedCharacter: characterSchema.nullable()
 })
 

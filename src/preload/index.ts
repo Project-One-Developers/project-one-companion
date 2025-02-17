@@ -13,9 +13,10 @@ import type {
     EditPlayer,
     EditRaidSession,
     Item,
+    Loot,
     LootAssignmentInfo,
+    LootWithAssigned,
     LootWithItem,
-    LootWithItemAndAssigned,
     NewCharacter,
     NewLootManual,
     NewPlayer,
@@ -116,11 +117,14 @@ export const api = {
     addLootsFromRc(raidSessionId: string, csv: string): Promise<void> {
         return ipcRenderer.invoke('loots-add-rcloot', raidSessionId, csv)
     },
-    getLootsBySession(sessionId: string): Promise<LootWithItem[]> {
+    getLootsBySession(sessionId: string): Promise<Loot[]> {
         return ipcRenderer.invoke('loots-get-by-session', sessionId)
     },
-    getLootsWithAssignedBySession(sessionId: string): Promise<LootWithItemAndAssigned[]> {
+    getLootsBySessionWithAssigned(sessionId: string): Promise<LootWithAssigned[]> {
         return ipcRenderer.invoke('loots-get-by-session-with-assigned', sessionId)
+    },
+    getLootsBySessionWithItem(sessionId: string): Promise<LootWithItem[]> {
+        return ipcRenderer.invoke('loots-get-by-session-with-item', sessionId)
     },
     getLootAssignmentInfo(lootId: string): Promise<LootAssignmentInfo> {
         return ipcRenderer.invoke('loots-assign-info', lootId)

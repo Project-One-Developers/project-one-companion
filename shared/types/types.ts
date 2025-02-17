@@ -9,7 +9,7 @@ import {
 } from '@shared/schemas/items.schema'
 import {
     lootSchema,
-    lootWithItemAndAssignedSchema,
+    lootWithAssignedSchema,
     lootWithItemSchema,
     newLootManualSchema,
     newLootSchema
@@ -105,7 +105,7 @@ export type EditRaidSession = z.infer<typeof editRaidSessionSchema>
 // Raid loots
 export type Loot = z.infer<typeof lootSchema>
 export type LootWithItem = z.infer<typeof lootWithItemSchema>
-export type LootWithItemAndAssigned = z.infer<typeof lootWithItemAndAssignedSchema>
+export type LootWithAssigned = z.infer<typeof lootWithAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootManual = z.infer<typeof newLootManualSchema>
 export type CharAssignmentInfo = {
@@ -122,7 +122,7 @@ export type CharAssignmentInfo = {
     score: number
 }
 export type LootAssignmentInfo = {
-    loot: LootWithItem
+    loot: Loot
     eligible: CharAssignmentInfo[]
 }
 

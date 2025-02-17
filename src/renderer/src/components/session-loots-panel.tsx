@@ -1,6 +1,6 @@
 import { fetchBosses } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { getLootsBySession } from '@renderer/lib/tanstack-query/loots'
+import { getLootsBySessionWithItem } from '@renderer/lib/tanstack-query/loots'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithItem } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
@@ -20,7 +20,7 @@ type GroupedLoots = {
 export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => {
     const lootsQuery = useQuery({
         queryKey: [queryKeys.lootsBySession, raidSessionId],
-        queryFn: () => getLootsBySession(raidSessionId)
+        queryFn: () => getLootsBySessionWithItem(raidSessionId)
     })
     const bossesQuery = useQuery({
         queryKey: [queryKeys.bosses, CURRENT_RAID_ID],

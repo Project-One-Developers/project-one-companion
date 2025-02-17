@@ -1,11 +1,11 @@
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
-import { LootWithItemAndAssigned } from '@shared/types/types'
+import { LootWithAssigned } from '@shared/types/types'
 import { WowGearIcon } from './ui/wowgear-icon'
 
 type LootItemProps = {
-    loot: LootWithItemAndAssigned
+    loot: LootWithAssigned
     isSelected: boolean
-    setSelectedLoot: (loot: LootWithItemAndAssigned) => void
+    setSelectedLoot: (loot: LootWithAssigned) => void
 }
 
 const LootItem = ({ loot, isSelected, setSelectedLoot }: LootItemProps) => {
