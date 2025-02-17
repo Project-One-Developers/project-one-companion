@@ -130,6 +130,21 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                         />
                     </div>
 
+                    {/* Hide Alts*/}
+                    <div className="flex flex-row items-center gap-3">
+                        <Checkbox
+                            id="hide-alts"
+                            checked={filter.hideAlts as CheckedState}
+                            onCheckedChange={(checked) => updateFilter('hideAlts', !!checked)}
+                            className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                        >
+                            {filter.hideAlts && <Check className="text-white w-4 h-4" />}
+                        </Checkbox>
+                        <label htmlFor="hide-alts" className="text-sm font-semibold">
+                            Hide alts
+                        </label>
+                    </div>
+
                     {/* Item Slot Toggles */}
                     <div className="flex flex-col space-y-2">
                         <label className="text-sm font-semibold">Item Slots:</label>

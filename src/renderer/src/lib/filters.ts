@@ -1,4 +1,10 @@
-import { Droptimizer, WowArmorType, WowItemSlot, WowRaidDifficulty } from '@shared/types/types'
+import {
+    Character,
+    Droptimizer,
+    WowArmorType,
+    WowItemSlot,
+    WowRaidDifficulty
+} from '@shared/types/types'
 import { unixTimestampToRelativeDays } from './utils'
 
 export type LootFilter = {
@@ -12,16 +18,32 @@ export type LootFilter = {
     selectedArmorTypes: WowArmorType[]
 }
 
-export function filterDroptimizer(droptimizers: Droptimizer[], filter: LootFilter): Droptimizer[] {
+export function filterDroptimizer(
+    droptimizers: Droptimizer[],
+    chars: Character[],
+    filter: LootFilter
+): Droptimizer[] {
     const filterByDroptimizerFilters = droptimizers
         .sort((a, b) => b.simInfo.date - a.simInfo.date)
         .filter((dropt) => {
             // Filter by raid difficulty
-            console.log(filter.selectedRaidDiff)
             if (filter.selectedRaidDiff.length > 0) {
                 if (!filter.selectedRaidDiff.includes(dropt.raidInfo.difficulty)) {
                     return false
                 }
+            }
+
+            // filter by all or main only
+            if (
+                filter.hideAlts &&
+                chars.some(
+                    (c) =>
+                        c.name === dropt.charInfo.name &&
+                        c.realm === dropt.charInfo.server &&
+                        !c.main // filter out char explicity not main
+                )
+            ) {
+                return false
             }
 
             // Filter droptimizer older than X days

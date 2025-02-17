@@ -4,6 +4,7 @@ import { FiltersPanel } from '@renderer/components/filter-panel'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
+import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
@@ -14,7 +15,7 @@ const DEFAULT_FILTER: LootFilter = {
     onlyUpgrades: false,
     minUpgrade: 1000,
     hideOlderThanDays: false,
-    hideAlts: true, // todo: implement actual filter & create control in filter panel
+    hideAlts: true,
     maxDays: 7,
     selectedArmorTypes: [],
     selectedSlots: []
@@ -26,12 +27,16 @@ export default function DroptimizerPage(): JSX.Element {
         queryKey: [queryKeys.droptimizers],
         queryFn: fetchLatestDroptimizers
     })
+    const charQuery = useQuery({
+        queryKey: [queryKeys.characters],
+        queryFn: fetchCharacters
+    })
     const filteredDroptimizers = useMemo(() => {
-        if (!droptimizerQuery.data) return []
-        return filterDroptimizer(droptimizerQuery.data, filter)
-    }, [droptimizerQuery.data, filter])
+        if (!droptimizerQuery.data || !charQuery.data) return []
+        return filterDroptimizer(droptimizerQuery.data, charQuery.data, filter)
+    }, [droptimizerQuery.data, charQuery.data, filter])
 
-    if (droptimizerQuery.isLoading) {
+    if (droptimizerQuery.isLoading || charQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />

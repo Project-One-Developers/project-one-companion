@@ -5,6 +5,7 @@ import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
+import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
@@ -24,12 +25,18 @@ const useRaidData = (currentRaid: number) => {
         queryKey: [queryKeys.raidLootTable, currentRaid],
         queryFn: () => fetchRaidLootTable(currentRaid)
     })
+    const charRes = useQuery({
+        queryKey: [queryKeys.characters],
+        queryFn: fetchCharacters
+    })
 
     return {
         droptimizers: droptimizerRes.data ?? [],
         droptimizersIsLoading: droptimizerRes.isLoading,
         encounterList: itemRes.data ?? [],
-        encounterListIsLoading: itemRes.isLoading
+        encounterListIsLoading: itemRes.isLoading,
+        charList: charRes.data ?? [],
+        charIsLoading: charRes.isLoading
     }
 }
 
@@ -154,8 +161,14 @@ export default function LootTable(): JSX.Element {
 
     const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
 
-    const { droptimizers, droptimizersIsLoading, encounterList, encounterListIsLoading } =
-        useRaidData(CURRENT_RAID_ID)
+    const {
+        droptimizers,
+        droptimizersIsLoading,
+        encounterList,
+        encounterListIsLoading,
+        charList,
+        charIsLoading
+    } = useRaidData(CURRENT_RAID_ID)
 
     const updateFilter = (key: keyof LootFilter, value: unknown): void => {
         setFilters((prev) => ({ ...prev, [key]: value }))
@@ -163,10 +176,10 @@ export default function LootTable(): JSX.Element {
 
     const filteredDroptimizers = useMemo(() => {
         if (!droptimizers) return []
-        return filterDroptimizer(droptimizers, filter)
-    }, [droptimizers, filter])
+        return filterDroptimizer(droptimizers, charList, filter)
+    }, [droptimizers, charList, filter])
 
-    if (encounterListIsLoading || droptimizersIsLoading) {
+    if (encounterListIsLoading || droptimizersIsLoading || charIsLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
