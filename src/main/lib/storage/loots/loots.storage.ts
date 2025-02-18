@@ -1,5 +1,12 @@
 import { lootSchema, lootWithAssignedSchema, lootWithItemSchema } from '@shared/schemas/loot.schema'
-import type { Character, Loot, LootWithAssigned, LootWithItem, NewLoot } from '@shared/types/types'
+import type {
+    Character,
+    CharAssignmentHighlights,
+    Loot,
+    LootWithAssigned,
+    LootWithItem,
+    NewLoot
+} from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { lootTable } from '@storage/storage.schema'
 import { getUnixTimestamp, newUUID } from '@utils'
@@ -79,12 +86,16 @@ export const addLoots = async (
         .onConflictDoNothing({ target: lootTable.rclootId }) // do nothing on item already inserted
 }
 
-export const assignLoot = async (charId: string, lootId: string, score?: number): Promise<void> => {
-    console.log(score)
+export const assignLoot = async (
+    charId: string,
+    lootId: string,
+    highlights: CharAssignmentHighlights
+): Promise<void> => {
     await db()
         .update(lootTable)
         .set({
-            assignedCharacterId: charId
+            assignedCharacterId: charId,
+            assignedHighlights: highlights
         })
         .where(eq(lootTable.id, lootId))
 }

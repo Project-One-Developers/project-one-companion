@@ -1,4 +1,5 @@
 import {
+    CharAssignmentHighlights,
     CharAssignmentInfo,
     Loot,
     LootAssignmentInfo,
@@ -70,9 +71,9 @@ export const getLootsBySessionIdWithAssignedHandler = async (
 export const assignLootHandler = async (
     charId: string,
     lootId: string,
-    score?: number
+    highlights: CharAssignmentHighlights
 ): Promise<void> => {
-    await assignLoot(charId, lootId, score)
+    await assignLoot(charId, lootId, highlights)
 }
 
 export const unassignLootHandler = async (lootId: string): Promise<void> => {
@@ -85,8 +86,6 @@ export const unassignLootHandler = async (lootId: string): Promise<void> => {
  * @returns
  */
 export const getLootAssignmentInfoHandler = async (lootId: string): Promise<LootAssignmentInfo> => {
-    console.log('getLootAssignmentInfoHandler')
-
     const [loot, roster, latestDroptimizer, bisList] = await Promise.all([
         getLootWithItemById(lootId),
         getCharactersList(),

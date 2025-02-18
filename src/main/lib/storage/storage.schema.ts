@@ -6,7 +6,7 @@ import {
     RAID_DIFF,
     ROLES
 } from '@shared/consts/wow.consts'
-import { GearItem } from '@shared/types/types'
+import { CharAssignmentHighlights, GearItem } from '@shared/types/types'
 import { relations } from 'drizzle-orm'
 import {
     boolean,
@@ -283,6 +283,7 @@ export const lootTable = pgTable('loots', {
     charsEligibility: text('chars_eligibility').array(), // array of IDs referencing RaidSession.Chars
     rclootId: varchar('rcloot_id').unique(),
     assignedCharacterId: varchar('assigned_character_id').references(() => charTable.id),
+    assignedHighlights: jsonb('assigned_highlights').$type<CharAssignmentHighlights>(),
     raidSessionId: varchar('raid_session_id')
         .references(() => raidSessionTable.id)
         .notNull(),
