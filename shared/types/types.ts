@@ -119,13 +119,12 @@ export type LootWithItem = z.infer<typeof lootWithItemSchema>
 export type LootWithAssigned = z.infer<typeof lootWithAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootManual = z.infer<typeof newLootManualSchema>
+export type TierSetCompletion = { type: 'none' } | { type: '2p' } | { type: '4p' }
 export type CharAssignmentHighlights = {
     isMain: boolean
     dpsGain: number
-    tiersetCloses2p: boolean
-    tiersetCloses4p: boolean
+    tierSetCompletion: TierSetCompletion
     gearIlvlUpgrade: number
-    gearTrackUpgrade: boolean
     gearIsBis: boolean
     score: number
 }
