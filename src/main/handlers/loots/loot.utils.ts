@@ -442,11 +442,11 @@ export const evalHighlightsAndScore = (
         bestItemInSlot
             .map((d) => trackNameToNumber(d.itemTrack?.name))
             .sort((a, b) => b - a)
-            .at(0) ?? -1
+            .at(0) ?? undefined
 
     const lootTrack = trackNameToNumber(loot.gearItem.itemTrack?.name)
     const isTrackUpgrade =
-        bestItemInSlotTrack > 0 && lootTrack > 0 ? bestItemInSlotTrack > lootTrack : false
+        bestItemInSlotTrack && lootTrack > 0 ? bestItemInSlotTrack > lootTrack : false
 
     const res: Omit<CharAssignmentHighlights, 'score'> = {
         isMain,
