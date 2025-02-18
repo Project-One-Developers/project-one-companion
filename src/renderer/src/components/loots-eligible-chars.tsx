@@ -153,19 +153,19 @@ export default function LootsEligibleChars({
                                                         {charInfo.highlights.gearIsBis && 'BIS'}
                                                     </p>
                                                     <p className="text-xs font-bold">
-                                                        {charInfo.highlights.tiersetCloses2p &&
-                                                            '2p'}
+                                                        {charInfo.highlights.tierSetCompletion
+                                                            .type === '2p' && '2p'}
                                                     </p>
                                                     <p className="text-xs font-bold">
-                                                        {charInfo.highlights.tiersetCloses2p &&
-                                                            '4p'}
+                                                        {charInfo.highlights.tierSetCompletion
+                                                            .type === '4p' && '4p'}
                                                     </p>
                                                     <p className="text-xs font-bold">
                                                         {charInfo.highlights.dpsGain > 0 && 'DPS'}
                                                     </p>
                                                     <p className="text-xs font-bold">
-                                                        {(charInfo.highlights.gearIlvlUpgrade > 0 ||
-                                                            charInfo.highlights.gearTrackUpgrade) &&
+                                                        {(charInfo.highlights.ilvlDiff > 0 ||
+                                                            charInfo.highlights.ilvlDiff) &&
                                                             'SLOT'}
                                                     </p>
                                                 </div>

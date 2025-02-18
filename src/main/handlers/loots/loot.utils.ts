@@ -11,6 +11,7 @@ import {
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
+import { trackNameToNumber } from '@shared/libs/items/item-tracks'
 import { getClassSpecs } from '@shared/libs/spec-parser/spec-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
@@ -411,41 +412,56 @@ const calculateTiersetCompletion = (
 
 export const evalHighlightsAndScore = (
     loot: LootWithItem,
-    input: Omit<CharAssignmentInfo, 'highlights'>
+    charInfo: Omit<CharAssignmentInfo, 'highlights'>
 ): CharAssignmentHighlights => {
-    const isMain = input.character.main
+    const { bestItemInSlot, bis, character, droptimizers, tierset } = charInfo
+
+    const isMain = character.main
 
     // take max upgrade from available dropt
-    const maxUpgrade = input.droptimizers
+    const maxUpgrade = droptimizers
         .map((d) => d.upgrade?.dps ?? 0)
         .reduce((max, upgrade) => (upgrade > max ? upgrade : max), 0)
 
-    const tierSetCompletion = calculateTiersetCompletion(loot, input.tierset)
+    const tierSetCompletion = calculateTiersetCompletion(loot, tierset)
 
     // todo: check only for spec associated with role (es: shaman healer = [restoration])
-    const isBis = input.bis.find((bis) => bis.itemId === loot.item.id) != null
+    const isBis = bis.find((bis) => bis.itemId === loot.item.id) != null
 
     const bestItemInSlotItemLevel =
-        input.bestItemInSlot.sort((a, b) => b.itemLevel - a.itemLevel)[0]?.itemLevel ?? -1
+        bestItemInSlot.length > 0
+            ? Math.max(...bestItemInSlot.map((item) => item.itemLevel))
+            : undefined
 
-    let ilvlDiff = -1
-    if (loot.gearItem.itemLevel > 0 && bestItemInSlotItemLevel > 0) {
-        ilvlDiff = loot.gearItem.itemLevel - bestItemInSlotItemLevel
-    }
+    const ilvlDiff = bestItemInSlotItemLevel
+        ? loot.gearItem.itemLevel - bestItemInSlotItemLevel
+        : -999
+
+    // check slot track upgrade
+    const bestItemInSlotTrack =
+        bestItemInSlot
+            .map((d) => trackNameToNumber(d.itemTrack?.name))
+            .sort((a, b) => b - a)
+            .at(0) ?? -1
+
+    const lootTrack = trackNameToNumber(loot.gearItem.itemTrack?.name)
+    const isTrackUpgrade =
+        bestItemInSlotTrack > 0 && lootTrack > 0 ? bestItemInSlotTrack > lootTrack : false
 
     const res: Omit<CharAssignmentHighlights, 'score'> = {
-        isMain: isMain,
+        isMain,
         dpsGain: maxUpgrade,
         tierSetCompletion,
         gearIsBis: isBis,
-        gearIlvlUpgrade: ilvlDiff
+        ilvlDiff,
+        isTrackUpgrade
     }
 
     return { ...res, score: evalScore(res) }
 }
 
 export const evalScore = (highlights: Omit<CharAssignmentHighlights, 'score'>): number => {
-    const { dpsGain, gearIlvlUpgrade, gearIsBis, isMain, tierSetCompletion } = highlights
+    const { dpsGain, ilvlDiff, gearIsBis, isMain, tierSetCompletion } = highlights
 
     if (!isMain) return 0 // TODO: comment if testing is needed
 
@@ -457,7 +473,7 @@ export const evalScore = (highlights: Omit<CharAssignmentHighlights, 'score'>): 
 
     const bisBonus = gearIsBis ? 20000 : 0
 
-    const ilvlDiffBonus = gearIlvlUpgrade > 0 ? 1000 * gearIlvlUpgrade : 0 // TODO: is this needed?
+    const ilvlDiffBonus = ilvlDiff > 0 ? 1000 * ilvlDiff : 0 // TODO: is this needed?
 
     return dpsGain + tierSetBonus + bisBonus + ilvlDiffBonus
 }

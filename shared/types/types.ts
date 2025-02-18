@@ -124,9 +124,10 @@ export type CharAssignmentHighlights = {
     isMain: boolean
     dpsGain: number
     tierSetCompletion: TierSetCompletion
-    gearIlvlUpgrade: number
+    ilvlDiff: number
     gearIsBis: boolean
     score: number
+    isTrackUpgrade: boolean
 }
 export type CharAssignmentInfo = {
     character: Character
