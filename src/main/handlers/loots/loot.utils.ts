@@ -448,23 +448,20 @@ export const evalHighlightsAndScore = (
         ilvlDiff = loot.gearItem.itemLevel - bestItemInSlotItemLevel
     }
 
-    const res: CharAssignmentHighlights = {
+    const res: Omit<CharAssignmentHighlights, 'score'> = {
         isMain: isMain,
         dpsGain: maxUpgrade,
         tiersetCloses2p: closes2p,
         tiersetCloses4p: closes4p,
         gearIsBis: isBis,
         gearTrackUpgrade: isTrackUpgrade,
-        gearIlvlUpgrade: ilvlDiff,
-        score: 0
+        gearIlvlUpgrade: ilvlDiff
     }
 
-    res.score = evalScore(res)
-
-    return res
+    return { ...res, score: evalScore(res) }
 }
 
-export const evalScore = (highlights: CharAssignmentHighlights): number => {
+export const evalScore = (highlights: Omit<CharAssignmentHighlights, 'score'>): number => {
     let res = 0
 
     // main char always above alts
