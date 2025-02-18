@@ -115,12 +115,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         }
 
         return {
-            character: char,
-            droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
-            weeklyChest: parseWeeklyChest(charDroptimizers),
-            tierset: parseTiersetInfo(charDroptimizers),
-            bestItemInSlot: parseBestItemInSlot(loot.item.slotKey, charDroptimizers),
-            bis: parseLootBisForClass(bisList, loot.item.id, char.class),
+            ...res,
             highlights: evalHighlightsAndScore(loot, res)
         }
     })
