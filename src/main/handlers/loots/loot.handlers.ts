@@ -105,30 +105,24 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         const charDroptimizers = latestDroptimizer.filter(
             (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
-        const res: CharAssignmentInfo = {
+        const res: Omit<CharAssignmentInfo, 'highlights'> = {
+            character: char,
+            droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
+            weeklyChest: parseWeeklyChest(charDroptimizers),
+            tierset: parseTiersetInfo(charDroptimizers),
+            bestItemInSlot: parseBestItemInSlot(loot.item.slotKey, charDroptimizers),
+            bis: parseLootBisForClass(bisList, loot.item.id, char.class)
+        }
+
+        return {
             character: char,
             droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
             weeklyChest: parseWeeklyChest(charDroptimizers),
             tierset: parseTiersetInfo(charDroptimizers),
             bestItemInSlot: parseBestItemInSlot(loot.item.slotKey, charDroptimizers),
             bis: parseLootBisForClass(bisList, loot.item.id, char.class),
-            // dummy hightlight -> it will be populated l8r
-            highlights: {
-                isMain: false,
-                dpsGain: 0,
-                tiersetCloses2p: false,
-                tiersetCloses4p: false,
-                gearIsBis: false,
-                gearTrackUpgrade: false,
-                gearIlvlUpgrade: 0,
-                score: 0
-            }
+            highlights: evalHighlightsAndScore(loot, res)
         }
-
-        // project one score
-        res.highlights = evalHighlightsAndScore(loot, res)
-
-        return res
     })
 
     return {

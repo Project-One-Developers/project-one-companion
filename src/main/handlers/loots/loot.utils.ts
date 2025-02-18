@@ -395,7 +395,7 @@ export const parseWeeklyChest = (droptimizers: Droptimizer[]): GearItem[] => {
 
 export const evalHighlightsAndScore = (
     loot: LootWithItem,
-    input: CharAssignmentInfo
+    input: Omit<CharAssignmentInfo, 'highlights'>
 ): CharAssignmentHighlights => {
     const isMain = input.character.main
 
