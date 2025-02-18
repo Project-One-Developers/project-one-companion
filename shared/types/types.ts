@@ -119,6 +119,16 @@ export type LootWithItem = z.infer<typeof lootWithItemSchema>
 export type LootWithAssigned = z.infer<typeof lootWithAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootManual = z.infer<typeof newLootManualSchema>
+export type CharAssignmentHighlights = {
+    isMain: boolean
+    dpsGain: number
+    tiersetCloses2p: boolean
+    tiersetCloses4p: boolean
+    gearIlvlUpgrade: number
+    gearTrackUpgrade: boolean
+    gearIsBis: boolean
+    score: number
+}
 export type CharAssignmentInfo = {
     character: Character
     droptimizers: {
@@ -130,7 +140,7 @@ export type CharAssignmentInfo = {
     tierset: GearItem[]
     bestItemInSlot: GearItem[]
     bis: BisList[]
-    score: number
+    highlights: CharAssignmentHighlights
 }
 export type LootAssignmentInfo = {
     loot: Loot

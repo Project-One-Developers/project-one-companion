@@ -1,4 +1,5 @@
 import {
+    CharAssignmentHighlights,
     Loot,
     LootAssignmentInfo,
     LootWithAssigned,
@@ -45,8 +46,12 @@ export const getLootsWithAssignedBySessions = async (
     return lootsArrays.flat()
 }
 
-export const assignLoot = async (charId: string, lootId: string, score?: number) => {
-    return await window.api.assignLoot(charId, lootId, score)
+export const assignLoot = async (
+    charId: string,
+    lootId: string,
+    highlights: CharAssignmentHighlights
+) => {
+    return await window.api.assignLoot(charId, lootId, highlights)
 }
 
 export const getLootAssignmentInfo = async (lootId: string): Promise<LootAssignmentInfo> => {

@@ -8,6 +8,7 @@ import type {
     Character,
     CharacterGameInfo,
     CharacterWithPlayer,
+    CharAssignmentHighlights,
     Droptimizer,
     EditCharacter,
     EditPlayer,
@@ -129,8 +130,8 @@ export const api = {
     getLootAssignmentInfo(lootId: string): Promise<LootAssignmentInfo> {
         return ipcRenderer.invoke('loots-assign-info', lootId)
     },
-    assignLoot(charId: string, lootId: string, score?: number) {
-        return ipcRenderer.invoke('loots-assign', charId, lootId, score)
+    assignLoot(charId: string, lootId: string, highlight: CharAssignmentHighlights) {
+        return ipcRenderer.invoke('loots-assign', charId, lootId, highlight)
     },
     unassignLoot(lootId: string) {
         return ipcRenderer.invoke('loots-unassign', lootId)

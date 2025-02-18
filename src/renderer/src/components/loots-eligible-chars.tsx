@@ -2,7 +2,7 @@ import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { assignLoot, getLootAssignmentInfo } from '@renderer/lib/tanstack-query/loots'
 import { ITEM_SLOTS_KEY_TIERSET } from '@shared/consts/wow.consts'
-import type { LootWithAssigned } from '@shared/types/types'
+import type { CharAssignmentHighlights, LootWithAssigned } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { type JSX } from 'react'
@@ -32,12 +32,12 @@ export default function LootsEligibleChars({
         mutationFn: ({
             charId,
             lootId,
-            score
+            highlights: highlights
         }: {
             charId: string
             lootId: string
-            score?: number
-        }) => assignLoot(charId, lootId, score),
+            highlights: CharAssignmentHighlights
+        }) => assignLoot(charId, lootId, highlights),
         onMutate: async (variables) => {
             // Optimistically update the selected loot assignment
             const previousSelectedLoot = { ...selectedLoot }
@@ -98,6 +98,7 @@ export default function LootsEligibleChars({
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>
+                            <TableHead>Highlights</TableHead>
                             <TableHead>Droptimizer</TableHead>
                             <TableHead>Vault</TableHead>
                             <TableHead>Other Assignment</TableHead>
@@ -107,7 +108,7 @@ export default function LootsEligibleChars({
                     </TableHeader>
                     <TableBody>
                         {lootAssignmentInfoQuery.data?.eligible
-                            .sort((a, b) => b.score - a.score)
+                            .sort((a, b) => b.highlights.score - a.highlights.score)
                             .map((charInfo) => {
                                 const assignedLoots = allLoots.filter(
                                     (loot) =>
@@ -124,7 +125,7 @@ export default function LootsEligibleChars({
                                             assignLootMutation.mutate({
                                                 charId: charInfo.character.id,
                                                 lootId: selectedLoot.id,
-                                                score: charInfo.score
+                                                highlights: charInfo.highlights
                                             })
                                         }
                                     >
@@ -139,7 +140,34 @@ export default function LootsEligibleChars({
                                                     <h1 className="font-bold">
                                                         {charInfo.character.name}
                                                     </h1>
-                                                    <p className="text-xs">{charInfo.score}</p>
+                                                    <p className="text-xs">
+                                                        {charInfo.highlights?.score ?? 0}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-row space-x-4 items-center">
+                                                <div className="flex flex-col">
+                                                    <p className="text-xs font-bold">
+                                                        {charInfo.highlights.gearIsBis && 'BIS'}
+                                                    </p>
+                                                    <p className="text-xs font-bold">
+                                                        {charInfo.highlights.tiersetCloses2p &&
+                                                            '2p'}
+                                                    </p>
+                                                    <p className="text-xs font-bold">
+                                                        {charInfo.highlights.tiersetCloses2p &&
+                                                            '4p'}
+                                                    </p>
+                                                    <p className="text-xs font-bold">
+                                                        {charInfo.highlights.dpsGain > 0 && 'DPS'}
+                                                    </p>
+                                                    <p className="text-xs font-bold">
+                                                        {(charInfo.highlights.gearIlvlUpgrade > 0 ||
+                                                            charInfo.highlights.gearTrackUpgrade) &&
+                                                            'SLOT'}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </TableCell>

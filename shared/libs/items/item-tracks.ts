@@ -14,6 +14,27 @@ export function queryByItemLevelAndName(itemLevel: number, name: string): BonusI
     )
 }
 
+export function trackNameToNumber(name: string | null | undefined): number {
+    if (!name) {
+        // for gear item without item track
+        return -1
+    }
+    switch (name) {
+        case 'Explorer':
+            return 1
+        case 'Adventurer':
+            return 2
+        case 'Champion':
+            return 3
+        case 'Hero':
+            return 4
+        case 'Myth':
+            return 5
+        default:
+            throw new Error('trackNameToNumber: track not supported ' + name)
+    }
+}
+
 export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
     '10256': {
         level: 6,

@@ -20,7 +20,7 @@ import {
 import { getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
 import {
-    evalScore,
+    evalHighlightsAndScore,
     parseBestItemInSlot,
     parseDroptimizersInfo,
     parseLootBisForClass,
@@ -106,18 +106,28 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         const charDroptimizers = latestDroptimizer.filter(
             (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
-        const res = {
+        const res: CharAssignmentInfo = {
             character: char,
             droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
             weeklyChest: parseWeeklyChest(charDroptimizers),
             tierset: parseTiersetInfo(charDroptimizers),
             bestItemInSlot: parseBestItemInSlot(loot.item.slotKey, charDroptimizers),
             bis: parseLootBisForClass(bisList, loot.item.id, char.class),
-            score: Math.floor(Math.random() * (10000 - 10 + 1)) + 10
+            // dummy hightlight -> it will be populated l8r
+            highlights: {
+                isMain: false,
+                dpsGain: 0,
+                tiersetCloses2p: false,
+                tiersetCloses4p: false,
+                gearIsBis: false,
+                gearTrackUpgrade: false,
+                gearIlvlUpgrade: 0,
+                score: 0
+            }
         }
 
         // project one score
-        res.score = evalScore(loot, res)
+        res.highlights = evalHighlightsAndScore(loot, res)
 
         return res
     })

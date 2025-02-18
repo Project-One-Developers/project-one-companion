@@ -11,10 +11,12 @@ import {
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
+import { trackNameToNumber } from '@shared/libs/items/item-tracks'
 import { getClassSpecs } from '@shared/libs/spec-parser/spec-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
     BisList,
+    CharAssignmentHighlights,
     CharAssignmentInfo,
     Droptimizer,
     DroptimizerUpgrade,
@@ -391,22 +393,20 @@ export const parseWeeklyChest = (droptimizers: Droptimizer[]): GearItem[] => {
     )
 }
 
-export const evalScore = (loot: LootWithItem, input: CharAssignmentInfo): number => {
-    let res = 0
-
-    // is alt?
-    if (!input.character.main) return res
-
-    // main char
-    res += 10
+export const evalHighlightsAndScore = (
+    loot: LootWithItem,
+    input: CharAssignmentInfo
+): CharAssignmentHighlights => {
+    const isMain = input.character.main
 
     // take max upgrade from available dropt
     const maxUpgrade = input.droptimizers
         .map((d) => d.upgrade?.dps ?? 0)
         .reduce((max, upgrade) => (upgrade > max ? upgrade : max), 0)
-    res += maxUpgrade
 
     // check tiersets completion status
+    let closes2p = false
+    let closes4p = false
     if (loot.item.token) {
         const tokenCoverMissingSlot =
             loot.item.slotKey === 'omni'
@@ -415,13 +415,76 @@ export const evalScore = (loot: LootWithItem, input: CharAssignmentInfo): number
 
         if (tokenCoverMissingSlot && input.tierset.length === 1) {
             // closes 2p
-            res += 20000 // todo: refine with multiplicative increase
+            closes2p = true
         }
         if (tokenCoverMissingSlot && input.tierset.length === 3) {
             // closes 4p
-            res += 40000 // todo: refine with multiplicative increase
+            closes4p = true
         }
     }
+
+    // check bis
+    // todo: check only for spec associated with role (es: shaman healer = [restoration])
+    const isBis = input.bis.find((bis) => bis.itemId === loot.item.id) != null
+
+    // check slot upgrade
+    const bestItemInSlotTrack: number =
+        input.bestItemInSlot
+            .map((d) => trackNameToNumber(d.itemTrack?.name))
+            .sort((a, b) => b - a)[0] ?? -1
+
+    const bestItemInSlotItemLevel: number =
+        input.bestItemInSlot.sort((a, b) => b.itemLevel - a.itemLevel)[0]?.itemLevel ?? -1
+
+    const lootTrack = trackNameToNumber(loot.gearItem.itemTrack?.name)
+
+    let isTrackUpgrade = false
+    if (bestItemInSlotTrack > 0 && lootTrack > 0) {
+        isTrackUpgrade = bestItemInSlotTrack > lootTrack
+    }
+
+    let ilvlDiff = -1
+    if (loot.gearItem.itemLevel > 0 && bestItemInSlotItemLevel > 0) {
+        ilvlDiff = loot.gearItem.itemLevel - bestItemInSlotItemLevel
+    }
+
+    const res: CharAssignmentHighlights = {
+        isMain: isMain,
+        dpsGain: maxUpgrade,
+        tiersetCloses2p: closes2p,
+        tiersetCloses4p: closes4p,
+        gearIsBis: isBis,
+        gearTrackUpgrade: isTrackUpgrade,
+        gearIlvlUpgrade: ilvlDiff,
+        score: 0
+    }
+
+    res.score = evalScore(res)
+
+    return res
+}
+
+export const evalScore = (highlights: CharAssignmentHighlights): number => {
+    let res = 0
+
+    // main char always above alts
+    res += highlights.isMain ? 1 : 0
+
+    // take max upgrade from available dropt
+    res += highlights.dpsGain
+
+    // check tiersets completion status
+    res += highlights.tiersetCloses2p ? 20000 : 0
+    res += highlights.tiersetCloses4p ? 30000 : 0
+
+    // check bis
+    res += highlights.gearIsBis ? 20000 : 0
+
+    // track upgrades (es: Hero to Mythic)
+    res += highlights.gearTrackUpgrade ? 5000 : 0
+
+    // ilvl diff
+    res += highlights.gearIlvlUpgrade > 0 ? 1000 * highlights.gearIlvlUpgrade : 0
 
     return res
 }
