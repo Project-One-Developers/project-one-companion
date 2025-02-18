@@ -49,36 +49,25 @@ export const addRaidLootsByManualInputHandler = async (
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
-export const getLootsBySessionIdHandler = async (raidSessionId: string): Promise<Loot[]> => {
-    const res = await getLootsByRaidSessionId(raidSessionId)
-    return res
-}
+export const getLootsBySessionIdHandler = async (raidSessionId: string): Promise<Loot[]> =>
+    await getLootsByRaidSessionId(raidSessionId)
 
 export const getLootsBySessionIdWithItemHandler = async (
     raidSessionId: string
-): Promise<LootWithItem[]> => {
-    const res = await getLootsByRaidSessionIdWithItem(raidSessionId)
-    return res
-}
+): Promise<LootWithItem[]> => await getLootsByRaidSessionIdWithItem(raidSessionId)
 
 export const getLootsBySessionIdWithAssignedHandler = async (
     raidSessionId: string
-): Promise<LootWithAssigned[]> => {
-    const res = await getLootsByRaidSessionIdWithAssigned(raidSessionId)
-    return res
-}
+): Promise<LootWithAssigned[]> => await getLootsByRaidSessionIdWithAssigned(raidSessionId)
 
 export const assignLootHandler = async (
     charId: string,
     lootId: string,
     highlights: CharAssignmentHighlights
-): Promise<void> => {
-    await assignLoot(charId, lootId, highlights)
-}
+): Promise<void> => await assignLoot(charId, lootId, highlights)
 
-export const unassignLootHandler = async (lootId: string): Promise<void> => {
+export const unassignLootHandler = async (lootId: string): Promise<void> =>
     await unassignLoot(lootId)
-}
 
 /**
  * Retrieve all the information to evaluate the loot assignments
