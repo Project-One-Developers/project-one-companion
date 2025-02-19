@@ -461,9 +461,11 @@ export const evalHighlightsAndScore = (
 }
 
 export const evalScore = (highlights: Omit<CharAssignmentHighlights, 'score'>): number => {
-    const { dpsGain, ilvlDiff, gearIsBis, isMain, tierSetCompletion } = highlights
+    const { dpsGain, ilvlDiff, gearIsBis, isMain, tierSetCompletion, isTrackUpgrade } = highlights
 
-    if (!isMain) return 0 // TODO: comment if testing is needed
+    console.log(isMain)
+
+    //if (!isMain) return 0 // TODO: comment if testing is needed
 
     const tierSetBonus = match(tierSetCompletion)
         .with({ type: '4p' }, () => 30000)
@@ -471,9 +473,10 @@ export const evalScore = (highlights: Omit<CharAssignmentHighlights, 'score'>): 
         .with({ type: 'none' }, () => 0)
         .exhaustive()
 
+    const trackBonus = isTrackUpgrade ? 10000 : 0
     const bisBonus = gearIsBis ? 20000 : 0
 
     const ilvlDiffBonus = ilvlDiff > 0 ? 1000 * ilvlDiff : 0 // TODO: is this needed?
 
-    return dpsGain + tierSetBonus + bisBonus + ilvlDiffBonus
+    return dpsGain + tierSetBonus + bisBonus + ilvlDiffBonus + trackBonus
 }

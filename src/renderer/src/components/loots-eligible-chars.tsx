@@ -165,7 +165,7 @@ export default function LootsEligibleChars({
                                                     </p>
                                                     <p className="text-xs font-bold">
                                                         {(charInfo.highlights.ilvlDiff > 0 ||
-                                                            charInfo.highlights.ilvlDiff) &&
+                                                            charInfo.highlights.isTrackUpgrade) &&
                                                             'SLOT'}
                                                     </p>
                                                 </div>
