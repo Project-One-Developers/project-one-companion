@@ -47,6 +47,7 @@ import {
     wowItemEquippedSlotKeySchema,
     wowItemSlotKeySchema,
     wowItemSlotSchema,
+    wowItemTrackNameSchema,
     wowRaidDiffSchema,
     wowRolesSchema,
     wowSpecNameSchema,
@@ -67,6 +68,7 @@ export type WowClass = {
 }
 
 export type WowRaidDifficulty = z.infer<typeof wowRaidDiffSchema>
+export type WowItemTrackName = z.infer<typeof wowItemTrackNameSchema>
 export type WowItemSlot = z.infer<typeof wowItemSlotSchema>
 export type WowItemSlotKey = z.infer<typeof wowItemSlotKeySchema>
 export type WowItemEquippedSlotKey = z.infer<typeof wowItemEquippedSlotKeySchema>

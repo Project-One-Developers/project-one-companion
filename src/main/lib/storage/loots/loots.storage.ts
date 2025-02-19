@@ -30,6 +30,21 @@ export const getLootWithItemById = async (lootId: string): Promise<LootWithItem>
     return lootWithItemSchema.parse(result)
 }
 
+export const getLootAssigned = async (): Promise<Loot[]> => {
+    const result = await db().query.lootTable.findMany({
+        where: (lootTable, { isNotNull }) => isNotNull(lootTable.raidSessionId)
+    })
+    return z.array(lootSchema).parse(result)
+}
+
+export const getLootAssignedBySession = async (raidSessionId: string): Promise<Loot[]> => {
+    const result = await db().query.lootTable.findMany({
+        where: (lootTable, { eq, and, isNotNull }) =>
+            and(eq(lootTable.raidSessionId, raidSessionId), isNotNull(lootTable.raidSessionId))
+    })
+    return z.array(lootSchema).parse(result)
+}
+
 export const getLootsByRaidSessionId = async (raidSessionId: string): Promise<Loot[]> => {
     const result = await db().query.lootTable.findMany({
         where: (lootTable, { eq }) => eq(lootTable.raidSessionId, raidSessionId)

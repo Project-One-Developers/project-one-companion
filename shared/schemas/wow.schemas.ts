@@ -99,7 +99,16 @@ export const wowArmorTypeSchema = z.enum(['Cloth', 'Leather', 'Mail', 'Plate'])
 
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
 
-export const wowRaidDiffSchema = z.enum(['Normal', 'Heroic', 'Mythic'])
+export const wowRaidDiffSchema = z.enum(['LFR', 'Normal', 'Heroic', 'Mythic'])
+
+export const wowItemTrackNameSchema = z.enum([
+    'Explorer',
+    'Adventurer',
+    'Veteran',
+    'Champion',
+    'Hero',
+    'Myth'
+])
 
 export const wowItemTertiaryStatsSchema = z.enum(['Speed', 'Leech', 'Avoidance', 'Indestructible'])
 

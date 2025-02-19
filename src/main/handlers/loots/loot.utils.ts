@@ -5,8 +5,9 @@ import {
     applySocket,
     applySpeed,
     applyTokenDiff,
+    compareGearItem,
     getItemTrack,
-    parseItemLevelFromTrack,
+    parseItemLevelFromRaidDiff,
     parseItemTrack
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
@@ -23,6 +24,7 @@ import {
     GearItem,
     Item,
     ItemTrack,
+    Loot,
     LootWithItem,
     NewLoot,
     NewLootManual,
@@ -81,6 +83,8 @@ export const parseRcLoots = async (csv: string): Promise<NewLoot[]> => {
             const bonusIds = getItemBonusString(parsedItem).split(':').map(Number)
             const wowItem = allItemsInDb.find((i) => i.id === itemId)
 
+            const raidDiff = parseWowDiff(difficultyID)
+
             if (!wowItem) {
                 console.log(
                     'parseRcLoots: skipping loot item not in db: ' +
@@ -94,7 +98,14 @@ export const parseRcLoots = async (csv: string): Promise<NewLoot[]> => {
             }
 
             const itemTrack = parseItemTrack(bonusIds)
-            const itemLevel = parseItemLevelFromTrack(wowItem, itemTrack, bonusIds)
+            let itemLevel: number = 0
+
+            if (itemTrack != null) {
+                itemLevel = itemTrack.itemLevel
+            } else {
+                // we are dealing with raid items only
+                itemLevel = parseItemLevelFromRaidDiff(wowItem, raidDiff)
+            }
 
             if (itemLevel == null) {
                 console.log(
@@ -132,7 +143,7 @@ export const parseRcLoots = async (csv: string): Promise<NewLoot[]> => {
                 gearItem: gearItem,
                 dropDate: parseDateTime(date, time),
                 itemString: itemString,
-                raidDifficulty: parseWowDiff(difficultyID),
+                raidDifficulty: raidDiff,
                 rclootId: id
             }
 
@@ -262,19 +273,39 @@ const parseDateTime = (dateStr: string, timeStr: string): number => {
 
 export const parseBestItemInSlot = (
     slot: WowItemSlotKey,
-    droptimizers: Droptimizer[]
+    charDroptimizers: Droptimizer[],
+    charAssignedLoot: Loot[]
 ): GearItem[] => {
-    if (slot == 'omni') return []
+    if (slot === 'omni') return []
 
-    const allItemsEquipped: GearItem[] = droptimizers.flatMap((d) => d.itemsEquipped)
-    const allItemsInBag: GearItem[] = droptimizers.flatMap((d) => d.itemsInBag)
-    const allItems = [...allItemsEquipped, ...allItemsInBag]
+    const allItems: GearItem[] = [
+        ...charDroptimizers.flatMap((d) => d.itemsEquipped),
+        ...charDroptimizers.flatMap((d) => d.itemsInBag),
+        ...charAssignedLoot.map((l) => l.gearItem)
+    ]
+
+    // if (charWowAudit) {
+    //     const wowAuditItem = charWowAudit.bestGear.find((bg) => bg.item.slotKey === slot)
+    //     if (wowAuditItem) {
+    //         allItems.push(wowAuditItem)
+    //     }
+    // }
 
     const filteredItems = allItems.filter((gear) => gear.item.slotKey === slot)
     const sortedItems = filteredItems.sort((a, b) => b.itemLevel - a.itemLevel)
 
     if (slot === 'finger' || slot === 'trinket') {
-        return sortedItems.slice(0, 2)
+        const uniqueItems: GearItem[] = []
+        const seenItemIds = new Set<number>()
+
+        for (const item of sortedItems) {
+            if (!seenItemIds.has(item.item.id)) {
+                uniqueItems.push(item)
+                seenItemIds.add(item.item.id)
+            }
+            if (uniqueItems.length === 2) break
+        }
+        return uniqueItems
     }
 
     return sortedItems.slice(0, 1)
@@ -296,23 +327,32 @@ export const parseLootBisForClass = (
  * @param tiersetInfo
  * @returns
  */
-export const parseTiersetInfo = (charDroptimizers: Droptimizer[]): GearItem[] => {
-    const droptWithTierInfo = charDroptimizers
+export const parseTiersetInfo = (
+    charDroptimizers: Droptimizer[],
+    charAssignedLoots: Loot[]
+): GearItem[] => {
+    const lastDroptWithTierInfo = charDroptimizers
         .filter((c) => c.tiersetInfo.length > 0)
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
 
-    if (droptWithTierInfo == null) return []
+    if (lastDroptWithTierInfo == null) return []
 
-    const maxItemLevelBySlot = new Map<string, GearItem>()
+    const allItems: GearItem[] = [
+        ...lastDroptWithTierInfo.tiersetInfo,
+        ...lastDroptWithTierInfo.itemsInBag.filter((gi) => gi.item.tierset || gi.item.token), // tierset / token in bag
+        ...charAssignedLoots.map((l) => l.gearItem).filter((gi) => gi.item.tierset || gi.item.token) // tierset / token assigned in this session
+    ]
 
-    droptWithTierInfo.tiersetInfo
+    const maxItemLevelBySlot = new Map<WowItemSlotKey, GearItem>()
+
+    allItems
         .filter((t) => t.item.slotKey !== 'omni') // omni will be counted later
         .forEach((gear) => {
             if (gear.itemTrack) {
-                const existingItem = maxItemLevelBySlot.get(gear.item.slotKey)
-                // todo: should consider also item with bigger track
+                const existingGear = maxItemLevelBySlot.get(gear.item.slotKey)
+                // should consider also item with bigger track
                 // es: 626HC vs 626M
-                if (!existingItem || gear.itemLevel > existingItem.itemLevel) {
+                if (!existingGear || compareGearItem(gear, existingGear) > 0) {
                     maxItemLevelBySlot.set(gear.item.slotKey, gear)
                 }
             } else {
@@ -322,7 +362,7 @@ export const parseTiersetInfo = (charDroptimizers: Droptimizer[]): GearItem[] =>
 
     return [
         ...Array.from(maxItemLevelBySlot.values()), // tierset found
-        ...droptWithTierInfo.tiersetInfo.filter((t) => t.item.slotKey === 'omni') // omni tokens
+        ...lastDroptWithTierInfo.tiersetInfo.filter((t) => t.item.slotKey === 'omni') // omni tokens
     ]
 }
 

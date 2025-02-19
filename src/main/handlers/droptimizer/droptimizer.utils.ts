@@ -1,4 +1,4 @@
-import { parseItemLevelFromTrack, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
+import { parseItemLevelFromBonusIds, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
 import { wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import type {
     GearItem,
@@ -224,7 +224,12 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
         const itemTrack = parseItemTrack(bonusIds)
         if (itemTrack == null) {
             throw new Error(
-                'parseGreatVaultFromSimc: Detected Vault item without item track... check import'
+                'parseGreatVaultFromSimc: Detected Vault item without item track... check import ' +
+                    itemId +
+                    ' - https://www.wowhead.com/item=' +
+                    itemId +
+                    '?bonus=' +
+                    bonusIds.join(':')
             )
         }
 
@@ -305,7 +310,13 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
             }
 
             const itemTrack = parseItemTrack(bonusIds)
-            const itemLevel = parseItemLevelFromTrack(wowItem, itemTrack, bonusIds)
+
+            let itemLevel: number | null = null
+            if (itemTrack != null) {
+                itemLevel = itemTrack.itemLevel
+            } else {
+                itemLevel = parseItemLevelFromBonusIds(wowItem, bonusIds)
+            }
 
             if (itemLevel == null) {
                 console.log(

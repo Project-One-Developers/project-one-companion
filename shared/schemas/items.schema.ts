@@ -3,7 +3,8 @@ import {
     wowArmorTypeSchema,
     wowItemEquippedSlotKeySchema,
     wowItemSlotKeySchema,
-    wowItemSlotSchema
+    wowItemSlotSchema,
+    wowItemTrackNameSchema
 } from './wow.schemas'
 
 export const itemSchema = z.object({
@@ -57,11 +58,13 @@ export const itemToCatalystSchema = z.object({
 export const itemToCatalystArraySchema = z.array(itemToCatalystSchema)
 
 export const itemTrackSchema = z.object({
-    name: z.string(),
+    name: wowItemTrackNameSchema,
     fullName: z.string(),
     level: z.number(),
     max: z.number(),
-    itemLevel: z.number()
+    itemLevel: z.number(),
+    season: z.number(),
+    maxItemLevel: z.number()
 })
 
 /**

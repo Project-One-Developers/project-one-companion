@@ -12,6 +12,7 @@ import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.stora
 import {
     addLoots,
     assignLoot,
+    getLootAssigned,
     getLootsByRaidSessionId,
     getLootsByRaidSessionIdWithAssigned,
     getLootsByRaidSessionIdWithItem,
@@ -75,12 +76,14 @@ export const unassignLootHandler = async (lootId: string): Promise<void> =>
  * @returns
  */
 export const getLootAssignmentInfoHandler = async (lootId: string): Promise<LootAssignmentInfo> => {
-    const [loot, roster, latestDroptimizer, bisList] = await Promise.all([
+    // todo: almost any query can be cached until wowaudit/droptimizer insert/reload
+    const [loot, roster, latestDroptimizer, bisList, allAssignedLoots] = await Promise.all([
         getLootWithItemById(lootId),
         getCharactersList(),
         getDroptimizerLatestList(),
-        //getCharacterWowAuditList(),
-        getBisList()
+        getBisList(),
+        getLootAssigned()
+        // getAllCharacterWowAudit(),
     ])
 
     const filteredRoster = roster.filter(
@@ -98,12 +101,24 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         const charDroptimizers = latestDroptimizer.filter(
             (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
+        // wow audit data for a given char
+        // const charWowAudit = wowAuditData.find(
+        //     (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
+        // )
+        // loot assgined to a given char
+        const lootsAssignedToChar = allAssignedLoots.filter(
+            (l) => l.assignedCharacterId === char.id
+        )
         const res: Omit<CharAssignmentInfo, 'highlights'> = {
             character: char,
             droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
             weeklyChest: parseWeeklyChest(charDroptimizers),
-            tierset: parseTiersetInfo(charDroptimizers),
-            bestItemInSlot: parseBestItemInSlot(loot.item.slotKey, charDroptimizers),
+            tierset: parseTiersetInfo(charDroptimizers, lootsAssignedToChar),
+            bestItemInSlot: parseBestItemInSlot(
+                loot.item.slotKey,
+                charDroptimizers,
+                lootsAssignedToChar
+            ),
             bis: parseLootBisForClass(bisList, loot.item.id, char.class)
         }
 

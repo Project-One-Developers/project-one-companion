@@ -2,56 +2,89 @@
 // parse tww item tracks:
 // jq 'map(select(.upgrade.fullName != null and (.upgrade.seasonId == 24 or .upgrade.seasonId == 25)) | {id, level: .upgrade.level, max: .upgrade.max, name: .upgrade.name, fullName: .upgrade.fullName, itemLevel: .upgrade.itemLevel})' bonus.json > parsed_bonus.json
 
-import { Item, ItemTrack, WowRaidDifficulty } from '@shared/types/types'
-import bonusItemTracks, { queryByItemLevelAndName } from './item-tracks'
+import { GearItem, Item, ItemTrack, WowItemTrackName, WowRaidDifficulty } from '@shared/types/types'
+import bonusItemTracks, { queryByItemLevelAndName, trackNameToNumber } from './item-tracks'
 
-export function parseItemDiff(bonusIds: number[]): WowRaidDifficulty | null {
+function parseItemTrackName(
+    bonusIds: number[],
+    isToken: boolean,
+    isTierset: boolean
+): WowItemTrackName | null {
+    const itemTrack = parseItemTrack(bonusIds)
+
+    if (itemTrack) return itemTrack.name
+    if (!itemTrack && bonusIds.length == 0) return null
+
     if (bonusIds.includes(10356)) {
         // bonus id for Mythic
-        return 'Mythic'
+        return 'Myth'
     } else if (bonusIds.includes(10355)) {
         // bonus id for Heroic
-        return 'Heroic'
+        return 'Hero'
+    } else if (bonusIds.includes(10353)) {
+        // bonus id for lfr
+        return 'Veteran'
     }
-    // else if (bonusIds.includes(10353)){
-    //     return 'Raid Finder'
-    // }
 
-    const itemTrack = parseItemTrack(bonusIds)
-    switch (itemTrack?.name) {
-        case 'Champion':
-            return 'Normal'
-        case 'Hero':
-            return 'Heroic'
-        case 'Myth':
-            return 'Mythic'
-        default:
-            return null
+    if (isToken || isTierset) {
+        // if i am here and its a tierset/token -> Champion track becouse it doesnt have diff bonus ids
+        return 'Champion'
     }
+
+    //all other items -> no info
+    return null
 }
 
-export function parseItemLevelFromTrack(
-    item: Item,
-    itemTrack: ItemTrack | null,
-    bonusIds: number[]
-): number | null {
-    const diff = parseItemDiff(bonusIds)
+/**
+ * Compara gear item a and b
+ * @param a First Gear to compare
+ * @param b Second Gear to compare
+ * @returns 1 if a is an upgrade over b, -1 b otherwise, 0 if are the same
+ */
+export function compareGearItem(a: GearItem, b: GearItem): number {
+    const delta = a.itemLevel - b.itemLevel
 
-    if (itemTrack == null && diff != null) {
-        switch (diff) {
-            case 'Normal':
-                return item.ilvlNormal
-            case 'Heroic':
-                return item.ilvlHeroic
-            case 'Mythic':
-                return item.ilvlMythic
-            default:
-                return null
-        }
+    if (a.itemTrack && b.itemTrack) {
+        // Compare max theoretical item level
+        return Math.sign(a.itemTrack.maxItemLevel - b.itemTrack.maxItemLevel)
     }
 
-    if (itemTrack != null) {
-        return itemTrack.itemLevel
+    if ((a.item.token || b.item.token) && Math.abs(delta) <= 9) {
+        // Token doesn't have item track
+        // If difference is above 9, we use item level difference directly
+        const aDiff = trackNameToNumber(
+            parseItemTrackName(a.bonusIds ?? [], a.item.token, a.item.tierset)
+        )
+        const bDiff = trackNameToNumber(
+            parseItemTrackName(b.bonusIds ?? [], b.item.token, b.item.tierset)
+        )
+
+        // The item with a track wins over one without a track
+        if (aDiff && !bDiff) return 1
+        if (!aDiff && bDiff) return -1
+
+        return Math.sign(aDiff - bDiff)
+    }
+
+    return Math.sign(delta)
+}
+
+export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): number | null {
+    const diff = parseItemTrackName(bonusIds, item.token, item.tierset)
+
+    if (diff != null) {
+        switch (diff) {
+            case 'Veteran':
+                return item.ilvlBase + 22
+            case 'Champion':
+                return item.ilvlNormal
+            case 'Hero':
+                return item.ilvlHeroic
+            case 'Myth':
+                return item.ilvlMythic
+            default:
+                throw Error('parseItemLevelFromBonusIds: ' + diff + ' not mapped')
+        }
     }
 
     // crafted items ilvl
@@ -69,6 +102,21 @@ export function parseItemLevelFromTrack(
     return null
 }
 
+export function parseItemLevelFromRaidDiff(item: Item, raidDiff: WowRaidDifficulty): number {
+    switch (raidDiff) {
+        case 'LFR':
+            return item.ilvlBase + 22
+        case 'Normal':
+            return item.ilvlNormal
+        case 'Heroic':
+            return item.ilvlHeroic
+        case 'Mythic':
+            return item.ilvlMythic
+        default:
+            throw new Error('parseItemLevelFromRaidLoot: unable to map raid diff')
+    }
+}
+
 export function parseItemTrack(input: number[]): ItemTrack | null {
     for (const bonus of input) {
         if (bonus in bonusItemTracks) {
@@ -77,7 +125,9 @@ export function parseItemTrack(input: number[]): ItemTrack | null {
                 max: bonusItemTracks[bonus].max,
                 name: bonusItemTracks[bonus].name,
                 fullName: bonusItemTracks[bonus].fullName,
-                itemLevel: bonusItemTracks[bonus].itemLevel
+                itemLevel: bonusItemTracks[bonus].itemLevel,
+                maxItemLevel: bonusItemTracks[bonus].maxItemLevel,
+                season: bonusItemTracks[bonus].season
             }
         }
     }
