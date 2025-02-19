@@ -90,8 +90,8 @@ importers:
         specifier: 7.54.2
         version: 7.54.2(react@19.0.0)
       react-router:
-        specifier: 7.1.5
-        version: 7.1.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: 7.2.0
+        version: 7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-router-dom:
         specifier: 7.1.5
         version: 7.1.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -4168,6 +4168,16 @@ packages:
 
   react-router@7.1.5:
     resolution: {integrity: sha512-8BUF+hZEU4/z/JD201yK6S+UYhsf58bzYIDq2NS1iGpwxSXDu7F+DeGSkIXMFBuHZB21FSiCzEcUb18cQNdRkA==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+
+  react-router@7.2.0:
+    resolution: {integrity: sha512-fXyqzPgCPZbqhrk7k3hPcCpYIlQ2ugIXDboHUzhJISFVy2DEPsmHgN588MyGmkIOv3jDgNfUE3kJi83L28s/LQ==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: '>=18'
@@ -9416,6 +9426,16 @@ snapshots:
       react-router: 7.1.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   react-router@7.1.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      '@types/cookie': 0.6.0
+      cookie: 1.0.2
+      react: 19.0.0
+      set-cookie-parser: 2.7.1
+      turbo-stream: 2.4.0
+    optionalDependencies:
+      react-dom: 19.0.0(react@19.0.0)
+
+  react-router@7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@types/cookie': 0.6.0
       cookie: 1.0.2
