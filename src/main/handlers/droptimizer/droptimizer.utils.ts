@@ -216,7 +216,7 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
                     ' - https://www.wowhead.com/item=' +
                     itemId +
                     '?bonus=' +
-                    bonusIds
+                    bonusIds.join(':')
             )
             continue
         }
@@ -314,7 +314,7 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
                         ' - https://www.wowhead.com/item=' +
                         itemId +
                         '?bonus=' +
-                        bonusIds
+                        bonusIds.join(':')
                 )
                 continue
             }
