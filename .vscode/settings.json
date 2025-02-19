@@ -9,7 +9,8 @@
         "players",
         "preload",
         "raid-session",
-        "bis-list"
+        "bis-list",
+        "loot"
     ],
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"

@@ -89,6 +89,10 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             (loot.item.classes == null || loot.item.classes.includes(character.class))
     )
 
+    const maxGainFromDroptimizers = Math.max(
+        ...latestDroptimizer.flatMap((item) => item.upgrades.map((upgrade) => upgrade.dps))
+    )
+
     const charAssignmentInfo: CharAssignmentInfo[] = filteredRoster.map((char) => {
         // get latest droptimizers for a given chars
         const charDroptimizers = latestDroptimizer.filter(
@@ -105,7 +109,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
 
         return {
             ...res,
-            highlights: evalHighlightsAndScore(loot, res)
+            highlights: evalHighlightsAndScore(loot, res, maxGainFromDroptimizers)
         }
     })
 

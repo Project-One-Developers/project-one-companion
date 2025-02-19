@@ -412,7 +412,8 @@ const calculateTiersetCompletion = (
 
 export const evalHighlightsAndScore = (
     loot: LootWithItem,
-    charInfo: Omit<CharAssignmentInfo, 'highlights'>
+    charInfo: Omit<CharAssignmentInfo, 'highlights'>,
+    maxDpsGain: number
 ): CharAssignmentHighlights => {
     const { bestItemInSlot, bis, character, droptimizers, tierset } = charInfo
 
@@ -457,26 +458,34 @@ export const evalHighlightsAndScore = (
         isTrackUpgrade
     }
 
-    return { ...res, score: evalScore(res) }
+    return { ...res, score: evalScore(res, maxDpsGain) }
 }
 
-export const evalScore = (highlights: Omit<CharAssignmentHighlights, 'score'>): number => {
+export const evalScore = (
+    highlights: Omit<CharAssignmentHighlights, 'score'>,
+    maxDdpsGain: number
+): number => {
     const { dpsGain, ilvlDiff, gearIsBis, isMain, tierSetCompletion, isTrackUpgrade } = highlights
+
+    //if(!isMain) return 0 // TODO: uncomment this when testing is finished
 
     console.log(isMain)
 
-    //if (!isMain) return 0 // TODO: comment if testing is needed
+    const normalizedDps = dpsGain / maxDdpsGain
+    const baseScore = gearIsBis ? 1 + normalizedDps : normalizedDps
 
-    const tierSetBonus = match(tierSetCompletion)
-        .with({ type: '4p' }, () => 30000)
-        .with({ type: '2p' }, () => 20000)
-        .with({ type: 'none' }, () => 0)
+    const tierSetMultiplier = match(tierSetCompletion)
+        .with({ type: '4p' }, () => 1.3)
+        .with({ type: '2p' }, () => 1.2)
+        .with({ type: 'none' }, () => 1)
         .exhaustive()
 
-    const trackBonus = isTrackUpgrade ? 10000 : 0
-    const bisBonus = gearIsBis ? 20000 : 0
+    const trackMultiplier = isTrackUpgrade ? 1.1 : 1
+    const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.01 * ilvlDiff : 1
 
-    const ilvlDiffBonus = ilvlDiff > 0 ? 1000 * ilvlDiff : 0 // TODO: is this needed?
+    const score = baseScore * tierSetMultiplier * trackMultiplier * ilvlDiffMultiplier
 
-    return dpsGain + tierSetBonus + bisBonus + ilvlDiffBonus + trackBonus
+    const formattedScore = Number(score.toFixed(2)) * 100
+
+    return formattedScore
 }
