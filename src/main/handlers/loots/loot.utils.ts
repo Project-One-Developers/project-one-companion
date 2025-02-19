@@ -53,7 +53,7 @@ const parseWowDiff = (wowDiff: number): WowRaidDifficulty => {
     }
 }
 
-export const parseRcLoots = async (csv: string): Promise<NewLoot[]> => {
+export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise<NewLoot[]> => {
     const parsedData = parse(csv, {
         header: true,
         dynamicTyping: true,
@@ -79,6 +79,13 @@ export const parseRcLoots = async (csv: string): Promise<NewLoot[]> => {
         try {
             const parsedItem = parseItemString(record.itemString)
             const { date, time, itemString, difficultyID, itemID: itemId, id } = record
+
+            const lootUnixTs = parseDateTime(date, time)
+            if (lootUnixTs < dateLowerBound) {
+                console.log(
+                    'parseRcLoots: skipping loot item before raid session date time ' + record
+                )
+            }
 
             const bonusIds = getItemBonusString(parsedItem).split(':').map(Number)
             const wowItem = allItemsInDb.find((i) => i.id === itemId)
@@ -141,7 +148,7 @@ export const parseRcLoots = async (csv: string): Promise<NewLoot[]> => {
 
             const loot: NewLoot = {
                 gearItem: gearItem,
-                dropDate: parseDateTime(date, time),
+                dropDate: lootUnixTs,
                 itemString: itemString,
                 raidDifficulty: raidDiff,
                 rclootId: id

@@ -18,7 +18,7 @@ const flattenRaidPartecipation = (result: any): RaidSession => {
     }
 }
 
-export const getRaidSession = async (id: string): Promise<RaidSession> => {
+export const getRaidSessionWithCharPartecipation = async (id: string): Promise<RaidSession> => {
     const result = await db().query.raidSessionTable.findFirst({
         where: (raidSessionTable, { eq }) => eq(raidSessionTable.id, id),
         with: {
@@ -36,6 +36,13 @@ export const getRaidSession = async (id: string): Promise<RaidSession> => {
 
     const processedResult = flattenRaidPartecipation(result)
     return raidSessionSchema.parse(processedResult)
+}
+
+export const getRaidSession = async (id: string): Promise<RaidSession> => {
+    const result = await db().query.raidSessionTable.findFirst({
+        where: (raidSessionTable, { eq }) => eq(raidSessionTable.id, id)
+    })
+    return raidSessionSchema.parse(result)
 }
 
 export const getRaidSessionList = async (): Promise<RaidSession[]> => {

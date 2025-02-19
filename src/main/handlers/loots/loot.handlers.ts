@@ -20,7 +20,7 @@ import {
     unassignLoot
 } from '@storage/loots/loots.storage'
 import { getCharactersList } from '@storage/players/characters.storage'
-import { getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
+import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
 import {
     evalHighlightsAndScore,
     parseBestItemInSlot,
@@ -36,8 +36,11 @@ export const addRaidLootsByRCLootCsvHandler = async (
     raidSessionId: string,
     csv: string
 ): Promise<void> => {
-    const parsedData = await parseRcLoots(csv)
-    const elegibleCharacters = await getRaidSessionRoster(raidSessionId)
+    const session = await getRaidSession(raidSessionId)
+    const [parsedData, elegibleCharacters] = await Promise.all([
+        parseRcLoots(csv, session.raidDate),
+        getRaidSessionRoster(raidSessionId)
+    ])
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
@@ -45,8 +48,10 @@ export const addRaidLootsByManualInputHandler = async (
     raidSessionId: string,
     loots: NewLootManual[]
 ): Promise<void> => {
-    const parsedData = await parseManualLoots(loots)
-    const elegibleCharacters = await getRaidSessionRoster(raidSessionId)
+    const [parsedData, elegibleCharacters] = await Promise.all([
+        parseManualLoots(loots),
+        getRaidSessionRoster(raidSessionId)
+    ])
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
