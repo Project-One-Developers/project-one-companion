@@ -2,7 +2,6 @@ import { Checkbox, CheckedState } from '@radix-ui/react-checkbox'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { LootFilter } from '@renderer/lib/filters'
 import { armorTypesIcon, itemSlotIcon, raidDiffIcon } from '@renderer/lib/wow-icon'
-import { RAID_DIFF } from '@shared/consts/wow.consts'
 import { wowArmorTypeSchema, wowItemSlotSchema } from '@shared/schemas/wow.schemas'
 import { WowArmorType, WowItemSlot, WowRaidDifficulty } from '@shared/types/types'
 import { Check, ChevronDown } from 'lucide-react'
@@ -41,7 +40,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
             <div className="flex flex-col space-y-2 mb-4">
                 {/* <label className="text-sm font-semibold">Raid Difficulty:</label> */}
                 <div className="flex flex-wrap gap-4">
-                    {RAID_DIFF.map((difficulty) => (
+                    {(['Normal', 'Heroic', 'Mythic'] as WowRaidDifficulty[]).map((difficulty) => (
                         <div
                             key={difficulty}
                             className={`cursor-pointer transition-transform hover:scale-110 ${
