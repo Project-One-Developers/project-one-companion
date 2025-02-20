@@ -3,7 +3,7 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { searchItems } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { addLootsFromRc, addLootsManual } from '@renderer/lib/tanstack-query/loots'
+import { addLootsFromMrt, addLootsFromRc, addLootsManual } from '@renderer/lib/tanstack-query/loots'
 import { RAID_DIFF } from '@shared/consts/wow.consts'
 import { Item, NewLootManual, RaidSessionWithRoster, WowRaidDifficulty } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -28,7 +28,8 @@ export default function SessionLootNewDialog({
 }): JSX.Element {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedItems, setSelectedItems] = useState<NewLootManual[]>([])
-    const [csvData, setCsvData] = useState('')
+    const [rcCsvData, setRcInputData] = useState('')
+    const [mrtData, setMrtData] = useState('')
 
     const { data: items, isLoading } = useQuery({
         queryKey: [queryKeys.itemSearch, searchTerm],
@@ -55,12 +56,26 @@ export default function SessionLootNewDialog({
             addLootsFromRc(raidSessionId, csv),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
-            setCsvData('')
+            setRcInputData('')
             setOpen(false)
             toast({ title: 'RCLoot CSV imported', description: 'Loots successfully imported.' })
         },
         onError: (error) => {
-            toast({ title: 'Error', description: `Failed to import CSV. ${error.message}` })
+            toast({ title: 'Error', description: `Failed to import RC. ${error.message}` })
+        }
+    })
+
+    const addMrtLootsMutation = useMutation({
+        mutationFn: ({ raidSessionId, text }: { raidSessionId: string; text: string }) =>
+            addLootsFromMrt(raidSessionId, text),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
+            setMrtData('')
+            setOpen(false)
+            toast({ title: 'MRT loots imported', description: 'Loots successfully imported.' })
+        },
+        onError: (error) => {
+            toast({ title: 'Error', description: `Failed to import MRT. ${error.message}` })
         }
     })
 
@@ -99,6 +114,12 @@ export default function SessionLootNewDialog({
                             className="px-4 py-2 flex-1 text-center hover:bg-muted"
                         >
                             RCLoot CSV
+                        </Tabs.Trigger>
+                        <Tabs.Trigger
+                            value="mrt"
+                            className="px-4 py-2 flex-1 text-center hover:bg-muted"
+                        >
+                            MRT
                         </Tabs.Trigger>
                     </Tabs.List>
                     <Tabs.Content value="manual" className="p-4">
@@ -244,8 +265,8 @@ export default function SessionLootNewDialog({
                     </Tabs.Content>
                     <Tabs.Content value="rcloot" className="p-4">
                         <Textarea
-                            value={csvData}
-                            onChange={(e) => setCsvData(e.target.value)}
+                            value={rcCsvData}
+                            onChange={(e) => setRcInputData(e.target.value)}
                             placeholder="Paste RCLoot CSV data here..."
                             rows={10}
                         />
@@ -254,7 +275,26 @@ export default function SessionLootNewDialog({
                             onClick={() =>
                                 addRcLootsMutation.mutate({
                                     raidSessionId: raidSession.id,
-                                    csv: csvData
+                                    csv: rcCsvData
+                                })
+                            }
+                        >
+                            Import Loots
+                        </Button>
+                    </Tabs.Content>
+                    <Tabs.Content value="mrt" className="p-4">
+                        <Textarea
+                            value={mrtData}
+                            onChange={(e) => setMrtData(e.target.value)}
+                            placeholder="Paste MRT data here..."
+                            rows={10}
+                        />
+                        <Button
+                            className="w-full mt-4"
+                            onClick={() =>
+                                addMrtLootsMutation.mutate({
+                                    raidSessionId: raidSession.id,
+                                    text: mrtData
                                 })
                             }
                         >

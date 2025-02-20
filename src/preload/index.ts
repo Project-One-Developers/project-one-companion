@@ -121,6 +121,9 @@ export const api = {
     addLootsFromRc(raidSessionId: string, csv: string): Promise<void> {
         return ipcRenderer.invoke('loots-add-rcloot', raidSessionId, csv)
     },
+    addLootsFromMrt(raidSessionId: string, text: string): Promise<void> {
+        return ipcRenderer.invoke('loots-add-mrt', raidSessionId, text)
+    },
     getLootsBySession(sessionId: string): Promise<Loot[]> {
         return ipcRenderer.invoke('loots-get-by-session', sessionId)
     },

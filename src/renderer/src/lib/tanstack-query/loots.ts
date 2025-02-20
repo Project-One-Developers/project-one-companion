@@ -24,6 +24,13 @@ export const addLootsFromRc = async (raidSessionId: string, csv: string): Promis
     return await window.api.addLootsFromRc(raidSessionId, csv)
 }
 
+export const addLootsFromMrt = async (raidSessionId: string, text: string): Promise<void> => {
+    if (!raidSessionId) {
+        throw new Error('No raid session id provided')
+    }
+    return await window.api.addLootsFromMrt(raidSessionId, text)
+}
+
 export const getLootsBySession = async (raidSessionId: string): Promise<Loot[]> => {
     return await window.api.getLootsBySession(raidSessionId)
 }
