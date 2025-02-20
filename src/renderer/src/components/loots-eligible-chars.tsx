@@ -108,7 +108,18 @@ export default function LootsEligibleChars({
                     </TableHeader>
                     <TableBody>
                         {lootAssignmentInfoQuery.data?.eligible
-                            .sort((a, b) => b.highlights.score - a.highlights.score)
+                            .sort((a, b) => {
+                                // score first
+                                if (b.highlights.score !== a.highlights.score) {
+                                    return b.highlights.score - a.highlights.score
+                                }
+                                // then bis
+                                if (b.highlights.gearIsBis !== a.highlights.gearIsBis) {
+                                    return b.highlights.gearIsBis ? 1 : -1
+                                }
+                                // then main
+                                return b.highlights.isMain ? 1 : -1
+                            })
                             .map((charInfo) => {
                                 const assignedLoots = allLoots.filter(
                                     (loot) =>
