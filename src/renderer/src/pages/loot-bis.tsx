@@ -7,13 +7,14 @@ import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
+import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
 import { BisList, BossWithItems, Item, WowItemSlotKey } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Edit, LoaderCircle } from 'lucide-react'
 
 import { useState, type JSX } from 'react'
 
-const slotBis: WowItemSlotKey[] = ['finger', 'trinket']
+const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket']
 
 // Boss Card Component
 type BossPanelProps = {
@@ -126,6 +127,18 @@ export default function BisListPage(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
+            {/* Page Header */}
+            <div className="bg-muted rounded-lg p-6 mb-2 shadow-lg flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold mb-2 text-blue-400">Raid BiS List</h1>
+                    <div className="flex items-center text-gray-400">
+                        <span>
+                            Very Rare and {slotBis.map((s) => formatWowSlotKey(s)).join(',')}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             {/* Boss List */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 {items.map((boss) => (
