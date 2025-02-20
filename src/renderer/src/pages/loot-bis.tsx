@@ -9,7 +9,7 @@ import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { BisList, BossWithItems, Item, WowItemSlotKey } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle, Pencil } from 'lucide-react'
+import { Edit, LoaderCircle } from 'lucide-react'
 
 import { useState, type JSX } from 'react'
 
@@ -74,7 +74,7 @@ const BossPanel = ({ boss, bisLists, editMode, onEdit }: BossPanelProps) => {
                                         className=" h-5 w-5"
                                         onClick={() => onEdit(item)}
                                     >
-                                        <Pencil />
+                                        <Edit />
                                     </Button>
                                 )}
                             </div>
@@ -86,7 +86,6 @@ const BossPanel = ({ boss, bisLists, editMode, onEdit }: BossPanelProps) => {
 }
 
 // Main Component
-
 type ItemWithBisSpecs = {
     item: Item
     specs: number[]
@@ -95,6 +94,8 @@ type ItemWithBisSpecs = {
 export default function BisListPage(): JSX.Element {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [selectedItem, setSelectedItem] = useState<ItemWithBisSpecs | null>(null)
+    const [editMode, setEditMode] = useState(false)
+
     const itemRes = useQuery({
         queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
         queryFn: () => fetchRaidLootTable(CURRENT_RAID_ID)
@@ -121,6 +122,8 @@ export default function BisListPage(): JSX.Element {
         setIsEditDialogOpen(true)
     }
 
+    const toggleEditMode = () => setEditMode((prev) => !prev)
+
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             {/* Boss List */}
@@ -130,7 +133,7 @@ export default function BisListPage(): JSX.Element {
                         key={boss.id}
                         boss={boss}
                         bisLists={bisLists}
-                        editMode={true}
+                        editMode={editMode}
                         onEdit={handleEditClick}
                     />
                 ))}
@@ -142,6 +145,17 @@ export default function BisListPage(): JSX.Element {
                     itemAndSpecs={selectedItem}
                 />
             )}
+            {/* Bottom Right Icons */}
+            <div className="fixed bottom-6 right-6 space-y-2">
+                <div
+                    className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
+                    onClick={toggleEditMode}
+                >
+                    <Edit
+                        className={`w-5 h-5 transition-transform ${editMode ? 'rotate-45 ' : ''}`}
+                    />
+                </div>
+            </div>
         </div>
     )
 }
