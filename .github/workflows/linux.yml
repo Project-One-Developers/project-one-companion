@@ -45,5 +45,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload AppImage
         with:
-          name: WeakAuras-Companion-CI-AppImage
+          name: ProjectOne-Companion-CI-AppImage
           path: dist/**/*.AppImage

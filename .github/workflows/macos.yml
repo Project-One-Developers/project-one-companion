@@ -48,11 +48,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload DMG
         with:
-          name: WeakAuras-Companion-CI-dmg
+          name: ProjectOne-Companion-CI-dmg
           path: dist/**/*-mac-universal.dmg
 
       - uses: actions/upload-artifact@v4
         name: Upload ZIP
         with:
-          name: WeakAuras-Companion-CI-zip
+          name: ProjectOne-Companion-CI-zip
           path: dist/**/*-mac-universal.zip
