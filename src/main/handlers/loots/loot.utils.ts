@@ -517,7 +517,7 @@ export const evalScore = (
 
     const score = baseScore * tierSetMultiplier * trackMultiplier * ilvlDiffMultiplier
 
-    const formattedScore = Number(score.toFixed(2)) * 100
+    const formattedScore = Math.round(score * 100)
 
     return formattedScore
 }
