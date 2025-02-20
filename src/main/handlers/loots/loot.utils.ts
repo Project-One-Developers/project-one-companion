@@ -501,7 +501,7 @@ export const evalScore = (
 
     //if(!isMain) return 0 // TODO: uncomment this when testing is finished
 
-    console.log(isMain)
+    if (isMain) Promise.resolve()
 
     const normalizedDps = dpsGain / maxDdpsGain
     const baseScore = gearIsBis ? 1 + normalizedDps : normalizedDps
