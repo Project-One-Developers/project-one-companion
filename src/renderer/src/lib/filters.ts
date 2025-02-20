@@ -3,7 +3,7 @@ import {
     Droptimizer,
     WowArmorType,
     WowClassName,
-    WowItemSlot,
+    WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
 import { unixTimestampToRelativeDays } from './utils'
@@ -15,7 +15,7 @@ export type LootFilter = {
     hideOlderThanDays: boolean
     hideAlts: boolean
     maxDays: number
-    selectedSlots: WowItemSlot[]
+    selectedSlots: WowItemSlotKey[]
     selectedArmorTypes: WowArmorType[]
     selectedWowClassName: WowClassName[]
 }
@@ -83,7 +83,7 @@ export function filterDroptimizer(
                     if (filter.selectedSlots.length > 0) {
                         if (
                             upgrade.item.slot == null ||
-                            !filter.selectedSlots.includes(upgrade.item.slot)
+                            !filter.selectedSlots.includes(upgrade.item.slotKey)
                         ) {
                             return false
                         }

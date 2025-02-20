@@ -2,12 +2,13 @@ import { Checkbox, CheckedState } from '@radix-ui/react-checkbox'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { LootFilter } from '@renderer/lib/filters'
 import { armorTypesIcon, classIcon, itemSlotIcon, raidDiffIcon } from '@renderer/lib/wow-icon'
+import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
 import {
     wowArmorTypeSchema,
     wowClassNameSchema,
-    wowItemSlotSchema
+    wowItemSlotKeySchema
 } from '@shared/schemas/wow.schemas'
-import { WowArmorType, WowClassName, WowItemSlot, WowRaidDifficulty } from '@shared/types/types'
+import { WowArmorType, WowClassName, WowItemSlotKey, WowRaidDifficulty } from '@shared/types/types'
 import { Check, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 
@@ -20,7 +21,7 @@ type FiltersPanelProps = {
 export const FiltersPanel = ({ filter: filter, updateFilter, className }: FiltersPanelProps) => {
     const [isOpen, setIsOpen] = useState(false)
 
-    const toggleSlot = (slotName: WowItemSlot) => {
+    const toggleSlot = (slotName: WowItemSlotKey) => {
         const newSelectedSlots = filter.selectedSlots.includes(slotName)
             ? filter.selectedSlots.filter((slot) => slot !== slotName)
             : [...filter.selectedSlots, slotName]
@@ -184,7 +185,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                     <div className="flex flex-col space-y-2">
                         <label className="text-sm font-semibold">Item Slots:</label>
                         <div className="flex flex-wrap gap-2">
-                            {wowItemSlotSchema.options.map((slot) => (
+                            {wowItemSlotKeySchema.options.map((slot) => (
                                 <div
                                     key={slot}
                                     className={`cursor-pointer transition-transform hover:scale-125 ${
@@ -198,7 +199,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                                         src={itemSlotIcon.get(slot)}
                                         alt={slot}
                                         className="w-7 h-7"
-                                        title={slot}
+                                        title={formatWowSlotKey(slot)}
                                     />
                                 </div>
                             ))}
