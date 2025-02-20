@@ -35,6 +35,7 @@ import {
 } from './loots/loot.handlers'
 import {
     addRaidSessionHandler,
+    cloneRaidSessionHandler,
     deleteRaidSessionHandler,
     editRaidSessionHandler,
     getRaidSessionHandler,
@@ -76,6 +77,7 @@ export const allHandlers = {
     'raid-session-add': addRaidSessionHandler,
     'raid-session-edit': editRaidSessionHandler,
     'raid-session-delete': deleteRaidSessionHandler,
+    'raid-session-clone': cloneRaidSessionHandler,
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,
     'loots-get-by-session': getLootsBySessionIdHandler,

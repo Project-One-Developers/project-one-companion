@@ -30,3 +30,7 @@ export const addRaidSession = async (
 export const deleteRaidSession = async (id: string): Promise<void> => {
     return await window.api.deleteRaidSession(id)
 }
+
+export const cloneRaidSession = async (id: string): Promise<RaidSessionWithRoster> => {
+    return await window.api.cloneRaidSession(id)
+}

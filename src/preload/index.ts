@@ -111,6 +111,9 @@ export const api = {
     deleteRaidSession(id: string): Promise<void> {
         return ipcRenderer.invoke('raid-session-delete', id)
     },
+    cloneRaidSession(id: string): Promise<RaidSessionWithRoster> {
+        return ipcRenderer.invoke('raid-session-clone', id)
+    },
     // Loots
     addLootsManual(raidSessionId: string, loots: NewLootManual[]): Promise<void> {
         return ipcRenderer.invoke('loots-add-manual', raidSessionId, loots)

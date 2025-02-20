@@ -6,12 +6,13 @@ import { SessionLootsPanel } from '@renderer/components/session-loots-panel'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
+import { cloneRaidSession, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import {
     ArrowLeft,
     Calendar,
+    Copy,
     Edit,
     LoaderCircle,
     PlusIcon,
@@ -34,6 +35,13 @@ export const RaidSessionPage = () => {
         queryKey: [queryKeys.raidSession, raidSessionId],
         queryFn: () => fetchRaidSession(raidSessionId),
         enabled: !!raidSessionId
+    })
+
+    const cloneSessionMutation = useMutation({
+        mutationFn: (id: string) => cloneRaidSession(id),
+        onSuccess: (clonedSession) => {
+            navigate(`/raid-session/${clonedSession.id}`)
+        }
     })
 
     if (!raidSession) return null
@@ -91,6 +99,15 @@ export const RaidSessionPage = () => {
                         setOpen={setIsEditDialogOpen}
                         existingSession={raidSession}
                     />
+                    {/* Clone Session */}
+                    <Button
+                        variant="secondary"
+                        className="hover:bg-blue-700"
+                        onClick={() => cloneSessionMutation.mutate(raidSession.id)}
+                        disabled={cloneSessionMutation.isPending}
+                    >
+                        <Copy className="mr-2 h-4 w-4" /> Clone Session
+                    </Button>
                     {/* Delete Session */}
                     <Button
                         variant="destructive"
