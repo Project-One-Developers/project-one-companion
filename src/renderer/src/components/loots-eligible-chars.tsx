@@ -117,6 +117,10 @@ export default function LootsEligibleChars({
                                 if (b.highlights.gearIsBis !== a.highlights.gearIsBis) {
                                     return b.highlights.gearIsBis ? 1 : -1
                                 }
+                                // then slot upgrade
+                                if (b.highlights.isTrackUpgrade !== a.highlights.isTrackUpgrade) {
+                                    return b.highlights.isTrackUpgrade ? 1 : -1
+                                }
                                 // then main
                                 return b.highlights.isMain ? 1 : -1
                             })
