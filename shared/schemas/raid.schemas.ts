@@ -4,7 +4,10 @@ import { characterSchema } from './characters.schemas'
 export const raidSessionSchema = z.object({
     id: z.string(),
     name: z.string(),
-    raidDate: z.number(),
+    raidDate: z.number()
+})
+
+export const raidSessionWithRosterSchema = raidSessionSchema.extend({
     roster: z.array(characterSchema)
 })
 
@@ -15,5 +18,5 @@ export const newRaidSessionSchema = z.object({
 })
 
 export const editRaidSessionSchema = newRaidSessionSchema.extend({
-    id: raidSessionSchema.shape.id
+    id: raidSessionWithRosterSchema.shape.id
 })

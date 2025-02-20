@@ -24,7 +24,7 @@ import type {
     NewRaidSession,
     Player,
     PlayerWithCharacters,
-    RaidSession,
+    RaidSessionWithRoster,
     WowRaidDifficulty
 } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
@@ -96,16 +96,16 @@ export const api = {
         return ipcRenderer.invoke('boss-loot-table-get', raidId)
     },
     // Raid sessions
-    addRaidSession(newSession: NewRaidSession): Promise<RaidSession> {
+    addRaidSession(newSession: NewRaidSession): Promise<RaidSessionWithRoster> {
         return ipcRenderer.invoke('raid-session-add', newSession)
     },
-    editRaidSession(editedSession: EditRaidSession): Promise<RaidSession> {
+    editRaidSession(editedSession: EditRaidSession): Promise<RaidSessionWithRoster> {
         return ipcRenderer.invoke('raid-session-edit', editedSession)
     },
-    getRaidSession(id: string): Promise<RaidSession> {
+    getRaidSession(id: string): Promise<RaidSessionWithRoster> {
         return ipcRenderer.invoke('raid-session-get', id)
     },
-    getRaidSessions(): Promise<RaidSession[]> {
+    getRaidSessions(): Promise<RaidSessionWithRoster[]> {
         return ipcRenderer.invoke('raid-session-list')
     },
     deleteRaidSession(id: string): Promise<void> {

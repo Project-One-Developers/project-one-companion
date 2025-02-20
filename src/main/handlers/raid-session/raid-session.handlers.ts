@@ -1,4 +1,4 @@
-import { EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
+import { EditRaidSession, NewRaidSession, RaidSessionWithRoster } from '@shared/types/types'
 import {
     addRaidSession,
     deleteRaidSession,
@@ -7,22 +7,24 @@ import {
     getRaidSessionWithCharPartecipation
 } from '@storage/raid-session/raid-session.storage'
 
-export const getRaidSessionHandler = async (id: string): Promise<RaidSession> => {
+export const getRaidSessionHandler = async (id: string): Promise<RaidSessionWithRoster> => {
     return await getRaidSessionWithCharPartecipation(id)
 }
 
-export const getRaidSessionListHandler = async (): Promise<RaidSession[]> => {
+export const getRaidSessionListHandler = async (): Promise<RaidSessionWithRoster[]> => {
     return await getRaidSessionList()
 }
 
-export const addRaidSessionHandler = async (raidSession: NewRaidSession): Promise<RaidSession> => {
+export const addRaidSessionHandler = async (
+    raidSession: NewRaidSession
+): Promise<RaidSessionWithRoster> => {
     const id = await addRaidSession(raidSession)
     return await getRaidSessionWithCharPartecipation(id)
 }
 
 export const editRaidSessionHandler = async (
     editedRaidSession: EditRaidSession
-): Promise<RaidSession> => {
+): Promise<RaidSessionWithRoster> => {
     // edit
     await editRaidSession(editedRaidSession)
 

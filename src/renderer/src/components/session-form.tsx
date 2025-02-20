@@ -3,7 +3,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay, parseStringToUnixTimestamp } from '@renderer/lib/utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
-import { NewRaidSession, PlayerWithCharacters, RaidSession } from '@shared/types/types'
+import { NewRaidSession, PlayerWithCharacters, RaidSessionWithRoster } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import React from 'react'
@@ -52,7 +52,7 @@ type FormNewRaidSession = z.infer<typeof updatedNewRaidSessionSchema>
 
 const SessionForm: React.FC<{
     onSubmit: (data: NewRaidSession) => void
-    existingSession?: RaidSession
+    existingSession?: RaidSessionWithRoster
 }> = ({ onSubmit, existingSession }) => {
     const defaultDate = new Date()
     defaultDate.setHours(21, 0, 0, 0)

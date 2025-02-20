@@ -1,7 +1,7 @@
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { deleteRaidSession } from '@renderer/lib/tanstack-query/raid'
-import { RaidSession } from '@shared/types/types'
+import { RaidSessionWithRoster } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { type JSX } from 'react'
@@ -20,7 +20,7 @@ import {
 type SessionDeleteDialogProps = {
     isOpen: boolean
     setOpen: (open: boolean) => void
-    raidSession: RaidSession
+    raidSession: RaidSessionWithRoster
 }
 
 export default function SessionDeleteDialog({

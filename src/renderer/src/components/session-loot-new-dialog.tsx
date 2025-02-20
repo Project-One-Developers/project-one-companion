@@ -5,7 +5,7 @@ import { searchItems } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addLootsFromRc, addLootsManual } from '@renderer/lib/tanstack-query/loots'
 import { RAID_DIFF } from '@shared/consts/wow.consts'
-import { Item, NewLootManual, RaidSession, WowRaidDifficulty } from '@shared/types/types'
+import { Item, NewLootManual, RaidSessionWithRoster, WowRaidDifficulty } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LoaderCircle, X } from 'lucide-react'
 import { useState, type JSX } from 'react'
@@ -24,7 +24,7 @@ export default function SessionLootNewDialog({
 }: {
     isOpen: boolean
     setOpen: (open: boolean) => void
-    raidSession: RaidSession
+    raidSession: RaidSessionWithRoster
 }): JSX.Element {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedItems, setSelectedItems] = useState<NewLootManual[]>([])

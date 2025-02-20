@@ -1,6 +1,12 @@
 import { characterSchema } from '@shared/schemas/characters.schemas'
-import { raidSessionSchema } from '@shared/schemas/raid.schemas'
-import type { Character, EditRaidSession, NewRaidSession, RaidSession } from '@shared/types/types'
+import { raidSessionSchema, raidSessionWithRosterSchema } from '@shared/schemas/raid.schemas'
+import type {
+    Character,
+    EditRaidSession,
+    NewRaidSession,
+    RaidSession,
+    RaidSessionWithRoster
+} from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charTable, raidSessionRosterTable, raidSessionTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
@@ -8,7 +14,7 @@ import { eq, InferInsertModel } from 'drizzle-orm'
 import { z } from 'zod'
 import { newUUID } from '../../utils'
 
-const flattenRaidPartecipation = (result: any): RaidSession => {
+const flattenRaidPartecipation = (result: any): RaidSessionWithRoster => {
     return {
         ...result,
         roster:
@@ -18,7 +24,9 @@ const flattenRaidPartecipation = (result: any): RaidSession => {
     }
 }
 
-export const getRaidSessionWithCharPartecipation = async (id: string): Promise<RaidSession> => {
+export const getRaidSessionWithCharPartecipation = async (
+    id: string
+): Promise<RaidSessionWithRoster> => {
     const result = await db().query.raidSessionTable.findFirst({
         where: (raidSessionTable, { eq }) => eq(raidSessionTable.id, id),
         with: {
@@ -35,7 +43,7 @@ export const getRaidSessionWithCharPartecipation = async (id: string): Promise<R
     })
 
     const processedResult = flattenRaidPartecipation(result)
-    return raidSessionSchema.parse(processedResult)
+    return raidSessionWithRosterSchema.parse(processedResult)
 }
 
 export const getRaidSession = async (id: string): Promise<RaidSession> => {
@@ -45,7 +53,7 @@ export const getRaidSession = async (id: string): Promise<RaidSession> => {
     return raidSessionSchema.parse(result)
 }
 
-export const getRaidSessionList = async (): Promise<RaidSession[]> => {
+export const getRaidSessionList = async (): Promise<RaidSessionWithRoster[]> => {
     // todo: switchare in query raid session + count loot + count partecipation
     const result = await db().query.raidSessionTable.findMany({
         with: {
@@ -58,7 +66,7 @@ export const getRaidSessionList = async (): Promise<RaidSession[]> => {
     })
 
     const processedResults = result.map(flattenRaidPartecipation)
-    return z.array(raidSessionSchema).parse(processedResults)
+    return z.array(raidSessionWithRosterSchema).parse(processedResults)
 }
 
 export const editRaidSession = async (editedRaidSession: EditRaidSession): Promise<string> => {

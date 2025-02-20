@@ -2,14 +2,14 @@ import RaidSessionDialog from '@renderer/components/session-dialog'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
-import { RaidSession } from '@shared/types/types'
+import { RaidSessionWithRoster } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Calendar, LoaderCircle, PlusIcon, Users } from 'lucide-react'
 import type { JSX } from 'react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const SessionCard: React.FC<{ session: RaidSession; onClick: () => void }> = ({
+const SessionCard: React.FC<{ session: RaidSessionWithRoster; onClick: () => void }> = ({
     session,
     onClick
 }) => (

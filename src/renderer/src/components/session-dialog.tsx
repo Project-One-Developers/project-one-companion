@@ -1,7 +1,7 @@
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addRaidSession, editRaidSession } from '@renderer/lib/tanstack-query/raid'
-import { NewRaidSession, RaidSession } from '@shared/types/types'
+import { NewRaidSession, RaidSessionWithRoster } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { type JSX } from 'react'
 import { toast } from './hooks/use-toast'
@@ -18,7 +18,7 @@ import {
 type RaidSessionDialogProps = {
     isOpen: boolean
     setOpen: (open: boolean) => void
-    existingSession?: RaidSession
+    existingSession?: RaidSessionWithRoster
 }
 
 export default function RaidSessionDialog({

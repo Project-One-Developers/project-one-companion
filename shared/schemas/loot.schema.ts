@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { characterSchema } from './characters.schemas'
 import { gearItemSchema, itemSchema } from './items.schema'
-import { raidSessionSchema } from './raid.schemas'
+import { raidSessionWithRosterSchema } from './raid.schemas'
 import { wowRaidDiffSchema } from './wow.schemas'
 
 export const newLootSchema = z.object({
@@ -23,7 +23,7 @@ export const newLootManualSchema = z.object({
 
 export const lootSchema = z.object({
     id: z.string().uuid(),
-    raidSessionId: raidSessionSchema.shape.id,
+    raidSessionId: raidSessionWithRosterSchema.shape.id,
     itemId: itemSchema.shape.id,
     gearItem: gearItemSchema,
     dropDate: z.number(),

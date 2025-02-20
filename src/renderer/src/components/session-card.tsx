@@ -1,9 +1,9 @@
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
-import { RaidSession } from '@shared/types/types'
+import { RaidSessionWithRoster } from '@shared/types/types'
 import { Calendar, Users } from 'lucide-react'
 
 type SessionCardProps = {
-    session: RaidSession
+    session: RaidSessionWithRoster
     className?: string
 }
 
