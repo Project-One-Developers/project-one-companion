@@ -513,7 +513,7 @@ export const evalScore = (
         .exhaustive()
 
     const trackMultiplier = isTrackUpgrade ? 1.1 : 1
-    const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.01 * ilvlDiff : 1
+    const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.05 * ilvlDiff : 1
 
     const score = baseScore * tierSetMultiplier * trackMultiplier * ilvlDiffMultiplier
 
