@@ -329,11 +329,6 @@ export const parseLootBisForClass = (
     )
 }
 
-/**
- * Todo: include assigned loot in the calculation
- * @param tiersetInfo
- * @returns
- */
 export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[]
@@ -350,20 +345,18 @@ export const parseTiersetInfo = (
         ...charAssignedLoots.map((l) => l.gearItem).filter((gi) => gi.item.tierset || gi.item.token) // tierset / token assigned in this session
     ]
 
+    // todo: ignore tierset from previous seasons
+
     const maxItemLevelBySlot = new Map<WowItemSlotKey, GearItem>()
 
     allItems
         .filter((t) => t.item.slotKey !== 'omni') // omni will be counted later
         .forEach((gear) => {
-            if (gear.itemTrack) {
-                const existingGear = maxItemLevelBySlot.get(gear.item.slotKey)
-                // should consider also item with bigger track
-                // es: 626HC vs 626M
-                if (!existingGear || compareGearItem(gear, existingGear) > 0) {
-                    maxItemLevelBySlot.set(gear.item.slotKey, gear)
-                }
-            } else {
-                throw new Error('Found tierset without track infos: ' + gear)
+            const existingGear = maxItemLevelBySlot.get(gear.item.slotKey)
+            // should consider also item with bigger track
+            // es: 626HC vs 626M
+            if (!existingGear || compareGearItem(gear, existingGear) > 0) {
+                maxItemLevelBySlot.set(gear.item.slotKey, gear)
             }
         })
 
