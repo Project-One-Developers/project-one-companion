@@ -1,9 +1,13 @@
 import { Checkbox, CheckedState } from '@radix-ui/react-checkbox'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { LootFilter } from '@renderer/lib/filters'
-import { armorTypesIcon, itemSlotIcon, raidDiffIcon } from '@renderer/lib/wow-icon'
-import { wowArmorTypeSchema, wowItemSlotSchema } from '@shared/schemas/wow.schemas'
-import { WowArmorType, WowItemSlot, WowRaidDifficulty } from '@shared/types/types'
+import { armorTypesIcon, classIcon, itemSlotIcon, raidDiffIcon } from '@renderer/lib/wow-icon'
+import {
+    wowArmorTypeSchema,
+    wowClassNameSchema,
+    wowItemSlotSchema
+} from '@shared/schemas/wow.schemas'
+import { WowArmorType, WowClassName, WowItemSlot, WowRaidDifficulty } from '@shared/types/types'
 import { Check, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 
@@ -28,6 +32,13 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
             ? filter.selectedArmorTypes.filter((type) => type !== armorType)
             : [...filter.selectedArmorTypes, armorType]
         updateFilter('selectedArmorTypes', newSelectedArmorTypes)
+    }
+
+    const toggleWowClass = (wowClassName: WowClassName) => {
+        const newSelectedWowClassName = filter.selectedWowClassName.includes(wowClassName)
+            ? filter.selectedWowClassName.filter((type) => type !== wowClassName)
+            : [...filter.selectedWowClassName, wowClassName]
+        updateFilter('selectedWowClassName', newSelectedWowClassName)
     }
 
     const selectDifficulty = (difficulty: WowRaidDifficulty) => {
@@ -142,6 +153,31 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                         <label htmlFor="hide-alts" className="text-sm font-semibold">
                             Hide alts
                         </label>
+                    </div>
+
+                    {/* Item Slot Toggles */}
+                    <div className="flex flex-col space-y-2">
+                        <label className="text-sm font-semibold">Class:</label>
+                        <div className="flex flex-wrap gap-2">
+                            {wowClassNameSchema.options.map((wowClassName) => (
+                                <div
+                                    key={wowClassName}
+                                    className={`cursor-pointer transition-transform hover:scale-125 ${
+                                        filter.selectedWowClassName.includes(wowClassName)
+                                            ? 'ring-2 ring-blue-500'
+                                            : 'opacity-50 grayscale'
+                                    }`}
+                                    onClick={() => toggleWowClass(wowClassName)}
+                                >
+                                    <img
+                                        src={classIcon.get(wowClassName)}
+                                        alt={wowClassName}
+                                        className="w-7 h-7"
+                                        title={wowClassName}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Item Slot Toggles */}

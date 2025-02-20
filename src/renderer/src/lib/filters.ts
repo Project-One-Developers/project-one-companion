@@ -2,6 +2,7 @@ import {
     Character,
     Droptimizer,
     WowArmorType,
+    WowClassName,
     WowItemSlot,
     WowRaidDifficulty
 } from '@shared/types/types'
@@ -16,6 +17,7 @@ export type LootFilter = {
     maxDays: number
     selectedSlots: WowItemSlot[]
     selectedArmorTypes: WowArmorType[]
+    selectedWowClassName: WowClassName[]
 }
 
 export function filterDroptimizer(
@@ -42,6 +44,14 @@ export function filterDroptimizer(
                         c.realm === dropt.charInfo.server &&
                         !c.main // filter out char explicity not main
                 )
+            ) {
+                return false
+            }
+
+            // filter by selected class
+            if (
+                filter.selectedWowClassName.length > 0 &&
+                !filter.selectedWowClassName.includes(dropt.charInfo.class) // filter out char that doesnt match filter
             ) {
                 return false
             }
@@ -80,6 +90,7 @@ export function filterDroptimizer(
                     }
 
                     // armor type
+                    // todo: back is considered cloth.. why?
                     if (filter.selectedArmorTypes.length > 0) {
                         if (
                             upgrade.item.armorType == null ||

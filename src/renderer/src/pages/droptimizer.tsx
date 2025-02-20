@@ -18,7 +18,8 @@ const DEFAULT_FILTER: LootFilter = {
     hideAlts: true,
     maxDays: 7,
     selectedArmorTypes: [],
-    selectedSlots: []
+    selectedSlots: [],
+    selectedWowClassName: []
 }
 
 export default function DroptimizerPage(): JSX.Element {

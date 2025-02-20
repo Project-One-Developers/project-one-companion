@@ -156,7 +156,8 @@ export default function LootTable(): JSX.Element {
         hideAlts: true, // todo: implement actual filter & create control in filter panel
         maxDays: 7,
         selectedArmorTypes: [],
-        selectedSlots: []
+        selectedSlots: [],
+        selectedWowClassName: []
     }
 
     const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
