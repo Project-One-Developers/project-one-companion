@@ -142,7 +142,7 @@ export type CharAssignmentInfo = {
     }[]
     weeklyChest: GearItem[]
     tierset: GearItem[]
-    bestItemInSlot: GearItem[]
+    bestItemsInSlot: GearItem[]
     bis: BisList[]
     highlights: CharAssignmentHighlights
 }

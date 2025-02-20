@@ -100,9 +100,9 @@ export default function LootsEligibleChars({
                             <TableHead>Name</TableHead>
                             <TableHead>Highlights</TableHead>
                             <TableHead>Droptimizer</TableHead>
-                            <TableHead>Vault</TableHead>
-                            <TableHead>Other Assignment</TableHead>
                             {showHightestInSlot && <TableHead>Highest</TableHead>}
+                            <TableHead>Other Assignment</TableHead>
+                            <TableHead>Vault</TableHead>
                             {showTiersetInfo && <TableHead>Tierset</TableHead>}
                         </TableRow>
                     </TableHeader>
@@ -183,16 +183,12 @@ export default function LootsEligibleChars({
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-row space-x-1">
-                                                {charInfo.weeklyChest
-                                                    .filter(
-                                                        (vault) =>
-                                                            vault.item.slotKey ===
-                                                            selectedLoot.gearItem.item.slotKey
-                                                    )
-                                                    .map((gear) => (
+                                                {showHightestInSlot &&
+                                                    charInfo.bestItemsInSlot.map((bestInSlot) => (
                                                         <WowGearIcon
-                                                            key={gear.item.id}
-                                                            item={gear}
+                                                            key={bestInSlot.item.id}
+                                                            item={bestInSlot}
+                                                            showTierBanner={true}
                                                         />
                                                     ))}
                                             </div>
@@ -209,12 +205,16 @@ export default function LootsEligibleChars({
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex flex-row space-x-1">
-                                                {showHightestInSlot &&
-                                                    charInfo.bestItemInSlot.map((bestInSlot) => (
+                                                {charInfo.weeklyChest
+                                                    .filter(
+                                                        (vault) =>
+                                                            vault.item.slotKey ===
+                                                            selectedLoot.gearItem.item.slotKey
+                                                    )
+                                                    .map((gear) => (
                                                         <WowGearIcon
-                                                            key={bestInSlot.item.id}
-                                                            item={bestInSlot}
-                                                            showTierBanner={true}
+                                                            key={gear.item.id}
+                                                            item={gear}
                                                         />
                                                     ))}
                                             </div>

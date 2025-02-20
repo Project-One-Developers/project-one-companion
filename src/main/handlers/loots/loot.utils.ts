@@ -12,7 +12,6 @@ import {
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
-import { trackNameToNumber } from '@shared/libs/items/item-tracks'
 import { getClassSpecs } from '@shared/libs/spec-parser/spec-parser'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
@@ -455,7 +454,7 @@ export const evalHighlightsAndScore = (
     charInfo: Omit<CharAssignmentInfo, 'highlights'>,
     maxDpsGain: number
 ): CharAssignmentHighlights => {
-    const { bestItemInSlot, bis, character, droptimizers, tierset } = charInfo
+    const { bestItemsInSlot, bis, character, droptimizers, tierset } = charInfo
 
     const isMain = character.main
 
@@ -469,25 +468,18 @@ export const evalHighlightsAndScore = (
     // todo: check only for spec associated with role (es: shaman healer = [restoration])
     const isBis = bis.find((bis) => bis.itemId === loot.item.id) != null
 
-    const bestItemInSlotItemLevel =
-        bestItemInSlot.length > 0
-            ? Math.max(...bestItemInSlot.map((item) => item.itemLevel))
-            : undefined
+    let bestItemInSlot: GearItem | undefined = bestItemsInSlot.at(1)
+    if (bestItemsInSlot.length === 2) {
+        // slot has 2 possible gear item, we take the lowest track
+        bestItemInSlot = bestItemsInSlot.sort((a, b) => compareGearItem(a, b)).at(0)
+    }
 
-    const ilvlDiff = bestItemInSlotItemLevel
-        ? loot.gearItem.itemLevel - bestItemInSlotItemLevel
-        : -999
+    const ilvlDiff = bestItemInSlot ? loot.gearItem.itemLevel - bestItemInSlot.itemLevel : -999
 
-    // check slot track upgrade
-    const bestItemInSlotTrack =
-        bestItemInSlot
-            .map((d) => trackNameToNumber(d.itemTrack?.name))
-            .sort((a, b) => b - a)
-            .at(0) ?? undefined
-
-    const lootTrack = trackNameToNumber(loot.gearItem.itemTrack?.name)
-    const isTrackUpgrade =
-        bestItemInSlotTrack && lootTrack > 0 ? bestItemInSlotTrack > lootTrack : false
+    let isTrackUpgrade = false
+    if (bestItemInSlot != null) {
+        isTrackUpgrade = compareGearItem(loot.gearItem, bestItemInSlot) > 0 ? true : false
+    }
 
     const res: Omit<CharAssignmentHighlights, 'score'> = {
         isMain,
