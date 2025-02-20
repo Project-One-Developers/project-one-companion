@@ -1,10 +1,11 @@
 import { fetchBosses } from '@renderer/lib/tanstack-query/bosses'
+import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { getLootsBySessionWithItem } from '@renderer/lib/tanstack-query/loots'
+import { deleteLootById, getLootsBySessionWithItem } from '@renderer/lib/tanstack-query/loots'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithItem } from '@shared/types/types'
-import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { LoaderCircle, X } from 'lucide-react'
 import { WowGearIcon } from './ui/wowgear-icon'
 
 type SessionLootsPanelProps = {
@@ -25,6 +26,13 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
     const bossesQuery = useQuery({
         queryKey: [queryKeys.bosses, CURRENT_RAID_ID],
         queryFn: () => fetchBosses(CURRENT_RAID_ID)
+    })
+
+    const deleteLootMutation = useMutation({
+        mutationFn: (lootId: string) => deleteLootById(lootId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSessionId] })
+        }
     })
 
     const loots = lootsQuery.data ?? []
@@ -83,16 +91,23 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                 {allDifficulties.map((difficulty) => (
                                     <td key={difficulty} className="p-2">
                                         <div className="flex flex-row gap-2">
-                                            {groupedLoots[boss.id]?.[difficulty]?.map(
-                                                (loot, index) => (
+                                            {groupedLoots[boss.id]?.[difficulty]?.map((loot) => (
+                                                <div key={loot.id} className="relative group">
                                                     <WowGearIcon
-                                                        key={index}
                                                         item={loot.gearItem}
                                                         showTierBanner={true}
                                                         showItemTrackDiff={false}
                                                     />
-                                                )
-                                            ) || <span className="text-gray-400">-</span>}
+                                                    <button
+                                                        onClick={() =>
+                                                            deleteLootMutation.mutate(loot.id)
+                                                        }
+                                                        className="absolute -top-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full"
+                                                    >
+                                                        <X size={12} />
+                                                    </button>
+                                                </div>
+                                            )) || <span className="text-gray-400">-</span>}
                                         </div>
                                     </td>
                                 ))}

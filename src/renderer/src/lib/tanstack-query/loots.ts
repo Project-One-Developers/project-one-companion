@@ -57,3 +57,7 @@ export const assignLoot = async (
 export const getLootAssignmentInfo = async (lootId: string): Promise<LootAssignmentInfo> => {
     return await window.api.getLootAssignmentInfo(lootId)
 }
+
+export const deleteLootById = async (lootId: string): Promise<void> => {
+    return await window.api.deleteLoot(lootId)
+}

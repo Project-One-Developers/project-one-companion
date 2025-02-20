@@ -114,6 +114,7 @@ export const assignLoot = async (
         })
         .where(eq(lootTable.id, lootId))
 }
+
 export const unassignLoot = async (lootId: string): Promise<void> => {
     await db()
         .update(lootTable)
@@ -121,4 +122,8 @@ export const unassignLoot = async (lootId: string): Promise<void> => {
             assignedCharacterId: null
         })
         .where(eq(lootTable.id, lootId))
+}
+
+export const deleteLoot = async (lootId: string): Promise<void> => {
+    await db().delete(lootTable).where(eq(lootTable.id, lootId))
 }

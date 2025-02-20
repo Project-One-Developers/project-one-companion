@@ -136,6 +136,9 @@ export const api = {
     unassignLoot(lootId: string) {
         return ipcRenderer.invoke('loots-unassign', lootId)
     },
+    deleteLoot(lootId: string) {
+        return ipcRenderer.invoke('loots-delete-by-id', lootId)
+    },
     // App settings
     getAppSettings(): Promise<AppSettings> {
         return ipcRenderer.invoke('app-settings-get')

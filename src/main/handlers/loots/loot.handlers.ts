@@ -12,6 +12,7 @@ import { getDroptimizerLatestList } from '@storage/droptimizer/droptimizer.stora
 import {
     addLoots,
     assignLoot,
+    deleteLoot,
     getLootAssigned,
     getLootsByRaidSessionId,
     getLootsByRaidSessionIdWithAssigned,
@@ -74,6 +75,8 @@ export const assignLootHandler = async (
 
 export const unassignLootHandler = async (lootId: string): Promise<void> =>
     await unassignLoot(lootId)
+
+export const deleteLootHandler = async (lootId: string): Promise<void> => await deleteLoot(lootId)
 
 /**
  * Retrieve all the information to evaluate the loot assignments
