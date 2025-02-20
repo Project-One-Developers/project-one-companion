@@ -40,7 +40,7 @@ export const deleteRaidSessionHandler = async (id: string): Promise<void> => {
 export const cloneRaidSessionHandler = async (id: string): Promise<RaidSessionWithRoster> => {
     const source = await getRaidSessionWithCharPartecipation(id)
     const cloned: NewRaidSession = {
-        name: source.name + '-' + newUUID(),
+        name: source.name + '-' + newUUID().slice(0, 6),
         raidDate: getUnixTimestamp(), // set now as session date
         roster: source.roster.map((r) => r.id)
     }
