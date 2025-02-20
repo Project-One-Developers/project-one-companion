@@ -285,7 +285,7 @@ export const lootTable = pgTable('loots', {
     assignedCharacterId: varchar('assigned_character_id').references(() => charTable.id),
     assignedHighlights: jsonb('assigned_highlights').$type<CharAssignmentHighlights>(),
     raidSessionId: varchar('raid_session_id')
-        .references(() => raidSessionTable.id)
+        .references(() => raidSessionTable.id, { onDelete: 'cascade' })
         .notNull(),
     itemId: integer('item_id')
         .references(() => itemTable.id)
