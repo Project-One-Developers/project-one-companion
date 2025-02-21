@@ -37,6 +37,7 @@ function parseItemTrackName(
 
 /**
  * Compara gear item a and b
+ * Compare over season, item track, item level (it detects overlaps like 626HC vs 626M)
  * @param a First Gear to compare
  * @param b Second Gear to compare
  * @returns 1 if a is an upgrade over b, -1 b otherwise, 0 if are the same
