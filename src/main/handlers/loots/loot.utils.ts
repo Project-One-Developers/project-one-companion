@@ -12,7 +12,7 @@ import {
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
-import { getClassSpecs } from '@shared/libs/spec-parser/spec-parser'
+import { getClassSpecs } from '@shared/libs/spec-parser/spec-utils'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
     BisList,

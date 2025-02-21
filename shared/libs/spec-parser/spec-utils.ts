@@ -1,5 +1,5 @@
 import { WowClassName, WowSpec } from '@shared/types/types'
-import { WOW_CLASS_WITH_SPECS } from './spec-parser.schemas'
+import { WOW_CLASS_WITH_SPECS } from './spec-utils.schemas'
 
 export const getClassSpecs = (wowClass: number | WowClassName): WowSpec[] => {
     return (

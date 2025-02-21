@@ -51,6 +51,7 @@ import {
     wowItemSlotSchema,
     wowItemTrackNameSchema,
     wowRaidDiffSchema,
+    wowRolePositionSchema,
     wowRolesSchema,
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
@@ -60,6 +61,8 @@ export type WowSpecName = z.infer<typeof wowSpecNameSchema>
 export type WowSpec = {
     id: number
     name: WowSpecName
+    role: WoWRole
+    position: WoWRolePosition
 }
 
 export type WowClass = {
@@ -75,6 +78,7 @@ export type WowItemSlotKey = z.infer<typeof wowItemSlotKeySchema>
 export type WowItemEquippedSlotKey = z.infer<typeof wowItemEquippedSlotKeySchema>
 export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
 export type WoWRole = z.infer<typeof wowRolesSchema>
+export type WoWRolePosition = z.infer<typeof wowRolePositionSchema>
 export type WowTiersetSlot = z.infer<typeof wowItemSlotKeyTiersetSchema>
 
 export type Player = z.infer<typeof playerSchema>

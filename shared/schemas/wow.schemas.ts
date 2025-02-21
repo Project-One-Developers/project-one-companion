@@ -96,6 +96,7 @@ export const wowItemSlotKeyTiersetSchema = z.enum(['head', 'shoulder', 'chest', 
 export const wowArmorTypeSchema = z.enum(['Cloth', 'Leather', 'Mail', 'Plate'])
 
 export const wowRolesSchema = z.enum(['Tank', 'Healer', 'DPS'])
+export const wowRolePositionSchema = z.enum(['Melee', 'Ranged'])
 
 export const wowRaidDiffSchema = z.enum(['LFR', 'Normal', 'Heroic', 'Mythic'])
 
