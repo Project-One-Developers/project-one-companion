@@ -115,7 +115,9 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         // )
         // loot assgined to a given char
         const lootsAssignedToChar = allAssignedLoots.filter(
-            (l) => l.assignedCharacterId === char.id
+            (l) =>
+                l.assignedCharacterId === char.id &&
+                l.dropDate > Math.max(...charDroptimizers.map((c) => c.simInfo.date)) // we consider all the loots assigned from last known simc
         )
         const res: Omit<CharAssignmentInfo, 'highlights'> = {
             character: char,
