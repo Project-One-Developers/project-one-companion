@@ -457,7 +457,7 @@ export const evalHighlightsAndScore = (
     charInfo: Omit<CharAssignmentInfo, 'highlights'>,
     maxDpsGain: number
 ): CharAssignmentHighlights => {
-    const { bestItemsInSlot, bis, character, droptimizers, tierset } = charInfo
+    const { bestItemsInSlot, bis: charBisList, character, droptimizers, tierset } = charInfo
 
     const isMain = character.main
 
@@ -467,14 +467,17 @@ export const evalHighlightsAndScore = (
         .reduce((max, upgrade) => (upgrade > max ? upgrade : max), 0)
 
     const tierSetCompletion = calculateTiersetCompletion(loot, tierset)
+    const isBis = charBisList.find((bis) => bis.itemId === loot.item.id) != null
 
-    // todo: check only for spec associated with role (es: shaman healer = [restoration])
-    const isBis = bis.find((bis) => bis.itemId === loot.item.id) != null
-
-    let bestItemInSlot: GearItem | undefined = bestItemsInSlot.at(0)
-    if (bestItemsInSlot.length === 2) {
-        // slot has 2 possible gear item, we take the lowest track
+    let bestItemInSlot: GearItem | undefined
+    if (loot.gearItem.item.token) {
+        // loot is omni token: we compare with lowest track tierset available
+        bestItemInSlot = tierset.sort((a, b) => compareGearItem(a, b)).at(0)
+    } else if (bestItemsInSlot.length === 2) {
+        // slot has 2 possible gear item (eg: finger,trinket), we take the lowest track
         bestItemInSlot = bestItemsInSlot.sort((a, b) => compareGearItem(a, b)).at(0)
+    } else {
+        bestItemInSlot = bestItemsInSlot.at(0)
     }
 
     const ilvlDiff = bestItemInSlot ? loot.gearItem.itemLevel - bestItemInSlot.itemLevel : -999
