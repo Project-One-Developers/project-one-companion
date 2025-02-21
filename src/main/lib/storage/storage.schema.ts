@@ -351,6 +351,7 @@ export const itemTable = pgTable('items', {
     sourceName: varchar('source_name'),
     sourceType: varchar('source_type'),
     bossName: varchar('boss_name', { length: 255 }), // ridondante ma utile
+    season: integer('season').notNull(),
     bossId: integer('boss_id')
         .references(() => bossTable.id)
         .notNull()

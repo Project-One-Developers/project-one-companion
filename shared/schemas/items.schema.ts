@@ -41,7 +41,8 @@ export const itemSchema = z.object({
     sourceId: z.number(), // instance id (eg: raid id, profession id, mplus name)
     sourceName: z.string(),
     sourceType: z.string(),
-    onUseTrinket: z.boolean()
+    onUseTrinket: z.boolean(),
+    season: z.number()
 })
 
 export const itemToTiersetSchema = z.object({
@@ -80,7 +81,8 @@ export const gearItemSchema = z.object({
         tierset: itemSchema.shape.tierset,
         boe: itemSchema.shape.boe,
         veryRare: itemSchema.shape.veryRare,
-        iconName: itemSchema.shape.iconName
+        iconName: itemSchema.shape.iconName,
+        season: itemSchema.shape.season
     }),
     source: z.enum(['equipped', 'bag', 'great-vault', 'loot']),
     equippedInSlot: wowItemEquippedSlotKeySchema.optional(),

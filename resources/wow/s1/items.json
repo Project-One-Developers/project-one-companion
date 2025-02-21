@@ -34,7 +34,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -71,7 +72,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -108,7 +110,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -145,7 +148,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -182,7 +186,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -219,7 +224,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -256,7 +262,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -293,7 +300,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -330,7 +338,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -367,7 +376,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -404,7 +414,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -441,7 +452,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -478,7 +490,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -515,7 +528,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -552,7 +566,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -589,7 +604,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -626,7 +642,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -663,7 +680,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -700,7 +718,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -737,7 +756,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -774,7 +794,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -811,7 +832,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -848,7 +870,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -885,7 +908,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -922,7 +946,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -959,7 +984,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -996,7 +1022,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1033,7 +1060,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1070,7 +1098,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1107,7 +1136,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1144,7 +1174,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1181,7 +1212,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1218,7 +1250,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1255,7 +1288,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1292,7 +1326,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1329,7 +1364,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1366,7 +1402,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1403,7 +1440,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1440,7 +1478,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1477,7 +1516,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1514,7 +1554,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1551,7 +1592,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1588,7 +1630,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1625,7 +1668,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1662,7 +1706,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1699,7 +1744,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1736,7 +1782,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1773,7 +1820,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1810,7 +1858,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1847,7 +1896,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1884,7 +1934,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1921,7 +1972,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1958,7 +2010,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -1995,7 +2048,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2032,7 +2086,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2069,7 +2124,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2106,7 +2162,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2143,7 +2200,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2180,7 +2238,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2217,7 +2276,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2254,7 +2314,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2291,7 +2352,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2328,7 +2390,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2365,7 +2428,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2402,7 +2466,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2439,7 +2504,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2476,7 +2542,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2513,7 +2580,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2550,7 +2618,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2587,7 +2656,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2624,7 +2694,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2661,7 +2732,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2698,7 +2770,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2735,7 +2808,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2772,7 +2846,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2809,7 +2884,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2846,7 +2922,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2883,7 +2960,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2920,7 +2998,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2957,7 +3036,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -2994,7 +3074,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3031,7 +3112,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3068,7 +3150,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3105,7 +3188,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3142,7 +3226,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3179,7 +3264,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3216,7 +3302,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3253,7 +3340,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3290,7 +3378,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3327,7 +3416,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3364,7 +3454,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3401,7 +3492,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3438,7 +3530,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3475,7 +3568,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3512,7 +3606,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3549,7 +3644,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3586,7 +3682,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3623,7 +3720,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3660,7 +3758,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3697,7 +3796,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3734,7 +3834,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3771,7 +3872,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3808,7 +3910,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3845,7 +3948,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3882,7 +3986,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3919,7 +4024,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3956,7 +4062,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -3993,7 +4100,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4030,7 +4138,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4067,7 +4176,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4104,7 +4214,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4141,7 +4252,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4178,7 +4290,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4215,7 +4328,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4252,7 +4366,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4289,7 +4404,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4326,7 +4442,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4363,7 +4480,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4400,7 +4518,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4437,7 +4556,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4474,7 +4594,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4511,7 +4632,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4548,7 +4670,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4585,7 +4708,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4622,7 +4746,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4659,7 +4784,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4696,7 +4822,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4733,7 +4860,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4770,7 +4898,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4807,7 +4936,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4844,7 +4974,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4881,7 +5012,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4918,7 +5050,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4955,7 +5088,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -4992,7 +5126,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5029,7 +5164,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5066,7 +5202,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5103,7 +5240,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5140,7 +5278,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5177,7 +5316,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5214,7 +5354,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5251,7 +5392,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5288,7 +5430,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5325,7 +5468,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5362,7 +5506,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5399,7 +5544,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5436,7 +5582,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5473,7 +5620,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5510,7 +5658,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5547,7 +5696,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5584,7 +5734,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5621,7 +5772,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5658,7 +5810,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5695,7 +5848,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5732,7 +5886,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5769,7 +5924,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5806,7 +5962,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5843,7 +6000,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5880,7 +6038,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5917,7 +6076,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5954,7 +6114,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -5991,7 +6152,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6028,7 +6190,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6065,7 +6228,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6102,7 +6266,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6139,7 +6304,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6176,7 +6342,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6213,7 +6380,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6250,7 +6418,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6287,7 +6456,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6324,7 +6494,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6361,7 +6532,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6398,7 +6570,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6435,7 +6608,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6472,7 +6646,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6509,7 +6684,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6546,7 +6722,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6583,7 +6760,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6620,7 +6798,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6657,7 +6836,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6694,7 +6874,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6731,7 +6912,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6768,7 +6950,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6805,7 +6988,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6842,7 +7026,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6879,7 +7064,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6916,7 +7102,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6953,7 +7140,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -6990,7 +7178,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7027,7 +7216,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7064,7 +7254,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7101,7 +7292,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7138,7 +7330,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7175,7 +7368,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7212,7 +7406,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7249,7 +7444,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7286,7 +7482,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7323,7 +7520,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7360,7 +7558,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7397,7 +7596,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7434,7 +7634,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7471,7 +7672,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7508,7 +7710,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7545,7 +7748,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7582,7 +7786,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7619,7 +7824,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7656,7 +7862,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7693,7 +7900,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7730,7 +7938,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7767,7 +7976,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7804,7 +8014,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7841,7 +8052,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7878,7 +8090,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":-1,
@@ -7915,7 +8128,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -7952,7 +8166,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -7989,7 +8204,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8026,7 +8242,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8063,7 +8280,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8100,7 +8318,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8137,7 +8356,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8174,7 +8394,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8211,7 +8432,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8248,7 +8470,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8285,7 +8508,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8322,7 +8546,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8359,7 +8584,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8396,7 +8622,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8433,7 +8660,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8470,7 +8698,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8507,7 +8736,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8544,7 +8774,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8581,7 +8812,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8618,7 +8850,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8655,7 +8888,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8692,7 +8926,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8729,7 +8964,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8766,7 +9002,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8803,7 +9040,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8840,7 +9078,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8877,7 +9116,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8914,7 +9154,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8951,7 +9192,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -8988,7 +9230,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9025,7 +9268,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9062,7 +9306,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9099,7 +9344,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9136,7 +9382,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9173,7 +9420,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9210,7 +9458,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9247,7 +9496,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9284,7 +9534,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9321,7 +9572,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9358,7 +9610,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9395,7 +9648,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9432,7 +9686,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9469,7 +9724,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9506,7 +9762,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9543,7 +9800,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9580,7 +9838,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9617,7 +9876,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9654,7 +9914,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9691,7 +9952,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9728,7 +9990,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9765,7 +10028,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9802,7 +10066,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9839,7 +10104,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9876,7 +10142,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9913,7 +10180,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9950,7 +10218,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -9987,7 +10256,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10024,7 +10294,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10061,7 +10332,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10098,7 +10370,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10135,7 +10408,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10172,7 +10446,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10209,7 +10484,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10246,7 +10522,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10283,7 +10560,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10320,7 +10598,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10357,7 +10636,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10394,7 +10674,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10431,7 +10712,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10468,7 +10750,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10505,7 +10788,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10542,7 +10826,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10579,7 +10864,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10616,7 +10902,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10653,7 +10940,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10690,7 +10978,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10727,7 +11016,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10764,7 +11054,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10801,7 +11092,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10838,7 +11130,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10875,7 +11168,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10912,7 +11206,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10949,7 +11244,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -10986,7 +11282,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11023,7 +11320,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11060,7 +11358,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11097,7 +11396,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11134,7 +11434,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11171,7 +11472,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11208,7 +11510,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11245,7 +11548,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11282,7 +11586,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11319,7 +11624,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11356,7 +11662,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11393,7 +11700,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11430,7 +11738,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11467,7 +11776,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11504,7 +11814,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11541,7 +11852,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11578,7 +11890,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11615,7 +11928,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11652,7 +11966,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11689,7 +12004,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11726,7 +12042,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11763,7 +12080,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11800,7 +12118,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11837,7 +12156,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11874,7 +12194,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11911,7 +12232,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11948,7 +12270,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -11985,7 +12308,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12022,7 +12346,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12059,7 +12384,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12096,7 +12422,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12133,7 +12460,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12170,7 +12498,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12207,7 +12536,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12244,7 +12574,8 @@
         "catalyst":true,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -12281,7 +12612,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12318,7 +12650,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12355,7 +12688,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12392,7 +12726,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12429,7 +12764,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12466,7 +12802,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12503,7 +12840,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12540,7 +12878,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12577,7 +12916,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12614,7 +12954,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12651,7 +12992,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12688,7 +13030,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12725,7 +13068,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12762,7 +13106,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12799,7 +13144,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12836,7 +13182,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12873,7 +13220,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12910,7 +13258,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12947,7 +13296,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -12984,7 +13334,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13021,7 +13372,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13058,7 +13410,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13095,7 +13448,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13132,7 +13486,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13169,7 +13524,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13206,7 +13562,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13243,7 +13600,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13280,7 +13638,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13317,7 +13676,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13354,7 +13714,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13391,7 +13752,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13428,7 +13790,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13465,7 +13828,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13502,7 +13866,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13539,7 +13904,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13576,7 +13942,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13613,7 +13980,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13650,7 +14018,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13687,7 +14056,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13724,7 +14094,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13761,7 +14132,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13798,7 +14170,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13835,7 +14208,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13872,7 +14246,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13909,7 +14284,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13946,7 +14322,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -13983,7 +14360,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14020,7 +14398,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14057,7 +14436,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14094,7 +14474,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14131,7 +14512,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14168,7 +14550,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14205,7 +14588,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14242,7 +14626,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14279,7 +14664,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14316,7 +14702,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14353,7 +14740,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14390,7 +14778,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -14427,7 +14816,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -14464,7 +14854,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -14501,7 +14892,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14538,7 +14930,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14575,7 +14968,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14612,7 +15006,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14649,7 +15044,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14686,7 +15082,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14723,7 +15120,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14760,7 +15158,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14797,7 +15196,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14834,7 +15234,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14871,7 +15272,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14908,7 +15310,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14945,7 +15348,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -14982,7 +15386,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15019,7 +15424,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15056,7 +15462,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15093,7 +15500,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15130,7 +15538,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15167,7 +15576,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15204,7 +15614,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15241,7 +15652,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15278,7 +15690,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15315,7 +15728,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -15352,7 +15766,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15389,7 +15804,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15426,7 +15842,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15463,7 +15880,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15500,7 +15918,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15537,7 +15956,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15574,7 +15994,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15611,7 +16032,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15648,7 +16070,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15685,7 +16108,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15722,7 +16146,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15759,7 +16184,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -15796,7 +16222,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -15833,7 +16260,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -15870,7 +16298,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -15907,7 +16336,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -15944,7 +16374,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -15981,7 +16412,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -16018,7 +16450,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -16055,7 +16488,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -16092,7 +16526,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16129,7 +16564,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16166,7 +16602,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16203,7 +16640,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16240,7 +16678,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16277,7 +16716,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16314,7 +16754,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16351,7 +16792,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16388,7 +16830,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16425,7 +16868,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16462,7 +16906,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16499,7 +16944,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16536,7 +16982,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16573,7 +17020,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16610,7 +17058,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16647,7 +17096,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16684,7 +17134,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16721,7 +17172,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16758,7 +17210,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16795,7 +17248,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16832,7 +17286,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16869,7 +17324,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16906,7 +17362,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16943,7 +17400,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -16980,7 +17438,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17017,7 +17476,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17054,7 +17514,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17091,7 +17552,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17128,7 +17590,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17165,7 +17628,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17202,7 +17666,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17239,7 +17704,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17276,7 +17742,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17313,7 +17780,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17350,7 +17818,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17387,7 +17856,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17424,7 +17894,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17461,7 +17932,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17498,7 +17970,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17535,7 +18008,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17572,7 +18046,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17609,7 +18084,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17646,7 +18122,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17683,7 +18160,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17720,7 +18198,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17757,7 +18236,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17794,7 +18274,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17831,7 +18312,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17868,7 +18350,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17905,7 +18388,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17942,7 +18426,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -17979,7 +18464,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -18016,7 +18502,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -18053,7 +18540,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -18090,7 +18578,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -18127,7 +18616,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -18164,7 +18654,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -18201,7 +18692,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -18238,7 +18730,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18275,7 +18768,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18312,7 +18806,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18349,7 +18844,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18386,7 +18882,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18423,7 +18920,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18460,7 +18958,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18497,7 +18996,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18534,7 +19034,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18571,7 +19072,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18608,7 +19110,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18645,7 +19148,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18682,7 +19186,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18719,7 +19224,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18756,7 +19262,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18793,7 +19300,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18830,7 +19338,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18867,7 +19376,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18904,7 +19414,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18941,7 +19452,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -18978,7 +19490,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19015,7 +19528,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19052,7 +19566,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19089,7 +19604,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19126,7 +19642,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19163,7 +19680,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19200,7 +19718,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19237,7 +19756,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19274,7 +19794,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19311,7 +19832,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19348,7 +19870,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19385,7 +19908,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19422,7 +19946,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -19459,7 +19984,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19496,7 +20022,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19533,7 +20060,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19570,7 +20098,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19607,7 +20136,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19644,7 +20174,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19681,7 +20212,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19718,7 +20250,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19755,7 +20288,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19792,7 +20326,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19829,7 +20364,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19866,7 +20402,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19903,7 +20440,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":1,
@@ -19940,7 +20478,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -19977,7 +20516,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20014,7 +20554,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20051,7 +20592,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20088,7 +20630,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20125,7 +20668,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20162,7 +20706,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20199,7 +20744,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20236,7 +20782,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20273,7 +20820,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20310,7 +20858,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20347,7 +20896,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20384,7 +20934,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":2,
@@ -20421,7 +20972,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20458,7 +21010,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20495,7 +21048,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20532,7 +21086,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20569,7 +21124,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20606,7 +21162,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20643,7 +21200,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20680,7 +21238,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20717,7 +21276,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20754,7 +21314,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20791,7 +21352,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20828,7 +21390,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20865,7 +21428,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20902,7 +21466,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":3,
@@ -20939,7 +21504,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -20976,7 +21542,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21013,7 +21580,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21050,7 +21618,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21087,7 +21656,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21124,7 +21694,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21161,7 +21732,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21198,7 +21770,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21235,7 +21808,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21272,7 +21846,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21309,7 +21884,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21346,7 +21922,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21383,7 +21960,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":4,
@@ -21420,7 +21998,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21457,7 +22036,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21494,7 +22074,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21531,7 +22112,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21568,7 +22150,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21605,7 +22188,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21642,7 +22226,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21679,7 +22264,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21716,7 +22302,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21753,7 +22340,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21790,7 +22378,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21827,7 +22416,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21864,7 +22454,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":5,
@@ -21901,7 +22492,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -21938,7 +22530,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -21975,7 +22568,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22012,7 +22606,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22049,7 +22644,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22086,7 +22682,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22123,7 +22720,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22160,7 +22758,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22197,7 +22796,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22234,7 +22834,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22271,7 +22872,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22308,7 +22910,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22345,7 +22948,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":6,
@@ -22382,7 +22986,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22419,7 +23024,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22456,7 +23062,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22493,7 +23100,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22530,7 +23138,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22567,7 +23176,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22604,7 +23214,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22641,7 +23252,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22678,7 +23290,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22715,7 +23328,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22752,7 +23366,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22789,7 +23404,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22826,7 +23442,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":7,
@@ -22863,7 +23480,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -22900,7 +23518,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -22937,7 +23556,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -22974,7 +23594,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23011,7 +23632,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23048,7 +23670,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23085,7 +23708,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23122,7 +23746,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23159,7 +23784,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23196,7 +23822,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":true
+        "onUseTrinket":true,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23233,7 +23860,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23270,7 +23898,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23307,7 +23936,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23344,7 +23974,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":8,
@@ -23381,7 +24012,8 @@
         "catalyst":false,
         "boe":false,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23418,7 +24050,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23455,7 +24088,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Cloth",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23492,7 +24126,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23529,7 +24164,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Leather",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23566,7 +24202,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23603,7 +24240,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Mail",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23640,7 +24278,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23677,7 +24316,8 @@
         "catalyst":false,
         "boe":true,
         "armorType":null,
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     },
     {
         "journalEncounterOrder":99,
@@ -23714,6 +24354,7 @@
         "catalyst":false,
         "boe":true,
         "armorType":"Plate",
-        "onUseTrinket":false
+        "onUseTrinket":false,
+        "season":1
     }
 ]

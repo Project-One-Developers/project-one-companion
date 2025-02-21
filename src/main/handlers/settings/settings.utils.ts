@@ -45,7 +45,8 @@ export const fetchRaidItems = (season: number): Item[] => {
         sourceId: itemRaw.sourceId, // instance id (eg: raid id, profession id, mplus name)
         sourceName: itemRaw.sourceName,
         sourceType: itemRaw.sourceType,
-        onUseTrinket: itemRaw.onUseTrinket
+        onUseTrinket: itemRaw.onUseTrinket,
+        season: itemRaw.season
     })
 
     return z.array(itemSchema).parse(jsonData.map(transformRawItem))
@@ -88,7 +89,8 @@ export const fetchNonRaidItems = (): Item[] => {
         sourceId: -66, // non è vero
         sourceName: 'Professions - Epic',
         sourceType: 'profession593',
-        onUseTrinket: false
+        onUseTrinket: false,
+        season: 1
     })
 
     return res

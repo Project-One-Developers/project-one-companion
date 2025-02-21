@@ -135,7 +135,8 @@ export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise
                     tierset: wowItem.tierset,
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
-                    iconName: wowItem.iconName
+                    iconName: wowItem.iconName,
+                    season: wowItem.season
                 },
                 source: 'loot',
                 itemLevel: itemLevel,
@@ -231,7 +232,8 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
                     tierset: wowItem.tierset,
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
-                    iconName: wowItem.iconName
+                    iconName: wowItem.iconName,
+                    season: wowItem.season
                 },
                 source: 'loot',
                 itemLevel: itemLevel,
