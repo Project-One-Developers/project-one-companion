@@ -471,7 +471,7 @@ export const evalHighlightsAndScore = (
     // todo: check only for spec associated with role (es: shaman healer = [restoration])
     const isBis = bis.find((bis) => bis.itemId === loot.item.id) != null
 
-    let bestItemInSlot: GearItem | undefined = bestItemsInSlot.at(1)
+    let bestItemInSlot: GearItem | undefined = bestItemsInSlot.at(0)
     if (bestItemsInSlot.length === 2) {
         // slot has 2 possible gear item, we take the lowest track
         bestItemInSlot = bestItemsInSlot.sort((a, b) => compareGearItem(a, b)).at(0)
