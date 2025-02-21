@@ -44,6 +44,11 @@ function parseItemTrackName(
 export function compareGearItem(a: GearItem, b: GearItem): number {
     const delta = a.itemLevel - b.itemLevel
 
+    if (a.item.season != b.item.season) {
+        // a is item from new season
+        return a.item.season > b.item.season ? 1 : -1
+    }
+
     if (a.itemTrack && b.itemTrack) {
         // Compare max theoretical item level
         return Math.sign(a.itemTrack.maxItemLevel - b.itemTrack.maxItemLevel)
