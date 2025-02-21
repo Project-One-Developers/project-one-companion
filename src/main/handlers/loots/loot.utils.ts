@@ -12,10 +12,11 @@ import {
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
-import { getClassSpecs } from '@shared/libs/spec-parser/spec-utils'
+import { getClassSpecsForRole } from '@shared/libs/spec-parser/spec-utils'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
     BisList,
+    Character,
     CharAssignmentHighlights,
     CharAssignmentInfo,
     Droptimizer,
@@ -28,7 +29,6 @@ import {
     NewLoot,
     NewLootManual,
     TierSetCompletion,
-    WowClassName,
     WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
@@ -322,9 +322,9 @@ export const parseBestItemInSlot = (
 export const parseLootBisForClass = (
     bisList: BisList[],
     lootId: number,
-    wowClass: WowClassName
+    char: Character
 ): BisList[] => {
-    const classSpecs = getClassSpecs(wowClass).map((s) => s.id)
+    const classSpecs = getClassSpecsForRole(char.class, char.role).map((s) => s.id)
     return bisList.filter(
         (b) => b.itemId === lootId && b.specIds.some((specId) => classSpecs.includes(specId))
     )
