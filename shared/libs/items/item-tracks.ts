@@ -18,10 +18,10 @@ export function queryByItemLevelAndName(itemLevel: number, name: string): BonusI
     )
 }
 
-export function trackNameToNumber(name: WowItemTrackName | null | undefined): number {
+export function trackNameToNumber(name: WowItemTrackName | null | undefined): number | null {
     if (!name) {
         // for gear item without item track
-        return -1
+        return null
     }
     switch (name) {
         case 'Explorer':

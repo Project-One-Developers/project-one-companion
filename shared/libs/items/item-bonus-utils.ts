@@ -57,7 +57,6 @@ export function compareGearItem(a: GearItem, b: GearItem): number {
 
     if ((a.item.token || b.item.token) && Math.abs(delta) <= 9) {
         // Token doesn't have item track
-        // If difference is above 9, we use item level difference directly
         const aDiff = trackNameToNumber(
             parseItemTrackName(a.bonusIds ?? [], a.item.token, a.item.tierset)
         )
@@ -69,9 +68,10 @@ export function compareGearItem(a: GearItem, b: GearItem): number {
         if (aDiff && !bDiff) return 1
         if (!aDiff && bDiff) return -1
 
-        return Math.sign(aDiff - bDiff)
+        return Math.sign(aDiff! - bDiff!)
     }
 
+    // If difference is above 9, we use item level difference directly
     return Math.sign(delta)
 }
 
