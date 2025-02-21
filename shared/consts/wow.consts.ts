@@ -12,7 +12,7 @@ import {
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
 
-export const CURRENT_SEASON: number = 2
+export const CURRENT_SEASON: number = 1
 // 1273: Nerubar
 // 1296: Undermine
 export const CURRENT_RAID_ID = CURRENT_SEASON === 1 ? 1273 : 1296
