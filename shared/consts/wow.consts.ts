@@ -2,9 +2,9 @@ import { WoWRole } from '@shared/types/types'
 import {
     wowArmorTypeSchema,
     wowClassNameSchema,
+    wowItemSlotSchema as wowItemSlotDescSchema,
     wowItemSlotKeySchema,
     wowItemSlotKeyTiersetSchema,
-    wowItemSlotSchema,
     wowItemTertiaryStatsSchema,
     wowRaidDiffSchema,
     wowRoleClassSchema,
@@ -30,7 +30,7 @@ export const ROLES_CLASSES_MAP = {
 
 export const TERTIARY_STATS = wowItemTertiaryStatsSchema.options
 export const ARMOR_TYPES = wowArmorTypeSchema.options
-export const ITEM_SLOTS = wowItemSlotSchema.options
+export const ITEM_SLOTS_DESC = wowItemSlotDescSchema.options
 export const ITEM_SLOTS_KEY = wowItemSlotKeySchema.options
 export const ITEM_SLOTS_KEY_TIERSET = wowItemSlotKeyTiersetSchema.options
 

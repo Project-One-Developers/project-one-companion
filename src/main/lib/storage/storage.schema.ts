@@ -1,7 +1,7 @@
 import {
     ARMOR_TYPES,
     CLASSES_NAME,
-    ITEM_SLOTS,
+    ITEM_SLOTS_DESC,
     ITEM_SLOTS_KEY,
     RAID_DIFF,
     ROLES
@@ -29,7 +29,7 @@ export const pgRoleEnum = pgEnum('role', ROLES)
 export const pgRaidDiffEnum = pgEnum('raid_diff', RAID_DIFF)
 
 export const pgItemArmorTypeEnum = pgEnum('item_armor_type', ARMOR_TYPES)
-export const pgItemSlotEnum = pgEnum('item_slot', ITEM_SLOTS)
+export const pgItemSlotEnum = pgEnum('item_slot', ITEM_SLOTS_DESC)
 export const pgItemSlotKeyEnum = pgEnum('item_slot_key', ITEM_SLOTS_KEY)
 
 //////////////////////////////////////////////////////////
