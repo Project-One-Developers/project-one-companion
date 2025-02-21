@@ -42,8 +42,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get package version
+        id: package_version
+        run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
       - uses: actions/upload-artifact@v4
         name: Upload Installer
         with:
-          name: ProjectOne-Companion-CI-Installer
+          name: ProjectOne-Companion-CI-${{ env.APP_VERSION }}-Installer
           path: dist/**/*Installer*.exe

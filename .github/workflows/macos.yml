@@ -45,14 +45,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get package version
+        id: package_version
+        run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
       - uses: actions/upload-artifact@v4
         name: Upload DMG
         with:
-          name: ProjectOne-Companion-CI-dmg
+          name: ProjectOne-Companion-CI-${{ env.APP_VERSION }}-dmg
           path: dist/**/*-mac-universal.dmg
 
       - uses: actions/upload-artifact@v4
         name: Upload ZIP
         with:
-          name: ProjectOne-Companion-CI-zip
+          name: ProjectOne-Companion-CI-${{ env.APP_VERSION }}-zip
           path: dist/**/*-mac-universal.zip
