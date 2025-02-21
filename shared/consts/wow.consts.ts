@@ -12,8 +12,10 @@ import {
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
 
-export const CURRENT_RAID_ID = 1273 // Nerubar palace 1273, Undermine 1296
-export const CURRENT_SEASON = -70 // Season 1 -70, Season 2 -71
+export const CURRENT_SEASON: number = 2
+// 1273: Nerubar
+// 1296: Undermine
+export const CURRENT_RAID_ID = CURRENT_SEASON === 1 ? 1273 : 1296
 
 export const CLASSES_NAME = wowClassNameSchema.options
 export const SPECS_NAME = wowSpecNameSchema.options

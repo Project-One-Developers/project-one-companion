@@ -1,4 +1,4 @@
-import { CURRENT_RAID_ID, CURRENT_SEASON } from '@shared/consts/wow.consts'
+import { CURRENT_SEASON } from '@shared/consts/wow.consts'
 import {
     itemSchema,
     itemToCatalystArraySchema,
@@ -62,9 +62,9 @@ export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
 export const getTiersetAndTokenList = async (): Promise<Item[]> => {
     if (!cachedTierset) {
         const res = await db().query.itemTable.findMany({
-            where: (itemTable, { inArray, eq, or, and }) =>
+            where: (itemTable, { eq, or, and }) =>
                 and(
-                    inArray(itemTable.sourceId, [CURRENT_RAID_ID, CURRENT_SEASON]),
+                    eq(itemTable.season, CURRENT_SEASON),
                     or(eq(itemTable.tierset, true), eq(itemTable.token, true))
                 )
         })
