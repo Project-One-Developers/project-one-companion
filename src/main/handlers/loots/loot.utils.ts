@@ -470,7 +470,7 @@ export const evalHighlightsAndScore = (
     const isBis = charBisList.find((bis) => bis.itemId === loot.item.id) != null
 
     let bestItemInSlot: GearItem | undefined
-    if (loot.gearItem.item.token) {
+    if (loot.gearItem.item.slotKey === 'omni') {
         // loot is omni token: we compare with lowest track tierset available
         bestItemInSlot = tierset.sort((a, b) => compareGearItem(a, b)).at(0)
     } else if (bestItemsInSlot.length === 2) {
