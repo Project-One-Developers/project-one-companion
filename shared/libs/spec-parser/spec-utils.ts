@@ -22,3 +22,21 @@ export const getSpec = (id: number): WowSpec => {
     if (!res) throw Error('getSpec(): spec ' + id + 'not mapped')
     return res
 }
+
+const tankSpecIds = [66, 73, 104, 250, 268, 581]
+const healerSpecIds = [65, 105, 256, 257, 264, 270, 1468]
+
+export const isTankSpec = (id: number): boolean => {
+    return tankSpecIds.includes(id)
+}
+export const isHealerSpec = (id: number): boolean => {
+    return healerSpecIds.includes(id)
+}
+
+export const tanksSpec = (ids: number[]): boolean => {
+    return ids.length === tankSpecIds.length && ids.every((id) => isTankSpec(id))
+}
+
+export const healersSpec = (ids: number[]): boolean => {
+    return ids.length === healerSpecIds.length && ids.every((id) => isHealerSpec(id))
+}
