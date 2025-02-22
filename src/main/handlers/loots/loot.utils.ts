@@ -319,14 +319,14 @@ export const parseBestItemInSlot = (
     return sortedItems.slice(0, 1)
 }
 
-export const parseLootBisForClass = (
+export const parseLootIsBisForChar = (
     bisList: BisList[],
-    lootId: number,
+    itemId: number,
     char: Character
-): BisList[] => {
+): boolean => {
     const classSpecs = getClassSpecsForRole(char.class, char.role).map((s) => s.id)
-    return bisList.filter(
-        (b) => b.itemId === lootId && b.specIds.some((specId) => classSpecs.includes(specId))
+    return bisList.some(
+        (b) => b.itemId === itemId && b.specIds.some((specId) => classSpecs.includes(specId))
     )
 }
 
@@ -457,7 +457,7 @@ export const evalHighlightsAndScore = (
     charInfo: Omit<CharAssignmentInfo, 'highlights'>,
     maxDpsGain: number
 ): CharAssignmentHighlights => {
-    const { bestItemsInSlot, bis: charBisList, character, droptimizers, tierset } = charInfo
+    const { bestItemsInSlot, bis, character, droptimizers, tierset } = charInfo
 
     const isMain = character.main
 
@@ -467,7 +467,6 @@ export const evalHighlightsAndScore = (
         .reduce((max, upgrade) => (upgrade > max ? upgrade : max), 0)
 
     const tierSetCompletion = calculateTiersetCompletion(loot, tierset)
-    const isBis = charBisList.find((bis) => bis.itemId === loot.item.id) != null
 
     let bestItemInSlot: GearItem | undefined
     if (loot.gearItem.item.slotKey === 'omni') {
@@ -491,7 +490,7 @@ export const evalHighlightsAndScore = (
         isMain,
         dpsGain: maxUpgrade,
         tierSetCompletion,
-        gearIsBis: isBis,
+        gearIsBis: bis,
         ilvlDiff,
         isTrackUpgrade
     }

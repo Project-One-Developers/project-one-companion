@@ -26,7 +26,7 @@ import {
     evalHighlightsAndScore,
     parseBestItemInSlot,
     parseDroptimizersInfo,
-    parseLootBisForClass as parseLootBisForCharacter,
+    parseLootIsBisForChar,
     parseManualLoots,
     parseRcLoots,
     parseTiersetInfo,
@@ -130,7 +130,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                 charDroptimizers,
                 lootsAssignedToChar
             ),
-            bis: parseLootBisForCharacter(bisList, loot.item.id, char)
+            bis: parseLootIsBisForChar(bisList, loot.item.id, char)
         }
 
         return {
