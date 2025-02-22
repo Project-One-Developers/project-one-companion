@@ -8,6 +8,7 @@ import { LoaderCircle } from 'lucide-react'
 import { type JSX } from 'react'
 import { DroptimizerUpgradeForItemEquipped } from './droptimizer-upgrade-for-item'
 import { toast } from './hooks/use-toast'
+import TiersetInfo from './tierset-info'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
@@ -63,7 +64,6 @@ export default function LootsEligibleChars({
             // we dont need to refetch the loot assignment info, we just need to refetch the loots from the parent to also refresh loot tabs panel
             queryClient.invalidateQueries({
                 queryKey: [queryKeys.lootsBySession]
-                //queryKey: [queryKeys.lootsAssignInfo, selectedLoot.id] queryKeys.lootsBySession
             })
         }
     })
@@ -241,37 +241,7 @@ export default function LootsEligibleChars({
                                         </TableCell>
                                         {showTiersetInfo && (
                                             <TableCell>
-                                                <div className="flex flex-row gap-1">
-                                                    {[
-                                                        'head',
-                                                        'shoulder',
-                                                        'chest',
-                                                        'hands',
-                                                        'legs'
-                                                    ].map((slot) => {
-                                                        const tierset = charInfo.tierset.find(
-                                                            (t) => t.item.slotKey === slot
-                                                        )
-                                                        return (
-                                                            <div
-                                                                key={slot}
-                                                                className="flex flex-col items-center space-x-1"
-                                                            >
-                                                                <span className="text-[9px] text-gray-500">
-                                                                    {slot}
-                                                                </span>
-                                                                {tierset ? (
-                                                                    <WowGearIcon
-                                                                        item={tierset}
-                                                                        showTierBanner={false}
-                                                                    />
-                                                                ) : (
-                                                                    <div className="w-8 h-8 bg-gray-700 border border-cyan-400 rounded-md"></div> // Dummy icon
-                                                                )}
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </div>
+                                                <TiersetInfo tierset={charInfo.tierset} />
                                             </TableCell>
                                         )}
                                     </TableRow>
