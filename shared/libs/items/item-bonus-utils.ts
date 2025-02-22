@@ -5,6 +5,14 @@
 import { GearItem, Item, ItemTrack, WowItemTrackName, WowRaidDifficulty } from '@shared/types/types'
 import bonusItemTracks, { queryByItemLevelAndName, trackNameToNumber } from './item-tracks'
 
+/**
+ * Return item track name.
+ * In case of token or tierset the track name is not well defined, we deduce it from Diff bonusId
+ * @param bonusIds
+ * @param isToken
+ * @param isTierset
+ * @returns
+ */
 function parseItemTrackName(
     bonusIds: number[],
     isToken: boolean,
@@ -36,7 +44,32 @@ function parseItemTrackName(
 }
 
 /**
- * Compara gear item a and b
+ * Compare two gear item to find if its the same item id and diff tracks (es: Spymaster 632M and 639M are the same item)
+ * @param a
+ * @param b
+ * @returns
+ */
+export function gearAreTheSame(a: GearItem, b: GearItem): boolean {
+    if (a.item.id !== b.item.id || a.item.season !== b.item.season) {
+        return false // Different item ID or season
+    }
+
+    if (a.itemTrack && b.itemTrack) {
+        return a.itemTrack.maxItemLevel === b.itemTrack.maxItemLevel
+    }
+
+    if (a.item.token && b.item.token) {
+        // Ensure correct bonusIds are used for each comparison
+        const aTrackName = parseItemTrackName(a.bonusIds ?? [], a.item.token, a.item.tierset)
+        const bTrackName = parseItemTrackName(b.bonusIds ?? [], b.item.token, b.item.tierset)
+        return aTrackName === bTrackName
+    }
+
+    return false // Not comparable -> not the same item
+}
+
+/**
+ * Compare gear item a and b
  * Compare over season, item track, item level (it detects overlaps like 626HC vs 626M)
  * @param a First Gear to compare
  * @param b Second Gear to compare

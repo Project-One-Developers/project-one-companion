@@ -6,6 +6,7 @@ import {
     applySpeed,
     applyTokenDiff,
     compareGearItem,
+    gearAreTheSame,
     getItemTrack,
     parseItemLevelFromRaidDiff,
     parseItemTrack
@@ -330,6 +331,34 @@ export const parseLootIsBisForChar = (
     )
 }
 
+/**
+ * Check if char already got the loot in bag/equipped/assigned
+ * @param charDroptimizers
+ * @param charAssignedLoots
+ */
+export const parseLootAlreadyGotIt = (
+    loot: LootWithItem,
+    charDroptimizers: Droptimizer[],
+    charAssignedLoots: Loot[]
+): boolean => {
+    if (loot.gearItem.item.slotKey === 'omni') return false
+
+    const lastDroptWithTierInfo = charDroptimizers
+        .filter((c) => c.itemsInBag.length > 0)
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0) // Can be undefined
+
+    const availableGear: GearItem[] = [
+        ...(lastDroptWithTierInfo?.itemsEquipped ?? []).filter((gi) => gi.item.id === loot.item.id),
+        ...(lastDroptWithTierInfo?.itemsInBag ?? []).filter((gi) => gi.item.id === loot.item.id),
+        ...charAssignedLoots.flatMap((l) =>
+            l.gearItem.item.id === loot.item.id ? [l.gearItem] : []
+        )
+    ]
+
+    return availableGear.some((gear) => gearAreTheSame(loot.gearItem, gear))
+}
+
 export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[]
@@ -457,7 +486,7 @@ export const evalHighlightsAndScore = (
     charInfo: Omit<CharAssignmentInfo, 'highlights'>,
     maxDpsGain: number
 ): CharAssignmentHighlights => {
-    const { bestItemsInSlot, bis, character, droptimizers, tierset } = charInfo
+    const { bestItemsInSlot, bis, character, droptimizers, tierset, alreadyGotIt } = charInfo
 
     const isMain = character.main
 
@@ -492,7 +521,8 @@ export const evalHighlightsAndScore = (
         tierSetCompletion,
         gearIsBis: bis,
         ilvlDiff,
-        isTrackUpgrade
+        isTrackUpgrade,
+        alreadyGotIt
     }
 
     return { ...res, score: evalScore(res, maxDpsGain) }
@@ -502,11 +532,21 @@ export const evalScore = (
     highlights: Omit<CharAssignmentHighlights, 'score'>,
     maxDdpsGain: number
 ): number => {
-    const { dpsGain, ilvlDiff, gearIsBis, isMain, tierSetCompletion, isTrackUpgrade } = highlights
+    const {
+        dpsGain,
+        ilvlDiff,
+        gearIsBis,
+        isMain,
+        tierSetCompletion,
+        isTrackUpgrade,
+        alreadyGotIt
+    } = highlights
 
     //if(!isMain) return 0 // TODO: uncomment this when testing is finished
 
     if (isMain) Promise.resolve()
+
+    if (alreadyGotIt) return 0
 
     const normalizedDps = dpsGain / maxDdpsGain
     const baseScore = gearIsBis ? 1 + normalizedDps : normalizedDps

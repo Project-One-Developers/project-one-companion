@@ -26,6 +26,7 @@ import {
     evalHighlightsAndScore,
     parseBestItemInSlot,
     parseDroptimizersInfo,
+    parseLootAlreadyGotIt,
     parseLootIsBisForChar,
     parseManualLoots,
     parseRcLoots,
@@ -114,7 +115,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         //     (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
         // )
         // loot assgined to a given char
-        const lootsAssignedToChar = allAssignedLoots.filter(
+        const charAssignedLoots = allAssignedLoots.filter(
             (l) =>
                 l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
                 l.assignedCharacterId === char.id &&
@@ -124,12 +125,13 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             character: char,
             droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
             weeklyChest: parseWeeklyChest(charDroptimizers),
-            tierset: parseTiersetInfo(charDroptimizers, lootsAssignedToChar),
+            tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots),
             bestItemsInSlot: parseBestItemInSlot(
                 loot.item.slotKey,
                 charDroptimizers,
-                lootsAssignedToChar
+                charAssignedLoots
             ),
+            alreadyGotIt: parseLootAlreadyGotIt(loot, charDroptimizers, charAssignedLoots),
             bis: parseLootIsBisForChar(bisList, loot.item.id, char)
         }
 

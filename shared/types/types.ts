@@ -134,6 +134,7 @@ export type CharAssignmentHighlights = {
     tierSetCompletion: TierSetCompletion
     ilvlDiff: number
     gearIsBis: boolean
+    alreadyGotIt: boolean
     score: number
     isTrackUpgrade: boolean
 }
@@ -148,6 +149,7 @@ export type CharAssignmentInfo = {
     tierset: GearItem[]
     bestItemsInSlot: GearItem[]
     bis: boolean
+    alreadyGotIt: boolean
     highlights: CharAssignmentHighlights
 }
 export type LootAssignmentInfo = {

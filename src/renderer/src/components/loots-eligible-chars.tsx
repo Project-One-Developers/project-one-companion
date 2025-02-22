@@ -164,7 +164,7 @@ export default function LootsEligibleChars({
                                         <TableCell>
                                             <div className="flex flex-row space-x-4 items-center">
                                                 <div className="flex flex-col">
-                                                    <p className="text-xs font-bold">
+                                                    <p className="text-xs font-bold text-green-400">
                                                         {charInfo.highlights.gearIsBis && 'BIS'}
                                                     </p>
                                                     <p className="text-xs font-bold">
@@ -175,13 +175,17 @@ export default function LootsEligibleChars({
                                                         {charInfo.highlights.tierSetCompletion
                                                             .type === '4p' && '4p'}
                                                     </p>
-                                                    <p className="text-xs font-bold">
+                                                    <p className="text-xs font-bold text-blue-200">
                                                         {charInfo.highlights.dpsGain > 0 && 'DPS'}
                                                     </p>
                                                     <p className="text-xs font-bold">
                                                         {(charInfo.highlights.ilvlDiff > 0 ||
                                                             charInfo.highlights.isTrackUpgrade) &&
                                                             'SLOT'}
+                                                    </p>
+                                                    <p className="text-xs font-bold text-yellow-400 ">
+                                                        {charInfo.highlights.alreadyGotIt &&
+                                                            'ALREADY GOT IT'}
                                                     </p>
                                                 </div>
                                             </div>
