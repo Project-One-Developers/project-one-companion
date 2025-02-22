@@ -1,5 +1,7 @@
+import { TooltipArrow } from '@radix-ui/react-tooltip'
 import ItemBisSpecsDialog from '@renderer/components/item-bis-specs-dialog'
 import { Button } from '@renderer/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { fetchBisList } from '@renderer/lib/tanstack-query/bis-list'
@@ -8,6 +10,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
+import { getSpec } from '@shared/libs/spec-parser/spec-utils'
 import { BisList, BossWithItems, Item, WowItemSlotKey } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Edit, LoaderCircle } from 'lucide-react'
@@ -60,11 +63,23 @@ const BossPanel = ({ boss, bisLists, editMode, onEdit }: BossPanelProps) => {
                                 <div className="flex flex-row items-center gap-x-1">
                                     {bisForItem &&
                                         bisForItem.specIds.map((s) => (
-                                            <WowSpecIcon
-                                                key={item.id + '-' + s}
-                                                specId={s}
-                                                className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                                            />
+                                            <Tooltip key={item.id + '-' + s}>
+                                                <TooltipTrigger asChild>
+                                                    <div className="flex flex-col items-center">
+                                                        <WowSpecIcon
+                                                            specId={s}
+                                                            className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                                                        />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    {getSpec(s).name}
+                                                    <TooltipArrow className="TooltipArrow" />
+                                                </TooltipContent>
+                                            </Tooltip>
                                         ))}
                                 </div>
 

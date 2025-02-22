@@ -16,3 +16,9 @@ export const getClassSpecsForRole = (wowClass: number | WowClassName, role: WoWR
         .flatMap((c) => c.specs)
         .filter((spec) => spec.role === role)
 }
+
+export const getSpec = (id: number): WowSpec => {
+    const res = WOW_CLASS_WITH_SPECS.flatMap((c) => c.specs).find((s) => s.id === id)
+    if (!res) throw Error('getSpec(): spec ' + id + 'not mapped')
+    return res
+}
