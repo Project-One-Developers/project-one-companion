@@ -200,18 +200,19 @@ export default function LootsEligibleChars({
                                                 />
                                             ))}
                                         </TableCell>
-                                        <TableCell>
-                                            <div className="flex flex-row space-x-1">
-                                                {showHightestInSlot &&
-                                                    charInfo.bestItemsInSlot.map((bestInSlot) => (
+                                        {showHightestInSlot && (
+                                            <TableCell>
+                                                <div className="flex flex-row space-x-1">
+                                                    {charInfo.bestItemsInSlot.map((bestInSlot) => (
                                                         <WowGearIcon
                                                             key={bestInSlot.item.id}
                                                             item={bestInSlot}
                                                             showTierBanner={true}
                                                         />
                                                     ))}
-                                            </div>
-                                        </TableCell>
+                                                </div>
+                                            </TableCell>
+                                        )}
                                         <TableCell>
                                             <div className="flex flex-row space-x-1">
                                                 {assignedLoots.map((otherLoot) => (
@@ -238,10 +239,10 @@ export default function LootsEligibleChars({
                                                     ))}
                                             </div>
                                         </TableCell>
-                                        <TableCell>
-                                            <div className="flex flex-row gap-1">
-                                                {showTiersetInfo &&
-                                                    [
+                                        {showTiersetInfo && (
+                                            <TableCell>
+                                                <div className="flex flex-row gap-1">
+                                                    {[
                                                         'head',
                                                         'shoulder',
                                                         'chest',
@@ -270,8 +271,9 @@ export default function LootsEligibleChars({
                                                             </div>
                                                         )
                                                     })}
-                                            </div>
-                                        </TableCell>
+                                                </div>
+                                            </TableCell>
+                                        )}
                                     </TableRow>
                                 )
                             })}
