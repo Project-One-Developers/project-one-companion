@@ -241,17 +241,35 @@ export default function LootsEligibleChars({
                                         <TableCell>
                                             <div className="flex flex-row gap-1">
                                                 {showTiersetInfo &&
-                                                    charInfo.tierset.map((tierset) => (
-                                                        <div
-                                                            key={tierset.item.id}
-                                                            className="flex flex-col items-center space-x-1"
-                                                        >
-                                                            <WowGearIcon
-                                                                item={tierset}
-                                                                showTierBanner={false}
-                                                            />
-                                                        </div>
-                                                    ))}
+                                                    [
+                                                        'head',
+                                                        'shoulder',
+                                                        'chest',
+                                                        'hands',
+                                                        'legs'
+                                                    ].map((slot) => {
+                                                        const tierset = charInfo.tierset.find(
+                                                            (t) => t.item.slotKey === slot
+                                                        )
+                                                        return (
+                                                            <div
+                                                                key={slot}
+                                                                className="flex flex-col items-center space-x-1"
+                                                            >
+                                                                <span className="text-[9px] text-gray-500">
+                                                                    {slot}
+                                                                </span>
+                                                                {tierset ? (
+                                                                    <WowGearIcon
+                                                                        item={tierset}
+                                                                        showTierBanner={false}
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-8 h-8 bg-gray-700 border border-cyan-400 rounded-md"></div> // Dummy icon
+                                                                )}
+                                                            </div>
+                                                        )
+                                                    })}
                                             </div>
                                         </TableCell>
                                     </TableRow>
