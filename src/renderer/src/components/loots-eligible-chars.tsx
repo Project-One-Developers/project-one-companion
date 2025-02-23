@@ -43,7 +43,7 @@ const sortEligibleCharacters = (a: CharAssignmentInfo, b: CharAssignmentInfo) =>
     if (b.highlights.gearIsBis !== a.highlights.gearIsBis) return b.highlights.gearIsBis ? 1 : -1
     if (b.highlights.isTrackUpgrade !== a.highlights.isTrackUpgrade)
         return b.highlights.isTrackUpgrade ? 1 : -1
-    return b.highlights.isMain ? 1 : -1
+    return a.highlights.alreadyGotIt ? 1 : -1
 }
 
 export default function LootsEligibleChars({
