@@ -53,6 +53,27 @@ export function trackNameToNumber(name: WowItemTrackName | null | undefined): nu
     }
 }
 
+export function wowRaidDiffToTrackName(diff: WowRaidDifficulty): WowItemTrackName {
+    let diffName: WowItemTrackName
+    switch (diff) {
+        case 'LFR':
+            diffName = 'Veteran'
+            break
+        case 'Normal':
+            diffName = 'Champion'
+            break
+        case 'Heroic':
+            diffName = 'Hero'
+            break
+        case 'Mythic':
+            diffName = 'Myth'
+            break
+        default:
+            throw new Error('getWowItemTrackName: diff not mapped')
+    }
+    return diffName
+}
+
 export function trackNameToWowDiff(name: WowItemTrackName): WowRaidDifficulty {
     switch (name) {
         case 'Veteran':

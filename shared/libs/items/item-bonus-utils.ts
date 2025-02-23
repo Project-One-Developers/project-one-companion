@@ -7,7 +7,8 @@ import bonusItemTracks, {
     queryByItemLevelAndDelta,
     queryByItemLevelAndName,
     trackNameToNumber,
-    trackNameToWowDiff
+    trackNameToWowDiff,
+    wowRaidDiffToTrackName
 } from './item-tracks'
 
 /**
@@ -18,7 +19,7 @@ import bonusItemTracks, {
  * @param isTierset
  * @returns
  */
-function parseItemTrackName(
+export function parseItemTrackName(
     bonusIds: number[],
     isToken: boolean,
     isTierset: boolean
@@ -202,29 +203,8 @@ export const gearhasSocket = (input: number[] | null): boolean =>
 export const gearTertiary = (input: number[] | null): boolean =>
     gearHasAvoidance(input) || gearHasLeech(input) || gearHasSpeed(input)
 
-function getWowItemTrackName(diff: WowRaidDifficulty): WowItemTrackName {
-    let diffName: WowItemTrackName
-    switch (diff) {
-        case 'LFR':
-            diffName = 'Veteran'
-            break
-        case 'Normal':
-            diffName = 'Champion'
-            break
-        case 'Heroic':
-            diffName = 'Hero'
-            break
-        case 'Mythic':
-            diffName = 'Myth'
-            break
-        default:
-            throw new Error('getWowItemTrackName: diff not mapped')
-    }
-    return diffName
-}
-
 export function getItemTrack(ilvl: number, diff: WowRaidDifficulty): ItemTrack | null {
-    const diffName: WowItemTrackName = getWowItemTrackName(diff)
+    const diffName: WowItemTrackName = wowRaidDiffToTrackName(diff)
     const res = queryByItemLevelAndName(ilvl, diffName)
     if (res != null) {
         return res.track
@@ -284,7 +264,7 @@ export function applyItemTrackByIlvlAndDiff(
     diff: WowRaidDifficulty
 ): ItemTrack | null {
     applyDiffBonusId(input, diff)
-    const diffName: WowItemTrackName = getWowItemTrackName(diff)
+    const diffName: WowItemTrackName = wowRaidDiffToTrackName(diff)
     const res = queryByItemLevelAndName(ilvl, diffName)
     if (res != null) {
         input.push(Number(res.key))

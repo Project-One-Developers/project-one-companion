@@ -18,7 +18,7 @@ const LootItem = ({ loot, isSelected, setSelectedLoot }: LootItemProps) => {
             }}
         >
             <WowGearIcon
-                item={loot.gearItem}
+                gearItem={loot.gearItem}
                 showSlot={false}
                 showTierBanner={true}
                 showExtendedInfo={true}

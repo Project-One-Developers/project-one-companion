@@ -26,7 +26,7 @@ export const CurrentGreatVaultPanel = ({ droptimizer }: CurrentGreatVaultPanelPr
                     weeklyChests.map((gear) => (
                         <WowGearIcon
                             key={gear.item.id} // todo: what happends if same item in vault?
-                            item={gear}
+                            gearItem={gear}
                         />
                     ))
                 ) : (

@@ -110,7 +110,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                             {groupedLoots[boss.id]?.[difficulty]?.map((loot) => (
                                                 <div key={loot.id} className="relative group">
                                                     <WowGearIcon
-                                                        item={loot.gearItem}
+                                                        gearItem={loot.gearItem}
                                                         showTierBanner={true}
                                                         showItemTrackDiff={false}
                                                     />

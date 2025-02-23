@@ -139,7 +139,7 @@ export default function LootsEligibleChars({
             </div>
             <div className="flex flex-row justify-center items-center p-2 rounded-lg gap-4">
                 <WowGearIcon
-                    item={selectedLoot.gearItem}
+                    gearItem={selectedLoot.gearItem}
                     showSlot={true}
                     showTierBanner={true}
                     showExtendedInfo={true}
@@ -283,7 +283,7 @@ export default function LootsEligibleChars({
                                                 {charInfo.bestItemsInSlot.map((bestInSlot) => (
                                                     <WowGearIcon
                                                         key={bestInSlot.item.id}
-                                                        item={bestInSlot}
+                                                        gearItem={bestInSlot}
                                                         showTierBanner={true}
                                                     />
                                                 ))}
@@ -295,7 +295,7 @@ export default function LootsEligibleChars({
                                             {assignedLoots.map((otherLoot) => (
                                                 <WowGearIcon
                                                     key={otherLoot.id}
-                                                    item={otherLoot.gearItem}
+                                                    gearItem={otherLoot.gearItem}
                                                 />
                                             ))}
                                         </div>
@@ -309,7 +309,10 @@ export default function LootsEligibleChars({
                                                         selectedLoot.gearItem.item.slotKey
                                                 )
                                                 .map((gear) => (
-                                                    <WowGearIcon key={gear.item.id} item={gear} />
+                                                    <WowGearIcon
+                                                        key={gear.item.id}
+                                                        gearItem={gear}
+                                                    />
                                                 ))}
                                         </div>
                                     </TableCell>

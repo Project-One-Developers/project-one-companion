@@ -187,7 +187,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                             </TableCell>
                                             <TableCell>
                                                 <WowGearIcon
-                                                    item={gearItem}
+                                                    gearItem={gearItem}
                                                     showTierBanner={true}
                                                     iconClassName="rounded-lg h-10 w-10 border border-background"
                                                 />
@@ -200,7 +200,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                             <TableCell>
                                                 {tiesetInSlot && (
                                                     <WowGearIcon
-                                                        item={tiesetInSlot}
+                                                        gearItem={tiesetInSlot}
                                                         showTierBanner={true}
                                                         iconClassName="rounded-lg h-10 w-10 border border-background"
                                                     />
@@ -210,7 +210,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                                 {bestGearInSlot &&
                                                     bestGearInSlot.item.id !== gearItem.item.id && (
                                                         <WowGearIcon
-                                                            item={bestGearInSlot}
+                                                            gearItem={bestGearInSlot}
                                                             showTierBanner={true}
                                                             iconClassName="rounded-lg h-10 w-10 border border-background"
                                                         />
@@ -241,7 +241,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                         </TableCell>
                                         <TableCell>
                                             <WowGearIcon
-                                                item={gearItem}
+                                                gearItem={gearItem}
                                                 showTierBanner={true}
                                                 iconClassName="rounded-lg h-10 w-10 border border-background"
                                             />

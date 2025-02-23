@@ -24,7 +24,7 @@ const TiersetInfo = ({ tierset, className }: TiersetInfoProps) => {
                                     <TooltipTrigger asChild>
                                         <div className="text-yellow-500">
                                             <WowGearIcon
-                                                item={tiersetItem}
+                                                gearItem={tiersetItem}
                                                 showTierBanner={false}
                                             />
                                         </div>
@@ -35,7 +35,7 @@ const TiersetInfo = ({ tierset, className }: TiersetInfoProps) => {
                                     </TooltipContent>
                                 </Tooltip>
                             ) : (
-                                <WowGearIcon item={tiersetItem} showTierBanner={false} />
+                                <WowGearIcon gearItem={tiersetItem} showTierBanner={false} />
                             )
                         ) : (
                             <div className="w-8 h-8 bg-gray-700 border border-cyan-400 rounded-md"></div> // Dummy icon
