@@ -7,7 +7,7 @@ import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
@@ -21,8 +21,22 @@ export default function LootAssign() {
     const lootsQuery = useQuery({
         queryKey: [queryKeys.lootsBySession, Array.from(selectedSessions)],
         queryFn: () => getLootsWithAssignedBySessions(Array.from(selectedSessions)),
-        enabled: selectedSessions.size > 0
+        enabled: selectedSessions.size > 0,
+        refetchInterval: 10000 // Refetch every 10 seconds
     })
+
+    // Update selectedLoot.assignedCharacterId if changed in backend
+    useEffect(() => {
+        if (!selectedLoot || !lootsQuery.data) return
+
+        // Find the latest version of the selected loot
+        const updatedLoot = lootsQuery.data.find((loot) => loot.id === selectedLoot.id)
+        if (!updatedLoot) {
+            setSelectedLoot(null)
+        } else if (updatedLoot.assignedCharacterId !== selectedLoot.assignedCharacterId) {
+            setSelectedLoot(updatedLoot) // Update state with the latest data
+        }
+    }, [lootsQuery.data, selectedLoot])
 
     if (raidSessionsQuery.isLoading || lootsQuery.isLoading) {
         return (
@@ -39,15 +53,12 @@ export default function LootAssign() {
 
     const toggleSession = (sessionId: string) => {
         const newSelectedSessions = new Set(selectedSessions)
-
         if (newSelectedSessions.has(sessionId)) {
             newSelectedSessions.delete(sessionId)
         } else {
             newSelectedSessions.add(sessionId)
         }
-
         setSelectedSessions(newSelectedSessions)
-        setSelectedLoot(null)
     }
 
     return (
