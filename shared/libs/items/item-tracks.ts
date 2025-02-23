@@ -10,12 +10,24 @@ interface BonusItemTrack {
     season: number
 }
 
-export function queryByItemLevelAndName(itemLevel: number, name: string): BonusItemTrack | null {
-    return (
-        Object.values(bonusItemTracks).find(
-            (track) => track.itemLevel === itemLevel && track.name === name
-        ) ?? null
+export function queryByItemLevelAndName(
+    itemLevel: number,
+    name: string
+): { key: string; track: BonusItemTrack } | null {
+    const entry = Object.entries(bonusItemTracks).find(
+        ([, track]) => track.itemLevel === itemLevel && track.name === name
     )
+    return entry ? { key: entry[0], track: entry[1] } : null
+}
+
+export function queryByItemLevelAndDelta(
+    ilvl: number,
+    delta: number
+): { key: string; track: BonusItemTrack } | null {
+    const entry = Object.entries(bonusItemTracks).find(
+        ([, track]) => track.itemLevel === ilvl && track.max - track.level === delta
+    )
+    return entry ? { key: entry[0], track: entry[1] } : null
 }
 
 export function trackNameToNumber(name: WowItemTrackName | null | undefined): number | null {

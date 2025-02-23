@@ -1,14 +1,34 @@
+import { TooltipArrow } from '@radix-ui/react-tooltip'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { assignLoot, getLootAssignmentInfo } from '@renderer/lib/tanstack-query/loots'
 import { ITEM_SLOTS_KEY_TIERSET } from '@shared/consts/wow.consts'
-import type { CharAssignmentHighlights, LootWithAssigned } from '@shared/types/types'
+import { isHealerItem, isTankItem } from '@shared/libs/spec-parser/spec-utils'
+import type {
+    CharAssignmentHighlights,
+    CharAssignmentInfo,
+    LootWithAssigned
+} from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { LoaderCircle } from 'lucide-react'
-import { type JSX } from 'react'
+import {
+    HeartCrackIcon,
+    LoaderCircle,
+    MoreVertical,
+    ShieldAlertIcon,
+    TriangleAlertIcon
+} from 'lucide-react'
+import { useMemo, useState, type JSX } from 'react'
 import { DroptimizerUpgradeForItemEquipped } from './droptimizer-upgrade-for-item'
 import { toast } from './hooks/use-toast'
+import TiersetInfo from './tierset-info'
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from './ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
 
@@ -18,15 +38,31 @@ type LootsEligibleCharsProps = {
     allLoots: LootWithAssigned[]
 }
 
+const sortEligibleCharacters = (a: CharAssignmentInfo, b: CharAssignmentInfo) => {
+    if (b.highlights.score !== a.highlights.score) return b.highlights.score - a.highlights.score
+    if (b.highlights.gearIsBis !== a.highlights.gearIsBis) return b.highlights.gearIsBis ? 1 : -1
+    if (b.highlights.isTrackUpgrade !== a.highlights.isTrackUpgrade)
+        return b.highlights.isTrackUpgrade ? 1 : -1
+    return b.highlights.isMain ? 1 : -1
+}
+
 export default function LootsEligibleChars({
     selectedLoot,
     setSelectedLoot,
     allLoots
 }: LootsEligibleCharsProps): JSX.Element {
+    const [showAlts, setShowAlts] = useState(false)
     const lootAssignmentInfoQuery = useQuery({
         queryKey: [queryKeys.lootsAssignInfo, selectedLoot.id],
         queryFn: () => getLootAssignmentInfo(selectedLoot.id)
     })
+    const eligibleCharacters = useMemo(() => {
+        if (!lootAssignmentInfoQuery.data) return []
+
+        return lootAssignmentInfoQuery.data.eligible
+            .filter(({ character }) => showAlts || character.main)
+            .sort(sortEligibleCharacters)
+    }, [lootAssignmentInfoQuery.data, showAlts])
 
     const assignLootMutation = useMutation({
         mutationFn: ({
@@ -63,7 +99,6 @@ export default function LootsEligibleChars({
             // we dont need to refetch the loot assignment info, we just need to refetch the loots from the parent to also refresh loot tabs panel
             queryClient.invalidateQueries({
                 queryKey: [queryKeys.lootsBySession]
-                //queryKey: [queryKeys.lootsAssignInfo, selectedLoot.id] queryKeys.lootsBySession
             })
         }
     })
@@ -82,8 +117,27 @@ export default function LootsEligibleChars({
     const showHightestInSlot = selectedLoot.gearItem.item.slotKey !== 'omni'
 
     return (
-        <div className="flex flex-col gap-4">
-            <div className="flex flex-row justify-center">
+        <div className="flex flex-col gap-4 relative">
+            <div className="absolute top-4 right-2">
+                <DropdownMenu>
+                    <DropdownMenuTrigger
+                        className="p-2 rounded hover:bg-gray-700"
+                        aria-label="More options"
+                    >
+                        <MoreVertical className="h-5 w-5" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuCheckboxItem
+                            className="cursor-pointer"
+                            checked={showAlts}
+                            onCheckedChange={setShowAlts}
+                        >
+                            Show Alts
+                        </DropdownMenuCheckboxItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+            <div className="flex flex-row justify-center items-center p-2 rounded-lg gap-4">
                 <WowGearIcon
                     item={selectedLoot.gearItem}
                     showSlot={true}
@@ -92,6 +146,30 @@ export default function LootsEligibleChars({
                     showArmorType={true}
                     iconClassName="h-12 w-12"
                 />
+                {lootAssignmentInfoQuery.data &&
+                    isTankItem(lootAssignmentInfoQuery.data?.loot.item) && (
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <ShieldAlertIcon className="cursor-pointer text-yellow-300" />
+                            </TooltipTrigger>
+                            <TooltipContent className="TooltipContent" sideOffset={5}>
+                                Tank Item
+                                <TooltipArrow className="TooltipArrow" />
+                            </TooltipContent>
+                        </Tooltip>
+                    )}
+                {lootAssignmentInfoQuery.data &&
+                    isHealerItem(lootAssignmentInfoQuery.data?.loot.item) && (
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <HeartCrackIcon className="cursor-pointer text-yellow-300" />
+                            </TooltipTrigger>
+                            <TooltipContent className="TooltipContent" sideOffset={5}>
+                                Healer Item
+                                <TooltipArrow className="TooltipArrow" />
+                            </TooltipContent>
+                        </Tooltip>
+                    )}
             </div>
             <div className="flex">
                 <Table>
@@ -107,86 +185,74 @@ export default function LootsEligibleChars({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {lootAssignmentInfoQuery.data?.eligible
-                            .sort((a, b) => {
-                                // score first
-                                if (b.highlights.score !== a.highlights.score) {
-                                    return b.highlights.score - a.highlights.score
-                                }
-                                // then bis
-                                if (b.highlights.gearIsBis !== a.highlights.gearIsBis) {
-                                    return b.highlights.gearIsBis ? 1 : -1
-                                }
-                                // then slot upgrade
-                                if (b.highlights.isTrackUpgrade !== a.highlights.isTrackUpgrade) {
-                                    return b.highlights.isTrackUpgrade ? 1 : -1
-                                }
-                                // then main
-                                return b.highlights.isMain ? 1 : -1
-                            })
-                            .map((charInfo) => {
-                                const assignedLoots = allLoots.filter(
-                                    (loot) =>
-                                        loot.id !== selectedLoot.id &&
-                                        loot.assignedCharacterId === charInfo.character.id &&
-                                        loot.gearItem.item.slotKey ===
-                                            selectedLoot.gearItem.item.slotKey
-                                )
-                                return (
-                                    <TableRow
-                                        key={charInfo.character.id}
-                                        className={`cursor-pointer hover:bg-gray-700 ${selectedLoot.assignedCharacterId === charInfo.character.id ? 'bg-gray-700' : ''}`}
-                                        onClick={() =>
-                                            assignLootMutation.mutate({
-                                                charId: charInfo.character.id,
-                                                lootId: selectedLoot.id,
-                                                highlights: charInfo.highlights
-                                            })
-                                        }
-                                    >
-                                        <TableCell>
-                                            <div className="flex flex-row space-x-4 items-center">
-                                                <WowClassIcon
-                                                    wowClassName={charInfo.character.class}
-                                                    charname={charInfo.character.name}
-                                                    className="h-8 w-8 border-2 border-background rounded-lg"
-                                                />
-                                                <div className="flex flex-col">
-                                                    <h1 className="font-bold">
-                                                        {charInfo.character.name}
-                                                    </h1>
-                                                    <p className="text-xs">
-                                                        {charInfo.highlights?.score ?? 0}
-                                                    </p>
-                                                </div>
+                        {eligibleCharacters.map((charInfo) => {
+                            const assignedLoots = allLoots.filter(
+                                (loot) =>
+                                    loot.id !== selectedLoot.id &&
+                                    loot.assignedCharacterId === charInfo.character.id &&
+                                    loot.gearItem.item.slotKey ===
+                                        selectedLoot.gearItem.item.slotKey
+                            )
+                            return (
+                                <TableRow
+                                    key={charInfo.character.id}
+                                    className={`cursor-pointer hover:bg-gray-700 ${selectedLoot.assignedCharacterId === charInfo.character.id ? 'bg-green-800' : ''}`}
+                                    onClick={() =>
+                                        assignLootMutation.mutate({
+                                            charId: charInfo.character.id,
+                                            lootId: selectedLoot.id,
+                                            highlights: charInfo.highlights
+                                        })
+                                    }
+                                >
+                                    <TableCell>
+                                        <div className="flex flex-row space-x-4 items-center">
+                                            <WowClassIcon
+                                                wowClassName={charInfo.character.class}
+                                                charname={charInfo.character.name}
+                                                className="h-8 w-8 border-2 border-background rounded-lg"
+                                            />
+                                            <div className="flex flex-col">
+                                                <h1 className="font-bold">
+                                                    {charInfo.character.name}
+                                                </h1>
+                                                <p className="text-xs">
+                                                    {charInfo.highlights?.score ?? 0}
+                                                </p>
                                             </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex flex-row space-x-4 items-center">
-                                                <div className="flex flex-col">
-                                                    <p className="text-xs font-bold">
-                                                        {charInfo.highlights.gearIsBis && 'BIS'}
-                                                    </p>
-                                                    <p className="text-xs font-bold">
-                                                        {charInfo.highlights.tierSetCompletion
-                                                            .type === '2p' && '2p'}
-                                                    </p>
-                                                    <p className="text-xs font-bold">
-                                                        {charInfo.highlights.tierSetCompletion
-                                                            .type === '4p' && '4p'}
-                                                    </p>
-                                                    <p className="text-xs font-bold">
-                                                        {charInfo.highlights.dpsGain > 0 && 'DPS'}
-                                                    </p>
-                                                    <p className="text-xs font-bold">
-                                                        {(charInfo.highlights.ilvlDiff > 0 ||
-                                                            charInfo.highlights.isTrackUpgrade) &&
-                                                            'SLOT'}
-                                                    </p>
-                                                </div>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-row space-x-4 items-center">
+                                            <div className="flex flex-col">
+                                                <p className="text-xs font-bold text-green-400">
+                                                    {charInfo.highlights.gearIsBis && 'BIS'}
+                                                </p>
+                                                <p className="text-xs font-bold">
+                                                    {charInfo.highlights.tierSetCompletion.type ===
+                                                        '2p' && '2p'}
+                                                </p>
+                                                <p className="text-xs font-bold">
+                                                    {charInfo.highlights.tierSetCompletion.type ===
+                                                        '4p' && '4p'}
+                                                </p>
+                                                <p className="text-xs font-bold text-blue-200">
+                                                    {charInfo.highlights.dpsGain > 0 && 'DPS'}
+                                                </p>
+                                                <p className="text-xs font-bold">
+                                                    {(charInfo.highlights.ilvlDiff > 0 ||
+                                                        charInfo.highlights.isTrackUpgrade) &&
+                                                        'SLOT'}
+                                                </p>
+                                                <p className="text-xs font-bold text-yellow-400 ">
+                                                    {charInfo.highlights.alreadyGotIt &&
+                                                        'ALREADY GOT IT'}
+                                                </p>
                                             </div>
-                                        </TableCell>
-                                        <TableCell>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <>
                                             {charInfo.droptimizers.map((droptWithUpgrade) => (
                                                 <DroptimizerUpgradeForItemEquipped
                                                     key={droptWithUpgrade.droptimizer.url}
@@ -195,64 +261,66 @@ export default function LootsEligibleChars({
                                                     itemEquipped={droptWithUpgrade.itemEquipped}
                                                 />
                                             ))}
-                                        </TableCell>
+                                        </>
+                                        {charInfo.warnDroptimizer.type === 'not-imported' && (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <TriangleAlertIcon className="cursor-pointer text-yellow-300" />
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    Missing Droptimizer
+                                                    <TooltipArrow className="TooltipArrow" />
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )}
+                                    </TableCell>
+                                    {showHightestInSlot && (
                                         <TableCell>
                                             <div className="flex flex-row space-x-1">
-                                                {showHightestInSlot &&
-                                                    charInfo.bestItemsInSlot.map((bestInSlot) => (
-                                                        <WowGearIcon
-                                                            key={bestInSlot.item.id}
-                                                            item={bestInSlot}
-                                                            showTierBanner={true}
-                                                        />
-                                                    ))}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex flex-row space-x-1">
-                                                {assignedLoots.map((otherLoot) => (
+                                                {charInfo.bestItemsInSlot.map((bestInSlot) => (
                                                     <WowGearIcon
-                                                        key={otherLoot.id}
-                                                        item={otherLoot.gearItem}
+                                                        key={bestInSlot.item.id}
+                                                        item={bestInSlot}
+                                                        showTierBanner={true}
                                                     />
                                                 ))}
                                             </div>
                                         </TableCell>
+                                    )}
+                                    <TableCell>
+                                        <div className="flex flex-row space-x-1">
+                                            {assignedLoots.map((otherLoot) => (
+                                                <WowGearIcon
+                                                    key={otherLoot.id}
+                                                    item={otherLoot.gearItem}
+                                                />
+                                            ))}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-row space-x-1">
+                                            {charInfo.weeklyChest
+                                                .filter(
+                                                    (vault) =>
+                                                        vault.item.slotKey ===
+                                                        selectedLoot.gearItem.item.slotKey
+                                                )
+                                                .map((gear) => (
+                                                    <WowGearIcon key={gear.item.id} item={gear} />
+                                                ))}
+                                        </div>
+                                    </TableCell>
+                                    {showTiersetInfo && (
                                         <TableCell>
-                                            <div className="flex flex-row space-x-1">
-                                                {charInfo.weeklyChest
-                                                    .filter(
-                                                        (vault) =>
-                                                            vault.item.slotKey ===
-                                                            selectedLoot.gearItem.item.slotKey
-                                                    )
-                                                    .map((gear) => (
-                                                        <WowGearIcon
-                                                            key={gear.item.id}
-                                                            item={gear}
-                                                        />
-                                                    ))}
-                                            </div>
+                                            <TiersetInfo tierset={charInfo.tierset} />
                                         </TableCell>
-                                        <TableCell>
-                                            <div className="flex flex-row gap-1">
-                                                {showTiersetInfo &&
-                                                    charInfo.tierset.map((tierset) => (
-                                                        <div
-                                                            key={tierset.item.id}
-                                                            className="flex flex-col items-center space-x-1"
-                                                        >
-                                                            <WowGearIcon
-                                                                item={tierset}
-                                                                showTierBanner={false}
-                                                            />
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            })}
+                                    )}
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </div>

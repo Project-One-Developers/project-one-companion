@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { gearItemSchema } from './items.schema'
 import { droptimizerSchema } from './simulations.schemas'
 import { wowClassNameSchema, wowRaidDiffSchema, wowRolesSchema } from './wow.schemas'
 
@@ -96,49 +97,9 @@ export const charWowAuditSchema = z.object({
         slot8: z.number().nullable(),
         slot9: z.number().nullable()
     }),
-    tierset: z.object({
-        head: wowauditTiersetItemSchema.nullable(),
-        shoulder: wowauditTiersetItemSchema.nullable(),
-        chest: wowauditTiersetItemSchema.nullable(),
-        hands: wowauditTiersetItemSchema.nullable(),
-        legs: wowauditTiersetItemSchema.nullable()
-    }),
-    equippedGear: z.object({
-        head: wowauditGearItemSchema.nullish(),
-        neck: wowauditGearItemSchema.nullish(),
-        shoulder: wowauditGearItemSchema.nullish(),
-        back: wowauditGearItemSchema.nullish(),
-        chest: wowauditGearItemSchema.nullish(),
-        wrist: wowauditGearItemSchema.nullish(),
-        hands: wowauditGearItemSchema.nullish(),
-        waist: wowauditGearItemSchema.nullish(),
-        legs: wowauditGearItemSchema.nullish(),
-        feet: wowauditGearItemSchema.nullish(),
-        finger1: wowauditGearItemSchema.nullish(),
-        finger2: wowauditGearItemSchema.nullish(),
-        trinket1: wowauditGearItemSchema.nullish(),
-        trinket2: wowauditGearItemSchema.nullish(),
-        main_hand: wowauditGearItemSchema.nullish(),
-        off_hand: wowauditGearItemSchema.nullish()
-    }),
-    bestGear: z.object({
-        head: wowauditGearItemSchema.nullish(),
-        neck: wowauditGearItemSchema.nullish(),
-        shoulder: wowauditGearItemSchema.nullish(),
-        back: wowauditGearItemSchema.nullish(),
-        chest: wowauditGearItemSchema.nullish(),
-        wrist: wowauditGearItemSchema.nullish(),
-        hands: wowauditGearItemSchema.nullish(),
-        waist: wowauditGearItemSchema.nullish(),
-        legs: wowauditGearItemSchema.nullish(),
-        feet: wowauditGearItemSchema.nullish(),
-        finger1: wowauditGearItemSchema.nullish(),
-        finger2: wowauditGearItemSchema.nullish(),
-        trinket1: wowauditGearItemSchema.nullish(),
-        trinket2: wowauditGearItemSchema.nullish(),
-        main_hand: wowauditGearItemSchema.nullish(),
-        off_hand: wowauditGearItemSchema.nullish()
-    })
+    bestItemsEquipped: z.array(gearItemSchema),
+    itemsEquipped: z.array(gearItemSchema),
+    tiersetInfo: z.array(gearItemSchema)
 })
 
 export const characterGameInfoSchema = z.object({

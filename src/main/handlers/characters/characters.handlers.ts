@@ -70,7 +70,7 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
     const json = await fetchWowAuditData(key)
 
     if (json != null) {
-        const charsData = parseWowAuditData(json)
+        const charsData = await parseWowAuditData(json)
         await deleteAllCharacterWowAudit()
         await addCharacterWowAudit(charsData)
     }

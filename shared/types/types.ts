@@ -47,12 +47,13 @@ import {
     wowClassNameSchema,
     wowItemEquippedSlotKeySchema,
     wowItemSlotKeySchema,
+    wowItemSlotKeyTiersetSchema,
     wowItemSlotSchema,
     wowItemTrackNameSchema,
     wowRaidDiffSchema,
+    wowRolePositionSchema,
     wowRolesSchema,
-    wowSpecNameSchema,
-    wowTiersetSlotSchema
+    wowSpecNameSchema
 } from '../schemas/wow.schemas'
 
 export type WowClassName = z.infer<typeof wowClassNameSchema>
@@ -60,6 +61,8 @@ export type WowSpecName = z.infer<typeof wowSpecNameSchema>
 export type WowSpec = {
     id: number
     name: WowSpecName
+    role: WoWRole
+    position: WoWRolePosition
 }
 
 export type WowClass = {
@@ -75,7 +78,8 @@ export type WowItemSlotKey = z.infer<typeof wowItemSlotKeySchema>
 export type WowItemEquippedSlotKey = z.infer<typeof wowItemEquippedSlotKeySchema>
 export type WowArmorType = z.infer<typeof wowArmorTypeSchema>
 export type WoWRole = z.infer<typeof wowRolesSchema>
-export type WowTiersetSlot = z.infer<typeof wowTiersetSlotSchema>
+export type WoWRolePosition = z.infer<typeof wowRolePositionSchema>
+export type WowTiersetSlot = z.infer<typeof wowItemSlotKeyTiersetSchema>
 
 export type Player = z.infer<typeof playerSchema>
 export type PlayerWithCharacters = z.infer<typeof playerWithCharacterSchema>
@@ -124,12 +128,15 @@ export type LootWithAssigned = z.infer<typeof lootWithAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootManual = z.infer<typeof newLootManualSchema>
 export type TierSetCompletion = { type: 'none' } | { type: '2p' } | { type: '4p' }
+export type DroptimizerWarn = { type: 'none' } | { type: 'old' } | { type: 'not-imported' }
+export type WowAuditWarn = { type: 'none' } | { type: 'used' }
 export type CharAssignmentHighlights = {
     isMain: boolean
     dpsGain: number
     tierSetCompletion: TierSetCompletion
     ilvlDiff: number
     gearIsBis: boolean
+    alreadyGotIt: boolean
     score: number
     isTrackUpgrade: boolean
 }
@@ -143,11 +150,14 @@ export type CharAssignmentInfo = {
     weeklyChest: GearItem[]
     tierset: GearItem[]
     bestItemsInSlot: GearItem[]
-    bis: BisList[]
+    bis: boolean
+    alreadyGotIt: boolean
+    warnDroptimizer: DroptimizerWarn
+    warnWowAudit: WowAuditWarn
     highlights: CharAssignmentHighlights
 }
 export type LootAssignmentInfo = {
-    loot: Loot
+    loot: LootWithItem
     eligible: CharAssignmentInfo[]
 }
 

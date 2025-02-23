@@ -3,12 +3,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
 import { formatWowEquippedSlotKey } from '@shared/libs/items/item-slot-utils'
-import {
-    Character,
-    CharacterWowAudit,
-    Droptimizer,
-    WowItemEquippedSlotKey
-} from '@shared/types/types'
+import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import { CurrentGreatVaultPanel } from './greatvault-current-panel'
@@ -16,7 +11,6 @@ import { NextGreatVaultPanel } from './greatvault-next-panel'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
-import { WowItemIcon } from './ui/wowitem-icon'
 
 type CharGameInfoPanelProps = {
     character: Character
@@ -170,9 +164,7 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                     </TableHead>
                                     <TableHead>Enchant</TableHead>
                                     <TableHead>
-                                        Tierset •{' '}
-                                        {Object.values(wowAudit.tierset).filter((t) => t != null)
-                                            .length + '/5'}
+                                        Tierset • {wowAudit.tiersetInfo.length + '/5'}
                                     </TableHead>
                                     <TableHead>
                                         Best Gear • {wowAudit.hightestIlvlEverEquipped || 'N/A'}
@@ -180,57 +172,53 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {Object.entries(wowAudit.equippedGear).map(([key, value]) =>
-                                    value ? (
-                                        <TableRow key={key}>
+                                {wowAudit.itemsEquipped.map((gearItem) => {
+                                    const slot = gearItem.equippedInSlot!
+                                    const bestGearInSlot = wowAudit.bestItemsEquipped.find(
+                                        (b) => b.equippedInSlot === slot
+                                    )
+                                    const tiesetInSlot = wowAudit.tiersetInfo.find(
+                                        (t) => t.item.slotKey === gearItem.item.slotKey
+                                    )
+                                    return (
+                                        <TableRow key={gearItem.equippedInSlot}>
                                             <TableCell>
-                                                {formatWowEquippedSlotKey(
-                                                    key as WowItemEquippedSlotKey
-                                                )}
+                                                {formatWowEquippedSlotKey(gearItem.equippedInSlot!)}
                                             </TableCell>
                                             <TableCell>
-                                                <WowItemIcon
-                                                    item={wowAudit.equippedGear[key].id}
-                                                    ilvl={wowAudit.equippedGear[key].ilvl}
-                                                    iconOnly={false}
-                                                    showIlvl={true}
-                                                    showSlot={false}
-                                                    showSubclass={false}
-                                                    tierBanner={true}
+                                                <WowGearIcon
+                                                    item={gearItem}
+                                                    showTierBanner={true}
                                                     iconClassName="rounded-lg h-10 w-10 border border-background"
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                {wowAudit.enchant[key] && (
-                                                    <p>{wowAudit.enchant[key].name}</p>
+                                                {wowAudit.enchant[slot] && (
+                                                    <p>{wowAudit.enchant[slot].name}</p>
                                                 )}
                                             </TableCell>
                                             <TableCell>
-                                                {wowAudit.tierset[key] && (
-                                                    <p>
-                                                        {wowAudit.tierset[key].diff} -{' '}
-                                                        {wowAudit.tierset[key].ilvl}{' '}
-                                                    </p>
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {wowAudit.bestGear[key].id !=
-                                                wowAudit.equippedGear[key].id ? (
-                                                    <WowItemIcon
-                                                        item={wowAudit.bestGear[key].id}
-                                                        ilvl={wowAudit.bestGear[key].ilvl}
-                                                        iconOnly={false}
-                                                        showIlvl={true}
-                                                        showSlot={false}
-                                                        showSubclass={false}
-                                                        tierBanner={true}
+                                                {tiesetInSlot && (
+                                                    <WowGearIcon
+                                                        item={tiesetInSlot}
+                                                        showTierBanner={true}
                                                         iconClassName="rounded-lg h-10 w-10 border border-background"
                                                     />
-                                                ) : null}
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {bestGearInSlot &&
+                                                    bestGearInSlot.item.id !== gearItem.item.id && (
+                                                        <WowGearIcon
+                                                            item={bestGearInSlot}
+                                                            showTierBanner={true}
+                                                            iconClassName="rounded-lg h-10 w-10 border border-background"
+                                                        />
+                                                    )}
                                             </TableCell>
                                         </TableRow>
-                                    ) : null
-                                )}
+                                    )
+                                })}
                             </TableBody>
                         </Table>
                     )}

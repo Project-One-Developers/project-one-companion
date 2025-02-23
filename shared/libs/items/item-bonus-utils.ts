@@ -3,8 +3,20 @@
 // jq 'map(select(.upgrade.fullName != null and (.upgrade.seasonId == 24 or .upgrade.seasonId == 25)) | {id, level: .upgrade.level, max: .upgrade.max, name: .upgrade.name, fullName: .upgrade.fullName, itemLevel: .upgrade.itemLevel})' bonus.json > parsed_bonus.json
 
 import { GearItem, Item, ItemTrack, WowItemTrackName, WowRaidDifficulty } from '@shared/types/types'
-import bonusItemTracks, { queryByItemLevelAndName, trackNameToNumber } from './item-tracks'
+import bonusItemTracks, {
+    queryByItemLevelAndDelta,
+    queryByItemLevelAndName,
+    trackNameToNumber
+} from './item-tracks'
 
+/**
+ * Return item track name.
+ * In case of token or tierset the track name is not well defined, we deduce it from Diff bonusId
+ * @param bonusIds
+ * @param isToken
+ * @param isTierset
+ * @returns
+ */
 function parseItemTrackName(
     bonusIds: number[],
     isToken: boolean,
@@ -36,7 +48,32 @@ function parseItemTrackName(
 }
 
 /**
- * Compara gear item a and b
+ * Compare two gear item to find if its the same item id and diff tracks (es: Spymaster 632M and 639M are the same item)
+ * @param a
+ * @param b
+ * @returns
+ */
+export function gearAreTheSame(a: GearItem, b: GearItem): boolean {
+    if (a.item.id !== b.item.id || a.item.season !== b.item.season) {
+        return false // Different item ID or season
+    }
+
+    if (a.itemTrack && b.itemTrack) {
+        return a.itemTrack.maxItemLevel === b.itemTrack.maxItemLevel
+    }
+
+    if (a.item.token && b.item.token) {
+        // Ensure correct bonusIds are used for each comparison
+        const aTrackName = parseItemTrackName(a.bonusIds ?? [], a.item.token, a.item.tierset)
+        const bTrackName = parseItemTrackName(b.bonusIds ?? [], b.item.token, b.item.tierset)
+        return aTrackName === bTrackName
+    }
+
+    return false // Not comparable -> not the same item
+}
+
+/**
+ * Compare gear item a and b
  * Compare over season, item track, item level (it detects overlaps like 626HC vs 626M)
  * @param a First Gear to compare
  * @param b Second Gear to compare
@@ -93,10 +130,16 @@ export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): numb
         }
     }
 
-    // crafted items ilvl
-    if (bonusIds.includes(11144)) {
-        // tww season 1 rank 5
-        return 636
+    // crafted items ilvl (10222 = Omen Crafted -> 593)
+    if (bonusIds.includes(10222)) {
+        //const baseLevel = 597
+        if (bonusIds.includes(11144)) {
+            // tww season 1 mythic crest
+            return 636
+        } else if (bonusIds.includes(11143)) {
+            // tww season 1 hc crest
+            return 619
+        }
     }
 
     // edge case items (not worth mapping all possible states with bonus id)
@@ -158,10 +201,12 @@ export const gearhasSocket = (input: number[] | null): boolean =>
 export const gearTertiary = (input: number[] | null): boolean =>
     gearHasAvoidance(input) || gearHasLeech(input) || gearHasSpeed(input)
 
-export function getItemTrack(ilvl: number, diff: WowRaidDifficulty): ItemTrack | null {
-    let diffName
-
+function getWowItemTrackName(diff: WowRaidDifficulty): WowItemTrackName {
+    let diffName: WowItemTrackName
     switch (diff) {
+        case 'LFR':
+            diffName = 'Veteran'
+            break
         case 'Normal':
             diffName = 'Champion'
             break
@@ -172,15 +217,26 @@ export function getItemTrack(ilvl: number, diff: WowRaidDifficulty): ItemTrack |
             diffName = 'Myth'
             break
         default:
-            throw new Error('getItemTrack: diff not mapped')
+            throw new Error('getWowItemTrackName: diff not mapped')
     }
+    return diffName
+}
 
-    return queryByItemLevelAndName(ilvl, diffName)
+export function getItemTrack(ilvl: number, diff: WowRaidDifficulty): ItemTrack | null {
+    const diffName: WowItemTrackName = getWowItemTrackName(diff)
+    const res = queryByItemLevelAndName(ilvl, diffName)
+    if (res != null) {
+        return res.track
+    }
+    return null
 }
 
 // gear manipolation
 export function applyTokenDiff(input: number[], diff: WowRaidDifficulty): void {
     switch (diff) {
+        case 'LFR':
+            input.push(10353)
+            break
         case 'Heroic':
             input.push(10355)
             break
@@ -188,6 +244,47 @@ export function applyTokenDiff(input: number[], diff: WowRaidDifficulty): void {
             input.push(10356)
             break
     }
+}
+
+// todo
+
+/**
+ * Apply track bonus ids and return
+ * @param input Bonus id array to fill
+ * @param ilvl Gear ilvl
+ * @param delta Gear delta to reach max track upgrade (eg: for 4/6M delta is 2)
+ */
+export function applyItemTrackByIlvlAndDelta(
+    input: number[],
+    ilvl: number,
+    delta: number
+): ItemTrack | null {
+    const res = queryByItemLevelAndDelta(ilvl, delta)
+    if (res != null) {
+        input.push(Number(res.key))
+        return res.track
+    }
+    return null
+}
+
+/**
+ * Apply track bonus ids and return
+ * @param input Bonus id array to fill
+ * @param ilvl Gear ilvl
+ * @param diff Gear raid difficulty (eg: Heroic item)
+ */
+export function applyItemTrack(
+    input: number[],
+    ilvl: number,
+    diff: WowRaidDifficulty
+): ItemTrack | null {
+    const diffName: WowItemTrackName = getWowItemTrackName(diff)
+    const res = queryByItemLevelAndName(ilvl, diffName)
+    if (res != null) {
+        input.push(Number(res.key))
+        return res.track
+    }
+    return null
 }
 
 export function applySocket(input: number[]): void {

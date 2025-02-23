@@ -6,16 +6,19 @@ import {
     applySpeed,
     applyTokenDiff,
     compareGearItem,
+    gearAreTheSame,
     getItemTrack,
     parseItemLevelFromRaidDiff,
     parseItemTrack
 } from '@shared/libs/items/item-bonus-utils'
 import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
-import { getClassSpecs } from '@shared/libs/spec-parser/spec-parser'
+import { getClassSpecsForRole } from '@shared/libs/spec-parser/spec-utils'
 import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
     BisList,
+    Character,
+    CharacterWowAudit,
     CharAssignmentHighlights,
     CharAssignmentInfo,
     Droptimizer,
@@ -28,7 +31,6 @@ import {
     NewLoot,
     NewLootManual,
     TierSetCompletion,
-    WowClassName,
     WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
@@ -280,11 +282,12 @@ const parseDateTime = (dateStr: string, timeStr: string): number => {
 }
 
 export const parseBestItemInSlot = (
-    slot: WowItemSlotKey,
+    slotKey: WowItemSlotKey,
     charDroptimizers: Droptimizer[],
-    charAssignedLoot: Loot[]
+    charAssignedLoot: Loot[],
+    charWowAudit: CharacterWowAudit | null
 ): GearItem[] => {
-    if (slot === 'omni') return []
+    if (slotKey === 'omni') return []
 
     const allItems: GearItem[] = [
         ...charDroptimizers.flatMap((d) => d.itemsEquipped),
@@ -292,17 +295,17 @@ export const parseBestItemInSlot = (
         ...charAssignedLoot.map((l) => l.gearItem)
     ]
 
-    // if (charWowAudit) {
-    //     const wowAuditItem = charWowAudit.bestGear.find((bg) => bg.item.slotKey === slot)
-    //     if (wowAuditItem) {
-    //         allItems.push(wowAuditItem)
-    //     }
-    // }
+    if (charWowAudit) {
+        const wowAuditItem = charWowAudit.itemsEquipped.find((bg) => bg.item.slotKey === slotKey)
+        if (wowAuditItem) {
+            allItems.push(wowAuditItem)
+        }
+    }
 
-    const filteredItems = allItems.filter((gear) => gear.item.slotKey === slot)
+    const filteredItems = allItems.filter((gear) => gear.item.slotKey === slotKey)
     const sortedItems = filteredItems.sort((a, b) => b.itemLevel - a.itemLevel)
 
-    if (slot === 'finger' || slot === 'trinket') {
+    if (slotKey === 'finger' || slotKey === 'trinket') {
         const uniqueItems: GearItem[] = []
         const seenItemIds = new Set<number>()
 
@@ -319,38 +322,81 @@ export const parseBestItemInSlot = (
     return sortedItems.slice(0, 1)
 }
 
-export const parseLootBisForClass = (
+export const parseLootIsBisForChar = (
     bisList: BisList[],
-    lootId: number,
-    wowClass: WowClassName
-): BisList[] => {
-    const classSpecs = getClassSpecs(wowClass).map((s) => s.id)
-    return bisList.filter(
-        (b) => b.itemId === lootId && b.specIds.some((specId) => classSpecs.includes(specId))
+    itemId: number,
+    char: Character
+): boolean => {
+    const classSpecs = getClassSpecsForRole(char.class, char.role).map((s) => s.id)
+    return bisList.some(
+        (b) => b.itemId === itemId && b.specIds.some((specId) => classSpecs.includes(specId))
     )
+}
+
+/**
+ * Check if char already got the loot in bag/equipped/assigned
+ * @param charDroptimizers
+ * @param charAssignedLoots
+ */
+export const parseLootAlreadyGotIt = (
+    loot: LootWithItem,
+    charDroptimizers: Droptimizer[],
+    charAssignedLoots: Loot[],
+    charAuditData: CharacterWowAudit | null
+): boolean => {
+    if (loot.gearItem.item.slotKey === 'omni') return false
+
+    const lastDroptWithTierInfo = charDroptimizers
+        .filter((c) => c.itemsInBag.length > 0)
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0) // Can be undefined
+
+    const availableGear: GearItem[] = [
+        ...(lastDroptWithTierInfo?.itemsEquipped ?? []).filter((gi) => gi.item.id === loot.item.id),
+        ...(lastDroptWithTierInfo?.itemsInBag ?? []).filter((gi) => gi.item.id === loot.item.id),
+        ...charAssignedLoots.flatMap((l) =>
+            l.gearItem.item.id === loot.item.id ? [l.gearItem] : []
+        ),
+        ...(charAuditData?.itemsEquipped ?? []).filter((gi) => gi.item.id === loot.item.id)
+    ]
+
+    return availableGear.some((gear) => gearAreTheSame(loot.gearItem, gear))
 }
 
 export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
-    charAssignedLoots: Loot[]
+    charAssignedLoots: Loot[],
+    charWowAudit: CharacterWowAudit | null
 ): GearItem[] => {
     const lastDroptWithTierInfo = charDroptimizers
         .filter((c) => c.tiersetInfo.length > 0)
-        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0)
 
-    if (lastDroptWithTierInfo == null) return []
+    const tiersetsInfo: GearItem[] = []
+    const tiersetsInBag: GearItem[] = []
+    const tiersetAssigned: GearItem[] = charAssignedLoots
+        .map((l) => l.gearItem)
+        .filter((gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)) // tierset / token assigned in this session
 
-    const allItems: GearItem[] = [
-        ...lastDroptWithTierInfo.tiersetInfo.filter((gi) => gi.item.season === CURRENT_SEASON),
-        ...lastDroptWithTierInfo.itemsInBag.filter(
-            (gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)
-        ),
-        // tierset / token in bag
-        ...charAssignedLoots
-            .map((l) => l.gearItem)
-            .filter((gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)) // tierset / token assigned in this session
-    ]
+    if (lastDroptWithTierInfo) {
+        tiersetsInfo.push(
+            ...lastDroptWithTierInfo.tiersetInfo.filter((gi) => gi.item.season === CURRENT_SEASON)
+        )
+        tiersetsInBag.push(
+            // tierset / token in bag
+            ...lastDroptWithTierInfo.itemsInBag.filter(
+                (gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)
+            )
+        )
+    }
+    if (charWowAudit) {
+        tiersetsInfo.push(
+            ...charWowAudit.tiersetInfo.filter((gi) => gi.item.season === CURRENT_SEASON)
+        )
+    }
 
+    const allItems: GearItem[] = [...tiersetsInfo, ...tiersetsInBag, ...tiersetAssigned]
     const maxItemLevelBySlot = new Map<WowItemSlotKey, GearItem>()
 
     allItems
@@ -364,7 +410,7 @@ export const parseTiersetInfo = (
 
     return [
         ...Array.from(maxItemLevelBySlot.values()), // tierset found
-        ...lastDroptWithTierInfo.tiersetInfo.filter((t) => t.item.slotKey === 'omni') // omni tokens
+        ...allItems.filter((t) => t.item.slotKey === 'omni') // omni tokens
     ]
 }
 
@@ -457,7 +503,7 @@ export const evalHighlightsAndScore = (
     charInfo: Omit<CharAssignmentInfo, 'highlights'>,
     maxDpsGain: number
 ): CharAssignmentHighlights => {
-    const { bestItemsInSlot, bis, character, droptimizers, tierset } = charInfo
+    const { bestItemsInSlot, bis, character, droptimizers, tierset, alreadyGotIt } = charInfo
 
     const isMain = character.main
 
@@ -468,13 +514,15 @@ export const evalHighlightsAndScore = (
 
     const tierSetCompletion = calculateTiersetCompletion(loot, tierset)
 
-    // todo: check only for spec associated with role (es: shaman healer = [restoration])
-    const isBis = bis.find((bis) => bis.itemId === loot.item.id) != null
-
-    let bestItemInSlot: GearItem | undefined = bestItemsInSlot.at(1)
-    if (bestItemsInSlot.length === 2) {
-        // slot has 2 possible gear item, we take the lowest track
+    let bestItemInSlot: GearItem | undefined
+    if (loot.gearItem.item.slotKey === 'omni') {
+        // loot is omni token: we compare with lowest track tierset available
+        bestItemInSlot = tierset.sort((a, b) => compareGearItem(a, b)).at(0)
+    } else if (bestItemsInSlot.length === 2) {
+        // slot has 2 possible gear item (eg: finger,trinket), we take the lowest track
         bestItemInSlot = bestItemsInSlot.sort((a, b) => compareGearItem(a, b)).at(0)
+    } else {
+        bestItemInSlot = bestItemsInSlot.at(0)
     }
 
     const ilvlDiff = bestItemInSlot ? loot.gearItem.itemLevel - bestItemInSlot.itemLevel : -999
@@ -488,9 +536,10 @@ export const evalHighlightsAndScore = (
         isMain,
         dpsGain: maxUpgrade,
         tierSetCompletion,
-        gearIsBis: isBis,
+        gearIsBis: bis,
         ilvlDiff,
-        isTrackUpgrade
+        isTrackUpgrade,
+        alreadyGotIt
     }
 
     return { ...res, score: evalScore(res, maxDpsGain) }
@@ -500,11 +549,21 @@ export const evalScore = (
     highlights: Omit<CharAssignmentHighlights, 'score'>,
     maxDdpsGain: number
 ): number => {
-    const { dpsGain, ilvlDiff, gearIsBis, isMain, tierSetCompletion, isTrackUpgrade } = highlights
+    const {
+        dpsGain,
+        ilvlDiff,
+        gearIsBis,
+        isMain,
+        tierSetCompletion,
+        isTrackUpgrade,
+        alreadyGotIt
+    } = highlights
 
     //if(!isMain) return 0 // TODO: uncomment this when testing is finished
 
     if (isMain) Promise.resolve()
+
+    if (alreadyGotIt) return 0
 
     const normalizedDps = dpsGain / maxDdpsGain
     const baseScore = gearIsBis ? 1 + normalizedDps : normalizedDps

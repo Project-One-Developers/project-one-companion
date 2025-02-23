@@ -1,4 +1,5 @@
-import { CharacterWowAudit, WowRaidDifficulty } from '@shared/types/types'
+import { gearItemSchema } from '@shared/schemas/items.schema'
+import { CharacterWowAudit } from '@shared/types/types'
 import { z } from 'zod'
 
 export type NewCharacterWowAudit = z.infer<typeof charWowAuditStorageSchema>
@@ -14,38 +15,7 @@ export const charWowAuditStorageSchema = z.object({
     weekMythicDungeons: z.number().nullable(),
     emptySockets: z.number().nullable(),
     averageItemLevel: z.string().nullable(),
-    headIlvl: z.number().nullable(),
-    headId: z.number().nullable(),
-    neckIlvl: z.number().nullable(),
-    neckId: z.number().nullable(),
-    shoulderIlvl: z.number().nullable(),
-    shoulderId: z.number().nullable(),
-    backIlvl: z.number().nullable(),
-    backId: z.number().nullable(),
-    chestIlvl: z.number().nullable(),
-    chestId: z.number().nullable(),
-    wristIlvl: z.number().nullable(),
-    wristId: z.number().nullable(),
-    handsIlvl: z.number().nullable(),
-    handsId: z.number().nullable(),
-    waistIlvl: z.number().nullable(),
-    waistId: z.number().nullable(),
-    legsIlvl: z.number().nullable(),
-    legsId: z.number().nullable(),
-    feetIlvl: z.number().nullable(),
-    feetId: z.number().nullable(),
-    finger1Ilvl: z.number().nullable(),
-    finger1Id: z.number().nullable(),
-    finger2Ilvl: z.number().nullable(),
-    finger2Id: z.number().nullable(),
-    trinket1Ilvl: z.number().nullable(),
-    trinket1Id: z.number().nullable(),
-    trinket2Ilvl: z.number().nullable(),
-    trinket2Id: z.number().nullable(),
-    mainHandIlvl: z.number().nullable(),
-    mainHandId: z.number().nullable(),
-    offHandIlvl: z.number().nullable(),
-    offHandId: z.number().nullable(),
+    highestIlvlEverEquipped: z.string().nullable(),
     enchantQualityWrist: z.number().nullable(),
     enchantQualityLegs: z.number().nullable(),
     enchantQualityMainHand: z.number().nullable(),
@@ -73,49 +43,9 @@ export const charWowAuditStorageSchema = z.object({
     greatVaultSlot7: z.number().nullable(),
     greatVaultSlot8: z.number().nullable(),
     greatVaultSlot9: z.number().nullable(),
-    tiersetHeadIlvl: z.number().nullable(),
-    tiersetShouldersIlvl: z.number().nullable(),
-    tiersetChestIlvl: z.number().nullable(),
-    tiersetHandsIlvl: z.number().nullable(),
-    tiersetLegsIlvl: z.number().nullable(),
-    tiersetHeadDiff: z.string().nullable(),
-    tiersetShouldersDiff: z.string().nullable(),
-    tiersetChestDiff: z.string().nullable(),
-    tiersetHandsDiff: z.string().nullable(),
-    tiersetLegsDiff: z.string().nullable(),
-    highestIlvlEverEquipped: z.string().nullable(),
-    bestHeadIlvl: z.number().nullable(),
-    bestHeadId: z.number().nullable(),
-    bestNeckIlvl: z.number().nullable(),
-    bestNeckId: z.number().nullable(),
-    bestShoulderIlvl: z.number().nullable(),
-    bestShoulderId: z.number().nullable(),
-    bestBackIlvl: z.number().nullable(),
-    bestBackId: z.number().nullable(),
-    bestChestIlvl: z.number().nullable(),
-    bestChestId: z.number().nullable(),
-    bestWristIlvl: z.number().nullable(),
-    bestWristId: z.number().nullable(),
-    bestHandsIlvl: z.number().nullable(),
-    bestHandsId: z.number().nullable(),
-    bestWaistIlvl: z.number().nullable(),
-    bestWaistId: z.number().nullable(),
-    bestLegsIlvl: z.number().nullable(),
-    bestLegsId: z.number().nullable(),
-    bestFeetIlvl: z.number().nullable(),
-    bestFeetId: z.number().nullable(),
-    bestFinger1Ilvl: z.number().nullable(),
-    bestFinger1Id: z.number().nullable(),
-    bestFinger2Ilvl: z.number().nullable(),
-    bestFinger2Id: z.number().nullable(),
-    bestTrinket1Ilvl: z.number().nullable(),
-    bestTrinket1Id: z.number().nullable(),
-    bestTrinket2Ilvl: z.number().nullable(),
-    bestTrinket2Id: z.number().nullable(),
-    bestMainHandIlvl: z.number().nullable(),
-    bestMainHandId: z.number().nullable(),
-    bestOffHandIlvl: z.number().nullable(),
-    bestOffHandId: z.number().nullable()
+    bestItemsEquipped: z.array(gearItemSchema),
+    itemsEquipped: z.array(gearItemSchema),
+    tiersetInfo: z.array(gearItemSchema)
 })
 
 export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.transform(
@@ -153,72 +83,11 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
             slot8: data.greatVaultSlot8,
             slot9: data.greatVaultSlot9
         },
-        tierset: {
-            head: createTiersetPiece(data.tiersetHeadIlvl, data.tiersetHeadDiff),
-            shoulder: createTiersetPiece(data.tiersetShouldersIlvl, data.tiersetShouldersDiff),
-            chest: createTiersetPiece(data.tiersetChestIlvl, data.tiersetChestDiff),
-            hands: createTiersetPiece(data.tiersetHandsIlvl, data.tiersetHandsDiff),
-            legs: createTiersetPiece(data.tiersetLegsIlvl, data.tiersetLegsDiff)
-        },
-        equippedGear: {
-            head: createGearPiece(data.headIlvl, data.headId),
-            neck: createGearPiece(data.neckIlvl, data.neckId),
-            shoulder: createGearPiece(data.shoulderIlvl, data.shoulderId),
-            back: createGearPiece(data.backIlvl, data.backId),
-            chest: createGearPiece(data.chestIlvl, data.chestId),
-            wrist: createGearPiece(data.wristIlvl, data.wristId),
-            hands: createGearPiece(data.handsIlvl, data.handsId),
-            waist: createGearPiece(data.waistIlvl, data.waistId),
-            legs: createGearPiece(data.legsIlvl, data.legsId),
-            feet: createGearPiece(data.feetIlvl, data.feetId),
-            finger1: createGearPiece(data.finger1Ilvl, data.finger1Id),
-            finger2: createGearPiece(data.finger2Ilvl, data.finger2Id),
-            trinket1: createGearPiece(data.trinket1Ilvl, data.trinket1Id),
-            trinket2: createGearPiece(data.trinket2Ilvl, data.trinket2Id),
-            main_hand: createGearPiece(data.mainHandIlvl, data.mainHandId),
-            off_hand: createGearPiece(data.offHandIlvl, data.offHandId)
-        },
-        bestGear: {
-            head: createGearPiece(data.bestHeadIlvl, data.bestHeadId),
-            neck: createGearPiece(data.bestNeckIlvl, data.bestNeckId),
-            shoulder: createGearPiece(data.bestShoulderIlvl, data.bestShoulderId),
-            back: createGearPiece(data.bestBackIlvl, data.bestBackId),
-            chest: createGearPiece(data.bestChestIlvl, data.bestChestId),
-            wrist: createGearPiece(data.bestWristIlvl, data.bestWristId),
-            hands: createGearPiece(data.bestHandsIlvl, data.bestHandsId),
-            waist: createGearPiece(data.bestWaistIlvl, data.bestWaistId),
-            legs: createGearPiece(data.bestLegsIlvl, data.bestLegsId),
-            feet: createGearPiece(data.bestFeetIlvl, data.bestFeetId),
-            finger1: createGearPiece(data.bestFinger1Ilvl, data.bestFinger1Id),
-            finger2: createGearPiece(data.bestFinger2Ilvl, data.bestFinger2Id),
-            trinket1: createGearPiece(data.bestTrinket1Ilvl, data.bestTrinket1Id),
-            trinket2: createGearPiece(data.bestTrinket2Ilvl, data.bestTrinket2Id),
-            main_hand: createGearPiece(data.bestMainHandIlvl, data.bestMainHandId),
-            off_hand: createGearPiece(data.bestOffHandIlvl, data.bestOffHandId)
-        }
+        itemsEquipped: data.itemsEquipped,
+        tiersetInfo: data.tiersetInfo,
+        bestItemsEquipped: data.bestItemsEquipped
     })
 )
-
-// Helper function to create a gear piece only if all properties are non-null
-function createGearPiece(ilvl: number | null, id: number | null) {
-    if (ilvl !== null && id !== null) {
-        return {
-            ilvl,
-            id
-        }
-    }
-    return null
-}
-
-function createTiersetPiece(ilvl: number | null, diff: string | null) {
-    if (ilvl !== null && diff !== null) {
-        return {
-            ilvl,
-            diff: wowAuditTiersetDiffToEnum(diff)
-        }
-    }
-    return null
-}
 
 function createEnchantPiece(name: string | null, quality: number | null) {
     if (name !== null && quality !== null) {
@@ -228,13 +97,4 @@ function createEnchantPiece(name: string | null, quality: number | null) {
         }
     }
     return null
-}
-
-function wowAuditTiersetDiffToEnum(diff: string): WowRaidDifficulty {
-    if (diff === 'N') return 'Normal'
-    if (diff === 'H') return 'Heroic'
-    if (diff === 'M') return 'Mythic'
-
-    console.log('Unable to map raid difficulty ' + diff)
-    return 'Mythic'
 }

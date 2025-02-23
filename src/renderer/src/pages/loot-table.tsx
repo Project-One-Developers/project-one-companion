@@ -1,4 +1,6 @@
+import { TooltipArrow } from '@radix-ui/react-tooltip'
 import { FiltersPanel } from '@renderer/components/filter-panel'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
@@ -65,17 +67,26 @@ export const DroptimizersForItem = ({ item, droptimizers }: DroptimizersForItems
     return (
         <div className="flex flex-row items-center gap-x-2">
             {itemDroptimizerUpgrades.map((upgrade) => (
-                <div key={`${upgrade.id}`} className="flex flex-col items-center">
-                    <WowSpecIcon
-                        specId={upgrade.droptimizer.charInfo.specId}
-                        className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                        title={
-                            upgrade.droptimizer.charInfo.name +
-                            ' - ' +
-                            formatUnixTimestampToRelativeDays(upgrade.droptimizer.simInfo.date)
-                        }
-                    />
-                    <p className="text-bold text-[11px]">{getDpsHumanReadable(upgrade.dps)}</p>
+                <div key={`${upgrade.id}`}>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div className="flex flex-col items-center">
+                                <WowSpecIcon
+                                    specId={upgrade.droptimizer.charInfo.specId}
+                                    className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                                />
+                                <p className="text-bold text-[11px]">
+                                    {getDpsHumanReadable(upgrade.dps)}
+                                </p>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="TooltipContent" sideOffset={5}>
+                            {upgrade.droptimizer.charInfo.name +
+                                ' - ' +
+                                formatUnixTimestampToRelativeDays(upgrade.droptimizer.simInfo.date)}
+                            <TooltipArrow className="TooltipArrow" />
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
             ))}
         </div>

@@ -3,9 +3,10 @@ import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { deleteLootById, getLootsBySessionWithItem } from '@renderer/lib/tanstack-query/loots'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
-import { LootWithItem } from '@shared/types/types'
+import { LootWithItem, WowRaidDifficulty } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LoaderCircle, X } from 'lucide-react'
+import { useMemo } from 'react'
 import { WowGearIcon } from './ui/wowgear-icon'
 
 type SessionLootsPanelProps = {
@@ -35,8 +36,47 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
         }
     })
 
-    const loots = lootsQuery.data ?? []
-    const bosses = bossesQuery.data ?? []
+    const loots = useMemo(() => lootsQuery.data ?? [], [lootsQuery.data])
+    const bosses = useMemo(() => bossesQuery.data ?? [], [bossesQuery.data])
+
+    // Memoize sorted bosses
+    const orderedBosses = useMemo(() => {
+        return bosses.sort((a, b) => a.order - b.order)
+    }, [bosses])
+
+    // Memoize grouped loots & total token counts
+    const { groupedLoots, allDifficulties, tokenSums } = useMemo(() => {
+        const grouped: GroupedLoots = {}
+        const difficultyOrder: WowRaidDifficulty[] = ['Mythic', 'Heroic', 'Normal']
+        const tokenSums: Record<WowRaidDifficulty, number> = {
+            Mythic: 0,
+            Heroic: 0,
+            Normal: 0,
+            LFR: 0
+        }
+
+        loots.forEach((loot) => {
+            const { bossId } = loot.item
+            const difficulty = loot.raidDifficulty
+
+            if (!grouped[bossId]) grouped[bossId] = {}
+            if (!grouped[bossId][difficulty]) {
+                grouped[bossId][difficulty] = []
+            }
+
+            grouped[bossId][difficulty].push(loot)
+
+            if (loot.gearItem.item.token) {
+                tokenSums[difficulty] += 1
+            }
+        })
+
+        const uniqueDifficulties = Array.from(
+            new Set(loots.map((loot) => loot.raidDifficulty))
+        ).sort((a, b) => difficultyOrder.indexOf(a) - difficultyOrder.indexOf(b))
+
+        return { groupedLoots: grouped, allDifficulties: uniqueDifficulties, tokenSums }
+    }, [loots])
 
     if (lootsQuery.isLoading || bossesQuery.isLoading) {
         return (
@@ -46,40 +86,16 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
         )
     }
 
-    // Group boss in a Map < boss id, boss > and sort by boss order
-    const orderedBosses = bosses.sort((a, b) => a.order - b.order)
-
-    // Group loots by boss ID and then by difficulty
-    const groupedLoots: GroupedLoots = loots
-        .sort((a, b) => a.itemId - b.itemId)
-        .reduce((acc, loot) => {
-            if (!acc[loot.item.bossId]) {
-                acc[loot.item.bossId] = {}
-            }
-            if (!acc[loot.item.bossId][loot.raidDifficulty]) {
-                acc[loot.item.bossId][loot.raidDifficulty] = []
-            }
-            acc[loot.item.bossId][loot.raidDifficulty].push(loot)
-            return acc
-        }, {} as GroupedLoots)
-
-    // Get all unique difficulties
-    const difficultyOrder = ['Mythic', 'Heroic', 'Normal']
-
-    const allDifficulties = Array.from(new Set(loots.map((loot) => loot.raidDifficulty))).sort(
-        (a, b) => difficultyOrder.indexOf(a) - difficultyOrder.indexOf(b)
-    )
-
     return (
-        <div className="mb-4 ">
+        <div className="mb-4">
             {Object.keys(groupedLoots).length > 0 ? (
                 <table className="w-full border-collapse">
                     <thead>
-                        <tr className="">
+                        <tr>
                             <th className="p-2 text-left">Boss</th>
                             {allDifficulties.map((difficulty) => (
                                 <th key={difficulty} className="p-2 text-left">
-                                    {difficulty}
+                                    {difficulty} ({tokenSums[difficulty]} tokens)
                                 </th>
                             ))}
                         </tr>
