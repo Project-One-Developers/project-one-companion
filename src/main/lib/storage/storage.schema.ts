@@ -210,7 +210,6 @@ export const lootTable = pgTable('loots', {
     gearItem: jsonb('gear_item').$type<GearItem>(),
     raidDifficulty: pgRaidDiffEnum('raid_difficulty').notNull(),
     charsEligibility: text('chars_eligibility').array(), // array of IDs referencing RaidSession.Chars
-    rclootId: varchar('rcloot_id').unique(),
     assignedCharacterId: varchar('assigned_character_id').references(() => charTable.id),
     assignedHighlights: jsonb('assigned_highlights').$type<CharAssignmentHighlights>(),
     raidSessionId: varchar('raid_session_id')

@@ -42,7 +42,7 @@ export const addRaidLootsByRCLootCsvHandler = async (
 ): Promise<void> => {
     const session = await getRaidSession(raidSessionId)
     const [parsedData, elegibleCharacters] = await Promise.all([
-        parseRcLoots(csv, session.raidDate),
+        parseRcLoots(csv, session.raidDate, session.raidDate + 5 * 60 * 60), // lower bound = raid session date - upperbound = raid session + 5hours
         getRaidSessionRoster(raidSessionId)
     ])
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
@@ -54,7 +54,7 @@ export const addRaidLootsByMrtHandler = async (
 ): Promise<void> => {
     const session = await getRaidSession(raidSessionId)
     const [parsedData, elegibleCharacters] = await Promise.all([
-        parseMrtLoots(csv, session.raidDate),
+        parseMrtLoots(csv, session.raidDate, session.raidDate + 5 * 60 * 60), // lower bound = raid session date - upperbound = raid session + 5hours
         getRaidSessionRoster(raidSessionId)
     ])
     await addLoots(raidSessionId, parsedData, elegibleCharacters)

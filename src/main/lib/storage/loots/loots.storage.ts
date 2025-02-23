@@ -83,22 +83,18 @@ export const addLoots = async (
 ): Promise<void> => {
     const lootValues = loots.map((loot): InferInsertModel<typeof lootTable> => {
         return {
-            id: newUUID(),
+            id: loot.addonId ?? newUUID(),
             dropDate: loot.dropDate ?? getUnixTimestamp(),
             gearItem: loot.gearItem,
             raidDifficulty: loot.raidDifficulty,
             itemString: loot.itemString,
             charsEligibility: elegibleCharacters.map((c) => c.id),
             raidSessionId: raidSessionId,
-            rclootId: loot.rclootId,
             itemId: loot.gearItem.item.id
         }
     })
 
-    await db()
-        .insert(lootTable)
-        .values(lootValues)
-        .onConflictDoNothing({ target: lootTable.rclootId }) // do nothing on item already inserted
+    await db().insert(lootTable).values(lootValues).onConflictDoNothing({ target: lootTable.id }) // do nothing on item already inserted
 }
 
 export const assignLoot = async (

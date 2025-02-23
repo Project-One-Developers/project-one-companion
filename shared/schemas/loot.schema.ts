@@ -9,7 +9,7 @@ export const newLootSchema = z.object({
     dropDate: z.number(),
     raidDifficulty: wowRaidDiffSchema,
     itemString: z.string().nullable(), // only in rc csv import
-    rclootId: z.string().nullable() // only in rc csv import
+    addonId: z.string().nullable() // only in rc csv/mrt import
 })
 
 export const newLootManualSchema = z.object({
@@ -22,7 +22,7 @@ export const newLootManualSchema = z.object({
 })
 
 export const lootSchema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
     raidSessionId: raidSessionWithRosterSchema.shape.id,
     itemId: itemSchema.shape.id,
     gearItem: gearItemSchema,

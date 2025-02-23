@@ -57,7 +57,11 @@ const parseWowDiff = (wowDiff: number): WowRaidDifficulty => {
     }
 }
 
-export const parseMrtLoots = async (csv: string, dateLowerBound: number): Promise<NewLoot[]> => {
+export const parseMrtLoots = async (
+    csv: string,
+    dateLowerBound: number,
+    dateUpperBound: number
+): Promise<NewLoot[]> => {
     const lines = csv.split('\n').filter((line) => line.trim() !== '')
     const rawRecords = lines.map((line) => {
         const [
@@ -92,14 +96,16 @@ export const parseMrtLoots = async (csv: string, dateLowerBound: number): Promis
     const allItemsInDb = await getItems()
     const res: NewLoot[] = []
 
+    const recordMap = new Map<string, number>()
+
     for (const record of validatedRecords) {
         try {
-            const { timeRec, difficulty, quantity, itemLink } = record
+            const { timeRec, encounterID, difficulty, quantity, itemLink } = record
 
             const parsedItem = parseItemString(itemLink)
-            if (timeRec < dateLowerBound) {
+            if (timeRec < dateLowerBound || timeRec > dateUpperBound) {
                 console.log(
-                    'parseMrtLoots: skipping loot item before raid session date time ' + record
+                    'parseRcLoots: skipping loot item outside raid session date time ' + record
                 )
                 continue
             }
@@ -161,6 +167,12 @@ export const parseMrtLoots = async (csv: string, dateLowerBound: number): Promis
                 continue
             }
 
+            const key = `${timeRec}-${encounterID}-${difficulty}-${itemId}`
+            const itemIndex = recordMap.get(key) || 0
+            recordMap.set(key, itemIndex + 1)
+
+            const id = `${key}-${itemIndex}`
+
             const gearItem: GearItem = {
                 item: {
                     id: wowItem.id,
@@ -187,7 +199,7 @@ export const parseMrtLoots = async (csv: string, dateLowerBound: number): Promis
                 dropDate: timeRec,
                 itemString: itemLink,
                 raidDifficulty: raidDiff,
-                rclootId: null
+                addonId: id
             }
 
             res.push(newLootSchema.parse(loot))
@@ -199,7 +211,11 @@ export const parseMrtLoots = async (csv: string, dateLowerBound: number): Promis
     return res
 }
 
-export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise<NewLoot[]> => {
+export const parseRcLoots = async (
+    csv: string,
+    dateLowerBound: number,
+    dateUpperBound: number
+): Promise<NewLoot[]> => {
     const parsedData = parse(csv, {
         header: true,
         dynamicTyping: true,
@@ -220,16 +236,17 @@ export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise
     const rawRecords = z.array(rawRCLootRecordSchema).parse(filteredData)
     const allItemsInDb = await getItems()
     const res: NewLoot[] = []
+    const recordMap = new Map<string, number>()
 
     for (const record of rawRecords) {
         try {
             const parsedItem = parseItemString(record.itemString)
-            const { date, time, itemString, difficultyID, itemID: itemId, id } = record
+            const { date, time, itemString, difficultyID, itemID: itemId, boss } = record
 
             const lootUnixTs = parseDateTime(date, time)
-            if (lootUnixTs < dateLowerBound) {
+            if (lootUnixTs < dateLowerBound || lootUnixTs > dateUpperBound) {
                 console.log(
-                    'parseRcLoots: skipping loot item before raid session date time ' + record
+                    'parseRcLoots: skipping loot item outside raid session date time ' + record
                 )
                 continue
             }
@@ -284,6 +301,12 @@ export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise
                 continue
             }
 
+            const key = `${lootUnixTs}-${boss}-${difficultyID}-${wowItem.id}`
+            const itemIndex = recordMap.get(key) || 0
+            recordMap.set(key, itemIndex + 1)
+
+            const id = `${key}-${itemIndex}`
+
             const gearItem: GearItem = {
                 item: {
                     id: wowItem.id,
@@ -310,7 +333,7 @@ export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise
                 dropDate: lootUnixTs,
                 itemString: itemString,
                 raidDifficulty: raidDiff,
-                rclootId: id
+                addonId: id
             }
 
             res.push(newLootSchema.parse(loot))
@@ -405,7 +428,7 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
             const nl: NewLoot = {
                 ...loot,
                 gearItem: gearItem,
-                rclootId: null,
+                addonId: null,
                 itemString: null,
                 dropDate: getUnixTimestamp() // now
             }
