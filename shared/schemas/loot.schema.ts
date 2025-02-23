@@ -28,8 +28,7 @@ export const lootSchema = z.object({
     gearItem: gearItemSchema,
     dropDate: z.number(),
     raidDifficulty: wowRaidDiffSchema,
-    itemString: z.string().nullable(), // only in rc csv import
-    rclootId: z.string().nullable(), // only in rc csv import
+    itemString: z.string().nullable(), // only in rc/mrt csv import
     charsEligibility: z.string().array(),
     assignedCharacterId: characterSchema.shape.id.nullable()
 })
