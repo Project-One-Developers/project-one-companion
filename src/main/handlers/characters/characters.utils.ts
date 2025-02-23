@@ -469,9 +469,10 @@ function createTiersetGearPiece(
 
     const itemDiff = wowAuditDiffToRealDiff(diff)
     const bonusIds: number[] = []
+    let itemTrack: ItemTrack | null = null
 
     if (itemDiff != null) {
-        applyItemTrackByIlvlAndDiff(bonusIds, ilvl, itemDiff)
+        itemTrack = applyItemTrackByIlvlAndDiff(bonusIds, ilvl, itemDiff)
     }
 
     const res: GearItem = {
@@ -490,7 +491,7 @@ function createTiersetGearPiece(
         source: 'equipped',
         itemLevel: ilvl,
         bonusIds: bonusIds,
-        itemTrack: null,
+        itemTrack: itemTrack,
         gemIds: null,
         enchantIds: null
     }
