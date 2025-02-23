@@ -24,6 +24,7 @@ import {
 import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
     addRaidLootsByManualInputHandler,
+    addRaidLootsByMrtHandler,
     addRaidLootsByRCLootCsvHandler,
     assignLootHandler,
     deleteLootHandler,
@@ -79,6 +80,7 @@ export const allHandlers = {
     'raid-session-delete': deleteRaidSessionHandler,
     'raid-session-clone': cloneRaidSessionHandler,
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
+    'loots-add-mrt': addRaidLootsByMrtHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,
     'loots-get-by-session': getLootsBySessionIdHandler,
     'loots-get-by-session-with-assigned': getLootsBySessionIdWithAssignedHandler,

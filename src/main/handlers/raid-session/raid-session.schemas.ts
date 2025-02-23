@@ -25,3 +25,15 @@ export const rawLootRecordSchema = z.object({
     note: z.string().nullish(),
     owner: z.string().nullish()
 })
+
+export const rawMrtRecordSchema = z.object({
+    timeRec: z.number(),
+    encounterID: z.number(),
+    instanceID: z.number(),
+    difficulty: z.number(),
+    playerName: z.string(),
+    classID: z.number(),
+    quantity: z.number(),
+    itemLink: z.string(),
+    rollType: z.number().nullable() // 0 = pass (if personal this is null)
+})

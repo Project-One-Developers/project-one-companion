@@ -39,7 +39,10 @@ import { getUnixTimestamp } from '@utils'
 import { parse } from 'papaparse'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
-import { rawLootRecordSchema } from '../raid-session/raid-session.schemas'
+import {
+    rawMrtRecordSchema,
+    rawLootRecordSchema as rawRCLootRecordSchema
+} from '../raid-session/raid-session.schemas'
 
 const parseWowDiff = (wowDiff: number): WowRaidDifficulty => {
     switch (wowDiff) {
@@ -52,6 +55,148 @@ const parseWowDiff = (wowDiff: number): WowRaidDifficulty => {
         default:
             return 'Mythic'
     }
+}
+
+export const parseMrtLoots = async (csv: string, dateLowerBound: number): Promise<NewLoot[]> => {
+    const lines = csv.split('\n').filter((line) => line.trim() !== '')
+    const rawRecords = lines.map((line) => {
+        const [
+            timeRec,
+            encounterID,
+            instanceID,
+            difficulty,
+            playerName,
+            classID,
+            quantity,
+            itemLink,
+            rollType
+        ] = line.split('#')
+        return {
+            timeRec: Number(timeRec),
+            encounterID: Number(encounterID),
+            instanceID: Number(instanceID),
+            difficulty: Number(difficulty),
+            playerName,
+            classID: Number(classID),
+            quantity: Number(quantity),
+            itemLink,
+            rollType: rollType ? Number(rollType) : null
+        }
+    })
+
+    const validatedRecords = z
+        .array(rawMrtRecordSchema)
+        .parse(rawRecords)
+        .filter((r) => r.rollType != null) // skip personal loot & currency
+
+    const allItemsInDb = await getItems()
+    const res: NewLoot[] = []
+
+    for (const record of validatedRecords) {
+        try {
+            const { timeRec, difficulty, quantity, itemLink } = record
+
+            const parsedItem = parseItemString(itemLink)
+            if (timeRec < dateLowerBound) {
+                console.log(
+                    'parseMrtLoots: skipping loot item before raid session date time ' + record
+                )
+                continue
+            }
+            if (quantity > 1) {
+                console.log(
+                    'parseMrtLoots: encounter loot with quantity =' + quantity + 'source: ' + record
+                )
+            }
+
+            const itemId = parsedItem.itemID
+            const bonusIds = getItemBonusString(parsedItem).split(':').map(Number)
+            const wowItem = allItemsInDb.find((i) => i.id === itemId)
+
+            const raidDiff = parseWowDiff(difficulty)
+
+            if (!wowItem) {
+                console.log(
+                    'parseRcLoots: skipping loot item not in db: ' +
+                        itemId +
+                        ' https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds
+                )
+                continue
+            }
+
+            if (wowItem.sourceType !== 'raid') {
+                console.log(
+                    'parseRcLoots: skipping non raid loot: ' +
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds
+                )
+                continue
+            }
+
+            const itemTrack = parseItemTrack(bonusIds)
+            let itemLevel: number = 0
+
+            if (itemTrack != null) {
+                itemLevel = itemTrack.itemLevel
+            } else {
+                // we are dealing with raid items only
+                itemLevel = parseItemLevelFromRaidDiff(wowItem, raidDiff)
+            }
+
+            if (itemLevel == null) {
+                console.log(
+                    'parseRcLoots: skipping loot item without ilvl: ' +
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds
+                )
+                continue
+            }
+
+            const gearItem: GearItem = {
+                item: {
+                    id: wowItem.id,
+                    name: wowItem.name,
+                    armorType: wowItem.armorType,
+                    slotKey: wowItem.slotKey,
+                    token: wowItem.token,
+                    tierset: wowItem.tierset,
+                    boe: wowItem.boe,
+                    veryRare: wowItem.veryRare,
+                    iconName: wowItem.iconName,
+                    season: wowItem.season
+                },
+                source: 'loot',
+                itemLevel: itemLevel,
+                bonusIds: bonusIds,
+                itemTrack: itemTrack,
+                gemIds: null,
+                enchantIds: null
+            }
+
+            const loot: NewLoot = {
+                gearItem: gearItem,
+                dropDate: timeRec,
+                itemString: itemLink,
+                raidDifficulty: raidDiff,
+                rclootId: null
+            }
+
+            res.push(newLootSchema.parse(loot))
+        } catch (error) {
+            console.log('Error processing record:', record, error)
+        }
+    }
+
+    return res
 }
 
 export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise<NewLoot[]> => {
@@ -72,7 +217,7 @@ export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise
             !record.response.toLowerCase().includes('personal loot')
     )
 
-    const rawRecords = z.array(rawLootRecordSchema).parse(filteredData)
+    const rawRecords = z.array(rawRCLootRecordSchema).parse(filteredData)
     const allItemsInDb = await getItems()
     const res: NewLoot[] = []
 
@@ -86,6 +231,7 @@ export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise
                 console.log(
                     'parseRcLoots: skipping loot item before raid session date time ' + record
                 )
+                continue
             }
 
             const bonusIds = getItemBonusString(parsedItem).split(':').map(Number)
@@ -98,6 +244,17 @@ export const parseRcLoots = async (csv: string, dateLowerBound: number): Promise
                     'parseRcLoots: skipping loot item not in db: ' +
                         itemId +
                         ' https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds
+                )
+                continue
+            }
+            if (wowItem.sourceType !== 'raid') {
+                console.log(
+                    'parseRcLoots: skipping non raid loot: ' +
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
                         itemId +
                         '?bonus=' +
                         bonusIds

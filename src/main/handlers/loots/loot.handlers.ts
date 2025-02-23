@@ -30,6 +30,7 @@ import {
     parseLootAlreadyGotIt,
     parseLootIsBisForChar,
     parseManualLoots,
+    parseMrtLoots,
     parseRcLoots,
     parseTiersetInfo,
     parseWeeklyChest
@@ -42,6 +43,18 @@ export const addRaidLootsByRCLootCsvHandler = async (
     const session = await getRaidSession(raidSessionId)
     const [parsedData, elegibleCharacters] = await Promise.all([
         parseRcLoots(csv, session.raidDate),
+        getRaidSessionRoster(raidSessionId)
+    ])
+    await addLoots(raidSessionId, parsedData, elegibleCharacters)
+}
+
+export const addRaidLootsByMrtHandler = async (
+    raidSessionId: string,
+    csv: string
+): Promise<void> => {
+    const session = await getRaidSession(raidSessionId)
+    const [parsedData, elegibleCharacters] = await Promise.all([
+        parseMrtLoots(csv, session.raidDate),
         getRaidSessionRoster(raidSessionId)
     ])
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
