@@ -1,10 +1,10 @@
 import { CURRENT_SEASON, PROFESSION_TYPES } from '@shared/consts/wow.consts'
 import {
     applyAvoidance,
+    applyDiffBonusId,
     applyLeech,
     applySocket,
     applySpeed,
-    applyTokenDiff,
     compareGearItem,
     gearAreTheSame,
     getItemTrack,
@@ -389,7 +389,7 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
             let itemTrack: ItemTrack | null = null
             if (wowItem.token) {
                 // apply bonus id to token (Mythic/Heroic tag)
-                applyTokenDiff(bonusIds, loot.raidDifficulty)
+                applyDiffBonusId(bonusIds, loot.raidDifficulty)
             } else {
                 itemTrack = getItemTrack(itemLevel, loot.raidDifficulty)
             }

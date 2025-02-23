@@ -6,7 +6,8 @@ import { GearItem, Item, ItemTrack, WowItemTrackName, WowRaidDifficulty } from '
 import bonusItemTracks, {
     queryByItemLevelAndDelta,
     queryByItemLevelAndName,
-    trackNameToNumber
+    trackNameToNumber,
+    trackNameToWowDiff
 } from './item-tracks'
 
 /**
@@ -232,7 +233,9 @@ export function getItemTrack(ilvl: number, diff: WowRaidDifficulty): ItemTrack |
 }
 
 // gear manipolation
-export function applyTokenDiff(input: number[], diff: WowRaidDifficulty): void {
+
+export function applyDiffBonusId(input: number[], diff: WowRaidDifficulty): void {
+    // Beware: normal diff has no modifier
     switch (diff) {
         case 'LFR':
             input.push(10353)
@@ -245,8 +248,6 @@ export function applyTokenDiff(input: number[], diff: WowRaidDifficulty): void {
             break
     }
 }
-
-// todo
 
 /**
  * Apply track bonus ids and return
@@ -262,6 +263,10 @@ export function applyItemTrackByIlvlAndDelta(
     const res = queryByItemLevelAndDelta(ilvl, delta)
     if (res != null) {
         input.push(Number(res.key))
+
+        // apply diff bonus id
+        applyDiffBonusId(input, trackNameToWowDiff(res.track.name))
+
         return res.track
     }
     return null
@@ -273,11 +278,12 @@ export function applyItemTrackByIlvlAndDelta(
  * @param ilvl Gear ilvl
  * @param diff Gear raid difficulty (eg: Heroic item)
  */
-export function applyItemTrack(
+export function applyItemTrackByIlvlAndDiff(
     input: number[],
     ilvl: number,
     diff: WowRaidDifficulty
 ): ItemTrack | null {
+    applyDiffBonusId(input, diff)
     const diffName: WowItemTrackName = getWowItemTrackName(diff)
     const res = queryByItemLevelAndName(ilvl, diffName)
     if (res != null) {

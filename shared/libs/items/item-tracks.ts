@@ -1,4 +1,4 @@
-import { WowItemTrackName } from '@shared/types/types'
+import { WowItemTrackName, WowRaidDifficulty } from '@shared/types/types'
 
 interface BonusItemTrack {
     level: number
@@ -50,6 +50,21 @@ export function trackNameToNumber(name: WowItemTrackName | null | undefined): nu
             return 6
         default:
             throw new Error('trackNameToNumber: track not supported ' + name)
+    }
+}
+
+export function trackNameToWowDiff(name: WowItemTrackName): WowRaidDifficulty {
+    switch (name) {
+        case 'Veteran':
+            return 'LFR'
+        case 'Champion':
+            return 'Normal'
+        case 'Hero':
+            return 'Heroic'
+        case 'Myth':
+            return 'Mythic'
+        default:
+            throw new Error('trackNameToWowDiff: track not supported ' + name)
     }
 }
 

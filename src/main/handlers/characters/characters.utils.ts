@@ -1,4 +1,7 @@
-import { applyItemTrack, applyItemTrackByIlvlAndDelta } from '@shared/libs/items/item-bonus-utils'
+import {
+    applyItemTrackByIlvlAndDelta,
+    applyItemTrackByIlvlAndDiff
+} from '@shared/libs/items/item-bonus-utils'
 import { wowClassNameSchema } from '@shared/schemas/wow.schemas'
 import {
     GearItem,
@@ -468,7 +471,7 @@ function createTiersetGearPiece(
     const bonusIds: number[] = []
 
     if (itemDiff != null) {
-        applyItemTrack(bonusIds, ilvl, itemDiff)
+        applyItemTrackByIlvlAndDiff(bonusIds, ilvl, itemDiff)
     }
 
     const res: GearItem = {
