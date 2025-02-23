@@ -153,7 +153,7 @@ export type CharAssignmentInfo = {
     highlights: CharAssignmentHighlights
 }
 export type LootAssignmentInfo = {
-    loot: Loot
+    loot: LootWithItem
     eligible: CharAssignmentInfo[]
 }
 

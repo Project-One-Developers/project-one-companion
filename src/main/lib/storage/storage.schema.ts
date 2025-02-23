@@ -337,19 +337,19 @@ export const itemTable = pgTable('items', {
     boe: boolean('boe').notNull(),
     onUseTrinket: boolean('on_use_trinket').notNull(),
     specs: text('specs').array(), // null == tutte le spec
-    specIds: text('spec_ids').array(),
+    specIds: integer('spec_ids').array(),
     classes: text('classes').array(),
-    classesId: text('classes_id').array(),
+    classesId: integer('classes_id').array(),
     stats: text('stats'),
     mainStats: varchar('main_stats', { length: 50 }),
     secondaryStats: varchar('secondary_stats', { length: 50 }),
-    wowheadUrl: text('wowhead_url'),
-    iconName: varchar('icon_name', { length: 255 }),
-    iconUrl: text('icon_url'),
+    wowheadUrl: text('wowhead_url').notNull(),
+    iconName: varchar('icon_name', { length: 255 }).notNull(),
+    iconUrl: text('icon_url').notNull(),
     catalyzed: boolean('catalyzed').notNull().default(false), // se questo item è ottenibile solo tramite catalyst
-    sourceId: integer('source_id'),
-    sourceName: varchar('source_name'),
-    sourceType: varchar('source_type'),
+    sourceId: integer('source_id').notNull(),
+    sourceName: varchar('source_name').notNull(),
+    sourceType: varchar('source_type').notNull(),
     bossName: varchar('boss_name', { length: 255 }), // ridondante ma utile
     season: integer('season').notNull(),
     bossId: integer('boss_id')

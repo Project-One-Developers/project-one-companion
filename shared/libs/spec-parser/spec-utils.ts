@@ -1,4 +1,4 @@
-import { WowClassName, WoWRole, WowSpec } from '@shared/types/types'
+import { Item, WowClassName, WoWRole, WowSpec } from '@shared/types/types'
 import { WOW_CLASS_WITH_SPECS } from './spec-utils.schemas'
 
 export const getClassSpecs = (wowClass: number | WowClassName): WowSpec[] => {
@@ -33,10 +33,18 @@ export const isHealerSpec = (id: number): boolean => {
     return healerSpecIds.includes(id)
 }
 
-export const tanksSpec = (ids: number[]): boolean => {
-    return ids.length === tankSpecIds.length && ids.every((id) => isTankSpec(id))
+export const isTankItem = (item: Item): boolean => {
+    return (
+        item.specIds != null &&
+        item.specIds.length === tankSpecIds.length &&
+        item.specIds.every((id) => isTankSpec(id))
+    )
 }
 
-export const healersSpec = (ids: number[]): boolean => {
-    return ids.length === healerSpecIds.length && ids.every((id) => isHealerSpec(id))
+export const isHealerItem = (item: Item): boolean => {
+    return (
+        item.specIds != null &&
+        item.specIds.length === healerSpecIds.length &&
+        item.specIds.every((id) => isHealerSpec(id))
+    )
 }
