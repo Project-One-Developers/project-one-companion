@@ -80,34 +80,32 @@ export default function LootAssign() {
                 ))}
             </div>
 
-            <div className="flex">
-                {selectedSessions.size > 0 ? (
-                    <>
-                        <div className="flex flex-col pr-5">
-                            <LootsTabs
-                                loots={loots}
+            {selectedSessions.size > 0 ? (
+                <div className="flex w-full">
+                    <div className="flex flex-col pr-5">
+                        <LootsTabs
+                            loots={loots}
+                            selectedLoot={selectedLoot}
+                            setSelectedLoot={setSelectedLoot}
+                        />
+                    </div>
+                    <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
+                        {selectedLoot ? (
+                            <LootsEligibleChars
+                                allLoots={loots}
                                 selectedLoot={selectedLoot}
                                 setSelectedLoot={setSelectedLoot}
                             />
-                        </div>
-                        <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
-                            {selectedLoot ? (
-                                <LootsEligibleChars
-                                    allLoots={loots}
-                                    selectedLoot={selectedLoot}
-                                    setSelectedLoot={setSelectedLoot}
-                                />
-                            ) : (
-                                <p className="text-gray-400">Select a loot to start assigning</p>
-                            )}
-                        </div>
-                    </>
-                ) : (
-                    <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
-                        <p className="text-gray-400">Select a session to start browsing loots</p>
+                        ) : (
+                            <p className="text-gray-400">Select a loot to start assigning</p>
+                        )}
                     </div>
-                )}
-            </div>
+                </div>
+            ) : (
+                <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
+                    <p className="text-gray-400">Select a session to start browsing loots</p>
+                </div>
+            )}
         </div>
     )
 }
