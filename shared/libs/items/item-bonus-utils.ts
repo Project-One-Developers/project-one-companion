@@ -126,10 +126,16 @@ export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): numb
         }
     }
 
-    // crafted items ilvl
-    if (bonusIds.includes(11144)) {
-        // tww season 1 rank 5
-        return 636
+    // crafted items ilvl (10222 = Omen Crafted -> 593)
+    if (bonusIds.includes(10222)) {
+        //const baseLevel = 597
+        if (bonusIds.includes(11144)) {
+            // tww season 1 mythic crest
+            return 636
+        } else if (bonusIds.includes(11143)) {
+            // tww season 1 hc crest
+            return 619
+        }
     }
 
     // edge case items (not worth mapping all possible states with bonus id)

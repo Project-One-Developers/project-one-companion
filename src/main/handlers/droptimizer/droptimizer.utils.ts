@@ -385,7 +385,7 @@ export const parseEquippedGear = async (
                     ' - https://www.wowhead.com/item=' +
                     droptGearItem.id +
                     '?bonus=' +
-                    droptGearItem.bonus_id.replace('/', ':')
+                    bonusIds.join(':')
             )
         }
 
@@ -399,7 +399,7 @@ export const parseEquippedGear = async (
                         ' - https://www.wowhead.com/item=' +
                         droptGearItem.id +
                         '?bonus=' +
-                        droptGearItem.bonus_id
+                        bonusIds.join(':')
                 )
             }
         }
