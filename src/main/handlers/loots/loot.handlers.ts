@@ -1,4 +1,5 @@
 import {
+    CharacterWowAudit,
     CharAssignmentHighlights,
     CharAssignmentInfo,
     Loot,
@@ -20,7 +21,7 @@ import {
     getLootWithItemById,
     unassignLoot
 } from '@storage/loots/loots.storage'
-import { getCharactersList } from '@storage/players/characters.storage'
+import { getAllCharacterWowAudit, getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
 import {
     evalHighlightsAndScore,
@@ -86,14 +87,15 @@ export const deleteLootHandler = async (lootId: string): Promise<void> => await 
  */
 export const getLootAssignmentInfoHandler = async (lootId: string): Promise<LootAssignmentInfo> => {
     // todo: almost any query can be cached until wowaudit/droptimizer insert/reload
-    const [loot, roster, latestDroptimizer, bisList, allAssignedLoots] = await Promise.all([
-        getLootWithItemById(lootId),
-        getCharactersList(),
-        getDroptimizerLatestList(),
-        getBisList(),
-        getLootAssigned()
-        // getAllCharacterWowAudit(),
-    ])
+    const [loot, roster, latestDroptimizer, bisList, allAssignedLoots, wowAuditData] =
+        await Promise.all([
+            getLootWithItemById(lootId),
+            getCharactersList(),
+            getDroptimizerLatestList(),
+            getBisList(),
+            getLootAssigned(),
+            getAllCharacterWowAudit()
+        ])
 
     const filteredRoster = roster.filter(
         (character) =>
@@ -110,29 +112,49 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         const charDroptimizers = latestDroptimizer.filter(
             (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
-        // wow audit data for a given char
-        // const charWowAudit = wowAuditData.find(
-        //     (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
-        // )
+
+        let charWowAudit: CharacterWowAudit | null = null
+        let charLastUpdate: number | null = Math.max(...charDroptimizers.map((c) => c.simInfo.date))
+
+        // wow audit data when no char droptimizer
+        // healer will always enter this branch
+        if (charDroptimizers.length === 0 && wowAuditData) {
+            charWowAudit =
+                wowAuditData.find(
+                    (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
+                ) ?? null
+            charLastUpdate = charWowAudit?.wowauditLastModifiedUnixTs ?? null
+        }
+
         // loot assgined to a given char
         const charAssignedLoots = allAssignedLoots.filter(
             (l) =>
                 l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
                 l.assignedCharacterId === char.id &&
-                l.dropDate > Math.max(...charDroptimizers.map((c) => c.simInfo.date)) // we consider all the loots assigned from last known simc
+                (!charLastUpdate || l.dropDate > charLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
         )
+
         const res: Omit<CharAssignmentInfo, 'highlights'> = {
             character: char,
             droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
             weeklyChest: parseWeeklyChest(charDroptimizers),
-            tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots),
+            tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots, charWowAudit),
             bestItemsInSlot: parseBestItemInSlot(
                 loot.item.slotKey,
                 charDroptimizers,
-                charAssignedLoots
+                charAssignedLoots,
+                charWowAudit
             ),
-            alreadyGotIt: parseLootAlreadyGotIt(loot, charDroptimizers, charAssignedLoots),
-            bis: parseLootIsBisForChar(bisList, loot.item.id, char)
+            alreadyGotIt: parseLootAlreadyGotIt(
+                loot,
+                charDroptimizers,
+                charAssignedLoots,
+                charWowAudit
+            ),
+            bis: parseLootIsBisForChar(bisList, loot.item.id, char),
+            warnDroptimizer:
+                charDroptimizers.length === 0 ? { type: 'not-imported' } : { type: 'none' },
+            warnWowAudit: wowAuditData ? { type: 'used' } : { type: 'none' }
         }
 
         return {

@@ -128,6 +128,8 @@ export type LootWithAssigned = z.infer<typeof lootWithAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootManual = z.infer<typeof newLootManualSchema>
 export type TierSetCompletion = { type: 'none' } | { type: '2p' } | { type: '4p' }
+export type DroptimizerWarn = { type: 'none' } | { type: 'old' } | { type: 'not-imported' }
+export type WowAuditWarn = { type: 'none' } | { type: 'used' }
 export type CharAssignmentHighlights = {
     isMain: boolean
     dpsGain: number
@@ -150,6 +152,8 @@ export type CharAssignmentInfo = {
     bestItemsInSlot: GearItem[]
     bis: boolean
     alreadyGotIt: boolean
+    warnDroptimizer: DroptimizerWarn
+    warnWowAudit: WowAuditWarn
     highlights: CharAssignmentHighlights
 }
 export type LootAssignmentInfo = {

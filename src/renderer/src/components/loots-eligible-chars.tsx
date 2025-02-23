@@ -10,7 +10,13 @@ import type {
     LootWithAssigned
 } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { HeartCrackIcon, LoaderCircle, MoreVertical, ShieldAlertIcon } from 'lucide-react'
+import {
+    HeartCrackIcon,
+    LoaderCircle,
+    MoreVertical,
+    ShieldAlertIcon,
+    TriangleAlertIcon
+} from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
 import { DroptimizerUpgradeForItemEquipped } from './droptimizer-upgrade-for-item'
 import { toast } from './hooks/use-toast'
@@ -246,14 +252,30 @@ export default function LootsEligibleChars({
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        {charInfo.droptimizers.map((droptWithUpgrade) => (
-                                            <DroptimizerUpgradeForItemEquipped
-                                                key={droptWithUpgrade.droptimizer.url}
-                                                upgrade={droptWithUpgrade.upgrade}
-                                                droptimizer={droptWithUpgrade.droptimizer}
-                                                itemEquipped={droptWithUpgrade.itemEquipped}
-                                            />
-                                        ))}
+                                        <>
+                                            {charInfo.droptimizers.map((droptWithUpgrade) => (
+                                                <DroptimizerUpgradeForItemEquipped
+                                                    key={droptWithUpgrade.droptimizer.url}
+                                                    upgrade={droptWithUpgrade.upgrade}
+                                                    droptimizer={droptWithUpgrade.droptimizer}
+                                                    itemEquipped={droptWithUpgrade.itemEquipped}
+                                                />
+                                            ))}
+                                        </>
+                                        {charInfo.warnDroptimizer.type === 'not-imported' && (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <TriangleAlertIcon className="cursor-pointer text-yellow-300" />
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    Missing Droptimizer
+                                                    <TooltipArrow className="TooltipArrow" />
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )}
                                     </TableCell>
                                     {showHightestInSlot && (
                                         <TableCell>

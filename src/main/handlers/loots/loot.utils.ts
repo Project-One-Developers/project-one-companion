@@ -18,6 +18,7 @@ import { newLootSchema } from '@shared/schemas/loot.schema'
 import {
     BisList,
     Character,
+    CharacterWowAudit,
     CharAssignmentHighlights,
     CharAssignmentInfo,
     Droptimizer,
@@ -281,11 +282,12 @@ const parseDateTime = (dateStr: string, timeStr: string): number => {
 }
 
 export const parseBestItemInSlot = (
-    slot: WowItemSlotKey,
+    slotKey: WowItemSlotKey,
     charDroptimizers: Droptimizer[],
-    charAssignedLoot: Loot[]
+    charAssignedLoot: Loot[],
+    charWowAudit: CharacterWowAudit | null
 ): GearItem[] => {
-    if (slot === 'omni') return []
+    if (slotKey === 'omni') return []
 
     const allItems: GearItem[] = [
         ...charDroptimizers.flatMap((d) => d.itemsEquipped),
@@ -293,17 +295,17 @@ export const parseBestItemInSlot = (
         ...charAssignedLoot.map((l) => l.gearItem)
     ]
 
-    // if (charWowAudit) {
-    //     const wowAuditItem = charWowAudit.bestGear.find((bg) => bg.item.slotKey === slot)
-    //     if (wowAuditItem) {
-    //         allItems.push(wowAuditItem)
-    //     }
-    // }
+    if (charWowAudit) {
+        const wowAuditItem = charWowAudit.itemsEquipped.find((bg) => bg.item.slotKey === slotKey)
+        if (wowAuditItem) {
+            allItems.push(wowAuditItem)
+        }
+    }
 
-    const filteredItems = allItems.filter((gear) => gear.item.slotKey === slot)
+    const filteredItems = allItems.filter((gear) => gear.item.slotKey === slotKey)
     const sortedItems = filteredItems.sort((a, b) => b.itemLevel - a.itemLevel)
 
-    if (slot === 'finger' || slot === 'trinket') {
+    if (slotKey === 'finger' || slotKey === 'trinket') {
         const uniqueItems: GearItem[] = []
         const seenItemIds = new Set<number>()
 
@@ -339,7 +341,8 @@ export const parseLootIsBisForChar = (
 export const parseLootAlreadyGotIt = (
     loot: LootWithItem,
     charDroptimizers: Droptimizer[],
-    charAssignedLoots: Loot[]
+    charAssignedLoots: Loot[],
+    charAuditData: CharacterWowAudit | null
 ): boolean => {
     if (loot.gearItem.item.slotKey === 'omni') return false
 
@@ -353,7 +356,8 @@ export const parseLootAlreadyGotIt = (
         ...(lastDroptWithTierInfo?.itemsInBag ?? []).filter((gi) => gi.item.id === loot.item.id),
         ...charAssignedLoots.flatMap((l) =>
             l.gearItem.item.id === loot.item.id ? [l.gearItem] : []
-        )
+        ),
+        ...(charAuditData?.itemsEquipped ?? []).filter((gi) => gi.item.id === loot.item.id)
     ]
 
     return availableGear.some((gear) => gearAreTheSame(loot.gearItem, gear))
@@ -361,25 +365,38 @@ export const parseLootAlreadyGotIt = (
 
 export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
-    charAssignedLoots: Loot[]
+    charAssignedLoots: Loot[],
+    charWowAudit: CharacterWowAudit | null
 ): GearItem[] => {
     const lastDroptWithTierInfo = charDroptimizers
         .filter((c) => c.tiersetInfo.length > 0)
-        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0)
 
-    if (lastDroptWithTierInfo == null) return []
+    const tiersetsInfo: GearItem[] = []
+    const tiersetsInBag: GearItem[] = []
+    const tiersetAssigned: GearItem[] = charAssignedLoots
+        .map((l) => l.gearItem)
+        .filter((gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)) // tierset / token assigned in this session
 
-    const allItems: GearItem[] = [
-        ...lastDroptWithTierInfo.tiersetInfo.filter((gi) => gi.item.season === CURRENT_SEASON),
-        ...lastDroptWithTierInfo.itemsInBag.filter(
-            (gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)
-        ),
-        // tierset / token in bag
-        ...charAssignedLoots
-            .map((l) => l.gearItem)
-            .filter((gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)) // tierset / token assigned in this session
-    ]
+    if (lastDroptWithTierInfo) {
+        tiersetsInfo.push(
+            ...lastDroptWithTierInfo.tiersetInfo.filter((gi) => gi.item.season === CURRENT_SEASON)
+        )
+        tiersetsInBag.push(
+            // tierset / token in bag
+            ...lastDroptWithTierInfo.itemsInBag.filter(
+                (gi) => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)
+            )
+        )
+    }
+    if (charWowAudit) {
+        tiersetsInfo.push(
+            ...charWowAudit.tiersetInfo.filter((gi) => gi.item.season === CURRENT_SEASON)
+        )
+    }
 
+    const allItems: GearItem[] = [...tiersetsInfo, ...tiersetsInBag, ...tiersetAssigned]
     const maxItemLevelBySlot = new Map<WowItemSlotKey, GearItem>()
 
     allItems
@@ -393,7 +410,7 @@ export const parseTiersetInfo = (
 
     return [
         ...Array.from(maxItemLevelBySlot.values()), // tierset found
-        ...lastDroptWithTierInfo.tiersetInfo.filter((t) => t.item.slotKey === 'omni') // omni tokens
+        ...allItems.filter((t) => t.item.slotKey === 'omni') // omni tokens
     ]
 }
 
