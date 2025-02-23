@@ -1,5 +1,5 @@
 import { LootWithAssigned } from '@shared/types/types'
-import { Copy } from 'lucide-react'
+import { Check, Copy } from 'lucide-react'
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
@@ -17,6 +17,7 @@ export default function LootsTradeHelperDialog({
     loots
 }: LootsTradeHelperDialogProps) {
     const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null)
+    const [copiedItemId, setCopiedItemId] = useState<string | null>(null)
 
     // Group loot by assigned character and sort by character name
     const lootByCharacter = Object.values(
@@ -38,8 +39,10 @@ export default function LootsTradeHelperDialog({
         )
     ).sort((a, b) => a.character.name.localeCompare(b.character.name))
 
-    const copyToClipboard = (text: string) => {
+    const copyToClipboard = (text: string, itemId: string) => {
         navigator.clipboard.writeText(text)
+        setCopiedItemId(itemId)
+        setTimeout(() => setCopiedItemId(null), 2000) // Reset after 2 seconds
     }
 
     return (
@@ -71,13 +74,17 @@ export default function LootsTradeHelperDialog({
                     ) && (
                         <div className="mt-4">
                             <h3 className="font-semibold">Assigned Loot</h3>
-                            <ul className="mt-2 space-y-2">
+                            <div className="mt-2 flex flex-wrap gap-2">
                                 {lootByCharacter
                                     .find(({ character }) => character.id === selectedCharacterId)
                                     ?.loot.map((loot) => (
-                                        <li
+                                        <div
                                             key={loot.id}
-                                            className="flex justify-between items-center p-2 border rounded-md"
+                                            className="flex items-center p-2 border rounded-md shadow-sm  hover:bg-muted transition"
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                copyToClipboard(loot.gearItem.item.name, loot.id)
+                                            }}
                                         >
                                             <WowGearIcon
                                                 item={loot.gearItem}
@@ -85,17 +92,16 @@ export default function LootsTradeHelperDialog({
                                                 showExtendedInfo={true}
                                                 iconClassName="rounded-lg h-10 w-10 border border-background"
                                             />
-                                            <button
-                                                onClick={() =>
-                                                    copyToClipboard(loot.gearItem.item.name)
-                                                }
-                                                className="ml-2 text-gray-500 hover:text-gray-700"
-                                            >
-                                                <Copy className="w-4 h-4" />
+                                            <button className="ml-2 text-gray-500 hover:text-gray-700 flex items-center">
+                                                {copiedItemId === loot.id ? (
+                                                    <Check className="w-4 h-4 text-green-500" />
+                                                ) : (
+                                                    <Copy className="w-4 h-4" />
+                                                )}
                                             </button>
-                                        </li>
+                                        </div>
                                     ))}
-                            </ul>
+                            </div>
                         </div>
                     )}
             </DialogContent>
