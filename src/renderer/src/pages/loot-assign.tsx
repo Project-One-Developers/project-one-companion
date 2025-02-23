@@ -1,17 +1,26 @@
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import LootsTabs from '@renderer/components/loots-tab'
+import LootsTradeHelperDialog from '@renderer/components/loots-trade-helper'
 import SessionCard from '@renderer/components/session-card'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from '@renderer/components/ui/dropdown-menu'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsWithAssignedBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, MoreVertical } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
     const [selectedLoot, setSelectedLoot] = useState<LootWithAssigned | null>(null)
+    // dialog
+    const [lootHelperDialogOpen, setLootHelperDialogOpen] = useState(false)
 
     const raidSessionsQuery = useQuery({
         queryKey: [queryKeys.raidSessionsWithLoots],
@@ -69,7 +78,7 @@ export default function LootAssign() {
     return (
         <div className="w-dvw h-dvh flex flex-col gap-y-8 p-8 relative">
             {/* Page Header */}
-            <div className=" bg-muted rounded-lg p-6 mb-2 shadow-lg flex items-center">
+            <div className="flex bg-muted rounded-lg p-6 mb-2 shadow-lg items-center relative">
                 {sortedSessions.map((session) => (
                     <div key={session.id} onClick={() => toggleSession(session.id)}>
                         <SessionCard
@@ -78,6 +87,29 @@ export default function LootAssign() {
                         />
                     </div>
                 ))}
+                <div className="absolute top-4 right-6">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger
+                            className="p-2 rounded hover:bg-gray-700"
+                            aria-label="More options"
+                        >
+                            <MoreVertical className="h-5 w-5" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() => setLootHelperDialogOpen(true)}
+                            >
+                                Display Trade Helper
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+                <LootsTradeHelperDialog
+                    isOpen={lootHelperDialogOpen}
+                    setOpen={setLootHelperDialogOpen}
+                    loots={loots}
+                />
             </div>
 
             {selectedSessions.size > 0 ? (
