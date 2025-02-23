@@ -5,7 +5,7 @@ import {
     itemToTiersetArraySchema
 } from '@shared/schemas/items.schema'
 import type { Item, ItemToCatalyst, ItemToTierset } from '@shared/types/types'
-import { ilike } from 'drizzle-orm'
+import { and, eq, ilike } from 'drizzle-orm'
 import { z } from 'zod'
 import { db } from '../storage.config'
 import { itemTable, itemToCatalystTable, itemToTiersetTable } from '../storage.schema'
@@ -77,7 +77,9 @@ export const searchItems = async (searchTerm: string, limit: number): Promise<It
     const res = await db()
         .select()
         .from(itemTable)
-        .where(ilike(itemTable.name, '%' + searchTerm + '%'))
+        .where(
+            and(eq(itemTable.season, CURRENT_SEASON), ilike(itemTable.name, '%' + searchTerm + '%'))
+        )
         .limit(limit)
     return z.array(itemSchema).parse(res)
 }
