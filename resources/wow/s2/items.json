@@ -261,7 +261,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_cloth_earthendungeon_c_01.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -1667,7 +1667,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_leather_earthendungeon_c_01_cape.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -2731,7 +2731,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_mail_outdoorundermine_c_01_cape.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -4517,7 +4517,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_cloth_zandalardungeon_c_01.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -5391,7 +5391,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_plate_kultirasdungeon_c_01.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -6949,7 +6949,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_plate_zandalardungeon_c_01.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -9837,7 +9837,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_plate_raidwarriornerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -10179,7 +10179,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_plate_raidpaladinnerubian_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -10521,7 +10521,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_raiddeathknightnerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -10863,7 +10863,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_mail_raidshamannerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -11205,7 +11205,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_mail_raidhunternerubian_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -11547,7 +11547,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_mail_raidevokernerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -11889,7 +11889,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_leather_raidroguenerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -12231,7 +12231,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_leather_raidmonknerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -12573,7 +12573,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_leather_raiddruidnerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -12915,7 +12915,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_leather_raiddemonhunternerubian_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -13257,7 +13257,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cloth_raidwarlocknerubian_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -13599,7 +13599,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cloth_raidpriestnerubian_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -13941,7 +13941,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_cloth_raidmagenerubian_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -14283,7 +14283,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_plate_raidwarriorgoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -14625,7 +14625,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_plate_raidpaladingoblin_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -14967,7 +14967,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_plate_raiddeathknightgoblin_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -15309,7 +15309,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_mail_raidshamangoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -15651,7 +15651,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_mail_raidhuntergoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -15993,7 +15993,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_mail_raidevokergoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -16335,7 +16335,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_leather_raidroguegoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -16677,7 +16677,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_leather_raidmonkgoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -17019,7 +17019,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_leather_raiddruidgoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -17361,7 +17361,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_leather_raiddemonhuntergoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -17703,7 +17703,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_cloth_raidwarlockgoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -18045,7 +18045,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_cloth_raidpriestgoblin_d_01.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -18387,7 +18387,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cloth_raidmagegoblin_d_01_cape.jpg",
         "catalyst":true,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -25189,7 +25189,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_cloth_undergroundquest_b_01.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -25569,7 +25569,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cloth_outdoorarathor_d_01_cape.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -25911,7 +25911,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_cloth_undergroundquest_b_01.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -26139,7 +26139,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cloth_raidmagegoblin_d_01_cape.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -28267,7 +28267,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_special_mechanicalflyer_d_01.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":2
     },
@@ -30737,7 +30737,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_cape_special_nerubian_d_02.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
@@ -32067,7 +32067,7 @@
         "iconUrl":"https:\/\/wow.zamimg.com\/images\/wow\/icons\/large\/inv_leather_raiddemonhunternerubian_d_01_cape.jpg",
         "catalyst":false,
         "boe":false,
-        "armorType":"Cloth",
+        "armorType":null,
         "onUseTrinket":false,
         "season":1
     },
