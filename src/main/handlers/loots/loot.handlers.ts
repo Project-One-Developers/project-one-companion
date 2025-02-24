@@ -167,7 +167,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             bis: parseLootIsBisForChar(bisList, loot.item.id, char),
             warnDroptimizer:
                 charDroptimizers.length === 0 ? { type: 'not-imported' } : { type: 'none' },
-            warnWowAudit: wowAuditData ? { type: 'used' } : { type: 'none' }
+            warnWowAudit: charWowAudit ? { type: 'used' } : { type: 'none' }
         }
 
         return {

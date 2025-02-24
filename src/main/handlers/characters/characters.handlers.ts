@@ -174,7 +174,7 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
             currencies: parseCurrencies(charDroptimizers),
             warnDroptimizer:
                 charDroptimizers.length === 0 ? { type: 'not-imported' } : { type: 'none' },
-            warnWowAudit: wowAuditData ? { type: 'used' } : { type: 'none' }
+            warnWowAudit: charWowAudit ? { type: 'used' } : { type: 'not-tracked' }
         }
 
         return summary

@@ -131,7 +131,7 @@ export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootManual = z.infer<typeof newLootManualSchema>
 export type TierSetCompletion = { type: 'none' } | { type: '2p' } | { type: '4p' }
 export type DroptimizerWarn = { type: 'none' } | { type: 'old' } | { type: 'not-imported' }
-export type WowAuditWarn = { type: 'none' } | { type: 'used' }
+export type WowAuditWarn = { type: 'none' } | { type: 'used' } | { type: 'not-tracked' }
 export type CharacterSummary = {
     character: Character
     itemLevel: string
