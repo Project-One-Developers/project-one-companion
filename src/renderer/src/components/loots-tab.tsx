@@ -37,7 +37,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                 if (b.gearItem.item.armorType === null) return -1
                 return a.gearItem.item.armorType.localeCompare(b.gearItem.item.armorType)
             }
-            return a.gearItem.item.id - b.gearItem.item.id || a.id.localeCompare(b.id)
+            return b.gearItem.item.id - a.gearItem.item.id || a.id.localeCompare(b.id)
         })
 
     return (
