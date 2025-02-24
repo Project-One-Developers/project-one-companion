@@ -97,7 +97,7 @@ export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
-export type DroptimizerCurrenciesUpgrade = z.infer<typeof droptimizerCurrenciesSchema>
+export type DroptimizerCurrencies = z.infer<typeof droptimizerCurrenciesSchema>
 
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
@@ -132,6 +132,15 @@ export type NewLootManual = z.infer<typeof newLootManualSchema>
 export type TierSetCompletion = { type: 'none' } | { type: '2p' } | { type: '4p' }
 export type DroptimizerWarn = { type: 'none' } | { type: 'old' } | { type: 'not-imported' }
 export type WowAuditWarn = { type: 'none' } | { type: 'used' }
+export type CharacterSummary = {
+    character: Character
+    itemLevel: string
+    weeklyChest: GearItem[]
+    tierset: GearItem[]
+    currencies: DroptimizerCurrencies[]
+    warnDroptimizer: DroptimizerWarn
+    warnWowAudit: WowAuditWarn
+}
 export type CharAssignmentHighlights = {
     isMain: boolean
     dpsGain: number

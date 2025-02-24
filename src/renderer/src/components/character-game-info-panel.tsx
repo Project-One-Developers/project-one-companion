@@ -57,7 +57,7 @@ type CurrenciesPanelProps = {
     }> | null
 }
 
-const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
+export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     return (
         <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
             {/* Character Info Panel */}

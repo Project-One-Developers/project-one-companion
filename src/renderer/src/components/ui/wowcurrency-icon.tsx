@@ -1,8 +1,8 @@
 import { currencyIcon } from '@renderer/lib/wow-icon'
-import { DroptimizerCurrenciesUpgrade } from '@shared/types/types'
+import { DroptimizerCurrencies } from '@shared/types/types'
 
 type WowItemIconProps = {
-    currency: DroptimizerCurrenciesUpgrade
+    currency: DroptimizerCurrencies
     iconClassName: string
 }
 

@@ -15,7 +15,7 @@ import { RaidSessionPage } from './pages/raid-session'
 import RaidSessionListPage from './pages/raid-session-list'
 import RosterPage from './pages/roster'
 import SettingsPage from './pages/settings'
-import Tierset from './pages/tierset'
+import SummaryPage from './pages/summary'
 
 function App(): JSX.Element {
     return (
@@ -31,9 +31,9 @@ function App(): JSX.Element {
                         <Route path="/loot-table" element={<LootTable />} />
                         <Route path="/raid-session" element={<RaidSessionListPage />} />
                         <Route path="/raid-session/:raidSessionId" element={<RaidSessionPage />} />
-                        <Route path="/tierset" element={<Tierset />} />
                         <Route path="/assign" element={<LootAssign />} />
                         <Route path="/bis-list" element={<BisListPage />} />
+                        <Route path="/summary" element={<SummaryPage />} />
                         <Route path="/config" element={<SettingsPage />} />
                     </Routes>
                 </HashRouter>

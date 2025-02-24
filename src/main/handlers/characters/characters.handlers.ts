@@ -1,7 +1,9 @@
 import type {
     Character,
     CharacterGameInfo,
+    CharacterSummary,
     CharacterWithPlayer,
+    CharacterWowAudit,
     EditCharacter,
     EditPlayer,
     NewCharacter,
@@ -9,15 +11,21 @@ import type {
     Player,
     PlayerWithCharacters
 } from '@shared/types/types'
-import { getDroptimizerLastByChar } from '@storage/droptimizer/droptimizer.storage'
+import {
+    getDroptimizerLastByChar,
+    getDroptimizerLatestList
+} from '@storage/droptimizer/droptimizer.storage'
+import { getLootAssigned } from '@storage/loots/loots.storage'
 import {
     addCharacter,
     addCharacterWowAudit,
     deleteAllCharacterWowAudit,
     deleteCharacter,
     editCharacter,
-    getCharacterWithPlayerById,
+    getAllCharacterWowAudit,
+    getCharactersList,
     getCharactersWithPlayerList,
+    getCharacterWithPlayerById,
     getLastCharacterWowAudit
 } from '@storage/players/characters.storage'
 import {
@@ -28,6 +36,12 @@ import {
     getPlayerWithCharactersList
 } from '@storage/players/players.storage'
 import { getConfig } from '@storage/settings/settings.storage'
+import {
+    parseCurrencies,
+    parseGreatVault,
+    parseItemLevel,
+    parseTiersetInfo
+} from '../loots/loot.utils'
 import { fetchWowAuditData, parseWowAuditData } from './characters.utils'
 
 // Characters
@@ -117,6 +131,54 @@ export const getCharLatestGameInfoHandler = async (
         droptimizer: lastDroptimizer,
         wowaudit: lastWowAudit
     }
+
+    return res
+}
+
+export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => {
+    const [roster, latestDroptimizer, allAssignedLoots, wowAuditData] = await Promise.all([
+        getCharactersList(),
+        getDroptimizerLatestList(),
+        getLootAssigned(),
+        getAllCharacterWowAudit()
+    ])
+
+    const res: CharacterSummary[] = roster.map((char) => {
+        // get latest droptimizers for a given chars
+        const charDroptimizers = latestDroptimizer.filter(
+            (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
+        )
+
+        const charWowAudit: CharacterWowAudit | null =
+            wowAuditData.find(
+                (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
+            ) ?? null
+
+        const droptimizerLastUpdate: number | null = Math.max(
+            ...charDroptimizers.map((c) => c.simInfo.date)
+        )
+        //let wowAuditLastUpdate: number | null = charWowAudit?.wowauditLastModifiedUnixTs ?? null
+
+        // loot assgined to a given char
+        const charAssignedLoots = allAssignedLoots.filter(
+            (l) =>
+                l.assignedCharacterId === char.id &&
+                (!droptimizerLastUpdate || l.dropDate > droptimizerLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
+        )
+
+        const summary: CharacterSummary = {
+            character: char,
+            itemLevel: parseItemLevel(charDroptimizers, charWowAudit),
+            weeklyChest: parseGreatVault(charDroptimizers),
+            tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots, charWowAudit),
+            currencies: parseCurrencies(charDroptimizers),
+            warnDroptimizer:
+                charDroptimizers.length === 0 ? { type: 'not-imported' } : { type: 'none' },
+            warnWowAudit: wowAuditData ? { type: 'used' } : { type: 'none' }
+        }
+
+        return summary
+    })
 
     return res
 }

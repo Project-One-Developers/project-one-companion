@@ -7,6 +7,7 @@ import type {
     BossWithItems,
     Character,
     CharacterGameInfo,
+    CharacterSummary,
     CharacterWithPlayer,
     CharAssignmentHighlights,
     Droptimizer,
@@ -51,6 +52,9 @@ export const api = {
     },
     getCharacterGameInfo(charName: string, charRealm: string): Promise<CharacterGameInfo> {
         return ipcRenderer.invoke('character-game-info', charName, charRealm)
+    },
+    getRosterSummary(): Promise<CharacterSummary[]> {
+        return ipcRenderer.invoke('character-roster-summary')
     },
     syncWowAudit(): Promise<void> {
         return ipcRenderer.invoke('character-sync-wowaudit')

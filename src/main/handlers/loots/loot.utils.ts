@@ -22,6 +22,7 @@ import {
     CharAssignmentHighlights,
     CharAssignmentInfo,
     Droptimizer,
+    DroptimizerCurrencies,
     DroptimizerUpgrade,
     GearItem,
     Item,
@@ -543,6 +544,35 @@ export const parseLootAlreadyGotIt = (
     return availableGear.some((gear) => gearAreTheSame(loot.gearItem, gear))
 }
 
+export const parseItemLevel = (
+    charDroptimizers: Droptimizer[],
+    charWowAudit: CharacterWowAudit | null
+): string => {
+    const lastDroptWithTierInfo = charDroptimizers
+        .filter((c) => c.itemsEquipped.length > 0)
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0)
+
+    const droptDate: number | null = lastDroptWithTierInfo?.simInfo.date ?? null
+    const wowAuditDate: number | null = charWowAudit?.blizzardLastModifiedUnixTs ?? null
+
+    const itemToCalc: GearItem[] | null = lastDroptWithTierInfo?.itemsEquipped ?? []
+
+    if (!droptDate && wowAuditDate) {
+        return charWowAudit?.averageIlvl ?? '?'
+    } else if (droptDate && wowAuditDate && wowAuditDate > droptDate) {
+        return charWowAudit?.averageIlvl ?? '?'
+    }
+
+    if (!itemToCalc || itemToCalc.length === 0) {
+        return '?'
+    }
+
+    const sumIlvl = itemToCalc.reduce((sum, item) => sum + item.itemLevel, 0)
+    const averageIlvl = sumIlvl / itemToCalc.length
+    return averageIlvl.toFixed(2)
+}
+
 export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[],
@@ -655,10 +685,15 @@ export const parseDroptimizersInfo = (
  * @param droptimizers
  * @returns
  */
-export const parseWeeklyChest = (droptimizers: Droptimizer[]): GearItem[] =>
+export const parseGreatVault = (droptimizers: Droptimizer[]): GearItem[] =>
     droptimizers
         .filter((c) => c.weeklyChest.length > 0)
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.weeklyChest ?? []
+
+export const parseCurrencies = (droptimizers: Droptimizer[]): DroptimizerCurrencies[] =>
+    droptimizers
+        .filter((c) => c.currencies.length > 0)
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.currencies ?? []
 
 const calculateTiersetCompletion = (
     loot: LootWithItem,

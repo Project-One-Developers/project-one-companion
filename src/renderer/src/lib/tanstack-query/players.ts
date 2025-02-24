@@ -1,6 +1,7 @@
 import type {
     Character,
     CharacterGameInfo,
+    CharacterSummary,
     CharacterWithPlayer,
     EditCharacter,
     EditPlayer,
@@ -64,4 +65,10 @@ export const deletePlayer = async (id: string): Promise<void> => {
 
 export const editPlayer = async (edited: EditPlayer): Promise<Player> => {
     return await window.api.editPlayer(edited)
+}
+
+// roster
+
+export const fetchRosterSummary = async (): Promise<CharacterSummary[]> => {
+    return await window.api.getRosterSummary()
 }

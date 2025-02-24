@@ -11,6 +11,7 @@ import {
     getCharLatestGameInfoHandler,
     getChracterListHandler,
     getPlayerWithCharactersListHandler,
+    getRosterSummaryHandler,
     syncCharacterWowAudit
 } from './characters/characters.handlers'
 import {
@@ -63,6 +64,7 @@ export const allHandlers = {
     'character-edit': editCharacterHandler,
     'character-sync-wowaudit': syncCharacterWowAudit,
     'character-game-info': getCharLatestGameInfoHandler,
+    'character-roster-summary': getRosterSummaryHandler,
     'player-add': addPlayerHandler,
     'player-delete': deletePlayerHandler,
     'player-edit': editPlayerHandler,

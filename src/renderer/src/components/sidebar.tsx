@@ -1,6 +1,7 @@
 import {
     Code2Icon,
     LucideAccessibility,
+    LucideCpu,
     LucideGauge,
     LucideMedal,
     LucideScrollText,
@@ -44,6 +45,11 @@ const preparationItems = [
         title: 'Bis List',
         url: '/bis-list',
         icon: LucideStar
+    },
+    {
+        title: 'Summary',
+        url: '/summary',
+        icon: LucideCpu
     }
 ]
 

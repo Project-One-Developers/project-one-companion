@@ -27,13 +27,13 @@ import {
     evalHighlightsAndScore,
     parseBestItemInSlot,
     parseDroptimizersInfo,
+    parseGreatVault,
     parseLootAlreadyGotIt,
     parseLootIsBisForChar,
     parseManualLoots,
     parseMrtLoots,
     parseRcLoots,
-    parseTiersetInfo,
-    parseWeeklyChest
+    parseTiersetInfo
 } from './loot.utils'
 
 export const addRaidLootsByRCLootCsvHandler = async (
@@ -150,7 +150,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         const res: Omit<CharAssignmentInfo, 'highlights'> = {
             character: char,
             droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
-            weeklyChest: parseWeeklyChest(charDroptimizers),
+            weeklyChest: parseGreatVault(charDroptimizers),
             tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots, charWowAudit),
             bestItemsInSlot: parseBestItemInSlot(
                 loot.item.slotKey,
