@@ -30,7 +30,6 @@ export default function SummaryPage(): JSX.Element {
     const filteredPlayers = useMemo(() => {
         if (!characterQuery.data) return []
         return characterQuery.data
-            .sort((a, b) => a.character.name.localeCompare(b.character.name)) // sort player by name
             .filter((summary) => {
                 const isMain = summary.character.main
                 const playerMatches = summary.character.name
@@ -39,6 +38,7 @@ export default function SummaryPage(): JSX.Element {
 
                 return isMain && playerMatches
             })
+            .sort((a, b) => parseFloat(b.itemLevel) - parseFloat(a.itemLevel)) // sort player by item level
     }, [characterQuery.data, searchQuery])
 
     if (characterQuery.isLoading) {
