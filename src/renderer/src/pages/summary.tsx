@@ -78,9 +78,9 @@ export default function SummaryPage(): JSX.Element {
                         return (
                             <TableRow
                                 key={summary.character.id}
-                                className={` py-2 cursor-pointer  hover:bg-gray-700 `}
+                                className={`  cursor-pointer  hover:bg-gray-700 `}
                             >
-                                <TableCell className="rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
+                                <TableCell className="p-1 rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
                                     <div className="flex items-center space-x-3">
                                         <div className="relative">
                                             <WowClassIcon
@@ -99,7 +99,7 @@ export default function SummaryPage(): JSX.Element {
                                         </div>
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="p-1">
                                     <TiersetInfo tierset={summary.tierset} />
                                 </TableCell>
                                 <TableCell className="rounded-r-md">
@@ -109,7 +109,7 @@ export default function SummaryPage(): JSX.Element {
                                         ))}
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="p-1">
                                     <div className="flex space-x-1">
                                         {summary.currencies
                                             .sort((a, b) => a.id - b.id)
@@ -122,7 +122,7 @@ export default function SummaryPage(): JSX.Element {
                                             ))}
                                     </div>
                                 </TableCell>
-                                <TableCell className="rounded-r-md">
+                                <TableCell className="p-1">
                                     <div className="flex flex-col space-y-2">
                                         {summary.warnDroptimizer.type === 'not-imported' && (
                                             <div className="flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ export default function SummaryPage(): JSX.Element {
                                         )}
                                     </div>
                                 </TableCell>
-                                <TableCell className="rounded-r-md">
+                                <TableCell className="p-1 rounded-r-md">
                                     <div className="flex flex-col space-y-2">
                                         {summary.warnWowAudit.type === 'not-tracked' && (
                                             <div className="flex flex-wrap gap-2">
