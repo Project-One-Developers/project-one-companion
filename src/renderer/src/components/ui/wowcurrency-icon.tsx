@@ -28,9 +28,7 @@ export const WowCurrencyIcon = ({ currency, iconClassName }: WowItemIconProps) =
                     alt={currencyInfo?.name}
                     className={`${iconClassName} block`}
                 />
-                <p className="text-xs text-center mt-1">
-                    <strong>{currency.amount}</strong>
-                </p>
+                <p className="text-bold text-[11px]">{currency.amount}</p>
             </div>
         </a>
     )

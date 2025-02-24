@@ -117,7 +117,7 @@ export default function SummaryPage(): JSX.Element {
                                                 <WowCurrencyIcon
                                                     key={currency.id}
                                                     currency={currency}
-                                                    iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
+                                                    iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
                                                 />
                                             ))}
                                     </div>
