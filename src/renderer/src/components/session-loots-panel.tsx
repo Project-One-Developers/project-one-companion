@@ -36,13 +36,13 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
         }
     })
 
-    const loots = useMemo(() => lootsQuery.data ?? [], [lootsQuery.data])
-    const bosses = useMemo(() => bossesQuery.data ?? [], [bossesQuery.data])
+    const loots = useMemo<LootWithItem[]>(() => lootsQuery.data ?? [], [lootsQuery.data])
 
     // Memoize sorted bosses
     const orderedBosses = useMemo(() => {
-        return bosses.sort((a, b) => a.order - b.order)
-    }, [bosses])
+        if (!bossesQuery.data) return []
+        return bossesQuery.data.sort((a, b) => a.order - b.order)
+    }, [bossesQuery.data])
 
     // Memoize grouped loots & total token counts
     const { groupedLoots, allDifficulties, tokenSums } = useMemo(() => {

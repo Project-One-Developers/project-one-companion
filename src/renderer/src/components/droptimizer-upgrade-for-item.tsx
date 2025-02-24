@@ -6,11 +6,11 @@ import { WowGearIcon } from './ui/wowgear-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
 
 type DroptimizerUpgradeForItemEquippedProps = {
-    upgrade: { dps: number }
+    upgrade: { dps: number } | null
     itemEquipped: any // Replace with the correct type
     droptimizer: {
         url: string
-        charInfo: { specId: string; name: string }
+        charInfo: { specId: number; name: string }
         simInfo: { date: number }
     }
 }
