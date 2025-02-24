@@ -14,7 +14,7 @@ type LootsTabsProps = {
 }
 
 const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => {
-    const [selectedSlot, setSelectedSlot] = useState<WowItemSlotKey>(ITEM_SLOTS_KEY[0])
+    const [selectedSlot, setSelectedSlot] = useState<WowItemSlotKey | 'tokens'>(ITEM_SLOTS_KEY[0])
 
     const lootCounts = loots.reduce(
         (acc, loot) => {
@@ -27,8 +27,19 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
         {} as Record<WowItemSlotKey, { total: number; assigned: number }>
     )
 
-    const filteredLoots = loots
-        .filter((loot) => loot.gearItem.item.slotKey === selectedSlot)
+    const tokensLoots = loots.filter(
+        (loot: LootWithAssigned) => loot.gearItem.item.tierset || loot.gearItem.item.token
+    )
+    const tokensCount = tokensLoots.reduce(
+        (acc, loot) => {
+            acc.total++
+            if (loot.assignedCharacter) acc.assigned++
+            return acc
+        },
+        { total: 0, assigned: 0 }
+    )
+    const slotLoots = loots
+        .filter((loot: LootWithAssigned) => loot.gearItem.item.slotKey === selectedSlot)
         .sort((a, b) => {
             if (a.gearItem.item.token !== b.gearItem.item.token)
                 return a.gearItem.item.token ? -1 : 1
@@ -37,8 +48,10 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                 if (b.gearItem.item.armorType === null) return -1
                 return a.gearItem.item.armorType.localeCompare(b.gearItem.item.armorType)
             }
-            return b.gearItem.item.id - a.gearItem.item.id || a.id.localeCompare(b.id)
+            return a.gearItem.item.id - b.gearItem.item.id || a.id.localeCompare(b.id)
         })
+
+    const filteredLoots = selectedSlot === 'tokens' ? tokensLoots : slotLoots
 
     return (
         <div>
@@ -71,6 +84,27 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                         </div>
                     )
                 })}
+                {tokensCount.total > 0 && (
+                    <div className="flex flex-col items-center">
+                        <span
+                            className={`text-xs font-bold ${tokensCount.assigned === tokensCount.total ? 'text-green-500' : 'text-white'}`}
+                        >
+                            {tokensCount.assigned}/{tokensCount.total}
+                        </span>
+                        <button
+                            onClick={() => setSelectedSlot('tokens')}
+                            className={`flex flex-col items-center gap-1 p-1 border-b-2 transition-transform ${
+                                selectedSlot === 'tokens' ? 'border-primary' : 'border-transparent'
+                            }`}
+                        >
+                            <img
+                                src="https://wow.zamimg.com/images/wow/icons/large/inv_axe_2h_nerubianraid_d_01_nv.jpg"
+                                className="w-8 h-8 hover:scale-125 transition-transform cursor-pointer rounded-sm"
+                                title={'Tokens'}
+                            />
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div className="bg-muted p-4 rounded-lg shadow-md mt-2">
@@ -91,10 +125,10 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                             {/* Loot */}
                             <WowGearIcon
                                 gearItem={loot.gearItem}
-                                showSlot={false}
+                                showSlot={selectedSlot === 'tokens'}
                                 showTierBanner={true}
                                 showExtendedInfo={true}
-                                showArmorType={true}
+                                showArmorType={selectedSlot !== 'tokens'}
                             />
 
                             {/* Assigned to Char */}
