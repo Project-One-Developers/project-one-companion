@@ -57,7 +57,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                     filteredLoots.map((loot) => (
                         <div
                             key={loot.id}
-                            className={`flex flex-row justify-between border-b border-gray-700 py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${selectedLoot?.id === loot.id ? 'bg-gray-700' : ''}`}
+                            className={`flex flex-row justify-between border border-transparent hover:border-white py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${selectedLoot?.id === loot.id ? 'bg-gray-700' : ''}`}
                             onClick={(e) => {
                                 e.preventDefault()
                                 setSelectedLoot(loot)
