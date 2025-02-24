@@ -16,6 +16,17 @@ type LootsTabsProps = {
 const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => {
     const [selectedSlot, setSelectedSlot] = useState<WowItemSlotKey>(ITEM_SLOTS_KEY[0])
 
+    const lootCounts = loots.reduce(
+        (acc, loot) => {
+            const slot = loot.gearItem.item.slotKey
+            if (!acc[slot]) acc[slot] = { total: 0, assigned: 0 }
+            acc[slot].total++
+            if (loot.assignedCharacter) acc[slot].assigned++
+            return acc
+        },
+        {} as Record<WowItemSlotKey, { total: number; assigned: number }>
+    )
+
     const filteredLoots = loots
         .filter((loot) => loot.gearItem.item.slotKey === selectedSlot)
         .sort((a, b) => {
@@ -32,22 +43,34 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
     return (
         <div>
             <div className="flex flex-wrap gap-2 pb-2">
-                {wowItemSlotKeySchema.options.map((slot) => (
-                    <button
-                        key={slot}
-                        onClick={() => setSelectedSlot(slot)}
-                        className={`flex flex-col items-center gap-1 p-1 border-b-2 transition-transform ${
-                            selectedSlot === slot ? 'border-primary' : 'border-transparent'
-                        }`}
-                    >
-                        <img
-                            src={itemSlotIcon.get(slot)}
-                            alt={slot}
-                            className="w-8 h-8 hover:scale-125 transition-transform cursor-pointer rounded-sm"
-                            title={formatWowSlotKey(slot)}
-                        />
-                    </button>
-                ))}
+                {wowItemSlotKeySchema.options.map((slot) => {
+                    const count = lootCounts[slot]
+                    if (!count || count.total === 0) return null
+                    const isFullyAssigned = count.assigned === count.total
+
+                    return (
+                        <div key={slot} className="flex flex-col items-center">
+                            <span
+                                className={`text-xs font-bold ${isFullyAssigned ? 'text-green-500' : 'text-white'}`}
+                            >
+                                {count.assigned}/{count.total}
+                            </span>
+                            <button
+                                onClick={() => setSelectedSlot(slot)}
+                                className={`flex flex-col items-center gap-1 p-1 border-b-2 transition-transform ${
+                                    selectedSlot === slot ? 'border-primary' : 'border-transparent'
+                                }`}
+                            >
+                                <img
+                                    src={itemSlotIcon.get(slot)}
+                                    alt={slot}
+                                    className="w-8 h-8 hover:scale-125 transition-transform cursor-pointer rounded-sm"
+                                    title={formatWowSlotKey(slot)}
+                                />
+                            </button>
+                        </div>
+                    )
+                })}
             </div>
 
             <div className="bg-muted p-4 rounded-lg shadow-md mt-2">
@@ -57,7 +80,9 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                     filteredLoots.map((loot) => (
                         <div
                             key={loot.id}
-                            className={`flex flex-row justify-between border border-transparent hover:border-white py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${selectedLoot?.id === loot.id ? 'bg-gray-700' : ''}`}
+                            className={`flex flex-row justify-between border border-transparent hover:border-white py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${
+                                selectedLoot?.id === loot.id ? 'bg-gray-700' : ''
+                            }`}
                             onClick={(e) => {
                                 e.preventDefault()
                                 setSelectedLoot(loot)
@@ -74,7 +99,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
 
                             {/* Assigned to Char */}
                             {loot.assignedCharacter && (
-                                <div className="flex flex-row space-x-4 items-center ">
+                                <div className="flex flex-row space-x-4 items-center">
                                     <p className="text-sm -mr-2">{loot.assignedCharacter.name}</p>
                                     <WowClassIcon
                                         wowClassName={loot.assignedCharacter.class}
