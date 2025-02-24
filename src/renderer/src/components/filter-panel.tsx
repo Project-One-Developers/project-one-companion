@@ -156,7 +156,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                         </label>
                     </div>
 
-                    {/* Item Slot Toggles */}
+                    {/* Wow Class filter */}
                     <div className="flex flex-col space-y-2">
                         <label className="text-sm font-semibold">Class:</label>
                         <div className="flex flex-wrap gap-2">
