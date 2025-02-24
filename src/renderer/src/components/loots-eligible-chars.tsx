@@ -214,13 +214,33 @@ export default function LootsEligibleChars({
                                     })
                                 }
                             >
-                                <TableCell className="rounded-l-md">
+                                <TableCell className="rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
                                     <div className="flex items-center space-x-3">
-                                        <WowClassIcon
-                                            wowClassName={charInfo.character.class}
-                                            charname={charInfo.character.name}
-                                            className="h-8 w-8 border-2 border-background rounded-lg"
-                                        />
+                                        <div className="relative">
+                                            <WowClassIcon
+                                                wowClassName={charInfo.character.class}
+                                                charname={charInfo.character.name}
+                                                className="h-8 w-8 border-2 border-background rounded-lg"
+                                            />
+                                            {/* CheckMark for awarded */}
+                                            {selectedLoot.assignedCharacterId ===
+                                                charInfo.character.id && (
+                                                <div className="absolute -top-1 -right-1 bg-green-500 rounded-full w-4 h-4 flex items-center justify-center">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="h-3 w-3 text-white"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            )}
+                                        </div>
                                         <div>
                                             <h1 className="font-bold text-gray-100">
                                                 {charInfo.character.name}
