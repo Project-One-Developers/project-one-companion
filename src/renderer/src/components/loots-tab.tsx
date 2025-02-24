@@ -19,7 +19,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
     const lootCounts = loots.reduce(
         (acc, loot) => {
             const slot = loot.gearItem.item.slotKey
-            if (!acc[slot]) acc[slot] = { total: 0, assigned: 0 }
+            acc[slot] = acc[slot] || { total: 0, assigned: 0 }
             acc[slot].total++
             if (loot.assignedCharacter) acc[slot].assigned++
             return acc
@@ -28,7 +28,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
     )
 
     const tokensLoots = loots.filter(
-        (loot: LootWithAssigned) => loot.gearItem.item.tierset || loot.gearItem.item.token
+        (loot) => loot.gearItem.item.tierset || loot.gearItem.item.token
     )
     const tokensCount = tokensLoots.reduce(
         (acc, loot) => {
@@ -38,75 +38,58 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
         },
         { total: 0, assigned: 0 }
     )
-    const slotLoots = loots
-        .filter((loot: LootWithAssigned) => loot.gearItem.item.slotKey === selectedSlot)
-        .sort((a, b) => {
-            if (a.gearItem.item.token !== b.gearItem.item.token)
-                return a.gearItem.item.token ? -1 : 1
-            if (a.gearItem.item.armorType !== b.gearItem.item.armorType) {
-                if (a.gearItem.item.armorType === null) return 1
-                if (b.gearItem.item.armorType === null) return -1
-                return a.gearItem.item.armorType.localeCompare(b.gearItem.item.armorType)
-            }
-            return a.gearItem.item.id - b.gearItem.item.id || a.id.localeCompare(b.id)
-        })
 
-    const filteredLoots = selectedSlot === 'tokens' ? tokensLoots : slotLoots
+    const filteredLoots =
+        selectedSlot === 'tokens'
+            ? tokensLoots
+            : loots
+                  .filter((loot) => loot.gearItem.item.slotKey === selectedSlot)
+                  .sort(
+                      (a, b) => a.gearItem.item.id - b.gearItem.item.id || a.id.localeCompare(b.id)
+                  )
+
+    const SlotButton = ({
+        slot,
+        count
+    }: {
+        slot: WowItemSlotKey | 'tokens'
+        count: { total: number; assigned: number }
+    }) => (
+        <div className="flex flex-col items-center">
+            <span
+                className={`text-xs font-bold ${count.assigned === count.total ? 'text-green-500' : 'text-white'}`}
+            >
+                {count.assigned}/{count.total}
+            </span>
+            <button
+                onClick={() => setSelectedSlot(slot)}
+                className={`flex flex-col items-center gap-1 p-1 border-b-2 transition-transform ${selectedSlot === slot ? 'border-primary' : 'border-transparent'}`}
+            >
+                <img
+                    src={
+                        slot === 'tokens'
+                            ? 'https://wow.zamimg.com/images/wow/icons/large/inv_axe_2h_nerubianraid_d_01_nv.jpg'
+                            : itemSlotIcon.get(slot)
+                    }
+                    alt={slot}
+                    className="w-8 h-8 hover:scale-125 transition-transform cursor-pointer rounded-sm"
+                    title={slot === 'tokens' ? 'Tokens' : formatWowSlotKey(slot)}
+                />
+            </button>
+        </div>
+    )
 
     return (
         <div>
             <div className="flex flex-wrap gap-2 pb-2">
-                {wowItemSlotKeySchema.options.map((slot) => {
-                    const count = lootCounts[slot]
-                    if (!count || count.total === 0) return null
-                    const isFullyAssigned = count.assigned === count.total
-
-                    return (
-                        <div key={slot} className="flex flex-col items-center">
-                            <span
-                                className={`text-xs font-bold ${isFullyAssigned ? 'text-green-500' : 'text-white'}`}
-                            >
-                                {count.assigned}/{count.total}
-                            </span>
-                            <button
-                                onClick={() => setSelectedSlot(slot)}
-                                className={`flex flex-col items-center gap-1 p-1 border-b-2 transition-transform ${
-                                    selectedSlot === slot ? 'border-primary' : 'border-transparent'
-                                }`}
-                            >
-                                <img
-                                    src={itemSlotIcon.get(slot)}
-                                    alt={slot}
-                                    className="w-8 h-8 hover:scale-125 transition-transform cursor-pointer rounded-sm"
-                                    title={formatWowSlotKey(slot)}
-                                />
-                            </button>
-                        </div>
-                    )
-                })}
-                {tokensCount.total > 0 && (
-                    <div className="flex flex-col items-center">
-                        <span
-                            className={`text-xs font-bold ${tokensCount.assigned === tokensCount.total ? 'text-green-500' : 'text-white'}`}
-                        >
-                            {tokensCount.assigned}/{tokensCount.total}
-                        </span>
-                        <button
-                            onClick={() => setSelectedSlot('tokens')}
-                            className={`flex flex-col items-center gap-1 p-1 border-b-2 transition-transform ${
-                                selectedSlot === 'tokens' ? 'border-primary' : 'border-transparent'
-                            }`}
-                        >
-                            <img
-                                src="https://wow.zamimg.com/images/wow/icons/large/inv_axe_2h_nerubianraid_d_01_nv.jpg"
-                                className="w-8 h-8 hover:scale-125 transition-transform cursor-pointer rounded-sm"
-                                title={'Tokens'}
-                            />
-                        </button>
-                    </div>
+                {wowItemSlotKeySchema.options.map(
+                    (slot) =>
+                        lootCounts[slot]?.total > 0 && (
+                            <SlotButton key={slot} slot={slot} count={lootCounts[slot]} />
+                        )
                 )}
+                {tokensCount.total > 0 && <SlotButton slot="tokens" count={tokensCount} />}
             </div>
-
             <div className="bg-muted p-4 rounded-lg shadow-md mt-2">
                 {filteredLoots.length === 0 ? (
                     <p className="text-gray-400">No loot in this category</p>
@@ -114,24 +97,19 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                     filteredLoots.map((loot) => (
                         <div
                             key={loot.id}
-                            className={`flex flex-row justify-between border border-transparent hover:border-white py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${
-                                selectedLoot?.id === loot.id ? 'bg-gray-700' : ''
-                            }`}
+                            className={`flex flex-row justify-between border border-transparent hover:border-white py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${selectedLoot?.id === loot.id ? 'bg-gray-700' : ''}`}
                             onClick={(e) => {
                                 e.preventDefault()
                                 setSelectedLoot(loot)
                             }}
                         >
-                            {/* Loot */}
                             <WowGearIcon
                                 gearItem={loot.gearItem}
                                 showSlot={selectedSlot === 'tokens'}
-                                showTierBanner={true}
-                                showExtendedInfo={true}
+                                showTierBanner
+                                showExtendedInfo
                                 showArmorType={selectedSlot !== 'tokens'}
                             />
-
-                            {/* Assigned to Char */}
                             {loot.assignedCharacter && (
                                 <div className="flex flex-row space-x-4 items-center">
                                     <p className="text-sm -mr-2">{loot.assignedCharacter.name}</p>
