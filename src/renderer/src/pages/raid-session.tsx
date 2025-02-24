@@ -6,7 +6,7 @@ import { SessionLootsPanel } from '@renderer/components/session-loots-panel'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { cloneRaidSession, fetchRaidSession } from '@renderer/lib/tanstack-query/raid'
+import { cloneRaidSession, fetchRaidSessionWithRoster } from '@renderer/lib/tanstack-query/raid'
 import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
@@ -33,7 +33,7 @@ export const RaidSessionPage = () => {
 
     const { data: raidSession, isLoading } = useQuery({
         queryKey: [queryKeys.raidSession, raidSessionId],
-        queryFn: () => fetchRaidSession(raidSessionId),
+        queryFn: () => fetchRaidSessionWithRoster(raidSessionId),
         enabled: !!raidSessionId
     })
 

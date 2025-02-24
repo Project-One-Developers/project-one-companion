@@ -10,7 +10,7 @@ import {
 } from '@renderer/components/ui/dropdown-menu'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsWithAssignedBySessions } from '@renderer/lib/tanstack-query/loots'
-import { fetchRaidSessions } from '@renderer/lib/tanstack-query/raid'
+import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle, MoreVertical } from 'lucide-react'
@@ -24,7 +24,7 @@ export default function LootAssign() {
 
     const raidSessionsQuery = useQuery({
         queryKey: [queryKeys.raidSessionsWithLoots],
-        queryFn: fetchRaidSessions
+        queryFn: fetchRaidSessionsWithSummary
     })
 
     const lootsQuery = useQuery({

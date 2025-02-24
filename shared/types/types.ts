@@ -18,7 +18,8 @@ import {
     editRaidSessionSchema,
     newRaidSessionSchema,
     raidSessionSchema,
-    raidSessionWithRosterSchema
+    raidSessionWithRosterSchema,
+    raidSessionWithSummarySchema
 } from '@shared/schemas/raid.schemas'
 import { appSettingsSchema } from '@shared/schemas/store.schemas'
 import { z } from 'zod'
@@ -118,6 +119,7 @@ export type BossWithItems = z.infer<typeof bossWithItemsSchema>
 
 export type RaidSession = z.infer<typeof raidSessionSchema>
 export type RaidSessionWithRoster = z.infer<typeof raidSessionWithRosterSchema>
+export type RaidSessionWithSummary = z.infer<typeof raidSessionWithSummarySchema>
 export type NewRaidSession = z.infer<typeof newRaidSessionSchema>
 export type EditRaidSession = z.infer<typeof editRaidSessionSchema>
 

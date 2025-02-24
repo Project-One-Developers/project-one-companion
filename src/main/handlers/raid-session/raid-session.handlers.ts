@@ -1,44 +1,51 @@
-import { EditRaidSession, NewRaidSession, RaidSessionWithRoster } from '@shared/types/types'
+import {
+    EditRaidSession,
+    NewRaidSession,
+    RaidSession,
+    RaidSessionWithRoster,
+    RaidSessionWithSummary
+} from '@shared/types/types'
 import {
     addRaidSession,
     deleteRaidSession,
     editRaidSession,
-    getRaidSessionList,
-    getRaidSessionWithCharPartecipation
+    getRaidSession,
+    getRaidSessionWithRoster,
+    getRaidSessionWithSummaryList
 } from '@storage/raid-session/raid-session.storage'
 import { getUnixTimestamp, newUUID } from '@utils'
 
-export const getRaidSessionHandler = async (id: string): Promise<RaidSessionWithRoster> => {
-    return await getRaidSessionWithCharPartecipation(id)
-}
-
-export const getRaidSessionListHandler = async (): Promise<RaidSessionWithRoster[]> => {
-    return await getRaidSessionList()
-}
-
-export const addRaidSessionHandler = async (
-    raidSession: NewRaidSession
+export const getRaidSessionWithRosterHandler = async (
+    id: string
 ): Promise<RaidSessionWithRoster> => {
+    return await getRaidSessionWithRoster(id)
+}
+
+export const getRaidSessionWithSummaryListHandler = async (): Promise<RaidSessionWithSummary[]> => {
+    return await getRaidSessionWithSummaryList()
+}
+
+export const addRaidSessionHandler = async (raidSession: NewRaidSession): Promise<RaidSession> => {
     const id = await addRaidSession(raidSession)
-    return await getRaidSessionWithCharPartecipation(id)
+    return await getRaidSession(id)
 }
 
 export const editRaidSessionHandler = async (
     editedRaidSession: EditRaidSession
-): Promise<RaidSessionWithRoster> => {
+): Promise<RaidSession> => {
     // edit
     await editRaidSession(editedRaidSession)
 
     // retrieve updated raid session
-    return await getRaidSessionWithCharPartecipation(editedRaidSession.id)
+    return await getRaidSession(editedRaidSession.id)
 }
 
 export const deleteRaidSessionHandler = async (id: string): Promise<void> => {
     return await deleteRaidSession(id)
 }
 
-export const cloneRaidSessionHandler = async (id: string): Promise<RaidSessionWithRoster> => {
-    const source = await getRaidSessionWithCharPartecipation(id)
+export const cloneRaidSessionHandler = async (id: string): Promise<RaidSession> => {
+    const source = await getRaidSessionWithRoster(id)
     const cloned: NewRaidSession = {
         name: source.name + '-' + newUUID().slice(0, 6),
         raidDate: getUnixTimestamp(), // set now as session date

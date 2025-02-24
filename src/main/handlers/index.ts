@@ -39,8 +39,8 @@ import {
     cloneRaidSessionHandler,
     deleteRaidSessionHandler,
     editRaidSessionHandler,
-    getRaidSessionHandler,
-    getRaidSessionListHandler
+    getRaidSessionWithRosterHandler,
+    getRaidSessionWithSummaryListHandler
 } from './raid-session/raid-session.handlers'
 import {
     getAppSettingsHandler,
@@ -73,8 +73,8 @@ export const allHandlers = {
     'items-search': searchItemsHandler,
     'boss-loot-table-get': getRaidLootTableHandler,
     'boss-list': getBossesHandler,
-    'raid-session-list': getRaidSessionListHandler,
-    'raid-session-get': getRaidSessionHandler,
+    'raid-session-list': getRaidSessionWithSummaryListHandler,
+    'raid-session-get': getRaidSessionWithRosterHandler,
     'raid-session-add': addRaidSessionHandler,
     'raid-session-edit': editRaidSessionHandler,
     'raid-session-delete': deleteRaidSessionHandler,

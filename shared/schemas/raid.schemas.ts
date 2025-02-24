@@ -11,6 +11,11 @@ export const raidSessionWithRosterSchema = raidSessionSchema.extend({
     roster: z.array(characterSchema)
 })
 
+export const raidSessionWithSummarySchema = raidSessionSchema.extend({
+    rosterCount: z.number(),
+    lootCount: z.number()
+})
+
 export const newRaidSessionSchema = z.object({
     name: z.string().min(1, 'Session name is required'),
     raidDate: z.number(),

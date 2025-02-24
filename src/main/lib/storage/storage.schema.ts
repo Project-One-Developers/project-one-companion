@@ -366,7 +366,8 @@ export const playerCharRelations = relations(playerTable, ({ many }) => ({
 // Raid Sessions
 
 export const raidSessionTableRelations = relations(raidSessionTable, ({ many }) => ({
-    charPartecipation: many(raidSessionRosterTable)
+    charPartecipation: many(raidSessionRosterTable),
+    lootedItems: many(lootTable)
 }))
 
 export const charTableRelations = relations(charTable, ({ one, many }) => ({

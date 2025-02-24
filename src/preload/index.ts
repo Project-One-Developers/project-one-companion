@@ -24,7 +24,9 @@ import type {
     NewRaidSession,
     Player,
     PlayerWithCharacters,
+    RaidSession,
     RaidSessionWithRoster,
+    RaidSessionWithSummary,
     WowRaidDifficulty
 } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
@@ -102,16 +104,16 @@ export const api = {
     editRaidSession(editedSession: EditRaidSession): Promise<RaidSessionWithRoster> {
         return ipcRenderer.invoke('raid-session-edit', editedSession)
     },
-    getRaidSession(id: string): Promise<RaidSessionWithRoster> {
+    getRaidSessionWithRoster(id: string): Promise<RaidSessionWithRoster> {
         return ipcRenderer.invoke('raid-session-get', id)
     },
-    getRaidSessions(): Promise<RaidSessionWithRoster[]> {
+    getRaidSessionsWithSummary(): Promise<RaidSessionWithSummary[]> {
         return ipcRenderer.invoke('raid-session-list')
     },
     deleteRaidSession(id: string): Promise<void> {
         return ipcRenderer.invoke('raid-session-delete', id)
     },
-    cloneRaidSession(id: string): Promise<RaidSessionWithRoster> {
+    cloneRaidSession(id: string): Promise<RaidSession> {
         return ipcRenderer.invoke('raid-session-clone', id)
     },
     // Loots

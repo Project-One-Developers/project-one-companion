@@ -1,29 +1,29 @@
-import type { EditRaidSession, NewRaidSession, RaidSessionWithRoster } from 'shared/types/types'
+import type {
+    EditRaidSession,
+    NewRaidSession,
+    RaidSession,
+    RaidSessionWithRoster,
+    RaidSessionWithSummary
+} from 'shared/types/types'
 
-export const fetchRaidSessions = async (): Promise<RaidSessionWithRoster[]> => {
-    return await window.api.getRaidSessions()
+export const fetchRaidSessionsWithSummary = async (): Promise<RaidSessionWithSummary[]> => {
+    return await window.api.getRaidSessionsWithSummary()
 }
 
-export const fetchRaidSessionsWithLoots = async (): Promise<RaidSessionWithRoster[]> => {
-    return await window.api.getRaidSessions()
-}
-
-export const fetchRaidSession = async (id: string | undefined): Promise<RaidSessionWithRoster> => {
+export const fetchRaidSessionWithRoster = async (
+    id: string | undefined
+): Promise<RaidSessionWithRoster> => {
     if (!id) {
         throw new Error('No raid session id provided')
     }
-    return await window.api.getRaidSession(id)
+    return await window.api.getRaidSessionWithRoster(id)
 }
 
-export const editRaidSession = async (
-    editedRaidSession: EditRaidSession
-): Promise<RaidSessionWithRoster> => {
+export const editRaidSession = async (editedRaidSession: EditRaidSession): Promise<RaidSession> => {
     return await window.api.editRaidSession(editedRaidSession)
 }
 
-export const addRaidSession = async (
-    newRaidSession: NewRaidSession
-): Promise<RaidSessionWithRoster> => {
+export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<RaidSession> => {
     return await window.api.addRaidSession(newRaidSession)
 }
 
@@ -31,6 +31,6 @@ export const deleteRaidSession = async (id: string): Promise<void> => {
     return await window.api.deleteRaidSession(id)
 }
 
-export const cloneRaidSession = async (id: string): Promise<RaidSessionWithRoster> => {
+export const cloneRaidSession = async (id: string): Promise<RaidSession> => {
     return await window.api.cloneRaidSession(id)
 }
