@@ -1,6 +1,7 @@
 import { TooltipArrow } from '@radix-ui/react-tooltip'
 import ItemBisSpecsDialog from '@renderer/components/item-bis-specs-dialog'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
+import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { fetchBisList } from '@renderer/lib/tanstack-query/bis-list'
@@ -8,7 +9,7 @@ import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
-import { getSpec } from '@shared/libs/spec-parser/spec-utils'
+import { getSpec, getWowClassBySpecId } from '@shared/libs/spec-parser/spec-utils'
 import { BisList, BossWithItems, Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Edit, LoaderCircle } from 'lucide-react'
@@ -64,26 +65,61 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
 
                                 <div className="flex flex-row items-center gap-x-1">
                                     {bisForItem &&
-                                        bisForItem.specIds.map((s) => (
-                                            <Tooltip key={item.id + '-' + s}>
-                                                <TooltipTrigger asChild>
-                                                    <div className="flex flex-col items-center">
-                                                        <WowSpecIcon
-                                                            specId={s}
-                                                            className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                                                        />
-                                                    </div>
-                                                </TooltipTrigger>
-                                                <TooltipContent
-                                                    className="TooltipContent"
-                                                    sideOffset={5}
-                                                >
-                                                    {getSpec(s).name}
-                                                    <TooltipArrow className="TooltipArrow" />
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        ))}
+                                        (() => {
+                                            const specIds = bisForItem.specIds
+                                            const firstSpecClass = getWowClassBySpecId(specIds[0]) // Get the class of the first spec
+                                            const isFullClass =
+                                                firstSpecClass &&
+                                                firstSpecClass.specs.every((spec) =>
+                                                    specIds.includes(spec.id)
+                                                )
+
+                                            return isFullClass ? (
+                                                // Display the class icon if all specs for the class are present
+                                                <Tooltip key={item.id + '-class'}>
+                                                    <TooltipTrigger asChild>
+                                                        <div className="flex flex-col items-center">
+                                                            <WowClassIcon
+                                                                wowClassName={firstSpecClass.name}
+                                                                className="h-5 w-5 border-2 border-background rounded-lg"
+                                                            />
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent
+                                                        className="TooltipContent"
+                                                        sideOffset={5}
+                                                    >
+                                                        {firstSpecClass.name}
+                                                        <TooltipArrow className="TooltipArrow" />
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            ) : (
+                                                // Display individual spec icons if not all specs of a class are selected
+                                                specIds.map((s) => {
+                                                    return (
+                                                        <Tooltip key={item.id + '-' + s}>
+                                                            <TooltipTrigger asChild>
+                                                                <div className="flex flex-col items-center">
+                                                                    <WowSpecIcon
+                                                                        specId={s}
+                                                                        className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                                                                    />
+                                                                </div>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent
+                                                                className="TooltipContent"
+                                                                sideOffset={5}
+                                                            >
+                                                                {getSpec(s).name}
+                                                                <TooltipArrow className="TooltipArrow" />
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    )
+                                                })
+                                            )
+                                        })()}
                                 </div>
+
                                 <button className="absolute -top-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full">
                                     <Edit size={14} />
                                 </button>
