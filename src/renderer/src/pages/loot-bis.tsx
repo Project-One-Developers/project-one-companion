@@ -1,6 +1,5 @@
 import { TooltipArrow } from '@radix-ui/react-tooltip'
 import ItemBisSpecsDialog from '@renderer/components/item-bis-specs-dialog'
-import { Button } from '@renderer/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
@@ -23,11 +22,10 @@ const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket', 'main_hand', 'of
 type BossPanelProps = {
     boss: BossWithItems
     bisLists: BisList[]
-    editMode: boolean
     onEdit: (item: Item) => void
 }
 
-const BossPanel = ({ boss, bisLists, editMode, onEdit }: BossPanelProps) => {
+const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
     return (
         <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[250px]">
             {/* Boss header: cover + name */}
@@ -49,7 +47,11 @@ const BossPanel = ({ boss, bisLists, editMode, onEdit }: BossPanelProps) => {
                         return (
                             <div
                                 key={item.id}
-                                className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer"
+                                className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer relative group"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    onEdit(item)
+                                }}
                             >
                                 <WowItemIcon
                                     item={item}
@@ -82,17 +84,9 @@ const BossPanel = ({ boss, bisLists, editMode, onEdit }: BossPanelProps) => {
                                             </Tooltip>
                                         ))}
                                 </div>
-
-                                {editMode && (
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className=" h-5 w-5"
-                                        onClick={() => onEdit(item)}
-                                    >
-                                        <Edit />
-                                    </Button>
-                                )}
+                                <button className="absolute -top-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full">
+                                    <Edit size={14} />
+                                </button>
                             </div>
                         )
                     })}
@@ -110,7 +104,6 @@ type ItemWithBisSpecs = {
 export default function BisListPage(): JSX.Element {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [selectedItem, setSelectedItem] = useState<ItemWithBisSpecs | null>(null)
-    const [editMode, setEditMode] = useState(false)
 
     const itemRes = useQuery({
         queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
@@ -138,8 +131,6 @@ export default function BisListPage(): JSX.Element {
         setIsEditDialogOpen(true)
     }
 
-    const toggleEditMode = () => setEditMode((prev) => !prev)
-
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             {/* Page Header */}
@@ -161,7 +152,6 @@ export default function BisListPage(): JSX.Element {
                         key={boss.id}
                         boss={boss}
                         bisLists={bisLists}
-                        editMode={editMode}
                         onEdit={handleEditClick}
                     />
                 ))}
@@ -173,17 +163,6 @@ export default function BisListPage(): JSX.Element {
                     itemAndSpecs={selectedItem}
                 />
             )}
-            {/* Bottom Right Icons */}
-            <div className="fixed bottom-6 right-6 space-y-2">
-                <div
-                    className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
-                    onClick={toggleEditMode}
-                >
-                    <Edit
-                        className={`w-5 h-5 transition-transform ${editMode ? 'rotate-45 ' : ''}`}
-                    />
-                </div>
-            </div>
         </div>
     )
 }

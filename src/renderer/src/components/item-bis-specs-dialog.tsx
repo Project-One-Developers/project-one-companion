@@ -6,7 +6,7 @@ import { WOW_CLASS_WITH_SPECS } from '@shared/libs/spec-parser/spec-utils.schema
 import { Item } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import { useState, type JSX } from 'react'
+import { useEffect, useState, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
@@ -28,7 +28,14 @@ export default function ItemBisSpecsDialog({
     setOpen,
     itemAndSpecs
 }: ItemBisSpecsDialogProps): JSX.Element {
-    const [selectedSpecs, setSelectedSpecs] = useState<number[]>(itemAndSpecs?.specs ?? [])
+    const [selectedSpecs, setSelectedSpecs] = useState<number[]>([])
+
+    // Sync selectedSpecs when itemAndSpecs changes
+    useEffect(() => {
+        if (itemAndSpecs) {
+            setSelectedSpecs(itemAndSpecs.specs)
+        }
+    }, [itemAndSpecs])
 
     const editMutation = useMutation({
         mutationFn: ({ itemId, specIds }: { itemId: number; specIds: number[] }) =>
