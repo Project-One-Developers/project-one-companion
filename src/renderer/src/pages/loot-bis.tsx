@@ -8,15 +8,14 @@ import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
-import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
 import { getSpec } from '@shared/libs/spec-parser/spec-utils'
-import { BisList, BossWithItems, Item, WowItemSlotKey } from '@shared/types/types'
+import { BisList, BossWithItems, Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Edit, LoaderCircle } from 'lucide-react'
 
 import { useState, type JSX } from 'react'
 
-const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket', 'main_hand', 'off_hand']
+//const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket', 'main_hand', 'off_hand']
 
 // Boss Card Component
 type BossPanelProps = {
@@ -40,7 +39,8 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
             {/* Boss items */}
             <div className="flex flex-col gap-y-3 p-6">
                 {boss.items
-                    .filter((i) => i.veryRare || slotBis.includes(i.slotKey))
+                    //.filter((i) => i.veryRare || slotBis.includes(i.slotKey))
+                    .filter((i) => !i.token && !i.tierset)
                     .map((item) => {
                         const bisForItem = bisLists.find((bis) => bis.itemId === item.id)
 
@@ -134,7 +134,7 @@ export default function BisListPage(): JSX.Element {
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             {/* Page Header */}
-            <div className="bg-muted rounded-lg p-6 mb-2 shadow-lg flex justify-between items-center">
+            {/* <div className="bg-muted rounded-lg p-6 mb-2 shadow-lg flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold mb-2 text-blue-400">Raid BiS List</h1>
                     <div className="flex items-center text-gray-400">
@@ -143,7 +143,7 @@ export default function BisListPage(): JSX.Element {
                         </span>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Boss List */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
