@@ -86,7 +86,7 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
                                                     <div className="flex flex-col items-center">
                                                         <WowClassIcon
                                                             wowClassName={className}
-                                                            className="h-5 w-5 border-2 border-background rounded-lg"
+                                                            className="h-5 w-5 border border-background rounded-lg"
                                                         />
                                                     </div>
                                                 </TooltipTrigger>
