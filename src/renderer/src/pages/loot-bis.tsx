@@ -17,7 +17,7 @@ import { Edit, LoaderCircle } from 'lucide-react'
 
 import { useState, type JSX } from 'react'
 
-const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket']
+const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket', 'main_hand', 'off_hand']
 
 // Boss Card Component
 type BossPanelProps = {
