@@ -1,5 +1,6 @@
 import { TooltipArrow } from '@radix-ui/react-tooltip'
 import ItemBisSpecsDialog from '@renderer/components/item-bis-specs-dialog'
+import { Input } from '@renderer/components/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
@@ -14,7 +15,7 @@ import { BisList, BossWithItems, Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Edit, LoaderCircle } from 'lucide-react'
 
-import { useState, type JSX } from 'react'
+import { useEffect, useMemo, useState, type JSX } from 'react'
 
 //const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket', 'main_hand', 'off_hand']
 
@@ -146,18 +147,45 @@ type ItemWithBisSpecs = {
 
 export default function BisListPage(): JSX.Element {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
     const [selectedItem, setSelectedItem] = useState<ItemWithBisSpecs | null>(null)
 
-    const itemRes = useQuery({
+    const bossesWithItemRes = useQuery({
         queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
         queryFn: () => fetchRaidLootTable(CURRENT_RAID_ID)
     })
+
     const bisRes = useQuery({
         queryKey: [queryKeys.bisList],
         queryFn: () => fetchBisList()
     })
 
-    if (itemRes.isLoading || bisRes.isLoading) {
+    // Debounce search input
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery)
+        }, 300)
+
+        return () => clearTimeout(handler)
+    }, [searchQuery])
+
+    // Memoized filtering logic
+    const filteredBosses: BossWithItems[] = useMemo(() => {
+        if (!bossesWithItemRes.data) return []
+        if (!debouncedSearchQuery) return bossesWithItemRes.data
+
+        return bossesWithItemRes.data
+            .map((boss) => ({
+                ...boss,
+                items: boss.items.filter((item) =>
+                    item.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+                )
+            }))
+            .filter((boss) => boss.items.length > 0) // Remove bosses with no matching items
+    }, [bossesWithItemRes.data, debouncedSearchQuery])
+
+    if (bossesWithItemRes.isLoading || bisRes.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -165,7 +193,6 @@ export default function BisListPage(): JSX.Element {
         )
     }
 
-    const items = itemRes.data ?? []
     const bisLists = bisRes.data ?? []
 
     const handleEditClick = (item: Item) => {
@@ -176,21 +203,20 @@ export default function BisListPage(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            {/* Page Header */}
-            {/* <div className="bg-muted rounded-lg p-6 mb-2 shadow-lg flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-bold mb-2 text-blue-400">Raid BiS List</h1>
-                    <div className="flex items-center text-gray-400">
-                        <span>
-                            Very Rare and {slotBis.map((s) => formatWowSlotKey(s)).join(',')}
-                        </span>
-                    </div>
-                </div>
-            </div> */}
+            {/* Search Bar */}
+            <div className="w-full mb-4 p-3">
+                <Input
+                    type="text"
+                    placeholder="Search items..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md"
+                />
+            </div>
 
             {/* Boss List */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {items.map((boss) => (
+                {filteredBosses.map((boss) => (
                     <BossPanel
                         key={boss.id}
                         boss={boss}
