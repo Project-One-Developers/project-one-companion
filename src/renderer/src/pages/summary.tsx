@@ -22,7 +22,7 @@ export default function SummaryPage(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('')
 
     const characterQuery = useQuery({
-        queryKey: [queryKeys.characters],
+        queryKey: [queryKeys.charactersSummary],
         queryFn: fetchRosterSummary
     })
 
