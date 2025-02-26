@@ -1,7 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
-import { formatUnixTimestampForDisplay, parseStringToUnixTimestamp } from '@renderer/lib/utils'
+import {
+    formatUnixTimestampForDisplay,
+    parseStringToUnixTimestamp
+} from '@shared/libs/date/date-utils'
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
 import { NewRaidSession, PlayerWithCharacters, RaidSessionWithRoster } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'

@@ -1,7 +1,8 @@
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { deleteDroptimizer } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
+import { getDpsHumanReadable } from '@renderer/lib/utils'
+import { formatUnixTimestampToRelativeDays } from '@shared/libs/date/date-utils'
 import {
     BossWithItems,
     Droptimizer,

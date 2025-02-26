@@ -1,4 +1,4 @@
-import { currentWowWeek, unixTimestampToWowWeek } from '@renderer/lib/utils'
+import { isInCurrentWowWeek } from '@shared/libs/date/date-utils'
 import { Droptimizer } from '@shared/types/types'
 import { WowGearIcon } from './ui/wowgear-icon'
 
@@ -8,10 +8,7 @@ type CurrentGreatVaultPanelProps = {
 
 export const CurrentGreatVaultPanel = ({ droptimizer }: CurrentGreatVaultPanelProps) => {
     const weeklyChests = droptimizer?.weeklyChest
-    const isValidWeek =
-        droptimizer &&
-        weeklyChests &&
-        currentWowWeek() === unixTimestampToWowWeek(droptimizer.simInfo.date)
+    const isValidWeek = droptimizer && weeklyChests && isInCurrentWowWeek(droptimizer.simInfo.date)
 
     return (
         <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">

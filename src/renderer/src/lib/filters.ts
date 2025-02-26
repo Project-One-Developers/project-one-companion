@@ -1,3 +1,4 @@
+import { unixTimestampToRelativeDays } from '@shared/libs/date/date-utils'
 import {
     Character,
     Droptimizer,
@@ -6,7 +7,6 @@ import {
     WowItemSlotKey,
     WowRaidDifficulty
 } from '@shared/types/types'
-import { unixTimestampToRelativeDays } from './utils'
 
 export type LootFilter = {
     selectedRaidDiff: WowRaidDifficulty

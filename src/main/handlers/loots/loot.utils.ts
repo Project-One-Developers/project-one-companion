@@ -681,7 +681,6 @@ export const parseDroptimizersInfo = (
 
 /**
  * // more recent droptimizer with weekly chest info
- * // todo: exclude if not in the current wow reset?
  * @param droptimizers
  * @returns
  */

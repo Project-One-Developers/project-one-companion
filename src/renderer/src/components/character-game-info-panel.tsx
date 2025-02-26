@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
-import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
+import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
 import { formatWowEquippedSlotKey } from '@shared/libs/items/item-slot-utils'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'

@@ -7,7 +7,7 @@ import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { cloneRaidSession, fetchRaidSessionWithRoster } from '@renderer/lib/tanstack-query/raid'
-import { formaUnixTimestampToItalianDate } from '@renderer/lib/utils'
+import { formaUnixTimestampToItalianDate } from '@shared/libs/date/date-utils'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
     ArrowLeft,

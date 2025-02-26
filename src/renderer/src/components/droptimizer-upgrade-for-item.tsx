@@ -1,5 +1,6 @@
 import { TooltipArrow } from '@radix-ui/react-tooltip'
-import { formatUnixTimestampToRelativeDays, getDpsHumanReadable } from '@renderer/lib/utils'
+import { getDpsHumanReadable } from '@renderer/lib/utils'
+import { formatUnixTimestampToRelativeDays } from '@shared/libs/date/date-utils'
 import { ArrowRight } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { WowGearIcon } from './ui/wowgear-icon'

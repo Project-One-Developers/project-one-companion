@@ -1,7 +1,7 @@
 import RaidSessionDialog from '@renderer/components/session-dialog'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
-import { formatUnixTimestampForDisplay } from '@renderer/lib/utils'
+import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
 import { RaidSessionWithSummary } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Calendar, Gem, LoaderCircle, PlusIcon, Users } from 'lucide-react'
