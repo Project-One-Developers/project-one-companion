@@ -1,4 +1,5 @@
 import { CURRENT_SEASON, PROFESSION_TYPES } from '@shared/consts/wow.consts'
+import { isInCurrentWowWeek } from '@shared/libs/date/date-utils'
 import {
     applyAvoidance,
     applyDiffBonusId,
@@ -680,13 +681,19 @@ export const parseDroptimizersInfo = (
 }
 
 /**
- * // more recent droptimizer with weekly chest info
- * @param droptimizers
- * @returns
+ * Parses the Great Vault loot from the provided Droptimizers array.
+ *
+ * This function filters the Droptimizers to include only those with a non-empty weekly chest
+ * and whose simulation information date is within the current World of Warcraft week.
+ * It then sorts the filtered Droptimizers by their simulation information date in descending order
+ * and returns the weekly chest of the most recent Droptimizer.
+ *
+ * @param {Droptimizer[]} droptimizers - An array of Droptimizer objects to parse.
+ * @returns {GearItem[]} An array of GearItem objects representing the loot from the Great Vault.
  */
 export const parseGreatVault = (droptimizers: Droptimizer[]): GearItem[] =>
     droptimizers
-        .filter((c) => c.weeklyChest.length > 0)
+        .filter((c) => c.weeklyChest.length > 0 && isInCurrentWowWeek(c.simInfo.date)) // keep vault of this wow reset
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.weeklyChest ?? []
 
 export const parseCurrencies = (droptimizers: Droptimizer[]): DroptimizerCurrencies[] =>
