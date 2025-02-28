@@ -9,7 +9,7 @@ import type {
 } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { lootTable } from '@storage/storage.schema'
-import { getUnixTimestamp, newUUID } from '@utils'
+import { newUUID } from '@utils'
 import { eq, InferInsertModel } from 'drizzle-orm'
 import { z } from 'zod'
 
@@ -81,20 +81,18 @@ export const addLoots = async (
     loots: NewLoot[],
     elegibleCharacters: Character[]
 ): Promise<void> => {
-    const lootValues = loots.map((loot): InferInsertModel<typeof lootTable> => {
-        return {
-            id: loot.addonId ?? newUUID(),
-            dropDate: loot.dropDate ?? getUnixTimestamp(),
-            gearItem: loot.gearItem,
-            raidDifficulty: loot.raidDifficulty,
-            itemString: loot.itemString,
-            charsEligibility: elegibleCharacters.map((c) => c.id),
-            raidSessionId: raidSessionId,
-            itemId: loot.gearItem.item.id
-        }
-    })
+    const lootValues: InferInsertModel<typeof lootTable>[] = loots.map((loot) => ({
+        id: loot.addonId ?? newUUID(),
+        charsEligibility: elegibleCharacters.map((c) => c.id),
+        itemId: loot.gearItem.item.id,
+        raidSessionId,
+        dropDate: loot.dropDate,
+        gearItem: loot.gearItem,
+        raidDifficulty: loot.raidDifficulty,
+        itemString: loot.itemString
+    }))
 
-    await db().insert(lootTable).values(lootValues).onConflictDoNothing({ target: lootTable.id }) // do nothing on item already inserted
+    await db().insert(lootTable).values(lootValues).onConflictDoNothing({ target: lootTable.id })
 }
 
 export const assignLoot = async (
