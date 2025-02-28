@@ -1,8 +1,6 @@
-import { TooltipArrow } from '@radix-ui/react-tooltip'
 import ItemBisSpecsDialog from '@renderer/components/item-bis-specs-dialog'
 import { Input } from '@renderer/components/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
-import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { fetchBisList } from '@renderer/lib/tanstack-query/bis-list'
@@ -10,9 +8,9 @@ import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
-import { getSpec, getWowClassBySpecId } from '@shared/libs/spec-parser/spec-utils'
 import { BisList, BossWithItems, Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
+import clsx from 'clsx'
 import { Edit, LoaderCircle } from 'lucide-react'
 
 import { useEffect, useMemo, useState, type JSX } from 'react'
@@ -45,14 +43,17 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
                     .map((item) => {
                         const bisForItem = bisLists.filter((bis) => bis.itemId === item.id)
                         const allSpecIds = bisForItem.flatMap((bis) => bis.specIds)
-                        const uniqueClasses = Array.from(
-                            new Set(allSpecIds.map((specId) => getWowClassBySpecId(specId)?.name))
-                        )
+                        // const uniqueClasses = Array.from(
+                        //     new Set(allSpecIds.map((specId) => getWowClassBySpecId(specId)?.name))
+                        // )
 
                         return (
                             <div
                                 key={item.id}
-                                className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer relative group"
+                                className={clsx(
+                                    'flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer relative group',
+                                    !allSpecIds.length && 'opacity-30'
+                                )}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     onEdit(item)
@@ -67,65 +68,34 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
                                     iconClassName=""
                                 />
 
-                                <div className="flex flex-row items-center gap-x-1">
-                                    {uniqueClasses.map((className) => {
-                                        const classSpecs = getWowClassBySpecId(
-                                            allSpecIds.find(
-                                                (specId) =>
-                                                    getWowClassBySpecId(specId)?.name === className
-                                            )!
-                                        )
-                                        const isFullClass =
-                                            classSpecs &&
-                                            classSpecs.specs.every((spec) =>
-                                                allSpecIds.includes(spec.id)
-                                            )
-
-                                        return isFullClass ? (
-                                            <Tooltip key={item.id + '-' + className}>
+                                <div className="flex flex-col items-center">
+                                    <div className="text-xs text-gray-400">
+                                        {allSpecIds.length ? (
+                                            <Tooltip>
                                                 <TooltipTrigger asChild>
-                                                    <div className="flex flex-col items-center">
-                                                        <WowClassIcon
-                                                            wowClassName={className}
-                                                            className="h-5 w-5 border border-background rounded-lg"
-                                                        />
-                                                    </div>
+                                                    <span>
+                                                        {' '}
+                                                        {allSpecIds.length} spec
+                                                        {allSpecIds.length > 1 && 's'}
+                                                    </span>
                                                 </TooltipTrigger>
                                                 <TooltipContent
                                                     className="TooltipContent"
                                                     sideOffset={5}
                                                 >
-                                                    {className}
-                                                    <TooltipArrow className="TooltipArrow" />
+                                                    <div className="flex flex-col gap-y-1">
+                                                        {allSpecIds.map((s) => (
+                                                            <WowSpecIcon
+                                                                key={s}
+                                                                specId={s}
+                                                                className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                                                            />
+                                                        ))}
+                                                    </div>
                                                 </TooltipContent>
                                             </Tooltip>
-                                        ) : (
-                                            allSpecIds
-                                                .filter(
-                                                    (s) =>
-                                                        getWowClassBySpecId(s)?.name === className
-                                                )
-                                                .map((s) => (
-                                                    <Tooltip key={item.id + '-' + s}>
-                                                        <TooltipTrigger asChild>
-                                                            <div className="flex flex-col items-center">
-                                                                <WowSpecIcon
-                                                                    specId={s}
-                                                                    className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                                                                />
-                                                            </div>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent
-                                                            className="TooltipContent"
-                                                            sideOffset={5}
-                                                        >
-                                                            {getSpec(s).name}
-                                                            <TooltipArrow className="TooltipArrow" />
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                ))
-                                        )
-                                    })}
+                                        ) : null}
+                                    </div>
                                 </div>
 
                                 <button className="absolute -top-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full">
