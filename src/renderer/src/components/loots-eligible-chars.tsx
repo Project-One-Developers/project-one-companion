@@ -100,7 +100,7 @@ export default function LootsEligibleChars({
 
     const unassignLootMutation = useMutation({
         mutationFn: ({ lootId }: { lootId: string }) => unassignLoot(lootId),
-        onMutate: async (variables) => {
+        onMutate: async () => {
             // Optimistically update the selected loot assignment
             const previousSelectedLoot = { ...selectedLoot }
             setSelectedLoot({
