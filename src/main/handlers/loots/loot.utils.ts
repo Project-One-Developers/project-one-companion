@@ -789,6 +789,10 @@ export const evalScore = (
     const normalizedDps = dpsGain / maxDdpsGain
     const baseScore = gearIsBis ? 1 + normalizedDps : normalizedDps
 
+    // Lowest non 0 score possible, just to order this character
+    // above characters with no gain whatsoever
+    if (baseScore === 0 && ilvlDiff > 0) return 1
+
     const tierSetMultiplier = match(tierSetCompletion)
         .with({ type: '4p' }, () => 1.3)
         .with({ type: '2p' }, () => 1.2)
