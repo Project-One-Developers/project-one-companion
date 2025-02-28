@@ -37,13 +37,16 @@ import {
     parseTiersetInfo
 } from './loot.utils'
 
+const ONE_HOUR_IN_SECONDS = 60 * 60
+const RAID_SESSION_UPPER_BOUND_DELTA = 5 * ONE_HOUR_IN_SECONDS
+
 export const addRaidLootsByRCLootCsvHandler = async (
     raidSessionId: string,
     csv: string
 ): Promise<void> => {
     const session = await getRaidSession(raidSessionId)
     const [parsedData, elegibleCharacters] = await Promise.all([
-        parseRcLoots(csv, session.raidDate, session.raidDate + 5 * 60 * 60), // lower bound = raid session date - upperbound = raid session + 5hours
+        parseRcLoots(csv, session.raidDate, session.raidDate + RAID_SESSION_UPPER_BOUND_DELTA),
         getRaidSessionRoster(raidSessionId)
     ])
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
@@ -55,7 +58,7 @@ export const addRaidLootsByMrtHandler = async (
 ): Promise<void> => {
     const session = await getRaidSession(raidSessionId)
     const [parsedData, elegibleCharacters] = await Promise.all([
-        parseMrtLoots(csv, session.raidDate, session.raidDate + 5 * 60 * 60), // lower bound = raid session date - upperbound = raid session + 5hours
+        parseMrtLoots(csv, session.raidDate, session.raidDate + RAID_SESSION_UPPER_BOUND_DELTA),
         getRaidSessionRoster(raidSessionId)
     ])
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
