@@ -454,6 +454,7 @@ function createTiersetGearPiece(
     diff: string | null
 ): GearItem | null {
     if (!className || !ilvl || !itemsInDb || !slotKey || !diff) return null
+    
     const wowItem = itemsInDb.find(
         (i) => i.tierset === true && i.slotKey === slotKey && i.classes?.includes(className)
     )
@@ -469,11 +470,7 @@ function createTiersetGearPiece(
 
     const itemDiff = wowAuditDiffToRealDiff(diff)
     const bonusIds: number[] = []
-    let itemTrack: ItemTrack | null = null
-
-    if (itemDiff != null) {
-        itemTrack = applyItemTrackByIlvlAndDiff(bonusIds, ilvl, itemDiff)
-    }
+    const itemTrack = itemDiff ? applyItemTrackByIlvlAndDiff(bonusIds, ilvl, itemDiff) : null
 
     const res: GearItem = {
         item: {
@@ -491,7 +488,7 @@ function createTiersetGearPiece(
         source: 'equipped',
         itemLevel: ilvl,
         bonusIds: bonusIds,
-        itemTrack: itemTrack,
+        itemTrack,
         gemIds: null,
         enchantIds: null
     }
