@@ -23,6 +23,7 @@ import {
 } from '@storage/loots/loots.storage'
 import { getAllCharacterWowAudit, getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
+import { match } from 'ts-pattern'
 import {
     evalHighlightsAndScore,
     parseBestItemInSlot,
@@ -116,7 +117,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             (loot.item.classes == null || loot.item.classes.includes(character.class))
     )
 
-    const maxGainFromDroptimizers = Math.max(
+    const maxGainFromAllDroptimizers = Math.max(
         ...latestDroptimizer.flatMap((item) => item.upgrades.map((upgrade) => upgrade.dps))
     )
 
@@ -126,20 +127,28 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
 
-        let charWowAudit: CharacterWowAudit | null = null
-        let charLastUpdate: number | null = Math.max(...charDroptimizers.map((c) => c.simInfo.date))
+        // TODO: can't we directly query the last audit only when needed?
+        const { charWowAudit, charLastUpdate } = match(charDroptimizers.length)
+            .with(
+                0,
+                (): { charWowAudit: CharacterWowAudit | null; charLastUpdate: number | null } => {
+                    const audit =
+                        wowAuditData.find(
+                            (wowaudit) =>
+                                wowaudit.name === char.name && wowaudit.realm === char.realm
+                        ) ?? null
+                    return {
+                        charWowAudit: audit,
+                        charLastUpdate: audit?.wowauditLastModifiedUnixTs ?? null
+                    }
+                }
+            )
+            .otherwise(() => ({
+                charWowAudit: null,
+                charLastUpdate: Math.max(...charDroptimizers.map((c) => c.simInfo.date))
+            }))
 
-        // wow audit data when no char droptimizer
-        // healer will always enter this branch
-        if (charDroptimizers.length === 0 && wowAuditData) {
-            charWowAudit =
-                wowAuditData.find(
-                    (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
-                ) ?? null
-            charLastUpdate = charWowAudit?.wowauditLastModifiedUnixTs ?? null
-        }
-
-        // loot assgined to a given char
+        // loot assigned to a given char
         const charAssignedLoots = allAssignedLoots.filter(
             (l) =>
                 l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
@@ -172,7 +181,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
 
         return {
             ...res,
-            highlights: evalHighlightsAndScore(loot, res, maxGainFromDroptimizers)
+            highlights: evalHighlightsAndScore(loot, res, maxGainFromAllDroptimizers)
         }
     })
 
