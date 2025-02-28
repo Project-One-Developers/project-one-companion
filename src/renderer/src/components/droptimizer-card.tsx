@@ -5,6 +5,7 @@ import { getDpsHumanReadable } from '@renderer/lib/utils'
 import { formatUnixTimestampToRelativeDays } from '@shared/libs/date/date-utils'
 import {
     BossWithItems,
+    Character,
     Droptimizer,
     DroptimizerUpgrade,
     Item,
@@ -13,21 +14,36 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { LoaderCircle, X } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import DroptimizerDetailDialog from './droptimizer-detail-dialog'
 import { Button } from './ui/button'
 import { Dialog, DialogTrigger } from './ui/dialog'
 import { WowItemIcon } from './ui/wowitem-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
 
-const CharacterInfo = ({ charInfo }: { charInfo: Droptimizer['charInfo'] }) => (
-    <div className="flex items-center space-x-3">
-        <WowSpecIcon
-            specId={charInfo.specId}
-            className="object-cover object-top rounded-md full h-10 w-10 border border-background"
-        />
-        <h2 className="font-black">{charInfo.name}</h2>
-    </div>
-)
+const CharacterInfo = ({
+    charInfo
+}: {
+    charInfo: Droptimizer['charInfo'] & { charId?: string }
+}) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center space-x-3">
+            <WowSpecIcon
+                specId={charInfo.specId}
+                className="object-cover object-top rounded-md full h-10 w-10 border border-background"
+            />
+            {charInfo.charId ? (
+                <div className="font-black" onClick={() => navigate(`/roster/${charInfo.charId}`)}>
+                    {charInfo.name}
+                </div>
+            ) : (
+                <h2 className="font-black">{charInfo.name}</h2>
+            )}
+        </div>
+    )
+}
 
 const DroptimizerInfo = ({ dropt, bosses }: { dropt: Droptimizer; bosses: BossWithItems[] }) => {
     const [isOpen, setOpen] = useState(false)
@@ -97,9 +113,10 @@ const UpgradeItem = ({
 
 type DroptimizerCardProps = {
     droptimizer: Droptimizer
+    character?: Character
 }
 
-export const DroptimizerCard = ({ droptimizer: dropt }: DroptimizerCardProps) => {
+export const DroptimizerCard = ({ droptimizer: dropt, character }: DroptimizerCardProps) => {
     const queryClient = useQueryClient()
     const { data: bosses = [], isLoading } = useQuery({
         queryKey: [queryKeys.raidLootTable, dropt.raidInfo.id],
@@ -145,7 +162,7 @@ export const DroptimizerCard = ({ droptimizer: dropt }: DroptimizerCardProps) =>
             </Button>
 
             {/* Spec Icon + Name */}
-            <CharacterInfo charInfo={dropt.charInfo} />
+            <CharacterInfo charInfo={{ ...dropt.charInfo, charId: character?.id }} />
 
             {/* Sim summary + detail dialog*/}
             <DroptimizerInfo dropt={dropt} bosses={bosses} />

@@ -55,7 +55,11 @@ export default function DroptimizerPage(): JSX.Element {
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 {filteredDroptimizers.length > 0 ? (
                     filteredDroptimizers.map((dropt) => (
-                        <DroptimizerCard key={dropt.url} droptimizer={dropt} />
+                        <DroptimizerCard
+                            key={dropt.url}
+                            droptimizer={dropt}
+                            character={charQuery.data?.find((c) => c.name === dropt.charInfo.name)}
+                        />
                     ))
                 ) : (
                     <img
