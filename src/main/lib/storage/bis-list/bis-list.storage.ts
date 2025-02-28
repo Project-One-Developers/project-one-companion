@@ -19,11 +19,13 @@ export const getBisList = async (): Promise<BisList[]> => {
 export const updateItemBisSpec = async (itemId: number, specIds: number[]): Promise<void> => {
     await db().delete(bisListTable).where(eq(bisListTable.itemId, itemId))
 
-    const values = specIds.map((spec) => ({
-        id: newUUID(),
-        specId: spec,
-        itemId: itemId
-    }))
+    if (specIds.length > 0) {
+        const values = specIds.map((spec) => ({
+            id: newUUID(),
+            specId: spec,
+            itemId: itemId
+        }))
 
-    await db().insert(bisListTable).values(values)
+        await db().insert(bisListTable).values(values)
+    }
 }
