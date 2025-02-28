@@ -10,7 +10,8 @@
         "preload",
         "raid-session",
         "bis-list",
-        "loot"
+        "loot",
+        "assignments"
     ],
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
