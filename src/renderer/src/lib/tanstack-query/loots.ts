@@ -61,6 +61,12 @@ export const assignLoot = async (
     return await window.api.assignLoot(charId, lootId, highlights)
 }
 
+export const unassignLoot = async (
+    lootId: string,
+) => {
+    return await window.api.unassignLoot(lootId)
+}
+
 export const getLootAssignmentInfo = async (lootId: string): Promise<LootAssignmentInfo> => {
     return await window.api.getLootAssignmentInfo(lootId)
 }

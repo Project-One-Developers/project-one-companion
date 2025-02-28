@@ -1,7 +1,7 @@
 import { TooltipArrow } from '@radix-ui/react-tooltip'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { assignLoot, getLootAssignmentInfo } from '@renderer/lib/tanstack-query/loots'
+import { assignLoot, getLootAssignmentInfo, unassignLoot } from '@renderer/lib/tanstack-query/loots'
 import { getDpsHumanReadable } from '@renderer/lib/utils'
 import { ITEM_SLOTS_KEY_TIERSET } from '@shared/consts/wow.consts'
 import { isHealerItem, isTankItem } from '@shared/libs/spec-parser/spec-utils'
@@ -88,6 +88,37 @@ export default function LootsEligibleChars({
             toast({
                 title: 'Error',
                 description: `Unable to assign loot. Error: ${error.message}`
+            })
+        },
+        onSettled: () => {
+            // we dont need to refetch the loot assignment info, we just need to refetch the loots from the parent to also refresh loot tabs panel
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.lootsBySession]
+            })
+        }
+    })
+
+    const unassignLootMutation = useMutation({
+        mutationFn: ({ lootId }: { lootId: string }) => unassignLoot(lootId),
+        onMutate: async (variables) => {
+            // Optimistically update the selected loot assignment
+            const previousSelectedLoot = { ...selectedLoot }
+            setSelectedLoot({
+                ...selectedLoot,
+                assignedCharacterId: null
+            })
+
+            // Return a rollback function
+            return { previousSelectedLoot }
+        },
+        onError: (error, _, context) => {
+            // Rollback to the previous state
+            if (context?.previousSelectedLoot) {
+                setSelectedLoot(context.previousSelectedLoot)
+            }
+            toast({
+                title: 'Error',
+                description: `Unable to unassign loot. Error: ${error.message}`
             })
         },
         onSettled: () => {
@@ -200,13 +231,19 @@ export default function LootsEligibleChars({
                                         ? 'bg-green-900/50'
                                         : ''
                                 }`}
-                                onClick={() =>
-                                    assignLootMutation.mutate({
-                                        charId: charInfo.character.id,
-                                        lootId: selectedLoot.id,
-                                        highlights: charInfo.highlights
-                                    })
-                                }
+                                onClick={() => {
+                                    if (
+                                        selectedLoot.assignedCharacterId === charInfo.character.id
+                                    ) {
+                                        unassignLootMutation.mutate({ lootId: selectedLoot.id })
+                                    } else {
+                                        assignLootMutation.mutate({
+                                            charId: charInfo.character.id,
+                                            lootId: selectedLoot.id,
+                                            highlights: charInfo.highlights
+                                        })
+                                    }
+                                }}
                             >
                                 <TableCell className="rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
                                     <div className="flex items-center space-x-3">
