@@ -141,6 +141,9 @@ export const RaidSessionPage = () => {
                                         charname={character.name}
                                         className="h-8 w-8 border-2 border-background rounded-lg"
                                     />
+                                    {character.main ? (
+                                        <div className="h-[3px] w-6 bg-white rounded-lg mt-2" />
+                                    ) : null}
                                 </div>
                             ))}
 
@@ -160,6 +163,9 @@ export const RaidSessionPage = () => {
                                         charname={character.name}
                                         className="h-8 w-8 border-2 border-background rounded-lg"
                                     />
+                                    {character.main ? (
+                                        <div className="h-[3px] w-6 bg-white rounded-lg mt-2" />
+                                    ) : null}
                                 </div>
                             ))}
                             <Separator.Root
@@ -178,6 +184,9 @@ export const RaidSessionPage = () => {
                                         charname={character.name}
                                         className="h-8 w-8 border-2 border-background rounded-lg"
                                     />
+                                    {character.main ? (
+                                        <div className="h-[3px] w-6 bg-white rounded-lg mt-2" />
+                                    ) : null}
                                 </div>
                             ))}
                         </div>

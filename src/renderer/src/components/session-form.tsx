@@ -8,6 +8,7 @@ import {
 import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
 import { NewRaidSession, PlayerWithCharacters, RaidSessionWithRoster } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
+import clsx from 'clsx'
 import { LoaderCircle } from 'lucide-react'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -29,17 +30,19 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
         <h3 className="font-bold text-lg">{player.name}</h3>
         <div className="flex gap-x-1">
             {player.characters?.map((char) => (
-                <WowClassIcon
-                    key={char.id}
-                    wowClassName={char.class}
-                    charname={char.name}
-                    className={`object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200 ${
-                        selectedCharacters.includes(char.id)
-                            ? 'scale-110 ring-2 ring-blue-500'
-                            : 'hover:opacity-100 opacity-50 grayscale'
-                    }`}
-                    onClick={() => onCharacterToggle(char.id)}
-                />
+                <div key={char.id} onClick={() => onCharacterToggle(char.id)}>
+                    <WowClassIcon
+                        wowClassName={char.class}
+                        charname={char.name}
+                        className={clsx(
+                            'object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200',
+                            selectedCharacters.includes(char.id)
+                                ? 'scale-110 ring-2 ring-blue-500'
+                                : 'hover:opacity-100 opacity-50 grayscale'
+                        )}
+                    />
+                    {char.main ? <div className="h-[3px] w-6 bg-white rounded-lg mt-2" /> : null}
+                </div>
             ))}
         </div>
     </div>
