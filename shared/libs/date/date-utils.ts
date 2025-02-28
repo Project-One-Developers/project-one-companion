@@ -1,3 +1,5 @@
+import { match } from 'ts-pattern'
+
 /**
  * Formats a Unix timestamp to a relative day string.
  *
@@ -7,9 +9,10 @@
 export function formatUnixTimestampToRelativeDays(unixTimestamp: number): string {
     const diffDays = unixTimestampToRelativeDays(unixTimestamp)
 
-    if (diffDays === 0) return 'Today'
-    if (diffDays === 1) return 'Yesterday'
-    return `${diffDays} days ago`
+    return match(diffDays)
+        .with(0, () => 'Today')
+        .with(1, () => 'Yesterday')
+        .otherwise((days) => `${days} days ago`)
 }
 
 /**
@@ -41,10 +44,6 @@ export function currentWowWeek(): number {
  * @returns The WoW week number corresponding to the given timestamp.
  */
 export function unixTimestampToWowWeek(unixTimestamp: number): number {
-    if (unixTimestamp == null) {
-        unixTimestamp = Math.floor(Date.now() / 1000) // current unix timestamp
-    }
-
     const startTimestamp = 1101254400 // WoW launch date (Wednesday) Unix timestamp
 
     // Days difference adjusted for the WoW week starting on Wednesday
