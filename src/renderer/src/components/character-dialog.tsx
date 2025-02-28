@@ -94,7 +94,7 @@ export default function CharacterDialog({
             realm: mode === 'edit' ? existingCharacter?.realm : 'pozzo-delleternità',
             class: mode === 'edit' ? existingCharacter?.class : 'Death Knight',
             role: mode === 'edit' ? existingCharacter?.role : 'DPS',
-            main: mode === 'edit' ? existingCharacter?.main : true,
+            main: mode === 'edit' ? existingCharacter?.main : false,
             playerId: player?.id
         }
     })
