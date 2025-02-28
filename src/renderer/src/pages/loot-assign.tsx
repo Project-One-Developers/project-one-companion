@@ -15,10 +15,22 @@ import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle, MoreVertical } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
     const [selectedLoot, setSelectedLoot] = useState<LootWithAssigned | null>(null)
+
+    const [searchParams] = useSearchParams()
+    const defaultSessionId = searchParams.get('sessionId')
+
+    useEffect(() => {
+        if (defaultSessionId) {
+            toggleSession(defaultSessionId)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [defaultSessionId])
+
     // dialog
     const [lootHelperDialogOpen, setLootHelperDialogOpen] = useState(false)
 

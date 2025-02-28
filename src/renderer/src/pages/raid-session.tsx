@@ -15,6 +15,7 @@ import {
     Copy,
     Edit,
     LoaderCircle,
+    LucideMedal,
     PlusIcon,
     ShoppingBag,
     Trash2
@@ -107,6 +108,16 @@ export const RaidSessionPage = () => {
                         disabled={cloneSessionMutation.isPending}
                     >
                         <Copy className="mr-2 h-4 w-4" /> Clone Session
+                    </Button>
+                    {/* Go to loot assign */}
+                    <Button
+                        variant="secondary"
+                        className="hover:bg-blue-700"
+                        onClick={() => {
+                            navigate(`/assign?sessionId=${raidSession.id}`)
+                        }}
+                    >
+                        <LucideMedal className="mr-2 h-4 w-4" /> Assign Loot
                     </Button>
                     {/* Delete Session */}
                     <Button
