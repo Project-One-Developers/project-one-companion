@@ -35,7 +35,10 @@ const CharacterInfo = ({
                 className="object-cover object-top rounded-md full h-10 w-10 border border-background"
             />
             {charInfo.charId ? (
-                <div className="font-black" onClick={() => navigate(`/roster/${charInfo.charId}`)}>
+                <div
+                    className="font-black cursor-pointer"
+                    onClick={() => navigate(`/roster/${charInfo.charId}`)}
+                >
                     {charInfo.name}
                 </div>
             ) : (
