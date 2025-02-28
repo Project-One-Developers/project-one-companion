@@ -40,6 +40,13 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
             <div className="flex flex-col gap-y-3 p-6">
                 {boss.items
                     .filter((i) => !i.token && !i.tierset)
+                    .sort((a, b) => {
+                        const aHasBis = bisLists.some((bis) => bis.itemId === a.id)
+                        const bHasBis = bisLists.some((bis) => bis.itemId === b.id)
+                        if (aHasBis && !bHasBis) return -1
+                        if (!aHasBis && bHasBis) return 1
+                        return 0
+                    })
                     .map((item) => {
                         const bisForItem = bisLists.filter((bis) => bis.itemId === item.id)
                         const allSpecIds = bisForItem.flatMap((bis) => bis.specIds)
