@@ -166,7 +166,7 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
                 (!droptimizerLastUpdate || l.dropDate > droptimizerLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
         )
 
-        const summary: CharacterSummary = {
+        return {
             character: char,
             itemLevel: parseItemLevel(charDroptimizers, charWowAudit),
             weeklyChest: parseGreatVault(charDroptimizers),
@@ -176,8 +176,6 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
                 charDroptimizers.length === 0 ? { type: 'not-imported' } : { type: 'none' },
             warnWowAudit: charWowAudit ? { type: 'used' } : { type: 'not-tracked' }
         }
-
-        return summary
     })
 
     return res

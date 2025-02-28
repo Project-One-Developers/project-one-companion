@@ -9,7 +9,6 @@ import {
 } from '@storage/droptimizer/droptimizer.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
-import { RaidbotJson } from './droptimizer.schemas'
 import { convertJsonToDroptimizer, fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
 
 export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> => {
@@ -17,7 +16,7 @@ export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> =
 
     const raidbotsURL = raidbotsURLSchema.parse(url)
     const jsonData = await fetchRaidbotsData(raidbotsURL)
-    const parsedJson: RaidbotJson = parseRaidbotsData(jsonData)
+    const parsedJson = parseRaidbotsData(jsonData)
 
     const droptimizer = await convertJsonToDroptimizer(url, parsedJson)
 
