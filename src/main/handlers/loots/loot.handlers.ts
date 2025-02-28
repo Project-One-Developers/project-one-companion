@@ -76,22 +76,19 @@ export const addRaidLootsByManualInputHandler = async (
 }
 
 export const getLootsBySessionIdHandler = async (raidSessionId: string): Promise<Loot[]> => {
-    const res = await getLootsByRaidSessionId(raidSessionId)
-    return res
+    return await getLootsByRaidSessionId(raidSessionId)
 }
 
 export const getLootsBySessionIdWithItemHandler = async (
     raidSessionId: string
 ): Promise<LootWithItem[]> => {
-    const res = await getLootsByRaidSessionIdWithItem(raidSessionId)
-    return res
+    return await getLootsByRaidSessionIdWithItem(raidSessionId)
 }
 
 export const getLootsBySessionIdWithAssignedHandler = async (
     raidSessionId: string
 ): Promise<LootWithAssigned[]> => {
-    const res = await getLootsByRaidSessionIdWithAssigned(raidSessionId)
-    return res
+    return await getLootsByRaidSessionIdWithAssigned(raidSessionId)
 }
 
 export const assignLootHandler = async (
@@ -106,7 +103,9 @@ export const unassignLootHandler = async (lootId: string): Promise<void> => {
     await unassignLoot(lootId)
 }
 
-export const deleteLootHandler = async (lootId: string): Promise<void> => await deleteLoot(lootId)
+export const deleteLootHandler = async (lootId: string): Promise<void> => {
+    await deleteLoot(lootId)
+}
 
 /**
  * Retrieve all the information to evaluate the loot assignments
