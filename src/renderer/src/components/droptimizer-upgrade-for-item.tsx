@@ -35,11 +35,14 @@ export const DroptimizerUpgradeForItemEquipped = ({
                 className="flex flex-col items-center relative"
                 onClick={() => window.open(droptimizer.url, '_blank', 'noreferrer')}
             >
-                <WowSpecIcon
-                    specId={droptimizer.charInfo.specId}
-                    className="rounded-md h-8 w-8 border border-background"
-                    title={droptDate}
-                />
+                <div className="h-8 w-8 flex items-center justify-center overflow-hidden">
+                    <WowSpecIcon
+                        specId={droptimizer.charInfo.specId}
+                        className="object-contain h-full w-full border-2 border-background rounded-lg"
+                        title={droptDate}
+                    />
+                </div>
+
                 {/* Outdated Badge */}
                 {isOutdated && (
                     <Tooltip>

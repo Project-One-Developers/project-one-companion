@@ -248,11 +248,13 @@ export default function LootsEligibleChars({
                                 <TableCell className="rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
                                     <div className="flex items-center space-x-3">
                                         <div className="relative">
-                                            <WowClassIcon
-                                                wowClassName={charInfo.character.class}
-                                                charname={charInfo.character.name}
-                                                className="h-8 w-8 border-2 border-background rounded-lg"
-                                            />
+                                            <div className="h-8 w-8 flex items-center justify-center overflow-hidden">
+                                                <WowClassIcon
+                                                    wowClassName={charInfo.character.class}
+                                                    charname={charInfo.character.name}
+                                                    className="object-contain h-full w-full border-2 border-background rounded-lg"
+                                                />
+                                            </div>
                                             {/* CheckMark for awarded */}
                                             {selectedLoot.assignedCharacterId ===
                                                 charInfo.character.id && (
