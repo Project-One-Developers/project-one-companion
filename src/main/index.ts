@@ -1,5 +1,6 @@
 import { is, optimizer } from '@electron-toolkit/utils'
 import { BrowserWindow, Menu, app, screen, session, shell } from 'electron'
+import fs from 'fs'
 import os from 'os'
 import path, { join } from 'path'
 import icon from '../../build/icon.png'
@@ -36,7 +37,8 @@ async function loadReactDevTools() {
         )
     }
 
-    await session.defaultSession.loadExtension(reactDevToolsPath)
+    if (reactDevToolsPath && fs.existsSync(reactDevToolsPath))
+        await session.defaultSession.loadExtension(reactDevToolsPath)
 }
 
 function createWindow(): void {
