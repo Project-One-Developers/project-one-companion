@@ -24,6 +24,16 @@ export default function LootAssign() {
     const [searchParams] = useSearchParams()
     const defaultSessionId = searchParams.get('sessionId')
 
+    const toggleSession = (sessionId: string) => {
+        const newSelectedSessions = new Set(selectedSessions)
+        if (newSelectedSessions.has(sessionId)) {
+            newSelectedSessions.delete(sessionId)
+        } else {
+            newSelectedSessions.add(sessionId)
+        }
+        setSelectedSessions(newSelectedSessions)
+    }
+
     useEffect(() => {
         if (defaultSessionId) {
             toggleSession(defaultSessionId)
@@ -75,16 +85,6 @@ export default function LootAssign() {
                 <LoaderCircle className="animate-spin text-5xl" />
             </div>
         )
-    }
-
-    const toggleSession = (sessionId: string) => {
-        const newSelectedSessions = new Set(selectedSessions)
-        if (newSelectedSessions.has(sessionId)) {
-            newSelectedSessions.delete(sessionId)
-        } else {
-            newSelectedSessions.add(sessionId)
-        }
-        setSelectedSessions(newSelectedSessions)
     }
 
     return (
