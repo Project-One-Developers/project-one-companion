@@ -1,6 +1,7 @@
 import { LootWithAssigned } from '@shared/types/types'
 import { Check, Copy } from 'lucide-react'
 import { useState } from 'react'
+import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { WowGearIcon } from './ui/wowgear-icon'
@@ -17,7 +18,7 @@ export default function LootsTradeHelperDialog({
     loots
 }: LootsTradeHelperDialogProps) {
     const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null)
-    const [copiedItemId, setCopiedItemId] = useState<string | null>(null)
+    const [copied, setCopied] = useState<boolean>()
 
     // Group loot by assigned character and sort by character name
     const lootByCharacter = Object.values(
@@ -38,12 +39,6 @@ export default function LootsTradeHelperDialog({
             {} as Record<string, { character: any; loot: LootWithAssigned[] }>
         )
     ).sort((a, b) => a.character.name.localeCompare(b.character.name))
-
-    const copyToClipboard = (text: string, itemId: string) => {
-        navigator.clipboard.writeText(text)
-        setCopiedItemId(itemId)
-        setTimeout(() => setCopiedItemId(null), 2000) // Reset after 2 seconds
-    }
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -74,6 +69,28 @@ export default function LootsTradeHelperDialog({
                     ) && (
                         <div className="mt-4">
                             <h3 className="font-semibold">Assigned Loot</h3>
+                            <Button
+                                className="my-2"
+                                onClick={() => {
+                                    const loot = lootByCharacter.find(
+                                        ({ character }) => character.id === selectedCharacterId
+                                    )?.loot
+                                    navigator.clipboard.writeText(
+                                        `/qt ${loot?.map((item) => item.gearItem.item.name).join(', ')}`
+                                    )
+                                    setCopied(true)
+                                    setTimeout(() => {
+                                        setCopied(false)
+                                    }, 2000)
+                                }}
+                            >
+                                Copy addon input
+                                {copied ? (
+                                    <Check className="w-4 h-4 text-green-500" />
+                                ) : (
+                                    <Copy className="w-4 h-4" />
+                                )}
+                            </Button>
                             <div className="mt-2 flex flex-wrap gap-2">
                                 {lootByCharacter
                                     .find(({ character }) => character.id === selectedCharacterId)
@@ -81,10 +98,6 @@ export default function LootsTradeHelperDialog({
                                         <div
                                             key={loot.id}
                                             className="flex items-center p-2 border rounded-md shadow-sm  hover:bg-muted transition"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                copyToClipboard(loot.gearItem.item.name, loot.id)
-                                            }}
                                         >
                                             <WowGearIcon
                                                 gearItem={loot.gearItem}
@@ -92,13 +105,6 @@ export default function LootsTradeHelperDialog({
                                                 showExtendedInfo={true}
                                                 iconClassName="rounded-lg h-10 w-10 border border-background"
                                             />
-                                            <button className="ml-2 text-gray-500 hover:text-gray-700 flex items-center">
-                                                {copiedItemId === loot.id ? (
-                                                    <Check className="w-4 h-4 text-green-500" />
-                                                ) : (
-                                                    <Copy className="w-4 h-4" />
-                                                )}
-                                            </button>
                                         </div>
                                     ))}
                             </div>
