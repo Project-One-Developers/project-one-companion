@@ -14,7 +14,6 @@ import { updateElectronApp } from './lib/autoupdater/autoupdater'
 async function loadReactDevTools() {
     let reactDevToolsPath = ''
     // on windows
-    console.log(process.platform)
     if (process.platform == 'win32') {
         reactDevToolsPath = path.join(
             os.homedir(),

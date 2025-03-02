@@ -94,12 +94,10 @@ const menuWindows: Array<MenuItemConstructorOptions> = [
         label: 'View',
         role: 'viewMenu',
         submenu: [
-            { role: 'reload', label: 'Reload', visible: isDev, enabled: isDev },
+            { role: 'reload', label: 'Reload' },
             {
                 role: 'forceReload',
-                label: 'Force Reload',
-                visible: isDev,
-                enabled: isDev
+                label: 'Force Reload'
             },
             {
                 role: 'toggleDevTools',
