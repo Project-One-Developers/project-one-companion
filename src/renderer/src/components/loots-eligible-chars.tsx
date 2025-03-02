@@ -203,7 +203,6 @@ export default function LootsEligibleChars({
                     <TableRow className="hover:bg-gray-800">
                         <TableHead className="text-gray-300 font-semibold">Name</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Highlights</TableHead>
-                        <TableHead className="text-gray-300 font-semibold">Bis</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Droptimizer</TableHead>
                         {showHightestInSlot && (
                             <TableHead className="text-gray-300 font-semibold">Highest</TableHead>
@@ -288,11 +287,35 @@ export default function LootsEligibleChars({
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex flex-wrap gap-2">
-                                        {charInfo.highlights.gearIsBis && (
-                                            <span className="px-2 py-1 text-xs font-bold bg-green-900/50 text-green-400 rounded-full">
-                                                BIS
-                                            </span>
-                                        )}
+                                        {charInfo.highlights.gearIsBis ? (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span className="px-2 py-1 text-xs font-bold bg-green-900/50 text-green-400 rounded-full">
+                                                        BIS
+                                                    </span>
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    <div className="flex flex-col gap-y-1">
+                                                        {charInfo.bisForSpec.map((s) => (
+                                                            <div
+                                                                key={s.id}
+                                                                className="flex flex-row gap-2 items-center"
+                                                            >
+                                                                <WowSpecIcon
+                                                                    specId={s.id}
+                                                                    className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                                                                />
+                                                                <p className="text-xs">{s.name}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        ) : null}
+
                                         {charInfo.highlights.tierSetCompletion.type === '2p' && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 2P
@@ -320,22 +343,6 @@ export default function LootsEligibleChars({
                                                 OWNED
                                             </span>
                                         )}
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex space-x-1">
-                                        {charInfo.bisForSpec.map((specId) => (
-                                            <div
-                                                key={specId.id}
-                                                className="h-7 w-7 flex items-center justify-center overflow-hidden"
-                                            >
-                                                <WowSpecIcon
-                                                    specId={specId.id}
-                                                    title={specId.name}
-                                                    className="object-contain h-full w-full border border-background rounded-lg"
-                                                />
-                                            </div>
-                                        ))}
                                     </div>
                                 </TableCell>
                                 <TableCell>
