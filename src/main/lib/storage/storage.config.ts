@@ -25,26 +25,14 @@ const getDatabaseUrl = (): string => {
 let dbClient: postgres.Sql | null = null
 let dbInstance: PostgresJsDatabase<typeof schema> | null = null
 
-export function initializeDb(connectionString: string) {
-    if (!dbClient) {
-        dbClient = postgres(connectionString, { prepare: false })
-        dbInstance = drizzle({
-            client: dbClient,
-            casing: 'snake_case',
-            schema: schema
-        })
-    }
-    return dbInstance
-}
-
 export function getDb() {
     if (!dbInstance) {
-        reloadConnection().catch(() => {
-            throw new Error('Database not initialized. Call initializeDb first.')
+        reloadConnection().catch((e) => {
+            throw new Error('getDb.reloadConnection: ' + e)
         })
 
         if (!dbInstance) {
-            throw new Error('Database not initialized. Call initializeDb first.')
+            throw new Error('getDb.dbInstance is null')
         }
 
         return dbInstance
