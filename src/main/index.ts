@@ -1,4 +1,5 @@
-import { is, optimizer } from '@electron-toolkit/utils'
+import { is } from '@electron-toolkit/utils'
+import dotenv from 'dotenv'
 import { BrowserWindow, Menu, app, screen, session, shell } from 'electron'
 import fs from 'fs'
 import os from 'os'
@@ -13,31 +14,25 @@ import { updateElectronApp } from './lib/autoupdater/autoupdater'
 
 async function loadReactDevTools() {
     let reactDevToolsPath = ''
-    // on windows
-    if (process.platform == 'win32') {
+    if (process.platform === 'win32') {
         reactDevToolsPath = path.join(
             os.homedir(),
             '/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.1.0.1_0'
         )
-    }
-
-    // On linux
-    if (process.platform == 'linux') {
+    } else if (process.platform === 'linux') {
         reactDevToolsPath = path.join(
             os.homedir(),
             '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.1.0.1_0'
         )
-    }
-    // on macOS
-    if (process.platform == 'darwin') {
+    } else if (process.platform === 'darwin') {
         reactDevToolsPath = path.join(
             os.homedir(),
             '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.1.0.1_0'
         )
     }
-
-    if (reactDevToolsPath && fs.existsSync(reactDevToolsPath))
+    if (reactDevToolsPath && fs.existsSync(reactDevToolsPath)) {
         await session.defaultSession.loadExtension(reactDevToolsPath)
+    }
 }
 
 function createWindow(): void {
@@ -48,8 +43,6 @@ function createWindow(): void {
         savedBounds.x < screenArea.x ||
         savedBounds.y < screenArea.y ||
         savedBounds.y > screenArea.y + screenArea.height
-
-    setZodErrorMap() // todo: why here?
 
     const mainWindow = new BrowserWindow({
         width: savedBounds.width,
@@ -103,6 +96,20 @@ function createWindow(): void {
     }
 }
 
+function initializeP1Companion() {
+    // load dotenv environments values
+    dotenv.config()
+
+    // better zod error messages
+    setZodErrorMap()
+
+    // check for updates
+    updateElectronApp()
+
+    // BE Handlers
+    registerHandlers(allHandlers)
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -114,12 +121,24 @@ app.whenReady().then(async () => {
     // and ignore CommandOrControl + R in production.
     // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
     app.on('browser-window-created', (_, window) => {
-        optimizer.watchWindowShortcuts(window)
+        //optimizer.watchWindowShortcuts(window)
+        window.webContents.on('before-input-event', (event, input) => {
+            const key = input.key.toLowerCase()
+            if ((input.control || input.meta) && input.shift && key === 'i') {
+                event.preventDefault()
+                window.webContents.toggleDevTools()
+            }
+            if (key === 'f5' || (key === 'r' && (input.control || input.meta))) {
+                event.preventDefault()
+                window.webContents.reload()
+            }
+        })
     })
 
-    registerHandlers(allHandlers)
-
     createWindow()
+
+    // p1 companion specific startup routine
+    initializeP1Companion()
 
     if (is.dev) {
         await loadReactDevTools()
@@ -128,9 +147,6 @@ app.whenReady().then(async () => {
     if (process.platform === 'darwin') {
         app.dock.show()
     }
-
-    // check for app updates
-    updateElectronApp()
 
     app.on('activate', () => {
         // On macOS it's common to re-create a window in the app when the

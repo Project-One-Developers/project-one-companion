@@ -2,12 +2,11 @@ import * as schema from '@storage/storage.schema'
 import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { store } from '../../app/store'
 
-import * as dotenv from 'dotenv'
 import postgres from 'postgres'
 import { z } from 'zod'
 
 // todo: va qua??
-dotenv.config()
+//dotenv.config()
 
 const getDatabaseUrl = (): string => {
     const envUrl = process.env.MAIN_VITE_DATABASE_URL
