@@ -69,7 +69,7 @@ const raidItems = [
 const weakaurasItems = [
     {
         title: 'Undermine P1',
-        url: 'https://wago.io/F5xeJMMVb',
+        url: 'https://wago.io/T-Bk5ov12',
         icon: Code2Icon
     },
     {
