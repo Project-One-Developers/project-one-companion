@@ -147,7 +147,7 @@ export enum TierSetBonus {
 export enum DroptimizerWarn {
     None = 'none',
     Outdated = 'outdated',
-    NotImported = 'not-imported'
+    NotImported = 'missing'
 }
 
 export enum WowAuditWarn {

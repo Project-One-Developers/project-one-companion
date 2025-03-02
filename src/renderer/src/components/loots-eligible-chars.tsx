@@ -359,8 +359,7 @@ export default function LootsEligibleChars({
                                                 itemEquipped={droptWithUpgrade.itemEquipped}
                                             />
                                         ))}
-                                        {charInfo.warnDroptimizer ===
-                                            DroptimizerWarn.NotImported && (
+                                        {charInfo.warnDroptimizer !== DroptimizerWarn.None && (
                                             <div className="flex flex-wrap gap-2">
                                                 <span className="px-2 py-1 text-xs font-bold bg-yellow-500/20 text-yellow-400 rounded-full flex items-center space-x-1 border border-yellow-400/50">
                                                     {/* Warning Icon */}
@@ -376,7 +375,9 @@ export default function LootsEligibleChars({
                                                             clipRule="evenodd"
                                                         />
                                                     </svg>
-                                                    <span>MISSING</span>
+                                                    <span>
+                                                        {charInfo.warnDroptimizer.toUpperCase()}
+                                                    </span>
                                                 </span>
                                             </div>
                                         )}

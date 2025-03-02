@@ -125,8 +125,7 @@ export default function SummaryPage(): JSX.Element {
                                 </TableCell>
                                 <TableCell className="p-1">
                                     <div className="flex flex-col space-y-2">
-                                        {summary.warnDroptimizer ===
-                                            DroptimizerWarn.NotImported && (
+                                        {summary.warnDroptimizer !== DroptimizerWarn.None && (
                                             <div className="flex flex-wrap gap-2">
                                                 <span className="px-2 py-1 text-xs font-bold bg-yellow-500/20 text-yellow-400 rounded-full flex items-center space-x-1 border border-yellow-400/50">
                                                     {/* Warning Icon */}
@@ -142,7 +141,9 @@ export default function SummaryPage(): JSX.Element {
                                                             clipRule="evenodd"
                                                         />
                                                     </svg>
-                                                    <span>MISSING</span>
+                                                    <span>
+                                                        {summary.warnDroptimizer.toUpperCase()}
+                                                    </span>
                                                 </span>
                                             </div>
                                         )}
