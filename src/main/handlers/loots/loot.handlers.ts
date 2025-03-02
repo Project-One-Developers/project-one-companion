@@ -28,13 +28,15 @@ import {
     evalHighlightsAndScore,
     parseBestItemInSlot,
     parseDroptimizersInfo,
+    parseDroptimizerWarn,
     parseGreatVault,
     parseLootAlreadyGotIt,
     parseLootBisSpecForChar,
     parseManualLoots,
     parseMrtLoots,
     parseRcLoots,
-    parseTiersetInfo
+    parseTiersetInfo,
+    parseWowAuditWarn
 } from './loot.utils'
 
 const ONE_HOUR_IN_SECONDS = 60 * 60
@@ -190,8 +192,8 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                 charWowAudit
             ),
             bisForSpec: parseLootBisSpecForChar(bisList, loot.item.id, char),
-            warnDroptimizer: hasSomeDroptimizers ? { type: 'none' } : { type: 'not-imported' },
-            warnWowAudit: charWowAudit ? { type: 'used' } : { type: 'none' }
+            warnDroptimizer: parseDroptimizerWarn(charDroptimizers, charAssignedLoots),
+            warnWowAudit: parseWowAuditWarn(charWowAudit)
         }
 
         return {

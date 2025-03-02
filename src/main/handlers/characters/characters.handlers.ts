@@ -40,9 +40,11 @@ import {
 import { getConfig } from '@storage/settings/settings.storage'
 import {
     parseCurrencies,
+    parseDroptimizerWarn,
     parseGreatVault,
     parseItemLevel,
-    parseTiersetInfo
+    parseTiersetInfo,
+    parseWowAuditWarn
 } from '../loots/loot.utils'
 import { fetchWowAuditData, parseWowAuditData } from './characters.utils'
 
@@ -184,9 +186,8 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
             weeklyChest: parseGreatVault(charDroptimizers),
             tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots, charWowAudit),
             currencies: parseCurrencies(charDroptimizers),
-            warnDroptimizer:
-                charDroptimizers.length === 0 ? { type: 'not-imported' } : { type: 'none' },
-            warnWowAudit: charWowAudit ? { type: 'used' } : { type: 'not-tracked' }
+            warnDroptimizer: parseDroptimizerWarn(charDroptimizers, charAssignedLoots),
+            warnWowAudit: parseWowAuditWarn(charWowAudit)
         }
     })
 

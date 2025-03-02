@@ -129,9 +129,33 @@ export type LootWithItem = z.infer<typeof lootWithItemSchema>
 export type LootWithAssigned = z.infer<typeof lootWithAssignedSchema>
 export type NewLoot = z.infer<typeof newLootSchema>
 export type NewLootManual = z.infer<typeof newLootManualSchema>
-export type TierSetCompletion = { type: 'none' } | { type: '2p' } | { type: '4p' }
-export type DroptimizerWarn = { type: 'none' } | { type: 'old' } | { type: 'not-imported' }
-export type WowAuditWarn = { type: 'none' } | { type: 'used' } | { type: 'not-tracked' }
+export enum TierSetCompletion {
+    None = 0,
+    OnePiece = 1,
+    TwoPiece = 2,
+    ThreePiece = 3,
+    FourPiece = 4,
+    FivePiece = 5
+}
+
+export enum TierSetBonus {
+    None = 'none',
+    TwoPiece = '2p',
+    FourPiece = '4p'
+}
+
+export enum DroptimizerWarn {
+    None = 'none',
+    Outdated = 'outdated',
+    NotImported = 'not-imported'
+}
+
+export enum WowAuditWarn {
+    None = 'none',
+    Outdated = 'outdated',
+    NotTracked = 'not-tracked'
+}
+
 export type CharacterSummary = {
     character: Character
     itemLevel: string
@@ -141,10 +165,11 @@ export type CharacterSummary = {
     warnDroptimizer: DroptimizerWarn
     warnWowAudit: WowAuditWarn
 }
+
 export type CharAssignmentHighlights = {
     isMain: boolean
     dpsGain: number
-    tierSetCompletion: TierSetCompletion
+    lootEnableTiersetBonus: TierSetBonus
     ilvlDiff: number
     gearIsBis: boolean
     alreadyGotIt: boolean

@@ -5,10 +5,12 @@ import { assignLoot, getLootAssignmentInfo, unassignLoot } from '@renderer/lib/t
 import { getDpsHumanReadable } from '@renderer/lib/utils'
 import { ITEM_SLOTS_KEY_TIERSET } from '@shared/consts/wow.consts'
 import { isHealerItem, isTankItem } from '@shared/libs/spec-parser/spec-utils'
-import type {
-    CharAssignmentHighlights,
-    CharAssignmentInfo,
-    LootWithAssigned
+import {
+    DroptimizerWarn,
+    TierSetBonus,
+    type CharAssignmentHighlights,
+    type CharAssignmentInfo,
+    type LootWithAssigned
 } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { HeartCrackIcon, LoaderCircle, MoreVertical, ShieldAlertIcon } from 'lucide-react'
@@ -316,12 +318,14 @@ export default function LootsEligibleChars({
                                             </Tooltip>
                                         ) : null}
 
-                                        {charInfo.highlights.tierSetCompletion.type === '2p' && (
+                                        {charInfo.highlights.lootEnableTiersetBonus ===
+                                            TierSetBonus.TwoPiece && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 2P
                                             </span>
                                         )}
-                                        {charInfo.highlights.tierSetCompletion.type === '4p' && (
+                                        {charInfo.highlights.lootEnableTiersetBonus ===
+                                            TierSetBonus.FourPiece && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 4P
                                             </span>
@@ -355,7 +359,8 @@ export default function LootsEligibleChars({
                                                 itemEquipped={droptWithUpgrade.itemEquipped}
                                             />
                                         ))}
-                                        {charInfo.warnDroptimizer.type === 'not-imported' && (
+                                        {charInfo.warnDroptimizer ===
+                                            DroptimizerWarn.NotImported && (
                                             <div className="flex flex-wrap gap-2">
                                                 <span className="px-2 py-1 text-xs font-bold bg-yellow-500/20 text-yellow-400 rounded-full flex items-center space-x-1 border border-yellow-400/50">
                                                     {/* Warning Icon */}

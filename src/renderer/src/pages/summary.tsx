@@ -13,6 +13,7 @@ import { WowCurrencyIcon } from '@renderer/components/ui/wowcurrency-icon'
 import { WowGearIcon } from '@renderer/components/ui/wowgear-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterSummary } from '@renderer/lib/tanstack-query/players'
+import { DroptimizerWarn, WowAuditWarn } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
@@ -124,7 +125,8 @@ export default function SummaryPage(): JSX.Element {
                                 </TableCell>
                                 <TableCell className="p-1">
                                     <div className="flex flex-col space-y-2">
-                                        {summary.warnDroptimizer.type === 'not-imported' && (
+                                        {summary.warnDroptimizer ===
+                                            DroptimizerWarn.NotImported && (
                                             <div className="flex flex-wrap gap-2">
                                                 <span className="px-2 py-1 text-xs font-bold bg-yellow-500/20 text-yellow-400 rounded-full flex items-center space-x-1 border border-yellow-400/50">
                                                     {/* Warning Icon */}
@@ -148,7 +150,7 @@ export default function SummaryPage(): JSX.Element {
                                 </TableCell>
                                 <TableCell className="p-1 rounded-r-md">
                                     <div className="flex flex-col space-y-2">
-                                        {summary.warnWowAudit.type === 'not-tracked' && (
+                                        {summary.warnWowAudit === WowAuditWarn.NotTracked && (
                                             <div className="flex flex-wrap gap-2">
                                                 <span className="px-2 py-1 text-xs font-bold bg-yellow-500/20 text-yellow-400 rounded-full flex items-center space-x-1 border border-yellow-400/50">
                                                     {/* Warning Icon */}

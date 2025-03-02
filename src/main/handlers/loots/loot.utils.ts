@@ -25,6 +25,7 @@ import {
     Droptimizer,
     DroptimizerCurrencies,
     DroptimizerUpgrade,
+    DroptimizerWarn,
     GearItem,
     Item,
     ItemTrack,
@@ -32,7 +33,8 @@ import {
     LootWithItem,
     NewLoot,
     NewLootManual,
-    TierSetCompletion,
+    TierSetBonus,
+    WowAuditWarn,
     WowItemSlotKey,
     WowRaidDifficulty,
     WowSpec
@@ -513,6 +515,37 @@ export const parseBestItemInSlot = (
     return sortedItems.slice(0, 1)
 }
 
+export const parseDroptimizerWarn = (
+    charDroptimizers: Droptimizer[],
+    charAssignedLoots: Loot[]
+): DroptimizerWarn => {
+    if (charDroptimizers.length === 0) return DroptimizerWarn.NotImported
+
+    const lastSimUnixTs = Math.max(...charDroptimizers.map((c) => c.simInfo.date))
+    const threeDaysInSeconds = 3 * 24 * 60 * 60
+    const currentUnixTs = getUnixTimestamp()
+
+    if (charAssignedLoots.length > 0 || currentUnixTs - lastSimUnixTs > threeDaysInSeconds) {
+        return DroptimizerWarn.Outdated
+    }
+
+    return DroptimizerWarn.None
+}
+
+export const parseWowAuditWarn = (wowAuditData: CharacterWowAudit | null): WowAuditWarn => {
+    if (!wowAuditData) return WowAuditWarn.NotTracked
+
+    const lastSyncUnixTs = wowAuditData.wowauditLastModifiedUnixTs
+    const threeDaysInSeconds = 3 * 24 * 60 * 60
+    const currentUnixTs = getUnixTimestamp()
+
+    if (currentUnixTs - lastSyncUnixTs > threeDaysInSeconds) {
+        return WowAuditWarn.Outdated
+    }
+
+    return WowAuditWarn.None
+}
+
 export const parseLootBisSpecForChar = (
     bisList: BisList[],
     itemId: number,
@@ -715,19 +748,19 @@ export const parseCurrencies = (droptimizers: Droptimizer[]): DroptimizerCurrenc
 const calculateTiersetCompletion = (
     loot: LootWithItem,
     currentTierset: GearItem[]
-): TierSetCompletion => {
-    if (!loot.item.token) return { type: 'none' }
+): TierSetBonus => {
+    if (!loot.item.token) return TierSetBonus.None
 
     const isValidSlot =
         loot.item.slotKey === 'omni' ||
         !currentTierset.some((t) => t.item.slotKey === loot.item.slotKey)
 
-    if (!isValidSlot) return { type: 'none' }
+    if (!isValidSlot) return TierSetBonus.None
 
-    return match<number, TierSetCompletion>(currentTierset.length)
-        .with(1, () => ({ type: '2p' }))
-        .with(3, () => ({ type: '4p' }))
-        .otherwise(() => ({ type: 'none' }))
+    return match<number, TierSetBonus>(currentTierset.length)
+        .with(1, () => TierSetBonus.TwoPiece)
+        .with(3, () => TierSetBonus.FourPiece)
+        .otherwise(() => TierSetBonus.None)
 }
 
 export const evalHighlightsAndScore = (
@@ -743,8 +776,6 @@ export const evalHighlightsAndScore = (
     const maxUpgrade = droptimizers
         .map((d) => d.upgrade?.dps ?? 0)
         .reduce((max, upgrade) => (upgrade > max ? upgrade : max), 0)
-
-    const tierSetCompletion = calculateTiersetCompletion(loot, tierset)
 
     let bestItemInSlot: GearItem | undefined
     if (loot.gearItem.item.slotKey === 'omni') {
@@ -767,7 +798,7 @@ export const evalHighlightsAndScore = (
     const res: Omit<CharAssignmentHighlights, 'score'> = {
         isMain,
         dpsGain: maxUpgrade,
-        tierSetCompletion,
+        lootEnableTiersetBonus: calculateTiersetCompletion(loot, tierset),
         gearIsBis: bisForSpec.length > 0,
         ilvlDiff,
         isTrackUpgrade,
@@ -781,19 +812,8 @@ export const evalScore = (
     highlights: Omit<CharAssignmentHighlights, 'score'>,
     maxDdpsGain: number
 ): number => {
-    const {
-        dpsGain,
-        ilvlDiff,
-        gearIsBis,
-        isMain,
-        tierSetCompletion,
-        isTrackUpgrade,
-        alreadyGotIt
-    } = highlights
-
-    //if(!isMain) return 0 // TODO: uncomment this when testing is finished
-
-    if (isMain) Promise.resolve()
+    const { dpsGain, ilvlDiff, gearIsBis, lootEnableTiersetBonus, isTrackUpgrade, alreadyGotIt } =
+        highlights
 
     if (alreadyGotIt) return 0
 
@@ -804,11 +824,10 @@ export const evalScore = (
     // above characters with no gain whatsoever
     if (baseScore === 0 && ilvlDiff > 0) return 1
 
-    const tierSetMultiplier = match(tierSetCompletion)
-        .with({ type: '4p' }, () => 1.3)
-        .with({ type: '2p' }, () => 1.2)
-        .with({ type: 'none' }, () => 1)
-        .exhaustive()
+    const tierSetMultiplier = match(lootEnableTiersetBonus)
+        .with(TierSetBonus.FourPiece, () => 1.3)
+        .with(TierSetBonus.TwoPiece, () => 1.2)
+        .otherwise(() => 1)
 
     const trackMultiplier = isTrackUpgrade ? 1.1 : 1
     const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.05 * ilvlDiff : 1
