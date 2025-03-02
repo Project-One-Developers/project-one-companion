@@ -9,6 +9,7 @@ import { menu } from './app/menu'
 import { store } from './app/store'
 import { setZodErrorMap } from './config/zod'
 import { allHandlers } from './handlers'
+import { checkWowAuditUpdates } from './handlers/characters/characters.handlers'
 import { registerHandlers } from './handlers/handlers.utils'
 import { updateElectronApp } from './lib/autoupdater/autoupdater'
 
@@ -108,6 +109,9 @@ function initializeP1Companion() {
 
     // BE Handlers
     registerHandlers(allHandlers)
+
+    // Check for wowaudit updates
+    checkWowAuditUpdates()
 }
 
 // This method will be called when Electron has finished

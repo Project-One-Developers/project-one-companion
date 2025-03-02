@@ -1,3 +1,4 @@
+import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import { parseItemLevelFromBonusIds, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
 import { wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import type {
@@ -16,7 +17,6 @@ import {
     getItemToTiersetMapping,
     getTiersetAndTokenList
 } from '@storage/items/items.storage'
-import { getUnixTimestamp } from '@utils'
 import { z } from 'zod'
 import {
     droptimizerEquippedItemsSchema,

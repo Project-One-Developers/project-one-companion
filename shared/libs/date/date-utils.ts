@@ -38,6 +38,20 @@ export function currentWowWeek(): number {
 }
 
 /**
+ * Returns the current Unix timestamp in seconds.
+ */
+export const getUnixTimestamp = (): number => Math.floor(Date.now() / 1000)
+
+/**
+ * Converts an ISO 8601 datetime string to a Unix timestamp in seconds.
+ *
+ * @param isoDateTime - The ISO 8601 datetime string to convert.
+ * @returns The Unix timestamp in seconds.
+ */
+export const isoToUnixTimestamp = (isoDateTime: string): number =>
+    Math.floor(new Date(isoDateTime).getTime() / 1000)
+
+/**
  * Converts a Unix timestamp to the World of Warcraft week number.
  *
  * @param unixTimestamp - The Unix timestamp to convert.

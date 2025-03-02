@@ -84,6 +84,11 @@ export const deleteAllCharacterWowAudit = async (): Promise<void> => {
     await db().delete(charWowAuditTable)
 }
 
+export const getLastWowAuditSync = async (): Promise<number | null> => {
+    const result = await db().query.charWowAuditTable.findFirst()
+    return result ? result.wowauditLastModifiedUnixTs : null
+}
+
 export const editCharacter = async (edited: EditCharacter): Promise<void> => {
     await db()
         .update(charTable)

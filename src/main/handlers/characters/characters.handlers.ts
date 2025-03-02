@@ -1,3 +1,4 @@
+import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import type {
     Character,
     CharacterGameInfo,
@@ -26,7 +27,8 @@ import {
     getCharactersList,
     getCharactersWithPlayerList,
     getCharacterWithPlayerById,
-    getLastCharacterWowAudit
+    getLastCharacterWowAudit,
+    getLastWowAuditSync
 } from '@storage/players/characters.storage'
 import {
     addPlayer,
@@ -89,6 +91,16 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
         await addCharacterWowAudit(charsData)
     }
     console.log('[WowAudit] End Sync')
+}
+
+export const checkWowAuditUpdates = async (): Promise<void> => {
+    const lastSync = await getLastWowAuditSync()
+    const threeHoursUnixTs = 3 * 60 * 60 * 1000
+
+    if (lastSync === null || getUnixTimestamp() - lastSync > threeHoursUnixTs) {
+        console.log('syncCharacterWowAudit: data older than 3hours - syncing now')
+        await syncCharacterWowAudit()
+    }
 }
 
 // export const getCharacterListHandler = async (): Promise<Character[]> => {

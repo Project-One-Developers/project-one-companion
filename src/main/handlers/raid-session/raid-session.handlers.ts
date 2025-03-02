@@ -1,3 +1,4 @@
+import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import {
     EditRaidSession,
     NewRaidSession,
@@ -13,7 +14,7 @@ import {
     getRaidSessionWithRoster,
     getRaidSessionWithSummaryList
 } from '@storage/raid-session/raid-session.storage'
-import { getUnixTimestamp, newUUID } from '@utils'
+import { newUUID } from '@utils'
 
 export const getRaidSessionWithRosterHandler = async (
     id: string

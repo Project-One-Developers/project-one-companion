@@ -1,5 +1,5 @@
 import { CURRENT_SEASON, PROFESSION_TYPES } from '@shared/consts/wow.consts'
-import { isInCurrentWowWeek } from '@shared/libs/date/date-utils'
+import { getUnixTimestamp, isInCurrentWowWeek } from '@shared/libs/date/date-utils'
 import {
     applyAvoidance,
     applyDiffBonusId,
@@ -37,7 +37,6 @@ import {
     WowRaidDifficulty
 } from '@shared/types/types'
 import { getItems } from '@storage/items/items.storage'
-import { getUnixTimestamp } from '@utils'
 import { parse } from 'papaparse'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
