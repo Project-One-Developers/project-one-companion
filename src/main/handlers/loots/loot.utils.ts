@@ -469,7 +469,15 @@ export const parseBestItemInSlot = (
     charAssignedLoot: Loot[],
     charWowAudit: CharacterWowAudit | null
 ): GearItem[] => {
-    if (slotKey === 'omni') return []
+    if (slotKey === 'omni') {
+        return [
+            ...parseBestItemInSlot('head', charDroptimizers, charAssignedLoot, charWowAudit),
+            ...parseBestItemInSlot('shoulder', charDroptimizers, charAssignedLoot, charWowAudit),
+            ...parseBestItemInSlot('chest', charDroptimizers, charAssignedLoot, charWowAudit),
+            ...parseBestItemInSlot('hands', charDroptimizers, charAssignedLoot, charWowAudit),
+            ...parseBestItemInSlot('legs', charDroptimizers, charAssignedLoot, charWowAudit)
+        ]
+    }
 
     const allItems: GearItem[] = [
         ...charDroptimizers.flatMap((d) => d.itemsEquipped),
