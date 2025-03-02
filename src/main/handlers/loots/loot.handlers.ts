@@ -30,7 +30,7 @@ import {
     parseDroptimizersInfo,
     parseGreatVault,
     parseLootAlreadyGotIt,
-    parseLootIsBisForChar,
+    parseLootBisSpecForChar,
     parseManualLoots,
     parseMrtLoots,
     parseRcLoots,
@@ -189,7 +189,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                 charAssignedLoots,
                 charWowAudit
             ),
-            bis: parseLootIsBisForChar(bisList, loot.item.id, char),
+            bisForSpec: parseLootBisSpecForChar(bisList, loot.item.id, char),
             warnDroptimizer: hasSomeDroptimizers ? { type: 'none' } : { type: 'not-imported' },
             warnWowAudit: charWowAudit ? { type: 'used' } : { type: 'none' }
         }

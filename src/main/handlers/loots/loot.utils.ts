@@ -34,7 +34,8 @@ import {
     NewLootManual,
     TierSetCompletion,
     WowItemSlotKey,
-    WowRaidDifficulty
+    WowRaidDifficulty,
+    WowSpec
 } from '@shared/types/types'
 import { getItems } from '@storage/items/items.storage'
 import { parse } from 'papaparse'
@@ -503,15 +504,17 @@ export const parseBestItemInSlot = (
     return sortedItems.slice(0, 1)
 }
 
-export const parseLootIsBisForChar = (
+export const parseLootBisSpecForChar = (
     bisList: BisList[],
     itemId: number,
     char: Character
-): boolean => {
-    const classSpecs = getClassSpecsForRole(char.class, char.role).map((s) => s.id)
-    return bisList.some(
-        (b) => b.itemId === itemId && b.specIds.some((specId) => classSpecs.includes(specId))
-    )
+): WowSpec[] => {
+    const roleSpecIds = new Set(getClassSpecsForRole(char.class, char.role).map((s) => s.id))
+    return bisList
+        .filter((b) => b.itemId === itemId)
+        .flatMap((b) => b.specIds)
+        .filter((specId) => roleSpecIds.has(specId))
+        .map((specId) => getClassSpecsForRole(char.class, char.role).find((s) => s.id === specId)!)
 }
 
 /**
@@ -723,7 +726,7 @@ export const evalHighlightsAndScore = (
     charInfo: Omit<CharAssignmentInfo, 'highlights'>,
     maxDpsGain: number
 ): CharAssignmentHighlights => {
-    const { bestItemsInSlot, bis, character, droptimizers, tierset, alreadyGotIt } = charInfo
+    const { bestItemsInSlot, bisForSpec, character, droptimizers, tierset, alreadyGotIt } = charInfo
 
     const isMain = character.main
 
@@ -756,7 +759,7 @@ export const evalHighlightsAndScore = (
         isMain,
         dpsGain: maxUpgrade,
         tierSetCompletion,
-        gearIsBis: bis,
+        gearIsBis: bisForSpec.length > 0,
         ilvlDiff,
         isTrackUpgrade,
         alreadyGotIt

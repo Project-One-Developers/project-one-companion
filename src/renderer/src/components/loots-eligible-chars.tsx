@@ -26,6 +26,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
+import { WowSpecIcon } from './ui/wowspec-icon'
 
 type LootsEligibleCharsProps = {
     selectedLoot: LootWithAssigned
@@ -202,6 +203,7 @@ export default function LootsEligibleChars({
                     <TableRow className="hover:bg-gray-800">
                         <TableHead className="text-gray-300 font-semibold">Name</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Highlights</TableHead>
+                        <TableHead className="text-gray-300 font-semibold">Bis</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Droptimizer</TableHead>
                         {showHightestInSlot && (
                             <TableHead className="text-gray-300 font-semibold">Highest</TableHead>
@@ -321,6 +323,22 @@ export default function LootsEligibleChars({
                                     </div>
                                 </TableCell>
                                 <TableCell>
+                                    <div className="flex space-x-1">
+                                        {charInfo.bisForSpec.map((specId) => (
+                                            <div
+                                                key={specId.id}
+                                                className="h-7 w-7 flex items-center justify-center overflow-hidden"
+                                            >
+                                                <WowSpecIcon
+                                                    specId={specId.id}
+                                                    title={specId.name}
+                                                    className="object-contain h-full w-full border border-background rounded-lg"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </TableCell>
+                                <TableCell>
                                     <div className="flex flex-col space-y-2">
                                         {charInfo.droptimizers.map((droptWithUpgrade) => (
                                             <DroptimizerUpgradeForItemEquipped
@@ -365,6 +383,7 @@ export default function LootsEligibleChars({
                                         </div>
                                     </TableCell>
                                 )}
+
                                 <TableCell>
                                     <div className="flex space-x-1">
                                         {assignedLoots.map((otherLoot) => (

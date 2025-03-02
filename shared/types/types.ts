@@ -161,7 +161,7 @@ export type CharAssignmentInfo = {
     weeklyChest: GearItem[]
     tierset: GearItem[]
     bestItemsInSlot: GearItem[]
-    bis: boolean
+    bisForSpec: WowSpec[]
     alreadyGotIt: boolean
     warnDroptimizer: DroptimizerWarn
     warnWowAudit: WowAuditWarn
