@@ -492,8 +492,9 @@ export const parseBestItemInSlot = (
         }
     }
 
-    const filteredItems = allItems.filter((gear) => gear.item.slotKey === slotKey)
-    const sortedItems = filteredItems.sort((a, b) => b.itemLevel - a.itemLevel)
+    const sortedItems = allItems
+        .filter((gear) => gear.item.slotKey === slotKey)
+        .sort((a, b) => compareGearItem(b, a)) // order desc
 
     if (slotKey === 'finger' || slotKey === 'trinket') {
         const uniqueItems: GearItem[] = []
@@ -747,10 +748,10 @@ export const evalHighlightsAndScore = (
 
     let bestItemInSlot: GearItem | undefined
     if (loot.gearItem.item.slotKey === 'omni') {
-        // loot is omni token: we compare with lowest track tierset available
-        bestItemInSlot = tierset.sort((a, b) => compareGearItem(a, b)).at(0)
+        // loot is omni token: we compare with lowest track in head,shoulder,chest,legs,hands
+        bestItemInSlot = bestItemsInSlot.sort((a, b) => compareGearItem(a, b)).at(0)
     } else if (bestItemsInSlot.length === 2) {
-        // slot has 2 possible gear item (eg: finger,trinket), we take the lowest track
+        // slot has 2 possible gear items (eg: finger, trinket), we take the lowest track
         bestItemInSlot = bestItemsInSlot.sort((a, b) => compareGearItem(a, b)).at(0)
     } else {
         bestItemInSlot = bestItemsInSlot.at(0)
