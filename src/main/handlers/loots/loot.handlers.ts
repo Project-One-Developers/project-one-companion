@@ -23,7 +23,6 @@ import {
 } from '@storage/loots/loots.storage'
 import { getAllCharacterWowAudit, getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
-import { match } from 'ts-pattern'
 import {
     evalHighlightsAndScore,
     parseBestItemInSlot,
@@ -142,36 +141,21 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
 
-        const hasSomeDroptimizers = charDroptimizers.length > 0
+        const charWowAudit: CharacterWowAudit | null =
+            wowAuditData.find(
+                (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
+            ) ?? null
 
-        // TODO: can't we directly query the last audit only when needed?
-        type AuditResult = {
-            charWowAudit: CharacterWowAudit | null
-            charLastUpdate: number | null
-        }
-        const { charWowAudit, charLastUpdate } = match<boolean, AuditResult>(hasSomeDroptimizers)
-            .with(true, () => ({
-                charWowAudit: null,
-                charLastUpdate: Math.max(...charDroptimizers.map((c) => c.simInfo.date))
-            }))
-            .with(false, () => {
-                const audit =
-                    wowAuditData.find(
-                        (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
-                    ) ?? null
-                return {
-                    charWowAudit: audit,
-                    charLastUpdate: audit?.wowauditLastModifiedUnixTs ?? null
-                }
-            })
-            .exhaustive()
+        const droptimizerLastUpdate: number | null = Math.max(
+            ...charDroptimizers.map((c) => c.simInfo.date)
+        )
 
         // loot assigned to a given char
         const charAssignedLoots = allAssignedLoots.filter(
             (l) =>
                 l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
                 l.assignedCharacterId === char.id &&
-                (!charLastUpdate || l.dropDate > charLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
+                (!droptimizerLastUpdate || l.dropDate > droptimizerLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
         )
 
         const res: Omit<CharAssignmentInfo, 'highlights'> = {

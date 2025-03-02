@@ -171,7 +171,6 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
         const droptimizerLastUpdate: number | null = Math.max(
             ...charDroptimizers.map((c) => c.simInfo.date)
         )
-        //let wowAuditLastUpdate: number | null = charWowAudit?.wowauditLastModifiedUnixTs ?? null
 
         // loot assgined to a given char
         const charAssignedLoots = allAssignedLoots.filter(
