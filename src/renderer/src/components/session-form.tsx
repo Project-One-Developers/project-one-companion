@@ -33,7 +33,7 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
                 <div key={char.id} onClick={() => onCharacterToggle(char.id)}>
                     <WowClassIcon
                         wowClassName={char.class}
-                        charname={char.name}
+                        //charname={char.name}
                         className={clsx(
                             'object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200',
                             selectedCharacters.includes(char.id)
