@@ -193,14 +193,16 @@ export default function BisListPage(): JSX.Element {
 
             {/* Boss List */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {filteredBosses.map((boss) => (
-                    <BossPanel
-                        key={boss.id}
-                        boss={boss}
-                        bisLists={bisLists}
-                        onEdit={handleEditClick}
-                    />
-                ))}
+                {filteredBosses
+                    .sort((a, b) => a.order - b.order)
+                    .map((boss) => (
+                        <BossPanel
+                            key={boss.id}
+                            boss={boss}
+                            bisLists={bisLists}
+                            onEdit={handleEditClick}
+                        />
+                    ))}
             </div>
             {selectedItem && (
                 <ItemBisSpecsDialog

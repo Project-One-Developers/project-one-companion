@@ -206,15 +206,17 @@ export default function LootTable(): JSX.Element {
             <FiltersPanel filter={filter} updateFilter={updateFilter} />
             {/* Boss List */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {encounterList.map((boss) => (
-                    <BossPanel
-                        key={boss.id}
-                        boss={boss}
-                        droptimizers={filteredDroptimizers}
-                        diff={filter.selectedRaidDiff}
-                        hideItemsWithoutDropt={false}
-                    />
-                ))}
+                {encounterList
+                    .sort((a, b) => a.order - b.order)
+                    .map((boss) => (
+                        <BossPanel
+                            key={boss.id}
+                            boss={boss}
+                            droptimizers={filteredDroptimizers}
+                            diff={filter.selectedRaidDiff}
+                            hideItemsWithoutDropt={false}
+                        />
+                    ))}
             </div>
         </div>
     )
