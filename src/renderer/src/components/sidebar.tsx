@@ -68,7 +68,7 @@ const raidItems = [
 
 const weakaurasItems = [
     {
-        title: 'ProjectOne',
+        title: 'Project One',
         url: 'https://wago.io/T-Bk5ov12',
         icon: Code2Icon
     },
