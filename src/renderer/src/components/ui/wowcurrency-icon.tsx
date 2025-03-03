@@ -12,9 +12,10 @@ const blackListed: number[] = [
     204440, // DF Season2 Spark
     206959, // DF Season3 Spark
     198048, // DF Titan Training Matrix I
-    1792, // honor
-    228338, // Soul Sigil I TWW
-    228339, // Soul Sigil II TWW
+    228338, // TWW Soul Sigil I
+    228339, // TWW Soul Sigil II
+    211296, // TWW Season 1 Spark
+    1792, // PVP honor
     210233 // PVP Forged Gladiator's Heraldry
 ]
 
