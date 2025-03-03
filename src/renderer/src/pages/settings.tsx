@@ -7,11 +7,12 @@ import { editSettings, fetchSettings } from '@renderer/lib/tanstack-query/settin
 import { AppSettings } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Database, ListRestart, LoaderCircle, RefreshCcwDot } from 'lucide-react'
-import { type JSX, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export default function SettingsPage(): JSX.Element {
+export default function SettingsPage() {
     const [databaseUrl, setDatabaseUrl] = useState('')
     const [isReloading, setIsReloading] = useState(false)
+    const [isSyncingWowAudit, setIsSyncingWowAudit] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
 
     const { data: appSettings, isLoading } = useQuery<AppSettings>({
@@ -30,13 +31,13 @@ export default function SettingsPage(): JSX.Element {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.appSettings] })
             toast({
-                title: 'Config updated',
-                description: 'The configuration has been updated successfully.'
+                title: 'Config Updated',
+                description: 'Settings updated successfully.'
             })
         },
         onError: (error) => {
             toast({
-                title: 'Update failed',
+                title: 'Update Failed',
                 description: `Failed to update config: ${error.message}`,
                 variant: 'destructive'
             })
@@ -44,145 +45,128 @@ export default function SettingsPage(): JSX.Element {
     })
 
     const handleUpdateDatabaseUrl = () => {
-        if (databaseUrl) {
-            updateMutation.mutate({ databaseUrl })
-        }
+        if (databaseUrl) updateMutation.mutate({ databaseUrl })
+    }
+
+    const handleSyncWowAudit = async () => {
+        setIsSyncingWowAudit(true)
+        await window.api
+            .syncWowAudit()
+            .then(() =>
+                toast({ title: 'WoWAudit Synced', description: 'Data synced successfully.' })
+            )
+            .catch(() =>
+                toast({
+                    title: 'Update Failed',
+                    description: 'Could not update resources.',
+                    variant: 'destructive'
+                })
+            )
+            .finally(() => setIsSyncingWowAudit(false))
     }
 
     const handleReloadItems = async () => {
         setIsReloading(true)
         await window.api
             .upsertJsonData()
-            .then(() => {
+            .then(() =>
+                toast({ title: 'Resources Updated', description: 'Data synced successfully.' })
+            )
+            .catch(() =>
                 toast({
-                    title: 'Resources updated',
-                    description: 'Data from JSON files has been updated in the database.'
+                    title: 'Update Failed',
+                    description: 'Could not update resources.',
+                    variant: 'destructive'
                 })
-            })
-            .catch(() => {
-                toast({
-                    title: 'Resources not updated',
-                    description: `Could not update resources.`
-                })
-            })
-            .finally(() => {
-                setIsReloading(false)
-            })
+            )
+            .finally(() => setIsReloading(false))
     }
 
     const handleResetSettings = async () => {
         setIsResetting(true)
         await window.api
             .resetAppSettings()
-            .then(() => {
-                toast({
-                    title: 'Settings Reset',
-                    description: 'The application settings have been reset to their default values.'
-                })
-            })
-            .catch((error) => {
-                toast({
-                    title: 'Reset failed',
-                    description: `Failed to reset settings: ${error.message}`,
-                    variant: 'destructive'
-                })
-            })
-            .finally(() => {
-                setIsResetting(false)
-            })
+            .then(() =>
+                toast({ title: 'Settings Reset', description: 'Reverted to factory defaults.' })
+            )
+            .catch((error) =>
+                toast({ title: 'Reset Failed', description: error.message, variant: 'destructive' })
+            )
+            .finally(() => setIsResetting(false))
     }
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center mt-10 mb-10">
-                <LoaderCircle className="animate-spin text-5xl text-white" />
+            <div className="flex items-center justify-center h-screen">
+                <LoaderCircle className="animate-spin text-white w-10 h-10" />
             </div>
         )
     }
 
     return (
-        <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 p-8 relative">
-            <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {/* Database Configuration Panel */}
-                <div className="p-4 rounded-lg bg-gray-800">
-                    <h2 className="text-xl font-semibold">Database Configuration</h2>
-                    <div className="flex flex-col gap-2 mt-4">
-                        <Input
-                            type="text"
-                            value={databaseUrl}
-                            onChange={(e) => setDatabaseUrl(e.target.value)}
-                            placeholder="postgresql://username:password@server:5432/dbname"
-                            className="text-lg p-2 rounded-md bg-gray-700 text-white"
-                        />
-                        <Button
-                            onClick={handleUpdateDatabaseUrl}
-                            disabled={updateMutation.isPending}
-                            className="flex items-center justify-center gap-x-2 mt-4 bg-blue-600 hover:bg-blue-700"
-                        >
-                            {updateMutation.isPending ? (
-                                <>
-                                    <LoaderCircle className="animate-spin" />
-                                    <span className="text-white">Updating...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Database className="text-white" />
-                                    <span className="text-white">Update Database URL</span>
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                </div>
+        <div className="w-full h-full p-8 flex flex-col gap-6">
+            {/* Database Configuration */}
+            <section className="space-y-4">
+                <h2 className="text-lg font-semibold">Database Configuration</h2>
+                <Input
+                    type="text"
+                    value={databaseUrl}
+                    onChange={(e) => setDatabaseUrl(e.target.value)}
+                    placeholder="postgresql://username:password@server:5432/dbname"
+                />
+                <Button
+                    className="w-full"
+                    onClick={handleUpdateDatabaseUrl}
+                    disabled={updateMutation.isPending}
+                >
+                    {updateMutation.isPending ? (
+                        <LoaderCircle className="animate-spin" />
+                    ) : (
+                        <Database />
+                    )}
+                    Update Database URL
+                </Button>
+            </section>
 
-                {/* Reload Items Panel */}
-                <div className="p-4 rounded-lg bg-gray-800 mt-6">
-                    <h2 className="text-xl font-semibold">Reload Items Data</h2>
-                    <div className="mt-4">
-                        <Button
-                            disabled={isReloading}
-                            onClick={handleReloadItems}
-                            className="flex items-center justify-center gap-x-2 mt-4 bg-blue-600 hover:bg-blue-700"
-                        >
-                            {isReloading ? (
-                                <>
-                                    <LoaderCircle className="animate-spin" />
-                                    <span className="text-white">Reloading...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <ListRestart className="text-white" />
-                                    <span className="text-white">Reload Items</span>
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                </div>
+            {/* Reload Items */}
+            <section className="space-y-4">
+                <h2 className="text-lg font-semibold">Reload Items Data</h2>
+                <Button className="w-full" disabled={isReloading} onClick={handleReloadItems}>
+                    {isReloading ? <LoaderCircle className="animate-spin" /> : <ListRestart />}
+                    Reload Items
+                </Button>
+            </section>
 
-                {/* Reset to Factory Settings Panel */}
-                <div className="p-4 rounded-lg bg-gray-800 mt-6">
-                    <h2 className="text-xl font-semibold">Reset to Factory Settings</h2>
-                    <div className="mt-4">
-                        <Button
-                            variant="destructive"
-                            disabled={isResetting}
-                            onClick={handleResetSettings}
-                            className="flex items-center justify-center gap-x-2 w-full"
-                        >
-                            {isResetting ? (
-                                <>
-                                    <LoaderCircle className="animate-spin" />
-                                    <span>Resetting...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <RefreshCcwDot className="text-white" />
-                                    <span>Reset to Factory Settings</span>
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            {/* Force wow audit sync */}
+            <section className="space-y-4">
+                <h2 className="text-lg font-semibold">Sync Characters from WowAudit</h2>
+                <Button
+                    className="w-full"
+                    disabled={isSyncingWowAudit}
+                    onClick={handleSyncWowAudit}
+                >
+                    {isSyncingWowAudit ? (
+                        <LoaderCircle className="animate-spin" />
+                    ) : (
+                        <ListRestart />
+                    )}
+                    Sync WowAudit
+                </Button>
+            </section>
+
+            {/* Reset to Factory Settings */}
+            <section className="space-y-4">
+                <h2 className="text-lg font-semibold">Reset to Factory Settings</h2>
+                <Button
+                    className="w-full"
+                    variant="destructive"
+                    disabled={isResetting}
+                    onClick={handleResetSettings}
+                >
+                    {isResetting ? <LoaderCircle className="animate-spin" /> : <RefreshCcwDot />}
+                    Reset Settings
+                </Button>
+            </section>
         </div>
     )
 }
