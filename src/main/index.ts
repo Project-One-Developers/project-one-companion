@@ -97,7 +97,7 @@ function createWindow(): void {
     }
 }
 
-function initializeP1Companion() {
+async function initializeP1Companion() {
     // load dotenv environments values
     dotenv.config()
 
@@ -111,7 +111,7 @@ function initializeP1Companion() {
     registerHandlers(allHandlers)
 
     // Check for wowaudit updates
-    checkWowAuditUpdates()
+    await checkWowAuditUpdates()
 }
 
 // This method will be called when Electron has finished
@@ -142,7 +142,7 @@ app.whenReady().then(async () => {
     createWindow()
 
     // p1 companion specific startup routine
-    initializeP1Companion()
+    await initializeP1Companion()
 
     if (is.dev) {
         await loadReactDevTools()
