@@ -150,7 +150,7 @@ export const droptimizerUpgradesTable = pgTable(
 
 export const droptimizerTable = pgTable('droptimizers', {
     url: text('url').primaryKey(),
-    ak: varchar('ak').notNull(), // droptimizer identifier key eg: 1273,heroic,Tartesia,Nemesis,Devastation,Evoker
+    ak: varchar('ak').notNull().unique(), // droptimizer identifier key eg: 1273,heroic,Tartesia,Nemesis,Devastation,Evoker
     dateImported: integer('date_imported').notNull(), // imported unix timestamp in this app
     simDate: integer('sim_date').notNull(), // droptimizer execution unix timestamp
     simFightStyle: varchar('sim_fight_style', { length: 50 }).notNull(),
