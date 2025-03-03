@@ -50,14 +50,18 @@ const CharacterInfo = ({
 
 const DroptimizerInfo = ({ dropt, bosses }: { dropt: Droptimizer; bosses: BossWithItems[] }) => {
     const [isOpen, setOpen] = useState(false)
+    const isStandard = dropt.simInfo.nTargets === 1 && dropt.simInfo.duration === 300
     return (
-        <div className="text-xs mt-3">
+        <div className={'text-xs mt-3'}>
             <p>
                 <strong>Raid Difficulty:</strong> {dropt.raidInfo.difficulty}
             </p>
             <p>
-                <strong>Fight Style:</strong> {dropt.simInfo.fightstyle} ({dropt.simInfo.nTargets}){' '}
-                {dropt.simInfo.duration} sec
+                <strong>Fight Style:</strong>{' '}
+                <span className={isStandard ? '' : 'text-red-500'}>
+                    {dropt.simInfo.fightstyle} ({dropt.simInfo.nTargets}) {dropt.simInfo.duration}{' '}
+                    sec
+                </span>
             </p>
             <p title={new Date(dropt.simInfo.date * 1000).toLocaleString()}>
                 <strong>Date: </strong>
