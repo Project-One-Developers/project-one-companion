@@ -136,6 +136,11 @@ app.whenReady().then(async () => {
                 event.preventDefault()
                 window.webContents.reload()
             }
+            // Ctrl/Command A for selecting all text in inpit
+            if (key === 'a' && (input.control || input.meta)) {
+                event.preventDefault()
+                window.webContents.executeJavaScript(`document.execCommand('selectAll')`)
+            }
         })
     })
 
