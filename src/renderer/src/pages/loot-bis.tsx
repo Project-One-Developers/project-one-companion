@@ -141,7 +141,7 @@ export default function BisListPage(): JSX.Element {
     // Debounce search input
     useEffect(() => {
         const handler = setTimeout(() => {
-            setDebouncedSearchQuery(searchQuery)
+            setDebouncedSearchQuery(searchQuery.trim())
         }, 300)
 
         return () => clearTimeout(handler)
