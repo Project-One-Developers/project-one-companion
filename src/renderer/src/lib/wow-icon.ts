@@ -169,5 +169,20 @@ export const currencyIcon = new Map<number, { url: string; name: string }>([
             url: 'https://wow.zamimg.com/images/wow/icons/large/inv_spark_whole_violet.jpg',
             name: 'Spark of Omen'
         }
+    ],
+    // TWW SEASON 2
+    [
+        3107,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_undermine_weathered.jpg',
+            name: 'Weathered Undermine Crest'
+        }
+    ],
+    [
+        3108,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/medium/inv_crestupgrade_undermine_carved.jpg',
+            name: 'Carved Undermine Crest'
+        }
     ]
 ])
