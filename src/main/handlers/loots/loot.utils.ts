@@ -488,9 +488,9 @@ export const parseBestItemInSlot = (
     ]
 
     if (charWowAudit) {
-        const wowAuditItem = charWowAudit.itemsEquipped.find((bg) => bg.item.slotKey === slotKey)
-        if (wowAuditItem) {
-            allItems.push(wowAuditItem)
+        const wowAuditItems = charWowAudit.itemsEquipped.filter((bg) => bg.item.slotKey === slotKey)
+        if (wowAuditItems.length > 0) {
+            allItems.push(...wowAuditItems)
         }
     }
 
