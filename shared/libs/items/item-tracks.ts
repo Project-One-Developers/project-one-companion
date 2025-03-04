@@ -559,15 +559,7 @@ export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
         season: 2,
         maxItemLevel: 619
     },
-    '11950': {
-        level: 8,
-        max: 8,
-        name: 'Adventurer',
-        fullName: 'Adventurer 8/8',
-        itemLevel: 632,
-        season: 2,
-        maxItemLevel: 632
-    },
+    // Adventurer Ok
     '11951': {
         level: 1,
         max: 8,
@@ -631,6 +623,16 @@ export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
         season: 2,
         maxItemLevel: 632
     },
+    '11950': {
+        level: 8,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 8/8',
+        itemLevel: 632,
+        season: 2,
+        maxItemLevel: 632
+    },
+    // Veteran Ok
     '11969': {
         level: 1,
         max: 8,
@@ -703,6 +705,135 @@ export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
         season: 2,
         maxItemLevel: 645
     },
+    // Champion OK
+    '11984': {
+        level: 8,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 8/8',
+        itemLevel: 658,
+        season: 2,
+        maxItemLevel: 658
+    },
+    '11983': {
+        level: 7,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 7/8',
+        itemLevel: 655,
+        season: 2,
+        maxItemLevel: 658
+    },
+    '11982': {
+        level: 6,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 6/8',
+        itemLevel: 652,
+        season: 2,
+        maxItemLevel: 658
+    },
+    '11981': {
+        level: 5,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 5/8',
+        itemLevel: 649,
+        season: 2,
+        maxItemLevel: 658
+    },
+    '11980': {
+        level: 4,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 4/8',
+        itemLevel: 645,
+        season: 2,
+        maxItemLevel: 658
+    },
+    '11979': {
+        level: 3,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 3/8',
+        itemLevel: 642,
+        season: 2,
+        maxItemLevel: 658
+    },
+    '11978': {
+        level: 2,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 2/8',
+        itemLevel: 639,
+        season: 2,
+        maxItemLevel: 658
+    },
+    '11977': {
+        level: 1,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 1/8',
+        itemLevel: 636,
+        season: 2,
+        maxItemLevel: 658
+    },
+    // Hero Ok
+    '11990': {
+        level: 5,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 6/6',
+        itemLevel: 665,
+        season: 2,
+        maxItemLevel: 665
+    },
+    '11989': {
+        level: 5,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 5/6',
+        itemLevel: 662,
+        season: 2,
+        maxItemLevel: 665
+    },
+    '11988': {
+        level: 4,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 4/6',
+        itemLevel: 658,
+        season: 2,
+        maxItemLevel: 665
+    },
+    '11987': {
+        level: 3,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 3/6',
+        itemLevel: 655,
+        season: 2,
+        maxItemLevel: 665
+    },
+    '11986': {
+        level: 2,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 2/6',
+        itemLevel: 652,
+        season: 2,
+        maxItemLevel: 665
+    },
+    '11985': {
+        level: 1,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 1/6',
+        itemLevel: 649,
+        season: 2,
+        maxItemLevel: 665
+    },
+    // Mythic OK
     '11991': {
         level: 1,
         max: 6,
