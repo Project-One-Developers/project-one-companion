@@ -91,7 +91,7 @@ export const encounterIcon = new Map<number, string>([
     [2644, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/6/122886.webp'], // The One-Armed Bandit
     [2645, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/206/124110.webp'], // Mug'Zee, Heads of Security
     [2646, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/95/126047.webp'], // Chrome King Gallywix
-    [-67, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
+    [-75, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
 ])
 
 export const itemSlotIcon = new Map<WowItemSlotKey, string>([
