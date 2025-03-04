@@ -126,14 +126,14 @@ export default function LootAssign() {
 
             {selectedSessions.size > 0 ? (
                 <div className="flex w-full">
-                    <div className="flex flex-col pr-5">
+                    <div className="flex flex-col flex-grow max-w-[450px] pr-5">
                         <LootsTabs
                             loots={loots}
                             selectedLoot={selectedLoot}
                             setSelectedLoot={setSelectedLoot}
                         />
                     </div>
-                    <div className="flex flex-col w-full bg-muted p-4 rounded-lg">
+                    <div className="flex flex-col flex-grow bg-muted p-4 rounded-lg">
                         {selectedLoot ? (
                             <LootsEligibleChars
                                 allLoots={loots}
