@@ -23,7 +23,7 @@
         "build:linux": "npm run build && electron-builder --config electron-builder-config.ts --linux",
         "postinstall": "electron-builder install-app-deps",
         "publish:dev": "dotenv -e .env.development -- electron-builder --config electron-builder-config.ts --publish always --config.publish.provider=s3 --config.publish.endpoint=http://localhost:9000 --config.publish.bucket=test-update",
-        "migratedb": "drizzle-kit push",
+        "migratedb": "drizzle-kit push --verbose",
         "migratedb-prod": "dotenv -e .env.production -- drizzle-kit push",
         "test": "jest --passWithNoTests",
         "clean": "rimraf ./out && rimraf ./node_modules"
