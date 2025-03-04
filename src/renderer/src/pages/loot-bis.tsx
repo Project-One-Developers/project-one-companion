@@ -105,7 +105,7 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
                                     </div>
                                 </div>
 
-                                <button className="absolute -top-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full">
+                                <button className="absolute -bottom-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full">
                                     <Edit size={14} />
                                 </button>
                             </div>
