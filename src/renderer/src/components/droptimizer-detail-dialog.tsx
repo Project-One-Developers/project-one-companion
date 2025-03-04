@@ -35,7 +35,7 @@ export default function DroptimizerDetailDialog({
     const sortedBosses = [...bossMap.keys()].sort((a, b) => a.order - b.order)
 
     return (
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] min-w-[600px]">
             <DialogHeader>
                 <DialogTitle>Droptimizer info</DialogTitle>
                 <DialogDescription>
@@ -64,7 +64,7 @@ export default function DroptimizerDetailDialog({
                                                 ilvl={upgrade.ilvl}
                                                 catalystBanner={upgrade.catalyzedItemId != null}
                                                 className="mt-2"
-                                                iconClassName="object-cover object-top rounded-full h-10 w-10 border border-background"
+                                                iconClassName="object-cover object-top rounded-full h-8 w-8 border border-background"
                                             />
                                         ) : (
                                             <a
@@ -77,7 +77,7 @@ export default function DroptimizerDetailDialog({
                                             </a>
                                         )}
                                         <p className="text-xs text-center">
-                                            <strong>{getDpsHumanReadable(upgrade.dps)}</strong>
+                                            {getDpsHumanReadable(upgrade.dps)}
                                         </p>
                                     </div>
                                 )
