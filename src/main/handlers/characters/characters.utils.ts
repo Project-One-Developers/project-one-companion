@@ -1,6 +1,7 @@
 import {
     applyItemTrackByIlvlAndDelta,
-    applyItemTrackByIlvlAndDiff
+    applyItemTrackByIlvlAndDiff,
+    evalRealSeason
 } from '@shared/libs/items/item-bonus-utils'
 import { wowClassNameSchema } from '@shared/schemas/wow.schemas'
 import {
@@ -454,7 +455,7 @@ function createTiersetGearPiece(
     diff: string | null
 ): GearItem | null {
     if (!className || !ilvl || !itemsInDb || !slotKey || !diff) return null
-    
+
     const wowItem = itemsInDb.find(
         (i) => i.tierset === true && i.slotKey === slotKey && i.classes?.includes(className)
     )
@@ -483,7 +484,7 @@ function createTiersetGearPiece(
             boe: wowItem.boe,
             veryRare: wowItem.veryRare,
             iconName: wowItem.iconName,
-            season: wowItem.season
+            season: evalRealSeason(wowItem, ilvl)
         },
         source: 'equipped',
         itemLevel: ilvl,
@@ -536,7 +537,7 @@ function createGearPiece(
             boe: wowItem.boe,
             veryRare: wowItem.veryRare,
             iconName: wowItem.iconName,
-            season: wowItem.season
+            season: evalRealSeason(wowItem, ilvl)
         },
         source: 'equipped',
         equippedInSlot: equippedInSlot ?? undefined,

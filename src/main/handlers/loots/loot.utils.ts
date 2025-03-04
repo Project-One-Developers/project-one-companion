@@ -7,6 +7,7 @@ import {
     applySocket,
     applySpeed,
     compareGearItem,
+    evalRealSeason,
     gearAreTheSame,
     getItemTrack,
     parseItemLevelFromRaidDiff,
@@ -188,7 +189,7 @@ export const parseMrtLoots = async (
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: wowItem.season
+                    season: evalRealSeason(wowItem, itemLevel)
                 },
                 source: 'loot',
                 itemLevel: itemLevel,
@@ -322,7 +323,7 @@ export const parseRcLoots = async (
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: wowItem.season
+                    season: evalRealSeason(wowItem, itemLevel)
                 },
                 source: 'loot',
                 itemLevel: itemLevel,
@@ -419,7 +420,7 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: wowItem.season
+                    season: evalRealSeason(wowItem, itemLevel)
                 },
                 source: 'loot',
                 itemLevel: itemLevel,

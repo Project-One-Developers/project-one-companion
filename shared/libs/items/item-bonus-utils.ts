@@ -153,6 +153,18 @@ export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): numb
     return null
 }
 
+export function evalRealSeason(item: Item, ilvl: number) {
+    if (item.sourceType === 'profession593') {
+        // crafted item
+        if (ilvl <= 636) return 1
+        if (ilvl > 636 && ilvl <= 675) return 2
+        throw new Error(
+            'evalRealSeason: impossible to detect real season for crafted item - ' + item
+        )
+    }
+    return item.season
+}
+
 export function parseItemLevelFromRaidDiff(item: Item, raidDiff: WowRaidDifficulty): number {
     switch (raidDiff) {
         case 'LFR':

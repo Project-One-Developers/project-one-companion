@@ -1,5 +1,9 @@
 import { getUnixTimestamp } from '@shared/libs/date/date-utils'
-import { parseItemLevelFromBonusIds, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
+import {
+    evalRealSeason,
+    parseItemLevelFromBonusIds,
+    parseItemTrack
+} from '@shared/libs/items/item-bonus-utils'
 import { wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import type {
     GearItem,
@@ -233,6 +237,8 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
             )
         }
 
+        const itemLevel = parseInt(itemMatch[1], 10)
+
         items.push({
             item: {
                 id: itemId,
@@ -244,10 +250,10 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
                 boe: wowItem.boe,
                 veryRare: wowItem.veryRare,
                 iconName: wowItem.iconName,
-                season: wowItem.season
+                season: evalRealSeason(wowItem, itemLevel)
             },
             source: 'great-vault',
-            itemLevel: parseInt(itemMatch[1], 10),
+            itemLevel: itemLevel,
             bonusIds: bonusIds,
             enchantIds: null,
             gemIds: null,
@@ -342,7 +348,7 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: wowItem.season
+                    season: evalRealSeason(wowItem, itemLevel)
                 },
                 source: 'bag',
                 itemLevel: itemLevel,
@@ -419,7 +425,7 @@ export const parseEquippedGear = async (
                 boe: wowItem.boe,
                 veryRare: wowItem.veryRare,
                 iconName: wowItem.iconName,
-                season: wowItem.season
+                season: evalRealSeason(wowItem, droptGearItem.itemLevel)
             },
             source: 'equipped',
             equippedInSlot: wowItemEquippedSlotKeySchema.parse(realSlot),
