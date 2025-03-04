@@ -141,13 +141,20 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             where: (droptimizerTable, { eq }) => eq(droptimizerTable.ak, droptimizer.ak)
         })
 
-        if (alreadyPresent && alreadyPresent.simDate > droptimizer.simInfo.date) {
-            console.log(
-                'addDroptimizer: not importing droptimizer because there is older than previously imported - ak: ' +
-                    droptimizer.ak
-            )
-            tx.rollback()
-            return alreadyPresent.url
+        if (alreadyPresent) {
+            if (alreadyPresent.simDate > droptimizer.simInfo.date) {
+                console.log(
+                    'addDroptimizer: not importing droptimizer because there is older than previously imported - ak: ' +
+                        droptimizer.ak
+                )
+                tx.rollback()
+                return alreadyPresent.url
+            } else {
+                // we delete the older droptimizer with the same ak
+                await tx
+                    .delete(droptimizerTable)
+                    .where(eq(droptimizerTable.url, alreadyPresent.url))
+            }
         }
 
         const droptimizerRes = await tx
