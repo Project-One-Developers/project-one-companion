@@ -208,6 +208,14 @@
         "instanceType":"raid"
     },
     {
+        "id":-75,
+        "name":"Trash Drop",
+        "order":99,
+        "instanceId":1296,
+        "instanceName":"Liberation of Undermine",
+        "instanceType":"raid"
+    },
+    {
         "id":2607,
         "name":"Ulgrax the Devourer",
         "order":1,
