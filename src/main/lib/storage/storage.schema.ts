@@ -237,7 +237,7 @@ export const assignmentTable = pgTable('assignments', {
 
 export const bossTable = pgTable('bosses', {
     id: integer('id').primaryKey(), // // ricicliamo journal_encounter_id fornito da wow api
-    name: varchar('name', { length: 255 }).notNull().unique(),
+    name: varchar('name', { length: 255 }).notNull(),
     instanceId: integer('instance_id').notNull(),
     instanceName: varchar('instance_name').notNull(),
     instanceType: varchar('instance_type').notNull(),
