@@ -62,7 +62,9 @@ export const addRaidLootsByMrtHandler = async (
         parseMrtLoots(csv, session.raidDate, session.raidDate + RAID_SESSION_UPPER_BOUND_DELTA),
         getRaidSessionRoster(raidSessionId)
     ])
-    await addLoots(raidSessionId, parsedData, elegibleCharacters)
+    if (parsedData.length > 0) {
+        await addLoots(raidSessionId, parsedData, elegibleCharacters)
+    }
 }
 
 export const addRaidLootsByManualInputHandler = async (
