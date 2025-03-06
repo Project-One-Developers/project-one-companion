@@ -385,7 +385,7 @@ export const parseEquippedGear = async (
         const bonusIds = droptGearItem.bonus_id.split('/').map(Number)
         const wowItem = itemsInDb.find((i) => i.id === droptGearItem.id)
         if (wowItem == null) {
-            throw new Error(
+            console.log(
                 '[error] parseEquippedGear: skipping equipped item not in db: ' +
                     droptGearItem.id +
                     ' - https://www.wowhead.com/item=' +
@@ -393,6 +393,15 @@ export const parseEquippedGear = async (
                     '?bonus=' +
                     bonusIds.join(':')
             )
+            continue
+            // throw new Error(
+            //     '[error] parseEquippedGear: skipping equipped item not in db: ' +
+            //         droptGearItem.id +
+            //         ' - https://www.wowhead.com/item=' +
+            //         droptGearItem.id +
+            //         '?bonus=' +
+            //         bonusIds.join(':')
+            // )
         }
 
         let itemTrack: ItemTrack | null = null
