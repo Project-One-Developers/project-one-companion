@@ -93,10 +93,8 @@ export const parseMrtLoots = async (
         }
     })
 
-    const validatedRecords = z
-        .array(rawMrtRecordSchema)
-        .parse(rawRecords)
-        .filter((r) => r.rollType != null) // skip personal loot & currency
+    const validatedRecords = z.array(rawMrtRecordSchema).parse(rawRecords)
+    //.filter((r) => r.rollType != null) // skip personal loot & currency
 
     const allItemsInDb = await getItems()
     const res: NewLoot[] = []
@@ -110,13 +108,26 @@ export const parseMrtLoots = async (
             const parsedItem = parseItemString(itemLink)
             if (timeRec < dateLowerBound || timeRec > dateUpperBound) {
                 console.log(
-                    'parseRcLoots: skipping loot item outside raid session date time ' + record
+                    'parseRcLoots: skipping loot item outside raid session date time ' +
+                        JSON.stringify(record)
                 )
+                continue
+            }
+            // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic
+            if (
+                parsedItem.instanceDifficultyId === 68 ||
+                parsedItem.instanceDifficultyId === 69 ||
+                parsedItem.instanceDifficultyId === 70
+            ) {
+                console.log('parseMrtLoots: skipping WuE loot ' + JSON.stringify(record))
                 continue
             }
             if (quantity > 1) {
                 console.log(
-                    'parseMrtLoots: encounter loot with quantity =' + quantity + 'source: ' + record
+                    'parseMrtLoots: encounter loot with quantity =' +
+                        quantity +
+                        'source: ' +
+                        JSON.stringify(record)
                 )
             }
 
@@ -253,6 +264,15 @@ export const parseRcLoots = async (
                 console.log(
                     'parseRcLoots: skipping loot item outside raid session date time ' + record
                 )
+                continue
+            }
+            // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic
+            if (
+                parsedItem.instanceDifficultyId === 68 ||
+                parsedItem.instanceDifficultyId === 69 ||
+                parsedItem.instanceDifficultyId === 70
+            ) {
+                console.log('parseMrtLoots: skipping WuE loot ' + JSON.stringify(record))
                 continue
             }
 

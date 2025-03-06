@@ -38,7 +38,7 @@ export const parseItemString = (itemString: string): ItemStringData => {
         linkLevel,
         specializationID,
         upgradeId,
-        instanceDifficultyId,
+        instanceDifficultyId, // actually itemContext ( like BoE, WuE, etc)
         numBonusIds,
         ...rest
     ] = parts

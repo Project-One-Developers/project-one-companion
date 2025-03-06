@@ -58,8 +58,11 @@ export const addRaidLootsByMrtHandler = async (
     csv: string
 ): Promise<void> => {
     const session = await getRaidSession(raidSessionId)
+    const lowerBound = session.raidDate
+    const upperBound = session.raidDate + RAID_SESSION_UPPER_BOUND_DELTA
+    console.log('addRaidLootsByMrtHandler: ', lowerBound, upperBound)
     const [parsedData, elegibleCharacters] = await Promise.all([
-        parseMrtLoots(csv, session.raidDate, session.raidDate + RAID_SESSION_UPPER_BOUND_DELTA),
+        parseMrtLoots(csv, lowerBound, upperBound),
         getRaidSessionRoster(raidSessionId)
     ])
     if (parsedData.length > 0) {
