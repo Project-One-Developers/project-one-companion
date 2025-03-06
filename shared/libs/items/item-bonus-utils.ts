@@ -207,10 +207,10 @@ export const gearHasLeech = (input: number[] | null): boolean =>
 export const gearHasSpeed = (input: number[] | null): boolean =>
     input ? input.includes(42) : false
 
-// 10397 Primastic Socket
+// 10397,12055 Primastic Socket
 // 11307 Socket on Crafted Gear
 export const gearhasSocket = (input: number[] | null): boolean =>
-    input ? [10397, 11307].some((value) => input.includes(value)) : false
+    input ? [10397, 11307, 12055].some((value) => input.includes(value)) : false
 
 export const gearTertiary = (input: number[] | null): boolean =>
     gearHasAvoidance(input) || gearHasLeech(input) || gearHasSpeed(input)
@@ -286,7 +286,7 @@ export function applyItemTrackByIlvlAndDiff(
 }
 
 export function applySocket(input: number[]): void {
-    input.push(10397)
+    input.push(12055)
 }
 export function applyAvoidance(input: number[]): void {
     input.push(40)
