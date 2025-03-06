@@ -147,7 +147,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                     'addDroptimizer: not importing droptimizer because there is older than previously imported - ak: ' +
                         droptimizer.ak
                 )
-                tx.rollback()
+                //tx.rollback()
                 return alreadyPresent.url
             } else {
                 // we delete the older droptimizer with the same ak
