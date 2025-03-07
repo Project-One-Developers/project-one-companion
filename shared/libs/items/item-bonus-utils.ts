@@ -56,7 +56,18 @@ export function parseItemTrackName(
  * @returns
  */
 export function gearAreTheSame(a: GearItem, b: GearItem): boolean {
-    if (a.item.id !== b.item.id || a.item.season !== b.item.season) {
+    let aItemId = a.item.id
+    let bItemId = b.item.id
+
+    // workaround for one armed bandit best-in-slots: 232526, 232805
+    if (aItemId === 232805) {
+        aItemId = 232526
+    }
+    if (bItemId === 232805) {
+        bItemId = 232526
+    }
+
+    if (aItemId !== bItemId || a.item.season !== b.item.season) {
         return false // Different item ID or season
     }
 
