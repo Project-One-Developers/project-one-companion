@@ -94,6 +94,10 @@ export const upsertItems = async (items: Item[]): Promise<void> => {
         })
 }
 
+export const deleteItemById = async (id: number): Promise<void> => {
+    await db().delete(itemTable).where(eq(itemTable.id, id))
+}
+
 export const upsertItemsToTierset = async (itemsToTierset: ItemToTierset[]): Promise<void> => {
     await db().delete(itemToTiersetTable)
     await db().insert(itemToTiersetTable).values(itemsToTierset)
