@@ -73,7 +73,7 @@ function createWindow(): void {
         store.setBounds(bounds)
     })
 
-    mainWindow?.on('minimize', () => {
+    mainWindow.on('minimize', () => {
         if (mainWindow.isMinimized()) {
             mainWindow.minimize()
             if (process.platform === 'darwin') {
