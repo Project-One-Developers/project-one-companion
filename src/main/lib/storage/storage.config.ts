@@ -4,6 +4,7 @@ import { store } from '../../app/store'
 
 import postgres from 'postgres'
 import { z } from 'zod'
+import { logger } from '../logger/logger'
 
 // todo: va qua??
 //dotenv.config()
@@ -51,6 +52,18 @@ export async function reloadConnection(): Promise<void> {
         casing: 'snake_case',
         schema: schema
     })
+}
+
+export const closeDb = async (): Promise<void> => {
+    if (!dbClient) {
+        return
+    }
+
+    try {
+        await dbClient.end()
+    } catch (error) {
+        logger.error('Error closing DB connection:', error)
+    }
 }
 
 export const dbUrlSchema = z

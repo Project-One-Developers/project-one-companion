@@ -1,4 +1,5 @@
 import { is } from '@electron-toolkit/utils'
+import { closeDb } from '@storage/storage.config'
 import dotenv from 'dotenv'
 import { BrowserWindow, Menu, app, screen, session, shell } from 'electron'
 import fs from 'fs'
@@ -68,9 +69,16 @@ function createWindow(): void {
         mainWindow.show()
     })
 
-    mainWindow.on('close', () => {
+    mainWindow.on('close', async (event) => {
+        // Prevent the window from closing immediately
+        event.preventDefault()
+
         const bounds = mainWindow.getBounds()
         store.setBounds(bounds)
+
+        await closeDb()
+
+        mainWindow.destroy()
     })
 
     mainWindow.on('minimize', () => {
@@ -173,10 +181,20 @@ app.whenReady().then(async () => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
+    await closeDb()
     if (process.platform !== 'darwin') {
         app.quit()
     }
+})
+
+app.on('before-quit', async (event) => {
+    // Prevent quitting immediately
+    event.preventDefault()
+
+    await closeDb()
+
+    app.exit(0)
 })
 
 // In this file you can include the rest of your app"s specific main process
