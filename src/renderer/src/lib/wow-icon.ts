@@ -184,5 +184,40 @@ export const currencyIcon = new Map<number, { url: string; name: string }>([
             url: 'https://wow.zamimg.com/images/wow/icons/medium/inv_crestupgrade_undermine_carved.jpg',
             name: 'Carved Undermine Crest'
         }
+    ],
+    [
+        3109,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/medium/inv_crestupgrade_undermine_runed.jpg',
+            name: 'Runed Undermine Crest'
+        }
+    ],
+    [
+        3110,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/medium/inv_crestupgrade_undermine_gilded.jpg',
+            name: 'Gilded Undermine Crest'
+        }
+    ],
+    [
+        230906,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_spark_whole_orange.jpg',
+            name: 'Spark of Fortunes'
+        }
+    ],
+    [
+        230936,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_xalatath_runed_enchanted.jpg',
+            name: 'Enchanted Runed Undermine Crest'
+        }
+    ],
+    [
+        230935,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_xalatath_gilded_enchanted-.jpg',
+            name: 'Enchanted Gilded Undermine Crest'
+        }
     ]
 ])
