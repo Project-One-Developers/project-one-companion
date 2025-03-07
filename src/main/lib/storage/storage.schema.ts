@@ -104,13 +104,7 @@ export const charWowAuditTable = pgTable(
         itemsEquipped: jsonb('items_equipped').$type<GearItem[]>().notNull(),
         tiersetInfo: jsonb('tierset_info').$type<GearItem[]>().notNull()
     },
-    (t) => {
-        return [
-            {
-                pk: primaryKey({ columns: [t.name, t.realm] })
-            }
-        ]
-    }
+    (t) => [primaryKey({ columns: [t.name, t.realm] })]
 )
 
 export const bisListTable = pgTable(
@@ -120,7 +114,7 @@ export const bisListTable = pgTable(
         itemId: integer('item_id').notNull(),
         specId: integer('spec_id').notNull()
     },
-    (table) => [unique().on(table.itemId, table.specId)]
+    (t) => [unique().on(t.itemId, t.specId)]
 )
 
 //////////////////////////////////////////////////////////
@@ -196,11 +190,7 @@ export const raidSessionRosterTable = pgTable(
             .references(() => charTable.id, { onDelete: 'cascade' })
             .notNull()
     },
-    (t) => [
-        {
-            pk: primaryKey({ columns: [t.raidSessionId, t.charId] })
-        }
-    ]
+    (t) => [primaryKey({ columns: [t.raidSessionId, t.charId] })]
 )
 
 export const lootTable = pgTable('loots', {
@@ -304,9 +294,7 @@ export const itemToCatalystTable = pgTable(
         catalyzedItemId: integer('catalyzed_item_id').notNull()
     },
     (t) => [
-        {
-            pk: primaryKey({ columns: [t.itemId, t.encounterId, t.catalyzedItemId] }) // todo: non va
-        }
+        primaryKey({ columns: [t.itemId, t.encounterId, t.catalyzedItemId] }) // todo: non va UPDATE BY ZORBY: fixed in this commit?
     ]
 )
 
@@ -364,7 +352,6 @@ export const playerCharRelations = relations(playerTable, ({ many }) => ({
 }))
 
 // Raid Sessions
-
 export const raidSessionTableRelations = relations(raidSessionTable, ({ many }) => ({
     charPartecipation: many(raidSessionRosterTable),
     lootedItems: many(lootTable)
