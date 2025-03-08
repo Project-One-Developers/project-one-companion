@@ -41,11 +41,17 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
 
     const filteredLoots =
         selectedSlot === 'tokens'
-            ? tokensLoots
+            ? tokensLoots.sort(
+                  (a, b) =>
+                      a.gearItem.item.name.localeCompare(b.gearItem.item.name) ||
+                      b.gearItem.itemLevel - a.gearItem.itemLevel
+              )
             : loots
                   .filter((loot) => loot.gearItem.item.slotKey === selectedSlot)
                   .sort(
-                      (a, b) => a.gearItem.item.id - b.gearItem.item.id || a.id.localeCompare(b.id)
+                      (a, b) =>
+                          a.gearItem.item.name.localeCompare(b.gearItem.item.name) ||
+                          b.gearItem.itemLevel - a.gearItem.itemLevel
                   )
 
     const SlotButton = ({
