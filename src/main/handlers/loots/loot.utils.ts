@@ -833,18 +833,14 @@ export const evalScore = (
     highlights: Omit<CharAssignmentHighlights, 'score'>,
     maxDdpsGain: number
 ): number => {
-    const { dpsGain, ilvlDiff, gearIsBis, lootEnableTiersetBonus, isTrackUpgrade, alreadyGotIt } =
-        highlights
+    const { dpsGain, gearIsBis, lootEnableTiersetBonus, isTrackUpgrade, alreadyGotIt } = highlights
 
     if (alreadyGotIt) return 0
 
-    const normalizedDps = dpsGain / maxDdpsGain
-    let baseScore = dpsGain === 0 ? 0.01 : normalizedDps
+    const normalizedDps = dpsGain > 0 ? dpsGain / maxDdpsGain : 0.01
+    const bonusBisScore = gearIsBis ? 1 : 0
 
-    // bis increase score
-    if (gearIsBis) {
-        baseScore = 1 + normalizedDps
-    }
+    const baseScore = normalizedDps + bonusBisScore
 
     const tierSetMultiplier = match(lootEnableTiersetBonus)
         .with(TierSetBonus.FourPiece, () => 4)
@@ -852,11 +848,11 @@ export const evalScore = (
         .otherwise(() => 1)
 
     const trackMultiplier = isTrackUpgrade ? 1.1 : 1
-    const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.01 * ilvlDiff : 1
+    // const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.01 * ilvlDiff : 1
 
-    const score = baseScore * tierSetMultiplier * trackMultiplier * ilvlDiffMultiplier
+    const score = baseScore * tierSetMultiplier * trackMultiplier
 
-    const formattedScore = Math.round(score * 1000)
+    const formattedScore = Math.round(score * 100)
 
     return formattedScore
 }
