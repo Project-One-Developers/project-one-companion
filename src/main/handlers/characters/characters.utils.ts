@@ -1,3 +1,4 @@
+import { CURRENT_SEASON } from '@shared/consts/wow.consts'
 import {
     applyItemTrackByIlvlAndDelta,
     applyItemTrackByIlvlAndDiff,
@@ -457,7 +458,11 @@ function createTiersetGearPiece(
     if (!className || !ilvl || !itemsInDb || !slotKey || !diff) return null
 
     const wowItem = itemsInDb.find(
-        (i) => i.tierset === true && i.slotKey === slotKey && i.classes?.includes(className)
+        (i) =>
+            i.tierset === true &&
+            i.slotKey === slotKey &&
+            i.classes?.includes(className) &&
+            i.season === CURRENT_SEASON
     )
     if (wowItem == null) {
         console.log(
