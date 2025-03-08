@@ -839,23 +839,24 @@ export const evalScore = (
     if (alreadyGotIt) return 0
 
     const normalizedDps = dpsGain / maxDdpsGain
-    const baseScore = gearIsBis ? 1 + normalizedDps : normalizedDps
+    let baseScore = dpsGain === 0 ? 0.01 : normalizedDps
 
-    // Lowest non 0 score possible, just to order this character
-    // above characters with no gain whatsoever
-    if (baseScore === 0 && ilvlDiff > 0) return 1
+    // bis increase score
+    if (gearIsBis) {
+        baseScore = 1 + normalizedDps
+    }
 
     const tierSetMultiplier = match(lootEnableTiersetBonus)
-        .with(TierSetBonus.FourPiece, () => 1.3)
-        .with(TierSetBonus.TwoPiece, () => 1.2)
+        .with(TierSetBonus.FourPiece, () => 4)
+        .with(TierSetBonus.TwoPiece, () => 2)
         .otherwise(() => 1)
 
     const trackMultiplier = isTrackUpgrade ? 1.1 : 1
-    const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.05 * ilvlDiff : 1
+    const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.01 * ilvlDiff : 1
 
     const score = baseScore * tierSetMultiplier * trackMultiplier * ilvlDiffMultiplier
 
-    const formattedScore = Math.round(score * 100)
+    const formattedScore = Math.round(score * 1000)
 
     return formattedScore
 }
