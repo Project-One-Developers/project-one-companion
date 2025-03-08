@@ -679,8 +679,15 @@ export const parseTiersetInfo = (
         .filter((t) => t.item.slotKey !== 'omni') // omni will be counted later
         .forEach((gear) => {
             const existingGear = maxItemLevelBySlot.get(gear.item.slotKey)
-            if (!existingGear || compareGearItem(gear, existingGear) > 0) {
+            if (!existingGear) {
                 maxItemLevelBySlot.set(gear.item.slotKey, gear)
+            } else {
+                const compareRes = compareGearItem(gear, existingGear)
+                const ilvlDiff = gear.itemLevel - (existingGear.itemLevel ?? 0)
+                // if the gear is the same, we take the one with the biggest ilvl diff
+                if (compareRes > 0 || (compareRes === 0 && ilvlDiff > 0)) {
+                    maxItemLevelBySlot.set(gear.item.slotKey, gear)
+                }
             }
         })
 
