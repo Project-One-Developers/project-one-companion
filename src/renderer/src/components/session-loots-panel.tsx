@@ -107,23 +107,25 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                 {allDifficulties.map((difficulty) => (
                                     <td key={difficulty} className="p-2">
                                         <div className="flex flex-row gap-2">
-                                            {groupedLoots[boss.id]?.[difficulty]?.map((loot) => (
-                                                <div key={loot.id} className="relative group">
-                                                    <WowGearIcon
-                                                        gearItem={loot.gearItem}
-                                                        showTierBanner={true}
-                                                        showItemTrackDiff={false}
-                                                    />
-                                                    <button
-                                                        onClick={() =>
-                                                            deleteLootMutation.mutate(loot.id)
-                                                        }
-                                                        className="absolute -top-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full"
-                                                    >
-                                                        <X size={12} />
-                                                    </button>
-                                                </div>
-                                            )) || <span className="text-gray-400">-</span>}
+                                            {groupedLoots[boss.id]?.[difficulty]
+                                                ?.sort((a, b) => a.itemId - b.itemId)
+                                                .map((loot) => (
+                                                    <div key={loot.id} className="relative group">
+                                                        <WowGearIcon
+                                                            gearItem={loot.gearItem}
+                                                            showTierBanner={true}
+                                                            showItemTrackDiff={false}
+                                                        />
+                                                        <button
+                                                            onClick={() =>
+                                                                deleteLootMutation.mutate(loot.id)
+                                                            }
+                                                            className="absolute -top-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full"
+                                                        >
+                                                            <X size={12} />
+                                                        </button>
+                                                    </div>
+                                                )) || <span className="text-gray-400">-</span>}
                                         </div>
                                     </td>
                                 ))}
