@@ -278,6 +278,7 @@ export const itemTable = pgTable('items', {
 // Mapping tra itemId e Tier Token che lo genera - contiene l'import di public/items_to_tierset.csv
 export const itemToTiersetTable = pgTable('items_to_tierset', {
     itemId: integer('item_id').primaryKey(),
+    classId: integer('class_id').notNull(),
     tokenId: integer('token_id')
         .references(() => itemTable.id)
         .notNull()

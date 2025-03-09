@@ -9,6 +9,10 @@ export const getClassSpecs = (wowClass: number | WowClassName): WowSpec[] => {
     )
 }
 
+export const getWowClassByName = (wowClassName: WowClassName): WowClass => {
+    return WOW_CLASS_WITH_SPECS.find((c) => c.name === wowClassName)!
+}
+
 export const getClassSpecsForRole = (wowClass: number | WowClassName, role: WoWRole): WowSpec[] => {
     return WOW_CLASS_WITH_SPECS.filter((c) =>
         typeof wowClass === 'number' ? c.id === wowClass : c.name === wowClass

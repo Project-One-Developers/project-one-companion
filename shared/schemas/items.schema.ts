@@ -47,7 +47,8 @@ export const itemSchema = z.object({
 
 export const itemToTiersetSchema = z.object({
     itemId: z.number(),
-    tokenId: z.number()
+    tokenId: z.number(),
+    classId: z.number()
 })
 export const itemToTiersetArraySchema = z.array(itemToTiersetSchema)
 

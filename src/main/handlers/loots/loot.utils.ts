@@ -36,11 +36,12 @@ import {
     NewLootManual,
     TierSetBonus,
     WowAuditWarn,
+    WowClass,
     WowItemSlotKey,
     WowRaidDifficulty,
     WowSpec
 } from '@shared/types/types'
-import { getItems } from '@storage/items/items.storage'
+import { getItems, getItemToTiersetMapping } from '@storage/items/items.storage'
 import { parse } from 'papaparse'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
@@ -585,12 +586,13 @@ export const parseLootBisSpecForChar = (
  * @param charDroptimizers
  * @param charAssignedLoots
  */
-export const parseLootAlreadyGotIt = (
+export const parseLootAlreadyGotIt = async (
     loot: LootWithItem,
+    wowClass: WowClass,
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[],
     charAuditData: CharacterWowAudit | null
-): boolean => {
+): Promise<boolean> => {
     if (loot.gearItem.item.slotKey === 'omni') return false
 
     const lastDroptWithTierInfo = charDroptimizers
@@ -606,6 +608,54 @@ export const parseLootAlreadyGotIt = (
         ),
         ...(charAuditData?.itemsEquipped ?? []).filter((gi) => gi.item.id === loot.item.id)
     ]
+
+    if (loot.gearItem.item.token) {
+        // recover item id from token conversion
+
+        // conceptual plan:
+        // convert loot token to actual tierset item
+        // check if char has the item in bag/equipped/assigned
+        // compare
+
+        const itemToTiersetMapping = await getItemToTiersetMapping()
+        const tokenMapping = itemToTiersetMapping.find(
+            (mapping) =>
+                mapping.tokenId === loot.gearItem.item.id && mapping.classId === wowClass.id
+        )
+        if (tokenMapping) {
+            availableGear.push(
+                ...(lastDroptWithTierInfo?.itemsEquipped ?? []).filter(
+                    (gi) => gi.item.id === tokenMapping.itemId
+                )
+            )
+            availableGear.push(
+                ...(lastDroptWithTierInfo?.itemsInBag ?? []).filter(
+                    (gi) => gi.item.id === tokenMapping.itemId
+                )
+            )
+            availableGear.push(
+                ...(charAuditData?.itemsEquipped ?? []).filter(
+                    (gi) => gi.item.id === tokenMapping.itemId
+                )
+            )
+
+            // convert loot to actual tierset and compare
+            const convertedLoot: GearItem = {
+                ...loot.gearItem,
+                itemTrack: getItemTrack(loot.gearItem.itemLevel, loot.raidDifficulty),
+                item: {
+                    ...loot.item,
+                    id: tokenMapping.itemId
+                }
+            }
+            const alreadyGotTierset = availableGear.some((gear) =>
+                gearAreTheSame(convertedLoot, gear)
+            )
+            if (alreadyGotTierset) {
+                return true
+            }
+        }
+    }
 
     return availableGear.some((gear) => gearAreTheSame(loot.gearItem, gear))
 }

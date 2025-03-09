@@ -1,3 +1,4 @@
+import { getWowClassByName } from '@shared/libs/spec-parser/spec-utils'
 import {
     CharacterWowAudit,
     CharAssignmentHighlights,
@@ -140,56 +141,63 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         ...latestDroptimizer.flatMap((item) => item.upgrades.map((upgrade) => upgrade.dps))
     )
 
-    const charAssignmentInfo: CharAssignmentInfo[] = filteredRoster.map((char) => {
-        // get latest droptimizers for a given chars
-        const charDroptimizers = latestDroptimizer.filter(
-            (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
-        )
+    const charAssignmentInfo: CharAssignmentInfo[] = await Promise.all(
+        filteredRoster.map(async (char) => {
+            // get latest droptimizers for a given chars
+            const charDroptimizers = latestDroptimizer.filter(
+                (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
+            )
 
-        const charWowAudit: CharacterWowAudit | null =
-            wowAuditData.find(
-                (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
-            ) ?? null
+            const charWowAudit: CharacterWowAudit | null =
+                wowAuditData.find(
+                    (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
+                ) ?? null
 
-        const droptimizerLastUpdate: number | null = Math.max(
-            ...charDroptimizers.map((c) => c.simInfo.date)
-        )
+            const droptimizerLastUpdate: number | null = Math.max(
+                ...charDroptimizers.map((c) => c.simInfo.date)
+            )
 
-        // loot assigned to a given char
-        const charAssignedLoots = allAssignedLoots.filter(
-            (l) =>
-                l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
-                l.assignedCharacterId === char.id &&
-                (!droptimizerLastUpdate || l.dropDate > droptimizerLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
-        )
+            // loot assigned to a given char
+            const charAssignedLoots = allAssignedLoots.filter(
+                (l) =>
+                    l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
+                    l.assignedCharacterId === char.id &&
+                    (!droptimizerLastUpdate || l.dropDate > droptimizerLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
+            )
 
-        const res: Omit<CharAssignmentInfo, 'highlights'> = {
-            character: char,
-            droptimizers: parseDroptimizersInfo(loot.item, loot.raidDifficulty, charDroptimizers),
-            weeklyChest: parseGreatVault(charDroptimizers),
-            tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots, charWowAudit),
-            bestItemsInSlot: parseBestItemInSlot(
-                loot.item.slotKey,
-                charDroptimizers,
-                charAssignedLoots,
-                charWowAudit
-            ),
-            alreadyGotIt: parseLootAlreadyGotIt(
-                loot,
-                charDroptimizers,
-                charAssignedLoots,
-                charWowAudit
-            ),
-            bisForSpec: parseLootBisSpecForChar(bisList, loot.item.id, char),
-            warnDroptimizer: parseDroptimizerWarn(charDroptimizers, charAssignedLoots),
-            warnWowAudit: parseWowAuditWarn(charWowAudit)
-        }
+            const res: Omit<CharAssignmentInfo, 'highlights'> = {
+                character: char,
+                droptimizers: parseDroptimizersInfo(
+                    loot.item,
+                    loot.raidDifficulty,
+                    charDroptimizers
+                ),
+                weeklyChest: parseGreatVault(charDroptimizers),
+                tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots, charWowAudit),
+                bestItemsInSlot: parseBestItemInSlot(
+                    loot.item.slotKey,
+                    charDroptimizers,
+                    charAssignedLoots,
+                    charWowAudit
+                ),
+                alreadyGotIt: await parseLootAlreadyGotIt(
+                    loot,
+                    getWowClassByName(char.class),
+                    charDroptimizers,
+                    charAssignedLoots,
+                    charWowAudit
+                ),
+                bisForSpec: parseLootBisSpecForChar(bisList, loot.item.id, char),
+                warnDroptimizer: parseDroptimizerWarn(charDroptimizers, charAssignedLoots),
+                warnWowAudit: parseWowAuditWarn(charWowAudit)
+            }
 
-        return {
-            ...res,
-            highlights: evalHighlightsAndScore(loot, res, maxGainFromAllDroptimizers)
-        }
-    })
+            return {
+                ...res,
+                highlights: evalHighlightsAndScore(loot, res, maxGainFromAllDroptimizers)
+            }
+        })
+    )
 
     return {
         loot,
