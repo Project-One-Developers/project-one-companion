@@ -123,6 +123,14 @@ export default function LootAssign() {
                             <DropdownMenuItem className="cursor-pointer flex items-center gap-2">
                                 <DownloadIcon className="h-4 w-4" />
                                 <DownloadCSV
+                                    filename={
+                                        sortedSessions
+                                            .filter((s) =>
+                                                Array.from(selectedSessions).includes(s.id)
+                                            )
+                                            .map((s) => s.name)
+                                            .join('-') + '-loots.csv'
+                                    }
                                     data={loots
                                         .filter((loot) => loot.assignedCharacter !== null)
                                         .map((loot) => ({
