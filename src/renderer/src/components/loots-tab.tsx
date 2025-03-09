@@ -114,6 +114,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                                 showSlot={selectedSlot === 'tokens'}
                                 showTierBanner
                                 showExtendedInfo
+                                convertItemTrackToRaidDiff={true}
                                 showArmorType={selectedSlot !== 'tokens'}
                             />
                             {loot.assignedCharacter && (

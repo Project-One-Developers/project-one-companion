@@ -85,7 +85,8 @@ export function trackNameToWowDiff(name: WowItemTrackName): WowRaidDifficulty {
         case 'Myth':
             return 'Mythic'
         default:
-            throw new Error('trackNameToWowDiff: track not supported ' + name)
+            console.log('trackNameToWowDiff: track not supported ' + name)
+            return 'LFR'
     }
 }
 

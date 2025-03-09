@@ -5,13 +5,15 @@ import {
     parseItemTrackName
 } from '@shared/libs/items/item-bonus-utils'
 import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
-import { GearItem, WowItemTrackName } from '@shared/types/types'
+import { trackNameToWowDiff } from '@shared/libs/items/item-tracks'
+import { GearItem } from '@shared/types/types'
 
 type WowGearIconProps = {
     gearItem: GearItem
     showTierBanner?: boolean
     showItemTrackDiff?: boolean
     showExtendedInfo?: boolean
+    convertItemTrackToRaidDiff?: boolean
     showSlot?: boolean
     showArmorType?: boolean
     className?: string
@@ -23,6 +25,7 @@ export const WowGearIcon = ({
     showTierBanner = false,
     showItemTrackDiff = true,
     showExtendedInfo = false,
+    convertItemTrackToRaidDiff = true,
     showSlot = false,
     showArmorType = false,
     className,
@@ -41,32 +44,23 @@ export const WowGearIcon = ({
         (enchantIds?.length ? `&ench=${enchantIds.join(':')}` : '') +
         (gemIds?.length ? `&gems=${gemIds.join(':')}` : '')
 
-    const getItemTrackAbbr = () =>
-        showItemTrackDiff
-            ? itemTrack
-                ? itemTrackToDifficulty(itemTrack.name)
-                : bonusIds
-                  ? parseItemTrackName(bonusIds, token, tierset)
-                      ? itemTrackToDifficulty(parseItemTrackName(bonusIds, token, tierset)!)
-                      : ''
-                  : ''
-            : ''
+    const getItemTrackAbbr = () => {
+        if (!showItemTrackDiff) return ''
 
-    const itemTrackToDifficulty = (itemTrack: WowItemTrackName) => {
-        switch (itemTrack) {
-            case 'Explorer':
-                return 'LFR'
-            case 'Adventurer':
-                return 'LootFilter'
-            case 'Veteran':
-                return 'LFR'
-            case 'Champion':
-                return 'Normal'
-            case 'Hero':
-                return 'Heroic'
-            case 'Myth':
-                return 'Mythic'
+        if (itemTrack) {
+            return convertItemTrackToRaidDiff ? trackNameToWowDiff(itemTrack.name) : itemTrack.name
         }
+
+        if (bonusIds) {
+            const parsedTrackName = parseItemTrackName(bonusIds, token, tierset)
+            if (parsedTrackName) {
+                return convertItemTrackToRaidDiff
+                    ? trackNameToWowDiff(parsedTrackName)
+                    : parsedTrackName
+            }
+        }
+
+        return ''
     }
 
     return (
@@ -96,7 +90,8 @@ export const WowGearIcon = ({
                     </div>
                     {!showExtendedInfo && (
                         <p className="flex text-bold text-[11px]">
-                            {itemLevel} {getItemTrackAbbr()}
+                            {itemLevel}
+                            {getItemTrackAbbr().charAt(0)}
                         </p>
                     )}
                 </div>
