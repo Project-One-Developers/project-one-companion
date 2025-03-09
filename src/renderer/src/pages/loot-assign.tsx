@@ -2,7 +2,7 @@ import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import LootsTabs from '@renderer/components/loots-tab'
 import LootsTradeHelperDialog from '@renderer/components/loots-trade-helper'
 import SessionCard from '@renderer/components/session-card'
-import DownloadCSVButton from '@renderer/components/shared/download-as-csv'
+import DownloadCSV from '@renderer/components/shared/download-as-csv'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,7 +15,7 @@ import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle, MoreVertical } from 'lucide-react'
+import { DownloadIcon, LoaderCircle, MoreVertical, ZapIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useRaidData } from './loot-table'
@@ -114,10 +114,46 @@ export default function LootAssign() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <DropdownMenuItem
-                                className="cursor-pointer"
+                                className="cursor-pointer flex items-center gap-2"
                                 onClick={() => setLootHelperDialogOpen(true)}
                             >
-                                Display Trade Helper
+                                <ZapIcon className="h-4 w-4" />
+                                <span>Display Trade Helper</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer flex items-center gap-2">
+                                <DownloadIcon className="h-4 w-4" />
+                                <DownloadCSV
+                                    data={loots
+                                        .filter((loot) => loot.assignedCharacter !== null)
+                                        .map((loot) => ({
+                                            Difficoltà: loot.raidDifficulty ?? '',
+                                            Boss:
+                                                encounterList
+                                                    .find((boss) =>
+                                                        boss.items.find(
+                                                            (item) =>
+                                                                item.id === loot.gearItem.item.id
+                                                        )
+                                                    )
+                                                    ?.name.replaceAll(',', ' ') ?? '',
+                                            Item: loot.gearItem.item.name ?? '',
+                                            Livello: loot.gearItem.itemLevel ?? '',
+                                            Slot:
+                                                loot.gearItem.item.slotKey
+                                                    .replaceAll('_', ' ')
+                                                    .replace(/\b\w/g, (char) =>
+                                                        char.toUpperCase()
+                                                    ) ?? '',
+                                            Character: loot.assignedCharacter?.name ?? ''
+                                        }))
+                                        .sort((a, b) => {
+                                            if (a.Character < b.Character) return -1
+                                            if (a.Character > b.Character) return 1
+                                            if (a.Difficoltà < b.Difficoltà) return -1
+                                            if (a.Difficoltà > b.Difficoltà) return 1
+                                            return 0
+                                        })}
+                                />
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -155,35 +191,6 @@ export default function LootAssign() {
                     <p className="text-gray-400">Select a session to start browsing loots</p>
                 </div>
             )}
-            <div className="absolute bottom-5 right-5">
-                <DownloadCSVButton
-                    data={loots
-                        .filter((loot) => loot.assignedCharacter !== null)
-                        .map((loot) => ({
-                            Difficoltà: loot.raidDifficulty ?? '',
-                            Boss:
-                                encounterList
-                                    .find((boss) =>
-                                        boss.items.find((item) => item.id === loot.gearItem.item.id)
-                                    )
-                                    ?.name.replaceAll(',', ' ') ?? '',
-                            Item: loot.gearItem.item.name ?? '',
-                            Livello: loot.gearItem.itemLevel ?? '',
-                            Slot:
-                                loot.gearItem.item.slotKey
-                                    .replaceAll('_', ' ')
-                                    .replace(/\b\w/g, (char) => char.toUpperCase()) ?? '',
-                            Character: loot.assignedCharacter?.name ?? ''
-                        }))
-                        .sort((a, b) => {
-                            if (a.Character < b.Character) return -1
-                            if (a.Character > b.Character) return 1
-                            if (a.Difficoltà < b.Difficoltà) return -1
-                            if (a.Difficoltà > b.Difficoltà) return 1
-                            return 0
-                        })}
-                />
-            </div>
         </div>
     )
 }
