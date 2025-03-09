@@ -176,11 +176,10 @@ export default function LootAssign() {
                             Character: loot.assignedCharacter?.name ?? ''
                         }))
                         .sort((a, b) => {
-                            // Sort by Difficulty first, then by Boss name
+                            if (a.Character < b.Character) return -1
+                            if (a.Character > b.Character) return 1
                             if (a.Difficoltà < b.Difficoltà) return -1
                             if (a.Difficoltà > b.Difficoltà) return 1
-                            if (a.Boss < b.Boss) return -1
-                            if (a.Boss > b.Boss) return 1
                             return 0
                         })}
                 />
