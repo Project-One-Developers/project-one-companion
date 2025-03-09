@@ -5,7 +5,7 @@ import {
     parseItemTrackName
 } from '@shared/libs/items/item-bonus-utils'
 import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
-import { GearItem } from '@shared/types/types'
+import { GearItem, WowItemTrackName } from '@shared/types/types'
 
 type WowGearIconProps = {
     gearItem: GearItem
@@ -44,11 +44,30 @@ export const WowGearIcon = ({
     const getItemTrackAbbr = () =>
         showItemTrackDiff
             ? itemTrack
-                ? itemTrack.name.charAt(0)
+                ? itemTrackToDifficulty(itemTrack.name)
                 : bonusIds
-                  ? parseItemTrackName(bonusIds, token, tierset)?.charAt(0) || ''
+                  ? parseItemTrackName(bonusIds, token, tierset)
+                      ? itemTrackToDifficulty(parseItemTrackName(bonusIds, token, tierset)!)
+                      : ''
                   : ''
             : ''
+
+    const itemTrackToDifficulty = (itemTrack: WowItemTrackName) => {
+        switch (itemTrack) {
+            case 'Explorer':
+                return 'LFR'
+            case 'Adventurer':
+                return 'LootFilter'
+            case 'Veteran':
+                return 'LFR'
+            case 'Champion':
+                return 'Normal'
+            case 'Hero':
+                return 'Heroic'
+            case 'Myth':
+                return 'Mythic'
+        }
+    }
 
     return (
         <a href={hrefString} rel="noreferrer" target="_blank">
@@ -77,8 +96,7 @@ export const WowGearIcon = ({
                     </div>
                     {!showExtendedInfo && (
                         <p className="flex text-bold text-[11px]">
-                            {itemLevel}
-                            {getItemTrackAbbr()}
+                            {itemLevel} {getItemTrackAbbr()}
                         </p>
                     )}
                 </div>
@@ -95,8 +113,7 @@ export const WowGearIcon = ({
                                 </p>
                             )}
                             <p className="flex text-bold text-[11px]">
-                                {itemLevel}
-                                {getItemTrackAbbr()}
+                                {itemLevel} {getItemTrackAbbr()}
                             </p>
                         </div>
                     </div>
