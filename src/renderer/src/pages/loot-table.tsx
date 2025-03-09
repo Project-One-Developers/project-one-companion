@@ -19,7 +19,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
 
 // Custom hooks
-const useRaidData = (currentRaid: number) => {
+export const useRaidData = (currentRaid: number) => {
     const droptimizerRes = useQuery({
         queryKey: [queryKeys.droptimizers],
         queryFn: fetchLatestDroptimizers

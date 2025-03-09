@@ -51,6 +51,7 @@
         "drizzle-kit": "0.30.5",
         "drizzle-orm": "0.40.0",
         "electron-updater": "6.3.9",
+        "file-saver": "^2.0.5",
         "framer-motion": "12.4.10",
         "lucide-react": "0.479.0",
         "papaparse": "^5.5.2",

@@ -2,6 +2,7 @@ import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import LootsTabs from '@renderer/components/loots-tab'
 import LootsTradeHelperDialog from '@renderer/components/loots-trade-helper'
 import SessionCard from '@renderer/components/session-card'
+import DownloadCSVButton from '@renderer/components/shared/download-as-csv'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,11 +12,13 @@ import {
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsWithAssignedBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
+import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle, MoreVertical } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useRaidData } from './loot-table'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
@@ -23,6 +26,8 @@ export default function LootAssign() {
 
     const [searchParams] = useSearchParams()
     const defaultSessionId = searchParams.get('sessionId')
+
+    const { encounterList } = useRaidData(CURRENT_RAID_ID)
 
     const toggleSession = (sessionId: string) => {
         const newSelectedSessions = new Set(selectedSessions)
@@ -150,6 +155,36 @@ export default function LootAssign() {
                     <p className="text-gray-400">Select a session to start browsing loots</p>
                 </div>
             )}
+            <div className="absolute bottom-5 right-5">
+                <DownloadCSVButton
+                    data={loots
+                        .filter((loot) => loot.assignedCharacter !== null)
+                        .map((loot) => ({
+                            Difficoltà: loot.raidDifficulty ?? '',
+                            Boss:
+                                encounterList
+                                    .find((boss) =>
+                                        boss.items.find((item) => item.id === loot.gearItem.item.id)
+                                    )
+                                    ?.name.replaceAll(',', ' ') ?? '',
+                            Item: loot.gearItem.item.name ?? '',
+                            Livello: loot.gearItem.itemLevel ?? '',
+                            Slot:
+                                loot.gearItem.item.slotKey
+                                    .replaceAll('_', ' ')
+                                    .replace(/\b\w/g, (char) => char.toUpperCase()) ?? '',
+                            Character: loot.assignedCharacter?.name ?? ''
+                        }))
+                        .sort((a, b) => {
+                            // Sort by Difficulty first, then by Boss name
+                            if (a.Difficoltà < b.Difficoltà) return -1
+                            if (a.Difficoltà > b.Difficoltà) return 1
+                            if (a.Boss < b.Boss) return -1
+                            if (a.Boss > b.Boss) return 1
+                            return 0
+                        })}
+                />
+            </div>
         </div>
     )
 }
