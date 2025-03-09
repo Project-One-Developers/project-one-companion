@@ -20,7 +20,9 @@ import {
     getLootsByRaidSessionIdWithAssigned,
     getLootsByRaidSessionIdWithItem,
     getLootWithItemById,
-    unassignLoot
+    tradeLoot,
+    unassignLoot,
+    untradeLoot
 } from '@storage/loots/loots.storage'
 import { getAllCharacterWowAudit, getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
@@ -108,6 +110,14 @@ export const assignLootHandler = async (
 
 export const unassignLootHandler = async (lootId: string): Promise<void> => {
     await unassignLoot(lootId)
+}
+
+export const tradeLootHandler = async (lootId: string): Promise<void> => {
+    await tradeLoot(lootId)
+}
+
+export const untradeLootHandler = async (lootId: string): Promise<void> => {
+    await untradeLoot(lootId)
 }
 
 export const deleteLootHandler = async (lootId: string): Promise<void> => {

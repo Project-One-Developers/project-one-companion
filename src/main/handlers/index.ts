@@ -33,7 +33,9 @@ import {
     getLootsBySessionIdHandler,
     getLootsBySessionIdWithAssignedHandler,
     getLootsBySessionIdWithItemHandler,
-    unassignLootHandler
+    tradeLootHandler,
+    unassignLootHandler,
+    untradeLootHandler
 } from './loots/loot.handlers'
 import {
     addRaidSessionHandler,
@@ -90,6 +92,8 @@ export const allHandlers = {
     'loots-assign-info': getLootAssignmentInfoHandler,
     'loots-assign': assignLootHandler,
     'loots-unassign': unassignLootHandler,
+    'loots-trade': tradeLootHandler,
+    'loots-untrade': untradeLootHandler,
     'loots-delete-by-id': deleteLootHandler,
     'app-settings-get': getAppSettingsHandler,
     'app-settings-edit': setAppSettingsHandler,

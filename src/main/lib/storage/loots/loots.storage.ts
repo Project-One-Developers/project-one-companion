@@ -89,7 +89,8 @@ export const addLoots = async (
         dropDate: loot.dropDate,
         gearItem: loot.gearItem,
         raidDifficulty: loot.raidDifficulty,
-        itemString: loot.itemString
+        itemString: loot.itemString,
+        tradedToAssigned: false
     }))
 
     await db().insert(lootTable).values(lootValues).onConflictDoNothing({ target: lootTable.id })
@@ -114,6 +115,24 @@ export const unassignLoot = async (lootId: string): Promise<void> => {
         .update(lootTable)
         .set({
             assignedCharacterId: null
+        })
+        .where(eq(lootTable.id, lootId))
+}
+
+export const tradeLoot = async (lootId: string): Promise<void> => {
+    await db()
+        .update(lootTable)
+        .set({
+            tradedToAssigned: true
+        })
+        .where(eq(lootTable.id, lootId))
+}
+
+export const untradeLoot = async (lootId: string): Promise<void> => {
+    await db()
+        .update(lootTable)
+        .set({
+            tradedToAssigned: false
         })
         .where(eq(lootTable.id, lootId))
 }

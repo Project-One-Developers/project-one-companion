@@ -30,7 +30,8 @@ export const lootSchema = z.object({
     raidDifficulty: wowRaidDiffSchema,
     itemString: z.string().nullable(), // only in rc/mrt csv import
     charsEligibility: z.string().array(),
-    assignedCharacterId: characterSchema.shape.id.nullable()
+    assignedCharacterId: characterSchema.shape.id.nullable(),
+    tradedToAssigned: z.boolean()
 })
 
 export const lootWithItemSchema = lootSchema.extend({

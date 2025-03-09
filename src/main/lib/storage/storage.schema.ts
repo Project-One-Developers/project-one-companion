@@ -202,6 +202,7 @@ export const lootTable = pgTable('loots', {
     charsEligibility: text('chars_eligibility').array(), // array of IDs referencing RaidSession.Chars
     assignedCharacterId: varchar('assigned_character_id').references(() => charTable.id),
     assignedHighlights: jsonb('assigned_highlights').$type<CharAssignmentHighlights>(),
+    tradedToAssigned: boolean('traded_to_assigned').notNull().default(false),
     raidSessionId: varchar('raid_session_id')
         .references(() => raidSessionTable.id, { onDelete: 'cascade' })
         .notNull(),
