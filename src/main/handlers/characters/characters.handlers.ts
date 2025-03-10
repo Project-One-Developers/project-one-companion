@@ -28,7 +28,7 @@ import {
     getCharactersWithPlayerList,
     getCharacterWithPlayerById,
     getLastCharacterWowAudit,
-    getLastWowAuditSync
+    getLastTimeSyncedWowAudit
 } from '@storage/players/characters.storage'
 import {
     addPlayer,
@@ -87,8 +87,17 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
 
     const json = await fetchWowAuditData(key)
 
+    const lastSyncInWowAudit = await getLastTimeSyncedWowAudit()
+
     if (json != null) {
         const charsData = await parseWowAuditData(json)
+
+        // if last sync is older than the last data in wowaudit
+        if (lastSyncInWowAudit && lastSyncInWowAudit <= charsData[0].wowauditLastModifiedUnixTs) {
+            console.log('[WowAudit] No Need to Sync')
+            return
+        }
+
         await deleteAllCharacterWowAudit()
         await addCharacterWowAudit(charsData)
     }
@@ -97,7 +106,7 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
 
 export const checkWowAuditUpdates = async (): Promise<void> => {
     console.log('checkWowAuditUpdates: checking..')
-    const lastSync = await getLastWowAuditSync()
+    const lastSync = await getLastTimeSyncedWowAudit()
     const fourHoursUnixTs = 4 * 60 * 60 // 3 hours in unix timestamp
 
     if (lastSync === null || getUnixTimestamp() - lastSync > fourHoursUnixTs) {

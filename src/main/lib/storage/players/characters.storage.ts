@@ -64,6 +64,13 @@ export const addCharacterWowAudit = async (characters: NewCharacterWowAudit[]): 
     await db().insert(charWowAuditTable).values(characters)
 }
 
+export const getLastTimeSyncedWowAudit = async (): Promise<number | null> => {
+    const result = await db().query.charWowAuditTable.findFirst({
+        orderBy: (charWowAuditTable, { desc }) => desc(charWowAuditTable.wowauditLastModifiedUnixTs)
+    })
+    return result ? result.wowauditLastModifiedUnixTs : null
+}
+
 export const getLastCharacterWowAudit = async (
     charName: string,
     charRealm: string
@@ -82,11 +89,6 @@ export const getAllCharacterWowAudit = async (): Promise<CharacterWowAudit[]> =>
 
 export const deleteAllCharacterWowAudit = async (): Promise<void> => {
     await db().delete(charWowAuditTable)
-}
-
-export const getLastWowAuditSync = async (): Promise<number | null> => {
-    const result = await db().query.charWowAuditTable.findFirst()
-    return result ? result.wowauditLastModifiedUnixTs : null
 }
 
 export const editCharacter = async (edited: EditCharacter): Promise<void> => {
