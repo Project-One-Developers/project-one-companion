@@ -150,7 +150,6 @@ export const droptimizerTable = pgTable('droptimizers', {
     simFightStyle: varchar('sim_fight_style', { length: 50 }).notNull(),
     simDuration: integer('sim_duration').notNull(),
     simNTargets: integer('sim_n_targets').notNull(),
-    simRaidbotInput: text('sim_raidbot_input').notNull(),
     simUpgradeEquipped: boolean('sim_upgrade_equipped'),
     raidId: integer('raid_id').notNull(),
     raidDifficulty: pgRaidDiffEnum('raid_difficulty').notNull(),

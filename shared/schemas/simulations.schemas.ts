@@ -38,7 +38,6 @@ export const droptimizerSchema = z.object({
         fightstyle: z.string(),
         duration: z.number().min(1),
         nTargets: z.number().min(1),
-        raidbotInput: z.string(),
         upgradeEquipped: z.boolean()
     }),
     raidInfo: z.object({

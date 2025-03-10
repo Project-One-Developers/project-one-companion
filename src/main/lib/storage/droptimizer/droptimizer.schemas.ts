@@ -15,7 +15,6 @@ export const droptimizerStorageSchema = z.object({
     simFightStyle: z.string(),
     simDuration: z.number().min(1),
     simNTargets: z.number().min(1),
-    simRaidbotInput: z.string(),
     simUpgradeEquipped: z.boolean(),
     raidId: z.number(),
     raidDifficulty: wowRaidDiffSchema,
@@ -47,7 +46,6 @@ export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
                 fightstyle: data.simFightStyle,
                 duration: data.simDuration,
                 nTargets: data.simNTargets,
-                raidbotInput: data.simRaidbotInput,
                 upgradeEquipped: data.simUpgradeEquipped
             },
             raidInfo: {

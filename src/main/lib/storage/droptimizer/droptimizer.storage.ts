@@ -167,7 +167,6 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
                 simFightStyle: droptimizer.simInfo.fightstyle,
                 simDuration: droptimizer.simInfo.duration,
                 simNTargets: droptimizer.simInfo.nTargets,
-                simRaidbotInput: droptimizer.simInfo.raidbotInput,
                 simUpgradeEquipped: droptimizer.simInfo.upgradeEquipped,
                 raidId: droptimizer.raidInfo.id,
                 raidDifficulty: droptimizer.raidInfo.difficulty,

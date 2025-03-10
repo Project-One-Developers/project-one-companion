@@ -184,10 +184,7 @@ export const convertJsonToDroptimizer = async (
             fightstyle: data.sim.options.fight_style,
             duration: data.sim.options.max_time,
             nTargets: data.sim.options.desired_targets,
-            upgradeEquipped: data.simbot.meta.rawFormData.droptimizer.upgradeEquipped,
-            raidbotInput: data.simbot.meta.rawFormData.text
-                ? data.simbot.meta.rawFormData.text
-                : data.simbot.input
+            upgradeEquipped: data.simbot.meta.rawFormData.droptimizer.upgradeEquipped
         },
         dateImported: getUnixTimestamp(),
         upgrades: await parseUpgrades(upgrades),
