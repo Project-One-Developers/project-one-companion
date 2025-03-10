@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow
 } from '@renderer/components/ui/table'
+import { WowCharacterLink } from '@renderer/components/ui/wowcharacter-links'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowCurrencyIcon } from '@renderer/components/ui/wowcurrency-icon'
 import { WowGearIcon } from '@renderer/components/ui/wowgear-icon'
@@ -63,7 +64,7 @@ export default function SummaryPage(): JSX.Element {
                 />
             </div>
 
-            <Table className="w-full cursor-pointer">
+            <Table className="w-full">
                 <TableHeader className="bg-gray-800">
                     <TableRow className="hover:bg-gray-800">
                         <TableHead className="text-gray-300 font-semibold">Name</TableHead>
@@ -77,26 +78,39 @@ export default function SummaryPage(): JSX.Element {
                 <TableBody className="">
                     {filteredPlayers.map((summary) => {
                         return (
-                            <TableRow
-                                key={summary.character.id}
-                                className={`  cursor-pointer  hover:bg-gray-700 `}
-                            >
+                            <TableRow key={summary.character.id} className={` hover:bg-gray-700 `}>
                                 <TableCell className="p-1 rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="relative">
-                                            <WowClassIcon
-                                                wowClassName={summary.character.class}
-                                                charname={summary.character.name}
-                                                className="h-8 w-8 border-2 border-background rounded-lg"
+                                    <div className="flex space-x-10">
+                                        <div className="flex flex-col space-y-2">
+                                            <WowCharacterLink
+                                                character={summary.character}
+                                                site="raiderio"
+                                            />
+                                            <WowCharacterLink
+                                                character={summary.character}
+                                                site="warcraftlogs"
+                                            />
+                                            <WowCharacterLink
+                                                character={summary.character}
+                                                site="armory"
                                             />
                                         </div>
-                                        <div>
-                                            <h1 className="font-bold text-gray-100">
-                                                {summary.character.name}
-                                            </h1>
-                                            <p className="text-xs text-gray-400">
-                                                {summary.itemLevel}
-                                            </p>
+                                        <div className="flex items-center space-x-3">
+                                            <div className="relative">
+                                                <WowClassIcon
+                                                    wowClassName={summary.character.class}
+                                                    charname={summary.character.name}
+                                                    className="h-8 w-8 border-2 border-background rounded-lg"
+                                                />
+                                            </div>
+                                            <div>
+                                                <h1 className="font-bold text-gray-100">
+                                                    {summary.character.name}
+                                                </h1>
+                                                <p className="text-xs text-gray-400">
+                                                    {summary.itemLevel}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </TableCell>
