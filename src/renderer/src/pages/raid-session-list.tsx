@@ -56,13 +56,15 @@ export default function RaidSessionListPage(): JSX.Element {
                 <h1 className="text-3xl font-bold">Raid Sessions</h1>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {data?.map((session) => (
-                    <SessionCard
-                        key={session.id}
-                        session={session}
-                        onClick={() => navigate(`/raid-session/${session.id}`)}
-                    />
-                ))}
+                {data
+                    ?.sort((a, b) => b.raidDate - a.raidDate)
+                    .map((session) => (
+                        <SessionCard
+                            key={session.id}
+                            session={session}
+                            onClick={() => navigate(`/raid-session/${session.id}`)}
+                        />
+                    ))}
             </div>
             {/* Bottom Right Plus Icon */}
             <div className="fixed bottom-6 right-6">
