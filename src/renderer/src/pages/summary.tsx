@@ -19,9 +19,11 @@ import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 
 import { useMemo, useState, type JSX } from 'react'
+import { useNavigate } from 'react-router'
 
 export default function SummaryPage(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('')
+    const navigate = useNavigate()
 
     const characterQuery = useQuery({
         queryKey: [queryKeys.charactersSummary],
@@ -95,7 +97,12 @@ export default function SummaryPage(): JSX.Element {
                                                 site="armory"
                                             />
                                         </div>
-                                        <div className="flex items-center space-x-3">
+                                        <div
+                                            className="flex items-center space-x-3 cursor-pointer"
+                                            onClick={() =>
+                                                navigate(`/roster/${summary.character.id}`)
+                                            }
+                                        >
                                             <div className="relative">
                                                 <WowClassIcon
                                                     wowClassName={summary.character.class}
