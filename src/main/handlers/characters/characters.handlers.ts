@@ -98,10 +98,10 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
 export const checkWowAuditUpdates = async (): Promise<void> => {
     console.log('checkWowAuditUpdates: checking..')
     const lastSync = await getLastWowAuditSync()
-    const threeHoursUnixTs = 3 * 60 * 60 // 3 hours in unix timestamp
+    const fourHoursUnixTs = 4 * 60 * 60 // 3 hours in unix timestamp
 
-    if (lastSync === null || getUnixTimestamp() - lastSync > threeHoursUnixTs) {
-        console.log('checkWowAuditUpdates: data older than 3 hours - syncing now')
+    if (lastSync === null || getUnixTimestamp() - lastSync > fourHoursUnixTs) {
+        console.log('checkWowAuditUpdates: data older than 4 hours - syncing now')
         await syncCharacterWowAudit()
     }
 }
