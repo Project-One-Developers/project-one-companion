@@ -1,4 +1,3 @@
-import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import type { Droptimizer, WowRaidDifficulty } from '@shared/types/types'
 import {
     addDroptimizer,
@@ -9,16 +8,12 @@ import {
 } from '@storage/droptimizer/droptimizer.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
-import { convertJsonToDroptimizer, fetchRaidbotsData, parseRaidbotsData } from './droptimizer.utils'
+import { getDroptimizerFromURL } from './droptimizer.utils'
 
 export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> => {
     console.log('Adding droptimizer from url', url)
 
-    const raidbotsURL = raidbotsURLSchema.parse(url)
-    const jsonData = await fetchRaidbotsData(raidbotsURL)
-    const parsedJson = parseRaidbotsData(jsonData)
-
-    const droptimizer = await convertJsonToDroptimizer(url, parsedJson)
+    const droptimizer = await getDroptimizerFromURL(url)
 
     const addedDropt = await addDroptimizer(droptimizer)
 
@@ -72,11 +67,24 @@ export const syncDroptimizersFromDiscord = async (): Promise<void> => {
 
     console.log(`Found ${uniqueUrls.size} unique valid Raidbots URLs in the last 2 weeks`)
 
-    for (const url of uniqueUrls) {
-        try {
-            await addDroptimizerHandler(url)
-        } catch (error) {
-            console.error(`Failed to add droptimizer for URL: ${url}`, error)
-        }
-    }
+    // TODO: dynamically importing p-limit is not the best practice probably
+    const { default: pLimit } = await import('p-limit')
+
+    const limit = pLimit(5)
+
+    await Promise.all(
+        Array.from(uniqueUrls).map((url) =>
+            limit(async () => {
+                try {
+                    const droptimizer = await getDroptimizerFromURL(url)
+                    // TODO: manage batch insertion instead of doing it one by one
+                    await addDroptimizer(droptimizer)
+                } catch (error) {
+                    console.error(`Failed to add droptimizer for URL: ${url}`, error)
+                }
+            })
+        )
+    )
+
+    console.log('All droptimizers imported succesfully')
 }

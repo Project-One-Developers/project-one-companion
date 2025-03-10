@@ -4,6 +4,7 @@ import {
     parseItemLevelFromBonusIds,
     parseItemTrack
 } from '@shared/libs/items/item-bonus-utils'
+import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import { wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import type {
     GearItem,
@@ -27,6 +28,16 @@ import {
     RaidbotJson,
     raidbotJsonSchema
 } from './droptimizer.schemas'
+
+export const getDroptimizerFromURL = async (url: string): Promise<NewDroptimizer> => {
+    const raidbotsURL = raidbotsURLSchema.parse(url)
+    const jsonData = await fetchRaidbotsData(raidbotsURL)
+    const parsedJson = parseRaidbotsData(jsonData)
+
+    const droptimizer = await convertJsonToDroptimizer(url, parsedJson)
+
+    return droptimizer
+}
 
 export const fetchRaidbotsData = async (url: RaidbotsURL): Promise<unknown> => {
     const responseJson = await fetch(`${url}/data.json`)
