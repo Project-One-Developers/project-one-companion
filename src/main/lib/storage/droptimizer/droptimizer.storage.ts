@@ -134,7 +134,7 @@ export const getDroptimizerLastByChar = async (
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
     const droptimizerId = await db().transaction(async (tx) => {
         // se è già stato importato, per ora sovrascrivo poi vedremo
-        await tx.delete(droptimizerTable).where(eq(droptimizerTable.url, droptimizer.url))
+        //await tx.delete(droptimizerTable).where(eq(droptimizerTable.url, droptimizer.url))
 
         // we keep only the latest version for a given ak
         const alreadyPresent = await tx.query.droptimizerTable.findFirst({
@@ -142,9 +142,9 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         })
 
         if (alreadyPresent) {
-            if (alreadyPresent.simDate > droptimizer.simInfo.date) {
+            if (alreadyPresent.simDate >= droptimizer.simInfo.date) {
                 console.log(
-                    'addDroptimizer: not importing droptimizer because there is older than previously imported - ak: ' +
+                    'addDroptimizer: not importing droptimizer because it is not newer than previously imported - ak: ' +
                         droptimizer.ak
                 )
                 //tx.rollback()
