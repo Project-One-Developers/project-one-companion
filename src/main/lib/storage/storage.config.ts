@@ -1,25 +1,12 @@
 import * as schema from '@storage/storage.schema'
 import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js'
-import { store } from '../../app/store'
-
 import postgres from 'postgres'
 import { z } from 'zod'
+import { store } from '../../app/store'
 import { logger } from '../logger/logger'
 
-// todo: va qua??
-//dotenv.config()
-
 const getDatabaseUrl = (): string => {
-    const envUrl = process.env.MAIN_VITE_DATABASE_URL
-    if (envUrl) {
-        console.log('[Database]: using database URL found in environment variables')
-        return envUrl
-    }
-
-    const storedUrl = store.getDatabaseUrl()
-    if (storedUrl) return storedUrl
-
-    throw new Error('Database URL not found in environment variables or user settings')
+    return process.env.MAIN_VITE_DATABASE_URL ?? store.getDatabaseUrl()
 }
 
 // Disable prefetch as it is not supported for "Transaction" pool mode

@@ -184,11 +184,11 @@ export const convertJsonToDroptimizer = async (
 
     return {
         ak: `${raidId},${raidDiff},${charInfo.name},${charInfo.server},${charInfo.spec},${charInfo.class}`,
-        url: url,
-        charInfo: charInfo,
+        url,
+        charInfo,
         raidInfo: {
             id: raidId,
-            difficulty: raidDiff // Difficulty is the third element
+            difficulty: raidDiff
         },
         simInfo: {
             date: data.timestamp,
@@ -205,8 +205,8 @@ export const convertJsonToDroptimizer = async (
             data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
         itemsAverageItemLevelEquipped:
             data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
-        itemsEquipped: itemsEquipped,
-        itemsInBag: itemsInBag,
+        itemsEquipped,
+        itemsInBag,
         tiersetInfo: await parseTiersets(itemsEquipped, itemsInBag)
     }
 }

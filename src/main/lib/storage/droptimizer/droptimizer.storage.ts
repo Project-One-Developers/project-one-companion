@@ -63,7 +63,6 @@ export const getDroptimizerByIdsList = async (ids: string[]): Promise<Droptimize
 }
 
 export const getDroptimizerLatestList = async (): Promise<Droptimizer[]> => {
-    // Execute the SQL query and explicitly type the results as { url: string }[]
     const latestDroptimizers: { url: string }[] = await db().execute(
         sql`
             SELECT DISTINCT ON (${droptimizerTable.ak}) url
@@ -72,10 +71,8 @@ export const getDroptimizerLatestList = async (): Promise<Droptimizer[]> => {
         `
     )
 
-    // Extract the URLs from the query results
     const urls = latestDroptimizers.map((row) => row.url)
 
-    // Pass the URLs to getDroptimizerByIdsList
     return getDroptimizerByIdsList(urls)
 }
 

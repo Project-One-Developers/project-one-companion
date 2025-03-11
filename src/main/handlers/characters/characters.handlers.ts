@@ -60,8 +60,7 @@ export const getCharacterHandler = async (id: string): Promise<CharacterWithPlay
 }
 
 export const getChracterListHandler = async (): Promise<Character[]> => {
-    const res = await getCharactersWithPlayerList()
-    return res
+    return await getCharactersWithPlayerList()
 }
 
 export const deleteCharacterHandler = async (id: string): Promise<void> => {
@@ -69,10 +68,8 @@ export const deleteCharacterHandler = async (id: string): Promise<void> => {
 }
 
 export const editCharacterHandler = async (edited: EditCharacter): Promise<Character | null> => {
-    // edit
     await editCharacter(edited)
 
-    // retrieve updated entity
     return await getCharacterWithPlayerById(edited.id)
 }
 
@@ -115,11 +112,6 @@ export const checkWowAuditUpdates = async (): Promise<void> => {
     }
 }
 
-// export const getCharacterListHandler = async (): Promise<Character[]> => {
-//     const players = await getPlayerWithCharactersList()
-//     return players
-// }
-
 // Players
 
 export const addPlayerHandler = async (player: NewPlayer): Promise<Player | null> => {
@@ -132,10 +124,8 @@ export const deletePlayerHandler = async (playerId: string): Promise<void> => {
 }
 
 export const editPlayerHandler = async (edited: EditPlayer): Promise<Player | null> => {
-    // edit
     await editPlayer(edited)
 
-    // retrieve updated entity
     return await getPlayerById(edited.id)
 }
 
@@ -151,12 +141,10 @@ export const getCharLatestGameInfoHandler = async (
     const lastDroptimizer = await getDroptimizerLastByChar(charName, charRealm)
     const lastWowAudit = await getLastCharacterWowAudit(charName, charRealm)
 
-    const res: CharacterGameInfo = {
+    return {
         droptimizer: lastDroptimizer,
         wowaudit: lastWowAudit
     }
-
-    return res
 }
 
 export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => {

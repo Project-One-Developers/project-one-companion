@@ -10,6 +10,5 @@ export const getItemByIdHandler = async (id: number): Promise<Item | null> => {
 }
 
 export const searchItemsHandler = async (searchTerm: string, limit: number): Promise<Item[]> => {
-    const items = await searchItems(searchTerm, limit)
-    return items
+    return await searchItems(searchTerm, limit)
 }
