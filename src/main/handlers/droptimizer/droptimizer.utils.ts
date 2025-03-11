@@ -245,12 +245,7 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
         const itemTrack = parseItemTrack(bonusIds)
         if (itemTrack == null) {
             throw new Error(
-                'parseGreatVaultFromSimc: Detected Vault item without item track... check import ' +
-                    itemId +
-                    ' - https://www.wowhead.com/item=' +
-                    itemId +
-                    '?bonus=' +
-                    bonusIds.join(':')
+                `parseGreatVaultFromSimc: Detected Vault item without item track... check import ${itemId} - https://www.wowhead.com/item=${itemId}?bonus=${bonusIds.join(':')}`
             )
         }
 
