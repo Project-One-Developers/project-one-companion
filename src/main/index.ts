@@ -69,16 +69,9 @@ function createWindow(): void {
         mainWindow.show()
     })
 
-    mainWindow.on('close', async (event) => {
-        // Prevent the window from closing immediately
-        event.preventDefault()
-
+    mainWindow.on('close', () => {
         const bounds = mainWindow.getBounds()
         store.setBounds(bounds)
-
-        await closeDb()
-
-        mainWindow.destroy()
     })
 
     mainWindow.on('minimize', () => {
@@ -181,8 +174,7 @@ app.whenReady().then(async () => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', async () => {
-    await closeDb()
+app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
