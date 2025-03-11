@@ -189,6 +189,11 @@ app.on('before-quit', async (event) => {
     app.exit(0)
 })
 
+// https://github.com/electron/electron/issues/32760
+if (process.platform === 'linux') {
+    app.disableHardwareAcceleration()
+}
+
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 Menu.setApplicationMenu(menu)
