@@ -58,7 +58,7 @@ export default function LootAssign() {
         queryKey: [queryKeys.lootsBySession, Array.from(selectedSessions)],
         queryFn: () => getLootsWithAssignedBySessions(Array.from(selectedSessions)),
         enabled: selectedSessions.size > 0,
-        refetchInterval: 10000 // Refetch every 10 seconds - TODO: update with server side events
+        refetchInterval: 60000 // Refetch every min
     })
 
     // Update selectedLoot.assignedCharacterId if changed in backend
