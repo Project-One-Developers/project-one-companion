@@ -4,7 +4,8 @@ import {
     deleteDroptimizer,
     getDroptimizerLastByCharAndDiff,
     getDroptimizerLatestList,
-    getDroptimizerList
+    getDroptimizerList,
+    getLatestDroptimizerUnixTs
 } from '@storage/droptimizer/droptimizer.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
@@ -53,19 +54,25 @@ export const syncDroptimizersFromDiscord = async (): Promise<void> => {
     const messages = await readAllMessagesInDiscord(botKey, channelId)
     const raidbotsUrlRegex = /https:\/\/www\.raidbots\.com\/simbot\/report\/([a-zA-Z0-9]+)/g
 
-    const twoWeeksAgo = new Date()
-    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14)
+    const latestDateUnixTimestamp: number | null = await getLatestDroptimizerUnixTs()
+
+    const lowerBoundDate = latestDateUnixTimestamp
+        ? new Date(latestDateUnixTimestamp * 1000)
+        : new Date()
+    if (!latestDateUnixTimestamp) {
+        lowerBoundDate.setDate(lowerBoundDate.getDate() - 14)
+    }
 
     const uniqueUrls = new Set(
         messages
-            .filter((msg) => msg.createdAt >= twoWeeksAgo) // filter out messages older than 2 weeks
+            .filter((msg) => msg.createdAt >= lowerBoundDate) // filter out messages older than lowerBoundDate
             .flatMap((message) => {
                 const matches = message.content.match(raidbotsUrlRegex)
                 return matches ? matches : []
             })
     )
 
-    console.log(`Found ${uniqueUrls.size} unique valid Raidbots URLs in the last 2 weeks`)
+    console.log(`Found ${uniqueUrls.size} unique valid Raidbots URLs since ${lowerBoundDate}`)
 
     // TODO: dynamically importing p-limit is not the best practice probably
     const { default: pLimit } = await import('p-limit')
@@ -86,5 +93,5 @@ export const syncDroptimizersFromDiscord = async (): Promise<void> => {
         )
     )
 
-    console.log('All droptimizers imported succesfully')
+    console.log('All droptimizers imported successfully')
 }

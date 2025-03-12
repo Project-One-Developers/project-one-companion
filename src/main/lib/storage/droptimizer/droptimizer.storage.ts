@@ -224,3 +224,10 @@ export const deleteDroptimizer = async (url: string): Promise<void> => {
     // droptimizerUpgradesTable will be deleted on "cascade"
     await db().delete(droptimizerTable).where(eq(droptimizerTable.url, url))
 }
+
+export const getLatestDroptimizerUnixTs = async (): Promise<number | null> => {
+    const result = await db().query.droptimizerTable.findFirst({
+        orderBy: (droptimizerTable, { desc }) => desc(droptimizerTable.simDate)
+    })
+    return result ? result.simDate : null
+}
