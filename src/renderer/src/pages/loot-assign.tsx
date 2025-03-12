@@ -77,7 +77,7 @@ export default function LootAssign() {
     const sortedSessions = useMemo(
         () =>
             raidSessionsQuery.data
-                ? [...raidSessionsQuery.data].sort((a, b) => b.raidDate - a.raidDate)
+                ? [...raidSessionsQuery.data].sort((a, b) => b.raidDate - a.raidDate).slice(0, 5) // todo: fix the overflow and restore full list
                 : [],
         [raidSessionsQuery.data]
     )
