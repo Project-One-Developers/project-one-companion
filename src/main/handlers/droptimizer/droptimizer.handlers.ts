@@ -1,7 +1,9 @@
+import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import type { Droptimizer, WowRaidDifficulty } from '@shared/types/types'
 import {
     addDroptimizer,
     deleteDroptimizer,
+    deleteDroptimizerOlderThanDate,
     getDroptimizerLastByCharAndDiff,
     getDroptimizerLatestList,
     getDroptimizerList,
@@ -94,4 +96,9 @@ export const syncDroptimizersFromDiscord = async (): Promise<void> => {
     )
 
     console.log('All droptimizers imported successfully')
+
+    console.log('syncDroptimizersFromDiscord: cleaning up droptimizers older than 7 days')
+    const sevenDaysAgo = getUnixTimestamp() - 7 * 60 * 60 * 24
+    await deleteDroptimizerOlderThanDate(sevenDaysAgo)
+    console.log('syncDroptimizersFromDiscord: cleaning up droptimizers older than 7 days - done')
 }

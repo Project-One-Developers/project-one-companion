@@ -2,7 +2,7 @@ import type { Droptimizer, NewDroptimizer, WowRaidDifficulty } from '@shared/typ
 import { db } from '@storage/storage.config'
 import { droptimizerTable, droptimizerUpgradesTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
-import { eq, InferInsertModel, sql } from 'drizzle-orm'
+import { eq, InferInsertModel, lte, sql } from 'drizzle-orm'
 import { newUUID } from '../../utils'
 import { droptimizerStorageListToSchema, droptimizerStorageToSchema } from './droptimizer.schemas'
 
@@ -223,6 +223,11 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
 export const deleteDroptimizer = async (url: string): Promise<void> => {
     // droptimizerUpgradesTable will be deleted on "cascade"
     await db().delete(droptimizerTable).where(eq(droptimizerTable.url, url))
+}
+
+export const deleteDroptimizerOlderThanDate = async (dateUnixTs: number): Promise<void> => {
+    // droptimizerUpgradesTable will be deleted on "cascade"
+    await db().delete(droptimizerTable).where(lte(droptimizerTable.simDate, dateUnixTs))
 }
 
 export const getLatestDroptimizerUnixTs = async (): Promise<number | null> => {
