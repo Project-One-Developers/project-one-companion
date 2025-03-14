@@ -198,8 +198,9 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
             })
         )
 
-        await tx.insert(droptimizerUpgradesTable).values(upgradesArray)
-
+        if (upgradesArray.length > 0) {
+            await tx.insert(droptimizerUpgradesTable).values(upgradesArray)
+        }
         return droptimizerRes.url
     })
 
