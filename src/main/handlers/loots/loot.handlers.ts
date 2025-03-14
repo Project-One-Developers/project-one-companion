@@ -28,6 +28,7 @@ import { getAllCharacterWowAudit, getCharactersList } from '@storage/players/cha
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
 import {
     evalHighlightsAndScore,
+    getLatestSyncDate,
     parseBestItemInSlot,
     parseDroptimizersInfo,
     parseDroptimizerWarn,
@@ -163,17 +164,18 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                     (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
                 ) ?? null
 
-            const droptimizerLastUpdate: number | null = Math.max(
-                ...charDroptimizers.map((c) => c.simInfo.date)
-            )
+            // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
+            const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit)
 
             // loot assigned to a given char
-            const charAssignedLoots = allAssignedLoots.filter(
-                (l) =>
-                    l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
-                    l.assignedCharacterId === char.id &&
-                    (!droptimizerLastUpdate || l.dropDate > droptimizerLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
-            )
+            const charAssignedLoots = !lowerBound
+                ? []
+                : allAssignedLoots.filter(
+                      (l) =>
+                          l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
+                          l.assignedCharacterId === char.id &&
+                          l.dropDate > lowerBound
+                  )
 
             const res: Omit<CharAssignmentInfo, 'highlights'> = {
                 character: char,

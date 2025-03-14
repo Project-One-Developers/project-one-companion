@@ -39,6 +39,7 @@ import {
 } from '@storage/players/players.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import {
+    getLatestSyncDate,
     parseCurrencies,
     parseDroptimizerWarn,
     parseGreatVault,
@@ -176,16 +177,15 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
                 (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
             ) ?? null
 
-        const droptimizerLastUpdate: number | null = Math.max(
-            ...charDroptimizers.map((c) => c.simInfo.date)
-        )
+        // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
+        const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit)
 
-        // loot assgined to a given char
-        const charAssignedLoots = allAssignedLoots.filter(
-            (l) =>
-                l.assignedCharacterId === char.id &&
-                (!droptimizerLastUpdate || l.dropDate > droptimizerLastUpdate) // we consider all the loots assigned from last known simc. we take all assignedif no char info
-        )
+        // loot assigned to a given char
+        const charAssignedLoots = !lowerBound
+            ? []
+            : allAssignedLoots.filter(
+                  (l) => l.assignedCharacterId === char.id && l.dropDate > lowerBound
+              )
 
         return {
             character: char,

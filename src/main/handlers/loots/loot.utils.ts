@@ -689,6 +689,22 @@ export const parseItemLevel = (
     return averageIlvl.toFixed(2)
 }
 
+export const getLatestSyncDate = (
+    charDroptimizers: Droptimizer[],
+    charWowAudit: CharacterWowAudit | null
+): number | null => {
+    const droptimizerLastUpdate =
+        charDroptimizers.length > 0
+            ? Math.max(...charDroptimizers.map((c) => c.simInfo.date))
+            : null
+
+    const wowAuditLastUpdate = charWowAudit?.blizzardLastModifiedUnixTs ?? null
+
+    const latestSyncDate = Math.max(droptimizerLastUpdate ?? -1, wowAuditLastUpdate ?? -1)
+
+    return latestSyncDate === -1 ? null : latestSyncDate
+}
+
 export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[],
