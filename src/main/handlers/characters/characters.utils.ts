@@ -442,7 +442,7 @@ function wowAuditDiffToRealDiff(diff: string | null): WowRaidDifficulty | null {
             return 'Normal'
         case 'M':
             return 'Mythic'
-        case 'L':
+        case 'R':
             return 'LFR'
         default:
             throw new Error('wowAuditDiffToRealDiff: diff not mapped - ' + diff)
