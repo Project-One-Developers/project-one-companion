@@ -3,13 +3,14 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import {
     addDroptimizer,
+    cleanupDroptimizerOlderThanHours,
     syncDroptimizersFromDiscord
 } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import { useMutation } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Loader2, PlusIcon, RefreshCw } from 'lucide-react'
+import { Loader2, PlusIcon, Recycle, RefreshCw } from 'lucide-react'
 import { useState, type JSX } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -36,6 +37,8 @@ type FormValues = z.infer<typeof formSchema>
 export default function DroptimizerNewDialog(): JSX.Element {
     // State
     const [open, setOpen] = useState(false)
+
+    const [hoursValue, setHoursValue] = useState(24)
 
     // Form setup
     const form = useForm<FormValues>({
@@ -83,8 +86,30 @@ export default function DroptimizerNewDialog(): JSX.Element {
         }
     })
 
+    const cleanupMutation = useMutation({
+        mutationFn: cleanupDroptimizerOlderThanHours,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.droptimizers] })
+            toast({
+                title: 'Cleanup Successful',
+                description: 'Droptimizers have been successfully cleaned up'
+            })
+        },
+        onError: (error: Error) => {
+            toast({
+                title: 'Cleanup Failed',
+                description: `Unable to cleanup droptimizers. Error: ${error.message}`,
+                variant: 'destructive'
+            })
+        }
+    })
+
     const handleSyncFromDiscord = () => {
-        syncMutation.mutate()
+        syncMutation.mutate(hoursValue)
+    }
+
+    const handleCleanup = () => {
+        cleanupMutation.mutate(hoursValue)
     }
 
     function onSubmit(values: FormValues): void {
@@ -134,33 +159,68 @@ export default function DroptimizerNewDialog(): JSX.Element {
                     <Tabs.List className="flex border-b mb-4">
                         <Tabs.Trigger
                             value="manual"
-                            className="px-4 py-2 flex-1 text-center hover:bg-gray-100 data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                            className="px-4 py-2 flex-1 text-center hover:bg-gray-700 data-[state=active]:border-b-2 data-[state=active]:border-primary"
                         >
-                            Manual Entry
+                            Manual
                         </Tabs.Trigger>
                         <Tabs.Trigger
                             value="sync"
-                            className="px-4 py-2 flex-1 text-center hover:bg-gray-100 data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                            className="px-4 py-2 flex-1 text-center hover:bg-gray-700 data-[state=active]:border-b-2 data-[state=active]:border-primary"
                         >
-                            Sync from Discord
+                            Sync
+                        </Tabs.Trigger>
+                        <Tabs.Trigger
+                            value="cleanup"
+                            className="px-4 py-2 flex-1 text-center hover:bg-gray-700 data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                        >
+                            Cleanup
                         </Tabs.Trigger>
                     </Tabs.List>
                     <Tabs.Content value="manual" className="p-4">
                         <FormContent />
                     </Tabs.Content>
                     <Tabs.Content value="sync" className="p-4">
-                        <Button
-                            onClick={handleSyncFromDiscord}
-                            className="w-full"
-                            disabled={syncMutation.isPending}
-                        >
-                            {syncMutation.isPending ? (
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            ) : (
-                                <RefreshCw className="mr-2 h-4 w-4" />
-                            )}
-                            {syncMutation.isPending ? 'Syncing...' : 'Sync from Discord'}
-                        </Button>
+                        <div className="flex items-center gap-x-4">
+                            <Button
+                                onClick={handleSyncFromDiscord}
+                                className="w-full"
+                                disabled={syncMutation.isPending}
+                            >
+                                {syncMutation.isPending ? (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                ) : (
+                                    <RefreshCw className="mr-2 h-4 w-4" />
+                                )}
+                                {syncMutation.isPending ? 'Syncing...' : 'Sync from Discord'}
+                            </Button>
+                            <Input
+                                type="number"
+                                value={hoursValue}
+                                onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
+                            />
+                        </div>
+                    </Tabs.Content>
+                    <Tabs.Content value="cleanup" className="p-4">
+                        <div className="flex items-center gap-x-4">
+                            <Button
+                                onClick={() => handleCleanup()}
+                                disabled={cleanupMutation.isPending}
+                            >
+                                {cleanupMutation.isPending ? (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                ) : (
+                                    <Recycle className="mr-2 h-4 w-4" />
+                                )}
+                                {cleanupMutation.isPending
+                                    ? 'Cleaning up...'
+                                    : 'Cleanup older than hours'}
+                            </Button>
+                            <Input
+                                type="number"
+                                value={hoursValue}
+                                onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
+                            />
+                        </div>
                     </Tabs.Content>
                 </Tabs.Root>
             </DialogContent>

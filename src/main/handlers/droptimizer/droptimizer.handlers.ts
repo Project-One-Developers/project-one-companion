@@ -6,8 +6,7 @@ import {
     deleteDroptimizerOlderThanDate,
     getDroptimizerLastByCharAndDiff,
     getDroptimizerLatestList,
-    getDroptimizerList,
-    getLatestDroptimizerUnixTs
+    getDroptimizerList
 } from '@storage/droptimizer/droptimizer.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
@@ -45,7 +44,7 @@ export const getDroptimizerLastByCharAndDiffHandler = async (
     return await getDroptimizerLastByCharAndDiff(charName, charRealm, raidDiff)
 }
 
-export const syncDroptimizersFromDiscord = async (): Promise<void> => {
+export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> => {
     const botKey = await getConfig('DISCORD_BOT_TOKEN')
     const channelId = '1283383693695778878' // #droptimizers-drop
 
@@ -56,14 +55,8 @@ export const syncDroptimizersFromDiscord = async (): Promise<void> => {
     const messages = await readAllMessagesInDiscord(botKey, channelId)
     const raidbotsUrlRegex = /https:\/\/www\.raidbots\.com\/simbot\/report\/([a-zA-Z0-9]+)/g
 
-    const latestDateUnixTimestamp: number | null = await getLatestDroptimizerUnixTs()
-
-    const lowerBoundDate = latestDateUnixTimestamp
-        ? new Date(latestDateUnixTimestamp * 1000)
-        : new Date()
-    if (!latestDateUnixTimestamp) {
-        lowerBoundDate.setDate(lowerBoundDate.getDate() - 14)
-    }
+    const upperBound = getUnixTimestamp() - hours * 60 * 60
+    const lowerBoundDate = new Date(upperBound * 1000)
 
     const uniqueUrls = new Set(
         messages
@@ -96,9 +89,10 @@ export const syncDroptimizersFromDiscord = async (): Promise<void> => {
     )
 
     console.log('All droptimizers imported successfully')
+}
 
-    console.log('syncDroptimizersFromDiscord: cleaning up droptimizers older than 7 days')
-    const sevenDaysAgo = getUnixTimestamp() - 7 * 60 * 60 * 24
-    await deleteDroptimizerOlderThanDate(sevenDaysAgo)
-    console.log('syncDroptimizersFromDiscord: cleaning up droptimizers older than 7 days - done')
+export const deleteDroptimizerOlderThanHoursHandler = async (hours: number): Promise<void> => {
+    const currentTimeStamp = getUnixTimestamp()
+    const upperBound = currentTimeStamp - hours * 60 * 60
+    await deleteDroptimizerOlderThanDate(upperBound)
 }

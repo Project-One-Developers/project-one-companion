@@ -544,10 +544,10 @@ export const parseDroptimizerWarn = (
     if (charDroptimizers.length === 0) return DroptimizerWarn.NotImported
 
     const lastSimUnixTs = Math.max(...charDroptimizers.map((c) => c.simInfo.date))
-    const threeDaysInSeconds = 3 * 24 * 60 * 60
+    const dayInSeconds = 24 * 60 * 60
     const currentUnixTs = getUnixTimestamp()
 
-    if (charAssignedLoots.length > 0 || currentUnixTs - lastSimUnixTs > threeDaysInSeconds) {
+    if (charAssignedLoots.length > 0 || currentUnixTs - lastSimUnixTs > dayInSeconds) {
         return DroptimizerWarn.Outdated
     }
 
@@ -558,10 +558,10 @@ export const parseWowAuditWarn = (wowAuditData: CharacterWowAudit | null): WowAu
     if (!wowAuditData) return WowAuditWarn.NotTracked
 
     const lastSyncUnixTs = wowAuditData.wowauditLastModifiedUnixTs
-    const threeDaysInSeconds = 3 * 24 * 60 * 60
+    const dayInSeconds = 24 * 60 * 60
     const currentUnixTs = getUnixTimestamp()
 
-    if (currentUnixTs - lastSyncUnixTs > threeDaysInSeconds) {
+    if (currentUnixTs - lastSyncUnixTs > dayInSeconds) {
         return WowAuditWarn.Outdated
     }
 

@@ -18,8 +18,12 @@ export const deleteDroptimizer = async (url: string): Promise<void> => {
     return await window.api.deleteDroptimizer(url)
 }
 
-export const syncDroptimizersFromDiscord = async (): Promise<void> => {
-    return await window.api.syncDroptimizerFromDiscord()
+export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> => {
+    return await window.api.syncDroptimizerFromDiscord(hours)
+}
+
+export const cleanupDroptimizerOlderThanHours = async (hours: number): Promise<void> => {
+    return await window.api.cleanupDroptimizerOlderThanHours(hours)
 }
 
 export const getDroptimizerLastByCharAndDiff = async (

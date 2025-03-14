@@ -17,6 +17,7 @@ import {
 import {
     addDroptimizerHandler,
     deleteDroptimizerHandler,
+    deleteDroptimizerOlderThanHoursHandler,
     getDroptimizerLastByCharAndDiffHandler,
     getDroptimizerLatestListHandler,
     getDroptimizerListHandler,
@@ -57,6 +58,7 @@ export const allHandlers = {
     'droptimizer-list': getDroptimizerListHandler,
     'droptimizer-latest-list': getDroptimizerLatestListHandler,
     'droptimizer-delete': deleteDroptimizerHandler,
+    'droptimizer-cleanup': deleteDroptimizerOlderThanHoursHandler,
     'droptimizer-discord-sync': syncDroptimizersFromDiscord,
     'droptimizer-last-char-diff': getDroptimizerLastByCharAndDiffHandler,
     'character-add': addCharacterHandler,

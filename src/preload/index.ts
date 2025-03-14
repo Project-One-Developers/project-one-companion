@@ -91,8 +91,11 @@ export const api = {
     deleteDroptimizer(url: string): Promise<void> {
         return ipcRenderer.invoke('droptimizer-delete', url)
     },
-    syncDroptimizerFromDiscord(): Promise<void> {
-        return ipcRenderer.invoke('droptimizer-discord-sync')
+    syncDroptimizerFromDiscord(hours: number): Promise<void> {
+        return ipcRenderer.invoke('droptimizer-discord-sync', hours)
+    },
+    cleanupDroptimizerOlderThanHours(hours: number): Promise<void> {
+        return ipcRenderer.invoke('droptimizer-cleanup', hours)
     },
     // Bosses
     getBosses(raidId: number): Promise<Boss[]> {
