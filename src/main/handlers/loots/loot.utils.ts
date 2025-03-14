@@ -913,8 +913,6 @@ export const evalScore = (
     const normalizedDps = dpsGain > 0 ? dpsGain / maxDdpsGain : 0.01
     const bonusBisScore = gearIsBis ? 1 : 0
 
-    const baseScore = normalizedDps + bonusBisScore
-
     const tierSetMultiplier = match(lootEnableTiersetBonus)
         .with(TierSetBonus.FourPiece, () => 4)
         .with(TierSetBonus.TwoPiece, () => 2)
@@ -923,7 +921,8 @@ export const evalScore = (
     const trackMultiplier = isTrackUpgrade ? 1.1 : 1
     // const ilvlDiffMultiplier = ilvlDiff > 0 ? 1 + 0.01 * ilvlDiff : 1
 
-    const score = baseScore * tierSetMultiplier * trackMultiplier
+    const baseScore = normalizedDps * tierSetMultiplier * trackMultiplier
+    const score = baseScore + bonusBisScore
 
     const formattedScore = Math.round(score * 100)
 
