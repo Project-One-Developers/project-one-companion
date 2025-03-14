@@ -1,4 +1,4 @@
-import { getUnixTimestamp } from '@shared/libs/date/date-utils'
+import { formaUnixTimestampToItalianDate, getUnixTimestamp } from '@shared/libs/date/date-utils'
 import type {
     Character,
     CharacterGameInfo,
@@ -107,8 +107,18 @@ export const checkWowAuditUpdates = async (): Promise<void> => {
     const fourHoursUnixTs = 4 * 60 * 60
 
     if (lastSync === null || getUnixTimestamp() - lastSync > fourHoursUnixTs) {
-        console.log('checkWowAuditUpdates: data older than 4 hours - syncing now')
+        console.log(
+            'checkWowAuditUpdates: woaudit older than 4 hours (' +
+                (lastSync != null ? formaUnixTimestampToItalianDate(lastSync) : '') +
+                ') - syncing now'
+        )
         await syncCharacterWowAudit()
+    } else {
+        console.log(
+            'checkWowAuditUpdates: woaudit is up to date (' +
+                formaUnixTimestampToItalianDate(lastSync) +
+                ')'
+        )
     }
 }
 
