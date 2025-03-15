@@ -18,7 +18,8 @@ import {
     LucideMedal,
     PlusIcon,
     ShoppingBag,
-    Trash2
+    Trash2,
+    Users
 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -102,6 +103,13 @@ export const RaidSessionPage = () => {
                     <div className="flex items-center text-gray-400">
                         <Calendar className="mr-2 h-4 w-4" />
                         <span>{formaUnixTimestampToItalianDate(raidSession.raidDate)}</span>
+                    </div>
+                    <div className="flex items-center text-gray-400">
+                        <Users className="w-4 h-4 mr-2" />
+                        <span>
+                            {raidSession.roster.length} ({tanks.length}/{healers.length}/
+                            {dps.length})
+                        </span>
                     </div>
                 </div>
                 <div className="flex space-x-2">
