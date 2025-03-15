@@ -25,28 +25,37 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
     player,
     selectedCharacters,
     onCharacterToggle
-}) => (
-    <div className="flex items-center justify-between">
-        <h3 className="font-bold text-lg">{player.name}</h3>
-        <div className="flex gap-x-1">
-            {player.characters?.map((char) => (
-                <div key={char.id} onClick={() => onCharacterToggle(char.id)}>
-                    <WowClassIcon
-                        wowClassName={char.class}
-                        //charname={char.name}
-                        className={clsx(
-                            'object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200',
-                            selectedCharacters.includes(char.id)
-                                ? 'scale-110 ring-2 ring-blue-500'
-                                : 'hover:opacity-100 opacity-50 grayscale'
-                        )}
-                    />
-                    {char.main ? <div className="h-[3px] w-6 bg-white rounded-lg mt-2" /> : null}
-                </div>
-            ))}
+}) => {
+    const noneSelected = player.characters.every((char) => !selectedCharacters.includes(char.id))
+    return (
+        <div className="flex items-center justify-between">
+            <h3
+                className={clsx('font-bold text-lg', noneSelected ? 'text-gray-500' : 'text-white')}
+            >
+                {player.name}
+            </h3>
+            <div className="flex gap-x-1">
+                {player.characters?.map((char) => (
+                    <div key={char.id} onClick={() => onCharacterToggle(char.id)}>
+                        <WowClassIcon
+                            wowClassName={char.class}
+                            //charname={char.name}
+                            className={clsx(
+                                'object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200',
+                                selectedCharacters.includes(char.id)
+                                    ? 'scale-110 ring-2 ring-blue-500'
+                                    : 'hover:opacity-100 opacity-50 grayscale'
+                            )}
+                        />
+                        {char.main ? (
+                            <div className="h-[1px] w-6 bg-white rounded-lg mt-2" />
+                        ) : null}
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-)
+    )
+}
 
 const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
     raidDate: z.string().refine((val) => /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(val), {
@@ -163,34 +172,38 @@ const SessionForm: React.FC<{
                                     />
                                 ))}
                                 <hr className="border-gray-800" />
-                                {healerPlayers.map((player) => (
-                                    <PlayerWithCharsRow
-                                        key={player.id}
-                                        player={player}
-                                        selectedCharacters={field.value}
-                                        onCharacterToggle={(charId) => {
-                                            const currentRoster = new Set(field.value)
-                                            field.onChange(
-                                                toggleCharacter(currentRoster, player, charId)
-                                            )
-                                        }}
-                                    />
-                                ))}
+                                {healerPlayers
+                                    .sort((a, b) => a.name.localeCompare(b.name))
+                                    .map((player) => (
+                                        <PlayerWithCharsRow
+                                            key={player.id}
+                                            player={player}
+                                            selectedCharacters={field.value}
+                                            onCharacterToggle={(charId) => {
+                                                const currentRoster = new Set(field.value)
+                                                field.onChange(
+                                                    toggleCharacter(currentRoster, player, charId)
+                                                )
+                                            }}
+                                        />
+                                    ))}
                             </div>
                             <div className="space-y-2 overflow-y-auto p-1">
-                                {dpsPlayers.map((player) => (
-                                    <PlayerWithCharsRow
-                                        key={player.id}
-                                        player={player}
-                                        selectedCharacters={field.value}
-                                        onCharacterToggle={(charId) => {
-                                            const currentRoster = new Set(field.value)
-                                            field.onChange(
-                                                toggleCharacter(currentRoster, player, charId)
-                                            )
-                                        }}
-                                    />
-                                ))}
+                                {dpsPlayers
+                                    .sort((a, b) => a.name.localeCompare(b.name))
+                                    .map((player) => (
+                                        <PlayerWithCharsRow
+                                            key={player.id}
+                                            player={player}
+                                            selectedCharacters={field.value}
+                                            onCharacterToggle={(charId) => {
+                                                const currentRoster = new Set(field.value)
+                                                field.onChange(
+                                                    toggleCharacter(currentRoster, player, charId)
+                                                )
+                                            }}
+                                        />
+                                    ))}
                             </div>
                         </>
                     )}
