@@ -15,7 +15,7 @@ import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { DownloadIcon, LoaderCircle, MoreVertical, ZapIcon } from 'lucide-react'
+import { DownloadIcon, Eye, LoaderCircle, MoreVertical, ZapIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useRaidData } from './loot-table'
@@ -23,6 +23,7 @@ import { useRaidData } from './loot-table'
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
     const [selectedLoot, setSelectedLoot] = useState<LootWithAssigned | null>(null)
+    const [showAllSessions, setShowAllSessions] = useState(false)
 
     const [searchParams] = useSearchParams()
     const defaultSessionId = searchParams.get('sessionId')
@@ -77,12 +78,13 @@ export default function LootAssign() {
     const sortedSessions = useMemo(
         () =>
             raidSessionsQuery.data
-                ? [...raidSessionsQuery.data].sort((a, b) => b.raidDate - a.raidDate).slice(0, 5) // todo: fix the overflow and restore full list
+                ? [...raidSessionsQuery.data].sort((a, b) => b.raidDate - a.raidDate)
                 : [],
         [raidSessionsQuery.data]
     )
 
     const loots = useMemo(() => lootsQuery.data ?? [], [lootsQuery.data])
+    const visibleSessions = showAllSessions ? sortedSessions : sortedSessions.slice(0, 5)
 
     if (raidSessionsQuery.isLoading || lootsQuery.isLoading) {
         return (
@@ -95,8 +97,8 @@ export default function LootAssign() {
     return (
         <div className="w-dvw h-dvh flex flex-col gap-y-8 p-8 relative">
             {/* Page Header */}
-            <div className="flex bg-muted rounded-lg p-6 mb-2 shadow-lg items-center relative">
-                {sortedSessions.map((session) => (
+            <div className="flex flex-wrap bg-muted rounded-lg p-6 mb-2 shadow-lg items-center relative">
+                {visibleSessions.map((session) => (
                     <div key={session.id} onClick={() => toggleSession(session.id)}>
                         <SessionCard
                             session={session}
@@ -113,6 +115,13 @@ export default function LootAssign() {
                             <MoreVertical className="h-5 w-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
+                            <DropdownMenuItem
+                                className="cursor-pointer flex items-center gap-2"
+                                onClick={() => setShowAllSessions(!showAllSessions)}
+                            >
+                                <Eye className="h-4 w-4" />
+                                <span>{showAllSessions ? 'Show less' : 'Show all sessions'}</span>
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="cursor-pointer flex items-center gap-2"
                                 onClick={() => setLootHelperDialogOpen(true)}
