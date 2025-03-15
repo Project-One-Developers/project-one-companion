@@ -6,14 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import SessionForm from './session-form'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogOverlay,
-    DialogPortal,
-    DialogTitle
-} from './ui/dialog'
+import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from './ui/dialog'
 
 type RaidSessionDialogProps = {
     isOpen: boolean
@@ -83,11 +76,11 @@ export default function RaidSessionDialog({
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle className="text-2xl font-bold mb-4">
-                        {isEditing ? 'Edit Session' : 'Create Session'}
+                        {isEditing ? 'Edit Raid Session' : 'Create Raid Session'}
                     </DialogTitle>
-                    <DialogDescription>
+                    {/* <DialogDescription>
                         Insert raid info and the initial raid composition
-                    </DialogDescription>
+                    </DialogDescription> */}
                     <SessionForm existingSession={existingSession} onSubmit={handleSubmit} />
                 </DialogContent>
             </DialogPortal>

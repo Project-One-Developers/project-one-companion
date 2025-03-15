@@ -29,9 +29,7 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
     const noneSelected = player.characters.every((char) => !selectedCharacters.includes(char.id))
     return (
         <div className="flex items-center justify-between">
-            <h3
-                className={clsx('font-bold text-lg', noneSelected ? 'text-gray-500' : 'text-white')}
-            >
+            <h3 className={clsx('font-bold ', noneSelected ? 'text-gray-800' : 'text-white')}>
                 {player.name}
             </h3>
             <div className="flex gap-x-1">
@@ -41,14 +39,14 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
                             wowClassName={char.class}
                             //charname={char.name}
                             className={clsx(
-                                'object-cover object-top rounded-md h-6 w-6 border border-background cursor-pointer transition-all duration-200',
+                                'object-cover object-top rounded-md h-5 w-5 border border-background cursor-pointer transition-all duration-200',
                                 selectedCharacters.includes(char.id)
                                     ? 'scale-110 ring-2 ring-blue-500'
                                     : 'hover:opacity-100 opacity-50 grayscale'
                             )}
                         />
                         {char.main ? (
-                            <div className="h-[1px] w-6 bg-white rounded-lg mt-2" />
+                            <div className="h-[1px] w-5 bg-white rounded-lg mt-2" />
                         ) : null}
                     </div>
                 ))}
