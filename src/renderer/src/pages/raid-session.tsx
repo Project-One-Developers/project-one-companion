@@ -8,6 +8,7 @@ import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { cloneRaidSession, fetchRaidSessionWithRoster } from '@renderer/lib/tanstack-query/raid'
 import { formaUnixTimestampToItalianDate } from '@shared/libs/date/date-utils'
+import { Character } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
     ArrowLeft,
@@ -22,6 +23,26 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+
+type CharacterIconProps = {
+    character: Character
+}
+
+export const CharacterIcon = ({ character }: CharacterIconProps) => {
+    return (
+        <div className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110">
+            <div>
+                <p className="text-[9px] mb-2">{character.name.slice(0, 4)}</p>
+            </div>
+            <WowClassIcon
+                wowClassName={character.class}
+                //charname={character.name}
+                className="h-8 w-8 border-2 border-background rounded-lg"
+            />
+            {character.main ? <div className="h-[2px] w-6 bg-white rounded-lg mt-2" /> : null}
+        </div>
+    )
+}
 
 export const RaidSessionPage = () => {
     const { raidSessionId } = useParams<{ raidSessionId: string }>()
@@ -143,19 +164,7 @@ export const RaidSessionPage = () => {
                     <div className="flex items-center space-x-2">
                         <div className="flex flex-wrap gap-2">
                             {tanks.map((character) => (
-                                <div
-                                    key={character.id}
-                                    className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
-                                >
-                                    <WowClassIcon
-                                        wowClassName={character.class}
-                                        charname={character.name}
-                                        className="h-8 w-8 border-2 border-background rounded-lg"
-                                    />
-                                    {character.main ? (
-                                        <div className="h-[3px] w-6 bg-white rounded-lg mt-2" />
-                                    ) : null}
-                                </div>
+                                <CharacterIcon key={character.id} character={character} />
                             ))}
 
                             <Separator.Root
@@ -165,20 +174,9 @@ export const RaidSessionPage = () => {
                             />
 
                             {healers.map((character) => (
-                                <div
-                                    key={character.id}
-                                    className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
-                                >
-                                    <WowClassIcon
-                                        wowClassName={character.class}
-                                        charname={character.name}
-                                        className="h-8 w-8 border-2 border-background rounded-lg"
-                                    />
-                                    {character.main ? (
-                                        <div className="h-[3px] w-6 bg-white rounded-lg mt-2" />
-                                    ) : null}
-                                </div>
+                                <CharacterIcon key={character.id} character={character} />
                             ))}
+
                             <Separator.Root
                                 className="h-8 mr-3 ml-3 w-[1px] bg-gray-400"
                                 decorative
@@ -186,19 +184,7 @@ export const RaidSessionPage = () => {
                             />
 
                             {dps.map((character) => (
-                                <div
-                                    key={character.id}
-                                    className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110"
-                                >
-                                    <WowClassIcon
-                                        wowClassName={character.class}
-                                        charname={character.name}
-                                        className="h-8 w-8 border-2 border-background rounded-lg"
-                                    />
-                                    {character.main ? (
-                                        <div className="h-[3px] w-6 bg-white rounded-lg mt-2" />
-                                    ) : null}
-                                </div>
+                                <CharacterIcon key={character.id} character={character} />
                             ))}
                         </div>
                     </div>
