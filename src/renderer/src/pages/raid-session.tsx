@@ -1,4 +1,3 @@
-import * as Separator from '@radix-ui/react-separator'
 import SessionDeleteDialog from '@renderer/components/session-delete-dialog'
 import RaidSessionDialog from '@renderer/components/session-dialog'
 import SessionLootNewDialog from '@renderer/components/session-loot-new-dialog'
@@ -90,14 +89,14 @@ export const RaidSessionPage = () => {
         .sort((a, b) => a.class.localeCompare(b.class))
 
     return (
-        <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 p-8 relative">
+        <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-5 p-8 relative">
             {/* Back to Raid Sessions */}
             <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4 hover:bg-gray-800">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back
             </Button>
 
             {/* Page Header */}
-            <div className="bg-muted rounded-lg p-6 mb-2 shadow-lg flex justify-between items-center">
+            <div className="bg-muted rounded-lg p-6 shadow-lg flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold mb-2 text-blue-400">{raidSession.name}</h1>
                     <div className="flex items-center text-gray-400">
@@ -160,33 +159,19 @@ export const RaidSessionPage = () => {
 
             {/* Roster Panel */}
             <div className="bg-muted p-6 rounded-lg shadow-md">
-                <div className="flex justify-between items-center w-full">
-                    <div className="flex items-center space-x-2">
-                        <div className="flex flex-wrap gap-2">
-                            {tanks.map((character) => (
-                                <CharacterIcon key={character.id} character={character} />
-                            ))}
-
-                            <Separator.Root
-                                className="h-8 mr-3 ml-3 w-[1px] bg-gray-400"
-                                decorative
-                                orientation="vertical"
-                            />
-
-                            {healers.map((character) => (
-                                <CharacterIcon key={character.id} character={character} />
-                            ))}
-
-                            <Separator.Root
-                                className="h-8 mr-3 ml-3 w-[1px] bg-gray-400"
-                                decorative
-                                orientation="vertical"
-                            />
-
-                            {dps.map((character) => (
-                                <CharacterIcon key={character.id} character={character} />
-                            ))}
-                        </div>
+                <div className="flex justify-between items-center">
+                    <div className="flex flex-wrap gap-x-10">
+                        {[
+                            { characters: tanks, label: 'Tanks' },
+                            { characters: healers, label: 'Healers' },
+                            { characters: dps, label: 'DPS' }
+                        ].map(({ characters }, index) => (
+                            <div key={index} className="flex gap-2">
+                                {characters.map((character) => (
+                                    <CharacterIcon key={character.id} character={character} />
+                                ))}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
