@@ -134,22 +134,25 @@ const BossPanel = ({
             {/* Boss items */}
             <div className="flex flex-col gap-y-3 p-6">
                 {bossHasDroptimizers ? (
-                    boss.items.filter(itemHasDroptimizers).map((item) => (
-                        <div
-                            key={item.id}
-                            className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer"
-                        >
-                            <WowItemIcon
-                                item={item}
-                                iconOnly={false}
-                                raidDiff={diff}
-                                tierBanner={true}
-                            />
-                            <div className="flex flex-row items-center gap-x-2">
-                                <DroptimizersForItem item={item} droptimizers={droptimizers} />
+                    boss.items
+                        .sort((a, b) => a.id - b.id)
+                        .filter(itemHasDroptimizers)
+                        .map((item) => (
+                            <div
+                                key={item.id}
+                                className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer"
+                            >
+                                <WowItemIcon
+                                    item={item}
+                                    iconOnly={false}
+                                    raidDiff={diff}
+                                    tierBanner={true}
+                                />
+                                <div className="flex flex-row items-center gap-x-2">
+                                    <DroptimizersForItem item={item} droptimizers={droptimizers} />
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        ))
                 ) : (
                     <p className="text-center text-sm text-gray-500">No upgrades available</p>
                 )}
@@ -165,7 +168,8 @@ export default function LootTable(): JSX.Element {
         onlyUpgrades: false,
         minUpgrade: 1000,
         hideOlderThanDays: false,
-        hideAlts: true, // todo: implement actual filter & create control in filter panel
+        hideAlts: true,
+        hideIfNoUpgrade: true,
         maxDays: 7,
         selectedArmorTypes: [],
         selectedSlots: [],
@@ -214,7 +218,7 @@ export default function LootTable(): JSX.Element {
                             boss={boss}
                             droptimizers={filteredDroptimizers}
                             diff={filter.selectedRaidDiff}
-                            hideItemsWithoutDropt={false}
+                            hideItemsWithoutDropt={filter.hideIfNoUpgrade}
                         />
                     ))}
             </div>

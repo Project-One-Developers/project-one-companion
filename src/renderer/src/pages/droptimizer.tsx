@@ -16,6 +16,7 @@ const DEFAULT_FILTER: LootFilter = {
     minUpgrade: 1000,
     hideOlderThanDays: false,
     hideAlts: true,
+    hideIfNoUpgrade: true,
     maxDays: 7,
     selectedArmorTypes: [],
     selectedSlots: [],

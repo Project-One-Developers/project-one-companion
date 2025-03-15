@@ -14,6 +14,7 @@ export type LootFilter = {
     minUpgrade: number
     hideOlderThanDays: boolean
     hideAlts: boolean
+    hideIfNoUpgrade: boolean
     maxDays: number
     selectedSlots: WowItemSlotKey[]
     selectedArmorTypes: WowArmorType[]
@@ -90,7 +91,6 @@ export function filterDroptimizer(
                     }
 
                     // armor type
-                    // todo: back is considered cloth.. why?
                     if (filter.selectedArmorTypes.length > 0) {
                         if (
                             upgrade.item.armorType == null ||
@@ -108,6 +108,8 @@ export function filterDroptimizer(
                 }
             })
             // finally remove empty droptimizers
-            .filter((dropt) => dropt.upgrades && dropt.upgrades.length > 0)
+            .filter(
+                (dropt) => !filter.hideIfNoUpgrade || (dropt.upgrades && dropt.upgrades.length > 0)
+            )
     )
 }

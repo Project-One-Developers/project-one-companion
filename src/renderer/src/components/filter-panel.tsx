@@ -141,19 +141,36 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                         />
                     </div>
 
-                    {/* Hide Alts*/}
+                    {/* Hide Alts / No upgrades*/}
                     <div className="flex flex-row items-center gap-3">
-                        <Checkbox
-                            id="hide-alts"
-                            checked={filter.hideAlts as CheckedState}
-                            onCheckedChange={(checked) => updateFilter('hideAlts', !!checked)}
-                            className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
-                        >
-                            {filter.hideAlts && <Check className="text-white w-4 h-4" />}
-                        </Checkbox>
-                        <label htmlFor="hide-alts" className="text-sm font-semibold">
-                            Hide alts
-                        </label>
+                        <div className="flex gap-3">
+                            <Checkbox
+                                id="hide-alts"
+                                checked={filter.hideAlts as CheckedState}
+                                onCheckedChange={(checked) => updateFilter('hideAlts', !!checked)}
+                                className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                            >
+                                {filter.hideAlts && <Check className="text-white w-4 h-4" />}
+                            </Checkbox>
+                            <label htmlFor="hide-alts" className="text-sm font-semibold">
+                                Hide alts
+                            </label>
+                        </div>
+                        <div className="flex gap-3">
+                            <Checkbox
+                                id="hide-no-upgrades"
+                                checked={filter.hideIfNoUpgrade as CheckedState}
+                                onCheckedChange={(checked) =>
+                                    updateFilter('hideIfNoUpgrade', !!checked)
+                                }
+                                className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                            >
+                                {filter.hideIfNoUpgrade && <Check className="text-white w-4 h-4" />}
+                            </Checkbox>
+                            <label htmlFor="hide-no-upgrades" className="text-sm font-semibold">
+                                Hide no upgrades
+                            </label>
+                        </div>
                     </div>
 
                     {/* Wow Class filter */}
