@@ -1,5 +1,6 @@
 import {
     Code2Icon,
+    FileSpreadsheet,
     LucideAccessibility,
     LucideCpu,
     LucideGauge,
@@ -84,6 +85,24 @@ const weakaurasItems = [
     }
 ]
 
+const spreadsheetItems = [
+    {
+        title: 'Split',
+        url: 'https://docs.google.com/spreadsheets/d/19eKRXiOP1IHGglSr89GCzdsFfff3ZKCAa6-ldEVrpVs/edit?gid=176460290#gid=176460290',
+        icon: FileSpreadsheet
+    },
+    {
+        title: 'Ulria PI/Tier',
+        url: 'https://docs.google.com/spreadsheets/d/1exJeu5eVe4bTmyg3WFx5PTxIWvDLi0j-WW-XWpGoG88/htmlview?gid=8138119#',
+        icon: FileSpreadsheet
+    },
+    {
+        title: 'WoW Audit',
+        url: 'https://docs.google.com/spreadsheets/d/1oXDiksY6UFl6QEW0cFqF0iuxUE3ZM3g5WrrCBIx4OTA/edit?gid=0#gid=0',
+        icon: FileSpreadsheet
+    }
+]
+
 export default function ProjectOneSidebar(): JSX.Element {
     const location = useLocation()
 
@@ -143,6 +162,26 @@ export default function ProjectOneSidebar(): JSX.Element {
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 {weakaurasItems.map((item) => (
+                                    <SidebarMenuItem
+                                        key={item.title}
+                                        className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
+                                    >
+                                        <SidebarMenuButton asChild>
+                                            <a href={item.url} rel="noreferrer" target="_blank">
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Spreadsheet</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {spreadsheetItems.map((item) => (
                                     <SidebarMenuItem
                                         key={item.title}
                                         className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
