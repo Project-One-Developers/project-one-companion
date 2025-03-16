@@ -74,7 +74,7 @@ export default function RaidSessionDialog({
         <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogPortal>
                 <DialogOverlay />
-                <DialogContent>
+                <DialogContent className="sm:max-w-[425px] min-w-[900px]">
                     <DialogTitle className="text-2xl font-bold mb-4">
                         {isEditing ? 'Edit Raid Session' : 'Create Raid Session'}
                     </DialogTitle>
