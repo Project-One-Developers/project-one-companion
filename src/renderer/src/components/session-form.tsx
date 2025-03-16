@@ -9,7 +9,16 @@ import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
 import { NewRaidSession, PlayerWithCharacters, RaidSessionWithRoster } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { LoaderCircle } from 'lucide-react'
+import {
+    Ban,
+    Brain,
+    Dumbbell,
+    LoaderCircle,
+    Radiation,
+    ShieldCheck,
+    Swords,
+    Users
+} from 'lucide-react'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -50,6 +59,104 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
                         ) : null}
                     </div>
                 ))}
+            </div>
+        </div>
+    )
+}
+
+const hasClass = (
+    roster: string[],
+    className: string,
+    availablePlayers: PlayerWithCharacters[]
+): boolean => {
+    // Check if any selected character belongs to the specified class
+    return roster.some((charId) => {
+        const character = availablePlayers.flatMap((p) => p.characters).find((c) => c.id === charId)
+        return character?.class === className
+    })
+}
+
+const calculateImmunities = (
+    roster: string[],
+    availablePlayers: PlayerWithCharacters[]
+): { name: string; count: number }[] => {
+    // Map classes to their respective immunities
+    const classImmunities: Record<string, string[]> = {
+        Hunter: ['Aspect of the Turtle'],
+        Mage: ['Ice Block'],
+        Paladin: ['Divine Shield'],
+        'Paladin (Protection)': ['Blessing of Spellwarding'],
+        Rogue: ['Cloak of Shadows']
+    }
+
+    // Object to store immunity counts
+    const immunityCounts: Record<string, number> = {}
+
+    // Iterate through selected characters and count their immunities
+    roster.forEach((charId) => {
+        const character = availablePlayers.flatMap((p) => p.characters).find((c) => c.id === charId)
+        if (character?.class && classImmunities[character.class]) {
+            classImmunities[character.class].forEach((immunity) => {
+                immunityCounts[immunity] = (immunityCounts[immunity] || 0) + 1
+            })
+        }
+    })
+
+    // Convert the immunity counts object into an array of objects
+    return Object.entries(immunityCounts).map(([name, count]) => ({ name, count }))
+}
+
+const RaidOverview: React.FC<{ roster: string[]; availablePlayers: PlayerWithCharacters[] }> = ({
+    roster,
+    availablePlayers
+}) => {
+    const buffs = [
+        { label: 'Attack Power', icon: <Dumbbell />, class: 'Warrior' },
+        { label: 'Stamina', icon: <ShieldCheck />, class: 'Priest' },
+        { label: 'Intellect', icon: <Brain />, class: 'Mage' },
+        { label: 'Chaos Brand', icon: <Radiation />, class: 'Demon Hunter' },
+        { label: 'Mystic Touch', icon: <Swords />, class: 'Monk' }
+    ]
+
+    const immunities = calculateImmunities(roster, availablePlayers)
+
+    return (
+        <div className="p-4  rounded-lg shadow-lg">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-blue-400" /> Raid Overview
+            </h3>
+            <div className="flex flex-col space-y-2 mt-2">
+                {/* Buffs Section */}
+                {buffs.map(({ label, icon, class: className }) => {
+                    const hasBuff = hasClass(roster, className, availablePlayers)
+                    return (
+                        <div
+                            key={label}
+                            className={`flex items-center gap-2 ${
+                                hasBuff ? 'text-white' : 'text-gray-500 opacity-50'
+                            }`}
+                        >
+                            {icon} {label}
+                        </div>
+                    )
+                })}
+            </div>
+            {/* Immunities Section */}
+            <div className="mt-8">
+                <h4 className="text-white font-semibold flex items-center gap-2">
+                    <Ban className="w-5 h-5 text-red-500" /> Immunities
+                </h4>
+                {immunities.length > 0 ? (
+                    <ul className="list-disc list-inside text-gray-300 mt-1">
+                        {immunities.map(({ name, count }) => (
+                            <li key={name}>
+                                {name} <span className="text-gray-400">({count})</span>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p className="text-gray-500 opacity-50">None</p>
+                )}
             </div>
         </div>
     )
@@ -130,7 +237,7 @@ const SessionForm: React.FC<{
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmitForm)} className="max-w-6xl mx-auto space-y-6">
+        <form onSubmit={handleSubmit(onSubmitForm)} className="w-full mx-auto space-y-6">
             <div className="flex space-x-4">
                 {['name', 'raidDate'].map((field) => (
                     <div key={field} className="flex-1">
@@ -149,7 +256,7 @@ const SessionForm: React.FC<{
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Controller
                     name="roster"
                     control={control}
@@ -203,6 +310,33 @@ const SessionForm: React.FC<{
                                         />
                                     ))}
                             </div>
+                            {/* Raid Overview */}
+                            <RaidOverview roster={field.value} availablePlayers={players} />
+                            {/* <div className="space-y-2 overflow-y-auto p-1">
+                                <h3 className="text-white font-bold">Raid Overview</h3>
+                                <p className="text-gray-300">
+                                    Roster: {field.value.length} players
+                                </p>
+                                <p className="text-gray-300">
+                                    Attack Power: {hasClass(field.value, 'Warrior') ? 'Yes' : 'No'}
+                                </p>
+                                <p className="text-gray-300">
+                                    Stamina: {hasClass(field.value, 'Priest') ? 'Yes' : 'No'}
+                                </p>
+                                <p className="text-gray-300">
+                                    Intellect: {hasClass(field.value, 'Mage') ? 'Yes' : 'No'}
+                                </p>
+                                <p className="text-gray-300">
+                                    Chaos Brand:{' '}
+                                    {hasClass(field.value, 'Demon Hunter') ? 'Yes' : 'No'}
+                                </p>
+                                <p className="text-gray-300">
+                                    Mystic Touch: {hasClass(field.value, 'Monk') ? 'Yes' : 'No'}
+                                </p>
+                                <p className="text-gray-300">
+                                    Immunities: {calculateImmunities(field.value)}
+                                </p>
+                            </div> */}
                         </>
                     )}
                 />
