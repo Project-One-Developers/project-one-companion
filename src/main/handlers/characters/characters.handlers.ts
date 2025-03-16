@@ -91,8 +91,12 @@ export const syncCharacterWowAudit = async (): Promise<void> => {
         const charsData = await parseWowAuditData(json)
 
         // if last sync is older than the last data in wowaudit
-        if (lastSyncInWowAudit && lastSyncInWowAudit <= charsData[0].wowauditLastModifiedUnixTs) {
-            console.log('[WowAudit] No Need to Sync')
+        if (!lastSyncInWowAudit || lastSyncInWowAudit <= charsData[0].wowauditLastModifiedUnixTs) {
+            console.log(
+                `[WowAudit] No Need to Sync - Last wowaudit sync ${formaUnixTimestampToItalianDate(
+                    charsData[0].wowauditLastModifiedUnixTs
+                )}`
+            )
             return
         }
 
