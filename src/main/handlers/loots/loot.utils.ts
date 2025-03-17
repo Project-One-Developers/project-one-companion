@@ -1,5 +1,5 @@
 import { CURRENT_SEASON, PROFESSION_TYPES } from '@shared/consts/wow.consts'
-import { getUnixTimestamp, isInCurrentWowWeek } from '@shared/libs/date/date-utils'
+import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import {
     applyAvoidance,
     applyDiffBonusId,
@@ -831,12 +831,12 @@ export const parseDroptimizersInfo = (
  */
 export const parseGreatVault = (droptimizers: Droptimizer[]): GearItem[] =>
     droptimizers
-        .filter((c) => c.weeklyChest.length > 0 && isInCurrentWowWeek(c.simInfo.date)) // keep vault of this wow reset
+        //.filter((c) => c.weeklyChest.length > 0 && isInCurrentWowWeek(c.simInfo.date)) // keep vault of this wow reset
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.weeklyChest ?? []
 
 export const parseCurrencies = (droptimizers: Droptimizer[]): DroptimizerCurrencies[] =>
     droptimizers
-        .filter((c) => c.currencies.length > 0)
+        //.filter((c) => c.currencies.length > 0)
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.currencies ?? []
 
 const calculateTiersetCompletion = (
