@@ -2,6 +2,7 @@ import SessionDeleteDialog from '@renderer/components/session-delete-dialog'
 import RaidSessionDialog from '@renderer/components/session-dialog'
 import SessionLootNewDialog from '@renderer/components/session-loot-new-dialog'
 import { SessionLootsPanel } from '@renderer/components/session-loots-panel'
+import SessionRosterImportDialog from '@renderer/components/session-roster-dialog'
 import { Button } from '@renderer/components/ui/button'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -50,6 +51,7 @@ export const RaidSessionPage = () => {
 
     // dialog
     const [isAddLootDialogOpen, setIsAddLootDialogOpen] = useState(false)
+    const [isImportRosterDialogOpen, setIsImportRosterDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
@@ -171,7 +173,22 @@ export const RaidSessionPage = () => {
                             </div>
                         ))}
                     </div>
+                    <div className="flex items-center gap-x-2">
+                        {/* Import roster by spreadsheet */}
+                        <Button
+                            variant="secondary"
+                            className="hover:bg-blue-700"
+                            onClick={() => setIsImportRosterDialogOpen(true)}
+                        >
+                            <PlusIcon className="mr-2 h-4 w-4" /> Import
+                        </Button>
+                    </div>
                 </div>
+                <SessionRosterImportDialog
+                    isOpen={isImportRosterDialogOpen}
+                    setOpen={setIsImportRosterDialogOpen}
+                    raidSession={raidSession}
+                />
             </div>
 
             {/* Looted items Panel */}

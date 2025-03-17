@@ -61,9 +61,7 @@ export const assignLoot = async (
     return await window.api.assignLoot(charId, lootId, highlights)
 }
 
-export const unassignLoot = async (
-    lootId: string,
-) => {
+export const unassignLoot = async (lootId: string) => {
     return await window.api.unassignLoot(lootId)
 }
 

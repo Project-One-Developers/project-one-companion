@@ -44,7 +44,8 @@ import {
     deleteRaidSessionHandler,
     editRaidSessionHandler,
     getRaidSessionWithRosterHandler,
-    getRaidSessionWithSummaryListHandler
+    getRaidSessionWithSummaryListHandler,
+    importRosterInRaidSessionHandler
 } from './raid-session/raid-session.handlers'
 import {
     getAppSettingsHandler,
@@ -85,6 +86,7 @@ export const allHandlers = {
     'raid-session-edit': editRaidSessionHandler,
     'raid-session-delete': deleteRaidSessionHandler,
     'raid-session-clone': cloneRaidSessionHandler,
+    'raid-session-roster-import': importRosterInRaidSessionHandler,
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
     'loots-add-mrt': addRaidLootsByMrtHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,

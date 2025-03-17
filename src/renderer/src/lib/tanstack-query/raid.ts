@@ -34,3 +34,13 @@ export const deleteRaidSession = async (id: string): Promise<void> => {
 export const cloneRaidSession = async (id: string): Promise<RaidSession> => {
     return await window.api.cloneRaidSession(id)
 }
+
+export const importRosterInRaidSession = async (
+    raidSessionId: string,
+    text: string
+): Promise<void> => {
+    if (!raidSessionId) {
+        throw new Error('No raid session id provided')
+    }
+    return await window.api.importRosterInRaidSession(raidSessionId, text)
+}

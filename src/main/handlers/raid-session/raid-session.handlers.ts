@@ -1,11 +1,13 @@
 import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import {
+    Character,
     EditRaidSession,
     NewRaidSession,
     RaidSession,
     RaidSessionWithRoster,
     RaidSessionWithSummary
 } from '@shared/types/types'
+import { getCharactersList } from '@storage/players/characters.storage'
 import {
     addRaidSession,
     deleteRaidSession,
@@ -53,4 +55,43 @@ export const cloneRaidSessionHandler = async (id: string): Promise<RaidSession> 
         roster: source.roster.map((r) => r.id)
     }
     return await addRaidSessionHandler(cloned)
+}
+
+export const importRosterInRaidSessionHandler = async (
+    raidSessionId: string,
+    csv: string
+): Promise<void> => {
+    const source = await getRaidSession(raidSessionId)
+    const allCharacters = await getCharactersList()
+
+    // parse csv: each line is a character name-server or character name
+    const roster: Character[] = csv
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+        .map((line) => {
+            const [name] = line.split('-')
+            const matches = allCharacters.filter((r) => r.name === name)
+
+            if (matches.length === 0) {
+                return undefined
+            } else if (matches.length === 1) {
+                return matches[0]
+            } else {
+                // multiple matches, prefer main
+                return matches.find((r) => r.main)
+            }
+        })
+        .filter((r) => r !== undefined)
+
+    console.log(csv)
+    console.log(roster)
+
+    const editedRaidSession: EditRaidSession = {
+        ...source,
+        roster: roster.map((r) => r.id)
+    }
+
+    // edit
+    await editRaidSession(editedRaidSession)
 }

@@ -105,6 +105,7 @@ export const api = {
         return ipcRenderer.invoke('boss-loot-table-get', raidId)
     },
     // Raid sessions
+
     addRaidSession(newSession: NewRaidSession): Promise<RaidSessionWithRoster> {
         return ipcRenderer.invoke('raid-session-add', newSession)
     },
@@ -122,6 +123,9 @@ export const api = {
     },
     cloneRaidSession(id: string): Promise<RaidSession> {
         return ipcRenderer.invoke('raid-session-clone', id)
+    },
+    importRosterInRaidSession(raidSessionId: string, csv: string): Promise<void> {
+        return ipcRenderer.invoke('raid-session-roster-import', raidSessionId, csv)
     },
     // Loots
     addLootsManual(raidSessionId: string, loots: NewLootManual[]): Promise<void> {
