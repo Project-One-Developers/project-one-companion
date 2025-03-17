@@ -123,7 +123,7 @@ const RaidOverview: React.FC<{ roster: string[]; availablePlayers: PlayerWithCha
     return (
         <div className="p-4  rounded-lg shadow-lg">
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-400" /> Raid Overview
+                <Users className="w-5 h-5 text-blue-400" /> {roster.length} Players
             </h3>
             <div className="flex flex-col space-y-2 mt-2">
                 {/* Buffs Section */}
