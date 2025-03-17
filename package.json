@@ -4,10 +4,10 @@
     "description": "Project One guild companion app",
     "main": "./out/main/index.js",
     "author": "Project One Devs",
-    "homepage": "https://github.com/zerbiniandrea/projectone-companion",
+    "homepage": "https://github.com/project-one-developers/project-one-companion",
     "repository": {
         "type": "git",
-        "url": "https://github.com/zerbiniandrea/projectone-companion.git"
+        "url": "https://github.com/project-one-developers/project-one-companion.git"
     },
     "scripts": {
         "format": "prettier \"**/*\" --write --ignore-unknown --cache",

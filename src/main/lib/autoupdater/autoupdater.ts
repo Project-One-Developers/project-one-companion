@@ -75,7 +75,7 @@ const initUpdater = (opts: UpdateOptions) => {
                         } else {
                             fileUrl = event.files[0].url
                         }
-                        const url = `https://github.com/zerbiniandrea/projectone-companion/releases/download/v${event.version}/${fileUrl}`
+                        const url = `https://github.com/project-one-developers/project-one-companion/releases/download/v${event.version}/${fileUrl}`
                         // download from browser
                         shell.openExternal(url)
                     } else {

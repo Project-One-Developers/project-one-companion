@@ -6,7 +6,7 @@ permissions:
 jobs:
   enable-auto-merge:
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'zerbiniandrea/projectone-companion' && github.event.pull_request.user.login == 'dependabot[bot]' }}
+    if: ${{ github.repository == 'project-one-developers/project-one-companion' && github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
       - name: Dependabot metadata
         id: dependabot-metadata
