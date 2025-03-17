@@ -137,16 +137,6 @@ export const RaidSessionPage = () => {
                     >
                         <Copy className="mr-2 h-4 w-4" /> Clone Session
                     </Button>
-                    {/* Go to loot assign */}
-                    <Button
-                        variant="secondary"
-                        className="hover:bg-blue-700"
-                        onClick={() => {
-                            navigate(`/assign?sessionId=${raidSession.id}`)
-                        }}
-                    >
-                        <LucideMedal className="mr-2 h-4 w-4" /> Assign Loot
-                    </Button>
                     {/* Delete Session */}
                     <Button
                         variant="destructive"
@@ -190,13 +180,26 @@ export const RaidSessionPage = () => {
                     <h2 className="text-xl font-semibold flex items-center text-yellow-400">
                         <ShoppingBag className="mr-2" /> Loots
                     </h2>
-                    <Button
-                        variant="outline"
-                        className="bg-primary text-background hover:bg-primary/80"
-                        onClick={() => setIsAddLootDialogOpen(true)}
-                    >
-                        <PlusIcon className="mr-2 h-4 w-4" /> Add Loot
-                    </Button>
+                    <div className="flex items-center gap-x-2">
+                        {/* Go to loot assign */}
+                        <Button
+                            variant="secondary"
+                            className="hover:bg-blue-700"
+                            onClick={() => {
+                                navigate(`/assign?sessionId=${raidSession.id}`)
+                            }}
+                        >
+                            <LucideMedal className="mr-2 h-4 w-4" /> Assign Loot
+                        </Button>
+                        {/* Add new loots */}
+                        <Button
+                            variant="secondary"
+                            className="hover:bg-blue-700"
+                            onClick={() => setIsAddLootDialogOpen(true)}
+                        >
+                            <PlusIcon className="mr-2 h-4 w-4" /> Add Loot
+                        </Button>
+                    </div>
                 </div>
                 <SessionLootsPanel raidSessionId={raidSession.id} />
             </div>
