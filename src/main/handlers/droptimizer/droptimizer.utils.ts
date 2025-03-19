@@ -182,6 +182,10 @@ export const convertJsonToDroptimizer = async (
     const itemsEquipped = await parseEquippedGear(data.simbot.meta.rawFormData.droptimizer.equipped)
     const itemsInBag = await parseBagGearsFromSimc(data.simbot.meta.rawFormData.text)
 
+    if (itemsInBag.length === 0) {
+        throw new Error('No items found in bags: ' + url)
+    }
+
     return {
         ak: `${raidId},${raidDiff},${charInfo.name},${charInfo.server},${charInfo.spec},${charInfo.class}`,
         url,
