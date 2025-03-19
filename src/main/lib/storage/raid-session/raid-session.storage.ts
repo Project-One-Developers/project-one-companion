@@ -154,14 +154,16 @@ export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<st
             throw new Error(errorMsg)
         }
 
-        const raidPartecipation = newRaidSession.roster.map(
-            (characterId): InferInsertModel<typeof raidSessionRosterTable> => ({
-                raidSessionId: res.id,
-                charId: characterId
-            })
-        )
+        if (newRaidSession.roster.length > 0) {
+            const raidPartecipation = newRaidSession.roster.map(
+                (characterId): InferInsertModel<typeof raidSessionRosterTable> => ({
+                    raidSessionId: res.id,
+                    charId: characterId
+                })
+            )
 
-        await tx.insert(raidSessionRosterTable).values(raidPartecipation)
+            await tx.insert(raidSessionRosterTable).values(raidPartecipation)
+        }
 
         return res.id
     })
