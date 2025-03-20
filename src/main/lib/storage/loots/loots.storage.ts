@@ -40,7 +40,10 @@ export const getLootAssigned = async (): Promise<Loot[]> => {
 export const getLootAssignedBySession = async (raidSessionId: string): Promise<Loot[]> => {
     const result = await db().query.lootTable.findMany({
         where: (lootTable, { eq, and, isNotNull }) =>
-            and(eq(lootTable.raidSessionId, raidSessionId), isNotNull(lootTable.raidSessionId))
+            and(
+                eq(lootTable.raidSessionId, raidSessionId),
+                isNotNull(lootTable.assignedCharacterId)
+            )
     })
     return z.array(lootSchema).parse(result)
 }
