@@ -155,7 +155,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
                         Add a new droptimizer manually or sync from Discord
                     </DialogDescription>
                 </DialogHeader>
-                <Tabs.Root defaultValue="manual" className="w-full">
+                <Tabs.Root defaultValue="sync" className="w-full">
                     <Tabs.List className="flex border-b mb-4">
                         <Tabs.Trigger
                             value="manual"
