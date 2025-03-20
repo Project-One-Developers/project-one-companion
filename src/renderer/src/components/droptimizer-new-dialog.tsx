@@ -193,11 +193,26 @@ export default function DroptimizerNewDialog(): JSX.Element {
                                 )}
                                 {syncMutation.isPending ? 'Syncing...' : 'Sync from Discord'}
                             </Button>
-                            <Input
-                                type="number"
-                                value={hoursValue}
-                                onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
-                            />
+                            <div className="flex items-center">
+                                <div className="relative w-24">
+                                    <Input
+                                        type="number"
+                                        id="hours-input"
+                                        min={1}
+                                        value={hoursValue}
+                                        onChange={(e) =>
+                                            setHoursValue(parseInt(e.target.value, 10))
+                                        }
+                                        className="pr-10"
+                                    />
+                                    <label
+                                        htmlFor="hours-input"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
+                                    >
+                                        hrs
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </Tabs.Content>
                     <Tabs.Content value="cleanup" className="p-4">
