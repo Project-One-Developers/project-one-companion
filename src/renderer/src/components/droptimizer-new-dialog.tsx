@@ -181,37 +181,41 @@ export default function DroptimizerNewDialog(): JSX.Element {
                     </Tabs.Content>
                     <Tabs.Content value="sync" className="p-4">
                         <div className="flex items-center gap-x-4">
-                            <Button
-                                onClick={handleSyncFromDiscord}
-                                className="w-full"
-                                disabled={syncMutation.isPending}
-                            >
-                                {syncMutation.isPending ? (
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                ) : (
-                                    <RefreshCw className="mr-2 h-4 w-4" />
-                                )}
-                                {syncMutation.isPending ? 'Syncing...' : 'Sync from Discord'}
-                            </Button>
-                            <div className="flex items-center">
-                                <div className="relative w-24">
-                                    <Input
-                                        type="number"
-                                        id="hours-input"
-                                        min={1}
-                                        value={hoursValue}
-                                        onChange={(e) =>
-                                            setHoursValue(parseInt(e.target.value, 10))
-                                        }
-                                        className="pr-10"
-                                    />
-                                    <label
-                                        htmlFor="hours-input"
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
-                                    >
-                                        hrs
-                                    </label>
-                                </div>
+                            <div className="flex-1">
+                                <Button
+                                    onClick={handleSyncFromDiscord}
+                                    className="w-full"
+                                    disabled={syncMutation.isPending}
+                                >
+                                    <div className="flex items-center justify-center w-full">
+                                        <div className="flex-none w-6 flex justify-start">
+                                            {syncMutation.isPending ? (
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                            ) : (
+                                                <RefreshCw className="h-4 w-4" />
+                                            )}
+                                        </div>
+                                        <div className="flex-grow text-center">
+                                            {syncMutation.isPending ? 'Syncing...' : 'Sync last'}
+                                        </div>
+                                    </div>
+                                </Button>
+                            </div>
+                            <div className="relative w-24">
+                                <Input
+                                    type="number"
+                                    id="sync-hours-input"
+                                    min={1}
+                                    value={hoursValue}
+                                    onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
+                                    className="pr-10"
+                                />
+                                <label
+                                    htmlFor="sync-hours-input"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
+                                >
+                                    hrs
+                                </label>
                             </div>
                         </div>
                     </Tabs.Content>
@@ -223,27 +227,33 @@ export default function DroptimizerNewDialog(): JSX.Element {
                                     disabled={cleanupMutation.isPending}
                                     className="w-full"
                                 >
-                                    {cleanupMutation.isPending ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : (
-                                        <Recycle className="mr-2 h-4 w-4" />
-                                    )}
-                                    {cleanupMutation.isPending
-                                        ? 'Cleaning up...'
-                                        : 'Cleanup older than'}
+                                    <div className="flex items-center justify-center w-full">
+                                        <div className="flex-none w-6 flex justify-start">
+                                            {cleanupMutation.isPending ? (
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                            ) : (
+                                                <Recycle className="h-4 w-4" />
+                                            )}
+                                        </div>
+                                        <div className="flex-grow text-center">
+                                            {cleanupMutation.isPending
+                                                ? 'Cleaning up...'
+                                                : 'Cleanup older than'}
+                                        </div>
+                                    </div>
                                 </Button>
                             </div>
                             <div className="relative w-24">
                                 <Input
                                     type="number"
-                                    id="hours-input"
+                                    id="cleanup-hours-input"
                                     min={1}
                                     value={hoursValue}
                                     onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
-                                    className="pr-12"
+                                    className="pr-10"
                                 />
                                 <label
-                                    htmlFor="hours-input"
+                                    htmlFor="cleanup-hours-input"
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
                                 >
                                     hrs
