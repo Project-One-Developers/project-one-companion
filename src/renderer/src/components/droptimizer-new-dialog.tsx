@@ -217,24 +217,38 @@ export default function DroptimizerNewDialog(): JSX.Element {
                     </Tabs.Content>
                     <Tabs.Content value="cleanup" className="p-4">
                         <div className="flex items-center gap-x-4">
-                            <Button
-                                onClick={() => handleCleanup()}
-                                disabled={cleanupMutation.isPending}
-                            >
-                                {cleanupMutation.isPending ? (
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                ) : (
-                                    <Recycle className="mr-2 h-4 w-4" />
-                                )}
-                                {cleanupMutation.isPending
-                                    ? 'Cleaning up...'
-                                    : 'Cleanup older than hours'}
-                            </Button>
-                            <Input
-                                type="number"
-                                value={hoursValue}
-                                onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
-                            />
+                            <div className="flex-1">
+                                <Button
+                                    onClick={() => handleCleanup()}
+                                    disabled={cleanupMutation.isPending}
+                                    className="w-full"
+                                >
+                                    {cleanupMutation.isPending ? (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    ) : (
+                                        <Recycle className="mr-2 h-4 w-4" />
+                                    )}
+                                    {cleanupMutation.isPending
+                                        ? 'Cleaning up...'
+                                        : 'Cleanup older than'}
+                                </Button>
+                            </div>
+                            <div className="relative w-24">
+                                <Input
+                                    type="number"
+                                    id="hours-input"
+                                    min={1}
+                                    value={hoursValue}
+                                    onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
+                                    className="pr-12"
+                                />
+                                <label
+                                    htmlFor="hours-input"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
+                                >
+                                    hrs
+                                </label>
+                            </div>
                         </div>
                     </Tabs.Content>
                 </Tabs.Root>
