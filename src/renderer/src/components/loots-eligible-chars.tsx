@@ -5,9 +5,9 @@ import { assignLoot, getLootAssignmentInfo, unassignLoot } from '@renderer/lib/t
 import { getDpsHumanReadable } from '@renderer/lib/utils'
 import { ITEM_SLOTS_KEY_TIERSET } from '@shared/consts/wow.consts'
 import { isHealerItem, isTankItem } from '@shared/libs/spec-parser/spec-utils'
+import { tierSetBonusSchema } from '@shared/schemas/wow.schemas'
 import {
     DroptimizerWarn,
-    TierSetBonus,
     type CharAssignmentHighlights,
     type CharAssignmentInfo,
     type LootWithAssigned
@@ -319,13 +319,13 @@ export default function LootsEligibleChars({
                                         ) : null}
 
                                         {charInfo.highlights.lootEnableTiersetBonus ===
-                                            TierSetBonus.TwoPiece && (
+                                            tierSetBonusSchema.Values['2p'] && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 2P
                                             </span>
                                         )}
                                         {charInfo.highlights.lootEnableTiersetBonus ===
-                                            TierSetBonus.FourPiece && (
+                                            tierSetBonusSchema.Values['4p'] && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 4P
                                             </span>

@@ -2,14 +2,15 @@ import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import {
     BossWithItems,
+    Character,
     EditRaidSession,
-    Loot,
+    LootWithAssigned,
     NewRaidSession,
     RaidSession,
     RaidSessionWithRoster,
     RaidSessionWithSummary
 } from '@shared/types/types'
-import { getLootAssignedBySession } from '@storage/loots/loots.storage'
+import { getLootsByRaidSessionIdWithAssigned } from '@storage/loots/loots.storage'
 import { getCharactersList } from '@storage/players/characters.storage'
 import {
     addRaidSession,
@@ -95,11 +96,14 @@ export const importRosterInRaidSessionHandler = async (
         ...source,
         roster: roster.map((r) => r.id)
     }
+
+    // edit
+    await editRaidSession(editedRaidSession)
 }
 
 export const getRaidSessionStatistics = async (raidSessionId: string): Promise<void> => {
-    const loots: Loot[] = await getLootAssignedBySession(raidSessionId)
-    const allCharacters = await getCharactersList()
+    const loots: LootWithAssigned[] = await getLootsByRaidSessionIdWithAssigned(raidSessionId)
+    //const allCharacters = await getCharactersList()
     const raidLootTable: BossWithItems[] = await getRaidLootTableHandler(CURRENT_RAID_ID)
 
     raidLootTable.forEach((boss) => {

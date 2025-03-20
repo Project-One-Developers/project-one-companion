@@ -8,6 +8,7 @@ import {
     itemTrackSchema
 } from '@shared/schemas/items.schema'
 import {
+    charAssignmentHighlightsSchema,
     lootSchema,
     lootWithAssignedSchema,
     lootWithItemSchema,
@@ -44,6 +45,7 @@ import {
     raidbotsURLSchema
 } from '../schemas/simulations.schemas'
 import {
+    tierSetBonusSchema,
     wowArmorTypeSchema,
     wowClassNameSchema,
     wowItemEquippedSlotKeySchema,
@@ -138,12 +140,6 @@ export enum TierSetCompletion {
     FivePiece = 5
 }
 
-export enum TierSetBonus {
-    None = 'none',
-    TwoPiece = '2p',
-    FourPiece = '4p'
-}
-
 export enum DroptimizerWarn {
     None = 'none',
     Outdated = 'outdated',
@@ -166,16 +162,9 @@ export type CharacterSummary = {
     warnWowAudit: WowAuditWarn
 }
 
-export type CharAssignmentHighlights = {
-    isMain: boolean
-    dpsGain: number
-    lootEnableTiersetBonus: TierSetBonus
-    ilvlDiff: number
-    gearIsBis: boolean
-    alreadyGotIt: boolean
-    score: number
-    isTrackUpgrade: boolean
-}
+export type TierSetBonus = z.infer<typeof tierSetBonusSchema>
+export type CharAssignmentHighlights = z.infer<typeof charAssignmentHighlightsSchema>
+
 export type CharAssignmentInfo = {
     character: Character
     droptimizers: {

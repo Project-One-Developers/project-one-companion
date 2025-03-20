@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { characterSchema } from './characters.schemas'
 import { gearItemSchema, itemSchema } from './items.schema'
 import { raidSessionWithRosterSchema } from './raid.schemas'
-import { wowRaidDiffSchema } from './wow.schemas'
+import { tierSetBonusSchema, wowRaidDiffSchema } from './wow.schemas'
 
 export const newLootSchema = z.object({
     gearItem: gearItemSchema,
@@ -38,9 +38,20 @@ export const lootWithItemSchema = lootSchema.extend({
     item: itemSchema
 })
 
+export const charAssignmentHighlightsSchema = z.object({
+    isMain: z.boolean(),
+    dpsGain: z.number(),
+    lootEnableTiersetBonus: tierSetBonusSchema,
+    ilvlDiff: z.number(),
+    gearIsBis: z.boolean(),
+    alreadyGotIt: z.boolean(),
+    score: z.number(),
+    isTrackUpgrade: z.boolean()
+})
+
 export const lootWithAssignedSchema = lootSchema.extend({
     assignedCharacter: characterSchema.nullable(),
-    highlights: CharAssignmentHighlights
+    assignedHighlights: charAssignmentHighlightsSchema.nullable()
 })
 
 export const newLootsFromManualInputSchema = z

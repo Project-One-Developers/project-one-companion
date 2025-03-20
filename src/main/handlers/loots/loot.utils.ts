@@ -17,6 +17,7 @@ import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
 import { getClassSpecsForRole } from '@shared/libs/spec-parser/spec-utils'
 import { newLootSchema } from '@shared/schemas/loot.schema'
+import { tierSetBonusSchema } from '@shared/schemas/wow.schemas'
 import {
     BisList,
     Character,
@@ -843,18 +844,18 @@ const calculateTiersetCompletion = (
     loot: LootWithItem,
     currentTierset: GearItem[]
 ): TierSetBonus => {
-    if (!loot.item.token) return TierSetBonus.None
+    if (!loot.item.token) return tierSetBonusSchema.Enum.none
 
     const isValidSlot =
         loot.item.slotKey === 'omni' ||
         !currentTierset.some((t) => t.item.slotKey === loot.item.slotKey)
 
-    if (!isValidSlot) return TierSetBonus.None
+    if (!isValidSlot) return tierSetBonusSchema.Enum.none
 
     return match<number, TierSetBonus>(currentTierset.length)
-        .with(1, () => TierSetBonus.TwoPiece)
-        .with(3, () => TierSetBonus.FourPiece)
-        .otherwise(() => TierSetBonus.None)
+        .with(1, () => tierSetBonusSchema.Enum['2p'])
+        .with(3, () => tierSetBonusSchema.Enum['4p'])
+        .otherwise(() => tierSetBonusSchema.Enum.none)
 }
 
 export const evalHighlightsAndScore = (
@@ -914,8 +915,8 @@ export const evalScore = (
     const bonusBisScore = gearIsBis ? 1 : 0
 
     const tierSetMultiplier = match(lootEnableTiersetBonus)
-        .with(TierSetBonus.FourPiece, () => 4)
-        .with(TierSetBonus.TwoPiece, () => 2)
+        .with(tierSetBonusSchema.Enum['4p'], () => 4)
+        .with(tierSetBonusSchema.Enum['2p'], () => 2)
         .otherwise(() => 1)
 
     const trackMultiplier = isTrackUpgrade ? 1.1 : 1

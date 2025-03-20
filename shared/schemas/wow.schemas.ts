@@ -109,6 +109,8 @@ export const wowItemTrackNameSchema = z.enum([
     'Myth'
 ])
 
+export const tierSetBonusSchema = z.enum(['none', '2p', '4p'])
+
 export const wowItemTertiaryStatsSchema = z.enum(['Speed', 'Leech', 'Avoidance', 'Indestructible'])
 
 export const wowRoleClassSchema = z.object({
