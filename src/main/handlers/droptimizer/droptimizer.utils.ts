@@ -130,20 +130,13 @@ const parseUpgrades = async (
 }
 
 const parseTiersets = async (equipped: GearItem[], bags: GearItem[]): Promise<GearItem[]> => {
-    const res: GearItem[] = []
     const tiersetItems = await getTiersetAndTokenList()
 
-    const checkAndAddItem = (item: GearItem) => {
-        const match = tiersetItems.find((t) => t.id === item.item.id)
-        if (match != null) {
-            res.push(item)
-        }
-    }
-
-    equipped.forEach(checkAndAddItem)
-    bags.forEach(checkAndAddItem)
-
-    return res
+    const tiersetItemIds = new Set(tiersetItems.map(item => item.id));
+    
+    const allItems = [...equipped, ...bags];
+    
+    return allItems.filter(item => tiersetItemIds.has(item.item.id));
 }
 
 export const convertJsonToDroptimizer = async (
