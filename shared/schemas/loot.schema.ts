@@ -39,7 +39,8 @@ export const lootWithItemSchema = lootSchema.extend({
 })
 
 export const lootWithAssignedSchema = lootSchema.extend({
-    assignedCharacter: characterSchema.nullable()
+    assignedCharacter: characterSchema.nullable(),
+    highlights: CharAssignmentHighlights
 })
 
 export const newLootsFromManualInputSchema = z

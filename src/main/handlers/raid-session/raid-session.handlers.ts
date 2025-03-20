@@ -1,12 +1,15 @@
+import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import {
-    Character,
+    BossWithItems,
     EditRaidSession,
+    Loot,
     NewRaidSession,
     RaidSession,
     RaidSessionWithRoster,
     RaidSessionWithSummary
 } from '@shared/types/types'
+import { getLootAssignedBySession } from '@storage/loots/loots.storage'
 import { getCharactersList } from '@storage/players/characters.storage'
 import {
     addRaidSession,
@@ -17,6 +20,7 @@ import {
     getRaidSessionWithSummaryList
 } from '@storage/raid-session/raid-session.storage'
 import { newUUID } from '@utils'
+import { getRaidLootTableHandler } from '../bosses/bosses.handlers'
 
 export const getRaidSessionWithRosterHandler = async (
     id: string
@@ -91,7 +95,19 @@ export const importRosterInRaidSessionHandler = async (
         ...source,
         roster: roster.map((r) => r.id)
     }
+}
 
-    // edit
-    await editRaidSession(editedRaidSession)
+export const getRaidSessionStatistics = async (raidSessionId: string): Promise<void> => {
+    const loots: Loot[] = await getLootAssignedBySession(raidSessionId)
+    const allCharacters = await getCharactersList()
+    const raidLootTable: BossWithItems[] = await getRaidLootTableHandler(CURRENT_RAID_ID)
+
+    raidLootTable.forEach((boss) => {
+        const bossItemsIds = boss.items.map((i) => i.id)
+        const bossLoots = loots.filter((l) => bossItemsIds.includes(l.itemId))
+
+        console.log('Boss:', boss.name)
+        console.log('Total:', bossLoots.length)
+        console.log('---')
+    })
 }
