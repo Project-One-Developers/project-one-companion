@@ -11,6 +11,7 @@ import { store } from './app/store'
 import { setZodErrorMap } from './config/zod'
 import { allHandlers } from './handlers'
 import { checkWowAuditUpdates } from './handlers/characters/characters.handlers'
+import { syncDroptimizersFromDiscord } from './handlers/droptimizer/droptimizer.handlers'
 import { registerHandlers } from './handlers/handlers.utils'
 import { updateElectronApp } from './lib/autoupdater/autoupdater'
 
@@ -111,8 +112,8 @@ async function initializeP1Companion() {
     // BE Handlers
     registerHandlers(allHandlers)
 
-    // Check for wowaudit updates
-    await checkWowAuditUpdates()
+    // sync wowaudit and discord droptimizers
+    await Promise.all([checkWowAuditUpdates(), syncDroptimizersFromDiscord(12)])
 }
 
 // This method will be called when Electron has finished
