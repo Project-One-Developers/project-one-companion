@@ -206,7 +206,7 @@ export const RaidSessionPage = () => {
                                 navigate(`/assign?sessionId=${raidSession.id}`)
                             }}
                         >
-                            <LucideMedal className="mr-2 h-4 w-4" /> Assign Loot
+                            <LucideMedal className="mr-2 h-4 w-4" /> Assign
                         </Button>
                         {/* Add new loots */}
                         <Button
@@ -214,7 +214,7 @@ export const RaidSessionPage = () => {
                             className="hover:bg-blue-700"
                             onClick={() => setIsAddLootDialogOpen(true)}
                         >
-                            <PlusIcon className="mr-2 h-4 w-4" /> Add Loot
+                            <PlusIcon className="mr-2 h-4 w-4" /> Add
                         </Button>
                     </div>
                 </div>

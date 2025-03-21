@@ -19,12 +19,12 @@ import { LoaderCircle } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
 
 // Custom hooks
-export const useRaidData = (currentRaid: number) => {
+const useRaidData = (currentRaid: number) => {
     const droptimizerRes = useQuery({
         queryKey: [queryKeys.droptimizers],
         queryFn: fetchLatestDroptimizers
     })
-    const itemRes = useQuery({
+    const raidLootTable = useQuery({
         queryKey: [queryKeys.raidLootTable, currentRaid],
         queryFn: () => fetchRaidLootTable(currentRaid)
     })
@@ -36,8 +36,8 @@ export const useRaidData = (currentRaid: number) => {
     return {
         droptimizers: droptimizerRes.data ?? [],
         droptimizersIsLoading: droptimizerRes.isLoading,
-        encounterList: itemRes.data ?? [],
-        encounterListIsLoading: itemRes.isLoading,
+        raidLootTable: raidLootTable.data ?? [],
+        raidLootTableIsLoading: raidLootTable.isLoading,
         charList: charRes.data ?? [],
         charIsLoading: charRes.isLoading
     }
@@ -181,8 +181,8 @@ export default function LootTable(): JSX.Element {
     const {
         droptimizers,
         droptimizersIsLoading,
-        encounterList,
-        encounterListIsLoading,
+        raidLootTable: encounterList,
+        raidLootTableIsLoading: encounterListIsLoading,
         charList,
         charIsLoading
     } = useRaidData(CURRENT_RAID_ID)

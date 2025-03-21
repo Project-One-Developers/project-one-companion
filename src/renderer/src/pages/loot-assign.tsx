@@ -9,16 +9,17 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@renderer/components/ui/dropdown-menu'
+import { generateLootFilename, prepareLootData, prepareStatsData } from '@renderer/lib/loots-utils'
+import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getLootsWithAssignedBySessions } from '@renderer/lib/tanstack-query/loots'
 import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { DownloadIcon, Eye, LoaderCircle, MoreVertical, ZapIcon } from 'lucide-react'
+import { BarChart, DownloadIcon, Eye, LoaderCircle, MoreVertical, ZapIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useRaidData } from './loot-table'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
@@ -28,7 +29,10 @@ export default function LootAssign() {
     const [searchParams] = useSearchParams()
     const defaultSessionId = searchParams.get('sessionId')
 
-    const { encounterList } = useRaidData(CURRENT_RAID_ID)
+    const raidLootTable = useQuery({
+        queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
+        queryFn: () => fetchRaidLootTable(CURRENT_RAID_ID)
+    })
 
     const toggleSession = (sessionId: string) => {
         const newSelectedSessions = new Set(selectedSessions)
@@ -132,44 +136,25 @@ export default function LootAssign() {
                             <DropdownMenuItem className="cursor-pointer flex items-center gap-2">
                                 <DownloadIcon className="h-4 w-4" />
                                 <DownloadCSV
-                                    filename={
-                                        sortedSessions
-                                            .filter((s) =>
-                                                Array.from(selectedSessions).includes(s.id)
-                                            )
-                                            .map((s) => s.name)
-                                            .join('-') + '-loots.csv'
-                                    }
-                                    data={loots
-                                        .filter((loot) => loot.assignedCharacter !== null)
-                                        .map((loot) => ({
-                                            Difficoltà: loot.raidDifficulty ?? '',
-                                            Boss:
-                                                encounterList
-                                                    .find((boss) =>
-                                                        boss.items.find(
-                                                            (item) =>
-                                                                item.id === loot.gearItem.item.id
-                                                        )
-                                                    )
-                                                    ?.name.replaceAll(',', ' ') ?? '',
-                                            Item: loot.gearItem.item.name ?? '',
-                                            Livello: loot.gearItem.itemLevel ?? '',
-                                            Slot:
-                                                loot.gearItem.item.slotKey
-                                                    .replaceAll('_', ' ')
-                                                    .replace(/\b\w/g, (char) =>
-                                                        char.toUpperCase()
-                                                    ) ?? '',
-                                            Character: loot.assignedCharacter?.name ?? ''
-                                        }))
-                                        .sort((a, b) => {
-                                            if (a.Character < b.Character) return -1
-                                            if (a.Character > b.Character) return 1
-                                            if (a.Difficoltà < b.Difficoltà) return -1
-                                            if (a.Difficoltà > b.Difficoltà) return 1
-                                            return 0
-                                        })}
+                                    title="Export Loots CSV"
+                                    filename={generateLootFilename(
+                                        sortedSessions,
+                                        selectedSessions,
+                                        'loots'
+                                    )}
+                                    data={prepareLootData(loots, raidLootTable.data ?? [])}
+                                />
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer flex items-center gap-2">
+                                <BarChart className="h-4 w-4" />
+                                <DownloadCSV
+                                    title="Export Statistics"
+                                    filename={generateLootFilename(
+                                        sortedSessions,
+                                        selectedSessions,
+                                        'stats'
+                                    )}
+                                    data={prepareStatsData(loots, raidLootTable.data ?? [])}
                                 />
                             </DropdownMenuItem>
                         </DropdownMenuContent>

@@ -20,10 +20,11 @@ const downloadCSV = (data: DataItem[], filename: string = 'data.csv'): void => {
 }
 
 interface DownloadCSVProps {
+    title: string
     filename?: string
     data: DataItem[]
 }
 
-export default function DownloadCSV({ data, filename }: DownloadCSVProps) {
-    return <div onClick={() => downloadCSV(data, filename)}>Export CSV</div>
+export default function DownloadCSV({ title, data, filename }: DownloadCSVProps) {
+    return <div onClick={() => downloadCSV(data, filename)}>{title}</div>
 }
