@@ -35,7 +35,7 @@ export default function SettingsPage() {
                 description: 'Settings updated successfully.'
             })
         },
-        onError: (error) => {
+        onError: error => {
             toast({
                 title: 'Update Failed',
                 description: `Failed to update config: ${error.message}`,
@@ -89,7 +89,7 @@ export default function SettingsPage() {
             .then(() =>
                 toast({ title: 'Settings Reset', description: 'Reverted to factory defaults.' })
             )
-            .catch((error) =>
+            .catch(error =>
                 toast({ title: 'Reset Failed', description: error.message, variant: 'destructive' })
             )
             .finally(() => setIsResetting(false))
@@ -111,7 +111,7 @@ export default function SettingsPage() {
                 <Input
                     type="text"
                     value={databaseUrl}
-                    onChange={(e) => setDatabaseUrl(e.target.value)}
+                    onChange={e => setDatabaseUrl(e.target.value)}
                     placeholder="postgresql://username:password@server:5432/dbname"
                 />
                 <Button

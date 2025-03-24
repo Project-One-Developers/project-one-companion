@@ -20,7 +20,7 @@ export const updateItemBisSpec = async (itemId: number, specIds: number[]): Prom
     await db().delete(bisListTable).where(eq(bisListTable.itemId, itemId))
 
     if (specIds.length > 0) {
-        const values = specIds.map((spec) => ({
+        const values = specIds.map(spec => ({
             id: newUUID(),
             specId: spec,
             itemId: itemId

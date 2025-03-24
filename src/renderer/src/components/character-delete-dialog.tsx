@@ -36,7 +36,7 @@ export default function CharacterDeleteDialog({
             queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
             navigate(`/roster`) // go to roster page
         },
-        onError: (error) => {
+        onError: error => {
             toast({
                 title: 'Error',
                 description: `Unable to delete the character. Error: ${error.message}`

@@ -53,7 +53,7 @@ export const parseWowAuditData = async (jsonData: unknown): Promise<NewCharacter
     itemsInDb = await getItems()
 
     // we skip header
-    const res = jsonData.slice(1).map((jsonData) => {
+    const res = jsonData.slice(1).map(jsonData => {
         const className: WowClassName = wowClassNameSchema.parse(jsonData[1])
         const wowAuditChar = {
             wowauditLastModifiedUnixTs: wowAuditLastRefreshunixTimestamp, //  when wowaudit refreshed its internal data "2025-01-20 07:27:12 +0100"
@@ -458,7 +458,7 @@ function createTiersetGearPiece(
     if (!className || !ilvl || !itemsInDb || !slotKey || !diff) return null
 
     const wowItem = itemsInDb.find(
-        (i) =>
+        i =>
             i.tierset === true &&
             i.slotKey === slotKey &&
             i.classes?.includes(className) &&
@@ -508,7 +508,7 @@ function createGearPiece(
     equippedInSlot: WowItemEquippedSlotKey | null
 ): GearItem | null {
     if (!itemId || !ilvl || !itemsInDb) return null
-    const wowItem = itemsInDb.find((i) => i.id === itemId)
+    const wowItem = itemsInDb.find(i => i.id === itemId)
     if (wowItem == null) {
         console.log(
             'wowaudit.createGearPiece: skipping equipped item not in db: ' +

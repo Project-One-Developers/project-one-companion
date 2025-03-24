@@ -12,7 +12,7 @@ export function formatUnixTimestampToRelativeDays(unixTimestamp: number): string
     return match(diffDays)
         .with(0, () => 'Today')
         .with(1, () => 'Yesterday')
-        .otherwise((days) => `${days} days ago`)
+        .otherwise(days => `${days} days ago`)
 }
 
 /**

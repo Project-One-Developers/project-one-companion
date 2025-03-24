@@ -63,7 +63,7 @@ export const RaidSessionPage = () => {
 
     const cloneSessionMutation = useMutation({
         mutationFn: (id: string) => cloneRaidSession(id),
-        onSuccess: (clonedSession) => {
+        onSuccess: clonedSession => {
             navigate(`/raid-session/${clonedSession.id}`)
         }
     })
@@ -80,15 +80,15 @@ export const RaidSessionPage = () => {
 
     // prepare data
     const tanks = raidSession.roster
-        .filter((character) => character.role === 'Tank')
+        .filter(character => character.role === 'Tank')
         .sort((a, b) => a.class.localeCompare(b.class))
 
     const healers = raidSession.roster
-        .filter((character) => character.role === 'Healer')
+        .filter(character => character.role === 'Healer')
         .sort((a, b) => a.class.localeCompare(b.class))
 
     const dps = raidSession.roster
-        .filter((character) => character.role === 'DPS')
+        .filter(character => character.role === 'DPS')
         .sort((a, b) => a.class.localeCompare(b.class))
 
     return (
@@ -167,7 +167,7 @@ export const RaidSessionPage = () => {
                             { characters: dps, label: 'DPS' }
                         ].map(({ characters }, index) => (
                             <div key={index} className="flex gap-2">
-                                {characters.map((character) => (
+                                {characters.map(character => (
                                     <CharacterIcon key={character.id} character={character} />
                                 ))}
                             </div>

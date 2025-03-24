@@ -143,25 +143,25 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         ])
 
     const filteredRoster = roster.filter(
-        (character) =>
+        character =>
             loot.charsEligibility.includes(character.id) &&
             (loot.item.classes == null || loot.item.classes.includes(character.class))
     )
 
     const maxGainFromAllDroptimizers = Math.max(
-        ...latestDroptimizer.flatMap((item) => item.upgrades.map((upgrade) => upgrade.dps))
+        ...latestDroptimizer.flatMap(item => item.upgrades.map(upgrade => upgrade.dps))
     )
 
     const charAssignmentInfo: CharAssignmentInfo[] = await Promise.all(
-        filteredRoster.map(async (char) => {
+        filteredRoster.map(async char => {
             // get latest droptimizers for a given chars
             const charDroptimizers = latestDroptimizer.filter(
-                (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
+                dropt => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
             )
 
             const charWowAudit: CharacterWowAudit | null =
                 wowAuditData.find(
-                    (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
+                    wowaudit => wowaudit.name === char.name && wowaudit.realm === char.realm
                 ) ?? null
 
             // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
@@ -171,7 +171,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
             const charAssignedLoots = !lowerBound
                 ? []
                 : allAssignedLoots.filter(
-                      (l) =>
+                      l =>
                           l.id !== loot.id && // we dont want to take in consideration this loot if already assigned to me
                           l.assignedCharacterId === char.id &&
                           l.dropDate > lowerBound

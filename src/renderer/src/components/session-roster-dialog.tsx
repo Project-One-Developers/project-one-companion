@@ -29,7 +29,7 @@ export default function SessionRosterImportDialog({
             setOpen(false)
             toast({ title: 'Roster imported', description: 'Roster successfully imported.' })
         },
-        onError: (error) => {
+        onError: error => {
             toast({ title: 'Error', description: `Failed to import Roster. ${error.message}` })
         }
     })
@@ -46,7 +46,7 @@ export default function SessionRosterImportDialog({
                 </DialogHeader>
                 <Textarea
                     value={rosterData}
-                    onChange={(e) => setRosterData(e.target.value)}
+                    onChange={e => setRosterData(e.target.value)}
                     placeholder="Paste Roster data here..."
                     rows={20}
                     spellCheck="false"

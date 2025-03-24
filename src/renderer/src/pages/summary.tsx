@@ -34,7 +34,7 @@ export default function SummaryPage(): JSX.Element {
     const filteredPlayers = useMemo(() => {
         if (!characterQuery.data) return []
         return characterQuery.data
-            .filter((summary) => {
+            .filter(summary => {
                 const isMain = summary.character.main
                 const playerMatches = summary.character.name
                     .toLowerCase()
@@ -61,7 +61,7 @@ export default function SummaryPage(): JSX.Element {
                     type="text"
                     placeholder="Search players or characters..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md"
                 />
             </div>
@@ -78,7 +78,7 @@ export default function SummaryPage(): JSX.Element {
                     </TableRow>
                 </TableHeader>
                 <TableBody className="">
-                    {filteredPlayers.map((summary) => {
+                    {filteredPlayers.map(summary => {
                         return (
                             <TableRow key={summary.character.id} className={` hover:bg-gray-700 `}>
                                 <TableCell className="p-1 rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
@@ -126,7 +126,7 @@ export default function SummaryPage(): JSX.Element {
                                 </TableCell>
                                 <TableCell className="rounded-r-md">
                                     <div className="flex space-x-1">
-                                        {summary.weeklyChest.map((gear) => (
+                                        {summary.weeklyChest.map(gear => (
                                             <WowGearIcon key={gear.item.id} gearItem={gear} />
                                         ))}
                                     </div>
@@ -135,7 +135,7 @@ export default function SummaryPage(): JSX.Element {
                                     <div className="flex space-x-1">
                                         {summary.currencies
                                             .sort((a, b) => a.id - b.id)
-                                            .map((currency) => (
+                                            .map(currency => (
                                                 <WowCurrencyIcon
                                                     key={currency.id}
                                                     currency={currency}

@@ -60,8 +60,8 @@ export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> 
 
     const uniqueUrls = new Set(
         messages
-            .filter((msg) => msg.createdAt >= lowerBoundDate) // filter out messages older than lowerBoundDate
-            .flatMap((message) => {
+            .filter(msg => msg.createdAt >= lowerBoundDate) // filter out messages older than lowerBoundDate
+            .flatMap(message => {
                 const matches = message.content.match(raidbotsUrlRegex)
                 return matches ? matches : []
             })
@@ -75,7 +75,7 @@ export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> 
     const limit = pLimit(5)
 
     await Promise.all(
-        Array.from(uniqueUrls).map((url) =>
+        Array.from(uniqueUrls).map(url =>
             limit(async () => {
                 try {
                     const droptimizer = await getDroptimizerFromURL(url)

@@ -71,7 +71,7 @@ export const getDroptimizerLatestList = async (): Promise<Droptimizer[]> => {
         `
     )
 
-    const urls = latestDroptimizers.map((row) => row.url)
+    const urls = latestDroptimizers.map(row => row.url)
 
     return getDroptimizerByIdsList(urls)
 }
@@ -129,7 +129,7 @@ export const getDroptimizerLastByChar = async (
 }
 
 export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Droptimizer> => {
-    const droptimizerId = await db().transaction(async (tx) => {
+    const droptimizerId = await db().transaction(async tx => {
         // se è già stato importato, per ora sovrascrivo poi vedremo
         //await tx.delete(droptimizerTable).where(eq(droptimizerTable.url, droptimizer.url))
 

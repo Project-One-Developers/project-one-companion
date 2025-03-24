@@ -30,7 +30,7 @@ export const AnimatedTooltip = ({
         <div className={cn('flex items-center gap-2', className)}>
             {items
                 .sort((a, b) => (b.main ? 1 : 0) - (a.main ? 1 : 0)) // main char first
-                .map((item) => (
+                .map(item => (
                     <div
                         className="-mr-4 relative group"
                         key={item.id}

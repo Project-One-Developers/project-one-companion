@@ -51,7 +51,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
     // Mutation handling
     const manualMutation = useMutation({
         mutationFn: addDroptimizer,
-        onSuccess: (response) => {
+        onSuccess: response => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.droptimizers] })
             form.reset()
             //setOpen(false)
@@ -207,7 +207,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
                                     id="sync-hours-input"
                                     min={1}
                                     value={hoursValue}
-                                    onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
+                                    onChange={e => setHoursValue(parseInt(e.target.value, 10))}
                                     className="pr-10"
                                 />
                                 <label
@@ -249,7 +249,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
                                     id="cleanup-hours-input"
                                     min={1}
                                     value={hoursValue}
-                                    onChange={(e) => setHoursValue(parseInt(e.target.value, 10))}
+                                    onChange={e => setHoursValue(parseInt(e.target.value, 10))}
                                     className="pr-10"
                                 />
                                 <label

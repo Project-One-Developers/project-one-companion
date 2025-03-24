@@ -28,7 +28,7 @@ export function filterDroptimizer(
 ): Droptimizer[] {
     const filterByDroptimizerFilters = droptimizers
         .sort((a, b) => b.simInfo.date - a.simInfo.date)
-        .filter((dropt) => {
+        .filter(dropt => {
             // Filter by raid difficulty
             if (filter.selectedRaidDiff.length > 0) {
                 if (!filter.selectedRaidDiff.includes(dropt.raidInfo.difficulty)) {
@@ -40,7 +40,7 @@ export function filterDroptimizer(
             if (
                 filter.hideAlts &&
                 chars.some(
-                    (c) =>
+                    c =>
                         c.name === dropt.charInfo.name &&
                         c.realm === dropt.charInfo.server &&
                         !c.main // filter out char explicity not main
@@ -71,10 +71,10 @@ export function filterDroptimizer(
     // now filter remaining droptimizer by upgrade filter (eg: slot, dps, armor type)
     return (
         filterByDroptimizerFilters
-            .map((dropt) => {
+            .map(dropt => {
                 const upgrades = dropt.upgrades ?? []
                 // Filter by upgrades
-                const filteredUpgrades = upgrades.filter((upgrade) => {
+                const filteredUpgrades = upgrades.filter(upgrade => {
                     // Filter by upgrades
                     if (filter.onlyUpgrades && upgrade.dps < filter.minUpgrade) {
                         return false
@@ -109,7 +109,7 @@ export function filterDroptimizer(
             })
             // finally remove empty droptimizers
             .filter(
-                (dropt) => !filter.hideIfNoUpgrade || (dropt.upgrades && dropt.upgrades.length > 0)
+                dropt => !filter.hideIfNoUpgrade || (dropt.upgrades && dropt.upgrades.length > 0)
             )
     )
 }

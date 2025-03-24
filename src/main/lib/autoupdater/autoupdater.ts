@@ -38,7 +38,7 @@ const initUpdater = (opts: UpdateOptions) => {
         autoUpdater.autoDownload = false
     }
 
-    autoUpdater.on('error', (err) => {
+    autoUpdater.on('error', err => {
         logger.log('[Update] An error ocurred')
         logger.log(err)
     })
@@ -68,11 +68,11 @@ const initUpdater = (opts: UpdateOptions) => {
                         let fileUrl = ''
                         if (isMacOS) {
                             fileUrl =
-                                event.files.find((file) => file.url.includes('.dmg'))?.url ??
+                                event.files.find(file => file.url.includes('.dmg'))?.url ??
                                 event.files[0].url
                         } else if (isLinux) {
                             fileUrl =
-                                event.files.find((file) => file.url.includes('.AppImage'))?.url ??
+                                event.files.find(file => file.url.includes('.AppImage'))?.url ??
                                 event.files[0].url
                         } else {
                             fileUrl = event.files[0].url
@@ -91,7 +91,7 @@ const initUpdater = (opts: UpdateOptions) => {
         }
     })
 
-    autoUpdater.on('download-progress', (event) => {
+    autoUpdater.on('download-progress', event => {
         logger.log('[Update] Download progress ' + event.percent + '%')
     })
 

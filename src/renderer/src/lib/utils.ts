@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]): string {
 }
 
 export function getClassColor(className: WowClassName): string {
-    const classColor = CLASSES_NAME.find((classItem) => classItem === className)
+    const classColor = CLASSES_NAME.find(classItem => classItem === className)
     if (classColor) {
         return 'bg-' + classColor.replace(' ', '').toLowerCase()
     }

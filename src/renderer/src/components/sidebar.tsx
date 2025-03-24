@@ -121,7 +121,7 @@ export default function ProjectOneSidebar(): JSX.Element {
                         <SidebarGroupLabel>Preparation</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {preparationItems.map((item) => (
+                                {preparationItems.map(item => (
                                     <SidebarMenuItem
                                         key={item.title}
                                         className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
@@ -141,7 +141,7 @@ export default function ProjectOneSidebar(): JSX.Element {
                         <SidebarGroupLabel>Raid</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {raidItems.map((item) => (
+                                {raidItems.map(item => (
                                     <SidebarMenuItem
                                         key={item.title}
                                         className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
@@ -161,7 +161,7 @@ export default function ProjectOneSidebar(): JSX.Element {
                         <SidebarGroupLabel>Weakauras</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {weakaurasItems.map((item) => (
+                                {weakaurasItems.map(item => (
                                     <SidebarMenuItem
                                         key={item.title}
                                         className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}
@@ -181,7 +181,7 @@ export default function ProjectOneSidebar(): JSX.Element {
                         <SidebarGroupLabel>Spreadsheet</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {spreadsheetItems.map((item) => (
+                                {spreadsheetItems.map(item => (
                                     <SidebarMenuItem
                                         key={item.title}
                                         className={`hover:bg-muted ${location.pathname === item.url ? 'bg-muted' : ''}`}

@@ -71,7 +71,7 @@ const parseUpgrades = async (
     const itemToCatalystMapping = await getItemToCatalystMapping()
 
     // One Armed Bandit workaround for Best-In-Slots item
-    const bestInSlotUpgrades = upgrades.find((up) => up.itemId === 232526 || up.itemId === 232805)
+    const bestInSlotUpgrades = upgrades.find(up => up.itemId === 232526 || up.itemId === 232805)
     if (bestInSlotUpgrades != null) {
         console.log('parseUpgrades: applying workaround for Best-in-Slots item id 232526 or 232805')
         const otherId = bestInSlotUpgrades.itemId === 232526 ? 232805 : 232526
@@ -81,12 +81,12 @@ const parseUpgrades = async (
 
     const upgradesMap = upgrades
         // filter out item without dps gain
-        .filter((item) => item.dps > 0)
+        .filter(item => item.dps > 0)
         // remap itemid to tierset & catalyst
-        .map((up) => {
+        .map(up => {
             // ci serve questo mapping perchè in data.csv è presente l'upgrade per l'itemid del pezzo del tierset finale (es: guanti warlock)
             // ma questo itemid non appartiene alla loot table del boss, che può lootare solo token per gruppi di classi
-            const tiersetMapping = itemToTiersetMapping?.find((i) => i.itemId === up.itemId)
+            const tiersetMapping = itemToTiersetMapping?.find(i => i.itemId === up.itemId)
 
             // ci serve questo reverse lookup perchè in data.csv di droptimizer per un upgrade di tipo catalizzato è presente:
             // 1. l'item id finale dopo la trasformazione catalyst (che non appartiene alla loot table del boss)
@@ -94,7 +94,7 @@ const parseUpgrades = async (
             // tramite la tabella di mapping ItemToCatalyst riusciamo a ricavare l'item id "originale" della loot table del boss
             const catalystMapping = !tiersetMapping
                 ? itemToCatalystMapping?.find(
-                      (i) => i.catalyzedItemId === up.itemId && i.encounterId === up.encounterId
+                      i => i.catalyzedItemId === up.itemId && i.encounterId === up.encounterId
                   )
                 : null
 
@@ -132,11 +132,11 @@ const parseUpgrades = async (
 const parseTiersets = async (equipped: GearItem[], bags: GearItem[]): Promise<GearItem[]> => {
     const tiersetItems = await getTiersetAndTokenList()
 
-    const tiersetItemIds = new Set(tiersetItems.map(item => item.id));
-    
-    const allItems = [...equipped, ...bags];
-    
-    return allItems.filter(item => tiersetItemIds.has(item.item.id));
+    const tiersetItemIds = new Set(tiersetItems.map(item => item.id))
+
+    const allItems = [...equipped, ...bags]
+
+    return allItems.filter(item => tiersetItemIds.has(item.item.id))
 }
 
 export const convertJsonToDroptimizer = async (
@@ -149,7 +149,7 @@ export const convertJsonToDroptimizer = async (
         data.simbot.publicTitle.split('•')[2].replaceAll(' ', '')
     )
     const dpsMean = data.sim.players[0].collected_data.dps.mean
-    const upgrades = data.sim.profilesets.results.map((item) => ({
+    const upgrades = data.sim.profilesets.results.map(item => ({
         dps: Math.round(item.mean - dpsMean),
         encounterId: Number(item.name.split('/')[1]),
         itemId: Number(item.name.split('/')[3]),
@@ -225,7 +225,7 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
         const itemId = parseInt(itemMatch[2], 10)
 
         // we dont have enough infos, we are forced to check on our db
-        const wowItem = itemsInDb.find((i) => i.id === itemId)
+        const wowItem = itemsInDb.find(i => i.id === itemId)
 
         if (wowItem == null) {
             console.log(
@@ -282,7 +282,7 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
     }
 
     const gearSection = gearSectionMatch[0]
-    const itemLines = gearSection.split('\n').filter((line) => line.includes('='))
+    const itemLines = gearSection.split('\n').filter(line => line.includes('='))
 
     const itemsInDb: Item[] = await getItems()
     const items: GearItem[] = []
@@ -299,7 +299,7 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
         if (slotMatch && itemIdMatch && bonusIdMatch) {
             const itemId = parseInt(itemIdMatch[1], 10)
             const bonusIds = bonusIdMatch[1].split('/').map(Number)
-            const wowItem = itemsInDb.find((i) => i.id === itemId)
+            const wowItem = itemsInDb.find(i => i.id === itemId)
 
             if (wowItem == null) {
                 console.log(
@@ -392,7 +392,7 @@ export const parseEquippedGear = async (
             )
         }
         const bonusIds = droptGearItem.bonus_id.split('/').map(Number)
-        const wowItem = itemsInDb.find((i) => i.id === droptGearItem.id)
+        const wowItem = itemsInDb.find(i => i.id === droptGearItem.id)
         if (wowItem == null) {
             console.log(
                 '[error] parseEquippedGear: skipping equipped item not in db: ' +

@@ -76,7 +76,7 @@ export default function LootsTradeHelperDialog({
                                         ({ character }) => character.id === selectedCharacterId
                                     )?.loot
                                     navigator.clipboard.writeText(
-                                        `/qt ${loot?.map((item) => item.gearItem.item.name).join(', ')}`
+                                        `/qt ${loot?.map(item => item.gearItem.item.name).join(', ')}`
                                     )
                                     setCopied(true)
                                     setTimeout(() => {
@@ -94,7 +94,7 @@ export default function LootsTradeHelperDialog({
                             <div className="mt-2 flex flex-wrap gap-2">
                                 {lootByCharacter
                                     .find(({ character }) => character.id === selectedCharacterId)
-                                    ?.loot.map((loot) => (
+                                    ?.loot.map(loot => (
                                         <div
                                             key={loot.id}
                                             className="flex items-center p-2 border rounded-md shadow-sm  hover:bg-muted transition"

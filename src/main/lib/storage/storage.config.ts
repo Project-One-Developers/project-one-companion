@@ -15,7 +15,7 @@ let dbInstance: PostgresJsDatabase<typeof schema> | null = null
 
 export function getDb() {
     if (!dbInstance) {
-        reloadConnection().catch((e) => {
+        reloadConnection().catch(e => {
             throw new Error('getDb.reloadConnection: ' + e)
         })
 
@@ -55,8 +55,8 @@ export const closeDb = async (): Promise<void> => {
 
 export const dbUrlSchema = z
     .string()
-    .transform((str) => str.replace(/^["']|["']$/g, ''))
-    .refine((str) => {
+    .transform(str => str.replace(/^["']|["']$/g, ''))
+    .refine(str => {
         try {
             const url = new URL(str)
             return (

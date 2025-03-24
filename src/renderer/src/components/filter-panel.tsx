@@ -23,21 +23,21 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
 
     const toggleSlot = (slotName: WowItemSlotKey) => {
         const newSelectedSlots = filter.selectedSlots.includes(slotName)
-            ? filter.selectedSlots.filter((slot) => slot !== slotName)
+            ? filter.selectedSlots.filter(slot => slot !== slotName)
             : [...filter.selectedSlots, slotName]
         updateFilter('selectedSlots', newSelectedSlots)
     }
 
     const toggleArmorType = (armorType: WowArmorType) => {
         const newSelectedArmorTypes = filter.selectedArmorTypes.includes(armorType)
-            ? filter.selectedArmorTypes.filter((type) => type !== armorType)
+            ? filter.selectedArmorTypes.filter(type => type !== armorType)
             : [...filter.selectedArmorTypes, armorType]
         updateFilter('selectedArmorTypes', newSelectedArmorTypes)
     }
 
     const toggleWowClass = (wowClassName: WowClassName) => {
         const newSelectedWowClassName = filter.selectedWowClassName.includes(wowClassName)
-            ? filter.selectedWowClassName.filter((type) => type !== wowClassName)
+            ? filter.selectedWowClassName.filter(type => type !== wowClassName)
             : [...filter.selectedWowClassName, wowClassName]
         updateFilter('selectedWowClassName', newSelectedWowClassName)
     }
@@ -52,7 +52,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
             <div className="flex flex-col space-y-2 mb-4">
                 {/* <label className="text-sm font-semibold">Raid Difficulty:</label> */}
                 <div className="flex flex-wrap gap-4">
-                    {(['Normal', 'Heroic', 'Mythic'] as WowRaidDifficulty[]).map((difficulty) => (
+                    {(['Normal', 'Heroic', 'Mythic'] as WowRaidDifficulty[]).map(difficulty => (
                         <div
                             key={difficulty}
                             className={`cursor-pointer transition-transform hover:scale-110 ${
@@ -94,7 +94,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                         <Checkbox
                             id="older-than-days"
                             checked={filter.hideOlderThanDays as CheckedState}
-                            onCheckedChange={(checked) =>
+                            onCheckedChange={checked =>
                                 updateFilter('hideOlderThanDays', !!checked)
                             }
                             className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
@@ -110,7 +110,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                             min="1"
                             step="1"
                             value={filter.maxDays}
-                            onChange={(e) => updateFilter('maxDays', Number(e.target.value))}
+                            onChange={e => updateFilter('maxDays', Number(e.target.value))}
                             disabled={!filter.hideOlderThanDays}
                             className={`border rounded-md p-2 bg-gray-700 text-white w-14 ${!filter.hideOlderThanDays ? 'opacity-50 cursor-not-allowed' : ''}`}
                         />
@@ -121,7 +121,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                         <Checkbox
                             id="only-upgrades"
                             checked={filter.onlyUpgrades as CheckedState}
-                            onCheckedChange={(checked) => updateFilter('onlyUpgrades', !!checked)}
+                            onCheckedChange={checked => updateFilter('onlyUpgrades', !!checked)}
                             className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
                         >
                             {filter.onlyUpgrades && <Check className="text-white w-4 h-4" />}
@@ -135,7 +135,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                             min="0"
                             step="500"
                             value={filter.minUpgrade}
-                            onChange={(e) => updateFilter('minUpgrade', Number(e.target.value))}
+                            onChange={e => updateFilter('minUpgrade', Number(e.target.value))}
                             disabled={!filter.onlyUpgrades}
                             className={`border rounded-md p-2 bg-gray-700 text-white w-20 ${!filter.onlyUpgrades ? 'opacity-50 cursor-not-allowed' : ''}`}
                         />
@@ -147,7 +147,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                             <Checkbox
                                 id="hide-alts"
                                 checked={filter.hideAlts as CheckedState}
-                                onCheckedChange={(checked) => updateFilter('hideAlts', !!checked)}
+                                onCheckedChange={checked => updateFilter('hideAlts', !!checked)}
                                 className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
                             >
                                 {filter.hideAlts && <Check className="text-white w-4 h-4" />}
@@ -160,7 +160,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                             <Checkbox
                                 id="hide-no-upgrades"
                                 checked={filter.hideIfNoUpgrade as CheckedState}
-                                onCheckedChange={(checked) =>
+                                onCheckedChange={checked =>
                                     updateFilter('hideIfNoUpgrade', !!checked)
                                 }
                                 className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
@@ -177,7 +177,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                     <div className="flex flex-col space-y-2">
                         <label className="text-sm font-semibold">Class:</label>
                         <div className="flex flex-wrap gap-2">
-                            {wowClassNameSchema.options.map((wowClassName) => (
+                            {wowClassNameSchema.options.map(wowClassName => (
                                 <div
                                     key={wowClassName}
                                     className={`cursor-pointer transition-transform hover:scale-125 ${
@@ -202,7 +202,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                     <div className="flex flex-col space-y-2">
                         <label className="text-sm font-semibold">Item Slots:</label>
                         <div className="flex flex-wrap gap-2">
-                            {wowItemSlotKeySchema.options.map((slot) => (
+                            {wowItemSlotKeySchema.options.map(slot => (
                                 <div
                                     key={slot}
                                     className={`cursor-pointer transition-transform hover:scale-125 ${
@@ -227,7 +227,7 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                     <div className="flex flex-col space-y-2">
                         <label className="text-sm font-semibold">Armor Types:</label>
                         <div className="flex flex-wrap gap-2">
-                            {wowArmorTypeSchema.options.map((armorType) => (
+                            {wowArmorTypeSchema.options.map(armorType => (
                                 <div
                                     key={armorType}
                                     className={`cursor-pointer transition-transform hover:scale-125 ${

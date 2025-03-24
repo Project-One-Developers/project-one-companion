@@ -36,7 +36,7 @@ export default function SessionDeleteDialog({
             queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessions] })
             navigate(`/raid-session`) // go to main session page
         },
-        onError: (error) => {
+        onError: error => {
             toast({
                 title: 'Error',
                 description: `Unable to delete the raid session. Error: ${error.message}`

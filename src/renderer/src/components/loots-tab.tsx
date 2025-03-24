@@ -27,9 +27,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
         {} as Record<WowItemSlotKey, { total: number; assigned: number }>
     )
 
-    const tokensLoots = loots.filter(
-        (loot) => loot.gearItem.item.tierset || loot.gearItem.item.token
-    )
+    const tokensLoots = loots.filter(loot => loot.gearItem.item.tierset || loot.gearItem.item.token)
     const tokensCount = tokensLoots.reduce(
         (acc, loot) => {
             acc.total++
@@ -47,7 +45,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                       b.gearItem.itemLevel - a.gearItem.itemLevel
               )
             : loots
-                  .filter((loot) => loot.gearItem.item.slotKey === selectedSlot)
+                  .filter(loot => loot.gearItem.item.slotKey === selectedSlot)
                   .sort(
                       (a, b) =>
                           a.gearItem.item.name.localeCompare(b.gearItem.item.name) ||
@@ -89,7 +87,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
         <div>
             <div className="flex flex-wrap gap-2 pb-2">
                 {wowItemSlotKeySchema.options.map(
-                    (slot) =>
+                    slot =>
                         lootCounts[slot]?.total > 0 && (
                             <SlotButton key={slot} slot={slot} count={lootCounts[slot]} />
                         )
@@ -100,11 +98,11 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                 {filteredLoots.length === 0 ? (
                     <p className="text-gray-400">No loot in this category</p>
                 ) : (
-                    filteredLoots.map((loot) => (
+                    filteredLoots.map(loot => (
                         <div
                             key={loot.id}
                             className={`flex flex-row justify-between border border-transparent hover:border-white py-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md ${selectedLoot?.id === loot.id ? 'bg-gray-700' : ''}`}
-                            onClick={(e) => {
+                            onClick={e => {
                                 e.preventDefault()
                                 setSelectedLoot(loot)
                             }}

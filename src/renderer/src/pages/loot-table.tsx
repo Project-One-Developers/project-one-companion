@@ -51,8 +51,8 @@ type DroptimizersForItemsProps = {
 
 export const DroptimizersForItem = ({ item, droptimizers }: DroptimizersForItemsProps) => {
     const itemDroptimizerUpgrades = droptimizers
-        .flatMap((dropt) =>
-            (dropt.upgrades ?? []).map((upgrade) => ({
+        .flatMap(dropt =>
+            (dropt.upgrades ?? []).map(upgrade => ({
                 ...upgrade,
                 droptimizer: {
                     url: dropt.url,
@@ -62,12 +62,12 @@ export const DroptimizersForItem = ({ item, droptimizers }: DroptimizersForItems
                 }
             }))
         )
-        .filter((upgrade) => upgrade.item.id === item.id)
+        .filter(upgrade => upgrade.item.id === item.id)
         .sort((a, b) => b.dps - a.dps)
 
     return (
         <div className="flex flex-row items-center gap-x-2">
-            {itemDroptimizerUpgrades.map((upgrade) => (
+            {itemDroptimizerUpgrades.map(upgrade => (
                 <div key={`${upgrade.id}`}>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -113,8 +113,8 @@ const BossPanel = ({
 
     const itemHasDroptimizers = function (item: Item): boolean {
         if (hideItemsWithoutDropt) {
-            return droptimizers.some((dropt) =>
-                (dropt.upgrades ?? []).some((upgrade) => upgrade.item.id === item.id)
+            return droptimizers.some(dropt =>
+                (dropt.upgrades ?? []).some(upgrade => upgrade.item.id === item.id)
             )
         }
         return true
@@ -137,7 +137,7 @@ const BossPanel = ({
                     boss.items
                         .sort((a, b) => a.id - b.id)
                         .filter(itemHasDroptimizers)
-                        .map((item) => (
+                        .map(item => (
                             <div
                                 key={item.id}
                                 className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer"
@@ -188,7 +188,7 @@ export default function LootTable(): JSX.Element {
     } = useRaidData(CURRENT_RAID_ID)
 
     const updateFilter = (key: keyof LootFilter, value: unknown): void => {
-        setFilters((prev) => ({ ...prev, [key]: value }))
+        setFilters(prev => ({ ...prev, [key]: value }))
     }
 
     const filteredDroptimizers = useMemo(() => {
@@ -212,7 +212,7 @@ export default function LootTable(): JSX.Element {
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 {encounterList
                     .sort((a, b) => a.order - b.order)
-                    .map((boss) => (
+                    .map(boss => (
                         <BossPanel
                             key={boss.id}
                             boss={boss}

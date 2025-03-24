@@ -16,10 +16,10 @@ export default function DroptimizerDetailDialog({
 }: DroptimizerDetailDialogProps): JSX.Element {
     const bossMap: Map<BossWithItems, DroptimizerUpgrade[]> = new Map()
 
-    droptimizer.upgrades.forEach((up) => {
+    droptimizer.upgrades.forEach(up => {
         for (let index = 0; index < bosses.length; index++) {
             const boss = bosses[index]
-            const bossUpgrade = boss.items.find((i) => i.id === up.item.id)
+            const bossUpgrade = boss.items.find(i => i.id === up.item.id)
             if (bossUpgrade) {
                 const val = bossMap.get(boss)
                 if (val !== undefined) {
@@ -45,7 +45,7 @@ export default function DroptimizerDetailDialog({
                 </DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 mt-4">
-                {sortedBosses.map((boss) => (
+                {sortedBosses.map(boss => (
                     <div key={boss.id} className="flex flex-col gap-2">
                         {/* Boss Name Column */}
                         <div className="font-bold text-sm text-gray-700">
@@ -53,8 +53,8 @@ export default function DroptimizerDetailDialog({
                         </div>
                         {/* Upgrades Column */}
                         <div className="flex flex-wrap gap-2">
-                            {bossMap.get(boss)?.map((upgrade) => {
-                                const foundItem = boss.items.find((i) => i.id === upgrade.item.id)
+                            {bossMap.get(boss)?.map(upgrade => {
+                                const foundItem = boss.items.find(i => i.id === upgrade.item.id)
                                 return (
                                     <div key={upgrade.item.id} className="relative group">
                                         {foundItem ? (

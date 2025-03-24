@@ -88,7 +88,7 @@ const UpgradeItem = ({
     raidItems: Item[]
     raidDifficulty: WowRaidDifficulty
 }) => {
-    const foundItem = raidItems.find((item) => item.id === upgrade.item.id)
+    const foundItem = raidItems.find(item => item.id === upgrade.item.id)
 
     return (
         <div className="-mr-4 relative group">
@@ -146,7 +146,7 @@ export const DroptimizerCard = ({ droptimizer: dropt, character }: DroptimizerCa
         }
     }
 
-    const raidItems = bosses.flatMap((boss) => boss.items)
+    const raidItems = bosses.flatMap(boss => boss.items)
 
     if (isLoading) {
         return (
@@ -179,7 +179,7 @@ export const DroptimizerCard = ({ droptimizer: dropt, character }: DroptimizerCa
                 {dropt.upgrades
                     ?.sort((a, b) => b.dps - a.dps)
                     .slice(0, 7)
-                    .map((upgrade) => (
+                    .map(upgrade => (
                         <UpgradeItem
                             key={upgrade.item.id}
                             upgrade={upgrade}

@@ -61,7 +61,7 @@ export const droptimizerStorageToSchema = droptimizerStorageSchema.transform(
                 specId: data.characterSpecId,
                 talents: data.characterTalents
             },
-            upgrades: data.upgrades.map((up) => ({
+            upgrades: data.upgrades.map(up => ({
                 id: up.id,
                 item: up.item,
                 dps: up.dps,

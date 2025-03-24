@@ -84,9 +84,9 @@ export const addLoots = async (
     loots: NewLoot[],
     elegibleCharacters: Character[]
 ): Promise<void> => {
-    const lootValues: InferInsertModel<typeof lootTable>[] = loots.map((loot) => ({
+    const lootValues: InferInsertModel<typeof lootTable>[] = loots.map(loot => ({
         id: loot.addonId ?? newUUID(),
-        charsEligibility: elegibleCharacters.map((c) => c.id),
+        charsEligibility: elegibleCharacters.map(c => c.id),
         itemId: loot.gearItem.item.id,
         raidSessionId,
         dropDate: loot.dropDate,

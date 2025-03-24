@@ -221,7 +221,7 @@ export const gearHasSpeed = (input: number[] | null): boolean =>
 // 10397,12055 Primastic Socket
 // 11307 Socket on Crafted Gear
 export const gearhasSocket = (input: number[] | null): boolean =>
-    input ? [10397, 11307, 12055].some((value) => input.includes(value)) : false
+    input ? [10397, 11307, 12055].some(value => input.includes(value)) : false
 
 export const gearTertiary = (input: number[] | null): boolean =>
     gearHasAvoidance(input) || gearHasLeech(input) || gearHasSpeed(input)

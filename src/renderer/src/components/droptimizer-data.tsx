@@ -11,7 +11,7 @@ export default function DroptimizerData({ droptimizer }: { droptimizer: Droptimi
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {droptimizer.itemsEquipped.map((gearItem) => {
+                            {droptimizer.itemsEquipped.map(gearItem => {
                                 return (
                                     <TableHead key={gearItem.item.id}>
                                         {formatWowEquippedSlotKey(gearItem.equippedInSlot!)}
@@ -22,9 +22,9 @@ export default function DroptimizerData({ droptimizer }: { droptimizer: Droptimi
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            {droptimizer.itemsEquipped.map((gearItem) => {
+                            {droptimizer.itemsEquipped.map(gearItem => {
                                 const tiesetInSlot = droptimizer.tiersetInfo.some(
-                                    (t) => t.item.slotKey === gearItem.item.slotKey
+                                    t => t.item.slotKey === gearItem.item.slotKey
                                 )
                                 return (
                                     <TableCell key={gearItem.item.id}>

@@ -41,7 +41,7 @@ export default function PlayerDialog({
                 description: `The player ${arg} has been successfully added.`
             })
         },
-        onError: (error) => {
+        onError: error => {
             toast({
                 title: 'Error',
                 description: `Unable to add the player. Error: ${error.message}`
@@ -61,7 +61,7 @@ export default function PlayerDialog({
                 description: `Player ${arg.name} edited successfully`
             })
         },
-        onError: (error) => {
+        onError: error => {
             toast({
                 title: 'Error',
                 description: `Unable to edit the player. Error: ${error.message}`

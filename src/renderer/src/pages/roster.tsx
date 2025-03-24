@@ -38,10 +38,10 @@ export default function RosterPage(): JSX.Element {
     // Filter players based on the search query
     const filteredPlayers = players
         .sort((a, b) => a.name.localeCompare(b.name)) // sort player by name
-        .filter((player) => {
+        .filter(player => {
             const playerMatches =
                 player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                player.characters?.some((character) =>
+                player.characters?.some(character =>
                     character.name.toLowerCase().includes(searchQuery.toLowerCase())
                 )
             return playerMatches
@@ -65,13 +65,13 @@ export default function RosterPage(): JSX.Element {
                     type="text"
                     placeholder="Search players or characters..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md"
                 />
             </div>
 
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {filteredPlayers.map((player) => (
+                {filteredPlayers.map(player => (
                     // Player Card
                     <div
                         key={player.id}

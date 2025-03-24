@@ -86,7 +86,7 @@ function createWindow(): void {
     })
 
     // Make all links open with the browser, not with the application
-    mainWindow.webContents.setWindowOpenHandler((details) => {
+    mainWindow.webContents.setWindowOpenHandler(details => {
         shell.openExternal(details.url)
         return { action: 'deny' }
     })
@@ -182,7 +182,7 @@ app.on('window-all-closed', () => {
     }
 })
 
-app.on('before-quit', (event) => {
+app.on('before-quit', event => {
     // Prevent quitting immediately
     event.preventDefault()
 
@@ -191,7 +191,7 @@ app.on('before-quit', (event) => {
             console.log('Database closed successfully')
             app.exit(0)
         })
-        .catch((error) => {
+        .catch(error => {
             console.error('Failed to close database:', error)
             app.exit(1)
         })

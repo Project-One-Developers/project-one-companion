@@ -45,7 +45,7 @@ export default function ItemBisSpecsDialog({
             queryClient.invalidateQueries({ queryKey: [queryKeys.bisList] })
             setOpen(false)
         },
-        onError: (error) => {
+        onError: error => {
             toast({ title: 'Error', description: `Failed to update BiS specs. ${error.message}` })
         }
     })
@@ -73,9 +73,9 @@ export default function ItemBisSpecsDialog({
                                     type="multiple"
                                     className="flex ml-10 gap-2"
                                     value={selectedSpecs.map(String)}
-                                    onValueChange={(values) => setSelectedSpecs(values.map(Number))}
+                                    onValueChange={values => setSelectedSpecs(values.map(Number))}
                                 >
-                                    {classWithSpecs.specs.map((wowSpec) => (
+                                    {classWithSpecs.specs.map(wowSpec => (
                                         <ToggleGroup.Item
                                             key={wowSpec.id}
                                             value={String(wowSpec.id)}

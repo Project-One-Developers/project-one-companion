@@ -7,27 +7,27 @@ export const generateLootFilename = (
 ) => {
     return (
         sessions
-            .filter((session) => selectedSessionIds.has(session.id))
-            .map((session) => session.name)
+            .filter(session => selectedSessionIds.has(session.id))
+            .map(session => session.name)
             .join('-') + `-${suffix}.csv`
     )
 }
 
 export const prepareLootData = (loots: LootWithAssigned[], encounterList: BossWithItems[]) => {
     return loots
-        .filter((loot) => loot.assignedCharacter !== null)
-        .map((loot) => ({
+        .filter(loot => loot.assignedCharacter !== null)
+        .map(loot => ({
             Difficoltà: loot.raidDifficulty ?? '',
             Boss:
                 encounterList
-                    .find((boss) => boss.items.find((item) => item.id === loot.gearItem.item.id))
+                    .find(boss => boss.items.find(item => item.id === loot.gearItem.item.id))
                     ?.name.replaceAll(',', ' ') ?? '',
             Item: loot.gearItem.item.name ?? '',
             Livello: loot.gearItem.itemLevel ?? '',
             Slot:
                 loot.gearItem.item.slotKey
                     .replaceAll('_', ' ')
-                    .replace(/\b\w/g, (char) => char.toUpperCase()) ?? '',
+                    .replace(/\b\w/g, char => char.toUpperCase()) ?? '',
             Character: loot.assignedCharacter?.name ?? ''
         }))
         .sort((a, b) => {
@@ -46,12 +46,12 @@ export const prepareStatsData = (loots: LootWithAssigned[], encounterList: BossW
         { RaidDpsGain: number; TwoPiecesClosed: string[]; FourPiecesClosed: string[] }
     > = {}
 
-    loots.forEach((loot) => {
+    loots.forEach(loot => {
         if (!loot.assignedCharacter) return
 
         const bossName =
             encounterList
-                .find((boss) => boss.items.find((item) => item.id === loot.gearItem.item.id))
+                .find(boss => boss.items.find(item => item.id === loot.gearItem.item.id))
                 ?.name.replaceAll(',', ' ') ?? 'Unknown Boss'
 
         const difficulty = loot.raidDifficulty ?? 'Unknown Difficulty'

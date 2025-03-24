@@ -20,7 +20,7 @@ export const CurrentGreatVaultPanel = ({ droptimizer }: CurrentGreatVaultPanelPr
             {/* Chest Items */}
             <div className="flex flex-wrap gap-2">
                 {isValidWeek ? (
-                    weeklyChests.map((gear) => (
+                    weeklyChests.map(gear => (
                         <WowGearIcon
                             key={gear.item.id} // todo: what happends if same item in vault?
                             gearItem={gear}

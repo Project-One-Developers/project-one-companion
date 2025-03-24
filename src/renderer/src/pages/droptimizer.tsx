@@ -47,7 +47,7 @@ export default function DroptimizerPage(): JSX.Element {
     }
 
     const updateFilter = (key: keyof LootFilter, value: unknown): void => {
-        setFilters((prev) => ({ ...prev, [key]: value }))
+        setFilters(prev => ({ ...prev, [key]: value }))
     }
 
     return (
@@ -55,11 +55,11 @@ export default function DroptimizerPage(): JSX.Element {
             <FiltersPanel filter={filter} updateFilter={updateFilter} />
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 {filteredDroptimizers.length > 0 ? (
-                    filteredDroptimizers.map((dropt) => (
+                    filteredDroptimizers.map(dropt => (
                         <DroptimizerCard
                             key={dropt.url}
                             droptimizer={dropt}
-                            character={charQuery.data?.find((c) => c.name === dropt.charInfo.name)}
+                            character={charQuery.data?.find(c => c.name === dropt.charInfo.name)}
                         />
                     ))
                 ) : (

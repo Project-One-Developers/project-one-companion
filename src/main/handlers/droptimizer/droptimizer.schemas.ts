@@ -5,7 +5,7 @@ export const droptimizerEquippedItemSchema = z.object({
     id: z.number(),
     name: z.string(),
     bonus_id: z
-        .preprocess((val) => {
+        .preprocess(val => {
             // Convert numbers to strings
             if (typeof val === 'number') {
                 return val.toString()
@@ -14,7 +14,7 @@ export const droptimizerEquippedItemSchema = z.object({
         }, z.string())
         .nullish(),
     enchant_id: z
-        .preprocess((val) => {
+        .preprocess(val => {
             // Convert numbers to strings
             if (typeof val === 'number') {
                 return val.toString()
@@ -23,7 +23,7 @@ export const droptimizerEquippedItemSchema = z.object({
         }, z.string())
         .nullish(),
     gem_id: z
-        .preprocess((val) => {
+        .preprocess(val => {
             // Convert numbers to strings
             if (typeof val === 'number') {
                 return val.toString()

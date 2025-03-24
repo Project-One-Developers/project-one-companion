@@ -46,7 +46,7 @@ export default function SessionLootNewDialog({
             setOpen(false)
             toast({ title: 'Loots added', description: 'Loots successfully added.' })
         },
-        onError: (error) => {
+        onError: error => {
             toast({ title: 'Error', description: `Failed to add loots. ${error.message}` })
         }
     })
@@ -60,7 +60,7 @@ export default function SessionLootNewDialog({
             setOpen(false)
             toast({ title: 'RCLoot CSV imported', description: 'Loots successfully imported.' })
         },
-        onError: (error) => {
+        onError: error => {
             toast({ title: 'Error', description: `Failed to import RC. ${error.message}` })
         }
     })
@@ -74,7 +74,7 @@ export default function SessionLootNewDialog({
             setOpen(false)
             toast({ title: 'MRT loots imported', description: 'Loots successfully imported.' })
         },
-        onError: (error) => {
+        onError: error => {
             toast({ title: 'Error', description: `Failed to import MRT. ${error.message}` })
         }
     })
@@ -125,17 +125,17 @@ export default function SessionLootNewDialog({
                     <Tabs.Content value="manual" className="p-4">
                         <Input
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={e => setSearchTerm(e.target.value)}
                             placeholder="Search for an item..."
                         />
                         {isLoading && <LoaderCircle className="animate-spin text-5xl" />}
                         {items && (
                             <ul className="mt-2 max-h-60 overflow-y-auto">
-                                {items.map((item) => (
+                                {items.map(item => (
                                     <li
                                         key={item.id}
                                         className="cursor-pointer hover:bg-muted p-2"
-                                        onClick={(e) => {
+                                        onClick={e => {
                                             e.preventDefault()
                                             handleItemSelect(item)
                                         }}
@@ -180,7 +180,7 @@ export default function SessionLootNewDialog({
                                                 <SelectValue placeholder="Select difficulty" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {RAID_DIFF.map((difficulty) => (
+                                                {RAID_DIFF.map(difficulty => (
                                                     <SelectItem key={difficulty} value={difficulty}>
                                                         {difficulty}
                                                     </SelectItem>
@@ -195,9 +195,9 @@ export default function SessionLootNewDialog({
                                             type="multiple"
                                             className="flex gap-2"
                                             value={Object.keys(selectedItem).filter(
-                                                (key) => selectedItem[key]
+                                                key => selectedItem[key]
                                             )}
-                                            onValueChange={(values) => {
+                                            onValueChange={values => {
                                                 const updatedItems = [...selectedItems]
                                                 updatedItems[index] = {
                                                     ...updatedItems[index],
@@ -266,7 +266,7 @@ export default function SessionLootNewDialog({
                     <Tabs.Content value="rcloot" className="p-4">
                         <Textarea
                             value={rcCsvData}
-                            onChange={(e) => setRcInputData(e.target.value)}
+                            onChange={e => setRcInputData(e.target.value)}
                             placeholder="Paste RCLoot CSV data here..."
                             rows={10}
                         />
@@ -285,7 +285,7 @@ export default function SessionLootNewDialog({
                     <Tabs.Content value="mrt" className="p-4">
                         <Textarea
                             value={mrtData}
-                            onChange={(e) => setMrtData(e.target.value)}
+                            onChange={e => setMrtData(e.target.value)}
                             placeholder="Paste MRT data here..."
                             rows={10}
                         />

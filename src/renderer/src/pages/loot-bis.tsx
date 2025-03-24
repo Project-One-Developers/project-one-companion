@@ -39,17 +39,17 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
             {/* Boss items */}
             <div className="flex flex-col gap-y-3 p-6">
                 {boss.items
-                    .filter((i) => !i.token && !i.tierset)
+                    .filter(i => !i.token && !i.tierset)
                     .sort((a, b) => {
-                        const aHasBis = bisLists.some((bis) => bis.itemId === a.id)
-                        const bHasBis = bisLists.some((bis) => bis.itemId === b.id)
+                        const aHasBis = bisLists.some(bis => bis.itemId === a.id)
+                        const bHasBis = bisLists.some(bis => bis.itemId === b.id)
                         if (aHasBis && !bHasBis) return -1
                         if (!aHasBis && bHasBis) return 1
                         return 0
                     })
-                    .map((item) => {
-                        const bisForItem = bisLists.filter((bis) => bis.itemId === item.id)
-                        const allSpecIds = bisForItem.flatMap((bis) => bis.specIds)
+                    .map(item => {
+                        const bisForItem = bisLists.filter(bis => bis.itemId === item.id)
+                        const allSpecIds = bisForItem.flatMap(bis => bis.specIds)
                         // const uniqueClasses = Array.from(
                         //     new Set(allSpecIds.map((specId) => getWowClassBySpecId(specId)?.name))
                         // )
@@ -61,7 +61,7 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
                                     'flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer relative group',
                                     !allSpecIds.length && 'opacity-30'
                                 )}
-                                onClick={(e) => {
+                                onClick={e => {
                                     e.preventDefault()
                                     onEdit(item)
                                 }}
@@ -91,7 +91,7 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
                                                     sideOffset={5}
                                                 >
                                                     <div className="flex flex-col gap-y-1">
-                                                        {allSpecIds.map((s) => (
+                                                        {allSpecIds.map(s => (
                                                             <WowSpecIcon
                                                                 key={s}
                                                                 specId={s}
@@ -153,13 +153,13 @@ export default function BisListPage(): JSX.Element {
         if (!debouncedSearchQuery) return bossesWithItemRes.data
 
         return bossesWithItemRes.data
-            .map((boss) => ({
+            .map(boss => ({
                 ...boss,
-                items: boss.items.filter((item) =>
+                items: boss.items.filter(item =>
                     item.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
                 )
             }))
-            .filter((boss) => boss.items.length > 0) // Remove bosses with no matching items
+            .filter(boss => boss.items.length > 0) // Remove bosses with no matching items
     }, [bossesWithItemRes.data, debouncedSearchQuery])
 
     if (bossesWithItemRes.isLoading || bisRes.isLoading) {
@@ -173,7 +173,7 @@ export default function BisListPage(): JSX.Element {
     const bisLists = bisRes.data ?? []
 
     const handleEditClick = (item: Item) => {
-        const selectedBis = bisLists.find((b) => b.itemId === item.id)
+        const selectedBis = bisLists.find(b => b.itemId === item.id)
         setSelectedItem({ item: item, specs: selectedBis?.specIds ?? [] })
         setIsEditDialogOpen(true)
     }
@@ -186,7 +186,7 @@ export default function BisListPage(): JSX.Element {
                     type="text"
                     placeholder="Search items..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     className="w-full border border-gray-300 rounded-md"
                 />
             </div>
@@ -195,7 +195,7 @@ export default function BisListPage(): JSX.Element {
             <div className="flex flex-wrap gap-x-4 gap-y-4">
                 {filteredBosses
                     .sort((a, b) => a.order - b.order)
-                    .map((boss) => (
+                    .map(boss => (
                         <BossPanel
                             key={boss.id}
                             boss={boss}

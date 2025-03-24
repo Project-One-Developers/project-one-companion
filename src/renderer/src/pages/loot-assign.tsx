@@ -71,7 +71,7 @@ export default function LootAssign() {
         if (!selectedLoot || !lootsQuery.data) return
 
         // Find the latest version of the selected loot
-        const updatedLoot = lootsQuery.data.find((loot) => loot.id === selectedLoot.id)
+        const updatedLoot = lootsQuery.data.find(loot => loot.id === selectedLoot.id)
         if (!updatedLoot) {
             setSelectedLoot(null)
         } else if (updatedLoot.assignedCharacterId !== selectedLoot.assignedCharacterId) {
@@ -102,7 +102,7 @@ export default function LootAssign() {
         <div className="w-dvw h-dvh flex flex-col gap-y-8 p-8 relative">
             {/* Page Header */}
             <div className="flex flex-wrap bg-muted rounded-lg p-6 mb-2 shadow-lg items-center relative">
-                {visibleSessions.map((session) => (
+                {visibleSessions.map(session => (
                     <div key={session.id} onClick={() => toggleSession(session.id)}>
                         <SessionCard
                             session={session}

@@ -72,7 +72,7 @@ export default function LootsEligibleChars({
             lootId: string
             highlights: CharAssignmentHighlights
         }) => assignLoot(charId, lootId, highlights),
-        onMutate: async (variables) => {
+        onMutate: async variables => {
             // Optimistically update the selected loot assignment
             const previousSelectedLoot = { ...selectedLoot }
             setSelectedLoot({
@@ -142,7 +142,7 @@ export default function LootsEligibleChars({
 
     const showTiersetInfo =
         selectedLoot.gearItem.item.slotKey === 'omni' ||
-        ITEM_SLOTS_KEY_TIERSET.find((i) => i === selectedLoot.gearItem.item.slotKey) != null
+        ITEM_SLOTS_KEY_TIERSET.find(i => i === selectedLoot.gearItem.item.slotKey) != null
     const showHightestInSlot = selectedLoot.gearItem.item.slotKey !== 'omni'
 
     return (
@@ -219,9 +219,9 @@ export default function LootsEligibleChars({
                     </TableRow>
                 </TableHeader>
                 <TableBody className="">
-                    {eligibleCharacters.map((charInfo) => {
+                    {eligibleCharacters.map(charInfo => {
                         const assignedLoots = allLoots.filter(
-                            (loot) =>
+                            loot =>
                                 loot.id !== selectedLoot.id &&
                                 loot.assignedCharacterId === charInfo.character.id &&
                                 loot.gearItem.item.slotKey === selectedLoot.gearItem.item.slotKey
@@ -301,7 +301,7 @@ export default function LootsEligibleChars({
                                                     sideOffset={5}
                                                 >
                                                     <div className="flex flex-col gap-y-1">
-                                                        {charInfo.bisForSpec.map((s) => (
+                                                        {charInfo.bisForSpec.map(s => (
                                                             <div
                                                                 key={s.id}
                                                                 className="flex flex-row gap-2 items-center"
@@ -351,7 +351,7 @@ export default function LootsEligibleChars({
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex flex-col space-y-2">
-                                        {charInfo.droptimizers.map((droptWithUpgrade) => (
+                                        {charInfo.droptimizers.map(droptWithUpgrade => (
                                             <DroptimizerUpgradeForItemEquipped
                                                 key={droptWithUpgrade.droptimizer.url}
                                                 upgrade={droptWithUpgrade.upgrade}
@@ -387,7 +387,7 @@ export default function LootsEligibleChars({
                                 {showHightestInSlot && (
                                     <TableCell>
                                         <div className="flex space-x-1">
-                                            {charInfo.bestItemsInSlot.map((bestInSlot) => (
+                                            {charInfo.bestItemsInSlot.map(bestInSlot => (
                                                 <WowGearIcon
                                                     key={bestInSlot.item.id}
                                                     gearItem={bestInSlot}
@@ -400,7 +400,7 @@ export default function LootsEligibleChars({
 
                                 <TableCell>
                                     <div className="flex space-x-1">
-                                        {assignedLoots.map((otherLoot) => (
+                                        {assignedLoots.map(otherLoot => (
                                             <WowGearIcon
                                                 key={otherLoot.id}
                                                 gearItem={otherLoot.gearItem}
@@ -418,11 +418,11 @@ export default function LootsEligibleChars({
                                     <div className="flex space-x-1">
                                         {charInfo.weeklyChest
                                             .filter(
-                                                (vault) =>
+                                                vault =>
                                                     vault.item.slotKey ===
                                                     selectedLoot.gearItem.item.slotKey
                                             )
-                                            .map((gear) => (
+                                            .map(gear => (
                                                 <WowGearIcon key={gear.item.id} gearItem={gear} />
                                             ))}
                                     </div>

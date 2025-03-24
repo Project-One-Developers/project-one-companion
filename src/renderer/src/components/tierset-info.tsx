@@ -11,13 +11,13 @@ type TiersetInfoProps = {
 
 const TiersetInfo = ({ tierset, className }: TiersetInfoProps) => {
     const tierSlots = ['head', 'shoulder', 'chest', 'hands', 'legs']
-    const omniItems = tierset.filter((t) => t.item.slotKey === 'omni')
+    const omniItems = tierset.filter(t => t.item.slotKey === 'omni')
 
     return (
         <div className={cn('flex flex-row gap-1', className)}>
             {/* Standard Tier Slots */}
-            {tierSlots.map((slot) => {
-                const tiersetItem = tierset.find((t) => t.item.slotKey === slot)
+            {tierSlots.map(slot => {
+                const tiersetItem = tierset.find(t => t.item.slotKey === slot)
                 return (
                     <div key={slot} className="flex flex-col items-center space-x-1">
                         <span className="text-[9px] text-gray-400">{slot}</span>

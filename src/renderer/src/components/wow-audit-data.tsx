@@ -11,7 +11,7 @@ export default function WowAuditData({ wowAudit }: { wowAudit: CharacterWowAudit
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {wowAudit.itemsEquipped.map((gearItem) => {
+                            {wowAudit.itemsEquipped.map(gearItem => {
                                 return (
                                     <TableHead key={gearItem.item.id}>
                                         {formatWowEquippedSlotKey(gearItem.equippedInSlot!)}
@@ -22,9 +22,9 @@ export default function WowAuditData({ wowAudit }: { wowAudit: CharacterWowAudit
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            {wowAudit.itemsEquipped.map((gearItem) => {
+                            {wowAudit.itemsEquipped.map(gearItem => {
                                 const tiesetInSlot = wowAudit.tiersetInfo.some(
-                                    (t) => t.item.slotKey === gearItem.item.slotKey
+                                    t => t.item.slotKey === gearItem.item.slotKey
                                 )
                                 return (
                                     <TableCell key={gearItem.item.id}>
@@ -38,10 +38,10 @@ export default function WowAuditData({ wowAudit }: { wowAudit: CharacterWowAudit
                             })}
                         </TableRow>
                         <TableRow>
-                            {wowAudit.itemsEquipped.map((gearItem) => {
+                            {wowAudit.itemsEquipped.map(gearItem => {
                                 const slot = gearItem.equippedInSlot!
                                 const bestGearInSlot = wowAudit.bestItemsEquipped.find(
-                                    (b) => b.equippedInSlot === slot
+                                    b => b.equippedInSlot === slot
                                 )
                                 if (gearItem === bestGearInSlot) return null
                                 else if (
@@ -66,7 +66,7 @@ export default function WowAuditData({ wowAudit }: { wowAudit: CharacterWowAudit
             <p className="mt-6 font-bold">Tier set</p>
             <div className="w-full">
                 <div className="flex gap-x-2">
-                    {wowAudit.tiersetInfo.map((tierItem) => {
+                    {wowAudit.tiersetInfo.map(tierItem => {
                         return (
                             <WowGearIcon
                                 key={tierItem.item.id}

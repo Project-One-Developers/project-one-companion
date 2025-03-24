@@ -86,7 +86,7 @@ const countRoster = async (id: string): Promise<number> => {
 export const getRaidSessionWithSummaryList = async (): Promise<RaidSessionWithSummary[]> => {
     const sessions = await getRaidSessios()
 
-    const allPromise = sessions.map(async (s) => {
+    const allPromise = sessions.map(async s => {
         const [lootCount, rosterCount] = await Promise.all([countLoot(s.id), countRoster(s.id)])
         return {
             ...s,
@@ -100,7 +100,7 @@ export const getRaidSessionWithSummaryList = async (): Promise<RaidSessionWithSu
 }
 
 export const editRaidSession = async (editedRaidSession: EditRaidSession): Promise<string> => {
-    return await db().transaction(async (tx) => {
+    return await db().transaction(async tx => {
         const res = await tx
             .update(raidSessionTable)
             .set({
@@ -136,7 +136,7 @@ export const editRaidSession = async (editedRaidSession: EditRaidSession): Promi
 }
 
 export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<string> => {
-    return await db().transaction(async (tx) => {
+    return await db().transaction(async tx => {
         const res = await tx
             .insert(raidSessionTable)
             .values({
@@ -180,5 +180,5 @@ export const getRaidSessionRoster = async (id: string): Promise<Character[]> => 
         .innerJoin(charTable, eq(raidSessionRosterTable.charId, charTable.id))
         .where(eq(raidSessionRosterTable.raidSessionId, id))
 
-    return z.array(characterSchema).parse(result.flatMap((sr) => sr.characters))
+    return z.array(characterSchema).parse(result.flatMap(sr => sr.characters))
 }

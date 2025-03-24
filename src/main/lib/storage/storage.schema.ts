@@ -54,7 +54,7 @@ export const charTable = pgTable(
             .references(() => playerTable.id)
             .notNull()
     },
-    (t) => [
+    t => [
         unique('name_realm').on(t.name, t.realm) // coppia nome-realm unique
     ]
 )
@@ -104,7 +104,7 @@ export const charWowAuditTable = pgTable(
         itemsEquipped: jsonb('items_equipped').$type<GearItem[]>().notNull(),
         tiersetInfo: jsonb('tierset_info').$type<GearItem[]>().notNull()
     },
-    (t) => [primaryKey({ columns: [t.name, t.realm] })]
+    t => [primaryKey({ columns: [t.name, t.realm] })]
 )
 
 export const bisListTable = pgTable(
@@ -114,7 +114,7 @@ export const bisListTable = pgTable(
         itemId: integer('item_id').notNull(),
         specId: integer('spec_id').notNull()
     },
-    (t) => [unique().on(t.itemId, t.specId)]
+    t => [unique().on(t.itemId, t.specId)]
 )
 
 //////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ export const droptimizerUpgradesTable = pgTable(
             .references(() => droptimizerTable.url, { onDelete: 'cascade' })
             .notNull()
     },
-    (t) => [
+    t => [
         unique('item_upgrade_in_droptimizer').on(t.itemId, t.droptimizerId) // un itemid per droptimizer
     ]
 )
@@ -189,7 +189,7 @@ export const raidSessionRosterTable = pgTable(
             .references(() => charTable.id, { onDelete: 'cascade' })
             .notNull()
     },
-    (t) => [primaryKey({ columns: [t.raidSessionId, t.charId] })]
+    t => [primaryKey({ columns: [t.raidSessionId, t.charId] })]
 )
 
 export const lootTable = pgTable('loots', {
@@ -294,7 +294,7 @@ export const itemToCatalystTable = pgTable(
         encounterId: integer('encounter_id').notNull(),
         catalyzedItemId: integer('catalyzed_item_id').notNull()
     },
-    (t) => [
+    t => [
         primaryKey({ columns: [t.itemId, t.encounterId, t.catalyzedItemId] }) // todo: non va UPDATE BY ZORBY: fixed in this commit?
     ]
 )

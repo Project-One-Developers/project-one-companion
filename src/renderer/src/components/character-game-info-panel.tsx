@@ -88,7 +88,7 @@ export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
                 {currencies &&
                     currencies
                         .sort((a, b) => a.id - b.id)
-                        .map((currency) => (
+                        .map(currency => (
                             <WowCurrencyIcon
                                 key={currency.id}
                                 currency={currency}

@@ -48,7 +48,7 @@ export const getLootsBySessionWithAssigned = async (
 export const getLootsWithAssignedBySessions = async (
     raidSessionIds: string[]
 ): Promise<LootWithAssigned[]> => {
-    const lootsPromises = raidSessionIds.map((id) => getLootsBySessionWithAssigned(id))
+    const lootsPromises = raidSessionIds.map(id => getLootsBySessionWithAssigned(id))
     const lootsArrays = await Promise.all(lootsPromises)
     return lootsArrays.flat()
 }

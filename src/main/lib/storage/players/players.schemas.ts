@@ -17,10 +17,10 @@ const playerStorageSchema = z
             })
         )
     })
-    .transform((data) => ({
+    .transform(data => ({
         id: data.id,
         name: data.name,
-        characters: data.characters.map((char) => ({
+        characters: data.characters.map(char => ({
             id: char.id,
             name: char.name,
             realm: char.realm,

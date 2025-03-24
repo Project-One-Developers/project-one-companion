@@ -67,6 +67,6 @@ export const newLootsFromRcSchema = z
         csv: z
             .string()
             .min(1)
-            .refine((csv) => csv.includes(','), { message: 'Invalid CSV format' })
+            .refine(csv => csv.includes(','), { message: 'Invalid CSV format' })
     })
     .strict()

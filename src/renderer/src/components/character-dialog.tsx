@@ -59,7 +59,7 @@ export default function CharacterDialog({
                 description: `The character ${arg.name} has been successfully added.`
             })
         },
-        onError: (error) => {
+        onError: error => {
             toast({
                 title: 'Error',
                 description: `Unable to add the character. Error: ${error.message}`
@@ -79,7 +79,7 @@ export default function CharacterDialog({
                 description: `Character ${arg.name} edited successfully`
             })
         },
-        onError: (error) => {
+        onError: error => {
             toast({
                 title: 'Error',
                 description: `Unable to edit the character. Error: ${error.message}`
@@ -156,7 +156,7 @@ export default function CharacterDialog({
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {REALMS.EU.map((r) => (
+                                                {REALMS.EU.map(r => (
                                                     <SelectItem key={r.slug} value={r.slug}>
                                                         {r.name}
                                                     </SelectItem>
@@ -185,7 +185,7 @@ export default function CharacterDialog({
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {ROLES.map((r) => (
+                                                {ROLES.map(r => (
                                                     <SelectItem key={r} value={r}>
                                                         {r}
                                                     </SelectItem>
@@ -215,7 +215,7 @@ export default function CharacterDialog({
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {filteredClasses.map((c) => (
+                                                {filteredClasses.map(c => (
                                                     <SelectItem key={c} value={c}>
                                                         {c}
                                                     </SelectItem>

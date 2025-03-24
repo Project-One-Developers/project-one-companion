@@ -70,7 +70,7 @@ export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).e
 export const raidbotsURLSchema = z
     .string()
     .url()
-    .refine((url) => url.includes('raidbots.com/simbot/report'), {
+    .refine(url => url.includes('raidbots.com/simbot/report'), {
         message: 'URL must be a raidbots.com report URL'
     })
     .brand('RaidbotsURL')

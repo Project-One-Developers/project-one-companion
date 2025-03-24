@@ -35,14 +35,14 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
     selectedCharacters,
     onCharacterToggle
 }) => {
-    const noneSelected = player.characters.every((char) => !selectedCharacters.includes(char.id))
+    const noneSelected = player.characters.every(char => !selectedCharacters.includes(char.id))
     return (
         <div className="flex items-center justify-between">
             <h3 className={clsx('font-bold ', noneSelected ? 'text-gray-800' : 'text-white')}>
                 {player.name}
             </h3>
             <div className="flex gap-x-1">
-                {player.characters?.map((char) => (
+                {player.characters?.map(char => (
                     <div key={char.id} onClick={() => onCharacterToggle(char.id)}>
                         <WowClassIcon
                             wowClassName={char.class}
@@ -70,8 +70,8 @@ const hasClass = (
     availablePlayers: PlayerWithCharacters[]
 ): boolean => {
     // Check if any selected character belongs to the specified class
-    return roster.some((charId) => {
-        const character = availablePlayers.flatMap((p) => p.characters).find((c) => c.id === charId)
+    return roster.some(charId => {
+        const character = availablePlayers.flatMap(p => p.characters).find(c => c.id === charId)
         return character?.class === className
     })
 }
@@ -93,10 +93,10 @@ const calculateImmunities = (
     const immunityCounts: Record<string, number> = {}
 
     // Iterate through selected characters and count their immunities
-    roster.forEach((charId) => {
-        const character = availablePlayers.flatMap((p) => p.characters).find((c) => c.id === charId)
+    roster.forEach(charId => {
+        const character = availablePlayers.flatMap(p => p.characters).find(c => c.id === charId)
         if (character?.class && classImmunities[character.class]) {
-            classImmunities[character.class].forEach((immunity) => {
+            classImmunities[character.class].forEach(immunity => {
                 immunityCounts[immunity] = (immunityCounts[immunity] || 0) + 1
             })
         }
@@ -163,7 +163,7 @@ const RaidOverview: React.FC<{ roster: string[]; availablePlayers: PlayerWithCha
 }
 
 const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
-    raidDate: z.string().refine((val) => /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(val), {
+    raidDate: z.string().refine(val => /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(val), {
         message: 'Invalid date format. Use DD/MM/YYYY HH:mm'
     })
 })
@@ -182,9 +182,9 @@ const SessionForm: React.FC<{
         queryFn: fetchPlayers
     })
 
-    const [tankPlayers, healerPlayers, dpsPlayers] = ['Tank', 'Healer', 'DPS'].map((role) =>
+    const [tankPlayers, healerPlayers, dpsPlayers] = ['Tank', 'Healer', 'DPS'].map(role =>
         players.filter(
-            (p) => p.characters && p.characters.length > 0 && p.characters[0].role === role
+            p => p.characters && p.characters.length > 0 && p.characters[0].role === role
         )
     )
 
@@ -199,7 +199,7 @@ const SessionForm: React.FC<{
         defaultValues: existingSession
             ? {
                   name: existingSession.name,
-                  roster: existingSession.roster.map((r) => r.id),
+                  roster: existingSession.roster.map(r => r.id),
                   raidDate: formatUnixTimestampForDisplay(existingSession.raidDate)
               }
             : {
@@ -222,11 +222,11 @@ const SessionForm: React.FC<{
         player: PlayerWithCharacters,
         charId: string
     ): string[] => {
-        const playerCharIds = new Set(player.characters?.map((c) => c.id) || [])
+        const playerCharIds = new Set(player.characters?.map(c => c.id) || [])
         if (currentRoster.has(charId)) {
             currentRoster.delete(charId)
         } else {
-            playerCharIds.forEach((id) => currentRoster.delete(id))
+            playerCharIds.forEach(id => currentRoster.delete(id))
             currentRoster.add(charId)
         }
         return Array.from(currentRoster)
@@ -239,7 +239,7 @@ const SessionForm: React.FC<{
     return (
         <form onSubmit={handleSubmit(onSubmitForm)} className="w-full mx-auto space-y-6">
             <div className="flex space-x-4">
-                {['name', 'raidDate'].map((field) => (
+                {['name', 'raidDate'].map(field => (
                     <div key={field} className="flex-1">
                         <input
                             {...register(field as 'name' | 'raidDate')}
@@ -263,12 +263,12 @@ const SessionForm: React.FC<{
                     render={({ field }) => (
                         <>
                             <div className="space-y-2 overflow-y-auto p-1">
-                                {tankPlayers.map((player) => (
+                                {tankPlayers.map(player => (
                                     <PlayerWithCharsRow
                                         key={player.id}
                                         player={player}
                                         selectedCharacters={field.value}
-                                        onCharacterToggle={(charId) => {
+                                        onCharacterToggle={charId => {
                                             const currentRoster = new Set(field.value)
                                             field.onChange(
                                                 toggleCharacter(currentRoster, player, charId)
@@ -279,12 +279,12 @@ const SessionForm: React.FC<{
                                 <hr className="border-gray-800" />
                                 {healerPlayers
                                     .sort((a, b) => a.name.localeCompare(b.name))
-                                    .map((player) => (
+                                    .map(player => (
                                         <PlayerWithCharsRow
                                             key={player.id}
                                             player={player}
                                             selectedCharacters={field.value}
-                                            onCharacterToggle={(charId) => {
+                                            onCharacterToggle={charId => {
                                                 const currentRoster = new Set(field.value)
                                                 field.onChange(
                                                     toggleCharacter(currentRoster, player, charId)
@@ -296,12 +296,12 @@ const SessionForm: React.FC<{
                             <div className="space-y-2 overflow-y-auto p-1">
                                 {dpsPlayers
                                     .sort((a, b) => a.name.localeCompare(b.name))
-                                    .map((player) => (
+                                    .map(player => (
                                         <PlayerWithCharsRow
                                             key={player.id}
                                             player={player}
                                             selectedCharacters={field.value}
-                                            onCharacterToggle={(charId) => {
+                                            onCharacterToggle={charId => {
                                                 const currentRoster = new Set(field.value)
                                                 field.onChange(
                                                     toggleCharacter(currentRoster, player, charId)

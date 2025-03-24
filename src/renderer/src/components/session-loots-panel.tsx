@@ -55,7 +55,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
             LFR: 0
         }
 
-        loots.forEach((loot) => {
+        loots.forEach(loot => {
             const { bossId } = loot.item
             const difficulty = loot.raidDifficulty
 
@@ -71,9 +71,9 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
             }
         })
 
-        const uniqueDifficulties = Array.from(
-            new Set(loots.map((loot) => loot.raidDifficulty))
-        ).sort((a, b) => difficultyOrder.indexOf(a) - difficultyOrder.indexOf(b))
+        const uniqueDifficulties = Array.from(new Set(loots.map(loot => loot.raidDifficulty))).sort(
+            (a, b) => difficultyOrder.indexOf(a) - difficultyOrder.indexOf(b)
+        )
 
         return { groupedLoots: grouped, allDifficulties: uniqueDifficulties, tokenSums }
     }, [loots])
@@ -93,7 +93,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                     <thead>
                         <tr>
                             <th className="p-2 text-left">Boss</th>
-                            {allDifficulties.map((difficulty) => (
+                            {allDifficulties.map(difficulty => (
                                 <th key={difficulty} className="p-2 text-left">
                                     {difficulty} ({tokenSums[difficulty]} tokens)
                                 </th>
@@ -101,15 +101,15 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                         </tr>
                     </thead>
                     <tbody>
-                        {orderedBosses.map((boss) => (
+                        {orderedBosses.map(boss => (
                             <tr key={boss.id} className="border-t">
                                 <td className="p-2 font-semibold">{boss.name}</td>
-                                {allDifficulties.map((difficulty) => (
+                                {allDifficulties.map(difficulty => (
                                     <td key={difficulty} className="p-2">
                                         <div className="flex flex-row gap-2">
                                             {groupedLoots[boss.id]?.[difficulty]
                                                 ?.sort((a, b) => a.itemId - b.itemId)
-                                                .map((loot) => (
+                                                .map(loot => (
                                                     <div key={loot.id} className="relative group">
                                                         <WowGearIcon
                                                             gearItem={loot.gearItem}

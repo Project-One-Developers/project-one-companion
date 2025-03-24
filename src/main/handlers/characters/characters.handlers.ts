@@ -173,15 +173,15 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
         getAllCharacterWowAudit()
     ])
 
-    const res: CharacterSummary[] = roster.map((char) => {
+    const res: CharacterSummary[] = roster.map(char => {
         // get latest droptimizers for a given chars
         const charDroptimizers = latestDroptimizer.filter(
-            (dropt) => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
+            dropt => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
         )
 
         const charWowAudit: CharacterWowAudit | null =
             wowAuditData.find(
-                (wowaudit) => wowaudit.name === char.name && wowaudit.realm === char.realm
+                wowaudit => wowaudit.name === char.name && wowaudit.realm === char.realm
             ) ?? null
 
         // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
@@ -191,7 +191,7 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
         const charAssignedLoots = !lowerBound
             ? []
             : allAssignedLoots.filter(
-                  (l) => l.assignedCharacterId === char.id && l.dropDate > lowerBound
+                  l => l.assignedCharacterId === char.id && l.dropDate > lowerBound
               )
 
         return {

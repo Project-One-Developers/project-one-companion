@@ -52,7 +52,7 @@ export const cloneRaidSessionHandler = async (id: string): Promise<RaidSession> 
     const cloned: NewRaidSession = {
         name: source.name + '-' + newUUID().slice(0, 6),
         raidDate: getUnixTimestamp(), // set now as session date
-        roster: source.roster.map((r) => r.id)
+        roster: source.roster.map(r => r.id)
     }
     return await addRaidSessionHandler(cloned)
 }
@@ -67,11 +67,11 @@ export const importRosterInRaidSessionHandler = async (
     // parse csv: each line is a character name-server or character name
     const roster: Character[] = csv
         .split('\n')
-        .map((line) => line.trim())
-        .filter((line) => line.length > 0)
-        .map((line) => {
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .map(line => {
             const [name] = line.split('-')
-            const matches = allCharacters.filter((r) => r.name === name)
+            const matches = allCharacters.filter(r => r.name === name)
 
             if (matches.length === 0) {
                 return undefined
@@ -79,17 +79,17 @@ export const importRosterInRaidSessionHandler = async (
                 return matches[0]
             } else {
                 // multiple matches, prefer main
-                return matches.find((r) => r.main)
+                return matches.find(r => r.main)
             }
         })
-        .filter((r) => r !== undefined)
+        .filter(r => r !== undefined)
 
     console.log(csv)
     console.log(roster)
 
     const editedRaidSession: EditRaidSession = {
         ...source,
-        roster: roster.map((r) => r.id)
+        roster: roster.map(r => r.id)
     }
 
     // edit
