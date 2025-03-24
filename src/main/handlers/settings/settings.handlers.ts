@@ -27,14 +27,14 @@ export const setAppSettingsHandler = async (settings: AppSettings): Promise<void
     store.setDatabaseUrl(settings.databaseUrl)
 
     // reload db connection
-    reloadConnection()
+    await reloadConnection()
 }
 
 export const resetAppSettingsHandler = async (): Promise<void> => {
     store.factoryReset()
 
     // reload db connection
-    reloadConnection()
+    await reloadConnection()
 }
 
 export const upsertJsonDataHandler = async (): Promise<void> => {

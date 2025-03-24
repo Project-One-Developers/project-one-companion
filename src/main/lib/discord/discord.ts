@@ -39,12 +39,12 @@ export async function readAllMessagesInDiscord(
 
         console.log(`Fetched ${messages.length} messages`)
 
-        client.destroy()
+        await client.destroy()
 
         return messages
     } catch (error) {
         console.error('Error syncing from Discord:', error)
-        client.destroy()
+        await client.destroy()
         return []
     }
 }

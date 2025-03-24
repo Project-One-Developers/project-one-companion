@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { is } from '@electron-toolkit/utils'
 import { closeDb } from '@storage/storage.config'
 import dotenv from 'dotenv'
@@ -181,13 +182,19 @@ app.on('window-all-closed', () => {
     }
 })
 
-app.on('before-quit', async (event) => {
+app.on('before-quit', (event) => {
     // Prevent quitting immediately
     event.preventDefault()
 
-    await closeDb()
-
-    app.exit(0)
+    closeDb()
+        .then(() => {
+            console.log('Database closed successfully')
+            app.exit(0)
+        })
+        .catch((error) => {
+            console.error('Failed to close database:', error)
+            app.exit(1)
+        })
 })
 
 // https://github.com/electron/electron/issues/32760

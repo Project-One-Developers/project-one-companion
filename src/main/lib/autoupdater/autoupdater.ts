@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { app, dialog, MessageBoxOptions, shell } from 'electron'
 import logger from 'electron-log/main'
 import { autoUpdater, UpdateDownloadedEvent, UpdateInfo } from 'electron-updater'
