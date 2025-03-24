@@ -1,64 +1,97 @@
 import eslint from '@eslint/js'
-import prettier from 'eslint-config-prettier'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
+import eslintConfigPrettier from 'eslint-config-prettier/flat'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
-const config = tseslint.config(
-    /**
-     * ignore
-     */
-    {
-        name: 'Global Ignores',
-        ignores: ['build', 'dist', 'out', 'resources', 'assets']
-    },
-    /**
-     * shared language options
-     */
+export default defineConfig([
+    globalIgnores([
+        '**/build/**',
+        '**/dist/**',
+        '**/out/**',
+        '**/resources/**',
+        '**/assets/**',
+        '**/eslint.config.mjs',
+        '**/tailwind.config.js',
+        '**/jest.config.js',
+        '**/postcss.config.js'
+    ]),
+
+    // Base configurations
+    eslint.configs.recommended,
+    ...tseslint.configs.recommended,
+
+    // Global language options (shared)
     {
         languageOptions: {
             globals: {
                 ...globals.node
+            },
+            // Use projectService instead of project
+            parserOptions: {
+                projectService: true
             }
         }
     },
-    /**
-     * base
-     */
-    eslint.configs.recommended,
-    /**
-     * typescript
-     */
-    ...tseslint.configs.recommended,
 
-    /**
-     * react
-     */
+    // Main process files
     {
-        files: ['src/renderer/src/**/*.{ts,tsx}'],
+        files: ['src/main/**/*.{ts,js}'],
         languageOptions: {
-            globals: globals.browser,
+            globals: {
+                ...globals.node
+            },
             parser: tseslint.parser
+        },
+        rules: {
+            '@typescript-eslint/no-floating-promises': 'error',
+            '@typescript-eslint/no-misused-promises': 'error'
+        }
+    },
+
+    // Preload process files (if you have them)
+    {
+        files: ['src/preload/**/*.{ts,js}'],
+        languageOptions: {
+            globals: {
+                ...globals.node,
+                ...globals.browser
+            },
+            parser: tseslint.parser
+        }
+    },
+
+    // Renderer process files
+    {
+        files: ['src/renderer/**/*.{ts,tsx,js,jsx}'],
+        languageOptions: {
+            globals: {
+                ...globals.browser
+            },
+            parser: tseslint.parser
+        },
+        plugins: {
+            react: reactPlugin,
+            'react-hooks': reactHooksPlugin
         },
         settings: {
             react: {
                 version: 'detect'
             }
         },
-        plugins: {
-            'react-hooks': reactHooks,
-            react: react
-        },
         rules: {
-            ...react.configs.flat.recommended.rules,
-            ...react.configs.flat['jsx-runtime'].rules,
-            ...reactHooks.configs.recommended.rules
+            // React recommended rules
+            ...reactPlugin.configs.flat.recommended.rules,
+            // JSX runtime rules
+            ...reactPlugin.configs.flat['jsx-runtime'].rules,
+            // React hooks rules
+            ...reactHooksPlugin.configs.recommended.rules
         }
     },
-    /**
-     * shared rules (Main + Renderer)
-     */
+
+    // Shared TypeScript rules
     {
         rules: {
             '@typescript-eslint/interface-name-prefix': 'off',
@@ -69,10 +102,7 @@ const config = tseslint.config(
             '@typescript-eslint/no-unused-vars': 'warn'
         }
     },
-    /**
-     * turns off all rules that are unnecessary or might conflict with Prettier
-     */
-    prettier
-)
 
-export default config
+    // Prettier compatibility (always last)
+    eslintConfigPrettier
+])
