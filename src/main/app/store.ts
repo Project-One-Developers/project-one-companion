@@ -17,7 +17,7 @@ class AppStore {
     public DEFAULT_DATABASE_URL: string = '"postgresql://admin:admin@localhost:5432/postgres"'
 
     private store: Store<StoreT>
-    constructor() {
+    public constructor() {
         this.store = new Store<StoreT>()
         if (!this.store.has('bounds')) {
             this.store.set('bounds', this.DEFAULT_BOUNDS)

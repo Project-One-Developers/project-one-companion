@@ -99,7 +99,8 @@ export default defineConfig([
             '@typescript-eslint/explicit-module-boundary-types': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/ban-ts-comment': 'warn',
-            '@typescript-eslint/no-unused-vars': 'warn'
+            '@typescript-eslint/no-unused-vars': 'warn',
+            '@typescript-eslint/explicit-member-accessibility': 'warn'
         }
     },
 
