@@ -890,5 +890,3 @@ export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
         maxItemLevel: 678
     }
 }
-
-export default bonusItemTracks
