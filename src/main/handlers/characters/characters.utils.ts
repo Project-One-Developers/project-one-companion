@@ -23,9 +23,9 @@ import {
 export const fetchWowAuditData = async (apiKey: string): Promise<unknown> => {
     const responseJson = await fetch(`https://data.wowaudit.com/dragonflight/${apiKey}.json`)
     if (!responseJson.ok) {
-        const errorMessage = `Failed to fetch JSON data: ${responseJson.status} ${responseJson.statusText}`
-        console.log(errorMessage)
-        throw new Error(errorMessage)
+        throw new Error(
+            `Failed to fetch JSON data: ${responseJson.status} ${responseJson.statusText}`
+        )
     }
     return await responseJson.json()
 }
