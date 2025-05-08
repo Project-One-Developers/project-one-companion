@@ -5,15 +5,17 @@ import { z } from 'zod'
 import { store } from '../../app/store'
 import { logger } from '../logger/logger'
 
+type DbInstanceFromSchema = PostgresJsDatabase<typeof schema>
+
 const getDatabaseUrl = (): string => {
     return process.env.MAIN_VITE_DATABASE_URL ?? store.getDatabaseUrl()
 }
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 let dbClient: postgres.Sql | null = null
-let dbInstance: PostgresJsDatabase<typeof schema> | null = null
+let dbInstance: DbInstanceFromSchema | null = null
 
-export function getDb() {
+export function getDb(): DbInstanceFromSchema {
     if (!dbInstance) {
         reloadConnection().catch(e => {
             throw new Error('getDb.reloadConnection: ' + e)
