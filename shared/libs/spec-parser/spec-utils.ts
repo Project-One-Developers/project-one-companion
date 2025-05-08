@@ -1,27 +1,32 @@
 import { Item, WowClass, WowClassName, WoWRole, WowSpec } from '@shared/types/types'
 import { WOW_CLASS_WITH_SPECS } from './spec-utils.schemas'
 
-export const getClassSpecs = (wowClass: number | WowClassName): WowSpec[] => {
-    return (
-        WOW_CLASS_WITH_SPECS.find(c =>
-            typeof wowClass === 'number' ? c.id === wowClass : c.name === wowClass
-        )?.specs ?? []
+const tankSpecIds = [66, 73, 104, 250, 268, 581]
+const healerSpecIds = [65, 105, 256, 257, 264, 270, 1468]
+
+export const getWowClassFromIdOrName = (wowClass: number | WowClassName): WowClass => {
+    const matchingClass = WOW_CLASS_WITH_SPECS.find(c =>
+        typeof wowClass === 'number' ? c.id === wowClass : c.name === wowClass
     )
+
+    if (!matchingClass) {
+        throw new Error(`No wow class found for ${wowClass}`)
+    }
+
+    return matchingClass
 }
 
-export const getWowClassByName = (wowClassName: WowClassName): WowClass => {
-    return WOW_CLASS_WITH_SPECS.find(c => c.name === wowClassName)!
+export const getClassSpecs = (wowClass: number | WowClassName): WowSpec[] => {
+    return getWowClassFromIdOrName(wowClass).specs
 }
 
 export const getClassSpecsForRole = (wowClass: number | WowClassName, role: WoWRole): WowSpec[] => {
-    return WOW_CLASS_WITH_SPECS.filter(c =>
-        typeof wowClass === 'number' ? c.id === wowClass : c.name === wowClass
-    )
-        .flatMap(c => c.specs)
-        .filter(spec => spec.role === role)
+    const matchingClass = getWowClassFromIdOrName(wowClass)
+
+    return matchingClass.specs.filter(spec => spec.role === role)
 }
 
-export const getSpec = (id: number): WowSpec => {
+export const getSpecById = (id: number): WowSpec => {
     const res = WOW_CLASS_WITH_SPECS.flatMap(c => c.specs).find(s => s.id === id)
     if (!res) throw Error('getSpec(): spec ' + id + 'not mapped')
     return res
@@ -32,9 +37,6 @@ export const getWowClassBySpecId = (id: number): WowClass => {
     if (!res) throw Error('getWowClassBySpecId(): spec ' + id + 'not mapped')
     return res
 }
-
-const tankSpecIds = [66, 73, 104, 250, 268, 581]
-const healerSpecIds = [65, 105, 256, 257, 264, 270, 1468]
 
 export const isTankSpec = (id: number): boolean => {
     return tankSpecIds.includes(id)

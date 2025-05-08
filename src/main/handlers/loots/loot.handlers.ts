@@ -1,4 +1,4 @@
-import { getWowClassByName } from '@shared/libs/spec-parser/spec-utils'
+import { getWowClassFromIdOrName } from '@shared/libs/spec-parser/spec-utils'
 import {
     CharacterWowAudit,
     CharAssignmentHighlights,
@@ -194,7 +194,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                 ),
                 alreadyGotIt: await parseLootAlreadyGotIt(
                     loot,
-                    getWowClassByName(char.class),
+                    getWowClassFromIdOrName(char.class),
                     charDroptimizers,
                     charAssignedLoots,
                     charWowAudit

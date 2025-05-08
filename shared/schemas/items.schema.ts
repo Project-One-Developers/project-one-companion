@@ -70,7 +70,7 @@ export const itemTrackSchema = z.object({
 })
 
 /**
- * Rapresents a looted version of an item (so with bonus and actual ilvl)
+ * Represents a looted version of an item (so with bonus and actual ilvl)
  */
 export const gearItemSchema = z.object({
     item: z.object({

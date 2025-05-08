@@ -14,10 +14,6 @@ import bonusItemTracks, {
 /**
  * Return item track name.
  * In case of token or tierset the track name is not well defined, we deduce it from Diff bonusId
- * @param bonusIds
- * @param isToken
- * @param isTierset
- * @returns
  */
 export function parseItemTrackName(
     bonusIds: number[],
@@ -51,9 +47,6 @@ export function parseItemTrackName(
 
 /**
  * Compare two gear item to find if its the same item id and diff tracks (es: Spymaster 632M and 639M are the same item)
- * @param a
- * @param b
- * @returns
  */
 export function gearAreTheSame(a: GearItem, b: GearItem): boolean {
     let aItemId = a.item.id
@@ -168,7 +161,7 @@ export function evalRealSeason(item: Item, ilvl: number) {
     if (item.sourceType === 'profession593') {
         // crafted item
         if (ilvl <= 636) return 1
-        if (ilvl > 636 && ilvl <= 675) return 2
+        if (ilvl > 636 && ilvl <= 675) return 2 //TODO: this will probably break next week
         throw new Error(
             'evalRealSeason: impossible to detect real season for crafted item - ' + item
         )
@@ -192,21 +185,10 @@ export function parseItemLevelFromRaidDiff(item: Item, raidDiff: WowRaidDifficul
 }
 
 export function parseItemTrack(input: number[]): ItemTrack | null {
-    for (const bonus of input) {
-        if (bonus in bonusItemTracks) {
-            return {
-                level: bonusItemTracks[bonus].level,
-                max: bonusItemTracks[bonus].max,
-                name: bonusItemTracks[bonus].name,
-                fullName: bonusItemTracks[bonus].fullName,
-                itemLevel: bonusItemTracks[bonus].itemLevel,
-                maxItemLevel: bonusItemTracks[bonus].maxItemLevel,
-                season: bonusItemTracks[bonus].season
-            }
-        }
-    }
+    const matchingBonus = input.find(bonus => bonus in bonusItemTracks) ?? null
 
-    return null // Return null if no match is found
+    // Return the matching track or null if none found
+    return matchingBonus ? bonusItemTracks[matchingBonus] : null
 }
 
 export const gearHasAvoidance = (input: number[] | null): boolean =>

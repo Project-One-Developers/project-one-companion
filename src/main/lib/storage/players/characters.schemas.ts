@@ -89,12 +89,16 @@ export const charWowAuditStorageToCharacterWowAudit = charWowAuditStorageSchema.
     })
 )
 
-function createEnchantPiece(name: string | null, quality: number | null) {
-    if (name !== null && quality !== null) {
-        return {
-            name,
-            quality
-        }
+// TODO: I think this could be types as something like {name, quality} | null
+// since both of those are either present or null
+function createEnchantPiece(
+    name: string | null,
+    quality: number | null
+): { name: string; quality: number } | null {
+    if (!name || !quality) return null
+
+    return {
+        name,
+        quality
     }
-    return null
 }

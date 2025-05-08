@@ -185,9 +185,9 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
 
         if (!droptimizerRes) {
             tx.rollback()
-            const errorMsg = `Failed to insert droptimizer. Droptimizer: ${JSON.stringify(droptimizer)}`
-            console.log(errorMsg)
-            throw new Error(errorMsg)
+            throw new Error(
+                `Failed to insert droptimizer. Droptimizer: ${JSON.stringify(droptimizer)}`
+            )
         }
 
         const upgradesArray = droptimizer.upgrades.map(
@@ -201,6 +201,7 @@ export const addDroptimizer = async (droptimizer: NewDroptimizer): Promise<Dropt
         if (upgradesArray.length > 0) {
             await tx.insert(droptimizerUpgradesTable).values(upgradesArray)
         }
+
         return droptimizerRes.url
     })
 

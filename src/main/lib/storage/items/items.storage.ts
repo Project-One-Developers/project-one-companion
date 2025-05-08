@@ -18,10 +18,11 @@ let allItems: Item[] | null = null
 let cachedTierset: Item[] | null = null
 
 export const getItems = async (): Promise<Item[]> => {
-    if (!allItems) {
-        const items = await db().query.itemTable.findMany()
-        allItems = z.array(itemSchema).parse(items)
-    }
+    if (allItems) return allItems
+
+    const items = await db().query.itemTable.findMany()
+    allItems = z.array(itemSchema).parse(items)
+
     return allItems
 }
 
@@ -30,11 +31,7 @@ export const getItem = async (id: number): Promise<Item | null> => {
         where: (itemTable, { eq }) => eq(itemTable.id, id)
     })
 
-    if (!res) {
-        return null
-    }
-
-    return itemSchema.parse(res)
+    return res ? itemSchema.parse(res) : null
 }
 
 export const getItemByIds = async (ids: number[]): Promise<Item[]> => {
@@ -45,31 +42,35 @@ export const getItemByIds = async (ids: number[]): Promise<Item[]> => {
 }
 
 export const getItemToTiersetMapping = async (): Promise<ItemToTierset[]> => {
-    if (!cachedItemsToTiersetMapping) {
-        const result = await db().query.itemToTiersetTable.findMany()
-        cachedItemsToTiersetMapping = itemToTiersetArraySchema.parse(result)
-    }
+    if (cachedItemsToTiersetMapping) return cachedItemsToTiersetMapping
+
+    const result = await db().query.itemToTiersetTable.findMany()
+    cachedItemsToTiersetMapping = itemToTiersetArraySchema.parse(result)
+
     return cachedItemsToTiersetMapping
 }
 export const getItemToCatalystMapping = async (): Promise<ItemToCatalyst[]> => {
-    if (!cachedItemsToCatalystMapping) {
-        const result = await db().query.itemToCatalystTable.findMany()
-        cachedItemsToCatalystMapping = itemToCatalystArraySchema.parse(result)
-    }
+    if (cachedItemsToCatalystMapping) return cachedItemsToCatalystMapping
+
+    const result = await db().query.itemToCatalystTable.findMany()
+    cachedItemsToCatalystMapping = itemToCatalystArraySchema.parse(result)
+
     return cachedItemsToCatalystMapping
 }
 
 export const getTiersetAndTokenList = async (): Promise<Item[]> => {
-    if (!cachedTierset) {
-        const res = await db().query.itemTable.findMany({
-            where: (itemTable, { eq, or, and }) =>
-                and(
-                    eq(itemTable.season, CURRENT_SEASON),
-                    or(eq(itemTable.tierset, true), eq(itemTable.token, true))
-                )
-        })
-        cachedTierset = z.array(itemSchema).parse(res)
-    }
+    if (cachedTierset) return cachedTierset
+
+    const res = await db().query.itemTable.findMany({
+        where: (itemTable, { eq, or, and }) =>
+            and(
+                eq(itemTable.season, CURRENT_SEASON),
+                or(eq(itemTable.tierset, true), eq(itemTable.token, true))
+            )
+    })
+
+    cachedTierset = z.array(itemSchema).parse(res)
+
     return cachedTierset
 }
 
