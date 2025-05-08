@@ -3,9 +3,8 @@
 import { app, dialog, MessageBoxOptions, shell } from 'electron'
 import logger from 'electron-log/main'
 import { autoUpdater, UpdateDownloadedEvent, UpdateInfo } from 'electron-updater'
+import { match } from 'ts-pattern'
 
-const isMacOS = process.platform === 'darwin'
-const isLinux = process.platform === 'linux'
 const supportedPlatforms = ['darwin', 'win32', 'linux']
 const supportedAutodownloads = ['win32']
 
@@ -65,18 +64,21 @@ const initUpdater = (opts: UpdateOptions) => {
                 if (response === 0) {
                     logger.log('[Update] User chose to download the update')
                     if (!autoUpdater.autoDownload) {
-                        let fileUrl = ''
-                        if (isMacOS) {
-                            fileUrl =
-                                event.files.find(file => file.url.includes('.dmg'))?.url ??
-                                event.files[0].url
-                        } else if (isLinux) {
-                            fileUrl =
-                                event.files.find(file => file.url.includes('.AppImage'))?.url ??
-                                event.files[0].url
-                        } else {
-                            fileUrl = event.files[0].url
-                        }
+                        const defaultFileUrl = event.files[0].url
+                        const fileUrl = match(process.platform)
+                            .with(
+                                'darwin',
+                                () =>
+                                    event.files.find(file => file.url.includes('.dmg'))?.url ??
+                                    defaultFileUrl
+                            )
+                            .with(
+                                'linux',
+                                () =>
+                                    event.files.find(file => file.url.includes('.AppImage'))?.url ??
+                                    defaultFileUrl
+                            )
+                            .otherwise(() => defaultFileUrl)
                         const url = `https://github.com/project-one-developers/project-one-companion/releases/download/v${event.version}/${fileUrl}`
                         // download from browser
                         shell.openExternal(url)

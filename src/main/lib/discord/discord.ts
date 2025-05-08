@@ -21,7 +21,7 @@ export async function readAllMessagesInDiscord(
         }
 
         let messages: Message[] = []
-        let lastId
+        let lastId: string | undefined
 
         while (true) {
             const options: FetchMessagesOptions = { limit: 100 }

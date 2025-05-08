@@ -30,7 +30,7 @@ const flattenRaidPartecipation = (result: any): RaidSessionWithRoster => {
         roster:
             result?.charPartecipation?.map(
                 (charPartecipation: any) => charPartecipation.character
-            ) || []
+            ) ?? []
     }
 }
 
@@ -72,7 +72,7 @@ const countLoot = async (id: string): Promise<number> => {
         .from(lootTable)
         .where(eq(lootTable.raidSessionId, id))
 
-    return res[0]?.count || 0
+    return res.at(0)?.count ?? 0
 }
 const countRoster = async (id: string): Promise<number> => {
     const res = await db()
@@ -80,7 +80,7 @@ const countRoster = async (id: string): Promise<number> => {
         .from(raidSessionRosterTable)
         .where(eq(raidSessionRosterTable.raidSessionId, id))
 
-    return res[0]?.count || 0
+    return res.at(0)?.count ?? 0
 }
 
 export const getRaidSessionWithSummaryList = async (): Promise<RaidSessionWithSummary[]> => {
@@ -111,9 +111,7 @@ export const editRaidSession = async (editedRaidSession: EditRaidSession): Promi
 
         if (!res) {
             tx.rollback()
-            const errorMsg = `Failed to insert a raid session. RaidSession: ${JSON.stringify(editedRaidSession)}`
-            console.log(errorMsg)
-            throw new Error(errorMsg)
+            throw new Error(`Failed to edit raid session ${JSON.stringify(editedRaidSession)}`)
         }
 
         // delete old partecipation
@@ -149,9 +147,7 @@ export const addRaidSession = async (newRaidSession: NewRaidSession): Promise<st
 
         if (!res) {
             tx.rollback()
-            const errorMsg = `Failed to insert a raid session. RaidSession: ${JSON.stringify(newRaidSession)}`
-            console.log(errorMsg)
-            throw new Error(errorMsg)
+            throw new Error(`Failed to insert raid session ${JSON.stringify(newRaidSession)}`)
         }
 
         if (newRaidSession.roster.length > 0) {
