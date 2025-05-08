@@ -72,7 +72,7 @@ export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> 
     // TODO: dynamically importing p-limit is not the best practice probably
     const { default: pLimit } = await import('p-limit')
 
-    const limit = pLimit(5)
+    const limit = pLimit(5) // TODO: probably increase this
 
     await Promise.all(
         Array.from(uniqueUrls).map(url =>
