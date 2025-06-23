@@ -42,6 +42,7 @@ export const upsertJsonDataHandler = async (): Promise<void> => {
 
     await upsertSeason(1)
     await upsertSeason(2)
+    await upsertSeason(3)
 
     // es: Cyrcle's Circlet
     const nonRaidItems = fetchNonRaidItems()

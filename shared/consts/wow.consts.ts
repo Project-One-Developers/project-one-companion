@@ -12,10 +12,19 @@ import {
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
 
-export const CURRENT_SEASON: number = 2
-// 1273: Nerubar
-// 1296: Undermine
-export const CURRENT_RAID_ID = CURRENT_SEASON === 1 ? 1273 : 1296
+export const CURRENT_SEASON: number = 2 // todo: to be updated "manually" at the start of each season
+export const CURRENT_RAID_ID = (() => {
+    switch (CURRENT_SEASON) {
+        case 1:
+            return 1273 // 1273: S1 Nerubar
+        case 2:
+            return 1296 // 1296: S2 Undermine
+        case 3:
+            return 1302 // 1302: S3 Manaforge Omega
+        default:
+            return 1296 // fallback to S2
+    }
+})()
 
 export const CLASSES_NAME = wowClassNameSchema.options
 export const SPECS_NAME = wowSpecNameSchema.options

@@ -91,7 +91,17 @@ export const encounterIcon = new Map<number, string>([
     [2644, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/6/122886.webp'], // The One-Armed Bandit
     [2645, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/206/124110.webp'], // Mug'Zee, Heads of Security
     [2646, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/95/126047.webp'], // Chrome King Gallywix
-    [-75, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
+    [-75, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'], // Trash Drop
+    // Manaforge Omega
+    [2684, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/93/127837.webp'], // Plexus Sentinel
+    [2686, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/65/128577.webp'], // Loom'ithar
+    [2685, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/63/128319.webp'], // Soulbinder Naazindhri
+    [2687, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/38/127526.webp'], // Forgeweaver Araz
+    [2688, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/127/122751.webp'], // The Soul Hunters
+    [2747, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/228/131300.webp'], // Fractillus
+    [2690, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/251/125691.webp'], // Nexus-King Salhadaar
+    [2691, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/99/128867.webp'], // Dimensius
+    [-76, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
 ])
 
 export const itemSlotIcon = new Map<WowItemSlotKey, string>([
