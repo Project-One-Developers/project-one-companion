@@ -93,6 +93,162 @@ export const fetchNonRaidItems = (): Item[] => {
         season: 1
     })
 
+    res.push({
+        id: 242664,
+        name: 'Durable Information Securing Container',
+        ilvlBase: 691,
+        ilvlMythic: 691,
+        ilvlHeroic: 691,
+        ilvlNormal: 691,
+        boe: false,
+        slot: 'Waist',
+        slotKey: 'waist',
+        itemSubclass: null,
+        token: false,
+        tokenPrefix: null,
+        tierset: false,
+        tiersetPrefix: null,
+        veryRare: false,
+        catalyzed: false,
+        specs: null,
+        specIds: null,
+        classes: null,
+        classesId: null,
+        stats: null,
+        mainStats: null,
+        secondaryStats: null,
+        itemClass: 'Armor',
+        armorType: 'Cloth',
+        wowheadUrl: 'https://www.wowhead.com/item=242664/durable-information-securing-container',
+        iconName: 'inv_armor_waistoftime_d_01_belt_titan-copy',
+        iconUrl:
+            'https://wow.zamimg.com/images/wow/icons/large/inv_armor_waistoftime_d_01_belt_titan-copy.jpg',
+        bossName: 'Jewelcrafting', // non è vero
+        bossId: -37, // non è vero
+        sourceId: -66, // non è vero
+        sourceName: 'Professions - Epic',
+        sourceType: 'profession593',
+        onUseTrinket: false,
+        season: 1
+    })
+
+    res.push({
+        id: 245964,
+        name: 'Durable Information Securing Container',
+        ilvlBase: 691,
+        ilvlMythic: 691,
+        ilvlHeroic: 691,
+        ilvlNormal: 691,
+        boe: false,
+        slot: 'Waist',
+        slotKey: 'waist',
+        itemSubclass: null,
+        token: false,
+        tokenPrefix: null,
+        tierset: false,
+        tiersetPrefix: null,
+        veryRare: false,
+        catalyzed: false,
+        specs: null,
+        specIds: null,
+        classes: null,
+        classesId: null,
+        stats: null,
+        mainStats: null,
+        secondaryStats: null,
+        itemClass: 'Armor',
+        armorType: 'Leather',
+        wowheadUrl: 'https://www.wowhead.com/item=245964/durable-information-securing-container',
+        iconName: 'inv_armor_waistoftime_d_01_belt_titan-copy',
+        iconUrl:
+            'https://wow.zamimg.com/images/wow/icons/large/inv_armor_waistoftime_d_01_belt_titan-copy.jpg',
+        bossName: 'Jewelcrafting', // non è vero
+        bossId: -37, // non è vero
+        sourceId: -66, // non è vero
+        sourceName: 'Professions - Epic',
+        sourceType: 'profession593',
+        onUseTrinket: false,
+        season: 1
+    })
+
+    res.push({
+        id: 245965,
+        name: 'Durable Information Securing Container',
+        ilvlBase: 691,
+        ilvlMythic: 691,
+        ilvlHeroic: 691,
+        ilvlNormal: 691,
+        boe: false,
+        slot: 'Waist',
+        slotKey: 'waist',
+        itemSubclass: null,
+        token: false,
+        tokenPrefix: null,
+        tierset: false,
+        tiersetPrefix: null,
+        veryRare: false,
+        catalyzed: false,
+        specs: null,
+        specIds: null,
+        classes: null,
+        classesId: null,
+        stats: null,
+        mainStats: null,
+        secondaryStats: null,
+        itemClass: 'Armor',
+        armorType: 'Mail',
+        wowheadUrl: 'https://www.wowhead.com/item=245965/durable-information-securing-container',
+        iconName: 'inv_armor_waistoftime_d_01_belt_titan-copy',
+        iconUrl:
+            'https://wow.zamimg.com/images/wow/icons/large/inv_armor_waistoftime_d_01_belt_titan-copy.jpg',
+        bossName: 'Jewelcrafting', // non è vero
+        bossId: -37, // non è vero
+        sourceId: -66, // non è vero
+        sourceName: 'Professions - Epic',
+        sourceType: 'profession593',
+        onUseTrinket: false,
+        season: 1
+    })
+
+    res.push({
+        id: 245966,
+        name: 'Durable Information Securing Container',
+        ilvlBase: 691,
+        ilvlMythic: 691,
+        ilvlHeroic: 691,
+        ilvlNormal: 691,
+        boe: false,
+        slot: 'Waist',
+        slotKey: 'waist',
+        itemSubclass: null,
+        token: false,
+        tokenPrefix: null,
+        tierset: false,
+        tiersetPrefix: null,
+        veryRare: false,
+        catalyzed: false,
+        specs: null,
+        specIds: null,
+        classes: null,
+        classesId: null,
+        stats: null,
+        mainStats: null,
+        secondaryStats: null,
+        itemClass: 'Armor',
+        armorType: 'Plate',
+        wowheadUrl: 'https://www.wowhead.com/item=245966/durable-information-securing-container',
+        iconName: 'inv_armor_waistoftime_d_01_belt_titan-copy',
+        iconUrl:
+            'https://wow.zamimg.com/images/wow/icons/large/inv_armor_waistoftime_d_01_belt_titan-copy.jpg',
+        bossName: 'Jewelcrafting', // non è vero
+        bossId: -37, // non è vero
+        sourceId: -66, // non è vero
+        sourceName: 'Professions - Epic',
+        sourceType: 'profession593',
+        onUseTrinket: false,
+        season: 1
+    })
+
     return res
 }
 
