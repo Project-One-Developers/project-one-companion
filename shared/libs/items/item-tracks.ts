@@ -837,56 +837,74 @@ export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
     // Mythic OK
     '11991': {
         level: 1,
-        max: 6,
+        max: 8,
         name: 'Myth',
-        fullName: 'Myth 1/6',
+        fullName: 'Myth 1/8',
         itemLevel: 662,
         season: 2,
-        maxItemLevel: 678
+        maxItemLevel: 684
     },
     '11992': {
         level: 2,
-        max: 6,
+        max: 8,
         name: 'Myth',
-        fullName: 'Myth 2/6',
+        fullName: 'Myth 2/8',
         itemLevel: 665,
         season: 2,
-        maxItemLevel: 678
+        maxItemLevel: 684
     },
     '11993': {
         level: 3,
-        max: 6,
+        max: 8,
         name: 'Myth',
-        fullName: 'Myth 3/6',
+        fullName: 'Myth 3/8',
         itemLevel: 668,
         season: 2,
-        maxItemLevel: 678
+        maxItemLevel: 684
     },
     '11994': {
         level: 4,
-        max: 6,
+        max: 8,
         name: 'Myth',
-        fullName: 'Myth 4/6',
+        fullName: 'Myth 4/8',
         itemLevel: 672,
         season: 2,
-        maxItemLevel: 678
+        maxItemLevel: 684
     },
     '11995': {
         level: 5,
-        max: 6,
+        max: 8,
         name: 'Myth',
-        fullName: 'Myth 5/6',
+        fullName: 'Myth 5/8',
         itemLevel: 675,
         season: 2,
-        maxItemLevel: 678
+        maxItemLevel: 684
     },
     '11996': {
         level: 6,
-        max: 6,
+        max: 8,
         name: 'Myth',
-        fullName: 'Myth 6/6',
+        fullName: 'Myth 6/8',
         itemLevel: 678,
         season: 2,
-        maxItemLevel: 678
+        maxItemLevel: 684
+    },
+    '12375': {
+        level: 7,
+        max: 8,
+        name: 'Myth',
+        fullName: 'Myth 7/8',
+        itemLevel: 681,
+        season: 2,
+        maxItemLevel: 684
+    },
+    '12376': {
+        level: 8,
+        max: 8,
+        name: 'Myth',
+        fullName: 'Myth 8/8',
+        itemLevel: 684,
+        season: 2,
+        maxItemLevel: 684
     }
 }
