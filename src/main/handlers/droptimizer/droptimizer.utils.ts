@@ -414,7 +414,10 @@ export const parseEquippedGear = async (
         }
 
         let itemTrack: ItemTrack | null = null
-        if (wowItem.sourceName !== 'Professions - Epic') {
+        if (
+            wowItem.sourceType !== 'profession593' && // crafted items doesn not have item track
+            !wowItem.sourceType.startsWith('special') // special season items like circe's circlet and s2 belt does not have item track
+        ) {
             itemTrack = parseItemTrack(bonusIds)
             if (!itemTrack) {
                 console.log(

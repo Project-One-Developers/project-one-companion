@@ -88,7 +88,7 @@ export const fetchNonRaidItems = (): Item[] => {
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
         sourceName: 'Tww Season 1 - Finger',
-        sourceType: 'tww-s1-finger',
+        sourceType: 'special-tww-s1-finger',
         onUseTrinket: false,
         season: 1
     })
@@ -127,7 +127,7 @@ export const fetchNonRaidItems = (): Item[] => {
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
         sourceName: 'Tww Season 2 - Belt',
-        sourceType: 'tww-s2-belt',
+        sourceType: 'special-tww-s2-belt',
         onUseTrinket: false,
         season: 2
     })
@@ -166,7 +166,7 @@ export const fetchNonRaidItems = (): Item[] => {
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
         sourceName: 'Tww Season 2 - Belt',
-        sourceType: 'tww-s2-belt',
+        sourceType: 'special-tww-s2-belt',
         onUseTrinket: false,
         season: 2
     })
@@ -205,7 +205,7 @@ export const fetchNonRaidItems = (): Item[] => {
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
         sourceName: 'Tww Season 2 - Belt',
-        sourceType: 'tww-s2-belt',
+        sourceType: 'special-tww-s2-belt',
         onUseTrinket: false,
         season: 2
     })
@@ -244,7 +244,7 @@ export const fetchNonRaidItems = (): Item[] => {
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
         sourceName: 'Tww Season 2 - Belt',
-        sourceType: 'tww-s2-belt',
+        sourceType: 'special-tww-s2-belt',
         onUseTrinket: false,
         season: 2
     })
