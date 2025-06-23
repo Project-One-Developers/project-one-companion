@@ -87,8 +87,8 @@ export const fetchNonRaidItems = (): Item[] => {
         bossName: 'Jewelcrafting', // non è vero
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
-        sourceName: 'Professions - Epic',
-        sourceType: 'profession593',
+        sourceName: 'Tww Season 1 - Finger',
+        sourceType: 'tww-s1-finger',
         onUseTrinket: false,
         season: 1
     })
@@ -126,10 +126,10 @@ export const fetchNonRaidItems = (): Item[] => {
         bossName: 'Jewelcrafting', // non è vero
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
-        sourceName: 'Professions - Epic',
-        sourceType: 'profession593',
+        sourceName: 'Tww Season 2 - Belt',
+        sourceType: 'tww-s2-belt',
         onUseTrinket: false,
-        season: 1
+        season: 2
     })
 
     res.push({
@@ -165,10 +165,10 @@ export const fetchNonRaidItems = (): Item[] => {
         bossName: 'Jewelcrafting', // non è vero
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
-        sourceName: 'Professions - Epic',
-        sourceType: 'profession593',
+        sourceName: 'Tww Season 2 - Belt',
+        sourceType: 'tww-s2-belt',
         onUseTrinket: false,
-        season: 1
+        season: 2
     })
 
     res.push({
@@ -204,10 +204,10 @@ export const fetchNonRaidItems = (): Item[] => {
         bossName: 'Jewelcrafting', // non è vero
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
-        sourceName: 'Professions - Epic',
-        sourceType: 'profession593',
+        sourceName: 'Tww Season 2 - Belt',
+        sourceType: 'tww-s2-belt',
         onUseTrinket: false,
-        season: 1
+        season: 2
     })
 
     res.push({
@@ -243,10 +243,10 @@ export const fetchNonRaidItems = (): Item[] => {
         bossName: 'Jewelcrafting', // non è vero
         bossId: -37, // non è vero
         sourceId: -66, // non è vero
-        sourceName: 'Professions - Epic',
-        sourceType: 'profession593',
+        sourceName: 'Tww Season 2 - Belt',
+        sourceType: 'tww-s2-belt',
         onUseTrinket: false,
-        season: 1
+        season: 2
     })
 
     return res
