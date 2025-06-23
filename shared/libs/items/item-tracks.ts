@@ -780,59 +780,77 @@ export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
         maxItemLevel: 658
     },
     // Hero Ok
+    '12372': {
+        level: 8,
+        max: 8,
+        name: 'Hero',
+        fullName: 'Hero 8/8',
+        itemLevel: 671,
+        season: 2,
+        maxItemLevel: 671
+    },
+    '12371': {
+        level: 7,
+        max: 8,
+        name: 'Hero',
+        fullName: 'Hero 7/8',
+        itemLevel: 668,
+        season: 2,
+        maxItemLevel: 671
+    },
     '11990': {
         level: 5,
-        max: 6,
+        max: 8,
         name: 'Hero',
-        fullName: 'Hero 6/6',
+        fullName: 'Hero 6/8',
         itemLevel: 665,
         season: 2,
-        maxItemLevel: 665
+        maxItemLevel: 671
     },
     '11989': {
         level: 5,
-        max: 6,
+        max: 8,
         name: 'Hero',
-        fullName: 'Hero 5/6',
+        fullName: 'Hero 5/8',
         itemLevel: 662,
         season: 2,
-        maxItemLevel: 665
+        maxItemLevel: 671
     },
     '11988': {
         level: 4,
-        max: 6,
+        max: 8,
         name: 'Hero',
-        fullName: 'Hero 4/6',
+        fullName: 'Hero 4/8',
         itemLevel: 658,
         season: 2,
-        maxItemLevel: 665
+        maxItemLevel: 671
     },
     '11987': {
         level: 3,
-        max: 6,
+        max: 8,
         name: 'Hero',
-        fullName: 'Hero 3/6',
+        fullName: 'Hero 3/8',
         itemLevel: 655,
         season: 2,
-        maxItemLevel: 665
+        maxItemLevel: 671
     },
     '11986': {
         level: 2,
-        max: 6,
+        max: 8,
         name: 'Hero',
-        fullName: 'Hero 2/6',
+        fullName: 'Hero 2/8',
         itemLevel: 652,
         season: 2,
-        maxItemLevel: 665
+        maxItemLevel: 671
     },
     '11985': {
         level: 1,
-        max: 6,
+        max: 8,
         name: 'Hero',
-        fullName: 'Hero 1/6',
+        fullName: 'Hero 1/8',
         itemLevel: 649,
         season: 2,
-        maxItemLevel: 665
+        maxItemLevel: 671
     },
     // Mythic OK
     '11991': {
