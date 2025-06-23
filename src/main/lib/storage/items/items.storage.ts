@@ -100,13 +100,15 @@ export const deleteItemById = async (id: number): Promise<void> => {
 }
 
 export const upsertItemsToTierset = async (itemsToTierset: ItemToTierset[]): Promise<void> => {
+    if (itemsToTierset.length === 0) return
     await db().delete(itemToTiersetTable)
     await db().insert(itemToTiersetTable).values(itemsToTierset)
 }
 
-export const upsertItemsToCatalyst = async (itemsToTierset: ItemToCatalyst[]): Promise<void> => {
+export const upsertItemsToCatalyst = async (itemsToCatalyst: ItemToCatalyst[]): Promise<void> => {
+    if (itemsToCatalyst.length === 0) return
     await db().delete(itemToCatalystTable)
-    await db().insert(itemToCatalystTable).values(itemsToTierset)
+    await db().insert(itemToCatalystTable).values(itemsToCatalyst)
 }
 
 export const invalidateCache = (): void => {
