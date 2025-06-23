@@ -138,6 +138,7 @@ export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): numb
     }
 
     // crafted items ilvl (10222 = Omen Crafted -> 593)
+    // TWW season 1
     if (bonusIds.includes(10222)) {
         //const baseLevel = 597
         if (bonusIds.includes(11144)) {
@@ -148,11 +149,27 @@ export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): numb
             return 619
         }
     }
+    // craft items ilvl (12040 = Fortune Crafted -> 632)
+    // TWW season 2
+    if (bonusIds.includes(12040)) {
+        // tww season 2 crafted item
+        if (bonusIds.includes(12043)) {
+            // tww season 2 mythic crest
+            return 681
+        } else if (bonusIds.includes(12042)) {
+            // tww season 2 hc crest
+            return 664
+        }
+    }
 
-    // edge case items (not worth mapping all possible states with bonus id)
-    if (item.id === 228411) {
+    // edge case items (not worth mapping all possible states with bonus id, assume player has maxed them)
+    if (item.id === 228411 || item.sourceType === 'special-tww-s1-finger') {
         // tww season 1 -  Cyrce's Circlet (Siren Isles)
         return 658
+    }
+    if (item.sourceType === 'special-tww-s2-belt') {
+        // tww season 2 -  Durable Information Securing Container
+        return 691
     }
 
     return null
