@@ -80,7 +80,7 @@ function createWindow(): void {
         if (mainWindow.isMinimized()) {
             mainWindow.minimize()
             if (process.platform === 'darwin') {
-                app.dock.hide()
+                app.dock?.hide()
             }
         }
     })
@@ -157,7 +157,7 @@ app.whenReady().then(async () => {
     }
 
     if (process.platform === 'darwin') {
-        app.dock.show()
+        app.dock?.show()
     }
 
     app.on('activate', () => {
@@ -167,7 +167,7 @@ app.whenReady().then(async () => {
             createWindow()
 
             if (process.platform === 'darwin') {
-                void app.dock.show()
+                void app.dock?.show()
             }
         }
     })
