@@ -12,7 +12,7 @@ import {
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
 
-export const CURRENT_SEASON: number = 2 // todo: to be updated "manually" at the start of each season
+export const CURRENT_SEASON: number = 3 // todo: to be updated "manually" at the start of each season
 export const CURRENT_RAID_ID = (() => {
     switch (CURRENT_SEASON) {
         case 1:
