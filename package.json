@@ -47,7 +47,7 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
-        "discord.js": "^14.20.0",
+        "discord.js": "^14.21.0",
         "drizzle-kit": "^0.31.4",
         "drizzle-orm": "^0.44.2",
         "electron-updater": "^6.6.2",
