@@ -1,3 +1,7 @@
+/// sources: https://www.raidbots.com/static/data/live/bonuses.json
+// parse tww item tracks:
+// jq 'map(select(.upgrade.fullName != null and (.upgrade.seasonId == 24 or .upgrade.seasonId == 25)) | {id, level: .upgrade.level, max: .upgrade.max, name: .upgrade.name, fullName: .upgrade.fullName, itemLevel: .upgrade.itemLevel})' bonus.json > parsed_bonus.json
+
 import { WowItemTrackName, WowRaidDifficulty } from '@shared/types/types'
 
 interface BonusItemTrack {
@@ -924,5 +928,410 @@ export const bonusItemTracks: { [key: string]: BonusItemTrack } = {
         itemLevel: 684,
         season: 2,
         maxItemLevel: 684
+    },
+    // TWW SEASON 3
+    // jq '.[] | map(select(.seasonId == 30)) | reduce .[] as $item ({}; .[$item.bonusId | tostring] = ($item | {level, max, name, fullName, itemLevel, season: .seasonId, maxItemLevel: 111}))' bonus.json > prova.json
+
+    // EXPLORER TWW SEASON 3
+    '12265': {
+        level: 1,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 1/8',
+        itemLevel: 642,
+        season: 3,
+        maxItemLevel: 665
+    },
+    '12266': {
+        level: 2,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 2/8',
+        itemLevel: 645,
+        season: 3,
+        maxItemLevel: 665
+    },
+    '12267': {
+        level: 3,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 3/8',
+        itemLevel: 649,
+        season: 3,
+        maxItemLevel: 665
+    },
+    '12268': {
+        level: 4,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 4/8',
+        itemLevel: 652,
+        season: 3,
+        maxItemLevel: 665
+    },
+    '12269': {
+        level: 5,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 5/8',
+        itemLevel: 655,
+        season: 3,
+        maxItemLevel: 665
+    },
+    '12270': {
+        level: 6,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 6/8',
+        itemLevel: 658,
+        season: 3,
+        maxItemLevel: 665
+    },
+    '12271': {
+        level: 7,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 7/8',
+        itemLevel: 662,
+        season: 3,
+        maxItemLevel: 665
+    },
+    '12272': {
+        level: 8,
+        max: 8,
+        name: 'Explorer',
+        fullName: 'Explorer 8/8',
+        itemLevel: 665,
+        season: 3,
+        maxItemLevel: 665
+    },
+    // Adventurer TWW SEASON 3
+    '12274': {
+        level: 1,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 1/8',
+        itemLevel: 655,
+        season: 3,
+        maxItemLevel: 678
+    },
+    '12275': {
+        level: 2,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 2/8',
+        itemLevel: 658,
+        season: 3,
+        maxItemLevel: 678
+    },
+    '12276': {
+        level: 3,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 3/8',
+        itemLevel: 662,
+        season: 3,
+        maxItemLevel: 678
+    },
+    '12277': {
+        level: 4,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 4/8',
+        itemLevel: 665,
+        season: 3,
+        maxItemLevel: 678
+    },
+    '12278': {
+        level: 5,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 5/8',
+        itemLevel: 668,
+        season: 3,
+        maxItemLevel: 678
+    },
+    '12279': {
+        level: 6,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 6/8',
+        itemLevel: 671,
+        season: 3,
+        maxItemLevel: 678
+    },
+    '12280': {
+        level: 7,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 7/8',
+        itemLevel: 675,
+        season: 3,
+        maxItemLevel: 678
+    },
+    '12281': {
+        level: 8,
+        max: 8,
+        name: 'Adventurer',
+        fullName: 'Adventurer 8/8',
+        itemLevel: 678,
+        season: 3,
+        maxItemLevel: 678
+    },
+    // Veteran
+    '12282': {
+        level: 1,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 1/8',
+        itemLevel: 668,
+        season: 3,
+        maxItemLevel: 691
+    },
+    '12283': {
+        level: 2,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 2/8',
+        itemLevel: 671,
+        season: 3,
+        maxItemLevel: 691
+    },
+    '12284': {
+        level: 3,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 3/8',
+        itemLevel: 675,
+        season: 3,
+        maxItemLevel: 691
+    },
+    '12285': {
+        level: 4,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 4/8',
+        itemLevel: 678,
+        season: 3,
+        maxItemLevel: 691
+    },
+    '12286': {
+        level: 5,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 5/8',
+        itemLevel: 681,
+        season: 3,
+        maxItemLevel: 691
+    },
+    '12287': {
+        level: 6,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 6/8',
+        itemLevel: 684,
+        season: 3,
+        maxItemLevel: 691
+    },
+    '12288': {
+        level: 7,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 7/8',
+        itemLevel: 688,
+        season: 3,
+        maxItemLevel: 691
+    },
+    '12289': {
+        level: 8,
+        max: 8,
+        name: 'Veteran',
+        fullName: 'Veteran 8/8',
+        itemLevel: 691,
+        season: 3,
+        maxItemLevel: 691
+    },
+    // Champion TWW SEASON 3
+    '12290': {
+        level: 1,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 1/8',
+        itemLevel: 681,
+        season: 3,
+        maxItemLevel: 704
+    },
+    '12291': {
+        level: 2,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 2/8',
+        itemLevel: 684,
+        season: 3,
+        maxItemLevel: 704
+    },
+    '12292': {
+        level: 3,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 3/8',
+        itemLevel: 688,
+        season: 3,
+        maxItemLevel: 704
+    },
+    '12293': {
+        level: 4,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 4/8',
+        itemLevel: 691,
+        season: 3,
+        maxItemLevel: 704
+    },
+    '12294': {
+        level: 5,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 5/8',
+        itemLevel: 694,
+        season: 3,
+        maxItemLevel: 704
+    },
+    '12295': {
+        level: 6,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 6/8',
+        itemLevel: 697,
+        season: 3,
+        maxItemLevel: 704
+    },
+    '12296': {
+        level: 7,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 7/8',
+        itemLevel: 701,
+        season: 3,
+        maxItemLevel: 704
+    },
+    '12297': {
+        level: 8,
+        max: 8,
+        name: 'Champion',
+        fullName: 'Champion 8/8',
+        itemLevel: 704,
+        season: 3,
+        maxItemLevel: 704
+    },
+    // Hero TWW SEASON 3
+    '12350': {
+        level: 1,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 1/6',
+        itemLevel: 694,
+        season: 3,
+        maxItemLevel: 710
+    },
+    '12351': {
+        level: 2,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 2/6',
+        itemLevel: 697,
+        season: 3,
+        maxItemLevel: 710
+    },
+    '12352': {
+        level: 3,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 3/6',
+        itemLevel: 701,
+        season: 3,
+        maxItemLevel: 710
+    },
+    '12353': {
+        level: 4,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 4/6',
+        itemLevel: 704,
+        season: 3,
+        maxItemLevel: 710
+    },
+    '12354': {
+        level: 5,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 5/6',
+        itemLevel: 707,
+        season: 3,
+        maxItemLevel: 710
+    },
+    '12355': {
+        level: 6,
+        max: 6,
+        name: 'Hero',
+        fullName: 'Hero 6/6',
+        itemLevel: 710,
+        season: 3,
+        maxItemLevel: 710
+    },
+    // Myth TWW SEASON 3
+    '12356': {
+        level: 1,
+        max: 6,
+        name: 'Myth',
+        fullName: 'Myth 1/6',
+        itemLevel: 707,
+        season: 3,
+        maxItemLevel: 723
+    },
+    '12357': {
+        level: 2,
+        max: 6,
+        name: 'Myth',
+        fullName: 'Myth 2/6',
+        itemLevel: 710,
+        season: 3,
+        maxItemLevel: 723
+    },
+    '12358': {
+        level: 3,
+        max: 6,
+        name: 'Myth',
+        fullName: 'Myth 3/6',
+        itemLevel: 714,
+        season: 3,
+        maxItemLevel: 723
+    },
+    '12359': {
+        level: 4,
+        max: 6,
+        name: 'Myth',
+        fullName: 'Myth 4/6',
+        itemLevel: 717,
+        season: 3,
+        maxItemLevel: 723
+    },
+    '12360': {
+        level: 5,
+        max: 6,
+        name: 'Myth',
+        fullName: 'Myth 5/6',
+        itemLevel: 720,
+        season: 3,
+        maxItemLevel: 723
+    },
+    '12361': {
+        level: 6,
+        max: 6,
+        name: 'Myth',
+        fullName: 'Myth 6/6',
+        itemLevel: 723,
+        season: 3,
+        maxItemLevel: 723
     }
 }
