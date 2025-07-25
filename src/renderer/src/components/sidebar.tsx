@@ -74,13 +74,18 @@ const weakaurasItems = [
         icon: Code2Icon
     },
     {
+        title: 'Reloe',
+        url: 'https://wago.io/search/imports/wow/all?q=User%3A%22Reloe%22',
+        icon: Code2Icon
+    },
+    {
         title: 'Northern Sky',
-        url: 'https://wago.io/NSUndermine',
+        url: 'https://wago.io/Y7yEWhBqV',
         icon: Code2Icon
     },
     {
         title: 'Liquid',
-        url: 'https://wago.io/LiquidUndermine',
+        url: 'https://wago.io/LiquidManaforge',
         icon: Code2Icon
     }
 ]
@@ -88,7 +93,12 @@ const weakaurasItems = [
 const spreadsheetItems = [
     {
         title: 'Split',
-        url: 'https://docs.google.com/spreadsheets/d/19eKRXiOP1IHGglSr89GCzdsFfff3ZKCAa6-ldEVrpVs/edit?gid=176460290#gid=176460290',
+        url: 'https://docs.google.com/spreadsheets/d/1kA2AIMB65xXnOY-dHKhOkaecwbmymdXP_jLg1Bu7xTI/edit?gid=2067098323#gid=2067098323',
+        icon: FileSpreadsheet
+    },
+    {
+        title: 'Farm 11.1',
+        url: 'https://docs.google.com/spreadsheets/d/1U8kKbRJQ13-cdH93otDlmc-6qbzQ1g55q9lRokvwSME/edit?pli=1&gid=0#gid=0',
         icon: FileSpreadsheet
     },
     {
