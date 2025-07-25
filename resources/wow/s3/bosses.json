@@ -1,5 +1,61 @@
 [
     {
+        "id":1271,
+        "name":"Ara-Kara, City of Echoes",
+        "order":-1,
+        "instanceId":-1,
+        "instanceName":"Mythic+ Dungeons",
+        "instanceType":"mplus-chest"
+    },
+    {
+        "id":1303,
+        "name":"Eco-Dome Al'dani",
+        "order":-1,
+        "instanceId":-1,
+        "instanceName":"Mythic+ Dungeons",
+        "instanceType":"mplus-chest"
+    },
+    {
+        "id":1185,
+        "name":"Halls of Atonement",
+        "order":-1,
+        "instanceId":-1,
+        "instanceName":"Mythic+ Dungeons",
+        "instanceType":"mplus-chest"
+    },
+    {
+        "id":1298,
+        "name":"Operation: Floodgate",
+        "order":-1,
+        "instanceId":-1,
+        "instanceName":"Mythic+ Dungeons",
+        "instanceType":"mplus-chest"
+    },
+    {
+        "id":1267,
+        "name":"Priory of the Sacred Flame",
+        "order":-1,
+        "instanceId":-1,
+        "instanceName":"Mythic+ Dungeons",
+        "instanceType":"mplus-chest"
+    },
+    {
+        "id":1194,
+        "name":"Tazavesh, the Veiled Market",
+        "order":2,
+        "instanceId":-1,
+        "instanceName":"Mythic+ Dungeons",
+        "instanceType":"mplus-chest"
+    },
+    {
+        "id":1270,
+        "name":"The Dawnbreaker",
+        "order":-1,
+        "instanceId":-1,
+        "instanceName":"Mythic+ Dungeons",
+        "instanceType":"mplus-chest"
+    },
+    {
         "id":-70,
         "name":"Catalyst - Season 1",
         "order":1,
@@ -211,6 +267,14 @@
         "id":2691,
         "name":"Dimensius, the All-Devouring",
         "order":8,
+        "instanceId":1302,
+        "instanceName":"Manaforge Omega",
+        "instanceType":"raid"
+    },
+    {
+        "id":-78,
+        "name":"Trash Drop",
+        "order":99,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
         "instanceType":"raid"

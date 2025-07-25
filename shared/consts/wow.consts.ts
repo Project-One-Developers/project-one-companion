@@ -22,7 +22,7 @@ export const CURRENT_RAID_ID = (() => {
         case 3:
             return 1302 // 1302: S3 Manaforge Omega
         default:
-            return 1296 // fallback to S2
+            return 1302 // fallback to S3
     }
 })()
 
