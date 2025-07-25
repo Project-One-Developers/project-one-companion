@@ -10,11 +10,6 @@
         "catalyzedItemId":211980
     },
     {
-        "itemId":237561,
-        "encounterId":2688,
-        "catalyzedItemId":211980
-    },
-    {
         "itemId":237550,
         "encounterId":2685,
         "catalyzedItemId":211981
@@ -85,11 +80,6 @@
         "catalyzedItemId":211989
     },
     {
-        "itemId":237561,
-        "encounterId":2688,
-        "catalyzedItemId":211989
-    },
-    {
         "itemId":237550,
         "encounterId":2685,
         "catalyzedItemId":211990
@@ -152,11 +142,6 @@
     {
         "itemId":237545,
         "encounterId":2686,
-        "catalyzedItemId":211998
-    },
-    {
-        "itemId":237561,
-        "encounterId":2688,
         "catalyzedItemId":211998
     },
     {
@@ -245,11 +230,6 @@
         "catalyzedItemId":212008
     },
     {
-        "itemId":237554,
-        "encounterId":2688,
-        "catalyzedItemId":212008
-    },
-    {
         "itemId":237537,
         "encounterId":2691,
         "catalyzedItemId":212009
@@ -320,11 +300,6 @@
         "catalyzedItemId":212017
     },
     {
-        "itemId":237554,
-        "encounterId":2688,
-        "catalyzedItemId":212017
-    },
-    {
         "itemId":237537,
         "encounterId":2691,
         "catalyzedItemId":212018
@@ -387,11 +362,6 @@
     {
         "itemId":237522,
         "encounterId":2686,
-        "catalyzedItemId":212026
-    },
-    {
-        "itemId":237554,
-        "encounterId":2688,
         "catalyzedItemId":212026
     },
     {
@@ -515,11 +485,6 @@
         "catalyzedItemId":212041
     },
     {
-        "itemId":237541,
-        "encounterId":2688,
-        "catalyzedItemId":212041
-    },
-    {
         "itemId":238031,
         "encounterId":-78,
         "catalyzedItemId":212041
@@ -583,11 +548,6 @@
         "itemId":243306,
         "encounterId":2688,
         "catalyzedItemId":212049
-    },
-    {
-        "itemId":237541,
-        "encounterId":2688,
-        "catalyzedItemId":212050
     },
     {
         "itemId":237541,
@@ -665,11 +625,6 @@
         "catalyzedItemId":212059
     },
     {
-        "itemId":237541,
-        "encounterId":2688,
-        "catalyzedItemId":212059
-    },
-    {
         "itemId":238031,
         "encounterId":-78,
         "catalyzedItemId":212059
@@ -740,11 +695,6 @@
         "catalyzedItemId":212068
     },
     {
-        "itemId":237541,
-        "encounterId":2688,
-        "catalyzedItemId":212068
-    },
-    {
         "itemId":238031,
         "encounterId":-78,
         "catalyzedItemId":212068
@@ -788,11 +738,6 @@
         "itemId":238033,
         "encounterId":-78,
         "catalyzedItemId":212074
-    },
-    {
-        "itemId":237549,
-        "encounterId":2688,
-        "catalyzedItemId":212075
     },
     {
         "itemId":237549,
@@ -870,11 +815,6 @@
         "catalyzedItemId":212084
     },
     {
-        "itemId":237549,
-        "encounterId":2688,
-        "catalyzedItemId":212084
-    },
-    {
         "itemId":237524,
         "encounterId":2686,
         "catalyzedItemId":212085
@@ -945,11 +885,6 @@
         "catalyzedItemId":212093
     },
     {
-        "itemId":237549,
-        "encounterId":2688,
-        "catalyzedItemId":212093
-    },
-    {
         "itemId":237524,
         "encounterId":2686,
         "catalyzedItemId":212094
@@ -972,11 +907,6 @@
     {
         "itemId":237545,
         "encounterId":2686,
-        "catalyzedItemId":229231
-    },
-    {
-        "itemId":237561,
-        "encounterId":2688,
         "catalyzedItemId":229231
     },
     {
@@ -1055,11 +985,6 @@
         "catalyzedItemId":229240
     },
     {
-        "itemId":237561,
-        "encounterId":2688,
-        "catalyzedItemId":229240
-    },
-    {
         "itemId":237550,
         "encounterId":2685,
         "catalyzedItemId":229241
@@ -1122,11 +1047,6 @@
     {
         "itemId":237545,
         "encounterId":2686,
-        "catalyzedItemId":229249
-    },
-    {
-        "itemId":237561,
-        "encounterId":2688,
         "catalyzedItemId":229249
     },
     {
@@ -1215,11 +1135,6 @@
         "catalyzedItemId":229259
     },
     {
-        "itemId":237554,
-        "encounterId":2688,
-        "catalyzedItemId":229259
-    },
-    {
         "itemId":237537,
         "encounterId":2691,
         "catalyzedItemId":229260
@@ -1277,11 +1192,6 @@
     {
         "itemId":237522,
         "encounterId":2686,
-        "catalyzedItemId":229268
-    },
-    {
-        "itemId":237554,
-        "encounterId":2688,
         "catalyzedItemId":229268
     },
     {
@@ -1352,11 +1262,6 @@
     {
         "itemId":237522,
         "encounterId":2686,
-        "catalyzedItemId":229277
-    },
-    {
-        "itemId":237554,
-        "encounterId":2688,
         "catalyzedItemId":229277
     },
     {
@@ -1480,11 +1385,6 @@
         "catalyzedItemId":229292
     },
     {
-        "itemId":237541,
-        "encounterId":2688,
-        "catalyzedItemId":229292
-    },
-    {
         "itemId":238031,
         "encounterId":-78,
         "catalyzedItemId":229292
@@ -1548,11 +1448,6 @@
         "itemId":243306,
         "encounterId":2688,
         "catalyzedItemId":229300
-    },
-    {
-        "itemId":237541,
-        "encounterId":2688,
-        "catalyzedItemId":229301
     },
     {
         "itemId":237541,
@@ -1690,11 +1585,6 @@
         "catalyzedItemId":229319
     },
     {
-        "itemId":237541,
-        "encounterId":2688,
-        "catalyzedItemId":229319
-    },
-    {
         "itemId":238031,
         "encounterId":-78,
         "catalyzedItemId":229319
@@ -1738,11 +1628,6 @@
         "itemId":238033,
         "encounterId":-78,
         "catalyzedItemId":229325
-    },
-    {
-        "itemId":237549,
-        "encounterId":2688,
-        "catalyzedItemId":229326
     },
     {
         "itemId":237549,
@@ -1820,11 +1705,6 @@
         "catalyzedItemId":229335
     },
     {
-        "itemId":237549,
-        "encounterId":2688,
-        "catalyzedItemId":229335
-    },
-    {
         "itemId":237524,
         "encounterId":2686,
         "catalyzedItemId":229336
@@ -1883,11 +1763,6 @@
         "itemId":238033,
         "encounterId":-78,
         "catalyzedItemId":229343
-    },
-    {
-        "itemId":237549,
-        "encounterId":2688,
-        "catalyzedItemId":229344
     },
     {
         "itemId":237549,
