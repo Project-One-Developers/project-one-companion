@@ -101,7 +101,7 @@ export const encounterIcon = new Map<number, string>([
     [2747, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/240/127984.webp'], // Fractillus
     [2690, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/251/125691.webp'], // Nexus-King Salhadaar
     [2691, 'https://wow.zamimg.com/modelviewer/ptr2/webthumbs/npc/99/128867.webp'], // Dimensius
-    [-76, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
+    [-78, 'https://wow.zamimg.com/modelviewer/classic/webthumbs/npc/55/117047.webp'] // Trash Drop
 ])
 
 export const itemSlotIcon = new Map<WowItemSlotKey, string>([
