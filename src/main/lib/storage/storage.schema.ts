@@ -275,6 +275,12 @@ export const itemTable = pgTable('items', {
         .notNull()
 })
 
+// Item Note ( user can write note about item, we isolate in a dedicated table to avoid data loss on item reload)
+export const itemNoteTable = pgTable('items_note', {
+    itemId: integer('item_id').primaryKey(),
+    note: varchar('note').notNull()
+})
+
 // Mapping tra itemId e Tier Token che lo genera - contiene l'import di public/items_to_tierset.csv
 export const itemToTiersetTable = pgTable('items_to_tierset', {
     itemId: integer('item_id').primaryKey(),

@@ -1,4 +1,3 @@
-
 import * as Tabs from '@radix-ui/react-tabs'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { updateItemBisSpecs } from '@renderer/lib/tanstack-query/bis-list'
@@ -7,14 +6,14 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { WOW_CLASS_WITH_SPECS } from '@shared/libs/spec-parser/spec-utils.schemas'
 import { Item } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
-import { Loader2, Users, StickyNote } from 'lucide-react'
+import { Loader2, StickyNote, Users } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
+import { Textarea } from './ui/text-area'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
-import { Textarea } from './ui/text-area'
 
 type ItemWithBisSpecs = {
     item: Item
@@ -29,19 +28,102 @@ type ItemBisSpecsDialogProps = {
 
 // Mock data for character inventory - replace with actual data fetching
 const mockCharactersWithItem = [
-    { name: "Paladin Tank", class: "paladin", spec: "Protection", hasItem: true },
-    { name: "Warrior DPS", class: "warrior", spec: "Fury", hasItem: true },
-    { name: "Mage Fire", class: "mage", spec: "Fire", hasItem: false }
+    { name: 'Paladin Tank', class: 'paladin', spec: 'Protection', hasItem: true },
+    { name: 'Warrior DPS', class: 'warrior', spec: 'Fury', hasItem: true },
+    { name: 'Mage Fire', class: 'mage', spec: 'Fire', hasItem: false }
 ]
 
+// Lazy component for Character Inventory
+function CharacterInventoryContent({ itemId }: { itemId: number }) {
+    const [isLoading, setIsLoading] = useState(true)
+    const [characters, setCharacters] = useState(mockCharactersWithItem)
+
+    useEffect(() => {
+        // Simulate loading character data
+        const loadCharacterData = async () => {
+            setIsLoading(true)
+            // Replace this with actual API call
+            await new Promise(resolve => setTimeout(resolve, 500)) // Simulate network delay
+            // In real implementation, fetch character data based on itemId
+            setCharacters(mockCharactersWithItem)
+            setIsLoading(false)
+        }
+
+        loadCharacterData()
+    }, [itemId])
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-[200px]">
+                <Loader2 className="animate-spin h-8 w-8" />
+                <span className="ml-2">Loading character inventory...</span>
+            </div>
+        )
+    }
+
+    return (
+        <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-2">Characters with this item:</h3>
+            {characters.filter(char => char.hasItem).length === 0 ? (
+                <p className="text-muted-foreground">No characters currently have this item.</p>
+            ) : (
+                characters
+                    .filter(char => char.hasItem)
+                    .map((character, index) => (
+                        <div
+                            key={index}
+                            className="flex items-center gap-3 p-3 bg-muted rounded-lg"
+                        >
+                            <WowClassIcon
+                                wowClassName={character.class}
+                                className="h-8 w-8 border-2 border-background rounded-lg"
+                            />
+                            <div className="flex-1">
+                                <div className="font-medium">{character.name}</div>
+                                <div className="text-sm text-muted-foreground">
+                                    {character.class} - {character.spec}
+                                </div>
+                            </div>
+                        </div>
+                    ))
+            )}
+
+            <h3 className="text-lg font-semibold mt-4 mb-2">All characters:</h3>
+            {characters.map((character, index) => (
+                <div
+                    key={index}
+                    className={`flex items-center gap-3 p-3 rounded-lg ${character.hasItem ? 'bg-green-900/20' : 'bg-muted'}`}
+                >
+                    <WowClassIcon
+                        wowClassName={character.class}
+                        className="h-8 w-8 border-2 border-background rounded-lg"
+                    />
+                    <div className="flex-1">
+                        <div className="font-medium">{character.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                            {character.class} - {character.spec}
+                        </div>
+                    </div>
+                    <div
+                        className={`text-sm font-medium ${character.hasItem ? 'text-green-400' : 'text-muted-foreground'}`}
+                    >
+                        {character.hasItem ? 'Has Item' : 'No Item'}
+                    </div>
+                </div>
+            ))}
+        </div>
+    )
+}
+
 export default function ItemBisSpecsDialog({
-                                               isOpen,
-                                               setOpen,
-                                               itemAndSpecs
-                                           }: ItemBisSpecsDialogProps): JSX.Element {
+    isOpen,
+    setOpen,
+    itemAndSpecs
+}: ItemBisSpecsDialogProps): JSX.Element {
     const [selectedSpecs, setSelectedSpecs] = useState<number[]>([])
     const [itemNote, setItemNote] = useState<string>('')
     const [activeTab, setActiveTab] = useState<string>('bis-specs')
+    const [hasLoadedInventory, setHasLoadedInventory] = useState(false)
 
     // Sync selectedSpecs when itemAndSpecs changes
     useEffect(() => {
@@ -51,6 +133,13 @@ export default function ItemBisSpecsDialog({
             setItemNote('') // Replace with actual note loading
         }
     }, [itemAndSpecs])
+
+    // Track when inventory tab is accessed for the first time
+    useEffect(() => {
+        if (activeTab === 'inventory' && !hasLoadedInventory) {
+            setHasLoadedInventory(true)
+        }
+    }, [activeTab, hasLoadedInventory])
 
     const editMutation = useMutation({
         mutationFn: ({ itemId, specIds }: { itemId: number; specIds: number[] }) =>
@@ -120,7 +209,9 @@ export default function ItemBisSpecsDialog({
                                             type="multiple"
                                             className="flex ml-4 gap-2"
                                             value={selectedSpecs.map(String)}
-                                            onValueChange={values => setSelectedSpecs(values.map(Number))}
+                                            onValueChange={values =>
+                                                setSelectedSpecs(values.map(Number))
+                                            }
                                         >
                                             {classWithSpecs.specs.map(wowSpec => (
                                                 <ToggleGroup.Item
@@ -150,55 +241,23 @@ export default function ItemBisSpecsDialog({
                             }
                             disabled={editMutation.isPending}
                         >
-                            {editMutation.isPending ? <Loader2 className="animate-spin" /> : 'Save BiS Specs'}
+                            {editMutation.isPending ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                'Save BiS Specs'
+                            )}
                         </Button>
                     </Tabs.Content>
 
-
-                    {/* Tab 2: Character Inventory */}
+                    {/* Tab 2: Character Inventory - Now with lazy loading */}
                     <Tabs.Content value="inventory" className="mt-4">
-                        <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto">
-                            <h3 className="text-lg font-semibold mb-2">Characters with this item:</h3>
-                            {mockCharactersWithItem.filter(char => char.hasItem).length === 0 ? (
-                                <p className="text-muted-foreground">No characters currently have this item.</p>
-                            ) : (
-                                mockCharactersWithItem
-                                    .filter(char => char.hasItem)
-                                    .map((character, index) => (
-                                        <div key={index} className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                                            <WowClassIcon
-                                                wowClassName={character.class}
-                                                className="h-8 w-8 border-2 border-background rounded-lg"
-                                            />
-                                            <div className="flex-1">
-                                                <div className="font-medium">{character.name}</div>
-                                                <div className="text-sm text-muted-foreground">
-                                                    {character.class} - {character.spec}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))
-                            )}
-
-                            <h3 className="text-lg font-semibold mt-4 mb-2">All characters:</h3>
-                            {mockCharactersWithItem.map((character, index) => (
-                                <div key={index} className={`flex items-center gap-3 p-3 rounded-lg ${character.hasItem ? 'bg-green-900/20' : 'bg-muted'}`}>
-                                    <WowClassIcon
-                                        wowClassName={character.class}
-                                        className="h-8 w-8 border-2 border-background rounded-lg"
-                                    />
-                                    <div className="flex-1">
-                                        <div className="font-medium">{character.name}</div>
-                                        <div className="text-sm text-muted-foreground">
-                                            {character.class} - {character.spec}
-                                        </div>
-                                    </div>
-                                    <div className={`text-sm font-medium ${character.hasItem ? 'text-green-400' : 'text-muted-foreground'}`}>
-                                        {character.hasItem ? 'Has Item' : 'No Item'}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        {hasLoadedInventory ? (
+                            <CharacterInventoryContent itemId={itemAndSpecs.item.id} />
+                        ) : (
+                            <div className="flex items-center justify-center h-[200px] text-muted-foreground">
+                                Click to load character inventory...
+                            </div>
+                        )}
                     </Tabs.Content>
 
                     {/* Tab 3: Notes */}
@@ -208,7 +267,7 @@ export default function ItemBisSpecsDialog({
                                 <Textarea
                                     placeholder="Add any notes about this item (priority, special considerations, etc.)"
                                     value={itemNote}
-                                    onChange={(e) => setItemNote(e.target.value)}
+                                    onChange={e => setItemNote(e.target.value)}
                                     className="min-h-[200px] resize-none"
                                 />
                             </div>

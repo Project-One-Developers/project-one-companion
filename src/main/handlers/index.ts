@@ -25,6 +25,11 @@ import {
 } from './droptimizer/droptimizer.handlers'
 import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
+    deleteItemNoteHandler,
+    getItemNoteHandler,
+    setItemNoteHandler
+} from './items/itemsNote.handlers'
+import {
     addRaidLootsByManualInputHandler,
     addRaidLootsByMrtHandler,
     addRaidLootsByRCLootCsvHandler,
@@ -78,6 +83,9 @@ export const allHandlers = {
     'item-get': getItemByIdHandler,
     'items-list': getItemsHandler,
     'items-search': searchItemsHandler,
+    'item-get-note': getItemNoteHandler,
+    'item-set-note': setItemNoteHandler,
+    'item-delete-note': deleteItemNoteHandler,
     'boss-loot-table-get': getRaidLootTableHandler,
     'boss-list': getBossesHandler,
     'raid-session-list': getRaidSessionWithSummaryListHandler,

@@ -58,6 +58,7 @@ import {
     wowRolesSchema,
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
+import { itemNoteSchema } from '@shared/schemas/itemNote.schema'
 
 export type WowClassName = z.infer<typeof wowClassNameSchema>
 export type WowSpecName = z.infer<typeof wowSpecNameSchema>
@@ -106,6 +107,7 @@ export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
 export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>
 
 export type Item = z.infer<typeof itemSchema>
+export type ItemNote = z.infer<typeof itemNoteSchema>
 export type ItemTrack = z.infer<typeof itemTrackSchema>
 export type GearItem = z.infer<typeof gearItemSchema>
 
