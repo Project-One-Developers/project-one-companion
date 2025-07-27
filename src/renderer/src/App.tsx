@@ -9,7 +9,7 @@ import { CharacterPage } from './pages/character'
 import DroptimizerForm from './pages/droptimizer'
 import HomePage from './pages/home'
 import LootAssign from './pages/loot-assign'
-import BisListPage from './pages/loot-bis'
+import LootGains from './pages/loot-gains'
 import LootTable from './pages/loot-table'
 import { RaidSessionPage } from './pages/raid-session'
 import RaidSessionListPage from './pages/raid-session-list'
@@ -28,11 +28,11 @@ function App(): JSX.Element {
                         <Route path="/roster" element={<RosterPage />} />
                         <Route path="/roster/:characterId" element={<CharacterPage />} />
                         <Route path="/droptimizer" element={<DroptimizerForm />} />
+                        <Route path="/loot-gains" element={<LootGains />} />
                         <Route path="/loot-table" element={<LootTable />} />
                         <Route path="/raid-session" element={<RaidSessionListPage />} />
                         <Route path="/raid-session/:raidSessionId" element={<RaidSessionPage />} />
                         <Route path="/assign" element={<LootAssign />} />
-                        <Route path="/bis-list" element={<BisListPage />} />
                         <Route path="/summary" element={<SummaryPage />} />
                         <Route path="/config" element={<SettingsPage />} />
                     </Routes>

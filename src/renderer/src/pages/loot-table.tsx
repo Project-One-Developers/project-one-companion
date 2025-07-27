@@ -1,125 +1,30 @@
-import { TooltipArrow } from '@radix-ui/react-tooltip'
-import { FiltersPanel } from '@renderer/components/filter-panel'
+import ItemManagementDialog from '@renderer/components/item-management-dialog'
+import { Input } from '@renderer/components/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
-import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
+import { fetchBisList } from '@renderer/lib/tanstack-query/bis-list'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
-import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchCharacters } from '@renderer/lib/tanstack-query/players'
-import { getDpsHumanReadable } from '@renderer/lib/utils'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
-import { formatUnixTimestampToRelativeDays } from '@shared/libs/date/date-utils'
-import { BossWithItems, Droptimizer, Item, WowRaidDifficulty } from '@shared/types/types'
+import { BisList, BossWithItems, Item } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle } from 'lucide-react'
+import clsx from 'clsx'
+import { Edit, LoaderCircle } from 'lucide-react'
 
-import { useMemo, useState, type JSX } from 'react'
+import { useEffect, useMemo, useState, type JSX } from 'react'
 
-// Custom hooks
-const useRaidData = (currentRaid: number) => {
-    const droptimizerRes = useQuery({
-        queryKey: [queryKeys.droptimizers],
-        queryFn: fetchLatestDroptimizers
-    })
-    const raidLootTable = useQuery({
-        queryKey: [queryKeys.raidLootTable, currentRaid],
-        queryFn: () => fetchRaidLootTable(currentRaid)
-    })
-    const charRes = useQuery({
-        queryKey: [queryKeys.characters],
-        queryFn: fetchCharacters
-    })
-
-    return {
-        droptimizers: droptimizerRes.data ?? [],
-        droptimizersIsLoading: droptimizerRes.isLoading,
-        raidLootTable: raidLootTable.data ?? [],
-        raidLootTableIsLoading: raidLootTable.isLoading,
-        charList: charRes.data ?? [],
-        charIsLoading: charRes.isLoading
-    }
-}
-
-type DroptimizersForItemsProps = {
-    item: Item
-    droptimizers: Droptimizer[]
-    showUpgradeItem?: boolean
-}
-
-export const DroptimizersForItem = ({ item, droptimizers }: DroptimizersForItemsProps) => {
-    const itemDroptimizerUpgrades = droptimizers
-        .flatMap(dropt =>
-            (dropt.upgrades ?? []).map(upgrade => ({
-                ...upgrade,
-                droptimizer: {
-                    url: dropt.url,
-                    charInfo: dropt.charInfo,
-                    simInfo: dropt.simInfo,
-                    itemsEquipped: dropt.itemsEquipped
-                }
-            }))
-        )
-        .filter(upgrade => upgrade.item.id === item.id)
-        .sort((a, b) => b.dps - a.dps)
-
-    return (
-        <div className="flex flex-row items-center gap-x-2">
-            {itemDroptimizerUpgrades.map(upgrade => (
-                <div key={`${upgrade.id}`}>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <div className="flex flex-col items-center">
-                                <WowSpecIcon
-                                    specId={upgrade.droptimizer.charInfo.specId}
-                                    className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                                />
-                                <p className="text-bold text-[11px]">
-                                    {getDpsHumanReadable(upgrade.dps)}
-                                </p>
-                            </div>
-                        </TooltipTrigger>
-                        <TooltipContent className="TooltipContent" sideOffset={5}>
-                            {upgrade.droptimizer.charInfo.name +
-                                ' - ' +
-                                formatUnixTimestampToRelativeDays(upgrade.droptimizer.simInfo.date)}
-                            <TooltipArrow className="TooltipArrow" />
-                        </TooltipContent>
-                    </Tooltip>
-                </div>
-            ))}
-        </div>
-    )
-}
+//const slotBis: WowItemSlotKey[] = ['finger', 'neck', 'trinket', 'main_hand', 'off_hand']
 
 // Boss Card Component
-const BossPanel = ({
-    boss,
-    droptimizers,
-    diff,
-    hideItemsWithoutDropt
-}: {
+type BossPanelProps = {
     boss: BossWithItems
-    droptimizers: Droptimizer[]
-    diff: WowRaidDifficulty
-    hideItemsWithoutDropt: boolean
-}) => {
-    const bossHasDroptimizers = true
-    // const bossHasDroptimizers = droptimizers.some((dropt) =>
-    //     (dropt.upgrades ?? []).some((upgrade) => upgrade.item.bossId === boss.id)
-    // )
+    bisLists: BisList[]
+    onEdit: (item: Item) => void
+}
 
-    const itemHasDroptimizers = function (item: Item): boolean {
-        if (hideItemsWithoutDropt) {
-            return droptimizers.some(dropt =>
-                (dropt.upgrades ?? []).some(upgrade => upgrade.item.id === item.id)
-            )
-        }
-        return true
-    }
-
+const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
     return (
         <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[250px]">
             {/* Boss header: cover + name */}
@@ -133,70 +38,131 @@ const BossPanel = ({
             </div>
             {/* Boss items */}
             <div className="flex flex-col gap-y-3 p-6">
-                {bossHasDroptimizers ? (
-                    boss.items
-                        .sort((a, b) => a.id - b.id)
-                        .filter(itemHasDroptimizers)
-                        .map(item => (
+                {boss.items
+                    .filter(i => !i.token && !i.tierset)
+                    .sort((a, b) => {
+                        const aHasBis = bisLists.some(bis => bis.itemId === a.id)
+                        const bHasBis = bisLists.some(bis => bis.itemId === b.id)
+                        if (aHasBis && !bHasBis) return -1
+                        if (!aHasBis && bHasBis) return 1
+                        return 0
+                    })
+                    .map(item => {
+                        const bisForItem = bisLists.filter(bis => bis.itemId === item.id)
+                        const allSpecIds = bisForItem.flatMap(bis => bis.specIds)
+                        // const uniqueClasses = Array.from(
+                        //     new Set(allSpecIds.map((specId) => getWowClassBySpecId(specId)?.name))
+                        // )
+
+                        return (
                             <div
                                 key={item.id}
-                                className="flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer"
+                                className={clsx(
+                                    'flex flex-row gap-x-8 justify-between items-center p-1 hover:bg-gray-700 transition-colors duration-200 rounded-md cursor-pointer relative group',
+                                    !allSpecIds.length && 'opacity-30'
+                                )}
+                                onClick={e => {
+                                    e.preventDefault()
+                                    onEdit(item)
+                                }}
                             >
                                 <WowItemIcon
                                     item={item}
                                     iconOnly={false}
-                                    raidDiff={diff}
+                                    raidDiff={'Mythic'}
                                     tierBanner={true}
+                                    showIlvl={false}
+                                    iconClassName=""
                                 />
-                                <div className="flex flex-row items-center gap-x-2">
-                                    <DroptimizersForItem item={item} droptimizers={droptimizers} />
+
+                                <div className="flex flex-col items-center">
+                                    <div className="text-xs text-gray-400">
+                                        {allSpecIds.length ? (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span>
+                                                        {' '}
+                                                        {allSpecIds.length} spec
+                                                        {allSpecIds.length > 1 && 's'}
+                                                    </span>
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    <div className="flex flex-col gap-y-1">
+                                                        {allSpecIds.map(s => (
+                                                            <WowSpecIcon
+                                                                key={s}
+                                                                specId={s}
+                                                                className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        ) : null}
+                                    </div>
                                 </div>
+
+                                <button className="absolute -bottom-2 -right-2 hidden group-hover:flex items-center justify-center w-5 h-5 bg-red-500 text-white rounded-full">
+                                    <Edit size={14} />
+                                </button>
                             </div>
-                        ))
-                ) : (
-                    <p className="text-center text-sm text-gray-500">No upgrades available</p>
-                )}
+                        )
+                    })}
             </div>
         </div>
     )
 }
 
 // Main Component
+type ItemWithBisSpecs = {
+    item: Item
+    specs: number[]
+}
+
 export default function LootTable(): JSX.Element {
-    const DEFAULT_FILTER: LootFilter = {
-        selectedRaidDiff: 'Mythic',
-        onlyUpgrades: false,
-        minUpgrade: 1000,
-        hideOlderThanDays: false,
-        hideAlts: true,
-        hideIfNoUpgrade: true,
-        maxDays: 7,
-        selectedArmorTypes: [],
-        selectedSlots: [],
-        selectedWowClassName: []
-    }
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
+    const [selectedItem, setSelectedItem] = useState<ItemWithBisSpecs | null>(null)
 
-    const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
+    const bossesWithItemRes = useQuery({
+        queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
+        queryFn: () => fetchRaidLootTable(CURRENT_RAID_ID)
+    })
 
-    const {
-        droptimizers,
-        droptimizersIsLoading,
-        raidLootTable: encounterList,
-        raidLootTableIsLoading: encounterListIsLoading,
-        charList,
-        charIsLoading
-    } = useRaidData(CURRENT_RAID_ID)
+    const bisRes = useQuery({
+        queryKey: [queryKeys.bisList],
+        queryFn: () => fetchBisList()
+    })
 
-    const updateFilter = (key: keyof LootFilter, value: unknown): void => {
-        setFilters(prev => ({ ...prev, [key]: value }))
-    }
+    // Debounce search input
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery.trim())
+        }, 300)
 
-    const filteredDroptimizers = useMemo(() => {
-        if (!droptimizers) return []
-        return filterDroptimizer(droptimizers, charList, filter)
-    }, [droptimizers, charList, filter])
+        return () => clearTimeout(handler)
+    }, [searchQuery])
 
-    if (encounterListIsLoading || droptimizersIsLoading || charIsLoading) {
+    // Memoized filtering logic
+    const filteredBosses: BossWithItems[] = useMemo(() => {
+        if (!bossesWithItemRes.data) return []
+        if (!debouncedSearchQuery) return bossesWithItemRes.data
+
+        return bossesWithItemRes.data
+            .map(boss => ({
+                ...boss,
+                items: boss.items.filter(item =>
+                    item.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+                )
+            }))
+            .filter(boss => boss.items.length > 0) // Remove bosses with no matching items
+    }, [bossesWithItemRes.data, debouncedSearchQuery])
+
+    if (bossesWithItemRes.isLoading || bisRes.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -204,24 +170,47 @@ export default function LootTable(): JSX.Element {
         )
     }
 
+    const bisLists = bisRes.data ?? []
+
+    const handleEditClick = (item: Item) => {
+        const selectedBis = bisLists.find(b => b.itemId === item.id)
+        setSelectedItem({ item: item, specs: selectedBis?.specIds ?? [] })
+        setIsEditDialogOpen(true)
+    }
+
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            {/* Filter */}
-            <FiltersPanel filter={filter} updateFilter={updateFilter} />
+            {/* Search Bar */}
+            <div className="w-full mb-4 p-3">
+                <Input
+                    type="text"
+                    placeholder="Search items..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md"
+                />
+            </div>
+
             {/* Boss List */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {encounterList
+                {filteredBosses
                     .sort((a, b) => a.order - b.order)
                     .map(boss => (
                         <BossPanel
                             key={boss.id}
                             boss={boss}
-                            droptimizers={filteredDroptimizers}
-                            diff={filter.selectedRaidDiff}
-                            hideItemsWithoutDropt={filter.hideIfNoUpgrade}
+                            bisLists={bisLists}
+                            onEdit={handleEditClick}
                         />
                     ))}
             </div>
+            {selectedItem && (
+                <ItemManagementDialog
+                    isOpen={isEditDialogOpen}
+                    setOpen={setIsEditDialogOpen}
+                    itemAndSpecs={selectedItem}
+                />
+            )}
         </div>
     )
 }

@@ -23,137 +23,17 @@ type ItemWithBisSpecs = {
     specs: number[]
 }
 
-type ItemBisSpecsDialogProps = {
+type ItemManagementDiaogProps = {
     isOpen: boolean
     setOpen: (open: boolean) => void
     itemAndSpecs: ItemWithBisSpecs | null
 }
 
-// Lazy component for Character Inventory
-function CharacterInventoryContent({ itemId }: { itemId: number }) {
-    const characterInventoryQuery = useQuery({
-        queryKey: [queryKeys.characterInventory, itemId],
-        queryFn: () => fetchCharactersWithItem(itemId),
-        enabled: !!itemId
-    })
-
-    if (characterInventoryQuery.isLoading) {
-        return (
-            <div className="flex items-center justify-center h-[200px]">
-                <Loader2 className="animate-spin h-8 w-8" />
-                <span className="ml-2">Loading character inventory...</span>
-            </div>
-        )
-    }
-
-    if (characterInventoryQuery.error) {
-        return (
-            <div className="flex items-center justify-center h-[200px] text-red-500">
-                Error loading character inventory
-            </div>
-        )
-    }
-
-    const charactersWithGears: CharacterWithGears[] | undefined = characterInventoryQuery.data
-    if (!charactersWithGears) {
-        return (
-            <div className="flex items-center justify-center h-[200px]">
-                No inventory data available
-            </div>
-        )
-    }
-
-    // Split characters into two groups
-    const charactersWithMatchingItem = charactersWithGears.filter(
-        char => char.gears && char.gears.some(gear => gear.item.id === itemId)
-    )
-
-    const charactersWithoutMatchingItem = charactersWithGears.filter(
-        char => !char.gears || !char.gears.some(gear => gear.item.id === itemId)
-    )
-
-    return (
-        <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
-            {/* Characters WITH the item */}
-            <div className="flex flex-col gap-3">
-                <h3 className="text-lg font-semibold text-green-400">
-                    Characters with this item ({charactersWithMatchingItem.length})
-                </h3>
-                {charactersWithMatchingItem.length === 0 ? (
-                    <p className="text-muted-foreground">No characters currently have this item.</p>
-                ) : (
-                    charactersWithMatchingItem.map(character => {
-                        // Get all gears that match the item ID
-                        const matchingGears =
-                            character.gears?.filter(gear => gear.item.id === itemId) || []
-
-                        return (
-                            <div
-                                key={character.id}
-                                className="flex flex-col gap-2 p-3 bg-green-900/20 rounded-lg"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div>
-                                        <WowClassIcon
-                                            wowClassName={character.class}
-                                            className="h-8 w-8 border-2 border-background rounded-lg"
-                                        />
-                                        <div className="text-xs">{character.name}</div>
-                                    </div>
-                                    <div className="flex">
-                                        {matchingGears.map((gear, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex text-xs text-muted-foreground bg-muted/50 p-2 rounded"
-                                            >
-                                                <WowGearIcon
-                                                    gearItem={gear}
-                                                    showTierBanner={true}
-                                                    showItemTrackDiff={true}
-                                                />
-                                                {/* {gear.source && (
-                                                    <div className="text-xs opacity-75 capitalize">
-                                                        {gear.source}
-                                                    </div>
-                                                )} */}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                    })
-                )}
-            </div>
-
-            {/* Separator */}
-            <div className="border-t border-muted-foreground/20 my-2"></div>
-
-            {/* Characters WITHOUT the item */}
-            <div className="flex flex-col gap-3">
-                <h3 className="text-lg font-semibold text-muted-foreground">
-                    Characters without this item ({charactersWithoutMatchingItem.length})
-                </h3>
-                <div className="flex flex-wrap gap-x-5 gap-y-5">
-                    {' '}
-                    {charactersWithoutMatchingItem
-                        .sort((a, b) => Number(b.main) - Number(a.main))
-                        .map(character => (
-                            <div key={character.id} className="flex gap-2">
-                                <CharacterIcon key={character.id} character={character} />
-                            </div>
-                        ))}
-                </div>
-            </div>
-        </div>
-    )
-}
-
-export default function ItemBisSpecsDialog({
+export default function ItemManagementDialog({
     isOpen,
     setOpen,
     itemAndSpecs
-}: ItemBisSpecsDialogProps): JSX.Element {
+}: ItemManagementDiaogProps): JSX.Element {
     const [selectedSpecs, setSelectedSpecs] = useState<number[]>([])
     const [itemNote, setItemNote] = useState<string>('')
     const [activeTab, setActiveTab] = useState<string>('bis-specs')
@@ -366,5 +246,125 @@ export default function ItemBisSpecsDialog({
                 </Tabs.Root>
             </DialogContent>
         </Dialog>
+    )
+}
+
+// Lazy component for Character Inventory
+function CharacterInventoryContent({ itemId }: { itemId: number }) {
+    const characterInventoryQuery = useQuery({
+        queryKey: [queryKeys.characterInventory, itemId],
+        queryFn: () => fetchCharactersWithItem(itemId),
+        enabled: !!itemId
+    })
+
+    if (characterInventoryQuery.isLoading) {
+        return (
+            <div className="flex items-center justify-center h-[200px]">
+                <Loader2 className="animate-spin h-8 w-8" />
+                <span className="ml-2">Loading character inventory...</span>
+            </div>
+        )
+    }
+
+    if (characterInventoryQuery.error) {
+        return (
+            <div className="flex items-center justify-center h-[200px] text-red-500">
+                Error loading character inventory
+            </div>
+        )
+    }
+
+    const charactersWithGears: CharacterWithGears[] | undefined = characterInventoryQuery.data
+    if (!charactersWithGears) {
+        return (
+            <div className="flex items-center justify-center h-[200px]">
+                No inventory data available
+            </div>
+        )
+    }
+
+    // Split characters into two groups
+    const charactersWithMatchingItem = charactersWithGears.filter(
+        char => char.gears && char.gears.some(gear => gear.item.id === itemId)
+    )
+
+    const charactersWithoutMatchingItem = charactersWithGears.filter(
+        char => !char.gears || !char.gears.some(gear => gear.item.id === itemId)
+    )
+
+    return (
+        <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
+            {/* Characters WITH the item */}
+            <div className="flex flex-col gap-3">
+                <h3 className="text-lg font-semibold text-green-400">
+                    Characters with this item ({charactersWithMatchingItem.length})
+                </h3>
+                {charactersWithMatchingItem.length === 0 ? (
+                    <p className="text-muted-foreground">No characters currently have this item.</p>
+                ) : (
+                    charactersWithMatchingItem.map(character => {
+                        // Get all gears that match the item ID
+                        const matchingGears =
+                            character.gears?.filter(gear => gear.item.id === itemId) || []
+
+                        return (
+                            <div
+                                key={character.id}
+                                className="flex flex-col gap-2 p-3 bg-green-900/20 rounded-lg"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div>
+                                        <WowClassIcon
+                                            wowClassName={character.class}
+                                            className="h-8 w-8 border-2 border-background rounded-lg"
+                                        />
+                                        <div className="text-xs">{character.name}</div>
+                                    </div>
+                                    <div className="flex">
+                                        {matchingGears.map((gear, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex text-xs text-muted-foreground bg-muted/50 p-2 rounded"
+                                            >
+                                                <WowGearIcon
+                                                    gearItem={gear}
+                                                    showTierBanner={true}
+                                                    showItemTrackDiff={true}
+                                                />
+                                                {/* {gear.source && (
+                                                    <div className="text-xs opacity-75 capitalize">
+                                                        {gear.source}
+                                                    </div>
+                                                )} */}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })
+                )}
+            </div>
+
+            {/* Separator */}
+            <div className="border-t border-muted-foreground/20 my-2"></div>
+
+            {/* Characters WITHOUT the item */}
+            <div className="flex flex-col gap-3">
+                <h3 className="text-lg font-semibold text-muted-foreground">
+                    Characters without this item ({charactersWithoutMatchingItem.length})
+                </h3>
+                <div className="flex flex-wrap gap-x-5 gap-y-5">
+                    {' '}
+                    {charactersWithoutMatchingItem
+                        .sort((a, b) => Number(b.main) - Number(a.main))
+                        .map(character => (
+                            <div key={character.id} className="flex gap-2">
+                                <CharacterIcon key={character.id} character={character} />
+                            </div>
+                        ))}
+                </div>
+            </div>
+        </div>
     )
 }

@@ -35,16 +35,16 @@ const preparationItems = [
     {
         title: 'Droptimizer',
         url: '/droptimizer',
+        icon: LucideScrollText
+    },
+    {
+        title: 'Loot Gains',
+        url: '/loot-gains',
         icon: LucideGauge
     },
     {
         title: 'Loot Table',
         url: '/loot-table',
-        icon: LucideScrollText
-    },
-    {
-        title: 'Bis List',
-        url: '/bis-list',
         icon: LucideStar
     },
     {
