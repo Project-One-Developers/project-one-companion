@@ -1,16 +1,5 @@
 import { WoWRole } from '@shared/types/types'
-import {
-    wowArmorTypeSchema,
-    wowClassNameSchema,
-    wowItemSlotSchema as wowItemSlotDescSchema,
-    wowItemSlotKeySchema,
-    wowItemSlotKeyTiersetSchema,
-    wowItemTertiaryStatsSchema,
-    wowRaidDiffSchema,
-    wowRoleClassSchema,
-    wowRolesSchema,
-    wowSpecNameSchema
-} from '../schemas/wow.schemas'
+import { wowItemSlotKeyTiersetSchema, wowRoleClassSchema } from '../schemas/wow.schemas'
 
 export const CURRENT_SEASON: number = 3 // todo: to be updated "manually" at the start of each season
 export const CURRENT_RAID_ID = (() => {
@@ -26,10 +15,77 @@ export const CURRENT_RAID_ID = (() => {
     }
 })()
 
-export const CLASSES_NAME = wowClassNameSchema.options
-export const SPECS_NAME = wowSpecNameSchema.options
-export const ROLES = wowRolesSchema.options
-export const RAID_DIFF = wowRaidDiffSchema.options
+export const CLASSES_NAME = [
+    'Death Knight',
+    'Demon Hunter',
+    'Druid',
+    'Evoker',
+    'Hunter',
+    'Mage',
+    'Monk',
+    'Paladin',
+    'Priest',
+    'Rogue',
+    'Shaman',
+    'Warlock',
+    'Warrior'
+] as const
+export const SPECS_NAME = [
+    // Death Knight
+    'Blood',
+    'Frost',
+    'Unholy',
+    // Demon Hunter
+    'Havoc',
+    'Vengeance',
+    // Druid
+    'Balance',
+    'Feral',
+    'Guardian',
+    'Restoration',
+    // Evoker
+    'Devastation',
+    'Preservation',
+    'Augmentation',
+    // Hunter
+    'Beast Mastery',
+    'Marksmanship',
+    'Survival',
+    // Mage
+    'Arcane',
+    'Fire',
+    'Frost',
+    // Monk
+    'Brewmaster',
+    'Mistweaver',
+    'Windwalker',
+    // Paladin
+    'Holy',
+    'Protection',
+    'Retribution',
+    // Priest
+    'Discipline',
+    'Holy',
+    'Shadow',
+    // Rogue
+    'Assassination',
+    'Outlaw',
+    'Subtlety',
+    // Shaman
+    'Elemental',
+    'Enhancement',
+    'Restoration',
+    // Warlock
+    'Affliction',
+    'Demonology',
+    'Destruction',
+    // Warrior
+    'Arms',
+    'Fury',
+    'Protection'
+] as const
+export const ROLES = ['Tank', 'Healer', 'DPS'] as const
+export const RAID_DIFF = ['LFR', 'Normal', 'Heroic', 'Mythic'] as const
 
 export const ROLES_CLASSES_MAP = {
     Tank: wowRoleClassSchema.shape.Tank.options,
@@ -37,10 +93,46 @@ export const ROLES_CLASSES_MAP = {
     DPS: wowRoleClassSchema.shape.DPS.options
 }
 
-export const TERTIARY_STATS = wowItemTertiaryStatsSchema.options
-export const ARMOR_TYPES = wowArmorTypeSchema.options
-export const ITEM_SLOTS_DESC = wowItemSlotDescSchema.options
-export const ITEM_SLOTS_KEY = wowItemSlotKeySchema.options
+export const TERTIARY_STATS = ['Speed', 'Leech', 'Avoidance', 'Indestructible'] as const
+export const ARMOR_TYPES = ['Cloth', 'Leather', 'Mail', 'Plate'] as const
+export const ITEM_SLOTS_DESC = [
+    'Head',
+    'Neck',
+    'Shoulder',
+    'Back',
+    'Chest',
+    'Wrist',
+    'Hands',
+    'Waist',
+    'Legs',
+    'Feet',
+    'Finger',
+    'Trinket',
+    'Main Hand',
+    'Off Hand',
+    'Two Hand',
+    'Ranged',
+    'Omni'
+] as const
+
+export const ITEM_SLOTS_KEY = [
+    'head',
+    'neck',
+    'shoulder',
+    'back',
+    'chest',
+    'wrist',
+    'hands',
+    'waist',
+    'legs',
+    'feet',
+    'finger',
+    'trinket',
+    'main_hand',
+    'off_hand',
+    'omni'
+] as const
+
 export const ITEM_SLOTS_KEY_TIERSET = wowItemSlotKeyTiersetSchema.options
 
 export const PROFESSION_TYPES = new Set([

@@ -319,13 +319,13 @@ export default function LootsEligibleChars({
                                         ) : null}
 
                                         {charInfo.highlights.lootEnableTiersetBonus ===
-                                            tierSetBonusSchema.Values['2p'] && (
+                                            tierSetBonusSchema.enum['2p'] && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 2P
                                             </span>
                                         )}
                                         {charInfo.highlights.lootEnableTiersetBonus ===
-                                            tierSetBonusSchema.Values['4p'] && (
+                                            tierSetBonusSchema.enum['4p'] && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 4P
                                             </span>
