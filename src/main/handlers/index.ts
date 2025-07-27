@@ -25,11 +25,17 @@ import {
 } from './droptimizer/droptimizer.handlers'
 import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
+    deleteItemNoteHandler,
+    getItemNoteHandler,
+    setItemNoteHandler
+} from './items/itemsNote.handlers'
+import {
     addRaidLootsByManualInputHandler,
     addRaidLootsByMrtHandler,
     addRaidLootsByRCLootCsvHandler,
     assignLootHandler,
     deleteLootHandler,
+    getCharactersWithLootsByItemIdHandler,
     getLootAssignmentInfoHandler,
     getLootsBySessionIdHandler,
     getLootsBySessionIdWithAssignedHandler,
@@ -70,6 +76,7 @@ export const allHandlers = {
     'character-sync-wowaudit': syncCharacterWowAudit,
     'character-game-info': getCharLatestGameInfoHandler,
     'character-roster-summary': getRosterSummaryHandler,
+    'characters-by-itemid': getCharactersWithLootsByItemIdHandler,
     'player-add': addPlayerHandler,
     'player-delete': deletePlayerHandler,
     'player-edit': editPlayerHandler,
@@ -78,6 +85,9 @@ export const allHandlers = {
     'item-get': getItemByIdHandler,
     'items-list': getItemsHandler,
     'items-search': searchItemsHandler,
+    'item-get-note': getItemNoteHandler,
+    'item-set-note': setItemNoteHandler,
+    'item-delete-note': deleteItemNoteHandler,
     'boss-loot-table-get': getRaidLootTableHandler,
     'boss-list': getBossesHandler,
     'raid-session-list': getRaidSessionWithSummaryListHandler,

@@ -660,6 +660,33 @@ export const parseLootAlreadyGotIt = async (
     return availableGear.some(gear => gearAreTheSame(loot.gearItem, gear))
 }
 
+/**
+ * Check if char already got the loot in bag/equipped/assigned
+ * if gotit return the best version of the item
+ */
+export const getAllLootsByItemId = async (
+    item: Item,
+    charDroptimizers: Droptimizer[],
+    charAssignedLoots: Loot[],
+    charAuditData: CharacterWowAudit | null
+): Promise<GearItem[]> => {
+    const lastDroptWithTierInfo = charDroptimizers
+        .filter(c => c.itemsInBag.length > 0)
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0) // Can be undefined
+
+    const availableGear: GearItem[] = [
+        ...(lastDroptWithTierInfo?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id),
+        ...(lastDroptWithTierInfo?.itemsInBag ?? []).filter(gi => gi.item.id === item.id),
+        ...charAssignedLoots.flatMap(l => (l.gearItem.item.id === item.id ? [l.gearItem] : [])),
+        ...(charAuditData?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id)
+    ]
+
+    return availableGear
+        .filter(gear => gear.item.id === item.id)
+        .sort((a, b) => compareGearItem(b, a))
+}
+
 export const parseItemLevel = (
     charDroptimizers: Droptimizer[],
     charWowAudit: CharacterWowAudit | null

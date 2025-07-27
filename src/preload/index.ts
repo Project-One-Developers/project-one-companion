@@ -7,7 +7,7 @@ import type {
     BossWithItems,
     Character,
     CharacterGameInfo,
-    CharacterSummary,
+    CharacterSummary, CharacterWithGears,
     CharacterWithPlayer,
     CharAssignmentHighlights,
     Droptimizer,
@@ -15,6 +15,7 @@ import type {
     EditPlayer,
     EditRaidSession,
     Item,
+    ItemNote,
     Loot,
     LootAssignmentInfo,
     LootWithAssigned,
@@ -181,6 +182,20 @@ export const api = {
     },
     searchItems(searchTerm: string, limit: number): Promise<Item[]> {
         return ipcRenderer.invoke('items-search', searchTerm, limit)
+    },
+    // chars with item
+    getCharactersWithItem(itemId: number): Promise<CharacterWithGears[]> {
+        return ipcRenderer.invoke('characters-by-itemid', itemId)
+    },
+    // item note
+    getItemNote(itemId: number): Promise<ItemNote | null> {
+        return ipcRenderer.invoke('item-get-note', itemId)
+    },
+    setItemNote(itemId: number, note: string): Promise<ItemNote> {
+        return ipcRenderer.invoke('item-set-note', itemId, note)
+    },
+    deleteItemNote(itemId: number): Promise<void> {
+        return ipcRenderer.invoke('item-delete-note', itemId)
     },
     // bis list
     getBisList(): Promise<BisList[]> {

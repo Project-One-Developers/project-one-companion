@@ -26,7 +26,7 @@ import { appSettingsSchema } from '@shared/schemas/store.schemas'
 import { z } from 'zod'
 import {
     characterGameInfoSchema,
-    characterSchema,
+    characterSchema, characterWithGears,
     characterWithPlayerSchema,
     charWowAuditSchema,
     editCharacterSchema,
@@ -58,6 +58,7 @@ import {
     wowRolesSchema,
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
+import { itemNoteSchema } from '@shared/schemas/itemNote.schema'
 
 export type WowClassName = z.infer<typeof wowClassNameSchema>
 export type WowSpecName = z.infer<typeof wowSpecNameSchema>
@@ -94,6 +95,7 @@ export type CharacterGameInfo = z.infer<typeof characterGameInfoSchema>
 export type CharacterWithPlayer = z.infer<typeof characterWithPlayerSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
 export type EditCharacter = z.infer<typeof editCharacterSchema>
+export type CharacterWithGears = z.infer<typeof characterWithGears>
 
 export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
@@ -106,6 +108,7 @@ export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
 export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>
 
 export type Item = z.infer<typeof itemSchema>
+export type ItemNote = z.infer<typeof itemNoteSchema>
 export type ItemTrack = z.infer<typeof itemTrackSchema>
 export type GearItem = z.infer<typeof gearItemSchema>
 

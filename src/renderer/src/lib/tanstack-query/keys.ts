@@ -10,11 +10,14 @@ export const queryKeys = {
     characterGameInfo: 'character-game-info',
     characters: 'character-list',
     charactersSummary: 'character-summary-list',
+    characterInventory: 'characters-by-itemid',
     itemSearch: 'item-search',
     appSettings: 'app-settings',
     lootsBySession: 'loots-by-session',
     lootsAssignInfo: 'loots-assign-info',
     bosses: 'boss-list',
-    //bis list,
-    bisList: 'bis-list-get'
+    // bis list,
+    bisList: 'bis-list-get',
+    // item note,
+    itemNote: 'item-note'
 }
