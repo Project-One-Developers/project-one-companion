@@ -1,6 +1,3 @@
-import { WoWRole } from '@shared/types/types'
-import { wowItemSlotKeyTiersetSchema, wowRoleClassSchema } from '../schemas/wow.schemas'
-
 export const CURRENT_SEASON: number = 3 // todo: to be updated "manually" at the start of each season
 export const CURRENT_RAID_ID = (() => {
     switch (CURRENT_SEASON) {
@@ -30,6 +27,7 @@ export const CLASSES_NAME = [
     'Warlock',
     'Warrior'
 ] as const
+
 export const SPECS_NAME = [
     // Death Knight
     'Blood',
@@ -87,13 +85,6 @@ export const SPECS_NAME = [
 export const ROLES = ['Tank', 'Healer', 'DPS'] as const
 export const RAID_DIFF = ['LFR', 'Normal', 'Heroic', 'Mythic'] as const
 
-export const ROLES_CLASSES_MAP = {
-    Tank: wowRoleClassSchema.shape.Tank.options,
-    Healer: wowRoleClassSchema.shape.Healer.options,
-    DPS: wowRoleClassSchema.shape.DPS.options
-}
-
-export const TERTIARY_STATS = ['Speed', 'Leech', 'Avoidance', 'Indestructible'] as const
 export const ARMOR_TYPES = ['Cloth', 'Leather', 'Mail', 'Plate'] as const
 export const ITEM_SLOTS_DESC = [
     'Head',
@@ -133,7 +124,7 @@ export const ITEM_SLOTS_KEY = [
     'omni'
 ] as const
 
-export const ITEM_SLOTS_KEY_TIERSET = wowItemSlotKeyTiersetSchema.options
+export const ITEM_SLOTS_KEY_TIERSET = ['head', 'shoulder', 'chest', 'hands', 'legs'] as const
 
 export const PROFESSION_TYPES = new Set([
     'Alchemy',
@@ -149,12 +140,6 @@ export const PROFESSION_TYPES = new Set([
     'Tailoring',
     'Cooking'
 ])
-
-export const ROLE_PRIORITIES: Record<WoWRole, number> = {
-    Tank: 0,
-    Healer: 1,
-    DPS: 2
-} as const
 
 export const REALMS = {
     EU: [

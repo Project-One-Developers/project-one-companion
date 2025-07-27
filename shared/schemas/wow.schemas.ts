@@ -1,16 +1,15 @@
 import {
     ARMOR_TYPES,
-    CLASSES_NAME,
+    CLASSES_NAME as CLASSES_NAME_VALUES,
     ITEM_SLOTS_DESC,
     ITEM_SLOTS_KEY,
     RAID_DIFF,
     ROLES,
-    SPECS_NAME,
-    TERTIARY_STATS
+    SPECS_NAME
 } from '@shared/consts/wow.consts'
 import { z } from 'zod'
 
-export const wowClassNameSchema = z.enum(CLASSES_NAME)
+export const wowClassNameSchema = z.enum(CLASSES_NAME_VALUES)
 
 export const wowClassTankSchema = z.enum([
     'Death Knight',
@@ -73,8 +72,6 @@ export const wowItemTrackNameSchema = z.enum([
 
 export const tierSetBonusSchema = z.enum(['none', '2p', '4p'])
 
-export const wowItemTertiaryStatsSchema = z.enum(TERTIARY_STATS)
-
 export const wowRoleClassSchema = z.object({
     Tank: wowClassTankSchema,
     Healer: wowClassHealerSchema,
@@ -82,3 +79,9 @@ export const wowRoleClassSchema = z.object({
 })
 
 export const wowSpecNameSchema = z.enum(SPECS_NAME)
+
+export const ROLES_CLASSES_MAP = {
+    Tank: wowRoleClassSchema.shape.Tank.options,
+    Healer: wowRoleClassSchema.shape.Healer.options,
+    DPS: wowRoleClassSchema.shape.DPS.options
+}
