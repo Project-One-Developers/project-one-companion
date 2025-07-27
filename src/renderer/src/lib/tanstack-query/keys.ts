@@ -15,6 +15,8 @@ export const queryKeys = {
     lootsBySession: 'loots-by-session',
     lootsAssignInfo: 'loots-assign-info',
     bosses: 'boss-list',
-    //bis list,
-    bisList: 'bis-list-get'
+    // bis list,
+    bisList: 'bis-list-get',
+    // item note,
+    itemNote: 'item-note'
 }

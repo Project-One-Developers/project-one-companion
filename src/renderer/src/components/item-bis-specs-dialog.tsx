@@ -5,9 +5,10 @@ import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { WOW_CLASS_WITH_SPECS } from '@shared/libs/spec-parser/spec-utils.schemas'
 import { Item } from '@shared/types/types'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Loader2, StickyNote, Users } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
+import { fetchItemNote, updateItemNote } from '../lib/tanstack-query/items'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
@@ -125,15 +126,6 @@ export default function ItemBisSpecsDialog({
     const [activeTab, setActiveTab] = useState<string>('bis-specs')
     const [hasLoadedInventory, setHasLoadedInventory] = useState(false)
 
-    // Sync selectedSpecs when itemAndSpecs changes
-    useEffect(() => {
-        if (itemAndSpecs) {
-            setSelectedSpecs(itemAndSpecs.specs)
-            // Load item note from storage or API
-            setItemNote('') // Replace with actual note loading
-        }
-    }, [itemAndSpecs])
-
     // Track when inventory tab is accessed for the first time
     useEffect(() => {
         if (activeTab === 'inventory' && !hasLoadedInventory) {
@@ -141,22 +133,78 @@ export default function ItemBisSpecsDialog({
         }
     }, [activeTab, hasLoadedInventory])
 
-    const editMutation = useMutation({
+    const editBisMutation = useMutation({
         mutationFn: ({ itemId, specIds }: { itemId: number; specIds: number[] }) =>
             updateItemBisSpecs(itemId, specIds),
         onSuccess: () => {
-            toast({ title: 'Success', description: 'BiS specs updated successfully' })
+            toast({
+                title: 'Success',
+                description: 'BiS specs updated successfully'
+            })
             queryClient.invalidateQueries({ queryKey: [queryKeys.bisList] })
             setOpen(false)
         },
-        onError: error => {
-            toast({ title: 'Error', description: `Failed to update BiS specs. ${error.message}` })
+        onError: (error: Error) => {
+            toast({
+                title: 'Error',
+                description: `Failed to update BiS specs: ${error.message}`,
+                variant: 'destructive'
+            })
         }
     })
 
-    const saveNote = () => {
-        // TODO: Implement note saving logic
-        toast({ title: 'Success', description: 'Note saved successfully' })
+    const itemNoteQuery = useQuery({
+        queryKey: [queryKeys.itemNote, itemAndSpecs?.item.id],
+        queryFn: () => fetchItemNote(itemAndSpecs!.item.id),
+        enabled: !!itemAndSpecs?.item.id
+    })
+
+    // Replace saveNote with editItemNoteMutation
+    const editItemNoteMutation = useMutation({
+        mutationFn: ({ itemId, note }: { itemId: number; note: string }) =>
+            updateItemNote(itemId, note),
+        onSuccess: () => {
+            toast({
+                title: 'Success',
+                description: 'Item note updated successfully'
+            })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.itemNote, itemAndSpecs?.item.id] })
+        },
+        onError: (error: Error) => {
+            toast({
+                title: 'Error',
+                description: `Failed to update item note: ${error.message}`,
+                variant: 'destructive'
+            })
+        }
+    })
+
+    // Sync selectedSpecs when itemAndSpecs changes
+    useEffect(() => {
+        if (itemAndSpecs) {
+            setSelectedSpecs(itemAndSpecs.specs)
+        }
+        if (itemNoteQuery.data !== undefined) {
+            setItemNote(itemNoteQuery.data)
+        }
+    }, [itemAndSpecs, itemNoteQuery.data])
+
+    const handleSaveNote = () => {
+        if (!itemAndSpecs) return
+
+        editItemNoteMutation.mutate({
+            itemId: itemAndSpecs.item.id,
+            note: itemNote
+        })
+    }
+
+    const handleSave = () => {
+        if (!itemAndSpecs) return
+
+        editBisMutation.mutate({
+            itemId: itemAndSpecs.item.id,
+            specIds: selectedSpecs
+        })
     }
 
     if (!itemAndSpecs) return <p>No Item selected</p>
@@ -233,15 +281,10 @@ export default function ItemBisSpecsDialog({
                         </div>
                         <Button
                             className="w-full mt-4"
-                            onClick={() =>
-                                editMutation.mutate({
-                                    itemId: itemAndSpecs.item.id,
-                                    specIds: selectedSpecs
-                                })
-                            }
-                            disabled={editMutation.isPending}
+                            onClick={handleSave}
+                            disabled={editBisMutation.isPending}
                         >
-                            {editMutation.isPending ? (
+                            {editBisMutation.isPending ? (
                                 <Loader2 className="animate-spin" />
                             ) : (
                                 'Save BiS Specs'
@@ -271,8 +314,19 @@ export default function ItemBisSpecsDialog({
                                     className="min-h-[200px] resize-none"
                                 />
                             </div>
-                            <Button onClick={saveNote} className="w-full">
-                                Save Note
+                            <Button
+                                onClick={handleSaveNote}
+                                disabled={editItemNoteMutation.isPending}
+                                className="w-full"
+                            >
+                                {editItemNoteMutation.isPending ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Saving...
+                                    </>
+                                ) : (
+                                    'Save Note'
+                                )}
                             </Button>
                         </div>
                     </Tabs.Content>
