@@ -3,17 +3,19 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { updateItemBisSpecs } from '@renderer/lib/tanstack-query/bis-list'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
+import { CharacterIcon } from '@renderer/pages/raid-session'
 import { WOW_CLASS_WITH_SPECS } from '@shared/libs/spec-parser/spec-utils.schemas'
-import { Item } from '@shared/types/types'
+import { CharacterWithGears, Item } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Loader2, StickyNote, Users } from 'lucide-react'
 import { useEffect, useState, type JSX } from 'react'
-import { fetchItemNote, updateItemNote } from '../lib/tanstack-query/items'
+import { fetchCharactersWithItem, fetchItemNote, updateItemNote } from '../lib/tanstack-query/items'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Textarea } from './ui/text-area'
 import { WowClassIcon } from './ui/wowclass-icon'
+import { WowGearIcon } from './ui/wowgear-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
 
 type ItemWithBisSpecs = {
@@ -27,33 +29,15 @@ type ItemBisSpecsDialogProps = {
     itemAndSpecs: ItemWithBisSpecs | null
 }
 
-// Mock data for character inventory - replace with actual data fetching
-const mockCharactersWithItem = [
-    { name: 'Paladin Tank', class: 'paladin', spec: 'Protection', hasItem: true },
-    { name: 'Warrior DPS', class: 'warrior', spec: 'Fury', hasItem: true },
-    { name: 'Mage Fire', class: 'mage', spec: 'Fire', hasItem: false }
-]
-
 // Lazy component for Character Inventory
 function CharacterInventoryContent({ itemId }: { itemId: number }) {
-    const [isLoading, setIsLoading] = useState(true)
-    const [characters, setCharacters] = useState(mockCharactersWithItem)
+    const characterInventoryQuery = useQuery({
+        queryKey: [queryKeys.characterInventory, itemId],
+        queryFn: () => fetchCharactersWithItem(itemId),
+        enabled: !!itemId
+    })
 
-    useEffect(() => {
-        // Simulate loading character data
-        const loadCharacterData = async () => {
-            setIsLoading(true)
-            // Replace this with actual API call
-            await new Promise(resolve => setTimeout(resolve, 500)) // Simulate network delay
-            // In real implementation, fetch character data based on itemId
-            setCharacters(mockCharactersWithItem)
-            setIsLoading(false)
-        }
-
-        loadCharacterData()
-    }, [itemId])
-
-    if (isLoading) {
+    if (characterInventoryQuery.isLoading) {
         return (
             <div className="flex items-center justify-center h-[200px]">
                 <Loader2 className="animate-spin h-8 w-8" />
@@ -62,56 +46,105 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
         )
     }
 
+    if (characterInventoryQuery.error) {
+        return (
+            <div className="flex items-center justify-center h-[200px] text-red-500">
+                Error loading character inventory
+            </div>
+        )
+    }
+
+    const charactersWithGears: CharacterWithGears[] | undefined = characterInventoryQuery.data
+    if (!charactersWithGears) {
+        return (
+            <div className="flex items-center justify-center h-[200px]">
+                No inventory data available
+            </div>
+        )
+    }
+
+    // Split characters into two groups
+    const charactersWithMatchingItem = charactersWithGears.filter(
+        char => char.gears && char.gears.some(gear => gear.item.id === itemId)
+    )
+
+    const charactersWithoutMatchingItem = charactersWithGears.filter(
+        char => !char.gears || !char.gears.some(gear => gear.item.id === itemId)
+    )
+
     return (
-        <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-2">Characters with this item:</h3>
-            {characters.filter(char => char.hasItem).length === 0 ? (
-                <p className="text-muted-foreground">No characters currently have this item.</p>
-            ) : (
-                characters
-                    .filter(char => char.hasItem)
-                    .map((character, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center gap-3 p-3 bg-muted rounded-lg"
-                        >
-                            <WowClassIcon
-                                wowClassName={character.class}
-                                className="h-8 w-8 border-2 border-background rounded-lg"
-                            />
-                            <div className="flex-1">
-                                <div className="font-medium">{character.name}</div>
-                                <div className="text-sm text-muted-foreground">
-                                    {character.class} - {character.spec}
+        <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
+            {/* Characters WITH the item */}
+            <div className="flex flex-col gap-3">
+                <h3 className="text-lg font-semibold text-green-400">
+                    Characters with this item ({charactersWithMatchingItem.length})
+                </h3>
+                {charactersWithMatchingItem.length === 0 ? (
+                    <p className="text-muted-foreground">No characters currently have this item.</p>
+                ) : (
+                    charactersWithMatchingItem.map(character => {
+                        // Get all gears that match the item ID
+                        const matchingGears =
+                            character.gears?.filter(gear => gear.item.id === itemId) || []
+
+                        return (
+                            <div
+                                key={character.id}
+                                className="flex flex-col gap-2 p-3 bg-green-900/20 rounded-lg"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div>
+                                        <WowClassIcon
+                                            wowClassName={character.class}
+                                            className="h-8 w-8 border-2 border-background rounded-lg"
+                                        />
+                                        <div className="text-xs">{character.name}</div>
+                                    </div>
+                                    <div className="flex">
+                                        {matchingGears.map((gear, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex text-xs text-muted-foreground bg-muted/50 p-2 rounded"
+                                            >
+                                                <WowGearIcon
+                                                    gearItem={gear}
+                                                    showTierBanner={true}
+                                                    showItemTrackDiff={true}
+                                                />
+                                                {/* {gear.source && (
+                                                    <div className="text-xs opacity-75 capitalize">
+                                                        {gear.source}
+                                                    </div>
+                                                )} */}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
-            )}
+                        )
+                    })
+                )}
+            </div>
 
-            <h3 className="text-lg font-semibold mt-4 mb-2">All characters:</h3>
-            {characters.map((character, index) => (
-                <div
-                    key={index}
-                    className={`flex items-center gap-3 p-3 rounded-lg ${character.hasItem ? 'bg-green-900/20' : 'bg-muted'}`}
-                >
-                    <WowClassIcon
-                        wowClassName={character.class}
-                        className="h-8 w-8 border-2 border-background rounded-lg"
-                    />
-                    <div className="flex-1">
-                        <div className="font-medium">{character.name}</div>
-                        <div className="text-sm text-muted-foreground">
-                            {character.class} - {character.spec}
-                        </div>
-                    </div>
-                    <div
-                        className={`text-sm font-medium ${character.hasItem ? 'text-green-400' : 'text-muted-foreground'}`}
-                    >
-                        {character.hasItem ? 'Has Item' : 'No Item'}
-                    </div>
+            {/* Separator */}
+            <div className="border-t border-muted-foreground/20 my-2"></div>
+
+            {/* Characters WITHOUT the item */}
+            <div className="flex flex-col gap-3">
+                <h3 className="text-lg font-semibold text-muted-foreground">
+                    Characters without this item ({charactersWithoutMatchingItem.length})
+                </h3>
+                <div className="flex flex-wrap gap-x-5 gap-y-5">
+                    {' '}
+                    {charactersWithoutMatchingItem
+                        .sort((a, b) => Number(b.main) - Number(a.main))
+                        .map(character => (
+                            <div key={character.id} className="flex gap-2">
+                                <CharacterIcon key={character.id} character={character} />
+                            </div>
+                        ))}
                 </div>
-            ))}
+            </div>
         </div>
     )
 }

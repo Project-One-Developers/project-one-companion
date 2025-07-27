@@ -7,7 +7,7 @@ import type {
     BossWithItems,
     Character,
     CharacterGameInfo,
-    CharacterSummary,
+    CharacterSummary, CharacterWithGears,
     CharacterWithPlayer,
     CharAssignmentHighlights,
     Droptimizer,
@@ -182,6 +182,10 @@ export const api = {
     },
     searchItems(searchTerm: string, limit: number): Promise<Item[]> {
         return ipcRenderer.invoke('items-search', searchTerm, limit)
+    },
+    // chars with item
+    getCharactersWithItem(itemId: number): Promise<CharacterWithGears[]> {
+        return ipcRenderer.invoke('characters-by-itemid', itemId)
     },
     // item note
     getItemNote(itemId: number): Promise<ItemNote | null> {

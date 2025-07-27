@@ -1,5 +1,6 @@
 import { getWowClassFromIdOrName } from '@shared/libs/spec-parser/spec-utils'
 import {
+    CharacterWithGears,
     CharacterWowAudit,
     CharAssignmentHighlights,
     CharAssignmentInfo,
@@ -26,8 +27,10 @@ import {
 } from '@storage/loots/loots.storage'
 import { getAllCharacterWowAudit, getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
+import { getItem } from '../../lib/storage/items/items.storage'
 import {
     evalHighlightsAndScore,
+    getAllLootsByItemId,
     getLatestSyncDate,
     parseBestItemInSlot,
     parseDroptimizersInfo,
@@ -215,4 +218,61 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
         loot,
         eligible: charAssignmentInfo
     }
+}
+
+export const getCharactersWithLootsByItemIdHandler = async (
+    itemId: number
+): Promise<CharacterWithGears[]> => {
+    const [item, roster, latestDroptimizer, allAssignedLoots, wowAuditData] = await Promise.all([
+        getItem(itemId),
+        getCharactersList(),
+        getDroptimizerLatestList(),
+        getLootAssigned(),
+        getAllCharacterWowAudit()
+    ])
+
+    if (item == null) {
+        throw new Error('Item not found')
+    }
+
+    const filteredRoster = roster.filter(
+        character => item.classes == null || item.classes.includes(character.class)
+    )
+
+    return await Promise.all(
+        filteredRoster.map(async char => {
+            // get latest droptimizers for a given chars
+            const charDroptimizers = latestDroptimizer.filter(
+                dropt => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
+            )
+
+            const charWowAudit: CharacterWowAudit | null =
+                wowAuditData.find(
+                    wowaudit => wowaudit.name === char.name && wowaudit.realm === char.realm
+                ) ?? null
+
+            // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
+            const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit)
+
+            // loot assigned to a given char
+            const charAssignedLoots = !lowerBound
+                ? []
+                : allAssignedLoots.filter(
+                      l =>
+                          l.itemId === item.id &&
+                          l.assignedCharacterId === char.id &&
+                          l.dropDate > lowerBound
+                  )
+
+            return {
+                ...char,
+                gears: await getAllLootsByItemId(
+                    item,
+                    charDroptimizers,
+                    charAssignedLoots,
+                    charWowAudit
+                )
+            }
+        })
+    )
 }

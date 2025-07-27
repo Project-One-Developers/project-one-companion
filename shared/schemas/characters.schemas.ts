@@ -106,3 +106,7 @@ export const characterGameInfoSchema = z.object({
     droptimizer: droptimizerSchema.nullable(),
     wowaudit: charWowAuditSchema.nullable()
 })
+
+export const characterWithGears = characterSchema.extend({
+    gears: gearItemSchema.array()
+})

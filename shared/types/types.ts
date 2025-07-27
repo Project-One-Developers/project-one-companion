@@ -26,7 +26,7 @@ import { appSettingsSchema } from '@shared/schemas/store.schemas'
 import { z } from 'zod'
 import {
     characterGameInfoSchema,
-    characterSchema,
+    characterSchema, characterWithGears,
     characterWithPlayerSchema,
     charWowAuditSchema,
     editCharacterSchema,
@@ -95,6 +95,7 @@ export type CharacterGameInfo = z.infer<typeof characterGameInfoSchema>
 export type CharacterWithPlayer = z.infer<typeof characterWithPlayerSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
 export type EditCharacter = z.infer<typeof editCharacterSchema>
+export type CharacterWithGears = z.infer<typeof characterWithGears>
 
 export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
