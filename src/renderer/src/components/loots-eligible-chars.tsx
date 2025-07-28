@@ -1,4 +1,5 @@
 import { queryClient } from '@renderer/lib/tanstack-query/client'
+import { fetchItemNote } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { assignLoot, getLootAssignmentInfo, unassignLoot } from '@renderer/lib/tanstack-query/loots'
 import { getDpsHumanReadable } from '@renderer/lib/utils'
@@ -11,7 +12,7 @@ import {
     type LootWithAssigned
 } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { LoaderCircle, MoreVertical } from 'lucide-react'
+import { Badge, LoaderCircle, MoreVertical, StickyNote } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
 import { DroptimizerUpgradeForItemEquipped } from './droptimizer-upgrade-for-item'
 import { toast } from './hooks/use-toast'
@@ -48,10 +49,19 @@ export default function LootsEligibleChars({
     allLoots
 }: LootsEligibleCharsProps): JSX.Element {
     const [showAlts, setShowAlts] = useState(false)
+
     const lootAssignmentInfoQuery = useQuery({
         queryKey: [queryKeys.lootsAssignInfo, selectedLoot.id],
         queryFn: () => getLootAssignmentInfo(selectedLoot.id)
     })
+
+    // Query for item note
+    const itemNoteQuery = useQuery({
+        queryKey: [queryKeys.itemNote, selectedLoot.gearItem.item.id],
+        queryFn: () => fetchItemNote(selectedLoot.gearItem.item.id),
+        enabled: !!selectedLoot.gearItem.item.id
+    })
+
     const eligibleCharacters = useMemo(() => {
         if (!lootAssignmentInfoQuery.data) return []
 
@@ -174,6 +184,31 @@ export default function LootsEligibleChars({
                     showRoleIcons={true}
                     iconClassName="h-12 w-12"
                 />
+                {/* Item Note Badge */}
+                {itemNoteQuery.data && itemNoteQuery.data.trim() !== '' && (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Badge className="flex items-center gap-1 max-w-xs cursor-help bg-blue-900/50 text-blue-100 border-blue-700">
+                                <StickyNote className="h-3 w-3" />
+                                <span className="truncate">
+                                    {itemNoteQuery.data.length > 20
+                                        ? `${itemNoteQuery.data.substring(0, 20)}...`
+                                        : itemNoteQuery.data}
+                                </span>
+                            </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent
+                            side="top"
+                            className="max-w-sm p-3 bg-gray-800 border-gray-600"
+                        >
+                            <div className="whitespace-pre-wrap break-words">
+                                <strong className="text-blue-400">Item Note:</strong>
+                                <br />
+                                {itemNoteQuery.data}
+                            </div>
+                        </TooltipContent>
+                    </Tooltip>
+                )}
             </div>
             <Table className="w-full cursor-pointer">
                 <TableHeader className="bg-gray-800">
