@@ -79,7 +79,11 @@ export const searchItems = async (searchTerm: string, limit: number): Promise<It
         .select()
         .from(itemTable)
         .where(
-            and(eq(itemTable.season, CURRENT_SEASON), ilike(itemTable.name, '%' + searchTerm + '%'))
+            and(
+                eq(itemTable.season, CURRENT_SEASON),
+                eq(itemTable.sourceType, 'raid'),
+                ilike(itemTable.name, '%' + searchTerm + '%')
+            )
         )
         .limit(limit)
     return z.array(itemSchema).parse(res)

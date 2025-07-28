@@ -145,6 +145,7 @@ export default function SessionLootNewDialog({
                                             iconOnly={false}
                                             raidDiff="Mythic"
                                             showIlvl={false}
+                                            showRoleIcons={true}
                                             className="mt-2"
                                         />
                                     </li>
