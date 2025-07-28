@@ -16,9 +16,25 @@ type FiltersPanelProps = {
     filter: LootFilter
     updateFilter: (key: keyof LootFilter, value: any) => void
     className?: string
+    showRaidDifficulty?: boolean
+    showDroptimizerFilters?: boolean
+    showClassFilter?: boolean
+    showSlotFilter?: boolean
+    showArmorTypeFilter?: boolean
+    collapsible?: boolean
 }
 
-export const FiltersPanel = ({ filter: filter, updateFilter, className }: FiltersPanelProps) => {
+export const FiltersPanel = ({
+    filter,
+    updateFilter,
+    className,
+    showRaidDifficulty = true,
+    showDroptimizerFilters = true,
+    showClassFilter = true,
+    showSlotFilter = true,
+    showArmorTypeFilter = true,
+    collapsible = true
+}: FiltersPanelProps) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const toggleSlot = (slotName: WowItemSlotKey) => {
@@ -46,49 +62,118 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
         updateFilter('selectedRaidDiff', difficulty)
     }
 
-    return (
-        <div className={`bg-gray-800 text-white p-6 rounded-lg ${className}`}>
+    const renderContent = () => (
+        <>
             {/* Raid Difficulty Selector */}
-            <div className="flex flex-col space-y-2 mb-4">
-                {/* <label className="text-sm font-semibold">Raid Difficulty:</label> */}
-                <div className="flex flex-wrap gap-4">
-                    {(['Normal', 'Heroic', 'Mythic'] as WowRaidDifficulty[]).map(difficulty => (
-                        <div
-                            key={difficulty}
-                            className={`cursor-pointer transition-transform hover:scale-110 ${
-                                filter.selectedRaidDiff.includes(difficulty)
-                                    ? 'ring-2 ring-blue-500'
-                                    : 'opacity-50 grayscale'
-                            }`}
-                            onClick={() => selectDifficulty(difficulty)}
-                        >
-                            <img
-                                src={raidDiffIcon.get(difficulty)}
-                                alt={difficulty}
-                                className="w-16 h-16 object-cover"
-                                title={difficulty}
-                            />
-                        </div>
-                    ))}
+            {showRaidDifficulty && (
+                <div className="flex flex-col space-y-2 mb-4">
+                    <div className="flex flex-wrap gap-4">
+                        {(['Normal', 'Heroic', 'Mythic'] as WowRaidDifficulty[]).map(difficulty => (
+                            <div
+                                key={difficulty}
+                                className={`cursor-pointer transition-transform hover:scale-110 ${
+                                    filter.selectedRaidDiff.includes(difficulty)
+                                        ? 'ring-2 ring-blue-500'
+                                        : 'opacity-50 grayscale'
+                                }`}
+                                onClick={() => selectDifficulty(difficulty)}
+                            >
+                                <img
+                                    src={raidDiffIcon.get(difficulty)}
+                                    alt={difficulty}
+                                    className="w-16 h-16 object-cover"
+                                    title={difficulty}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
 
-            <Collapsible.Root
-                className="w-full"
-                defaultOpen={false}
-                open={isOpen}
-                onOpenChange={setIsOpen}
-            >
-                {/* Panel Header */}
-                <Collapsible.Trigger className="flex items-center justify-between w-full text-lg font-bold mb-2 cursor-pointer">
-                    More Filters
-                    <ChevronDown
-                        className={`w-5 h-5 transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''}`}
-                    />
-                </Collapsible.Trigger>
+            {/* Class Filter */}
+            {showClassFilter && (
+                <div className="flex flex-col space-y-2 mb-4">
+                    <label className="text-sm font-semibold">Class:</label>
+                    <div className="flex flex-wrap gap-2">
+                        {wowClassNameSchema.options.map(wowClassName => (
+                            <div
+                                key={wowClassName}
+                                className={`cursor-pointer transition-transform hover:scale-125 ${
+                                    filter.selectedWowClassName.includes(wowClassName)
+                                        ? 'ring-2 ring-blue-500'
+                                        : 'opacity-50 grayscale'
+                                }`}
+                                onClick={() => toggleWowClass(wowClassName)}
+                            >
+                                <img
+                                    src={classIcon.get(wowClassName)}
+                                    alt={wowClassName}
+                                    className="w-8 h-8 object-cover"
+                                    title={wowClassName}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
-                {/* Panel Content */}
-                <Collapsible.Content className="mt-4 space-y-4">
+            {/* Item Slot Filter */}
+            {showSlotFilter && (
+                <div className="flex flex-col space-y-2 mb-4">
+                    <label className="text-sm font-semibold">Item Slot:</label>
+                    <div className="flex flex-wrap gap-2">
+                        {wowItemSlotKeySchema.options.map(slotName => (
+                            <div
+                                key={slotName}
+                                className={`cursor-pointer transition-transform hover:scale-125 ${
+                                    filter.selectedSlots.includes(slotName)
+                                        ? 'ring-2 ring-blue-500'
+                                        : 'opacity-50 grayscale'
+                                }`}
+                                onClick={() => toggleSlot(slotName)}
+                            >
+                                <img
+                                    src={itemSlotIcon.get(slotName)}
+                                    alt={formatWowSlotKey(slotName)}
+                                    className="w-8 h-8 object-cover"
+                                    title={formatWowSlotKey(slotName)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Armor Type Filter */}
+            {showArmorTypeFilter && (
+                <div className="flex flex-col space-y-2 mb-4">
+                    <label className="text-sm font-semibold">Armor Type:</label>
+                    <div className="flex flex-wrap gap-2">
+                        {wowArmorTypeSchema.options.map(armorType => (
+                            <div
+                                key={armorType}
+                                className={`cursor-pointer transition-transform hover:scale-125 ${
+                                    filter.selectedArmorTypes.includes(armorType)
+                                        ? 'ring-2 ring-blue-500'
+                                        : 'opacity-50 grayscale'
+                                }`}
+                                onClick={() => toggleArmorType(armorType)}
+                            >
+                                <img
+                                    src={armorTypesIcon.get(armorType)}
+                                    alt={armorType}
+                                    className="w-8 h-8 object-cover"
+                                    title={armorType}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Droptimizer-specific filters */}
+            {showDroptimizerFilters && (
+                <div className="space-y-4">
                     {/* Ignore droptimizer older than */}
                     <div className="flex flex-row items-center gap-3">
                         <Checkbox
@@ -172,83 +257,258 @@ export const FiltersPanel = ({ filter: filter, updateFilter, className }: Filter
                             </label>
                         </div>
                     </div>
+                </div>
+            )}
+        </>
+    )
 
-                    {/* Wow Class filter */}
-                    <div className="flex flex-col space-y-2">
-                        <label className="text-sm font-semibold">Class:</label>
-                        <div className="flex flex-wrap gap-2">
-                            {wowClassNameSchema.options.map(wowClassName => (
-                                <div
-                                    key={wowClassName}
-                                    className={`cursor-pointer transition-transform hover:scale-125 ${
-                                        filter.selectedWowClassName.includes(wowClassName)
-                                            ? 'ring-2 ring-blue-500'
-                                            : 'opacity-50 grayscale'
-                                    }`}
-                                    onClick={() => toggleWowClass(wowClassName)}
-                                >
-                                    <img
-                                        src={classIcon.get(wowClassName)}
-                                        alt={wowClassName}
-                                        className="w-7 h-7"
-                                        title={wowClassName}
-                                    />
+    return (
+        <div className={`bg-gray-800 text-white p-6 rounded-lg ${className}`}>
+            {collapsible && showDroptimizerFilters ? (
+                <Collapsible.Root
+                    className="w-full"
+                    defaultOpen={false}
+                    open={isOpen}
+                    onOpenChange={setIsOpen}
+                >
+                    {/* Always visible content */}
+                    <div className="mb-4">
+                        {showRaidDifficulty && (
+                            <div className="flex flex-col space-y-2 mb-4">
+                                <div className="flex flex-wrap gap-4">
+                                    {(['Normal', 'Heroic', 'Mythic'] as WowRaidDifficulty[]).map(
+                                        difficulty => (
+                                            <div
+                                                key={difficulty}
+                                                className={`cursor-pointer transition-transform hover:scale-110 ${
+                                                    filter.selectedRaidDiff.includes(difficulty)
+                                                        ? 'ring-2 ring-blue-500'
+                                                        : 'opacity-50 grayscale'
+                                                }`}
+                                                onClick={() => selectDifficulty(difficulty)}
+                                            >
+                                                <img
+                                                    src={raidDiffIcon.get(difficulty)}
+                                                    alt={difficulty}
+                                                    className="w-16 h-16 object-cover"
+                                                    title={difficulty}
+                                                />
+                                            </div>
+                                        )
+                                    )}
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        )}
+
+                        {showClassFilter && (
+                            <div className="flex flex-col space-y-2 mb-4">
+                                <label className="text-sm font-semibold">Class:</label>
+                                <div className="flex flex-wrap gap-2">
+                                    {wowClassNameSchema.options.map(wowClassName => (
+                                        <div
+                                            key={wowClassName}
+                                            className={`cursor-pointer transition-transform hover:scale-125 ${
+                                                filter.selectedWowClassName.includes(wowClassName)
+                                                    ? 'ring-2 ring-blue-500'
+                                                    : 'opacity-50 grayscale'
+                                            }`}
+                                            onClick={() => toggleWowClass(wowClassName)}
+                                        >
+                                            <img
+                                                src={classIcon.get(wowClassName)}
+                                                alt={wowClassName}
+                                                className="w-8 h-8 object-cover"
+                                                title={wowClassName}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Item Slot Toggles */}
-                    <div className="flex flex-col space-y-2">
-                        <label className="text-sm font-semibold">Item Slots:</label>
-                        <div className="flex flex-wrap gap-2">
-                            {wowItemSlotKeySchema.options.map(slot => (
-                                <div
-                                    key={slot}
-                                    className={`cursor-pointer transition-transform hover:scale-125 ${
-                                        filter.selectedSlots.includes(slot)
-                                            ? 'ring-2 ring-blue-500'
-                                            : 'opacity-50 grayscale'
-                                    }`}
-                                    onClick={() => toggleSlot(slot)}
-                                >
-                                    <img
-                                        src={itemSlotIcon.get(slot)}
-                                        alt={slot}
-                                        className="w-7 h-7"
-                                        title={formatWowSlotKey(slot)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    {/* Panel Header */}
+                    <Collapsible.Trigger className="flex items-center justify-between w-full text-lg font-bold mb-2 cursor-pointer">
+                        More Filters
+                        <ChevronDown
+                            className={`w-5 h-5 transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''}`}
+                        />
+                    </Collapsible.Trigger>
 
-                    {/* Armor Type Toggles */}
-                    <div className="flex flex-col space-y-2">
-                        <label className="text-sm font-semibold">Armor Types:</label>
-                        <div className="flex flex-wrap gap-2">
-                            {wowArmorTypeSchema.options.map(armorType => (
-                                <div
-                                    key={armorType}
-                                    className={`cursor-pointer transition-transform hover:scale-125 ${
-                                        filter.selectedArmorTypes.includes(armorType)
-                                            ? 'ring-2 ring-blue-500'
-                                            : 'opacity-50 grayscale'
-                                    }`}
-                                    onClick={() => toggleArmorType(armorType)}
-                                >
-                                    <img
-                                        src={armorTypesIcon.get(armorType)}
-                                        alt={armorType}
-                                        className="w-7 h-7"
-                                        title={armorType}
+                    {/* Panel Content */}
+                    <Collapsible.Content className="mt-4 space-y-4">
+                        {showSlotFilter && (
+                            <div className="flex flex-col space-y-2">
+                                <label className="text-sm font-semibold">Item Slot:</label>
+                                <div className="flex flex-wrap gap-2">
+                                    {wowItemSlotKeySchema.options.map(slotName => (
+                                        <div
+                                            key={slotName}
+                                            className={`cursor-pointer transition-transform hover:scale-125 ${
+                                                filter.selectedSlots.includes(slotName)
+                                                    ? 'ring-2 ring-blue-500'
+                                                    : 'opacity-50 grayscale'
+                                            }`}
+                                            onClick={() => toggleSlot(slotName)}
+                                        >
+                                            <img
+                                                src={itemSlotIcon.get(slotName)}
+                                                alt={formatWowSlotKey(slotName)}
+                                                className="w-8 h-8 object-cover"
+                                                title={formatWowSlotKey(slotName)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {showArmorTypeFilter && (
+                            <div className="flex flex-col space-y-2">
+                                <label className="text-sm font-semibold">Armor Type:</label>
+                                <div className="flex flex-wrap gap-2">
+                                    {wowArmorTypeSchema.options.map(armorType => (
+                                        <div
+                                            key={armorType}
+                                            className={`cursor-pointer transition-transform hover:scale-125 ${
+                                                filter.selectedArmorTypes.includes(armorType)
+                                                    ? 'ring-2 ring-blue-500'
+                                                    : 'opacity-50 grayscale'
+                                            }`}
+                                            onClick={() => toggleArmorType(armorType)}
+                                        >
+                                            <img
+                                                src={armorTypesIcon.get(armorType)}
+                                                alt={armorType}
+                                                className="w-8 h-8 object-cover"
+                                                title={armorType}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {showDroptimizerFilters && (
+                            <div className="space-y-4">
+                                {/* Ignore droptimizer older than */}
+                                <div className="flex flex-row items-center gap-3">
+                                    <Checkbox
+                                        id="older-than-days"
+                                        checked={filter.hideOlderThanDays as CheckedState}
+                                        onCheckedChange={checked =>
+                                            updateFilter('hideOlderThanDays', !!checked)
+                                        }
+                                        className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                                    >
+                                        {filter.hideOlderThanDays && (
+                                            <Check className="text-white w-4 h-4" />
+                                        )}
+                                    </Checkbox>
+                                    <label
+                                        htmlFor="older-than-days"
+                                        className="text-sm font-semibold"
+                                    >
+                                        Ignore droptimizer older than days
+                                    </label>
+                                    <input
+                                        id="upgrade-amount"
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        value={filter.maxDays}
+                                        onChange={e =>
+                                            updateFilter('maxDays', Number(e.target.value))
+                                        }
+                                        disabled={!filter.hideOlderThanDays}
+                                        className={`border rounded-md p-2 bg-gray-700 text-white w-14 ${!filter.hideOlderThanDays ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     />
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </Collapsible.Content>
-            </Collapsible.Root>
+
+                                {/* Upgrades only and Minimum Upgrade Amount in the same row */}
+                                <div className="flex flex-row items-center gap-3">
+                                    <Checkbox
+                                        id="only-upgrades"
+                                        checked={filter.onlyUpgrades as CheckedState}
+                                        onCheckedChange={checked =>
+                                            updateFilter('onlyUpgrades', !!checked)
+                                        }
+                                        className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                                    >
+                                        {filter.onlyUpgrades && (
+                                            <Check className="text-white w-4 h-4" />
+                                        )}
+                                    </Checkbox>
+                                    <label
+                                        htmlFor="only-upgrades"
+                                        className="text-sm font-semibold"
+                                    >
+                                        Minimum upgrade
+                                    </label>
+                                    <input
+                                        id="upgrade-amount"
+                                        type="number"
+                                        min="0"
+                                        step="500"
+                                        value={filter.minUpgrade}
+                                        onChange={e =>
+                                            updateFilter('minUpgrade', Number(e.target.value))
+                                        }
+                                        disabled={!filter.onlyUpgrades}
+                                        className={`border rounded-md p-2 bg-gray-700 text-white w-20 ${!filter.onlyUpgrades ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    />
+                                </div>
+
+                                {/* Hide Alts / No upgrades*/}
+                                <div className="flex flex-row items-center gap-3">
+                                    <div className="flex gap-3">
+                                        <Checkbox
+                                            id="hide-alts"
+                                            checked={filter.hideAlts as CheckedState}
+                                            onCheckedChange={checked =>
+                                                updateFilter('hideAlts', !!checked)
+                                            }
+                                            className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                                        >
+                                            {filter.hideAlts && (
+                                                <Check className="text-white w-4 h-4" />
+                                            )}
+                                        </Checkbox>
+                                        <label
+                                            htmlFor="hide-alts"
+                                            className="text-sm font-semibold"
+                                        >
+                                            Hide alts
+                                        </label>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        <Checkbox
+                                            id="hide-no-upgrades"
+                                            checked={filter.hideIfNoUpgrade as CheckedState}
+                                            onCheckedChange={checked =>
+                                                updateFilter('hideIfNoUpgrade', !!checked)
+                                            }
+                                            className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                                        >
+                                            {filter.hideIfNoUpgrade && (
+                                                <Check className="text-white w-4 h-4" />
+                                            )}
+                                        </Checkbox>
+                                        <label
+                                            htmlFor="hide-no-upgrades"
+                                            className="text-sm font-semibold"
+                                        >
+                                            Hide no upgrades
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </Collapsible.Content>
+                </Collapsible.Root>
+            ) : (
+                renderContent()
+            )}
         </div>
     )
 }
