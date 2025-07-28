@@ -111,7 +111,7 @@ export default function ItemManagementDialog({
         })
     }
 
-    const handleSave = () => {
+    const handleBisSave = () => {
         if (!itemAndSpecs) return
 
         editBisMutation.mutate({
@@ -159,42 +159,58 @@ export default function ItemManagementDialog({
                     {/* Tab 1: BiS Specs (existing logic) */}
                     <Tabs.Content value="bis-specs" className="mt-4">
                         <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto">
-                            {WOW_CLASS_WITH_SPECS.map((classWithSpecs, index) => (
-                                <div key={index} className="flex flex-row items-center">
-                                    <div className="flex">
-                                        <WowClassIcon
-                                            wowClassName={classWithSpecs.name}
-                                            className="h-8 w-8 border-2 border-background rounded-lg"
-                                        />
-                                        <ToggleGroup.Root
-                                            type="multiple"
-                                            className="flex ml-4 gap-2"
-                                            value={selectedSpecs.map(String)}
-                                            onValueChange={values =>
-                                                setSelectedSpecs(values.map(Number))
-                                            }
-                                        >
-                                            {classWithSpecs.specs.map(wowSpec => (
-                                                <ToggleGroup.Item
-                                                    key={wowSpec.id}
-                                                    value={String(wowSpec.id)}
-                                                    className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
-                                                >
-                                                    <WowSpecIcon
-                                                        specId={wowSpec.id}
-                                                        className="object-cover object-top rounded-md full h-5 w-5 border border-background"
-                                                        title={wowSpec.name}
-                                                    />
-                                                </ToggleGroup.Item>
-                                            ))}
-                                        </ToggleGroup.Root>
+                            {WOW_CLASS_WITH_SPECS.map((classWithSpecs, index) => {
+                                // Filter specs based on itemAndSpecs.item.specIds
+                                const filteredSpecs =
+                                    itemAndSpecs.item.specIds &&
+                                    itemAndSpecs.item.specIds.length > 0
+                                        ? classWithSpecs.specs.filter(spec =>
+                                              itemAndSpecs.item.specIds!.includes(spec.id)
+                                          )
+                                        : classWithSpecs.specs
+
+                                // Only render the class if it has specs to show
+                                if (filteredSpecs.length === 0) {
+                                    return null
+                                }
+
+                                return (
+                                    <div key={index} className="flex flex-row items-center">
+                                        <div className="flex">
+                                            <WowClassIcon
+                                                wowClassName={classWithSpecs.name}
+                                                className="h-8 w-8 border-2 border-background rounded-lg"
+                                            />
+                                            <ToggleGroup.Root
+                                                type="multiple"
+                                                className="flex ml-4 gap-2"
+                                                value={selectedSpecs.map(String)}
+                                                onValueChange={values =>
+                                                    setSelectedSpecs(values.map(Number))
+                                                }
+                                            >
+                                                {filteredSpecs.map(wowSpec => (
+                                                    <ToggleGroup.Item
+                                                        key={wowSpec.id}
+                                                        value={String(wowSpec.id)}
+                                                        className="px-3 py-1 rounded-md border border-gray-700 bg-gray-900 text-gray-500 opacity-50 hover:opacity-80 data-[state=on]:bg-green-600 data-[state=on]:text-white data-[state=on]:opacity-100 transition"
+                                                    >
+                                                        <WowSpecIcon
+                                                            specId={wowSpec.id}
+                                                            className="object-cover object-top rounded-md full h-5 w-5 border border-background"
+                                                            title={wowSpec.name}
+                                                        />
+                                                    </ToggleGroup.Item>
+                                                ))}
+                                            </ToggleGroup.Root>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
                         <Button
                             className="w-full mt-4"
-                            onClick={handleSave}
+                            onClick={handleBisSave}
                             disabled={editBisMutation.isPending}
                         >
                             {editBisMutation.isPending ? (
