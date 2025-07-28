@@ -1,5 +1,6 @@
 import { fetchItem } from '@renderer/lib/tanstack-query/items'
 import { cn } from '@renderer/lib/utils'
+import { isHealerItem, isTankItem } from '@shared/libs/spec-parser/spec-utils'
 import { Item, ItemTrack, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
@@ -16,7 +17,8 @@ export const WowItemIcon = ({
     iconClassName,
     showSlot = true,
     showSubclass = true,
-    showIlvl = true
+    showIlvl = true,
+    showRoleIcons = false
 }: {
     item: Item | number
     iconOnly: boolean
@@ -31,6 +33,7 @@ export const WowItemIcon = ({
     showSlot?: boolean
     showSubclass?: boolean
     showIlvl?: boolean
+    showRoleIcons?: boolean
 }) => {
     const { data: itemData, isLoading } = useQuery({
         queryKey: ['item', item],
@@ -80,6 +83,14 @@ export const WowItemIcon = ({
     const currentIlvl = getIlvl()
     const hrefString = `${itemData.wowheadUrl}&ilvl=${currentIlvl}}`
 
+    // role badges
+    let healerItem: boolean | undefined
+    let tankItem: boolean | undefined
+    if (showRoleIcons) {
+        healerItem = isHealerItem(itemData)
+        tankItem = isTankItem(itemData)
+    }
+
     return (
         <a className="" href={hrefString} rel="noreferrer" target="_blank">
             <div className={cn(`flex items-center`, className)}>
@@ -99,6 +110,36 @@ export const WowItemIcon = ({
                     )}
                     {tierBanner && (itemData.tierset || itemData.token) && (
                         <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
+                    )}
+                    {healerItem && (
+                        <div className="absolute -top-1 -left-1 w-4 h-4 bg-yellow-500 rounded-sm flex items-center justify-center">
+                            <svg
+                                className="w-3 h-3 text-yellow-900"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    d="M10 2a1.5 1.5 0 011.5 1.5v4h4a1.5 1.5 0 110 3h-4v4a1.5 1.5 0 11-3 0v-4h-4a1.5 1.5 0 110-3h4v-4A1.5 1.5 0 0110 2z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+                        </div>
+                    )}
+                    {tankItem && (
+                        <div className="absolute -top-1 -left-1 w-4 h-4 bg-yellow-500 rounded-sm flex items-center justify-center">
+                            <svg
+                                className="w-3 h-3 text-yellow-900"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+                        </div>
                     )}
                 </div>
                 {!iconOnly && (

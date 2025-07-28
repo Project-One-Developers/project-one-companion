@@ -72,6 +72,7 @@ const BossPanel = ({ boss, bisLists, onEdit }: BossPanelProps) => {
                                     raidDiff={'Mythic'}
                                     tierBanner={true}
                                     showIlvl={false}
+                                    showRoleIcons={true}
                                     iconClassName=""
                                 />
 
