@@ -1,6 +1,5 @@
-
-import ItemManagementDialog from '@renderer/components/item-management-dialog'
 import { FiltersPanel } from '@renderer/components/filter-panel'
+import ItemManagementDialog from '@renderer/components/item-management-dialog'
 import { Input } from '@renderer/components/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
@@ -11,11 +10,11 @@ import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
+import { getWowClassBySpecId } from '@shared/libs/spec-parser/spec-utils'
 import { BisList, BossWithItems, Item, WowClassName } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Edit, LoaderCircle } from 'lucide-react'
-import { getWowClassBySpecId } from '@shared/libs/spec-parser/spec-utils'
+import { Edit, Filter, LoaderCircle, X } from 'lucide-react'
 
 import { useEffect, useMemo, useState, type JSX } from 'react'
 
@@ -35,9 +34,11 @@ const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
             const allSpecIds = bisForItem.flatMap(bis => bis.specIds)
 
             // If no class filter is selected, show all items
-            if (filter.selectedWowClassName.length === 0 &&
+            if (
+                filter.selectedWowClassName.length === 0 &&
                 filter.selectedSlots.length === 0 &&
-                filter.selectedArmorTypes.length === 0) {
+                filter.selectedArmorTypes.length === 0
+            ) {
                 return true
             }
 
@@ -47,13 +48,15 @@ const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
 
             // Class filter - check if any BIS specs match selected classes
             if (filter.selectedWowClassName.length > 0) {
-                const itemClasses = allSpecIds.map(specId => {
-                    try {
-                        return getWowClassBySpecId(specId)?.name
-                    } catch {
-                        return null
-                    }
-                }).filter(Boolean)
+                const itemClasses = allSpecIds
+                    .map(specId => {
+                        try {
+                            return getWowClassBySpecId(specId)?.name
+                        } catch {
+                            return null
+                        }
+                    })
+                    .filter(Boolean)
 
                 passesClassFilter = itemClasses.some(className =>
                     filter.selectedWowClassName.includes(className as WowClassName)
@@ -62,12 +65,14 @@ const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
 
             // Slot filter
             if (filter.selectedSlots.length > 0) {
-                passesSlotFilter = filter.selectedSlots.includes(item.slot)
+                passesSlotFilter = filter.selectedSlots.includes(item.slotKey)
             }
 
             // Armor type filter
             if (filter.selectedArmorTypes.length > 0) {
-                passesArmorTypeFilter = item.armorType ? filter.selectedArmorTypes.includes(item.armorType) : false
+                passesArmorTypeFilter = item.armorType
+                    ? filter.selectedArmorTypes.includes(item.armorType)
+                    : false
             }
 
             return passesClassFilter && passesSlotFilter && passesArmorTypeFilter
@@ -170,6 +175,7 @@ type ItemWithBisSpecs = {
 
 export default function LootTable(): JSX.Element {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
     const [selectedItem, setSelectedItem] = useState<ItemWithBisSpecs | null>(null)
@@ -211,6 +217,15 @@ export default function LootTable(): JSX.Element {
         setFilter(prev => ({ ...prev, [key]: value }))
     }
 
+    // Check if any filters are active
+    const hasActiveFilters = useMemo(() => {
+        return (
+            filter.selectedSlots.length > 0 ||
+            filter.selectedArmorTypes.length > 0 ||
+            filter.selectedWowClassName.length > 0
+        )
+    }, [filter])
+
     // Memoized filtering logic with search query
     const filteredBosses: BossWithItems[] = useMemo(() => {
         if (!bossesWithItemRes.data) return []
@@ -220,7 +235,10 @@ export default function LootTable(): JSX.Element {
                 ...boss,
                 items: boss.items.filter(item => {
                     // Apply search filter first
-                    if (debouncedSearchQuery && !item.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())) {
+                    if (
+                        debouncedSearchQuery &&
+                        !item.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+                    ) {
                         return false
                     }
                     return true
@@ -247,18 +265,6 @@ export default function LootTable(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            {/* Enhanced Filter Panel - only showing class, slot, and armor type filters */}
-            <FiltersPanel
-                filter={filter}
-                updateFilter={updateFilter}
-                showRaidDifficulty={false}
-                showDroptimizerFilters={false}
-                showClassFilter={true}
-                showSlotFilter={true}
-                showArmorTypeFilter={true}
-                collapsible={false}
-            />
-
             {/* Search Bar */}
             <div className="w-full mb-4 p-3">
                 <Input
@@ -284,6 +290,50 @@ export default function LootTable(): JSX.Element {
                         />
                     ))}
             </div>
+
+            {/* Floating Filter Button */}
+            <button
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className={clsx(
+                    'fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center z-50',
+                    hasActiveFilters
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+                )}
+                title="Toggle Filters"
+            >
+                {isFilterOpen ? <X size={24} /> : <Filter size={24} />}
+                {hasActiveFilters && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+                )}
+            </button>
+
+            {/* Filter Panel Overlay */}
+            {isFilterOpen && (
+                <>
+                    {/* Backdrop */}
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                        onClick={() => setIsFilterOpen(false)}
+                    />
+
+                    {/* Filter Panel */}
+                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-80">
+                        <FiltersPanel
+                            filter={filter}
+                            updateFilter={updateFilter}
+                            showRaidDifficulty={false}
+                            showDroptimizerFilters={false}
+                            showClassFilter={true}
+                            showSlotFilter={true}
+                            showArmorTypeFilter={true}
+                            collapsible={false}
+                            className="shadow-2xl"
+                        />
+                    </div>
+                </>
+            )}
+
             {selectedItem && (
                 <ItemManagementDialog
                     isOpen={isEditDialogOpen}
