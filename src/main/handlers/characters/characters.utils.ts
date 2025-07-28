@@ -489,7 +489,8 @@ function createTiersetGearPiece(
             boe: wowItem.boe,
             veryRare: wowItem.veryRare,
             iconName: wowItem.iconName,
-            season: evalRealSeason(wowItem, ilvl)
+            season: evalRealSeason(wowItem, ilvl),
+            specIds: wowItem.specIds
         },
         source: 'equipped',
         itemLevel: ilvl,
@@ -542,7 +543,8 @@ function createGearPiece(
             boe: wowItem.boe,
             veryRare: wowItem.veryRare,
             iconName: wowItem.iconName,
-            season: evalRealSeason(wowItem, ilvl)
+            season: evalRealSeason(wowItem, ilvl),
+            specIds: wowItem.specIds
         },
         source: 'equipped',
         equippedInSlot: equippedInSlot ?? undefined,

@@ -259,7 +259,8 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
                 boe: wowItem.boe,
                 veryRare: wowItem.veryRare,
                 iconName: wowItem.iconName,
-                season: evalRealSeason(wowItem, itemLevel)
+                season: evalRealSeason(wowItem, itemLevel),
+                specIds: wowItem.specIds
             },
             source: 'great-vault',
             itemLevel: itemLevel,
@@ -357,7 +358,8 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: evalRealSeason(wowItem, itemLevel)
+                    season: evalRealSeason(wowItem, itemLevel),
+                    specIds: wowItem.specIds
                 },
                 source: 'bag',
                 itemLevel: itemLevel,
@@ -446,7 +448,8 @@ export const parseEquippedGear = async (
                 boe: wowItem.boe,
                 veryRare: wowItem.veryRare,
                 iconName: wowItem.iconName,
-                season: evalRealSeason(wowItem, droptGearItem.itemLevel)
+                season: evalRealSeason(wowItem, droptGearItem.itemLevel),
+                specIds: wowItem.specIds
             },
             source: 'equipped',
             equippedInSlot: wowItemEquippedSlotKeySchema.parse(realSlot),

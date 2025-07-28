@@ -46,17 +46,25 @@ export const isHealerSpec = (id: number): boolean => {
 }
 
 export const isTankItem = (item: Item): boolean => {
-    return (
-        item.specIds != null &&
-        item.specIds.length === tankSpecIds.length &&
-        item.specIds.every(id => isTankSpec(id))
-    )
+    return isTankSpecs(item.specIds)
 }
 
 export const isHealerItem = (item: Item): boolean => {
+    return isHealerSpecs(item.specIds)
+}
+
+export const isHealerSpecs = (specIds: number[] | null): boolean => {
     return (
-        item.specIds != null &&
-        item.specIds.length === healerSpecIds.length &&
-        item.specIds.every(id => isHealerSpec(id))
+        specIds != null &&
+        specIds.length === healerSpecIds.length &&
+        specIds.every(id => isHealerSpec(id))
+    )
+}
+
+export const isTankSpecs = (specIds: number[] | null): boolean => {
+    return (
+        specIds != null &&
+        specIds.length === tankSpecIds.length &&
+        specIds.every(id => isTankSpec(id))
     )
 }

@@ -115,6 +115,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                                             gearItem={loot.gearItem}
                                                             showTierBanner={true}
                                                             showItemTrackDiff={false}
+                                                            showRoleIcons={true}
                                                         />
                                                         <button
                                                             onClick={() =>

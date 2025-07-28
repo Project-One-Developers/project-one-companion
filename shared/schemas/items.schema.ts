@@ -83,7 +83,8 @@ export const gearItemSchema = z.object({
         boe: itemSchema.shape.boe,
         veryRare: itemSchema.shape.veryRare,
         iconName: itemSchema.shape.iconName,
-        season: itemSchema.shape.season
+        season: itemSchema.shape.season,
+        specIds: itemSchema.shape.specIds
     }),
     source: z.enum(['equipped', 'bag', 'great-vault', 'loot']),
     equippedInSlot: wowItemEquippedSlotKeySchema.optional(),

@@ -202,7 +202,8 @@ export const parseMrtLoots = async (
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: evalRealSeason(wowItem, itemLevel)
+                    season: evalRealSeason(wowItem, itemLevel),
+                    specIds: wowItem.specIds
                 },
                 source: 'loot',
                 itemLevel: itemLevel,
@@ -345,7 +346,8 @@ export const parseRcLoots = async (
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: evalRealSeason(wowItem, itemLevel)
+                    season: evalRealSeason(wowItem, itemLevel),
+                    specIds: wowItem.specIds
                 },
                 source: 'loot',
                 itemLevel: itemLevel,
@@ -442,7 +444,8 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
                     boe: wowItem.boe,
                     veryRare: wowItem.veryRare,
                     iconName: wowItem.iconName,
-                    season: evalRealSeason(wowItem, itemLevel)
+                    season: evalRealSeason(wowItem, itemLevel),
+                    specIds: wowItem.specIds
                 },
                 source: 'loot',
                 itemLevel: itemLevel,

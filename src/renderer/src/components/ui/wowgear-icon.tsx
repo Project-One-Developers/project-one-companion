@@ -6,6 +6,7 @@ import {
 } from '@shared/libs/items/item-bonus-utils'
 import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
 import { trackNameToWowDiff } from '@shared/libs/items/item-tracks'
+import { isHealerSpecs, isTankSpecs } from '@shared/libs/spec-parser/spec-utils'
 import { GearItem } from '@shared/types/types'
 
 type WowGearIconProps = {
@@ -18,6 +19,7 @@ type WowGearIconProps = {
     showArmorType?: boolean
     className?: string
     iconClassName?: string
+    showRoleIcons?: boolean
 }
 
 export const WowGearIcon = ({
@@ -28,11 +30,12 @@ export const WowGearIcon = ({
     convertItemTrackToRaidDiff = true,
     showSlot = false,
     showArmorType = false,
+    showRoleIcons = false,
     className,
     iconClassName
 }: WowGearIconProps) => {
     const { item, itemLevel, bonusIds, enchantIds, gemIds, itemTrack } = gearItem
-    const { id, iconName, tierset, token, name, slotKey, armorType } = item
+    const { id, iconName, tierset, token, name, slotKey, armorType, specIds } = item
 
     const hasSocket = gearhasSocket(bonusIds)
     const hasSpecials = hasSocket || gearTertiary(bonusIds)
@@ -43,6 +46,14 @@ export const WowGearIcon = ({
         (bonusIds?.length ? `&bonus=${bonusIds.join(':')}` : '') +
         (enchantIds?.length ? `&ench=${enchantIds.join(':')}` : '') +
         (gemIds?.length ? `&gems=${gemIds.join(':')}` : '')
+
+    // role badges
+    let healerItem: boolean | undefined
+    let tankItem: boolean | undefined
+    if (showRoleIcons) {
+        healerItem = isHealerSpecs(specIds)
+        tankItem = isTankSpecs(specIds)
+    }
 
     const getItemTrackAbbr = () => {
         if (!showItemTrackDiff) return ''
@@ -85,6 +96,36 @@ export const WowGearIcon = ({
                                     className="w-3 h-3 border"
                                     src="https://www.raidbots.com/frontend/c6217d2ee6dd7647cbfa.png"
                                 />
+                            </div>
+                        )}
+                        {healerItem && (
+                            <div className="absolute -top-1 -left-1 w-4 h-4 bg-yellow-500 rounded-sm flex items-center justify-center">
+                                <svg
+                                    className="w-3 h-3 text-yellow-900"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M10 2a1.5 1.5 0 011.5 1.5v4h4a1.5 1.5 0 110 3h-4v4a1.5 1.5 0 11-3 0v-4h-4a1.5 1.5 0 110-3h4v-4A1.5 1.5 0 0110 2z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </div>
+                        )}
+                        {tankItem && (
+                            <div className="absolute -top-1 -left-1 w-4 h-4 bg-yellow-500 rounded-sm flex items-center justify-center">
+                                <svg
+                                    className="w-3 h-3 text-yellow-900"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
                             </div>
                         )}
                     </div>

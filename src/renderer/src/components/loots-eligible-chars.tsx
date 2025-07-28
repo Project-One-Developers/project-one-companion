@@ -1,10 +1,8 @@
-import { TooltipArrow } from '@radix-ui/react-tooltip'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { assignLoot, getLootAssignmentInfo, unassignLoot } from '@renderer/lib/tanstack-query/loots'
 import { getDpsHumanReadable } from '@renderer/lib/utils'
 import { ITEM_SLOTS_KEY_TIERSET } from '@shared/consts/wow.consts'
-import { isHealerItem, isTankItem } from '@shared/libs/spec-parser/spec-utils'
 import { tierSetBonusSchema } from '@shared/schemas/wow.schemas'
 import {
     DroptimizerWarn,
@@ -13,7 +11,7 @@ import {
     type LootWithAssigned
 } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { HeartCrackIcon, LoaderCircle, MoreVertical, ShieldAlertIcon } from 'lucide-react'
+import { LoaderCircle, MoreVertical } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
 import { DroptimizerUpgradeForItemEquipped } from './droptimizer-upgrade-for-item'
 import { toast } from './hooks/use-toast'
@@ -173,32 +171,9 @@ export default function LootsEligibleChars({
                     showTierBanner={true}
                     showExtendedInfo={true}
                     showArmorType={true}
+                    showRoleIcons={true}
                     iconClassName="h-12 w-12"
                 />
-                {lootAssignmentInfoQuery.data &&
-                    isTankItem(lootAssignmentInfoQuery.data?.loot.item) && (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <ShieldAlertIcon className="cursor-pointer text-yellow-300" />
-                            </TooltipTrigger>
-                            <TooltipContent className="TooltipContent" sideOffset={5}>
-                                Tank Item
-                                <TooltipArrow className="TooltipArrow" />
-                            </TooltipContent>
-                        </Tooltip>
-                    )}
-                {lootAssignmentInfoQuery.data &&
-                    isHealerItem(lootAssignmentInfoQuery.data?.loot.item) && (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <HeartCrackIcon className="cursor-pointer text-yellow-300" />
-                            </TooltipTrigger>
-                            <TooltipContent className="TooltipContent" sideOffset={5}>
-                                Healer Item
-                                <TooltipArrow className="TooltipArrow" />
-                            </TooltipContent>
-                        </Tooltip>
-                    )}
             </div>
             <Table className="w-full cursor-pointer">
                 <TableHeader className="bg-gray-800">
