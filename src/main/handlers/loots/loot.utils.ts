@@ -867,18 +867,18 @@ const calculateTiersetCompletion = (
     loot: LootWithItem,
     currentTierset: GearItem[]
 ): TierSetBonus => {
-    if (!loot.item.token) return tierSetBonusSchema.Enum.none
+    if (!loot.item.token) return tierSetBonusSchema.enum.none
 
     const isValidSlot =
         loot.item.slotKey === 'omni' ||
         !currentTierset.some(t => t.item.slotKey === loot.item.slotKey)
 
-    if (!isValidSlot) return tierSetBonusSchema.Enum.none
+    if (!isValidSlot) return tierSetBonusSchema.enum.none
 
     return match<number, TierSetBonus>(currentTierset.length)
-        .with(1, () => tierSetBonusSchema.Enum['2p'])
-        .with(3, () => tierSetBonusSchema.Enum['4p'])
-        .otherwise(() => tierSetBonusSchema.Enum.none)
+        .with(1, () => tierSetBonusSchema.enum['2p'])
+        .with(3, () => tierSetBonusSchema.enum['4p'])
+        .otherwise(() => tierSetBonusSchema.enum.none)
 }
 
 export const evalHighlightsAndScore = (
@@ -938,8 +938,8 @@ export const evalScore = (
     const bonusBisScore = gearIsBis ? 1 : 0
 
     const tierSetMultiplier = match(lootEnableTiersetBonus)
-        .with(tierSetBonusSchema.Enum['4p'], () => 4)
-        .with(tierSetBonusSchema.Enum['2p'], () => 2)
+        .with(tierSetBonusSchema.enum['4p'], () => 4)
+        .with(tierSetBonusSchema.enum['2p'], () => 2)
         .otherwise(() => 1)
 
     const trackMultiplier = isTrackUpgrade ? 1.1 : 1

@@ -9,7 +9,6 @@ import path, { join } from 'path'
 import icon from '../../build/icon.png'
 import { menu } from './app/menu'
 import { store } from './app/store'
-import { setZodErrorMap } from './config/zod'
 import { allHandlers } from './handlers'
 import { checkWowAuditUpdates } from './handlers/characters/characters.handlers'
 import { syncDroptimizersFromDiscord } from './handlers/droptimizer/droptimizer.handlers'
@@ -103,9 +102,6 @@ function createWindow(): void {
 async function initializeP1Companion() {
     // load dotenv environments values
     dotenv.config()
-
-    // better zod error messages
-    setZodErrorMap()
 
     // check for updates
     updateElectronApp()
