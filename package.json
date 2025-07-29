@@ -60,7 +60,7 @@
         "postgres": "3.4.7",
         "react-hook-form": "7.61.1",
         "react-router": "7.7.0",
-        "react-router-dom": "7.7.0",
+        "react-router-dom": "7.7.1",
         "ts-pattern": "5.8.0",
         "uuid": "11.1.0",
         "winston": "3.17.0",
