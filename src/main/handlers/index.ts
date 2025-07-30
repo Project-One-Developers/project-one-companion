@@ -1,4 +1,5 @@
 import { getBisListHandler, updateItemBisSpecHandler } from './bis-list/bis-list.handlers'
+import { fetchRosterProgressionHandler } from './bosses/bosses-progression.handlers'
 import { getBossesHandler, getRaidLootTableHandler } from './bosses/bosses.handlers'
 import {
     addCharacterHandler,
@@ -20,8 +21,7 @@ import {
     deleteDroptimizerOlderThanHoursHandler,
     getDroptimizerLastByCharAndDiffHandler,
     getDroptimizerLatestListHandler,
-    getDroptimizerListHandler,
-    syncDroptimizersFromDiscord
+    getDroptimizerListHandler, syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
 import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
@@ -97,6 +97,7 @@ export const allHandlers = {
     'raid-session-delete': deleteRaidSessionHandler,
     'raid-session-clone': cloneRaidSessionHandler,
     'raid-session-roster-import': importRosterInRaidSessionHandler,
+    'raid-progression-get': fetchRosterProgressionHandler,
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
     'loots-add-mrt': addRaidLootsByMrtHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,

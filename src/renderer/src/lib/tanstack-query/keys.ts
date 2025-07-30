@@ -6,6 +6,7 @@ export const queryKeys = {
     raidSessions: 'raid-session-list',
     raidSessionsWithLoots: 'raid-session-list-with-loots',
     raidSession: 'raid-session',
+    raidProgression: 'raid-progression',
     character: 'character',
     characterGameInfo: 'character-game-info',
     characters: 'character-list',

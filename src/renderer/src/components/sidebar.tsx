@@ -48,6 +48,11 @@ const preparationItems = [
         icon: LucideStar
     },
     {
+        title: 'Boss Progression',
+        url: '/raid-progression',
+        icon: LucideStar
+    },
+    {
         title: 'Summary',
         url: '/summary',
         icon: LucideCpu
