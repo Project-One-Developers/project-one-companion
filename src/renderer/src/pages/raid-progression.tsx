@@ -1,6 +1,6 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip'
 import { FiltersPanel } from '@renderer/components/filter-panel'
 import { Input } from '@renderer/components/ui/input'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { LootFilter } from '@renderer/lib/filters'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -18,32 +18,33 @@ type BossPanelProps = {
     boss: BossWithItems
     rosterProgression: CharacterBossProgressionResponse[]
     selectedDifficulty: WowRaidDifficulty
-    searchQuery: string
+    filteredPlayerNames: string[]
 }
 
 const BossPanel = ({
     boss,
     rosterProgression,
     selectedDifficulty,
-    searchQuery
+    filteredPlayerNames
 }: BossPanelProps) => {
+    // Get characters who have defeated this boss at the selected difficulty
     // Get characters who have defeated this boss at the selected difficulty
     const charactersWithProgress = useMemo(() => {
         return rosterProgression
             .map(characterData => {
                 const { character, characterRaidProgress } = characterData
 
-                // Apply search filter to character names
+                // Filter by player names if search is active
                 if (
-                    searchQuery &&
-                    !character.name.toLowerCase().includes(searchQuery.toLowerCase())
+                    filteredPlayerNames.length > 0 &&
+                    !filteredPlayerNames.includes(character.name)
                 ) {
                     return null
                 }
 
                 // Find the current tier raid progress
                 const currentRaidProgress = characterRaidProgress.raidProgress.find(
-                    raidProgress => raidProgress.tier.ordinal === 33 // Current TWW tier
+                    raidProgress => raidProgress.raid === boss.raiderioRaidSlug
                 )
 
                 if (!currentRaidProgress) return null
@@ -53,8 +54,10 @@ const BossPanel = ({
                     selectedDifficulty.toLowerCase() as keyof typeof currentRaidProgress.encountersDefeated
                 const encounters = currentRaidProgress.encountersDefeated[difficultyKey] || []
 
-                // Check if this boss was defeated
-                const bossDefeated = encounters.find(encounter => encounter.slug === boss.slug)
+                // Check if this boss was defeated using raiderIoEncounterSlug
+                const bossDefeated = encounters.find(
+                    encounter => encounter.slug === boss.raiderioEncounterSlug
+                )
 
                 return bossDefeated
                     ? {
@@ -63,8 +66,24 @@ const BossPanel = ({
                       }
                     : null
             })
-            .filter(Boolean)
-    }, [boss.slug, rosterProgression, selectedDifficulty, searchQuery])
+            .filter((item): item is NonNullable<typeof item> => item !== null)
+    }, [
+        boss.raiderioEncounterSlug,
+        boss.raiderioRaidSlug,
+        rosterProgression,
+        selectedDifficulty,
+        filteredPlayerNames
+    ])
+
+    // Calculate total roster size for this boss (considering search filter)
+    const totalRosterSize = useMemo(() => {
+        if (filteredPlayerNames.length > 0) {
+            return rosterProgression.filter(({ character }) =>
+                filteredPlayerNames.includes(character.name)
+            ).length
+        }
+        return rosterProgression.length
+    }, [rosterProgression, filteredPlayerNames])
 
     return (
         <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[250px]">
@@ -81,7 +100,7 @@ const BossPanel = ({
             {/* Character progression */}
             <div className="flex flex-col gap-y-2 p-4">
                 <div className="text-xs text-center text-gray-400 mb-2">
-                    {charactersWithProgress.length} / {rosterProgression.length} defeated
+                    {charactersWithProgress.length} / {totalRosterSize} defeated
                 </div>
 
                 {charactersWithProgress.length > 0 ? (
@@ -192,17 +211,20 @@ export default function RaidProgressionPage(): JSX.Element {
         return filter.selectedRaidDiff !== 'Mythic'
     }, [filter])
 
-    // Memoized filtering logic with search query - consistent with loot-table.tsx
-    const filteredBosses = useMemo(() => {
-        if (!bossesQuery.data) return []
+    // Get filtered player names based on search query
+    const filteredPlayerNames = useMemo(() => {
+        if (!debouncedSearchQuery || !rosterProgressionQuery.data) return []
 
-        return bossesQuery.data
-            .filter(boss => {
-                if (!debouncedSearchQuery) return true
-                return boss.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
-            })
-            .sort((a, b) => a.order - b.order)
-    }, [bossesQuery.data, debouncedSearchQuery])
+        return rosterProgressionQuery.data
+            .map(({ character }) => character.name)
+            .filter(name => name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()))
+    }, [rosterProgressionQuery.data, debouncedSearchQuery])
+
+    // Bosses are always shown in order, search only affects player filtering within panels
+    const orderedBosses = useMemo(() => {
+        if (!bossesQuery.data) return []
+        return bossesQuery.data.sort((a, b) => a.order - b.order)
+    }, [bossesQuery.data])
 
     if (bossesQuery.isLoading || rosterProgressionQuery.isLoading) {
         return (
@@ -222,14 +244,20 @@ export default function RaidProgressionPage(): JSX.Element {
                 <p className="text-gray-400">
                     Showing {filter.selectedRaidDiff} difficulty progression for{' '}
                     {rosterProgression.length} characters
+                    {debouncedSearchQuery && (
+                        <span className="text-blue-400">
+                            {' '}
+                            (filtered by &quot;{debouncedSearchQuery}&quot;)
+                        </span>
+                    )}
                 </p>
             </div>
 
-            {/* Search Bar - consistent with loot-table.tsx */}
+            {/* Search Bar - only for player names */}
             <div className="w-full max-w-md mb-4">
                 <Input
                     type="text"
-                    placeholder="Search bosses or characters..."
+                    placeholder="Search player names..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     className="w-full"
@@ -238,13 +266,13 @@ export default function RaidProgressionPage(): JSX.Element {
 
             {/* Boss List */}
             <div className="flex flex-wrap gap-x-4 gap-y-4">
-                {filteredBosses.map(boss => (
+                {orderedBosses.map(boss => (
                     <BossPanel
                         key={boss.id}
                         boss={boss}
                         rosterProgression={rosterProgression}
                         selectedDifficulty={filter.selectedRaidDiff}
-                        searchQuery={debouncedSearchQuery}
+                        filteredPlayerNames={filteredPlayerNames}
                     />
                 ))}
             </div>
