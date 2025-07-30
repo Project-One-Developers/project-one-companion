@@ -48,7 +48,7 @@ const preparationItems = [
         icon: LucideStar
     },
     {
-        title: 'Boss Progression',
+        title: 'Raid Progression',
         url: '/raid-progression',
         icon: LucideStar
     },
