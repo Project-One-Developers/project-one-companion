@@ -2,11 +2,12 @@ import {
     Code2Icon,
     FileSpreadsheet,
     LucideAccessibility,
+    LucideBot,
     LucideCpu,
     LucideGauge,
     LucideMedal,
     LucideScrollText,
-    LucideStar,
+    LucideSnail,
     LucideSwords,
     Settings
 } from 'lucide-react'
@@ -35,7 +36,7 @@ const preparationItems = [
     {
         title: 'Droptimizer',
         url: '/droptimizer',
-        icon: LucideScrollText
+        icon: LucideBot
     },
     {
         title: 'Loot Gains',
@@ -45,12 +46,12 @@ const preparationItems = [
     {
         title: 'Loot Table',
         url: '/loot-table',
-        icon: LucideStar
+        icon: LucideScrollText
     },
     {
         title: 'Raid Progression',
         url: '/raid-progression',
-        icon: LucideStar
+        icon: LucideSnail
     },
     {
         title: 'Summary',
