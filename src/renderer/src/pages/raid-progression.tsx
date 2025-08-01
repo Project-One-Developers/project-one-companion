@@ -9,52 +9,30 @@ import { fetchRosterProgression } from '@renderer/lib/tanstack-query/raid'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
-import { BossWithItems, WowRaidDifficulty } from '@shared/types/types'
+import { BossWithItems, Character, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Filter, LoaderCircle, X } from 'lucide-react'
 import { useEffect, useMemo, useState, type JSX } from 'react'
 
-const getRolePriority = (role: string): number => {
-    switch (role.toLowerCase()) {
-        case 'tank':
-            return 1
-        case 'healer':
-            return 2
-        case 'dps':
-            return 3
-        default:
-            return 4
-    }
-}
+// Constants
+const ROLE_PRIORITIES = {
+    tank: 1,
+    healer: 2,
+    dps: 3,
+    default: 4
+} as const
 
-const sortCharactersByRoleAndClass = <T extends { character: { role: string; class: string } }>(
-    items: T[]
-): T[] => {
-    return items.sort((a, b) => {
-        // First sort by role priority (Tank -> Healer -> DPS)
-        const rolePriorityA = getRolePriority(a.character.role)
-        const rolePriorityB = getRolePriority(b.character.role)
+const ROLE_COLORS = {
+    tanks: 'text-blue-400',
+    healers: 'text-green-400',
+    dps: 'text-red-400'
+} as const
 
-        if (rolePriorityA !== rolePriorityB) {
-            return rolePriorityA - rolePriorityB
-        }
-
-        // If same role, sort by character class alphabetically
-        return a.character.class.localeCompare(b.character.class)
-    })
-}
-
-const groupCharactersByRole = <T extends { character: { role: string; class: string } }>(
-    characters: T[]
-) => {
-    const sorted = sortCharactersByRoleAndClass(characters)
-
-    const tanks = sorted.filter(char => char.character.role === 'Tank')
-    const healers = sorted.filter(char => char.character.role === 'Healer')
-    const dps = sorted.filter(char => char.character.role === 'DPS')
-
-    return { tanks, healers, dps }
+// Types
+type CharacterWithProgress = {
+    character: Character
+    encounter: any
 }
 
 type BossPanelProps = {
@@ -64,115 +42,206 @@ type BossPanelProps = {
     filteredPlayerNames: string[]
 }
 
+// Utility functions
+const getRolePriority = (role: string): number => {
+    return (
+        ROLE_PRIORITIES[role.toLowerCase() as keyof typeof ROLE_PRIORITIES] ||
+        ROLE_PRIORITIES.default
+    )
+}
+
+const sortCharactersByRoleAndClass = <T extends { character: { role: string; class: string } }>(
+    items: T[]
+): T[] => {
+    return items.sort((a, b) => {
+        const rolePriorityA = getRolePriority(a.character.role)
+        const rolePriorityB = getRolePriority(b.character.role)
+
+        if (rolePriorityA !== rolePriorityB) {
+            return rolePriorityA - rolePriorityB
+        }
+
+        return a.character.class.localeCompare(b.character.class)
+    })
+}
+
+const groupCharactersByRole = <T extends { character: { role: string; class: string } }>(
+    characters: T[]
+): { tanks: T[]; healers: T[]; dps: T[] } => {
+    const sorted = sortCharactersByRoleAndClass(characters)
+
+    return {
+        tanks: sorted.filter(char => char.character.role === 'Tank'),
+        healers: sorted.filter(char => char.character.role === 'Healer'),
+        dps: sorted.filter(char => char.character.role === 'DPS')
+    }
+}
+
+const filterCharactersByBossProgress = (
+    rosterProgression: CharacterBossProgressionResponse[],
+    boss: BossWithItems,
+    selectedDifficulty: WowRaidDifficulty,
+    filteredPlayerNames: string[],
+    hasProgress: boolean
+) => {
+    return rosterProgression
+        .map(characterData => {
+            const { character, characterRaidProgress } = characterData
+
+            // Filter by player names if search is active
+            if (filteredPlayerNames?.length > 0 && !filteredPlayerNames.includes(character.name)) {
+                return null
+            }
+
+            // Find the current tier raid progress
+            const currentRaidProgress = characterRaidProgress.raidProgress.find(
+                raidProgress => raidProgress.raid === boss.raiderioRaidSlug
+            )
+
+            if (!currentRaidProgress) {
+                return hasProgress ? null : { character }
+            }
+
+            // Get encounters for the selected difficulty - now safe because we checked for undefined
+            const difficultyKey =
+                selectedDifficulty.toLowerCase() as keyof typeof currentRaidProgress.encountersDefeated
+            const encounters = currentRaidProgress.encountersDefeated[difficultyKey] || []
+
+            // Check if this boss was defeated
+            const bossDefeated = encounters.find(
+                encounter => encounter.slug === boss.raiderioEncounterSlug
+            )
+
+            const shouldInclude = hasProgress ? !!bossDefeated : !bossDefeated
+
+            if (!shouldInclude) return null
+
+            return hasProgress && bossDefeated
+                ? { character, encounter: bossDefeated }
+                : { character }
+        })
+        .filter((item): item is NonNullable<typeof item> => item !== null)
+}
+
+// Components
+const CharacterTooltip = ({ character, encounter }: { character: Character; encounter?: any }) => (
+    <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
+        <div className="font-medium text-white">{character.name}</div>
+        {encounter ? (
+            <>
+                <div className="text-green-400">Kills: {encounter.numKills}</div>
+                <div className="text-gray-300">First kill ilvl: {encounter.itemLevel}</div>
+                {encounter.firstDefeated && (
+                    <div className="text-gray-400">
+                        First Kill: {new Date(encounter.firstDefeated).toLocaleDateString()}
+                    </div>
+                )}
+                {encounter.lastDefeated && (
+                    <div className="text-gray-400">
+                        Last Kill: {new Date(encounter.lastDefeated).toLocaleDateString()}
+                    </div>
+                )}
+            </>
+        ) : (
+            <div className="text-red-400">Not defeated on {encounter}</div>
+        )}
+    </div>
+)
+
+const CharacterGrid = ({
+    characters,
+    title,
+    color,
+    selectedDifficulty,
+    showRoleBadges = false,
+    hasDefeatedBoss = false
+}: {
+    characters: CharacterWithProgress[] | Character[]
+    title: string
+    color: string
+    selectedDifficulty?: WowRaidDifficulty
+    showRoleBadges?: boolean
+    hasDefeatedBoss?: boolean
+}) => {
+    if (characters.length === 0) return null
+
+    return (
+        <div>
+            <h4 className={`text-xs font-semibold ${color} mb-2`}>{title}</h4>
+            <div className="grid grid-cols-8 gap-2">
+                {characters.map(item => {
+                    const character = 'character' in item ? item.character : item
+                    const encounter = 'encounter' in item ? item.encounter : undefined
+
+                    return (
+                        <Tooltip key={character.id}>
+                            <TooltipTrigger asChild>
+                                <div className="flex justify-center">
+                                    <WowCharacterIcon
+                                        character={character}
+                                        showName={false}
+                                        showTooltip={false}
+                                        showMainIndicator={false}
+                                        showRoleBadges={showRoleBadges && !hasDefeatedBoss} // Hide badges if they defeated the boss
+                                    />
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent className="TooltipContent" sideOffset={5}>
+                                <CharacterTooltip
+                                    character={character}
+                                    encounter={encounter || selectedDifficulty}
+                                />
+                            </TooltipContent>
+                        </Tooltip>
+                    )
+                })}
+            </div>
+        </div>
+    )
+}
+
 const BossPanel = ({
     boss,
     rosterProgression,
     selectedDifficulty,
     filteredPlayerNames
 }: BossPanelProps) => {
-    // Get characters who have defeated this boss at the selected difficulty
+    // Get characters who have defeated this boss
     const charactersWithProgress = useMemo(() => {
-        const characters = rosterProgression
-            .map(characterData => {
-                const { character, characterRaidProgress } = characterData
+        const characters = filterCharactersByBossProgress(
+            rosterProgression,
+            boss,
+            selectedDifficulty,
+            filteredPlayerNames,
+            true
+        ) as CharacterWithProgress[]
 
-                // Filter by player names if search is active
-                if (
-                    filteredPlayerNames.length > 0 &&
-                    !filteredPlayerNames.includes(character.name)
-                ) {
-                    return null
-                }
-
-                // Find the current tier raid progress
-                const currentRaidProgress = characterRaidProgress.raidProgress.find(
-                    raidProgress => raidProgress.raid === boss.raiderioRaidSlug
-                )
-
-                if (!currentRaidProgress) return null
-
-                // Get encounters for the selected difficulty
-                const difficultyKey =
-                    selectedDifficulty.toLowerCase() as keyof typeof currentRaidProgress.encountersDefeated
-                const encounters = currentRaidProgress.encountersDefeated[difficultyKey] || []
-
-                // Check if this boss was defeated using raiderIoEncounterSlug
-                const bossDefeated = encounters.find(
-                    encounter => encounter.slug === boss.raiderioEncounterSlug
-                )
-
-                return bossDefeated
-                    ? {
-                          character,
-                          encounter: bossDefeated
-                      }
-                    : null
-            })
-            .filter((item): item is NonNullable<typeof item> => item !== null)
-
-        // Apply sorting by role and class
         return sortCharactersByRoleAndClass(characters)
-    }, [
-        boss.raiderioEncounterSlug,
-        boss.raiderioRaidSlug,
-        rosterProgression,
-        selectedDifficulty,
-        filteredPlayerNames
-    ])
+    }, [boss, rosterProgression, selectedDifficulty, filteredPlayerNames])
 
-    // Get characters who have NOT defeated this boss at the selected difficulty
+    // Get characters who have NOT defeated this boss
     const charactersWithoutProgress = useMemo(() => {
-        const characters = rosterProgression
-            .map(characterData => {
-                const { character, characterRaidProgress } = characterData
+        const characters = filterCharactersByBossProgress(
+            rosterProgression,
+            boss,
+            selectedDifficulty,
+            filteredPlayerNames,
+            false
+        )
 
-                // Filter by player names if search is active
-                if (
-                    filteredPlayerNames.length > 0 &&
-                    !filteredPlayerNames.includes(character.name)
-                ) {
-                    return null
-                }
-
-                // Find the current tier raid progress
-                const currentRaidProgress = characterRaidProgress.raidProgress.find(
-                    raidProgress => raidProgress.raid === boss.raiderioRaidSlug
-                )
-
-                if (!currentRaidProgress) return { character }
-
-                // Get encounters for the selected difficulty
-                const difficultyKey =
-                    selectedDifficulty.toLowerCase() as keyof typeof currentRaidProgress.encountersDefeated
-                const encounters = currentRaidProgress.encountersDefeated[difficultyKey] || []
-
-                // Check if this boss was NOT defeated using raiderIoEncounterSlug
-                const bossDefeated = encounters.find(
-                    encounter => encounter.slug === boss.raiderioEncounterSlug
-                )
-
-                return bossDefeated ? null : { character }
-            })
-            .filter((item): item is NonNullable<typeof item> => item !== null)
-
-        // Apply sorting by role and class, then extract just the character
-        return sortCharactersByRoleAndClass(characters).map(item => item.character)
-    }, [
-        boss.raiderioEncounterSlug,
-        boss.raiderioRaidSlug,
-        rosterProgression,
-        selectedDifficulty,
-        filteredPlayerNames
-    ])
+        return sortCharactersByRoleAndClass(characters).map(item =>
+            'character' in item ? item.character : item
+        ) as Character[]
+    }, [boss, rosterProgression, selectedDifficulty, filteredPlayerNames])
 
     // Group characters with progress by role
     const groupedCharactersWithProgress = useMemo(() => {
         return groupCharactersByRole(charactersWithProgress)
     }, [charactersWithProgress])
 
-    // Calculate total roster size for this boss (considering search filter)
+    // Calculate total roster size
     const totalRosterSize = useMemo(() => {
-        if (filteredPlayerNames.length > 0) {
+        if (filteredPlayerNames?.length > 0) {
             return rosterProgression.filter(({ character }) =>
                 filteredPlayerNames.includes(character.name)
             ).length
@@ -182,7 +251,7 @@ const BossPanel = ({
 
     return (
         <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[280px]">
-            {/* Boss header: cover + name */}
+            {/* Boss header */}
             <div className="flex flex-col gap-y-2">
                 <img
                     src={encounterIcon.get(boss.id)}
@@ -201,181 +270,27 @@ const BossPanel = ({
                 {/* Characters who have defeated the boss - grouped by role */}
                 {charactersWithProgress.length > 0 && (
                     <div className="flex flex-col gap-y-3">
-                        {/* Tanks */}
-                        {groupedCharactersWithProgress.tanks.length > 0 && (
-                            <div>
-                                <h4 className="text-xs font-semibold text-blue-400 mb-2">Tanks</h4>
-                                <div className="grid grid-cols-8 gap-2">
-                                    {groupedCharactersWithProgress.tanks.map(
-                                        ({ character, encounter }) => (
-                                            <Tooltip key={character.id}>
-                                                <TooltipTrigger asChild>
-                                                    <div className="flex justify-center">
-                                                        <WowCharacterIcon
-                                                            character={character}
-                                                            showName={false}
-                                                            showTooltip={false}
-                                                            showMainIndicator={false}
-                                                            showRoleBadges={false}
-                                                        />
-                                                    </div>
-                                                </TooltipTrigger>
-                                                <TooltipContent
-                                                    className="TooltipContent"
-                                                    sideOffset={5}
-                                                >
-                                                    <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
-                                                        <div className="font-medium text-white">
-                                                            {character.name}
-                                                        </div>
-                                                        <div className="text-green-400">
-                                                            Kills: {encounter.numKills}
-                                                        </div>
-                                                        <div className="text-gray-300">
-                                                            First kill ilvl: {encounter.itemLevel}
-                                                        </div>
-                                                        {encounter.firstDefeated && (
-                                                            <div className="text-gray-400">
-                                                                First Kill:{' '}
-                                                                {new Date(
-                                                                    encounter.firstDefeated
-                                                                ).toLocaleDateString()}
-                                                            </div>
-                                                        )}
-                                                        {encounter.lastDefeated && (
-                                                            <div className="text-gray-400">
-                                                                Last Kill:{' '}
-                                                                {new Date(
-                                                                    encounter.lastDefeated
-                                                                ).toLocaleDateString()}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        )
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Healers */}
-                        {groupedCharactersWithProgress.healers.length > 0 && (
-                            <div>
-                                <h4 className="text-xs font-semibold text-green-400 mb-2">
-                                    Healers
-                                </h4>
-                                <div className="grid grid-cols-8 gap-2">
-                                    {groupedCharactersWithProgress.healers.map(
-                                        ({ character, encounter }) => (
-                                            <Tooltip key={character.id}>
-                                                <TooltipTrigger asChild>
-                                                    <div className="flex justify-center">
-                                                        <WowCharacterIcon
-                                                            character={character}
-                                                            showName={false}
-                                                            showTooltip={false}
-                                                            showMainIndicator={false}
-                                                            showRoleBadges={false}
-                                                        />
-                                                    </div>
-                                                </TooltipTrigger>
-                                                <TooltipContent
-                                                    className="TooltipContent"
-                                                    sideOffset={5}
-                                                >
-                                                    <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
-                                                        <div className="font-medium text-white">
-                                                            {character.name}
-                                                        </div>
-                                                        <div className="text-green-400">
-                                                            Kills: {encounter.numKills}
-                                                        </div>
-                                                        <div className="text-gray-300">
-                                                            First kill ilvl: {encounter.itemLevel}
-                                                        </div>
-                                                        {encounter.firstDefeated && (
-                                                            <div className="text-gray-400">
-                                                                First Kill:{' '}
-                                                                {new Date(
-                                                                    encounter.firstDefeated
-                                                                ).toLocaleDateString()}
-                                                            </div>
-                                                        )}
-                                                        {encounter.lastDefeated && (
-                                                            <div className="text-gray-400">
-                                                                Last Kill:{' '}
-                                                                {new Date(
-                                                                    encounter.lastDefeated
-                                                                ).toLocaleDateString()}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        )
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* DPS */}
-                        {groupedCharactersWithProgress.dps.length > 0 && (
-                            <div>
-                                <h4 className="text-xs font-semibold text-red-400 mb-2">DPS</h4>
-                                <div className="grid grid-cols-8 gap-2">
-                                    {groupedCharactersWithProgress.dps.map(
-                                        ({ character, encounter }) => (
-                                            <Tooltip key={character.id}>
-                                                <TooltipTrigger asChild>
-                                                    <div className="flex justify-center">
-                                                        <WowCharacterIcon
-                                                            character={character}
-                                                            showName={false}
-                                                            showTooltip={false}
-                                                            showMainIndicator={false}
-                                                            showRoleBadges={true}
-                                                        />
-                                                    </div>
-                                                </TooltipTrigger>
-                                                <TooltipContent
-                                                    className="TooltipContent"
-                                                    sideOffset={5}
-                                                >
-                                                    <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
-                                                        <div className="font-medium text-white">
-                                                            {character.name}
-                                                        </div>
-                                                        <div className="text-green-400">
-                                                            Kills: {encounter.numKills}
-                                                        </div>
-                                                        <div className="text-gray-300">
-                                                            First kill ilvl: {encounter.itemLevel}
-                                                        </div>
-                                                        {encounter.firstDefeated && (
-                                                            <div className="text-gray-400">
-                                                                First Kill:{' '}
-                                                                {new Date(
-                                                                    encounter.firstDefeated
-                                                                ).toLocaleDateString()}
-                                                            </div>
-                                                        )}
-                                                        {encounter.lastDefeated && (
-                                                            <div className="text-gray-400">
-                                                                Last Kill:{' '}
-                                                                {new Date(
-                                                                    encounter.lastDefeated
-                                                                ).toLocaleDateString()}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        )
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                        <CharacterGrid
+                            characters={groupedCharactersWithProgress.tanks}
+                            title="Tanks"
+                            color={ROLE_COLORS.tanks}
+                            showRoleBadges={true}
+                            hasDefeatedBoss={true} // These characters defeated the boss, so hide role badges
+                        />
+                        <CharacterGrid
+                            characters={groupedCharactersWithProgress.healers}
+                            title="Healers"
+                            color={ROLE_COLORS.healers}
+                            showRoleBadges={true}
+                            hasDefeatedBoss={true} // These characters defeated the boss, so hide role badges
+                        />
+                        <CharacterGrid
+                            characters={groupedCharactersWithProgress.dps}
+                            title="DPS"
+                            color={ROLE_COLORS.dps}
+                            showRoleBadges={true}
+                            hasDefeatedBoss={true} // These characters defeated the boss, so hide role badges
+                        />
                     </div>
                 )}
 
@@ -391,21 +306,17 @@ const BossPanel = ({
                                             <WowCharacterIcon
                                                 character={character}
                                                 showTooltip={false}
-                                                showRoleBadges={true}
+                                                showRoleBadges={true} // Show role badges for characters who haven't defeated the boss
                                                 showName={true}
                                                 showMainIndicator={false}
                                             />
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent className="TooltipContent" sideOffset={5}>
-                                        <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
-                                            <div className="font-medium text-white">
-                                                {character.name}
-                                            </div>
-                                            <div className="text-red-400">
-                                                Not defeated on {selectedDifficulty}
-                                            </div>
-                                        </div>
+                                        <CharacterTooltip
+                                            character={character}
+                                            encounter={selectedDifficulty}
+                                        />
                                     </TooltipContent>
                                 </Tooltip>
                             ))}
@@ -429,7 +340,7 @@ export default function RaidProgressionPage(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('')
     const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
 
-    // Filter state - only difficulty filter is needed
+    // Filter state
     const [filter, setFilter] = useState<LootFilter>({
         selectedRaidDiff: 'Mythic',
         onlyUpgrades: false,
@@ -442,19 +353,18 @@ export default function RaidProgressionPage(): JSX.Element {
         selectedWowClassName: []
     })
 
-    // Fetch bosses data using consistent pattern
+    // Queries
     const bossesQuery = useQuery({
         queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
         queryFn: () => fetchRaidLootTable(CURRENT_RAID_ID)
     })
 
-    // Fetch roster progression data using consistent pattern
     const rosterProgressionQuery = useQuery({
         queryKey: [queryKeys.raidProgression],
         queryFn: fetchRosterProgression
     })
 
-    // Debounce search input - consistent with loot-table.tsx
+    // Debounce search input
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearchQuery(searchQuery.trim())
@@ -467,12 +377,11 @@ export default function RaidProgressionPage(): JSX.Element {
         setFilter(prev => ({ ...prev, [key]: value }))
     }
 
-    // Check if difficulty filter is active (different from default Mythic)
+    // Computed values
     const hasActiveFilters = useMemo(() => {
         return filter.selectedRaidDiff !== 'Mythic'
     }, [filter])
 
-    // Get filtered player names based on search query
     const filteredPlayerNames = useMemo(() => {
         if (!debouncedSearchQuery || !rosterProgressionQuery.data) return []
 
@@ -481,33 +390,18 @@ export default function RaidProgressionPage(): JSX.Element {
             .filter(name => name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()))
     }, [rosterProgressionQuery.data, debouncedSearchQuery])
 
-    // Bosses are always shown in order, search only affects player filtering within panels
     const orderedBosses = useMemo(() => {
         if (!bossesQuery.data) return []
         return bossesQuery.data.filter(b => b.id > 0).sort((a, b) => a.order - b.order)
     }, [bossesQuery.data])
 
-    // Filter rosterProgression based on main/alt filters
     const filteredRosterProgression = useMemo(() => {
         const rosterProgression = rosterProgressionQuery.data || []
 
         return rosterProgression.filter(({ character }) => {
-            // If both showMains and showAlts are true, show all characters
-            if (filter.showMains && filter.showAlts) {
-                return true
-            }
-
-            // If only showMains is true, show only main characters
-            if (filter.showMains && !filter.showAlts) {
-                return character.main
-            }
-
-            // If only showAlts is true, show only alt characters
-            if (!filter.showMains && filter.showAlts) {
-                return !character.main
-            }
-
-            // If both are false, show nothing (edge case)
+            if (filter.showMains && filter.showAlts) return true
+            if (filter.showMains && !filter.showAlts) return character.main
+            if (!filter.showMains && filter.showAlts) return !character.main
             return false
         })
     }, [rosterProgressionQuery.data, filter.showMains, filter.showAlts])
@@ -537,7 +431,7 @@ export default function RaidProgressionPage(): JSX.Element {
                 </p>
             </div>
 
-            {/* Search Bar - only for player names */}
+            {/* Search Bar */}
             <div className="w-full max-w-md mb-4">
                 <Input
                     type="text"
@@ -578,16 +472,13 @@ export default function RaidProgressionPage(): JSX.Element {
                 )}
             </button>
 
-            {/* Filter Panel Overlay - Only shows raid difficulty */}
+            {/* Filter Panel Overlay */}
             {isFilterOpen && (
                 <>
-                    {/* Backdrop */}
                     <div
                         className="fixed inset-0 bg-black bg-opacity-50 z-40"
                         onClick={() => setIsFilterOpen(false)}
                     />
-
-                    {/* Filter Panel */}
                     <div className="fixed bottom-24 right-6 z-50 max-w-md w-100">
                         <FiltersPanel
                             filter={filter}
