@@ -142,11 +142,18 @@ export default function DroptimizerNewDialog(): JSX.Element {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <div className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer">
+                <button
+                    className={clsx(
+                        'w-14 h-14 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center',
+                        'bg-primary hover:bg-primary/80 text-primary-foreground'
+                    )}
+                    title="Add New Droptimizer"
+                >
                     <PlusIcon
-                        className={clsx('w-5 h-5 hover:rotate-45 ease-linear transition-transform')}
+                        size={24}
+                        className="hover:rotate-45 ease-linear transition-transform"
                     />
-                </div>
+                </button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -237,8 +244,8 @@ export default function DroptimizerNewDialog(): JSX.Element {
                                         </div>
                                         <div className="flex-grow text-center">
                                             {cleanupMutation.isPending
-                                                ? 'Cleaning up...'
-                                                : 'Cleanup older than'}
+                                                ? 'Cleaning...'
+                                                : 'Clean older than'}
                                         </div>
                                     </div>
                                 </Button>
