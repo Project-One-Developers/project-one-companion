@@ -265,13 +265,13 @@ export default function LootTable(): JSX.Element {
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             {/* Search Bar */}
-            <div className="w-full mb-4 p-3">
+            <div className="w-full max-w-md mb-4">
                 <Input
                     type="text"
                     placeholder="Search items..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md"
+                    className="w-full"
                 />
             </div>
 
