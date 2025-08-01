@@ -15,6 +15,36 @@ import clsx from 'clsx'
 import { Filter, LoaderCircle, X } from 'lucide-react'
 import { useEffect, useMemo, useState, type JSX } from 'react'
 
+const getRolePriority = (role: string): number => {
+    switch (role.toLowerCase()) {
+        case 'tank':
+            return 1
+        case 'healer':
+            return 2
+        case 'dps':
+            return 3
+        default:
+            return 4
+    }
+}
+
+const sortCharactersByRoleAndClass = <T extends { character: { role: string; class: string } }>(
+    items: T[]
+): T[] => {
+    return items.sort((a, b) => {
+        // First sort by role priority (Tank -> Healer -> DPS)
+        const rolePriorityA = getRolePriority(a.character.role)
+        const rolePriorityB = getRolePriority(b.character.role)
+
+        if (rolePriorityA !== rolePriorityB) {
+            return rolePriorityA - rolePriorityB
+        }
+
+        // If same role, sort by character class alphabetically
+        return a.character.class.localeCompare(b.character.class)
+    })
+}
+
 type BossPanelProps = {
     boss: BossWithItems
     rosterProgression: CharacterBossProgressionResponse[]
@@ -30,7 +60,7 @@ const BossPanel = ({
 }: BossPanelProps) => {
     // Get characters who have defeated this boss at the selected difficulty
     const charactersWithProgress = useMemo(() => {
-        return rosterProgression
+        const characters = rosterProgression
             .map(characterData => {
                 const { character, characterRaidProgress } = characterData
 
@@ -67,6 +97,9 @@ const BossPanel = ({
                     : null
             })
             .filter((item): item is NonNullable<typeof item> => item !== null)
+
+        // Apply sorting by role and class
+        return sortCharactersByRoleAndClass(characters)
     }, [
         boss.raiderioEncounterSlug,
         boss.raiderioRaidSlug,
@@ -77,7 +110,7 @@ const BossPanel = ({
 
     // Get characters who have NOT defeated this boss at the selected difficulty
     const charactersWithoutProgress = useMemo(() => {
-        return rosterProgression
+        const characters = rosterProgression
             .map(characterData => {
                 const { character, characterRaidProgress } = characterData
 
@@ -94,7 +127,7 @@ const BossPanel = ({
                     raidProgress => raidProgress.raid === boss.raiderioRaidSlug
                 )
 
-                if (!currentRaidProgress) return character
+                if (!currentRaidProgress) return { character }
 
                 // Get encounters for the selected difficulty
                 const difficultyKey =
@@ -106,9 +139,12 @@ const BossPanel = ({
                     encounter => encounter.slug === boss.raiderioEncounterSlug
                 )
 
-                return bossDefeated ? null : character
+                return bossDefeated ? null : { character }
             })
-            .filter((character): character is NonNullable<typeof character> => character !== null)
+            .filter((item): item is NonNullable<typeof item> => item !== null)
+
+        // Apply sorting by role and class, then extract just the character
+        return sortCharactersByRoleAndClass(characters).map(item => item.character)
     }, [
         boss.raiderioEncounterSlug,
         boss.raiderioRaidSlug,
@@ -172,7 +208,7 @@ const BossPanel = ({
                                                 Kills: {encounter.numKills}
                                             </div>
                                             <div className="text-gray-300">
-                                                Item Level: {encounter.itemLevel}
+                                                First kill ilvl: {encounter.itemLevel}
                                             </div>
                                             {encounter.firstDefeated && (
                                                 <div className="text-gray-400">
