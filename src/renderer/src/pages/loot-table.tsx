@@ -323,6 +323,7 @@ export default function LootTable(): JSX.Element {
                             updateFilter={updateFilter}
                             showRaidDifficulty={false}
                             showDroptimizerFilters={false}
+                            showMainsAlts={false}
                             showClassFilter={true}
                             showSlotFilter={true}
                             showArmorTypeFilter={true}

@@ -17,6 +17,7 @@ type FiltersPanelProps = {
     updateFilter: (key: keyof LootFilter, value: any) => void
     className?: string
     showRaidDifficulty?: boolean
+    showMainsAlts?: boolean
     showDroptimizerFilters?: boolean
     showClassFilter?: boolean
     showSlotFilter?: boolean
@@ -28,6 +29,7 @@ export const FiltersPanel = ({
     updateFilter,
     className,
     showRaidDifficulty = true,
+    showMainsAlts = true,
     showDroptimizerFilters = true,
     showClassFilter = true,
     showSlotFilter = true,
@@ -88,35 +90,39 @@ export const FiltersPanel = ({
             )}
 
             {/* Character Type Filters */}
-            <fieldset className="border-t border-gray-700 pt-2">
-                <legend className="text-sm font-semibold text-white mb-2">Characters</legend>
-                <div className="flex flex-wrap gap-2">
-                    <div
-                        className={`cursor-pointer transition-transform hover:scale-105 rounded-lg overflow-hidden ${filter.showMains ? 'ring-2 ring-blue-500 shadow-lg' : 'opacity-60 grayscale hover:opacity-100 hover:grayscale-0'}`}
-                        onClick={() => updateFilter('showMains', !filter.showMains)}
-                    >
-                        <img
-                            src={charMainIcon}
-                            alt="Main Characters"
-                            className="w-10 h-10 object-cover"
-                            title="Main Characters"
-                        />
-                        <div className="text-center text-[10px] mt-0.5 font-semibold">Mains</div>
+            {showMainsAlts && (
+                <fieldset className="border-t border-gray-700 pt-2">
+                    <legend className="text-sm font-semibold text-white mb-2">Characters</legend>
+                    <div className="flex flex-wrap gap-2">
+                        <div
+                            className={`cursor-pointer transition-transform hover:scale-105 rounded-lg overflow-hidden ${filter.showMains ? 'ring-2 ring-blue-500 shadow-lg' : 'opacity-60 grayscale hover:opacity-100 hover:grayscale-0'}`}
+                            onClick={() => updateFilter('showMains', !filter.showMains)}
+                        >
+                            <img
+                                src={charMainIcon}
+                                alt="Main Characters"
+                                className="w-10 h-10 object-cover"
+                                title="Main Characters"
+                            />
+                            <div className="text-center text-[10px] mt-0.5 font-semibold">
+                                Mains
+                            </div>
+                        </div>
+                        <div
+                            className={`cursor-pointer transition-transform hover:scale-105 rounded-lg overflow-hidden ${filter.showAlts ? 'ring-2 ring-blue-500 shadow-lg' : 'opacity-60 grayscale hover:opacity-100 hover:grayscale-0'}`}
+                            onClick={() => updateFilter('showAlts', !filter.showAlts)}
+                        >
+                            <img
+                                src={charAltIcon}
+                                alt="Alt Characters"
+                                className="w-10 h-10 object-cover"
+                                title="Alt Characters"
+                            />
+                            <div className="text-center text-[10px] mt-0.5 font-semibold">Alts</div>
+                        </div>
                     </div>
-                    <div
-                        className={`cursor-pointer transition-transform hover:scale-105 rounded-lg overflow-hidden ${filter.showAlts ? 'ring-2 ring-blue-500 shadow-lg' : 'opacity-60 grayscale hover:opacity-100 hover:grayscale-0'}`}
-                        onClick={() => updateFilter('showAlts', !filter.showAlts)}
-                    >
-                        <img
-                            src={charAltIcon}
-                            alt="Alt Characters"
-                            className="w-10 h-10 object-cover"
-                            title="Alt Characters"
-                        />
-                        <div className="text-center text-[10px] mt-0.5 font-semibold">Alts</div>
-                    </div>
-                </div>
-            </fieldset>
+                </fieldset>
+            )}
 
             {/* Class Filter */}
             {showClassFilter && (
