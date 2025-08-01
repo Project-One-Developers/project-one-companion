@@ -7,6 +7,8 @@ export interface WowCharacterIconProps {
     className?: string
     showTooltip?: boolean
     showMainIndicator?: boolean
+    showName?: boolean
+    truncateAfter?: number
     size?: 'sm' | 'md' | 'lg'
 }
 
@@ -15,6 +17,8 @@ export const WowCharacterIcon: React.FC<WowCharacterIconProps> = ({
     className = '',
     showTooltip = false,
     showMainIndicator = true,
+    showName = true,
+    truncateAfter = 4,
     size = 'md'
 }) => {
     const sizeClasses = {
@@ -39,9 +43,13 @@ export const WowCharacterIcon: React.FC<WowCharacterIconProps> = ({
         <div
             className={`flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110 ${className}`}
         >
-            <div>
-                <p className={`${textSizeClasses[size]} mb-2`}>{character.name.slice(0, 4)}</p>
-            </div>
+            {showName && (
+                <div>
+                    <p className={`${textSizeClasses[size]} mb-2`}>
+                        {character.name.slice(0, truncateAfter)}
+                    </p>
+                </div>
+            )}
             <WowClassIcon
                 wowClassName={character.class}
                 charname={showTooltip ? character.name : undefined}

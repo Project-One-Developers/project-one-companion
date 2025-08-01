@@ -156,6 +156,7 @@ const BossPanel = ({
                                         <div className="flex justify-center">
                                             <WowCharacterIcon
                                                 character={character}
+                                                showName={false}
                                                 showTooltip={false}
                                                 showMainIndicator={false}
                                             />
@@ -208,6 +209,7 @@ const BossPanel = ({
                                             <WowCharacterIcon
                                                 character={character}
                                                 showTooltip={false}
+                                                showName={true}
                                                 showMainIndicator={false}
                                             />
                                         </div>
