@@ -159,6 +159,7 @@ const BossPanel = ({
                                                 showName={false}
                                                 showTooltip={false}
                                                 showMainIndicator={false}
+                                                showRoleBadges={true}
                                             />
                                         </div>
                                     </TooltipTrigger>
@@ -209,6 +210,7 @@ const BossPanel = ({
                                             <WowCharacterIcon
                                                 character={character}
                                                 showTooltip={false}
+                                                showRoleBadges={true}
                                                 showName={true}
                                                 showMainIndicator={false}
                                             />
