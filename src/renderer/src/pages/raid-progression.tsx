@@ -45,6 +45,18 @@ const sortCharactersByRoleAndClass = <T extends { character: { role: string; cla
     })
 }
 
+const groupCharactersByRole = <T extends { character: { role: string; class: string } }>(
+    characters: T[]
+) => {
+    const sorted = sortCharactersByRoleAndClass(characters)
+
+    const tanks = sorted.filter(char => char.character.role === 'Tank')
+    const healers = sorted.filter(char => char.character.role === 'Healer')
+    const dps = sorted.filter(char => char.character.role === 'DPS')
+
+    return { tanks, healers, dps }
+}
+
 type BossPanelProps = {
     boss: BossWithItems
     rosterProgression: CharacterBossProgressionResponse[]
@@ -153,6 +165,11 @@ const BossPanel = ({
         filteredPlayerNames
     ])
 
+    // Group characters with progress by role
+    const groupedCharactersWithProgress = useMemo(() => {
+        return groupCharactersByRole(charactersWithProgress)
+    }, [charactersWithProgress])
+
     // Calculate total roster size for this boss (considering search filter)
     const totalRosterSize = useMemo(() => {
         if (filteredPlayerNames.length > 0) {
@@ -181,56 +198,184 @@ const BossPanel = ({
                     {charactersWithProgress.length} / {totalRosterSize} defeated
                 </div>
 
-                {/* Characters who have defeated the boss */}
+                {/* Characters who have defeated the boss - grouped by role */}
                 {charactersWithProgress.length > 0 && (
-                    <div className="flex flex-col gap-y-2">
-                        {/* <h3 className="text-xs font-semibold text-green-400">Defeated</h3> */}
-                        <div className="grid grid-cols-8 gap-2 ">
-                            {charactersWithProgress.map(({ character, encounter }) => (
-                                <Tooltip key={character.id}>
-                                    <TooltipTrigger asChild>
-                                        <div className="flex justify-center">
-                                            <WowCharacterIcon
-                                                character={character}
-                                                showName={false}
-                                                showTooltip={false}
-                                                showMainIndicator={false}
-                                                showRoleBadges={true}
-                                            />
-                                        </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent className="TooltipContent" sideOffset={5}>
-                                        <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
-                                            <div className="font-medium text-white">
-                                                {character.name}
-                                            </div>
-                                            <div className="text-green-400">
-                                                Kills: {encounter.numKills}
-                                            </div>
-                                            <div className="text-gray-300">
-                                                First kill ilvl: {encounter.itemLevel}
-                                            </div>
-                                            {encounter.firstDefeated && (
-                                                <div className="text-gray-400">
-                                                    First Kill:{' '}
-                                                    {new Date(
-                                                        encounter.firstDefeated
-                                                    ).toLocaleDateString()}
-                                                </div>
-                                            )}
-                                            {encounter.lastDefeated && (
-                                                <div className="text-gray-400">
-                                                    Last Kill:{' '}
-                                                    {new Date(
-                                                        encounter.lastDefeated
-                                                    ).toLocaleDateString()}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </TooltipContent>
-                                </Tooltip>
-                            ))}
-                        </div>
+                    <div className="flex flex-col gap-y-3">
+                        {/* Tanks */}
+                        {groupedCharactersWithProgress.tanks.length > 0 && (
+                            <div>
+                                <h4 className="text-xs font-semibold text-blue-400 mb-2">Tanks</h4>
+                                <div className="grid grid-cols-8 gap-2">
+                                    {groupedCharactersWithProgress.tanks.map(
+                                        ({ character, encounter }) => (
+                                            <Tooltip key={character.id}>
+                                                <TooltipTrigger asChild>
+                                                    <div className="flex justify-center">
+                                                        <WowCharacterIcon
+                                                            character={character}
+                                                            showName={false}
+                                                            showTooltip={false}
+                                                            showMainIndicator={false}
+                                                            showRoleBadges={false}
+                                                        />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
+                                                        <div className="font-medium text-white">
+                                                            {character.name}
+                                                        </div>
+                                                        <div className="text-green-400">
+                                                            Kills: {encounter.numKills}
+                                                        </div>
+                                                        <div className="text-gray-300">
+                                                            First kill ilvl: {encounter.itemLevel}
+                                                        </div>
+                                                        {encounter.firstDefeated && (
+                                                            <div className="text-gray-400">
+                                                                First Kill:{' '}
+                                                                {new Date(
+                                                                    encounter.firstDefeated
+                                                                ).toLocaleDateString()}
+                                                            </div>
+                                                        )}
+                                                        {encounter.lastDefeated && (
+                                                            <div className="text-gray-400">
+                                                                Last Kill:{' '}
+                                                                {new Date(
+                                                                    encounter.lastDefeated
+                                                                ).toLocaleDateString()}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Healers */}
+                        {groupedCharactersWithProgress.healers.length > 0 && (
+                            <div>
+                                <h4 className="text-xs font-semibold text-green-400 mb-2">
+                                    Healers
+                                </h4>
+                                <div className="grid grid-cols-8 gap-2">
+                                    {groupedCharactersWithProgress.healers.map(
+                                        ({ character, encounter }) => (
+                                            <Tooltip key={character.id}>
+                                                <TooltipTrigger asChild>
+                                                    <div className="flex justify-center">
+                                                        <WowCharacterIcon
+                                                            character={character}
+                                                            showName={false}
+                                                            showTooltip={false}
+                                                            showMainIndicator={false}
+                                                            showRoleBadges={false}
+                                                        />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
+                                                        <div className="font-medium text-white">
+                                                            {character.name}
+                                                        </div>
+                                                        <div className="text-green-400">
+                                                            Kills: {encounter.numKills}
+                                                        </div>
+                                                        <div className="text-gray-300">
+                                                            First kill ilvl: {encounter.itemLevel}
+                                                        </div>
+                                                        {encounter.firstDefeated && (
+                                                            <div className="text-gray-400">
+                                                                First Kill:{' '}
+                                                                {new Date(
+                                                                    encounter.firstDefeated
+                                                                ).toLocaleDateString()}
+                                                            </div>
+                                                        )}
+                                                        {encounter.lastDefeated && (
+                                                            <div className="text-gray-400">
+                                                                Last Kill:{' '}
+                                                                {new Date(
+                                                                    encounter.lastDefeated
+                                                                ).toLocaleDateString()}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* DPS */}
+                        {groupedCharactersWithProgress.dps.length > 0 && (
+                            <div>
+                                <h4 className="text-xs font-semibold text-red-400 mb-2">DPS</h4>
+                                <div className="grid grid-cols-8 gap-2">
+                                    {groupedCharactersWithProgress.dps.map(
+                                        ({ character, encounter }) => (
+                                            <Tooltip key={character.id}>
+                                                <TooltipTrigger asChild>
+                                                    <div className="flex justify-center">
+                                                        <WowCharacterIcon
+                                                            character={character}
+                                                            showName={false}
+                                                            showTooltip={false}
+                                                            showMainIndicator={false}
+                                                            showRoleBadges={true}
+                                                        />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent
+                                                    className="TooltipContent"
+                                                    sideOffset={5}
+                                                >
+                                                    <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
+                                                        <div className="font-medium text-white">
+                                                            {character.name}
+                                                        </div>
+                                                        <div className="text-green-400">
+                                                            Kills: {encounter.numKills}
+                                                        </div>
+                                                        <div className="text-gray-300">
+                                                            First kill ilvl: {encounter.itemLevel}
+                                                        </div>
+                                                        {encounter.firstDefeated && (
+                                                            <div className="text-gray-400">
+                                                                First Kill:{' '}
+                                                                {new Date(
+                                                                    encounter.firstDefeated
+                                                                ).toLocaleDateString()}
+                                                            </div>
+                                                        )}
+                                                        {encounter.lastDefeated && (
+                                                            <div className="text-gray-400">
+                                                                Last Kill:{' '}
+                                                                {new Date(
+                                                                    encounter.lastDefeated
+                                                                ).toLocaleDateString()}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
