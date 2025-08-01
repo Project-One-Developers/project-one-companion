@@ -149,7 +149,7 @@ const BossPanel = ({
                 {charactersWithProgress.length > 0 && (
                     <div className="flex flex-col gap-y-2">
                         {/* <h3 className="text-xs font-semibold text-green-400">Defeated</h3> */}
-                        <div className="grid grid-cols-4 gap-2 ">
+                        <div className="grid grid-cols-8 gap-2 ">
                             {charactersWithProgress.map(({ character, encounter }) => (
                                 <Tooltip key={character.id}>
                                     <TooltipTrigger asChild>
@@ -201,7 +201,7 @@ const BossPanel = ({
                 {charactersWithoutProgress.length > 0 && (
                     <div className="flex flex-col gap-y-2 mt-4">
                         <h3 className="text-xs font-semibold text-red-400">Not Defeated</h3>
-                        <div className="grid grid-cols-4 gap-2 opacity-60">
+                        <div className="grid grid-cols-8 gap-2 opacity-60">
                             {charactersWithoutProgress.map(character => (
                                 <Tooltip key={character.id}>
                                     <TooltipTrigger asChild>
