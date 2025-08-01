@@ -32,6 +32,7 @@ import type {
     WowRaidDifficulty
 } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
+import { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
 
 // Custom APIs for renderer
 export const api = {
@@ -127,6 +128,10 @@ export const api = {
     },
     importRosterInRaidSession(raidSessionId: string, csv: string): Promise<void> {
         return ipcRenderer.invoke('raid-session-roster-import', raidSessionId, csv)
+    },
+    // raid progression
+    fetchRosterProgression(filter: number): Promise<CharacterBossProgressionResponse[]> {
+        return ipcRenderer.invoke('raid-progression-get', filter)
     },
     // Loots
     addLootsManual(raidSessionId: string, loots: NewLootManual[]): Promise<void> {

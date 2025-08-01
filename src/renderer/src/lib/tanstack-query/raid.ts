@@ -1,3 +1,4 @@
+import type { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
 import type {
     EditRaidSession,
     NewRaidSession,
@@ -43,4 +44,11 @@ export const importRosterInRaidSession = async (
         throw new Error('No raid session id provided')
     }
     return await window.api.importRosterInRaidSession(raidSessionId, text)
+}
+
+// raid progression
+export const fetchRosterProgression = async (
+    filter: number = 0
+): Promise<CharacterBossProgressionResponse[]> => {
+    return window.api.fetchRosterProgression(filter)
 }

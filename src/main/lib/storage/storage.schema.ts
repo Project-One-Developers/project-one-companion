@@ -231,7 +231,9 @@ export const bossTable = pgTable('bosses', {
     instanceId: integer('instance_id').notNull(),
     instanceName: varchar('instance_name').notNull(),
     instanceType: varchar('instance_type').notNull(),
-    order: integer('order').notNull()
+    order: integer('order').notNull(),
+    raiderioEncounterSlug: varchar('raiderio_encounter_slug', { length: 50 }),
+    raiderioRaidSlug: varchar('raiderio_raid_slug', { length: 50 })
 })
 
 // Sono gli item lootabili dal raid - contiene l'import di public/items.csv

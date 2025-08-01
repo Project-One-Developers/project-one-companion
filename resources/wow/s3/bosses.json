@@ -5,7 +5,9 @@
         "order":-1,
         "instanceId":-1,
         "instanceName":"Mythic+ Dungeons",
-        "instanceType":"mplus-chest"
+        "instanceType":"mplus-chest",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":1303,
@@ -13,7 +15,9 @@
         "order":-1,
         "instanceId":-1,
         "instanceName":"Mythic+ Dungeons",
-        "instanceType":"mplus-chest"
+        "instanceType":"mplus-chest",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":1185,
@@ -21,7 +25,9 @@
         "order":-1,
         "instanceId":-1,
         "instanceName":"Mythic+ Dungeons",
-        "instanceType":"mplus-chest"
+        "instanceType":"mplus-chest",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":1298,
@@ -29,7 +35,9 @@
         "order":-1,
         "instanceId":-1,
         "instanceName":"Mythic+ Dungeons",
-        "instanceType":"mplus-chest"
+        "instanceType":"mplus-chest",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":1267,
@@ -37,7 +45,9 @@
         "order":-1,
         "instanceId":-1,
         "instanceName":"Mythic+ Dungeons",
-        "instanceType":"mplus-chest"
+        "instanceType":"mplus-chest",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":1194,
@@ -45,7 +55,9 @@
         "order":2,
         "instanceId":-1,
         "instanceName":"Mythic+ Dungeons",
-        "instanceType":"mplus-chest"
+        "instanceType":"mplus-chest",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":1270,
@@ -53,7 +65,9 @@
         "order":-1,
         "instanceId":-1,
         "instanceName":"Mythic+ Dungeons",
-        "instanceType":"mplus-chest"
+        "instanceType":"mplus-chest",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-70,
@@ -61,7 +75,9 @@
         "order":1,
         "instanceId":-70,
         "instanceName":"Catalyst - Season 1",
-        "instanceType":"catalyst"
+        "instanceType":"catalyst",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-71,
@@ -69,7 +85,9 @@
         "order":1,
         "instanceId":-71,
         "instanceName":"Catalyst - Season 2",
-        "instanceType":"catalyst"
+        "instanceType":"catalyst",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-43,
@@ -77,7 +95,9 @@
         "order":1,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-33,
@@ -85,7 +105,9 @@
         "order":2,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-34,
@@ -93,7 +115,9 @@
         "order":3,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-35,
@@ -101,7 +125,9 @@
         "order":4,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-36,
@@ -109,7 +135,9 @@
         "order":5,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-37,
@@ -117,7 +145,9 @@
         "order":6,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-38,
@@ -125,7 +155,9 @@
         "order":7,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-39,
@@ -133,7 +165,9 @@
         "order":8,
         "instanceId":-66,
         "instanceName":"Professions - Epic",
-        "instanceType":"profession593"
+        "instanceType":"profession593",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2639,
@@ -141,7 +175,9 @@
         "order":1,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"vexie-and-the-geargrinders"
     },
     {
         "id":2640,
@@ -149,7 +185,9 @@
         "order":2,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"cauldron-of-carnage"
     },
     {
         "id":2641,
@@ -157,7 +195,9 @@
         "order":3,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"rik-reverb"
     },
     {
         "id":2642,
@@ -165,7 +205,9 @@
         "order":4,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"stix-bunkjunker"
     },
     {
         "id":2653,
@@ -173,7 +215,9 @@
         "order":5,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"sprocketmonger-lockenstock"
     },
     {
         "id":2644,
@@ -181,7 +225,9 @@
         "order":6,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"onearmed-bandit"
     },
     {
         "id":2645,
@@ -189,7 +235,9 @@
         "order":7,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"mugzee-heads-of-security"
     },
     {
         "id":2646,
@@ -197,7 +245,9 @@
         "order":8,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":"chrome-king-gallywix"
     },
     {
         "id":-75,
@@ -205,7 +255,9 @@
         "order":99,
         "instanceId":1296,
         "instanceName":"Liberation of Undermine",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"liberation-of-undermine",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2684,
@@ -213,7 +265,9 @@
         "order":1,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2686,
@@ -221,7 +275,9 @@
         "order":2,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2685,
@@ -229,7 +285,9 @@
         "order":3,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2687,
@@ -237,7 +295,9 @@
         "order":4,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2688,
@@ -245,7 +305,9 @@
         "order":5,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2747,
@@ -253,7 +315,9 @@
         "order":6,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2690,
@@ -261,7 +325,9 @@
         "order":7,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2691,
@@ -269,7 +335,9 @@
         "order":8,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":-78,
@@ -277,7 +345,9 @@
         "order":99,
         "instanceId":1302,
         "instanceName":"Manaforge Omega",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
     },
     {
         "id":2607,
@@ -285,7 +355,9 @@
         "order":1,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2611,
@@ -293,7 +365,9 @@
         "order":2,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2599,
@@ -301,7 +375,9 @@
         "order":3,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2609,
@@ -309,7 +385,9 @@
         "order":4,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2612,
@@ -317,7 +395,9 @@
         "order":5,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2601,
@@ -325,7 +405,9 @@
         "order":6,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2608,
@@ -333,7 +415,9 @@
         "order":7,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":2602,
@@ -341,7 +425,9 @@
         "order":8,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     },
     {
         "id":-67,
@@ -349,6 +435,8 @@
         "order":99,
         "instanceId":1273,
         "instanceName":"Nerub-ar Palace",
-        "instanceType":"raid"
+        "instanceType":"raid",
+        "raiderioRaidSlug":"nerubar-palace",
+        "raiderioEncounterSlug":null
     }
 ]

@@ -185,10 +185,9 @@ export default function LootTable(): JSX.Element {
         selectedRaidDiff: 'Mythic',
         onlyUpgrades: false,
         minUpgrade: 0,
-        hideOlderThanDays: false,
-        hideAlts: false,
+        showMains: true,
+        showAlts: true,
         hideIfNoUpgrade: false,
-        maxDays: 7,
         selectedSlots: [],
         selectedArmorTypes: [],
         selectedWowClassName: []
@@ -266,18 +265,18 @@ export default function LootTable(): JSX.Element {
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             {/* Search Bar */}
-            <div className="w-full mb-4 p-3">
+            <div className="w-full max-w-md mb-4">
                 <Input
                     type="text"
                     placeholder="Search items..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md"
+                    className="w-full"
                 />
             </div>
 
             {/* Boss List */}
-            <div className="flex flex-wrap gap-x-4 gap-y-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-4 justify-center">
                 {filteredBosses
                     .sort((a, b) => a.order - b.order)
                     .map(boss => (
@@ -318,16 +317,16 @@ export default function LootTable(): JSX.Element {
                     />
 
                     {/* Filter Panel */}
-                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-80">
+                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-100">
                         <FiltersPanel
                             filter={filter}
                             updateFilter={updateFilter}
                             showRaidDifficulty={false}
                             showDroptimizerFilters={false}
+                            showMainsAlts={false}
                             showClassFilter={true}
                             showSlotFilter={true}
                             showArmorTypeFilter={true}
-                            collapsible={false}
                             className="shadow-2xl"
                         />
                     </div>
