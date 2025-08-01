@@ -1,4 +1,6 @@
 import { Checkbox, CheckedState } from '@radix-ui/react-checkbox'
+import charAltIcon from '@renderer/assets/icons/char-alt.png'
+import charMainIcon from '@renderer/assets/icons/char-main.png'
 import { LootFilter } from '@renderer/lib/filters'
 import { armorTypesIcon, classIcon, itemSlotIcon, raidDiffIcon } from '@renderer/lib/wow-icon'
 import { formatWowSlotKey } from '@shared/libs/items/item-slot-utils'
@@ -84,6 +86,37 @@ export const FiltersPanel = ({
                     </div>
                 </fieldset>
             )}
+
+            {/* Character Type Filters */}
+            <fieldset className="border-t border-gray-700 pt-4">
+                <legend className="text-lg font-semibold text-white mb-1">Characters</legend>
+                <div className="flex flex-wrap gap-4">
+                    <div
+                        className={`cursor-pointer transition-transform hover:scale-110 rounded-lg overflow-hidden ${filter.showMains ? 'ring-2 ring-blue-500 shadow-lg' : 'opacity-60 grayscale hover:opacity-100 hover:grayscale-0'}`}
+                        onClick={() => updateFilter('showMains', !filter.showMains)}
+                    >
+                        <img
+                            src={charMainIcon}
+                            alt="Main Characters"
+                            className="w-16 h-16 object-cover"
+                            title="Main Characters"
+                        />
+                        <div className="text-center text-xs mt-1 font-semibold">Mains</div>
+                    </div>
+                    <div
+                        className={`cursor-pointer transition-transform hover:scale-110 rounded-lg overflow-hidden ${filter.showAlts ? 'ring-2 ring-blue-500 shadow-lg' : 'opacity-60 grayscale hover:opacity-100 hover:grayscale-0'}`}
+                        onClick={() => updateFilter('showAlts', !filter.showAlts)}
+                    >
+                        <img
+                            src={charAltIcon}
+                            alt="Alt Characters"
+                            className="w-16 h-16 object-cover"
+                            title="Alt Characters"
+                        />
+                        <div className="text-center text-xs mt-1 font-semibold">Alts</div>
+                    </div>
+                </div>
+            </fieldset>
 
             {/* Class Filter */}
             {showClassFilter && (
@@ -171,7 +204,6 @@ export const FiltersPanel = ({
                 <fieldset className="border-t border-gray-700 pt-4">
                     <legend className="text-lg font-semibold text-white mb-1">Droptimizer</legend>
                     <div className="space-y-4">
-
                         {/* Upgrades only and Minimum Upgrade Amount in the same row */}
                         <div className="flex flex-row items-center gap-3">
                             <Checkbox
@@ -197,38 +229,21 @@ export const FiltersPanel = ({
                             />
                         </div>
 
-                        {/* Hide Alts / No upgrades*/}
-                        <div className="flex flex-row items-center gap-6">
-                            <div className="flex items-center gap-3">
-                                <Checkbox
-                                    id="hide-alts"
-                                    checked={filter.hideAlts as CheckedState}
-                                    onCheckedChange={checked => updateFilter('hideAlts', !!checked)}
-                                    className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
-                                >
-                                    {filter.hideAlts && <Check className="text-white w-4 h-4" />}
-                                </Checkbox>
-                                <label htmlFor="hide-alts" className="text-sm font-semibold">
-                                    Hide alts
-                                </label>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <Checkbox
-                                    id="hide-no-upgrades"
-                                    checked={filter.hideIfNoUpgrade as CheckedState}
-                                    onCheckedChange={checked =>
-                                        updateFilter('hideIfNoUpgrade', !!checked)
-                                    }
-                                    className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
-                                >
-                                    {filter.hideIfNoUpgrade && (
-                                        <Check className="text-white w-4 h-4" />
-                                    )}
-                                </Checkbox>
-                                <label htmlFor="hide-no-upgrades" className="text-sm font-semibold">
-                                    Hide if no upgrade
-                                </label>
-                            </div>
+                        {/* Hide if no upgrade */}
+                        <div className="flex items-center gap-3">
+                            <Checkbox
+                                id="hide-no-upgrades"
+                                checked={filter.hideIfNoUpgrade as CheckedState}
+                                onCheckedChange={checked =>
+                                    updateFilter('hideIfNoUpgrade', !!checked)
+                                }
+                                className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
+                            >
+                                {filter.hideIfNoUpgrade && <Check className="text-white w-4 h-4" />}
+                            </Checkbox>
+                            <label htmlFor="hide-no-upgrades" className="text-sm font-semibold">
+                                Hide if no upgrade
+                            </label>
                         </div>
                     </div>
                 </fieldset>

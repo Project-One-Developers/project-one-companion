@@ -11,8 +11,8 @@ export type LootFilter = {
     selectedRaidDiff: WowRaidDifficulty
     onlyUpgrades: boolean
     minUpgrade: number
-    hideOlderThanDays: boolean
-    hideAlts: boolean
+    showMains: boolean
+    showAlts: boolean
     hideIfNoUpgrade: boolean
     selectedSlots: WowItemSlotKey[]
     selectedArmorTypes: WowArmorType[]
@@ -34,16 +34,21 @@ export function filterDroptimizer(
                 }
             }
 
-            // filter by all or main only
-            if (
-                filter.hideAlts &&
-                chars.some(
-                    c =>
-                        c.name === dropt.charInfo.name &&
-                        c.realm === dropt.charInfo.server &&
-                        !c.main // filter out char explicity not main
-                )
-            ) {
+            // filter by main/alt selection
+            const isMain = chars.some(
+                c => c.name === dropt.charInfo.name && c.realm === dropt.charInfo.server && c.main
+            )
+            const isAlt = chars.some(
+                c => c.name === dropt.charInfo.name && c.realm === dropt.charInfo.server && !c.main
+            )
+
+            // If this is a main character but mains are not shown
+            if (isMain && !filter.showMains) {
+                return false
+            }
+
+            // If this is an alt character but alts are not shown
+            if (isAlt && !filter.showAlts) {
                 return false
             }
 

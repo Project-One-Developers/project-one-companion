@@ -185,8 +185,8 @@ export default function LootTable(): JSX.Element {
         selectedRaidDiff: 'Mythic',
         onlyUpgrades: false,
         minUpgrade: 0,
-        hideOlderThanDays: false,
-        hideAlts: false,
+        showMains: true,
+        showAlts: true,
         hideIfNoUpgrade: false,
         selectedSlots: [],
         selectedArmorTypes: [],
@@ -317,7 +317,7 @@ export default function LootTable(): JSX.Element {
                     />
 
                     {/* Filter Panel */}
-                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-80">
+                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-100">
                         <FiltersPanel
                             filter={filter}
                             updateFilter={updateFilter}

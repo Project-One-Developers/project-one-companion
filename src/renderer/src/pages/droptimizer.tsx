@@ -15,8 +15,8 @@ const DEFAULT_FILTER: LootFilter = {
     selectedRaidDiff: 'Mythic',
     onlyUpgrades: false,
     minUpgrade: 1000,
-    hideOlderThanDays: false,
-    hideAlts: true,
+    showMains: true,
+    showAlts: false,
     hideIfNoUpgrade: true,
     selectedArmorTypes: [],
     selectedSlots: [],
@@ -47,8 +47,8 @@ export default function DroptimizerPage(): JSX.Element {
             filter.selectedRaidDiff !== DEFAULT_FILTER.selectedRaidDiff ||
             filter.onlyUpgrades !== DEFAULT_FILTER.onlyUpgrades ||
             filter.minUpgrade !== DEFAULT_FILTER.minUpgrade ||
-            filter.hideOlderThanDays !== DEFAULT_FILTER.hideOlderThanDays ||
-            filter.hideAlts !== DEFAULT_FILTER.hideAlts ||
+            filter.showMains !== DEFAULT_FILTER.showMains ||
+            filter.showAlts !== DEFAULT_FILTER.showAlts ||
             filter.hideIfNoUpgrade !== DEFAULT_FILTER.hideIfNoUpgrade ||
             filter.selectedArmorTypes.length > 0 ||
             filter.selectedSlots.length > 0 ||
@@ -117,7 +117,7 @@ export default function DroptimizerPage(): JSX.Element {
                     />
 
                     {/* Filter Panel */}
-                    <div className="fixed bottom-36 right-6 z-50 max-w-md w-80">
+                    <div className="fixed bottom-36 right-6 z-50 max-w-md w-100">
                         <FiltersPanel
                             filter={filter}
                             updateFilter={updateFilter}

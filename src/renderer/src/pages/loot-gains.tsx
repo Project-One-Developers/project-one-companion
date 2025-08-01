@@ -167,8 +167,8 @@ export default function LootGains(): JSX.Element {
         selectedRaidDiff: 'Mythic',
         onlyUpgrades: false,
         minUpgrade: 1000,
-        hideOlderThanDays: false,
-        hideAlts: true,
+        showMains: true,
+        showAlts: false,
         hideIfNoUpgrade: true,
         selectedArmorTypes: [],
         selectedSlots: [],
@@ -203,8 +203,8 @@ export default function LootGains(): JSX.Element {
             filter.selectedSlots.length > 0 ||
             filter.selectedWowClassName.length > 0 ||
             filter.onlyUpgrades ||
-            filter.hideOlderThanDays ||
-            filter.hideAlts ||
+            filter.showMains ||
+            filter.showAlts ||
             filter.hideIfNoUpgrade
         )
     }, [filter])
