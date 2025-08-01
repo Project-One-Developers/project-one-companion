@@ -1,4 +1,3 @@
-
 import {
     CharacterBossProgressionResponse,
     RaiderioCharacterResponse,
@@ -12,20 +11,18 @@ export const fetchRosterProgressionHandler = async (): Promise<
     const roster = await getCharactersList()
     console.log(`Fetching roster progression for ${roster.length} characters`)
 
-    const { default: pLimit } = await import('p-limit')
-    const limit = pLimit(3)
+    //const { default: pLimit } = await import('p-limit')
+    //const limit = pLimit(5)
 
     const results = await Promise.allSettled(
         roster
-            .filter(c => c.playerId == '1ec6b98f-e73f-49ca-b83b-fab1046ff619')
+            //.filter(c => c.playerId == '1ec6b98f-e73f-49ca-b83b-fab1046ff619')
+            .filter(c => c.main)
             .map(character =>
-                limit(() =>
-                    fetchCharacterRaidProgress(character.name, character.realm)
-                        .then(raiderioData => ({
-                            ...raiderioData,
-                            character: character
-                        }))
-                )
+                fetchCharacterRaidProgress(character.name, character.realm).then(raiderioData => ({
+                    ...raiderioData,
+                    character: character
+                }))
             )
     )
 

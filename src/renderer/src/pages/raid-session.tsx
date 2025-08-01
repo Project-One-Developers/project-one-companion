@@ -4,11 +4,10 @@ import SessionLootNewDialog from '@renderer/components/session-loot-new-dialog'
 import { SessionLootsPanel } from '@renderer/components/session-loots-panel'
 import SessionRosterImportDialog from '@renderer/components/session-roster-dialog'
 import { Button } from '@renderer/components/ui/button'
-import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
+import { WowCharacterIcon } from '@renderer/components/ui/wowcharacter-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { cloneRaidSession, fetchRaidSessionWithRoster } from '@renderer/lib/tanstack-query/raid'
 import { formaUnixTimestampToItalianDate } from '@shared/libs/date/date-utils'
-import { Character } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
     ArrowLeft,
@@ -24,26 +23,6 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-
-type CharacterIconProps = {
-    character: Character
-}
-
-export const CharacterIcon = ({ character }: CharacterIconProps) => {
-    return (
-        <div className="flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110">
-            <div>
-                <p className="text-[9px] mb-2">{character.name.slice(0, 4)}</p>
-            </div>
-            <WowClassIcon
-                wowClassName={character.class}
-                //charname={character.name}
-                className="h-8 w-8 border-2 border-background rounded-lg"
-            />
-            {character.main ? <div className="h-[2px] w-6 bg-white rounded-lg mt-2" /> : null}
-        </div>
-    )
-}
 
 export const RaidSessionPage = () => {
     const { raidSessionId } = useParams<{ raidSessionId: string }>()
@@ -168,7 +147,7 @@ export const RaidSessionPage = () => {
                         ].map(({ characters }, index) => (
                             <div key={index} className="flex gap-2">
                                 {characters.map(character => (
-                                    <CharacterIcon key={character.id} character={character} />
+                                    <WowCharacterIcon key={character.id} character={character} />
                                 ))}
                             </div>
                         ))}

@@ -3,7 +3,6 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { updateItemBisSpecs } from '@renderer/lib/tanstack-query/bis-list'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { CharacterIcon } from '@renderer/pages/raid-session'
 import { WOW_CLASS_WITH_SPECS } from '@shared/libs/spec-parser/spec-utils.schemas'
 import { CharacterWithGears, Item } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -14,6 +13,7 @@ import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Textarea } from './ui/text-area'
+import { WowCharacterIcon } from './ui/wowcharacter-icon'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
@@ -376,7 +376,7 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                         .sort((a, b) => Number(b.main) - Number(a.main))
                         .map(character => (
                             <div key={character.id} className="flex gap-2">
-                                <CharacterIcon key={character.id} character={character} />
+                                <WowCharacterIcon key={character.id} character={character} />
                             </div>
                         ))}
                 </div>

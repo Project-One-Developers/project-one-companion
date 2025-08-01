@@ -24,8 +24,8 @@ const encountersDefeatedSchema = z.object({
 
 const raidProgressSchema = z.object({
     raid: z.string(),
-    aotc: z.string().optional(), // ISO date string - Ahead of the Curve achievement
-    cuttingEdge: z.string().optional(), // ISO date string - Cutting Edge achievement
+    aotc: z.string().nullable(), // ISO date string - Ahead of the Curve achievement
+    cuttingEdge: z.string().nullable(), // ISO date string - Cutting Edge achievement
     encountersDefeated: encountersDefeatedSchema,
     progress: z.any().nullable(), // This field appears to be null in the example
     tier: raidTierSchema,

@@ -1,6 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip'
 import { FiltersPanel } from '@renderer/components/filter-panel'
 import { Input } from '@renderer/components/ui/input'
+import { WowCharacterIcon } from '@renderer/components/ui/wowcharacter-icon'
 import { LootFilter } from '@renderer/lib/filters'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -74,6 +75,48 @@ const BossPanel = ({
         filteredPlayerNames
     ])
 
+    // Get characters who have NOT defeated this boss at the selected difficulty
+    const charactersWithoutProgress = useMemo(() => {
+        return rosterProgression
+            .map(characterData => {
+                const { character, characterRaidProgress } = characterData
+
+                // Filter by player names if search is active
+                if (
+                    filteredPlayerNames.length > 0 &&
+                    !filteredPlayerNames.includes(character.name)
+                ) {
+                    return null
+                }
+
+                // Find the current tier raid progress
+                const currentRaidProgress = characterRaidProgress.raidProgress.find(
+                    raidProgress => raidProgress.raid === boss.raiderioRaidSlug
+                )
+
+                if (!currentRaidProgress) return character
+
+                // Get encounters for the selected difficulty
+                const difficultyKey =
+                    selectedDifficulty.toLowerCase() as keyof typeof currentRaidProgress.encountersDefeated
+                const encounters = currentRaidProgress.encountersDefeated[difficultyKey] || []
+
+                // Check if this boss was NOT defeated using raiderIoEncounterSlug
+                const bossDefeated = encounters.find(
+                    encounter => encounter.slug === boss.raiderioEncounterSlug
+                )
+
+                return bossDefeated ? null : character
+            })
+            .filter((character): character is NonNullable<typeof character> => character !== null)
+    }, [
+        boss.raiderioEncounterSlug,
+        boss.raiderioRaidSlug,
+        rosterProgression,
+        selectedDifficulty,
+        filteredPlayerNames
+    ])
+
     // Calculate total roster size for this boss (considering search filter)
     const totalRosterSize = useMemo(() => {
         if (filteredPlayerNames.length > 0) {
@@ -85,7 +128,7 @@ const BossPanel = ({
     }, [rosterProgression, filteredPlayerNames])
 
     return (
-        <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[250px]">
+        <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[280px]">
             {/* Boss header: cover + name */}
             <div className="flex flex-col gap-y-2">
                 <img
@@ -97,63 +140,98 @@ const BossPanel = ({
             </div>
 
             {/* Character progression */}
-            <div className="flex flex-col gap-y-2 p-4">
+            <div className="flex flex-col gap-y-3 p-4">
                 <div className="text-xs text-center text-gray-400 mb-2">
                     {charactersWithProgress.length} / {totalRosterSize} defeated
                 </div>
 
-                {charactersWithProgress.length > 0 ? (
-                    <div className="flex flex-col gap-y-1">
-                        {charactersWithProgress.map(({ character, encounter }) => (
-                            <Tooltip key={character.id}>
-                                <TooltipTrigger asChild>
-                                    <div className="flex flex-row items-center justify-between p-2 bg-gray-700 rounded text-xs hover:bg-gray-600 transition-colors">
-                                        <span className="font-medium text-white">
-                                            {character.name}
-                                        </span>
-                                        <div className="flex flex-col items-end">
-                                            <span className="text-green-400">
-                                                {encounter.numKills} kills
-                                            </span>
+                {/* Characters who have defeated the boss */}
+                {charactersWithProgress.length > 0 && (
+                    <div className="flex flex-col gap-y-2">
+                        {/* <h3 className="text-xs font-semibold text-green-400">Defeated</h3> */}
+                        <div className="grid grid-cols-4 gap-2 ">
+                            {charactersWithProgress.map(({ character, encounter }) => (
+                                <Tooltip key={character.id}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex justify-center">
+                                            <WowCharacterIcon
+                                                character={character}
+                                                showTooltip={false}
+                                                showMainIndicator={false}
+                                            />
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent className="TooltipContent" sideOffset={5}>
+                                        <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
+                                            <div className="font-medium text-white">
+                                                {character.name}
+                                            </div>
+                                            <div className="text-green-400">
+                                                Kills: {encounter.numKills}
+                                            </div>
+                                            <div className="text-gray-300">
+                                                Item Level: {encounter.itemLevel}
+                                            </div>
                                             {encounter.firstDefeated && (
-                                                <span className="text-gray-400 text-[10px]">
+                                                <div className="text-gray-400">
+                                                    First Kill:{' '}
                                                     {new Date(
                                                         encounter.firstDefeated
                                                     ).toLocaleDateString()}
-                                                </span>
+                                                </div>
+                                            )}
+                                            {encounter.lastDefeated && (
+                                                <div className="text-gray-400">
+                                                    Last Kill:{' '}
+                                                    {new Date(
+                                                        encounter.lastDefeated
+                                                    ).toLocaleDateString()}
+                                                </div>
                                             )}
                                         </div>
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent className="TooltipContent" sideOffset={5}>
-                                    <div className="flex flex-col gap-1">
-                                        <div>Character: {character.name}</div>
-                                        <div>Kills: {encounter.numKills}</div>
-                                        <div>Item Level: {encounter.itemLevel}</div>
-                                        {encounter.firstDefeated && (
-                                            <div>
-                                                First Kill:{' '}
-                                                {new Date(
-                                                    encounter.firstDefeated
-                                                ).toLocaleDateString()}
-                                            </div>
-                                        )}
-                                        {encounter.lastDefeated && (
-                                            <div>
-                                                Last Kill:{' '}
-                                                {new Date(
-                                                    encounter.lastDefeated
-                                                ).toLocaleDateString()}
-                                            </div>
-                                        )}
-                                    </div>
-                                </TooltipContent>
-                            </Tooltip>
-                        ))}
+                                    </TooltipContent>
+                                </Tooltip>
+                            ))}
+                        </div>
                     </div>
-                ) : (
+                )}
+
+                {/* Characters who have NOT defeated the boss */}
+                {charactersWithoutProgress.length > 0 && (
+                    <div className="flex flex-col gap-y-2 mt-4">
+                        <h3 className="text-xs font-semibold text-red-400">Not Defeated</h3>
+                        <div className="grid grid-cols-4 gap-2 opacity-60">
+                            {charactersWithoutProgress.map(character => (
+                                <Tooltip key={character.id}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex justify-center grayscale">
+                                            <WowCharacterIcon
+                                                character={character}
+                                                showTooltip={false}
+                                                showMainIndicator={false}
+                                            />
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent className="TooltipContent" sideOffset={5}>
+                                        <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
+                                            <div className="font-medium text-white">
+                                                {character.name}
+                                            </div>
+                                            <div className="text-red-400">
+                                                Not defeated on {selectedDifficulty}
+                                            </div>
+                                        </div>
+                                    </TooltipContent>
+                                </Tooltip>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Empty state */}
+                {charactersWithProgress.length === 0 && charactersWithoutProgress.length === 0 && (
                     <div className="text-center text-gray-500 text-sm py-4">
-                        No defeats on {selectedDifficulty}
+                        No characters found
                     </div>
                 )}
             </div>
@@ -263,7 +341,7 @@ export default function RaidProgressionPage(): JSX.Element {
             </div>
 
             {/* Boss List */}
-            <div className="flex flex-wrap gap-x-4 gap-y-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-4 justify-center">
                 {orderedBosses.map(boss => (
                     <BossPanel
                         key={boss.id}
