@@ -28,7 +28,6 @@ const BossPanel = ({
     filteredPlayerNames
 }: BossPanelProps) => {
     // Get characters who have defeated this boss at the selected difficulty
-    // Get characters who have defeated this boss at the selected difficulty
     const charactersWithProgress = useMemo(() => {
         return rosterProgression
             .map(characterData => {
