@@ -346,7 +346,7 @@ export default function RaidProgressionPage(): JSX.Element {
         onlyUpgrades: false,
         minUpgrade: 0,
         showMains: true,
-        showAlts: true,
+        showAlts: false,
         hideIfNoUpgrade: false,
         selectedSlots: [],
         selectedArmorTypes: [],
