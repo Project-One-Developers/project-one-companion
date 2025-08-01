@@ -1,4 +1,3 @@
-import { unixTimestampToRelativeDays } from '@shared/libs/date/date-utils'
 import {
     Character,
     Droptimizer,
@@ -15,7 +14,6 @@ export type LootFilter = {
     hideOlderThanDays: boolean
     hideAlts: boolean
     hideIfNoUpgrade: boolean
-    maxDays: number
     selectedSlots: WowItemSlotKey[]
     selectedArmorTypes: WowArmorType[]
     selectedWowClassName: WowClassName[]
@@ -53,14 +51,6 @@ export function filterDroptimizer(
             if (
                 filter.selectedWowClassName.length > 0 &&
                 !filter.selectedWowClassName.includes(dropt.charInfo.class) // filter out char that doesnt match filter
-            ) {
-                return false
-            }
-
-            // Filter droptimizer older than X days
-            if (
-                filter.hideOlderThanDays &&
-                unixTimestampToRelativeDays(dropt.simInfo.date) > filter.maxDays
             ) {
                 return false
             }

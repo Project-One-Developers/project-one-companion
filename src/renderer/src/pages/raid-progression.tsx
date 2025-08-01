@@ -175,7 +175,6 @@ export default function RaidProgressionPage(): JSX.Element {
         hideOlderThanDays: false,
         hideAlts: false,
         hideIfNoUpgrade: false,
-        maxDays: 7,
         selectedSlots: [],
         selectedArmorTypes: [],
         selectedWowClassName: []

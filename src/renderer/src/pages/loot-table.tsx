@@ -188,7 +188,6 @@ export default function LootTable(): JSX.Element {
         hideOlderThanDays: false,
         hideAlts: false,
         hideIfNoUpgrade: false,
-        maxDays: 7,
         selectedSlots: [],
         selectedArmorTypes: [],
         selectedWowClassName: []
@@ -327,7 +326,6 @@ export default function LootTable(): JSX.Element {
                             showClassFilter={true}
                             showSlotFilter={true}
                             showArmorTypeFilter={true}
-                            collapsible={false}
                             className="shadow-2xl"
                         />
                     </div>

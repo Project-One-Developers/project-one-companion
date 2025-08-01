@@ -171,35 +171,6 @@ export const FiltersPanel = ({
                 <fieldset className="border-t border-gray-700 pt-4">
                     <legend className="text-lg font-semibold text-white mb-1">Droptimizer</legend>
                     <div className="space-y-4">
-                        {/* Ignore droptimizer older than */}
-                        <div className="flex flex-row items-center gap-3">
-                            <Checkbox
-                                id="older-than-days"
-                                checked={filter.hideOlderThanDays as CheckedState}
-                                onCheckedChange={checked =>
-                                    updateFilter('hideOlderThanDays', !!checked)
-                                }
-                                className="w-5 h-5 bg-gray-700 border border-gray-600 rounded flex items-center justify-center"
-                            >
-                                {filter.hideOlderThanDays && (
-                                    <Check className="text-white w-4 h-4" />
-                                )}
-                            </Checkbox>
-                            <label htmlFor="older-than-days" className="text-sm font-semibold">
-                                Ignore droptimizer older than
-                            </label>
-                            <input
-                                id="older-than-days-input"
-                                type="number"
-                                min="1"
-                                step="1"
-                                value={filter.maxDays}
-                                onChange={e => updateFilter('maxDays', Number(e.target.value))}
-                                disabled={!filter.hideOlderThanDays}
-                                className={`border rounded-md p-2 bg-gray-700 text-white w-20 ${!filter.hideOlderThanDays ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            />
-                            <span className="text-sm font-semibold">days</span>
-                        </div>
 
                         {/* Upgrades only and Minimum Upgrade Amount in the same row */}
                         <div className="flex flex-row items-center gap-3">

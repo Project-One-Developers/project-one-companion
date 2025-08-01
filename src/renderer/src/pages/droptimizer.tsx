@@ -18,7 +18,6 @@ const DEFAULT_FILTER: LootFilter = {
     hideOlderThanDays: false,
     hideAlts: true,
     hideIfNoUpgrade: true,
-    maxDays: 7,
     selectedArmorTypes: [],
     selectedSlots: [],
     selectedWowClassName: []
@@ -51,7 +50,6 @@ export default function DroptimizerPage(): JSX.Element {
             filter.hideOlderThanDays !== DEFAULT_FILTER.hideOlderThanDays ||
             filter.hideAlts !== DEFAULT_FILTER.hideAlts ||
             filter.hideIfNoUpgrade !== DEFAULT_FILTER.hideIfNoUpgrade ||
-            filter.maxDays !== DEFAULT_FILTER.maxDays ||
             filter.selectedArmorTypes.length > 0 ||
             filter.selectedSlots.length > 0 ||
             filter.selectedWowClassName.length > 0

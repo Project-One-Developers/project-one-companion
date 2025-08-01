@@ -170,7 +170,6 @@ export default function LootGains(): JSX.Element {
         hideOlderThanDays: false,
         hideAlts: true,
         hideIfNoUpgrade: true,
-        maxDays: 7,
         selectedArmorTypes: [],
         selectedSlots: [],
         selectedWowClassName: []
