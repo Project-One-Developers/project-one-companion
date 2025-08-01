@@ -5,16 +5,29 @@ import {
 } from '@shared/schemas/raiderio.schemas'
 import { getCharactersList } from '@storage/players/characters.storage'
 
-export const fetchRosterProgressionHandler = async (): Promise<
-    CharacterBossProgressionResponse[]
-> => {
+export const fetchRosterProgressionHandler = async (
+    filter: number = 0
+): Promise<CharacterBossProgressionResponse[]> => {
     const roster = await getCharactersList()
     console.log(`Fetching roster progression for ${roster.length} characters`)
 
+    // Apply filter based on the parameter
+    const filteredRoster = (() => {
+        switch (filter) {
+            case 1: // only mains
+                return roster.filter(c => c.main)
+            case 2: // only alts
+                return roster.filter(c => !c.main)
+            default: // no filter, get progress for all characters
+                return roster
+        }
+    })()
+
+    console.log(`After filtering: ${filteredRoster.length} characters (filter: ${filter})`)
+
     const results = await Promise.allSettled(
-        roster
+        filteredRoster
             //.filter(c => c.playerId == '1ec6b98f-e73f-49ca-b83b-fab1046ff619')
-            //.filter(c => c.main)
             .map(character =>
                 fetchCharacterRaidProgress(character.name, character.realm).then(raiderioData => ({
                     ...raiderioData,
@@ -26,7 +39,7 @@ export const fetchRosterProgressionHandler = async (): Promise<
     // Log failed requests for debugging
     results.forEach((result, index) => {
         if (result.status === 'rejected') {
-            const character = roster[index]
+            const character = filteredRoster[index]
             console.log(
                 {
                     error: result.reason,
@@ -49,7 +62,7 @@ export const fetchRosterProgressionHandler = async (): Promise<
         .map(result => result.value)
 
     console.log(
-        `Successfully fetched progression for ${successfulResults.length}/${roster.length} characters`
+        `Successfully fetched progression for ${successfulResults.length}/${filteredRoster.length} characters`
     )
 
     return successfulResults

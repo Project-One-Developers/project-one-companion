@@ -360,8 +360,19 @@ export default function RaidProgressionPage(): JSX.Element {
     })
 
     const rosterProgressionQuery = useQuery({
-        queryKey: [queryKeys.raidProgression],
-        queryFn: fetchRosterProgression
+        queryKey: [queryKeys.raidProgression, filter.showMains, filter.showAlts],
+        queryFn: () => {
+            // Convert the boolean filter states to the numeric parameter
+            let filterParam = 0 // default: all characters
+            if (filter.showMains && !filter.showAlts) {
+                filterParam = 1 // only mains
+            } else if (!filter.showMains && filter.showAlts) {
+                filterParam = 2 // only alts
+            }
+            // If both showMains and showAlts are true, or both are false, use 0 (all characters)
+
+            return fetchRosterProgression(filterParam)
+        }
     })
 
     // Debounce search input
@@ -395,17 +406,6 @@ export default function RaidProgressionPage(): JSX.Element {
         return bossesQuery.data.filter(b => b.id > 0).sort((a, b) => a.order - b.order)
     }, [bossesQuery.data])
 
-    const filteredRosterProgression = useMemo(() => {
-        const rosterProgression = rosterProgressionQuery.data || []
-
-        return rosterProgression.filter(({ character }) => {
-            if (filter.showMains && filter.showAlts) return true
-            if (filter.showMains && !filter.showAlts) return character.main
-            if (!filter.showMains && filter.showAlts) return !character.main
-            return false
-        })
-    }, [rosterProgressionQuery.data, filter.showMains, filter.showAlts])
-
     if (bossesQuery.isLoading || rosterProgressionQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
@@ -421,7 +421,7 @@ export default function RaidProgressionPage(): JSX.Element {
                 <h1 className="text-2xl font-bold">Raid Progression</h1>
                 <p className="text-gray-400">
                     Showing {filter.selectedRaidDiff} difficulty progression for{' '}
-                    {filteredRosterProgression.length} characters
+                    {(rosterProgressionQuery.data || []).length} characters
                     {debouncedSearchQuery && (
                         <span className="text-blue-400">
                             {' '}
@@ -448,7 +448,7 @@ export default function RaidProgressionPage(): JSX.Element {
                     <BossPanel
                         key={boss.id}
                         boss={boss}
-                        rosterProgression={filteredRosterProgression}
+                        rosterProgression={rosterProgressionQuery.data || []}
                         selectedDifficulty={filter.selectedRaidDiff}
                         filteredPlayerNames={filteredPlayerNames}
                     />

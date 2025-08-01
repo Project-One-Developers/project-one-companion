@@ -130,8 +130,8 @@ export const api = {
         return ipcRenderer.invoke('raid-session-roster-import', raidSessionId, csv)
     },
     // raid progression
-    fetchRosterProgression(): Promise<CharacterBossProgressionResponse[]> {
-        return ipcRenderer.invoke('raid-progression-get')
+    fetchRosterProgression(filter: number): Promise<CharacterBossProgressionResponse[]> {
+        return ipcRenderer.invoke('raid-progression-get', filter)
     },
     // Loots
     addLootsManual(raidSessionId: string, loots: NewLootManual[]): Promise<void> {

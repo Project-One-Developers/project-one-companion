@@ -1,3 +1,4 @@
+import type { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
 import type {
     EditRaidSession,
     NewRaidSession,
@@ -5,7 +6,6 @@ import type {
     RaidSessionWithRoster,
     RaidSessionWithSummary
 } from 'shared/types/types'
-import type { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
 
 export const fetchRaidSessionsWithSummary = async (): Promise<RaidSessionWithSummary[]> => {
     return await window.api.getRaidSessionsWithSummary()
@@ -47,6 +47,8 @@ export const importRosterInRaidSession = async (
 }
 
 // raid progression
-export const fetchRosterProgression = async (): Promise<CharacterBossProgressionResponse[]> => {
-    return await window.api.fetchRosterProgression()
+export const fetchRosterProgression = async (
+    filter: number = 0
+): Promise<CharacterBossProgressionResponse[]> => {
+    return window.api.fetchRosterProgression(filter)
 }
