@@ -276,7 +276,7 @@ export default function LootTable(): JSX.Element {
             </div>
 
             {/* Boss List */}
-            <div className="flex flex-wrap gap-x-4 gap-y-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-4 justify-center">
                 {filteredBosses
                     .sort((a, b) => a.order - b.order)
                     .map(boss => (

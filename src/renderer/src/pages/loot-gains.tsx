@@ -203,9 +203,9 @@ export default function LootGains(): JSX.Element {
             filter.selectedSlots.length > 0 ||
             filter.selectedWowClassName.length > 0 ||
             filter.onlyUpgrades ||
-            filter.showMains ||
+            !filter.showMains ||
             filter.showAlts ||
-            filter.hideIfNoUpgrade
+            !filter.hideIfNoUpgrade
         )
     }, [filter])
 
@@ -220,7 +220,7 @@ export default function LootGains(): JSX.Element {
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             {/* Boss List */}
-            <div className="flex flex-wrap gap-x-4 gap-y-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-4 justify-center">
                 {encounterList
                     .sort((a, b) => a.order - b.order)
                     .map(boss => (
