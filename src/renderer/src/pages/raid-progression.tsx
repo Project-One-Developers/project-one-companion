@@ -223,7 +223,7 @@ export default function RaidProgressionPage(): JSX.Element {
     // Bosses are always shown in order, search only affects player filtering within panels
     const orderedBosses = useMemo(() => {
         if (!bossesQuery.data) return []
-        return bossesQuery.data.sort((a, b) => a.order - b.order)
+        return bossesQuery.data.filter(b => b.id > 0).sort((a, b) => a.order - b.order)
     }, [bossesQuery.data])
 
     if (bossesQuery.isLoading || rosterProgressionQuery.isLoading) {
@@ -313,7 +313,6 @@ export default function RaidProgressionPage(): JSX.Element {
                             showClassFilter={false}
                             showSlotFilter={false}
                             showArmorTypeFilter={false}
-                            collapsible={false}
                             className="shadow-2xl"
                         />
                     </div>
