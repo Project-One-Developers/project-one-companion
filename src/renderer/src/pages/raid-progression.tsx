@@ -3,13 +3,13 @@ import { FiltersPanel } from '@renderer/components/filter-panel'
 import { Input } from '@renderer/components/ui/input'
 import { WowCharacterIcon } from '@renderer/components/ui/wowcharacter-icon'
 import { LootFilter } from '@renderer/lib/filters'
-import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
+import { fetchBosses } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterProgression } from '@renderer/lib/tanstack-query/raid'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
-import { BossWithItems, Character, WowRaidDifficulty } from '@shared/types/types'
+import { Boss, Character, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Filter, LoaderCircle, X } from 'lucide-react'
@@ -36,7 +36,7 @@ type CharacterWithProgress = {
 }
 
 type BossPanelProps = {
-    boss: BossWithItems
+    boss: Boss
     rosterProgression: CharacterBossProgressionResponse[]
     selectedDifficulty: WowRaidDifficulty
     filteredPlayerNames: string[]
@@ -79,7 +79,7 @@ const groupCharactersByRole = <T extends { character: { role: string; class: str
 
 const filterCharactersByBossProgress = (
     rosterProgression: CharacterBossProgressionResponse[],
-    boss: BossWithItems,
+    boss: Boss,
     selectedDifficulty: WowRaidDifficulty,
     filteredPlayerNames: string[],
     hasProgress: boolean
@@ -355,8 +355,8 @@ export default function RaidProgressionPage(): JSX.Element {
 
     // Queries
     const bossesQuery = useQuery({
-        queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
-        queryFn: () => fetchRaidLootTable(CURRENT_RAID_ID)
+        queryKey: [queryKeys.bosses, CURRENT_RAID_ID],
+        queryFn: () => fetchBosses(CURRENT_RAID_ID)
     })
 
     const rosterProgressionQuery = useQuery({
