@@ -80,7 +80,7 @@ const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
     }, [boss.items, bisLists, filter])
 
     return (
-        <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[250px]">
+        <div className="flex flex-col bg-muted rounded-lg overflow-hidden min-w-[350px]">
             {/* Boss header: cover + name */}
             <div className="flex flex-col gap-y-2">
                 <img
