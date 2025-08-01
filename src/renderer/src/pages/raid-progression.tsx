@@ -487,6 +487,31 @@ export default function RaidProgressionPage(): JSX.Element {
         return bossesQuery.data.filter(b => b.id > 0).sort((a, b) => a.order - b.order)
     }, [bossesQuery.data])
 
+    // Filter rosterProgression based on main/alt filters
+    const filteredRosterProgression = useMemo(() => {
+        const rosterProgression = rosterProgressionQuery.data || []
+
+        return rosterProgression.filter(({ character }) => {
+            // If both showMains and showAlts are true, show all characters
+            if (filter.showMains && filter.showAlts) {
+                return true
+            }
+
+            // If only showMains is true, show only main characters
+            if (filter.showMains && !filter.showAlts) {
+                return character.main
+            }
+
+            // If only showAlts is true, show only alt characters
+            if (!filter.showMains && filter.showAlts) {
+                return !character.main
+            }
+
+            // If both are false, show nothing (edge case)
+            return false
+        })
+    }, [rosterProgressionQuery.data, filter.showMains, filter.showAlts])
+
     if (bossesQuery.isLoading || rosterProgressionQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
@@ -495,8 +520,6 @@ export default function RaidProgressionPage(): JSX.Element {
         )
     }
 
-    const rosterProgression = rosterProgressionQuery.data || []
-
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
             {/* Header */}
@@ -504,7 +527,7 @@ export default function RaidProgressionPage(): JSX.Element {
                 <h1 className="text-2xl font-bold">Raid Progression</h1>
                 <p className="text-gray-400">
                     Showing {filter.selectedRaidDiff} difficulty progression for{' '}
-                    {rosterProgression.length} characters
+                    {filteredRosterProgression.length} characters
                     {debouncedSearchQuery && (
                         <span className="text-blue-400">
                             {' '}
@@ -531,7 +554,7 @@ export default function RaidProgressionPage(): JSX.Element {
                     <BossPanel
                         key={boss.id}
                         boss={boss}
-                        rosterProgression={rosterProgression}
+                        rosterProgression={filteredRosterProgression}
                         selectedDifficulty={filter.selectedRaidDiff}
                         filteredPlayerNames={filteredPlayerNames}
                     />

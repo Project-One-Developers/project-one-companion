@@ -17,7 +17,7 @@ export const fetchRosterProgressionHandler = async (): Promise<
     const results = await Promise.allSettled(
         roster
             //.filter(c => c.playerId == '1ec6b98f-e73f-49ca-b83b-fab1046ff619')
-            .filter(c => c.main)
+            //.filter(c => c.main)
             .map(character =>
                 fetchCharacterRaidProgress(character.name, character.realm).then(raiderioData => ({
                     ...raiderioData,
