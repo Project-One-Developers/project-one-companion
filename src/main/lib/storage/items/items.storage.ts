@@ -111,8 +111,10 @@ export const upsertItemsToTierset = async (itemsToTierset: ItemToTierset[]): Pro
 
 export const upsertItemsToCatalyst = async (itemsToCatalyst: ItemToCatalyst[]): Promise<void> => {
     if (itemsToCatalyst.length === 0) return
-    await db().delete(itemToCatalystTable)
-    await db().insert(itemToCatalystTable).values(itemsToCatalyst)
+    await db()
+        .insert(itemToCatalystTable)
+        .values(itemsToCatalyst)
+        .onConflictDoNothing()
 }
 
 export const invalidateCache = (): void => {
