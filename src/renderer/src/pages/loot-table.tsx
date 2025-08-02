@@ -130,7 +130,7 @@ const BossPanel = ({ boss, bisLists, itemNotes, onEdit, filter }: BossPanelProps
                                 />
 
                                 <div className="flex flex-col items-center">
-                                    <div className="text-xs text-gray-400">
+                                    <div className="text-xs text-gray-400 flex items-center gap-1">
                                         {allSpecIds.length ? (
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
@@ -156,6 +156,21 @@ const BossPanel = ({ boss, bisLists, itemNotes, onEdit, filter }: BossPanelProps
                                                 </TooltipContent>
                                             </Tooltip>
                                         ) : null}
+
+                                        {/* Note indicator */}
+                                        {itemNote && (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <div className="text-blue-400">
+                                                        <Edit size={12} />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent className="TooltipContent max-w-xs" sideOffset={5}>
+                                                    <div className="text-xs">{itemNote}</div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )}
+
                                     </div>
                                 </div>
 
