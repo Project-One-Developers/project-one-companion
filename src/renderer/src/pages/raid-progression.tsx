@@ -35,7 +35,7 @@ const ROLE_COLORS = {
 // Types
 type CharacterWithProgress = {
     character: Character
-    encounter: RaiderioEncounter
+    encounter: RaiderioEncounter | null
 }
 
 type BossPanelProps = {
@@ -84,9 +84,8 @@ const filterCharactersByBossProgress = (
     rosterProgression: CharacterBossProgressionResponse[],
     boss: Boss,
     selectedDifficulty: WowRaidDifficulty,
-    filteredPlayerNames: string[],
-    hasProgress: boolean
-) => {
+    filteredPlayerNames: string[]
+): CharacterWithProgress[] => {
     return rosterProgression
         .map(characterData => {
             const { character, characterRaidProgress } = characterData
@@ -102,10 +101,10 @@ const filterCharactersByBossProgress = (
             )
 
             if (!currentRaidProgress) {
-                return hasProgress ? null : { character }
+                return { character, encounter: null }
             }
 
-            // Get encounters for the selected difficulty - now safe because we checked for undefined
+            // Get encounters for the selected difficulty
             const difficultyKey =
                 selectedDifficulty.toLowerCase() as keyof typeof currentRaidProgress.encountersDefeated
             const encounters = currentRaidProgress.encountersDefeated[difficultyKey] || []
@@ -115,15 +114,9 @@ const filterCharactersByBossProgress = (
                 encounter => encounter.slug === boss.raiderioEncounterSlug
             )
 
-            const shouldInclude = hasProgress ? !!bossDefeated : !bossDefeated
-
-            if (!shouldInclude) return null
-
-            return hasProgress && bossDefeated
-                ? { character, encounter: bossDefeated }
-                : { character }
+            return { character, encounter: bossDefeated || null }
         })
-        .filter((item): item is NonNullable<typeof item> => item !== null)
+        .filter((item): item is CharacterWithProgress => item !== null)
 }
 
 // Components
@@ -132,7 +125,7 @@ const CharacterTooltip = ({
     encounter
 }: {
     character: Character
-    encounter?: RaiderioEncounter | WowRaidDifficulty
+    encounter?: RaiderioEncounter | WowRaidDifficulty | null
 }) => (
     <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
         <div className="font-medium text-white">{character.name}</div>
@@ -165,7 +158,7 @@ const CharacterGrid = ({
     showRoleBadges = false,
     hasDefeatedBoss = false
 }: {
-    characters: CharacterWithProgress[] | Character[]
+    characters: CharacterWithProgress[]
     title: string
     color: string
     selectedDifficulty?: WowRaidDifficulty
@@ -179,8 +172,7 @@ const CharacterGrid = ({
             <h4 className={`text-xs font-semibold ${color} mb-2`}>{title}</h4>
             <div className="grid grid-cols-8 gap-2">
                 {characters.map(item => {
-                    const character = 'character' in item ? item.character : item
-                    const encounter = 'encounter' in item ? item.encounter : undefined
+                    const { character, encounter } = item
 
                     return (
                         <Tooltip key={character.id}>
@@ -215,33 +207,28 @@ const BossPanel = ({
     selectedDifficulty,
     filteredPlayerNames
 }: BossPanelProps) => {
-    // Get characters who have defeated this boss
-    const charactersWithProgress = useMemo(() => {
-        const characters = filterCharactersByBossProgress(
+    // Get all characters with their progress status
+    const allCharactersWithProgress = useMemo(() => {
+        return filterCharactersByBossProgress(
             rosterProgression,
             boss,
             selectedDifficulty,
-            filteredPlayerNames,
-            true
-        ) as CharacterWithProgress[]
-
-        return sortCharactersByRoleAndClass(characters)
-    }, [boss, rosterProgression, selectedDifficulty, filteredPlayerNames])
-
-    // Get characters who have NOT defeated this boss
-    const charactersWithoutProgress = useMemo(() => {
-        const characters = filterCharactersByBossProgress(
-            rosterProgression,
-            boss,
-            selectedDifficulty,
-            filteredPlayerNames,
-            false
+            filteredPlayerNames
         )
-
-        return sortCharactersByRoleAndClass(characters).map(item =>
-            'character' in item ? item.character : item
-        ) as Character[]
     }, [boss, rosterProgression, selectedDifficulty, filteredPlayerNames])
+
+    // Separate characters with and without progress
+    const charactersWithProgress = useMemo(() => {
+        return sortCharactersByRoleAndClass(
+            allCharactersWithProgress.filter(item => item.encounter !== null)
+        )
+    }, [allCharactersWithProgress])
+
+    const charactersWithoutProgress = useMemo(() => {
+        return sortCharactersByRoleAndClass(
+            allCharactersWithProgress.filter(item => item.encounter === null)
+        )
+    }, [allCharactersWithProgress])
 
     // Group characters with progress by role
     const groupedCharactersWithProgress = useMemo(() => {
@@ -308,12 +295,12 @@ const BossPanel = ({
                     <div className="flex flex-col gap-y-2 mt-4">
                         <h3 className="text-xs font-semibold text-red-400">Not Defeated</h3>
                         <div className="grid grid-cols-8 gap-2 opacity-60">
-                            {charactersWithoutProgress.map(character => (
-                                <Tooltip key={character.id}>
+                            {charactersWithoutProgress.map(item => (
+                                <Tooltip key={item.character.id}>
                                     <TooltipTrigger asChild>
                                         <div className="flex justify-center grayscale">
                                             <WowCharacterIcon
-                                                character={character}
+                                                character={item.character}
                                                 showTooltip={false}
                                                 showRoleBadges={true} // Show role badges for characters who haven't defeated the boss
                                                 showName={true}
@@ -323,7 +310,7 @@ const BossPanel = ({
                                     </TooltipTrigger>
                                     <TooltipContent className="TooltipContent" sideOffset={5}>
                                         <CharacterTooltip
-                                            character={character}
+                                            character={item.character}
                                             encounter={selectedDifficulty}
                                         />
                                     </TooltipContent>
