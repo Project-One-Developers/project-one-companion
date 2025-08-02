@@ -82,6 +82,7 @@ export default function ItemManagementDialog({
                 description: 'Item note updated successfully'
             })
             queryClient.invalidateQueries({ queryKey: [queryKeys.itemNote, itemAndSpecs?.item.id] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.allItemNotes] })
         },
         onError: (error: Error) => {
             toast({
