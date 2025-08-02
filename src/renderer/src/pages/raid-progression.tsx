@@ -8,7 +8,10 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterProgression } from '@renderer/lib/tanstack-query/raid'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
-import { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
+import {
+    CharacterBossProgressionResponse,
+    RaiderioEncounter
+} from '@shared/schemas/raiderio.schemas'
 import { Boss, Character, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
@@ -32,7 +35,7 @@ const ROLE_COLORS = {
 // Types
 type CharacterWithProgress = {
     character: Character
-    encounter: any
+    encounter: RaiderioEncounter
 }
 
 type BossPanelProps = {
@@ -124,10 +127,16 @@ const filterCharactersByBossProgress = (
 }
 
 // Components
-const CharacterTooltip = ({ character, encounter }: { character: Character; encounter?: any }) => (
+const CharacterTooltip = ({
+    character,
+    encounter
+}: {
+    character: Character
+    encounter?: RaiderioEncounter | WowRaidDifficulty
+}) => (
     <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
         <div className="font-medium text-white">{character.name}</div>
-        {encounter ? (
+        {encounter && typeof encounter === 'object' ? (
             <>
                 <div className="text-green-400">Kills: {encounter.numKills}</div>
                 <div className="text-gray-300">First kill ilvl: {encounter.itemLevel}</div>
