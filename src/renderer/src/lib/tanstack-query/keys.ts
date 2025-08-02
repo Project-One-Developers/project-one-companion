@@ -20,5 +20,6 @@ export const queryKeys = {
     // bis list,
     bisList: 'bis-list-get',
     // item note,
-    itemNote: 'item-note'
+    itemNote: 'item-note',
+    allItemNotes: 'all-item-notes'
 }

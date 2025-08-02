@@ -21,11 +21,13 @@ import {
     deleteDroptimizerOlderThanHoursHandler,
     getDroptimizerLastByCharAndDiffHandler,
     getDroptimizerLatestListHandler,
-    getDroptimizerListHandler, syncDroptimizersFromDiscord
+    getDroptimizerListHandler,
+    syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
 import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
     deleteItemNoteHandler,
+    getAllItemNotesHandler,
     getItemNoteHandler,
     setItemNoteHandler
 } from './items/itemsNote.handlers'
@@ -86,6 +88,7 @@ export const allHandlers = {
     'items-list': getItemsHandler,
     'items-search': searchItemsHandler,
     'item-get-note': getItemNoteHandler,
+    'item-get-all-notes': getAllItemNotesHandler,
     'item-set-note': setItemNoteHandler,
     'item-delete-note': deleteItemNoteHandler,
     'boss-loot-table-get': getRaidLootTableHandler,

@@ -1,4 +1,4 @@
-import type { CharacterWithGears, Item } from 'shared/types/types'
+import type { CharacterWithGears, Item, ItemNote } from 'shared/types/types'
 
 export const searchItems = async (searchTerm: string): Promise<Item[]> => {
     const response = await window.api.searchItems(searchTerm, 10)
@@ -19,6 +19,10 @@ export const updateItemNote = async (itemId: number, note: string): Promise<void
 export const fetchItemNote = async (itemId: number): Promise<string> => {
     const result = await window.api.getItemNote(itemId)
     return result?.note || ''
+}
+
+export const fetchAllItemNotes = async (): Promise<ItemNote[]> => {
+    return await window.api.getAllItemNotes()
 }
 
 export const deleteItemNote = async (itemId: number): Promise<void> => {

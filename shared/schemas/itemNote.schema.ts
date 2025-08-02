@@ -5,4 +5,3 @@ export const itemNoteSchema = z.object({
     note: z.string()
 })
 
-export type ItemNote = z.infer<typeof itemNoteSchema>

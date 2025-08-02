@@ -7,11 +7,12 @@ import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
 import { LootFilter } from '@renderer/lib/filters'
 import { fetchBisList } from '@renderer/lib/tanstack-query/bis-list'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
+import { fetchAllItemNotes } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { getWowClassBySpecId } from '@shared/libs/spec-parser/spec-utils'
-import { BisList, BossWithItems, Item, WowClassName } from '@shared/types/types'
+import { BisList, BossWithItems, Item, ItemNote, WowClassName } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Edit, Filter, LoaderCircle, X } from 'lucide-react'
@@ -22,11 +23,12 @@ import { useEffect, useMemo, useState, type JSX } from 'react'
 type BossPanelProps = {
     boss: BossWithItems
     bisLists: BisList[]
-    onEdit: (item: Item) => void
+    itemNotes: ItemNote[]
+    onEdit: (item: Item, note: string) => void
     filter: LootFilter
 }
 
-const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
+const BossPanel = ({ boss, bisLists, itemNotes, onEdit, filter }: BossPanelProps) => {
     // Filter items based on the selected classes, slots, and armor types
     const filteredItems = useMemo(() => {
         return boss.items.filter(item => {
@@ -103,6 +105,7 @@ const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
                     .map(item => {
                         const bisForItem = bisLists.filter(bis => bis.itemId === item.id)
                         const allSpecIds = bisForItem.flatMap(bis => bis.specIds)
+                        const itemNote = itemNotes.find(note => note.itemId === item.id)?.note || ''
 
                         return (
                             <div
@@ -113,7 +116,7 @@ const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
                                 )}
                                 onClick={e => {
                                     e.preventDefault()
-                                    onEdit(item)
+                                    onEdit(item, itemNote)
                                 }}
                             >
                                 <WowItemIcon
@@ -171,6 +174,7 @@ const BossPanel = ({ boss, bisLists, onEdit, filter }: BossPanelProps) => {
 type ItemWithBisSpecs = {
     item: Item
     specs: number[]
+    note: string
 }
 
 export default function LootTable(): JSX.Element {
@@ -201,6 +205,11 @@ export default function LootTable(): JSX.Element {
     const bisRes = useQuery({
         queryKey: [queryKeys.bisList],
         queryFn: () => fetchBisList()
+    })
+
+    const itemNotesRes = useQuery({
+        queryKey: [queryKeys.allItemNotes],
+        queryFn: () => fetchAllItemNotes()
     })
 
     // Debounce search input
@@ -246,7 +255,7 @@ export default function LootTable(): JSX.Element {
             .filter(boss => boss.items.length > 0) // Remove bosses with no matching items
     }, [bossesWithItemRes.data, debouncedSearchQuery])
 
-    if (bossesWithItemRes.isLoading || bisRes.isLoading) {
+    if (bossesWithItemRes.isLoading || bisRes.isLoading || itemNotesRes.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -255,10 +264,11 @@ export default function LootTable(): JSX.Element {
     }
 
     const bisLists = bisRes.data ?? []
+    const itemNotes = itemNotesRes.data ?? []
 
-    const handleEditClick = (item: Item) => {
+    const handleEditClick = (item: Item, note: string) => {
         const selectedBis = bisLists.find(b => b.itemId === item.id)
-        setSelectedItem({ item: item, specs: selectedBis?.specIds ?? [] })
+        setSelectedItem({ item: item, specs: selectedBis?.specIds ?? [], note })
         setIsEditDialogOpen(true)
     }
 
@@ -284,6 +294,7 @@ export default function LootTable(): JSX.Element {
                             key={boss.id}
                             boss={boss}
                             bisLists={bisLists}
+                            itemNotes={itemNotes}
                             onEdit={handleEditClick}
                             filter={filter}
                         />

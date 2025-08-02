@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { electronAPI } from '@electron-toolkit/preload'
+import { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
 import type {
     AppSettings,
     BisList,
@@ -7,7 +8,8 @@ import type {
     BossWithItems,
     Character,
     CharacterGameInfo,
-    CharacterSummary, CharacterWithGears,
+    CharacterSummary,
+    CharacterWithGears,
     CharacterWithPlayer,
     CharAssignmentHighlights,
     Droptimizer,
@@ -32,7 +34,6 @@ import type {
     WowRaidDifficulty
 } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
-import { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
 
 // Custom APIs for renderer
 export const api = {
@@ -195,6 +196,9 @@ export const api = {
     // item note
     getItemNote(itemId: number): Promise<ItemNote | null> {
         return ipcRenderer.invoke('item-get-note', itemId)
+    },
+    getAllItemNotes(): Promise<ItemNote[]> {
+        return ipcRenderer.invoke('item-get-all-notes')
     },
     setItemNote(itemId: number, note: string): Promise<ItemNote> {
         return ipcRenderer.invoke('item-set-note', itemId, note)

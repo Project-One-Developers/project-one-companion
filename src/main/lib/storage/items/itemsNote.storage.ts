@@ -1,9 +1,15 @@
 import { itemNoteSchema } from '@shared/schemas/itemNote.schema'
 import type { ItemNote } from '@shared/types/types'
 import { eq } from 'drizzle-orm'
+import z from 'zod'
 import { db } from '../storage.config'
 import { itemNoteTable } from '../storage.schema'
 import { conflictUpdateAllExcept } from '../storage.utils'
+
+export const getAllItemNotes = async (): Promise<ItemNote[]> => {
+    const items = await db().query.itemNoteTable.findMany()
+    return z.array(itemNoteSchema).parse(items)
+}
 
 export const getItemNote = async (id: number): Promise<ItemNote | null> => {
     const res = await db().query.itemNoteTable.findFirst({
