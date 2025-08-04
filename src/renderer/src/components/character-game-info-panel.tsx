@@ -109,73 +109,96 @@ const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
             wowAuditNewer = false
         }
     }
+
+    // Determine which tabs have data
+    const hasRaiderioData = raiderio != null
+    const hasDroptimizerData = droptimizer != null
+    const hasWowAuditData = wowAudit != null
+
+    // Determine default tab - prioritize the newest data
+    const getDefaultTab = () => {
+        if (hasWowAuditData && wowAuditNewer) return 'wowaudit'
+        if (hasDroptimizerData) return 'droptimizer'
+        if (hasRaiderioData) return 'raiderio'
+        if (hasWowAuditData) return 'wowaudit'
+        return 'raiderio' // fallback
+    }
+
     return (
         <div className="p-6 rounded-lg w-full relative bg-background shadow-lg">
-            <Tabs defaultValue={wowAuditNewer ? 'wowaudit' : 'droptimizer'} className="w-full">
+            <Tabs defaultValue={getDefaultTab()} className="w-full">
                 <TabsList className="flex justify-start space-x-4 border-b pb-2 mb-6">
-                    <TabsTrigger
-                        value="wowaudit"
-                        className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                    >
-                        <div className="flex items-center gap-2">
-                            <img
-                                src="https://data.wowaudit.com/img/new-logo-icon.svg"
-                                className="w-6 h-6 rounded-full"
-                            />
-                            <span>WoW Audit</span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                            {wowAudit
-                                ? formatUnixTimestampForDisplay(wowAudit.wowauditLastModifiedUnixTs)
-                                : 'No wowaudit imported'}
-                        </span>
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="droptimizer"
-                        className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                    >
-                        <div className="flex items-center gap-2">
-                            <img
-                                src="https://assets.rpglogs.com/img/warcraft/raidbots-icon.png"
-                                className="w-6 h-6 rounded-full"
-                            />
-                            <span>Droptimizer</span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                            {droptimizer
-                                ? formatUnixTimestampForDisplay(droptimizer.simInfo.date)
-                                : 'No droptimizer imported'}
-                        </span>
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="raiderio"
-                        className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
-                    >
-                        <div className="flex items-center gap-2">
-                            <img
-                                src="https://cdn.raiderio.net/images/mstile-150x150.png"
-                                className="w-6 h-6 rounded-full"
-                            />
-                            <span>RaiderIO</span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                            {raiderio
-                                ? formatUnixTimestampForDisplay(raiderio.p1SyncAt)
-                                : 'No raiderio imported'}
-                        </span>
-                    </TabsTrigger>
+                    {hasRaiderioData && (
+                        <TabsTrigger
+                            value="raiderio"
+                            className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src="https://cdn.raiderio.net/images/mstile-150x150.png"
+                                    className="w-6 h-6 rounded-full"
+                                />
+                                <span>RaiderIO</span>
+                            </div>
+                            <span className="text-xs text-muted-foreground">
+                                {formatUnixTimestampForDisplay(raiderio.p1SyncAt)}
+                            </span>
+                        </TabsTrigger>
+                    )}
+                    {hasDroptimizerData && (
+                        <TabsTrigger
+                            value="droptimizer"
+                            className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src="https://assets.rpglogs.com/img/warcraft/raidbots-icon.png"
+                                    className="w-6 h-6 rounded-full"
+                                />
+                                <span>Droptimizer</span>
+                            </div>
+                            <span className="text-xs text-muted-foreground">
+                                {formatUnixTimestampForDisplay(droptimizer.simInfo.date)}
+                            </span>
+                        </TabsTrigger>
+                    )}
+                    {hasWowAuditData && (
+                        <TabsTrigger
+                            value="wowaudit"
+                            className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                        >
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src="https://data.wowaudit.com/img/new-logo-icon.svg"
+                                    className="w-6 h-6 rounded-full"
+                                />
+                                <span>WoW Audit</span>
+                            </div>
+                            <span className="text-xs text-muted-foreground">
+                                {formatUnixTimestampForDisplay(wowAudit.wowauditLastModifiedUnixTs)}
+                            </span>
+                        </TabsTrigger>
+                    )}
                 </TabsList>
 
-                <TabsContent value="wowaudit">
-                    {wowAudit && <WowAuditData data={wowAudit} />}
-                </TabsContent>
+                {hasRaiderioData && (
+                    <TabsContent value="raiderio">
+                        <RaiderioData data={raiderio} />
+                    </TabsContent>
+                )}
 
-                <TabsContent value="droptimizer">
-                    {droptimizer && <DroptimizerData data={droptimizer} />}
-                </TabsContent>
-                <TabsContent value="raiderio">
-                    {raiderio && <RaiderioData data={raiderio} />}
-                </TabsContent>
+                {hasDroptimizerData && (
+                    <TabsContent value="droptimizer">
+                        <DroptimizerData data={droptimizer} />
+                    </TabsContent>
+                )}
+
+                {hasWowAuditData && (
+                    <TabsContent value="wowaudit">
+                        <WowAuditData data={wowAudit} />
+                    </TabsContent>
+                )}
+
             </Tabs>
         </div>
     )
