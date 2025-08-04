@@ -170,6 +170,16 @@
         "raiderioEncounterSlug":null
     },
     {
+        "id":-69,
+        "name":"Bountiful Delves - Season 3",
+        "order":1,
+        "instanceId":-69,
+        "instanceName":"Bountiful Delves - Season 3",
+        "instanceType":"delve-epic",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
+    },
+    {
         "id":2639,
         "name":"Vexie and the Geargrinders",
         "order":1,
