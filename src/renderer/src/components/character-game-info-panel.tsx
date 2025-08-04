@@ -164,7 +164,7 @@ const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
                     >
                         <div className="flex items-center gap-2">
                             <img
-                                src="https://assets.rpglogs.com/img/warcraft/raidbots-icon.png"
+                                src="https://cdn.raiderio.net/images/mstile-150x150.png"
                                 className="w-6 h-6 rounded-full"
                             />
                             <span>RaiderIO</span>
