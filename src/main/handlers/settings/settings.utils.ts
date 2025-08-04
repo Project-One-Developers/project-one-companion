@@ -249,6 +249,46 @@ export const fetchNonRaidItems = (): Item[] => {
         season: 2
     })
 
+    // TWW Season 3
+    res.push({
+        id: 235499,
+        name: 'Reshii Wraps',
+        ilvlBase: 730,
+        ilvlMythic: 730,
+        ilvlHeroic: 730,
+        ilvlNormal: 730,
+        boe: false,
+        slot: 'Back',
+        slotKey: 'back',
+        itemSubclass: null,
+        token: false,
+        tokenPrefix: null,
+        tierset: false,
+        tiersetPrefix: null,
+        veryRare: false,
+        catalyzed: false,
+        specs: null,
+        specIds: null,
+        classes: null,
+        classesId: null,
+        stats: null,
+        mainStats: null,
+        secondaryStats: null,
+        itemClass: 'Armor',
+        armorType: null,
+        wowheadUrl: 'https://www.wowhead.com/ptr-2/item=235499/reshii-wraps',
+        iconName: 'inv_cape_armor_etherealshawl_d_01',
+        iconUrl:
+            'https://wow.zamimg.com/images/wow/icons/large/inv_cape_armor_etherealshawl_d_01.jpg',
+        bossName: 'Jewelcrafting', // non è vero
+        bossId: -37, // non è vero
+        sourceId: -66, // non è vero
+        sourceName: 'Tww Season 3 - Back',
+        sourceType: 'special-tww-s3-back',
+        onUseTrinket: false,
+        season: 3
+    })
+
     return res
 }
 
