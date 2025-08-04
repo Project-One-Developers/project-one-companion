@@ -1,4 +1,4 @@
-import type { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
+import { CharacterWithProgression } from '@shared/types/types'
 import type {
     EditRaidSession,
     NewRaidSession,
@@ -49,6 +49,6 @@ export const importRosterInRaidSession = async (
 // raid progression
 export const fetchRosterProgression = async (
     filter: number = 0
-): Promise<CharacterBossProgressionResponse[]> => {
+): Promise<CharacterWithProgression[]> => {
     return window.api.fetchRosterProgression(filter)
 }

@@ -2,7 +2,10 @@ import type { CharacterWowAudit } from '@shared/types/types'
 import { db } from '@storage/storage.config'
 import { charWowAuditTable } from '@storage/storage.schema'
 import { z } from 'zod'
-import { charWowAuditStorageToCharacterWowAudit, NewCharacterWowAudit } from './characters.schemas'
+import {
+    charWowAuditStorageToCharacterWowAudit,
+    NewCharacterWowAudit
+} from './characters-wowaudit.schemas'
 
 export const addCharacterWowAudit = async (characters: NewCharacterWowAudit[]): Promise<void> => {
     await db().insert(charWowAuditTable).values(characters)

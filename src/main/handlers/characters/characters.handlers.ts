@@ -1,4 +1,3 @@
-import { formaUnixTimestampToItalianDate, getUnixTimestamp } from '@shared/libs/date/date-utils'
 import type {
     Character,
     CharacterGameInfo,
@@ -17,11 +16,9 @@ import {
     getDroptimizerLatestList
 } from '@storage/droptimizer/droptimizer.storage'
 import { getLootAssigned } from '@storage/loots/loots.storage'
+import { getLastRaiderioInfo } from '@storage/players/characters-raiderio.storage'
 import {
-    addCharacterWowAudit,
-    deleteAllCharacterWowAudit,
     getAllCharacterWowAudit,
-    getLastTimeSyncedWowAudit,
     getLastWowAuditInfo
 } from '@storage/players/characters-wowaudit.storage'
 import {
@@ -39,7 +36,6 @@ import {
     getPlayerById,
     getPlayerWithCharactersList
 } from '@storage/players/players.storage'
-import { getConfig } from '@storage/settings/settings.storage'
 import {
     getLatestSyncDate,
     parseCurrencies,
@@ -49,7 +45,6 @@ import {
     parseTiersetInfo,
     parseWowAuditWarn
 } from '../loots/loot.utils'
-import { fetchWowAuditData, parseWowAuditData } from './characters.utils'
 
 // Characters
 
@@ -74,62 +69,6 @@ export const editCharacterHandler = async (edited: EditCharacter): Promise<Chara
     await editCharacter(edited)
 
     return await getCharacterWithPlayerById(edited.id)
-}
-
-export const syncCharacterWowAudit = async (): Promise<void> => {
-    const key = await getConfig('WOW_AUDIT_API_KEY')
-
-    if (key === null) {
-        throw new Error('WOW_AUDIT_API_KEY not set in database')
-    }
-
-    console.log('[WowAudit] Start Sync')
-
-    const json = await fetchWowAuditData(key)
-
-    const lastSyncUnixTimestamp = await getLastTimeSyncedWowAudit()
-
-    if (json != null) {
-        const charsData = await parseWowAuditData(json)
-
-        // if last sync is older than the last data in wowaudit
-        if (
-            lastSyncUnixTimestamp &&
-            lastSyncUnixTimestamp >= charsData[0].wowauditLastModifiedUnixTs
-        ) {
-            console.log(
-                `[WowAudit] No Need to Sync - WowAudit Data: ${formaUnixTimestampToItalianDate(lastSyncUnixTimestamp)} Last wowaudit sync ${formaUnixTimestampToItalianDate(
-                    charsData[0].wowauditLastModifiedUnixTs
-                )}`
-            )
-            return
-        }
-
-        await deleteAllCharacterWowAudit()
-        await addCharacterWowAudit(charsData)
-    }
-    console.log('[WowAudit] End Sync')
-}
-
-export const checkWowAuditUpdates = async (): Promise<void> => {
-    console.log('checkWowAuditUpdates: checking..')
-    const lastSync = await getLastTimeSyncedWowAudit()
-    const fourHoursUnixTs = 4 * 60 * 60
-
-    if (lastSync === null || getUnixTimestamp() - lastSync > fourHoursUnixTs) {
-        console.log(
-            'checkWowAuditUpdates: woaudit older than 4 hours (' +
-                (lastSync != null ? formaUnixTimestampToItalianDate(lastSync) : '') +
-                ') - syncing now'
-        )
-        await syncCharacterWowAudit()
-    } else {
-        console.log(
-            'checkWowAuditUpdates: woaudit is up to date (' +
-                formaUnixTimestampToItalianDate(lastSync) +
-                ')'
-        )
-    }
 }
 
 // Players
@@ -158,12 +97,16 @@ export const getCharLatestGameInfoHandler = async (
     charName: string,
     charRealm: string
 ): Promise<CharacterGameInfo> => {
-    const lastDroptimizer = await getDroptimizerLastByChar(charName, charRealm)
-    const lastWowAudit = await getLastWowAuditInfo(charName, charRealm)
+    const [lastDroptimizer, lastWowAudit, lastRaiderio] = await Promise.all([
+        getDroptimizerLastByChar(charName, charRealm),
+        getLastWowAuditInfo(charName, charRealm),
+        getLastRaiderioInfo(charName, charRealm)
+    ])
 
     return {
         droptimizer: lastDroptimizer,
-        wowaudit: lastWowAudit
+        wowaudit: lastWowAudit,
+        raiderio: lastRaiderio
     }
 }
 

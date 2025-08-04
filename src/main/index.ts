@@ -10,7 +10,8 @@ import icon from '../../build/icon.png'
 import { menu } from './app/menu'
 import { store } from './app/store'
 import { allHandlers } from './handlers'
-import { checkWowAuditUpdates } from './handlers/characters/characters.handlers'
+import { checkRaiderioUpdates } from './handlers/characters/characters-raiderio.handlers'
+import { checkWowAuditUpdates } from './handlers/characters/characters-wowaudit.handlers'
 import { syncDroptimizersFromDiscord } from './handlers/droptimizer/droptimizer.handlers'
 import { registerHandlers } from './handlers/handlers.utils'
 import { updateElectronApp } from './lib/autoupdater/autoupdater'
@@ -109,8 +110,12 @@ async function initializeP1Companion() {
     // BE Handlers
     registerHandlers(allHandlers)
 
-    // sync wowaudit and discord droptimizers
-    await Promise.all([checkWowAuditUpdates(), syncDroptimizersFromDiscord(12)])
+    // sync wowaudit, raiderio, discord droptimizers
+    await Promise.all([
+        checkWowAuditUpdates(),
+        checkRaiderioUpdates(),
+        syncDroptimizersFromDiscord(12)
+    ])
 }
 
 // This method will be called when Electron has finished
