@@ -752,12 +752,12 @@ export const getAllLootsByItemId = async (
     }
 
     return uniqueGear.sort((a, b) => compareGearItem(b, a))
-
 }
 
 export const parseItemLevel = (
     charDroptimizers: Droptimizer[],
-    charWowAudit: CharacterWowAudit | null
+    charWowAudit: CharacterWowAudit | null,
+    charRaiderio: CharacterRaiderio | null
 ): string => {
     const lastDroptWithTierInfo = charDroptimizers
         .filter(c => c.itemsEquipped.length > 0)
@@ -766,22 +766,34 @@ export const parseItemLevel = (
 
     const droptDate: number | null = lastDroptWithTierInfo?.simInfo.date ?? null
     const wowAuditDate: number | null = charWowAudit?.blizzardLastModifiedUnixTs ?? null
+    const raiderioDate: number | null = charRaiderio?.itemUpdateAt ?? null
 
-    const itemToCalc: GearItem[] | null = lastDroptWithTierInfo?.itemsEquipped ?? []
+    // Find the most recent data source
+    const mostRecentDate = Math.max(droptDate ?? -1, wowAuditDate ?? -1, raiderioDate ?? -1)
 
-    if (!droptDate && wowAuditDate) {
-        return charWowAudit?.averageIlvl ?? '?'
-    } else if (droptDate && wowAuditDate && wowAuditDate > droptDate) {
-        return charWowAudit?.averageIlvl ?? '?'
-    }
-
-    if (!itemToCalc || itemToCalc.length === 0) {
+    // If no data sources are available, return unknown
+    if (mostRecentDate === -1) {
         return '?'
     }
 
-    const sumIlvl = itemToCalc.reduce((sum, item) => sum + item.itemLevel, 0)
-    const averageIlvl = sumIlvl / itemToCalc.length
-    return averageIlvl.toFixed(2)
+    // Use the most recent data source
+    if (raiderioDate === mostRecentDate && charRaiderio) {
+        return charRaiderio.averageItemLevel
+    } else if (wowAuditDate === mostRecentDate && charWowAudit) {
+        return charWowAudit.averageIlvl ?? '?'
+    } else if (droptDate === mostRecentDate) {
+        const itemToCalc: GearItem[] = lastDroptWithTierInfo?.itemsEquipped ?? []
+
+        if (!itemToCalc || itemToCalc.length === 0) {
+            return '?'
+        }
+
+        const sumIlvl = itemToCalc.reduce((sum, item) => sum + item.itemLevel, 0)
+        const averageIlvl = sumIlvl / itemToCalc.length
+        return averageIlvl.toFixed(2)
+    }
+
+    return '?'
 }
 
 export const getLatestSyncDate = (

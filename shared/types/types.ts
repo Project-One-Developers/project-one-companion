@@ -171,6 +171,7 @@ export type CharacterSummary = {
     currencies: DroptimizerCurrencies[]
     warnDroptimizer: DroptimizerWarn
     warnWowAudit: WowAuditWarn
+    warnRaiderio: RaiderioWarn
 }
 
 export type TierSetBonus = z.infer<typeof tierSetBonusSchema>
