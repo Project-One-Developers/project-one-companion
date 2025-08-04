@@ -6,12 +6,13 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { WOW_CLASS_WITH_SPECS } from '@shared/libs/spec-parser/spec-utils.schemas'
 import { CharacterWithGears, Item } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Loader2, StickyNote, Users } from 'lucide-react'
-import { useEffect, useState, type JSX } from 'react'
+import { ExternalLink, Loader2, Search, StickyNote, Users } from 'lucide-react'
+import { useEffect, useState, useMemo, type JSX } from 'react'
 import { fetchCharactersWithItem, fetchItemNote, updateItemNote } from '../lib/tanstack-query/items'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
+import { Input } from './ui/input'
 import { Textarea } from './ui/text-area'
 import { WowCharacterIcon } from './ui/wowcharacter-icon'
 import { WowClassIcon } from './ui/wowclass-icon'
@@ -30,10 +31,10 @@ type ItemManagementDiaogProps = {
 }
 
 export default function ItemManagementDialog({
-    isOpen,
-    setOpen,
-    itemAndSpecs
-}: ItemManagementDiaogProps): JSX.Element {
+                                                 isOpen,
+                                                 setOpen,
+                                                 itemAndSpecs
+                                             }: ItemManagementDiaogProps): JSX.Element {
     const [selectedSpecs, setSelectedSpecs] = useState<number[]>([])
     const [itemNote, setItemNote] = useState<string>('')
     const [activeTab, setActiveTab] = useState<string>('bis-specs')
@@ -121,16 +122,35 @@ export default function ItemManagementDialog({
         })
     }
 
+    const openWowheadLink = () => {
+        if (!itemAndSpecs) return
+        const wowheadUrl = `https://www.wowhead.com/item=${itemAndSpecs.item.id}`
+        window.open(wowheadUrl, '_blank')
+    }
+
     if (!itemAndSpecs) return <p>No Item selected</p>
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[800px] max-h-[80vh]">
+            <DialogContent className="sm:max-w-[900px] max-h-[80vh]">
                 <DialogHeader>
-                    <DialogTitle>Item Management - {itemAndSpecs.item.name}</DialogTitle>
-                    <DialogDescription>
-                        Manage BiS specs, view character inventory, and add notes for this item
-                    </DialogDescription>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <DialogTitle>Item Management - {itemAndSpecs.item.name}</DialogTitle>
+                            <DialogDescription>
+                                Manage BiS specs, view character inventory, and add notes for this item
+                            </DialogDescription>
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={openWowheadLink}
+                            className="flex items-center gap-2"
+                        >
+                            <ExternalLink size={16} />
+                            Wowhead
+                        </Button>
+                    </div>
                 </DialogHeader>
 
                 <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -166,8 +186,8 @@ export default function ItemManagementDialog({
                                     itemAndSpecs.item.specIds &&
                                     itemAndSpecs.item.specIds.length > 0
                                         ? classWithSpecs.specs.filter(spec =>
-                                              itemAndSpecs.item.specIds!.includes(spec.id)
-                                          )
+                                            itemAndSpecs.item.specIds!.includes(spec.id)
+                                        )
                                         : classWithSpecs.specs
 
                                 // Only render the class if it has specs to show
@@ -268,11 +288,38 @@ export default function ItemManagementDialog({
 
 // Lazy component for Character Inventory
 function CharacterInventoryContent({ itemId }: { itemId: number }) {
+    const [searchFilter, setSearchFilter] = useState('')
+
     const characterInventoryQuery = useQuery({
         queryKey: [queryKeys.characterInventory, itemId],
         queryFn: () => fetchCharactersWithItem(itemId),
         enabled: !!itemId
     })
+
+    const filteredCharacters = useMemo(() => {
+        if (!characterInventoryQuery.data) return { withItem: [], withoutItem: [] }
+
+        const charactersWithGears: CharacterWithGears[] = characterInventoryQuery.data
+
+        // Apply search filter
+        const filterByName = (char: CharacterWithGears) =>
+            char.name.toLowerCase().includes(searchFilter.toLowerCase())
+
+        // Split characters into two groups
+        const charactersWithMatchingItem = charactersWithGears
+            .filter(char => char.gears && char.gears.some(gear => gear.item.id === itemId))
+            .filter(filterByName)
+
+        const charactersWithoutMatchingItem = charactersWithGears
+            .filter(char => !char.gears || !char.gears.some(gear => gear.item.id === itemId))
+            .filter(filterByName)
+            .sort((a, b) => Number(b.main) - Number(a.main))
+
+        return {
+            withItem: charactersWithMatchingItem,
+            withoutItem: charactersWithoutMatchingItem
+        }
+    }, [characterInventoryQuery.data, itemId, searchFilter])
 
     if (characterInventoryQuery.isLoading) {
         return (
@@ -291,8 +338,7 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
         )
     }
 
-    const charactersWithGears: CharacterWithGears[] | undefined = characterInventoryQuery.data
-    if (!charactersWithGears) {
+    if (!characterInventoryQuery.data) {
         return (
             <div className="flex items-center justify-center h-[200px]">
                 No inventory data available
@@ -300,66 +346,69 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
         )
     }
 
-    // Split characters into two groups
-    const charactersWithMatchingItem = charactersWithGears.filter(
-        char => char.gears && char.gears.some(gear => gear.item.id === itemId)
-    )
-
-    const charactersWithoutMatchingItem = charactersWithGears.filter(
-        char => !char.gears || !char.gears.some(gear => gear.item.id === itemId)
-    )
-
     return (
-        <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
-            {/* Characters WITH the item */}
-            <div className="flex flex-col gap-3">
-                <h3 className="text-lg font-semibold text-green-400">
-                    Characters with this item ({charactersWithMatchingItem.length})
-                </h3>
-                {charactersWithMatchingItem.length === 0 ? (
-                    <p className="text-muted-foreground">No characters currently have this item.</p>
-                ) : (
-                    charactersWithMatchingItem.map(character => {
-                        // Get all gears that match the item ID
-                        const matchingGears =
-                            character.gears?.filter(gear => gear.item.id === itemId) || []
+        <div className="flex flex-col gap-4 max-h-[450px] overflow-y-auto ">
+            {/* Search Bar */}
+            <div className="sticky top-0 bg-background z-10 pb-2 border-b">
+                <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                        placeholder="Search characters by name..."
+                        value={searchFilter}
+                        onChange={e => setSearchFilter(e.target.value)}
+                        className="pl-10"
+                    />
+                </div>
+            </div>
 
-                        return (
-                            <div
-                                key={character.id}
-                                className="flex flex-col gap-2 p-3 bg-green-900/20 rounded-lg"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div>
-                                        <WowClassIcon
-                                            wowClassName={character.class}
-                                            className="h-8 w-8 border-2 border-background rounded-lg"
+            {/* Characters WITH the item - Compact Grid Layout */}
+            <div className="flex flex-col gap-3 mr-3">
+                <h3 className="text-lg font-semibold text-green-400">
+                    Characters with this item ({filteredCharacters.withItem.length})
+                </h3>
+                {filteredCharacters.withItem.length === 0 ? (
+                    <p className="text-muted-foreground">
+                        {searchFilter ? 'No matching characters have this item.' : 'No characters currently have this item.'}
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                        {filteredCharacters.withItem.map(character => {
+                            // Get all gears that match the item ID
+                            const matchingGears =
+                                character.gears?.filter(gear => gear.item.id === itemId) || []
+
+                            return (
+                                <div
+                                    key={character.id}
+                                    className="flex items-center gap-3 p-2 bg-green-900/20 rounded-lg hover:bg-green-900/30 transition-colors"
+                                >
+                                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                                        <WowCharacterIcon
+                                            character={character}
+                                            showName={false}
+                                            showRoleBadges={true}
                                         />
-                                        <div className="text-xs">{character.name}</div>
+                                        <span className="text-sm font-medium truncate">{character.name}</span>
                                     </div>
-                                    <div className="flex">
+                                    <div className="flex gap-1 flex-shrink-0">
                                         {matchingGears.map((gear, index) => (
                                             <div
                                                 key={index}
-                                                className="flex text-xs text-muted-foreground bg-muted/50 p-2 rounded"
+                                                className="relative"
+                                                title={`${gear.item.name} - ${gear.source || 'Unknown source'}`}
                                             >
                                                 <WowGearIcon
                                                     gearItem={gear}
                                                     showTierBanner={true}
                                                     showItemTrackDiff={true}
                                                 />
-                                                {/* {gear.source && (
-                                                    <div className="text-xs opacity-75 capitalize">
-                                                        {gear.source}
-                                                    </div>
-                                                )} */}
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    })
+                            )
+                        })}
+                    </div>
                 )}
             </div>
 
@@ -369,17 +418,14 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
             {/* Characters WITHOUT the item */}
             <div className="flex flex-col gap-3">
                 <h3 className="text-lg font-semibold text-muted-foreground">
-                    Characters without this item ({charactersWithoutMatchingItem.length})
+                    Characters without this item ({filteredCharacters.withoutItem.length})
                 </h3>
-                <div className="flex flex-wrap gap-x-5 gap-y-5">
-                    {' '}
-                    {charactersWithoutMatchingItem
-                        .sort((a, b) => Number(b.main) - Number(a.main))
-                        .map(character => (
-                            <div key={character.id} className="flex gap-2">
-                                <WowCharacterIcon key={character.id} character={character} />
-                            </div>
-                        ))}
+                <div className="flex flex-wrap gap-3">
+                    {filteredCharacters.withoutItem.map(character => (
+                        <div key={character.id} className="flex-shrink-0">
+                            <WowCharacterIcon character={character} />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
