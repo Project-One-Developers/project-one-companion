@@ -18,6 +18,7 @@ import { WowCharacterIcon } from './ui/wowcharacter-icon'
 import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
+import { Checkbox } from './ui/checkbox'
 
 type ItemWithBisSpecs = {
     item: Item
@@ -289,6 +290,7 @@ export default function ItemManagementDialog({
 // Lazy component for Character Inventory
 function CharacterInventoryContent({ itemId }: { itemId: number }) {
     const [searchFilter, setSearchFilter] = useState('')
+    const [includeAlts, setIncludeAlts] = useState(false)
 
     const characterInventoryQuery = useQuery({
         queryKey: [queryKeys.characterInventory, itemId],
@@ -301,25 +303,28 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
 
         const charactersWithGears: CharacterWithGears[] = characterInventoryQuery.data
 
-        // Apply search filter
-        const filterByName = (char: CharacterWithGears) =>
-            char.name.toLowerCase().includes(searchFilter.toLowerCase())
+        // Apply search filter and main/alt filter
+        const filterByNameAndMain = (char: CharacterWithGears) => {
+            const matchesName = char.name.toLowerCase().includes(searchFilter.toLowerCase())
+            const matchesMainFilter = includeAlts ? true : char.main
+            return matchesName && matchesMainFilter
+        }
 
         // Split characters into two groups
         const charactersWithMatchingItem = charactersWithGears
             .filter(char => char.gears && char.gears.some(gear => gear.item.id === itemId))
-            .filter(filterByName)
+            .filter(filterByNameAndMain)
 
         const charactersWithoutMatchingItem = charactersWithGears
             .filter(char => !char.gears || !char.gears.some(gear => gear.item.id === itemId))
-            .filter(filterByName)
+            .filter(filterByNameAndMain)
             .sort((a, b) => Number(b.main) - Number(a.main))
 
         return {
             withItem: charactersWithMatchingItem,
             withoutItem: charactersWithoutMatchingItem
         }
-    }, [characterInventoryQuery.data, itemId, searchFilter])
+    }, [characterInventoryQuery.data, itemId, searchFilter, includeAlts])
 
     if (characterInventoryQuery.isLoading) {
         return (
@@ -347,28 +352,45 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
     }
 
     return (
-        <div className="flex flex-col gap-4 max-h-[450px] overflow-y-auto ">
-            {/* Search Bar */}
+        <div className="flex flex-col gap-4 max-h-[450px] overflow-y-auto">
+            {/* Search Bar with Include Alts Checkbox */}
             <div className="sticky top-0 bg-background z-10 pb-2 border-b">
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                    <Input
-                        placeholder="Search characters by name..."
-                        value={searchFilter}
-                        onChange={e => setSearchFilter(e.target.value)}
-                        className="pl-10"
-                    />
+                <div className="flex gap-3 items-center mr-3">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                        <Input
+                            placeholder="Search characters by name..."
+                            value={searchFilter}
+                            onChange={e => setSearchFilter(e.target.value)}
+                            className="pl-10"
+                        />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            id="include-alts"
+                            checked={includeAlts}
+                            onCheckedChange={(checked) => {
+                                setIncludeAlts(checked === true)
+                            }}
+                        />
+                        <label
+                            htmlFor="include-alts"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Include Alts
+                        </label>
+                    </div>
                 </div>
             </div>
 
             {/* Characters WITH the item - Compact Grid Layout */}
-            <div className="flex flex-col gap-3 mr-3">
+            <div className="flex flex-col gap-3">
                 <h3 className="text-lg font-semibold text-green-400">
                     Characters with this item ({filteredCharacters.withItem.length})
                 </h3>
                 {filteredCharacters.withItem.length === 0 ? (
                     <p className="text-muted-foreground">
-                        {searchFilter ? 'No matching characters have this item.' : 'No characters currently have this item.'}
+                        {searchFilter || !includeAlts ? 'No matching characters have this item.' : 'No characters currently have this item.'}
                     </p>
                 ) : (
                     <div className="grid grid-cols-2 gap-2">
@@ -386,7 +408,6 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                                         <WowCharacterIcon
                                             character={character}
                                             showName={false}
-                                            showRoleBadges={true}
                                         />
                                         <span className="text-sm font-medium truncate">{character.name}</span>
                                     </div>
