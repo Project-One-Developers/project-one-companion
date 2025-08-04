@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
@@ -38,20 +39,25 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
     const nextWeekChest = wowauditData?.greatVault ?? null
 
     return (
-        <>
-            <div className="flex flex-wrap gap-x-4 gap-y-4">
+        <div className="grid grid-cols-12 gap-6">
+            {/* Left Sidebar - Secondary Info */}
+            <div className="col-span-3 space-y-4">
                 <CurrenciesPanel currencies={currencies} />
                 <CurrentGreatVaultPanel droptimizer={droptimizer} />
                 <NextGreatVaultPanel greatVault={nextWeekChest} />
             </div>
-            <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
-                <GearInfo
-                    wowAudit={wowauditData}
-                    droptimizer={droptimizer}
-                    raiderio={raiderioData}
-                />
+
+            {/* Main Content - Character Gear */}
+            <div className="col-span-9">
+                <div className="bg-muted rounded-lg relative">
+                    <GearInfo
+                        wowAudit={wowauditData}
+                        droptimizer={droptimizer}
+                        raiderio={raiderioData}
+                    />
+                </div>
             </div>
-        </>
+        </div>
     )
 }
 
@@ -65,43 +71,26 @@ type CurrenciesPanelProps = {
 
 export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     return (
-        <div className="flex flex-col p-6 bg-muted rounded-lg relative w-[310px]">
-            {/* Character Info Panel */}
-            {/* <div className="rounded-lg mb-4">
-                <div className="grid grid-cols-2 gap-2">
-                    <div>
-                        <p>
-                            <strong>Mythic Dungeons This Week:</strong>{' '}
-                            {wowAudit.weekMythicDungeons || 0}
-                        </p>
-                        <p>
-                            <strong>Empty Sockets:</strong> {wowAudit.emptySockets || 'N/A'}
-                        </p>
-                    </div>
-                </div>
-            </div> */}
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-                <p className="text-lg font-semibold">Currencies</p>
-                {/* <img
-                    src={weeklyChestIcon}
-                    alt="Weekly Chest Icon"
-                    className="h-16 w-16 object-contain"
-                /> */}
+        <div className="flex flex-col p-4 bg-muted rounded-lg relative">
+            <div className="flex justify-between items-center mb-3">
+                <p className="text-sm font-semibold">Currencies</p>
             </div>
-            {/* Chest Items */}
-            <div className="flex flex-row items-center justify-between space-x-4">
-                {!currencies ? <div>No currency info found</div> : null}
-                {currencies &&
+            <div className="space-y-3">
+                {!currencies ? (
+                    <div className="text-xs text-muted-foreground">No currency info found</div>
+                ) : (
                     currencies
                         .sort((a, b) => a.id - b.id)
                         .map(currency => (
-                            <WowCurrencyIcon
-                                key={currency.id}
-                                currency={currency}
-                                iconClassName="object-cover object-top rounded-lg h-7 w-7 border border-background"
-                            />
-                        ))}
+                            <div key={currency.id} className="flex items-center gap-2">
+                                <WowCurrencyIcon
+                                    currency={currency}
+                                    iconClassName="object-cover object-top rounded-lg h-6 w-6 border border-background"
+                                />
+                                <span className="text-sm font-medium">{currency.amount.toLocaleString()}</span>
+                            </div>
+                        ))
+                )}
             </div>
         </div>
     )
@@ -121,9 +110,9 @@ const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
         }
     }
     return (
-        <div className="p-4 rounded-lg w-full relative bg-background shadow-lg">
+        <div className="p-6 rounded-lg w-full relative bg-background shadow-lg">
             <Tabs defaultValue={wowAuditNewer ? 'wowaudit' : 'droptimizer'} className="w-full">
-                <TabsList className="flex justify-start space-x-4 border-b pb-2">
+                <TabsList className="flex justify-start space-x-4 border-b pb-2 mb-6">
                     <TabsTrigger
                         value="wowaudit"
                         className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"

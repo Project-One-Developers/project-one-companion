@@ -1,3 +1,4 @@
+
 import { cn } from '@renderer/lib/utils'
 import {
     gearhasSocket,
@@ -14,6 +15,7 @@ type WowGearIconProps = {
     showTierBanner?: boolean
     showItemTrackDiff?: boolean
     showExtendedInfo?: boolean
+    flipExtendedInfo?: boolean
     convertItemTrackToRaidDiff?: boolean
     showSlot?: boolean
     showArmorType?: boolean
@@ -23,17 +25,18 @@ type WowGearIconProps = {
 }
 
 export const WowGearIcon = ({
-    gearItem,
-    showTierBanner = false,
-    showItemTrackDiff = true,
-    showExtendedInfo = false,
-    convertItemTrackToRaidDiff = true,
-    showSlot = false,
-    showArmorType = false,
-    showRoleIcons = false,
-    className,
-    iconClassName
-}: WowGearIconProps) => {
+                                gearItem,
+                                showTierBanner = false,
+                                showItemTrackDiff = true,
+                                showExtendedInfo = false,
+                                flipExtendedInfo = false,
+                                convertItemTrackToRaidDiff = true,
+                                showSlot = false,
+                                showArmorType = false,
+                                showRoleIcons = false,
+                                className,
+                                iconClassName
+                            }: WowGearIconProps) => {
     const { item, itemLevel, bonusIds, enchantIds, gemIds, itemTrack } = gearItem
     const { id, iconName, tierset, token, name, slotKey, armorType, specIds } = item
 
@@ -77,6 +80,24 @@ export const WowGearIcon = ({
     return (
         <a href={hrefString} rel="noreferrer" target="_blank">
             <div className={cn('flex flex-row items-center', className)}>
+                {showExtendedInfo && flipExtendedInfo && (
+                    <div id="item-info" className="flex flex-col mr-3">
+                        <p className="font-black text-xs text-right">{name}</p>
+                        <div className="flex justify-end">
+                            <p className="flex text-bold text-[11px]">
+                                {itemLevel} {getItemTrackAbbr()}
+                            </p>
+                            {showArmorType && (armorType || token) && (
+                                <p className="text-xs ml-1">
+                                    {' • '} {token ? 'Token' : armorType}
+                                </p>
+                            )}
+                            {showSlot && (
+                                <p className="text-xs ml-1">{formatWowSlotKey(slotKey)}</p>
+                            )}
+                        </div>
+                    </div>
+                )}
                 <div className="flex flex-col items-center">
                     <div className="relative inline-block">
                         <img
@@ -136,7 +157,7 @@ export const WowGearIcon = ({
                         </p>
                     )}
                 </div>
-                {showExtendedInfo && (
+                {showExtendedInfo && !flipExtendedInfo && (
                     <div id="item-info" className="flex flex-col ml-3">
                         <p className="font-black text-xs">{name}</p>
                         <div className="flex">
