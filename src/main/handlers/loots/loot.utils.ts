@@ -17,6 +17,7 @@ import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { getItemBonusString, parseItemString } from '@shared/libs/items/item-string-parser'
 import { getClassSpecsForRole } from '@shared/libs/spec-parser/spec-utils'
 import { newLootSchema } from '@shared/schemas/loot.schema'
+import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { tierSetBonusSchema } from '@shared/schemas/wow.schemas'
 import {
     BisList,
@@ -35,6 +36,7 @@ import {
     LootWithItem,
     NewLoot,
     NewLootManual,
+    RaiderioWarn,
     TierSetBonus,
     WowAuditWarn,
     WowClass,
@@ -495,15 +497,46 @@ export const parseBestItemInSlot = (
     slotKey: WowItemSlotKey,
     charDroptimizers: Droptimizer[],
     charAssignedLoot: Loot[],
-    charWowAudit: CharacterWowAudit | null
+    charWowAudit: CharacterWowAudit | null,
+    charRaiderio: CharacterRaiderio | null
 ): GearItem[] => {
     if (slotKey === 'omni') {
         return [
-            ...parseBestItemInSlot('head', charDroptimizers, charAssignedLoot, charWowAudit),
-            ...parseBestItemInSlot('shoulder', charDroptimizers, charAssignedLoot, charWowAudit),
-            ...parseBestItemInSlot('chest', charDroptimizers, charAssignedLoot, charWowAudit),
-            ...parseBestItemInSlot('hands', charDroptimizers, charAssignedLoot, charWowAudit),
-            ...parseBestItemInSlot('legs', charDroptimizers, charAssignedLoot, charWowAudit)
+            ...parseBestItemInSlot(
+                'head',
+                charDroptimizers,
+                charAssignedLoot,
+                charWowAudit,
+                charRaiderio
+            ),
+            ...parseBestItemInSlot(
+                'shoulder',
+                charDroptimizers,
+                charAssignedLoot,
+                charWowAudit,
+                charRaiderio
+            ),
+            ...parseBestItemInSlot(
+                'chest',
+                charDroptimizers,
+                charAssignedLoot,
+                charWowAudit,
+                charRaiderio
+            ),
+            ...parseBestItemInSlot(
+                'hands',
+                charDroptimizers,
+                charAssignedLoot,
+                charWowAudit,
+                charRaiderio
+            ),
+            ...parseBestItemInSlot(
+                'legs',
+                charDroptimizers,
+                charAssignedLoot,
+                charWowAudit,
+                charRaiderio
+            )
         ]
     }
 
@@ -517,6 +550,12 @@ export const parseBestItemInSlot = (
         const wowAuditItems = charWowAudit.itemsEquipped.filter(bg => bg.item.slotKey === slotKey)
         if (wowAuditItems.length > 0) {
             allItems.push(...wowAuditItems)
+        }
+    }
+    if (charRaiderio) {
+        const raiderioItems = charRaiderio.itemsEquipped.filter(bg => bg.item.slotKey === slotKey)
+        if (raiderioItems.length > 0) {
+            allItems.push(...raiderioItems)
         }
     }
 
@@ -572,6 +611,20 @@ export const parseWowAuditWarn = (wowAuditData: CharacterWowAudit | null): WowAu
     return WowAuditWarn.None
 }
 
+export const parseRaiderioWarn = (raiderioData: CharacterRaiderio | null): RaiderioWarn => {
+    if (!raiderioData) return RaiderioWarn.NotTracked
+
+    const lastSyncUnixTs = raiderioData.p1SyncAt
+    const dayInSeconds = 24 * 60 * 60
+    const currentUnixTs = getUnixTimestamp()
+
+    if (currentUnixTs - lastSyncUnixTs > dayInSeconds) {
+        return RaiderioWarn.Outdated
+    }
+
+    return RaiderioWarn.None
+}
+
 export const parseLootBisSpecForChar = (
     bisList: BisList[],
     itemId: number,
@@ -595,7 +648,8 @@ export const parseLootAlreadyGotIt = async (
     wowClass: WowClass,
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[],
-    charAuditData: CharacterWowAudit | null
+    charAuditData: CharacterWowAudit | null,
+    charRaiderio: CharacterRaiderio | null
 ): Promise<boolean> => {
     if (loot.gearItem.item.slotKey === 'omni') return false
 
@@ -610,7 +664,8 @@ export const parseLootAlreadyGotIt = async (
         ...charAssignedLoots.flatMap(l =>
             l.gearItem.item.id === loot.item.id ? [l.gearItem] : []
         ),
-        ...(charAuditData?.itemsEquipped ?? []).filter(gi => gi.item.id === loot.item.id)
+        ...(charAuditData?.itemsEquipped ?? []).filter(gi => gi.item.id === loot.item.id),
+        ...(charRaiderio?.itemsEquipped ?? []).filter(gi => gi.item.id === loot.item.id)
     ]
 
     if (loot.gearItem.item.token) {
@@ -671,7 +726,8 @@ export const getAllLootsByItemId = async (
     item: Item,
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[],
-    charAuditData: CharacterWowAudit | null
+    charAuditData: CharacterWowAudit | null,
+    charRaiderio: CharacterRaiderio | null
 ): Promise<GearItem[]> => {
     const lastDroptWithTierInfo = charDroptimizers
         .filter(c => c.itemsInBag.length > 0)
@@ -682,12 +738,21 @@ export const getAllLootsByItemId = async (
         ...(lastDroptWithTierInfo?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id),
         ...(lastDroptWithTierInfo?.itemsInBag ?? []).filter(gi => gi.item.id === item.id),
         ...charAssignedLoots.flatMap(l => (l.gearItem.item.id === item.id ? [l.gearItem] : [])),
-        ...(charAuditData?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id)
+        ...(charAuditData?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id),
+        ...(charRaiderio?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id)
     ]
 
-    return availableGear
-        .filter(gear => gear.item.id === item.id)
-        .sort((a, b) => compareGearItem(b, a))
+    // Remove duplicate items using gearAreTheSame function
+    const uniqueGear: GearItem[] = []
+    for (const gear of availableGear) {
+        const isDuplicate = uniqueGear.some(existingGear => gearAreTheSame(gear, existingGear))
+        if (!isDuplicate) {
+            uniqueGear.push(gear)
+        }
+    }
+
+    return uniqueGear.sort((a, b) => compareGearItem(b, a))
+
 }
 
 export const parseItemLevel = (
@@ -721,14 +786,20 @@ export const parseItemLevel = (
 
 export const getLatestSyncDate = (
     charDroptimizers: Droptimizer[],
-    charWowAudit: CharacterWowAudit | null
+    charWowAudit: CharacterWowAudit | null,
+    charRaiderio: CharacterRaiderio | null
 ): number | null => {
     const droptimizerLastUpdate =
         charDroptimizers.length > 0 ? Math.max(...charDroptimizers.map(c => c.simInfo.date)) : null
 
     const wowAuditLastUpdate = charWowAudit?.blizzardLastModifiedUnixTs ?? null
+    const raiderioLastUpdate = charRaiderio?.itemUpdateAt ?? null // Raider.io real item update timestamp
 
-    const latestSyncDate = Math.max(droptimizerLastUpdate ?? -1, wowAuditLastUpdate ?? -1)
+    const latestSyncDate = Math.max(
+        droptimizerLastUpdate ?? -1,
+        wowAuditLastUpdate ?? -1,
+        raiderioLastUpdate ?? -1
+    )
 
     return latestSyncDate === -1 ? null : latestSyncDate
 }
@@ -736,7 +807,8 @@ export const getLatestSyncDate = (
 export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[],
-    charWowAudit: CharacterWowAudit | null
+    charWowAudit: CharacterWowAudit | null,
+    charRaiderio: CharacterRaiderio | null
 ): GearItem[] => {
     const lastDroptWithTierInfo = charDroptimizers
         .filter(c => c.tiersetInfo.length > 0)
@@ -763,6 +835,13 @@ export const parseTiersetInfo = (
     if (charWowAudit) {
         tiersetsInfo.push(
             ...charWowAudit.tiersetInfo.filter(gi => gi.item.season === CURRENT_SEASON)
+        )
+    }
+    if (charRaiderio) {
+        tiersetsInfo.push(
+            ...charRaiderio.itemsEquipped.filter(
+                gi => gi.item.tierset && gi.item.season === CURRENT_SEASON
+            )
         )
     }
 

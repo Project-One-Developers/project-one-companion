@@ -1,4 +1,5 @@
 import { getWowClassFromIdOrName } from '@shared/libs/spec-parser/spec-utils'
+import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import {
     CharacterWithGears,
     CharacterWowAudit,
@@ -25,6 +26,7 @@ import {
     unassignLoot,
     untradeLoot
 } from '@storage/loots/loots.storage'
+import { getAllCharacterRaiderio } from '@storage/players/characters-raiderio.storage'
 import { getAllCharacterWowAudit } from '@storage/players/characters-wowaudit.storage'
 import { getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
@@ -41,6 +43,7 @@ import {
     parseLootBisSpecForChar,
     parseManualLoots,
     parseMrtLoots,
+    parseRaiderioWarn,
     parseRcLoots,
     parseTiersetInfo,
     parseWowAuditWarn
@@ -136,14 +139,15 @@ export const deleteLootHandler = async (lootId: string): Promise<void> => {
  */
 export const getLootAssignmentInfoHandler = async (lootId: string): Promise<LootAssignmentInfo> => {
     // todo: almost any query can be cached until wowaudit/droptimizer insert/reload
-    const [loot, roster, latestDroptimizer, bisList, allAssignedLoots, wowAuditData] =
+    const [loot, roster, latestDroptimizer, bisList, allAssignedLoots, wowAuditData, raiderioData] =
         await Promise.all([
             getLootWithItemById(lootId),
             getCharactersList(),
             getDroptimizerLatestList(),
             getBisList(),
             getLootAssigned(),
-            getAllCharacterWowAudit()
+            getAllCharacterWowAudit(),
+            getAllCharacterRaiderio()
         ])
 
     const filteredRoster = roster.filter(
@@ -168,8 +172,13 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                     wowaudit => wowaudit.name === char.name && wowaudit.realm === char.realm
                 ) ?? null
 
+            const charRaiderio: CharacterRaiderio | null =
+                raiderioData.find(
+                    raiderio => raiderio.name === char.name && raiderio.realm === char.realm
+                ) ?? null
+
             // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
-            const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit)
+            const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit, charRaiderio)
 
             // loot assigned to a given char
             const charAssignedLoots = !lowerBound
@@ -189,23 +198,31 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                     charDroptimizers
                 ),
                 weeklyChest: parseGreatVault(charDroptimizers),
-                tierset: parseTiersetInfo(charDroptimizers, charAssignedLoots, charWowAudit),
+                tierset: parseTiersetInfo(
+                    charDroptimizers,
+                    charAssignedLoots,
+                    charWowAudit,
+                    charRaiderio
+                ),
                 bestItemsInSlot: parseBestItemInSlot(
                     loot.item.slotKey,
                     charDroptimizers,
                     charAssignedLoots,
-                    charWowAudit
+                    charWowAudit,
+                    charRaiderio
                 ),
                 alreadyGotIt: await parseLootAlreadyGotIt(
                     loot,
                     getWowClassFromIdOrName(char.class),
                     charDroptimizers,
                     charAssignedLoots,
-                    charWowAudit
+                    charWowAudit,
+                    charRaiderio
                 ),
                 bisForSpec: parseLootBisSpecForChar(bisList, loot.item.id, char),
                 warnDroptimizer: parseDroptimizerWarn(charDroptimizers, charAssignedLoots),
-                warnWowAudit: parseWowAuditWarn(charWowAudit)
+                warnWowAudit: parseWowAuditWarn(charWowAudit),
+                warnRaiderio: parseRaiderioWarn(charRaiderio)
             }
 
             return {
@@ -224,13 +241,15 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
 export const getCharactersWithLootsByItemIdHandler = async (
     itemId: number
 ): Promise<CharacterWithGears[]> => {
-    const [item, roster, latestDroptimizer, allAssignedLoots, wowAuditData] = await Promise.all([
-        getItem(itemId),
-        getCharactersList(),
-        getDroptimizerLatestList(),
-        getLootAssigned(),
-        getAllCharacterWowAudit()
-    ])
+    const [item, roster, latestDroptimizer, allAssignedLoots, wowAuditData, raiderioData] =
+        await Promise.all([
+            getItem(itemId),
+            getCharactersList(),
+            getDroptimizerLatestList(),
+            getLootAssigned(),
+            getAllCharacterWowAudit(),
+            getAllCharacterRaiderio()
+        ])
 
     if (item == null) {
         throw new Error('Item not found')
@@ -240,9 +259,9 @@ export const getCharactersWithLootsByItemIdHandler = async (
         character => item.classes == null || item.classes.includes(character.class)
     )
 
-    return await Promise.all(
+    const res = await Promise.all(
         filteredRoster.map(async char => {
-            // get latest droptimizers for a given chars
+            // get the latest droptimizers for a given chars
             const charDroptimizers = latestDroptimizer.filter(
                 dropt => dropt.charInfo.name === char.name && dropt.charInfo.server === char.realm
             )
@@ -252,8 +271,13 @@ export const getCharactersWithLootsByItemIdHandler = async (
                     wowaudit => wowaudit.name === char.name && wowaudit.realm === char.realm
                 ) ?? null
 
+            const charRaiderio: CharacterRaiderio | null =
+                raiderioData.find(
+                    raiderio => raiderio.name === char.name && raiderio.realm === char.realm
+                ) ?? null
+
             // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
-            const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit)
+            const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit, charRaiderio)
 
             // loot assigned to a given char
             const charAssignedLoots = !lowerBound
@@ -271,9 +295,12 @@ export const getCharactersWithLootsByItemIdHandler = async (
                     item,
                     charDroptimizers,
                     charAssignedLoots,
-                    charWowAudit
+                    charWowAudit,
+                    charRaiderio
                 )
             }
         })
     )
+
+    return res
 }

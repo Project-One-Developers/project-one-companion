@@ -157,6 +157,12 @@ export enum WowAuditWarn {
     NotTracked = 'not-tracked'
 }
 
+export enum RaiderioWarn {
+    None = 'none',
+    Outdated = 'outdated',
+    NotTracked = 'not-tracked'
+}
+
 export type CharacterSummary = {
     character: Character
     itemLevel: string
@@ -184,6 +190,7 @@ export type CharAssignmentInfo = {
     alreadyGotIt: boolean
     warnDroptimizer: DroptimizerWarn
     warnWowAudit: WowAuditWarn
+    warnRaiderio: RaiderioWarn
     highlights: CharAssignmentHighlights
 }
 export type LootAssignmentInfo = {
