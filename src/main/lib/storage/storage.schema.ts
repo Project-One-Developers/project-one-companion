@@ -107,6 +107,22 @@ export const charWowAuditTable = pgTable(
     t => [primaryKey({ columns: [t.name, t.realm] })]
 )
 
+export const charRaiderioTable = pgTable(
+    'characters_raiderio',
+    {
+        name: varchar('name', { length: 24 }).notNull(),
+        realm: varchar('realm').notNull(),
+        race: varchar('race'),
+        characterId: integer('character_id').notNull(),
+        p1SyncAt: integer('p1_sync_at').notNull(), // 2025-07-29T06:00:12.000Z
+        loggedOutAt: integer('logged_out_at').notNull(), // 2025-07-29T06:00:12.000Z
+        itemUpdateAt: integer('item_update_at').notNull(), // 2025-07-29T06:00:12.000Z
+        averageItemLevel: varchar('average_item_level'), // item_level_equipped
+        itemsEquipped: jsonb('items_equipped').$type<GearItem[]>().notNull()
+    },
+    t => [primaryKey({ columns: [t.name, t.realm] })]
+)
+
 export const bisListTable = pgTable(
     'bis_list',
     {

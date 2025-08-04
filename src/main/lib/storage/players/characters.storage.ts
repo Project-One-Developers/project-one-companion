@@ -2,16 +2,14 @@ import { characterSchema, characterWithPlayerSchema } from '@shared/schemas/char
 import type {
     Character,
     CharacterWithPlayer,
-    CharacterWowAudit,
     EditCharacter,
     NewCharacter
 } from '@shared/types/types'
 import { db } from '@storage/storage.config'
-import { charTable, charWowAuditTable } from '@storage/storage.schema'
+import { charTable } from '@storage/storage.schema'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { newUUID } from '../../utils'
-import { charWowAuditStorageToCharacterWowAudit, NewCharacterWowAudit } from './characters.schemas'
 
 export const getCharacterWithPlayerById = async (
     id: string
@@ -58,37 +56,6 @@ export const addCharacter = async (character: NewCharacter): Promise<string> => 
     })
 
     return id
-}
-
-export const addCharacterWowAudit = async (characters: NewCharacterWowAudit[]): Promise<void> => {
-    await db().insert(charWowAuditTable).values(characters)
-}
-
-export const getLastTimeSyncedWowAudit = async (): Promise<number | null> => {
-    const result = await db().query.charWowAuditTable.findFirst({
-        orderBy: (charWowAuditTable, { desc }) => desc(charWowAuditTable.wowauditLastModifiedUnixTs)
-    })
-    return result ? result.wowauditLastModifiedUnixTs : null
-}
-
-export const getLastCharacterWowAudit = async (
-    charName: string,
-    charRealm: string
-): Promise<CharacterWowAudit | null> => {
-    const result = await db().query.charWowAuditTable.findFirst({
-        where: (charWowAuditTable, { eq, and }) =>
-            and(eq(charWowAuditTable.name, charName), eq(charWowAuditTable.realm, charRealm))
-    })
-    return result ? charWowAuditStorageToCharacterWowAudit.parse(result) : null
-}
-
-export const getAllCharacterWowAudit = async (): Promise<CharacterWowAudit[]> => {
-    const result = await db().query.charWowAuditTable.findMany()
-    return z.array(charWowAuditStorageToCharacterWowAudit).parse(result)
-}
-
-export const deleteAllCharacterWowAudit = async (): Promise<void> => {
-    await db().delete(charWowAuditTable)
 }
 
 export const editCharacter = async (edited: EditCharacter): Promise<void> => {

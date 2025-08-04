@@ -18,17 +18,19 @@ import {
 } from '@storage/droptimizer/droptimizer.storage'
 import { getLootAssigned } from '@storage/loots/loots.storage'
 import {
-    addCharacter,
     addCharacterWowAudit,
     deleteAllCharacterWowAudit,
+    getAllCharacterWowAudit,
+    getLastTimeSyncedWowAudit,
+    getLastWowAuditInfo
+} from '@storage/players/characters-wowaudit.storage'
+import {
+    addCharacter,
     deleteCharacter,
     editCharacter,
-    getAllCharacterWowAudit,
     getCharactersList,
     getCharactersWithPlayerList,
-    getCharacterWithPlayerById,
-    getLastCharacterWowAudit,
-    getLastTimeSyncedWowAudit
+    getCharacterWithPlayerById
 } from '@storage/players/characters.storage'
 import {
     addPlayer,
@@ -157,7 +159,7 @@ export const getCharLatestGameInfoHandler = async (
     charRealm: string
 ): Promise<CharacterGameInfo> => {
     const lastDroptimizer = await getDroptimizerLastByChar(charName, charRealm)
-    const lastWowAudit = await getLastCharacterWowAudit(charName, charRealm)
+    const lastWowAudit = await getLastWowAuditInfo(charName, charRealm)
 
     return {
         droptimizer: lastDroptimizer,
