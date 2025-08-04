@@ -25,7 +25,8 @@ import {
     unassignLoot,
     untradeLoot
 } from '@storage/loots/loots.storage'
-import { getAllCharacterWowAudit, getCharactersList } from '@storage/players/characters.storage'
+import { getAllCharacterWowAudit } from '@storage/players/characters-wowaudit.storage'
+import { getCharactersList } from '@storage/players/characters.storage'
 import { getRaidSession, getRaidSessionRoster } from '@storage/raid-session/raid-session.storage'
 import { getItem } from '../../lib/storage/items/items.storage'
 import {

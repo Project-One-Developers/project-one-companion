@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { electronAPI } from '@electron-toolkit/preload'
-import { CharacterBossProgressionResponse } from '@shared/schemas/raiderio.schemas'
 import type {
     AppSettings,
     BisList,
@@ -33,6 +32,7 @@ import type {
     RaidSessionWithSummary,
     WowRaidDifficulty
 } from '@shared/types/types'
+import { CharacterWithProgression } from '@shared/types/types'
 import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
@@ -131,7 +131,7 @@ export const api = {
         return ipcRenderer.invoke('raid-session-roster-import', raidSessionId, csv)
     },
     // raid progression
-    fetchRosterProgression(filter: number): Promise<CharacterBossProgressionResponse[]> {
+    fetchRosterProgression(filter: number): Promise<CharacterWithProgression[]> {
         return ipcRenderer.invoke('raid-progression-get', filter)
     },
     // Loots

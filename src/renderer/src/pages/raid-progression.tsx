@@ -8,11 +8,8 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterProgression } from '@renderer/lib/tanstack-query/raid'
 import { encounterIcon } from '@renderer/lib/wow-icon'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
-import {
-    CharacterBossProgressionResponse,
-    RaiderioEncounter
-} from '@shared/schemas/raiderio.schemas'
-import { Boss, Character, WowRaidDifficulty } from '@shared/types/types'
+import { RaiderioEncounter } from '@shared/schemas/raiderio.schemas'
+import { Boss, Character, CharacterWithProgression, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Filter, LoaderCircle, X } from 'lucide-react'
@@ -33,14 +30,14 @@ const ROLE_COLORS = {
 } as const
 
 // Types
-type CharacterWithProgress = {
+type CharacterEncounterInfo = {
     character: Character
     encounter: RaiderioEncounter | null
 }
 
 type BossPanelProps = {
     boss: Boss
-    rosterProgression: CharacterBossProgressionResponse[]
+    rosterProgression: CharacterWithProgression[]
     selectedDifficulty: WowRaidDifficulty
     filteredPlayerNames: string[]
 }
@@ -81,27 +78,30 @@ const groupCharactersByRole = <T extends { character: { role: string; class: str
 }
 
 const filterCharactersByBossProgress = (
-    rosterProgression: CharacterBossProgressionResponse[],
+    rosterProgression: CharacterWithProgression[],
     boss: Boss,
     selectedDifficulty: WowRaidDifficulty,
     filteredPlayerNames: string[]
-): CharacterWithProgress[] => {
+): CharacterEncounterInfo[] => {
     return rosterProgression
         .map(characterData => {
-            const { character, characterRaidProgress } = characterData
+            const { p1Character, raiderIo } = characterData
 
             // Filter by player names if search is active
-            if (filteredPlayerNames?.length > 0 && !filteredPlayerNames.includes(character.name)) {
+            if (
+                filteredPlayerNames?.length > 0 &&
+                !filteredPlayerNames.includes(p1Character.name)
+            ) {
                 return null
             }
 
             // Find the current tier raid progress
-            const currentRaidProgress = characterRaidProgress.raidProgress.find(
+            const currentRaidProgress = raiderIo?.progress.raidProgress.find(
                 raidProgress => raidProgress.raid === boss.raiderioRaidSlug
             )
 
             if (!currentRaidProgress) {
-                return { character, encounter: null }
+                return { character: p1Character, encounter: null }
             }
 
             // Get encounters for the selected difficulty
@@ -114,9 +114,9 @@ const filterCharactersByBossProgress = (
                 encounter => encounter.slug === boss.raiderioEncounterSlug
             )
 
-            return { character, encounter: bossDefeated || null }
+            return { character: p1Character, encounter: bossDefeated || null }
         })
-        .filter((item): item is CharacterWithProgress => item !== null)
+        .filter((item): item is CharacterEncounterInfo => item !== null)
 }
 
 // Components
@@ -158,7 +158,7 @@ const CharacterGrid = ({
     showRoleBadges = false,
     hasDefeatedBoss = false
 }: {
-    characters: CharacterWithProgress[]
+    characters: CharacterEncounterInfo[]
     title: string
     color: string
     selectedDifficulty?: WowRaidDifficulty
@@ -238,8 +238,8 @@ const BossPanel = ({
     // Calculate total roster size
     const totalRosterSize = useMemo(() => {
         if (filteredPlayerNames?.length > 0) {
-            return rosterProgression.filter(({ character }) =>
-                filteredPlayerNames.includes(character.name)
+            return rosterProgression.filter(({ p1Character }) =>
+                filteredPlayerNames.includes(p1Character.name)
             ).length
         }
         return rosterProgression.length
@@ -393,7 +393,7 @@ export default function RaidProgressionPage(): JSX.Element {
         if (!debouncedSearchQuery || !rosterProgressionQuery.data) return []
 
         return rosterProgressionQuery.data
-            .map(({ character }) => character.name)
+            .map(({ p1Character }) => p1Character.name)
             .filter(name => name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()))
     }, [rosterProgressionQuery.data, debouncedSearchQuery])
 

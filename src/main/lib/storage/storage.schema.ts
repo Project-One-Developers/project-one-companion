@@ -6,6 +6,7 @@ import {
     RAID_DIFF,
     ROLES
 } from '@shared/consts/wow.consts'
+import { RaiderioProgress } from '@shared/schemas/raiderio.schemas'
 import { CharAssignmentHighlights, GearItem } from '@shared/types/types'
 import { relations } from 'drizzle-orm'
 import {
@@ -103,6 +104,23 @@ export const charWowAuditTable = pgTable(
         bestItemsEquipped: jsonb('best_items_equipped').$type<GearItem[]>().notNull(),
         itemsEquipped: jsonb('items_equipped').$type<GearItem[]>().notNull(),
         tiersetInfo: jsonb('tierset_info').$type<GearItem[]>().notNull()
+    },
+    t => [primaryKey({ columns: [t.name, t.realm] })]
+)
+
+export const charRaiderioTable = pgTable(
+    'characters_raiderio',
+    {
+        name: varchar('name', { length: 24 }).notNull(),
+        realm: varchar('realm').notNull(),
+        race: varchar('race'),
+        characterId: integer('character_id').notNull(),
+        p1SyncAt: integer('p1_sync_at').notNull(), // 2025-07-29T06:00:12.000Z
+        loggedOutAt: integer('logged_out_at').notNull(), // 2025-07-29T06:00:12.000Z
+        itemUpdateAt: integer('item_update_at').notNull(), // 2025-07-29T06:00:12.000Z
+        averageItemLevel: varchar('average_item_level'), // item_level_equipped
+        itemsEquipped: jsonb('items_equipped').$type<GearItem[]>().notNull(),
+        progress: jsonb('progress').$type<RaiderioProgress>().notNull()
     },
     t => [primaryKey({ columns: [t.name, t.realm] })]
 )

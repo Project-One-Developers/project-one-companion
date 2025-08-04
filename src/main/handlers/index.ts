@@ -1,6 +1,8 @@
 import { getBisListHandler, updateItemBisSpecHandler } from './bis-list/bis-list.handlers'
 import { fetchRosterProgressionHandler } from './bosses/bosses-progression.handlers'
 import { getBossesHandler, getRaidLootTableHandler } from './bosses/bosses.handlers'
+import { syncCharacterRaiderio } from './characters/characters-raiderio.handlers'
+import { syncCharacterWowAudit } from './characters/characters-wowaudit.handlers'
 import {
     addCharacterHandler,
     addPlayerHandler,
@@ -12,8 +14,7 @@ import {
     getCharLatestGameInfoHandler,
     getChracterListHandler,
     getPlayerWithCharactersListHandler,
-    getRosterSummaryHandler,
-    syncCharacterWowAudit
+    getRosterSummaryHandler
 } from './characters/characters.handlers'
 import {
     addDroptimizerHandler,
@@ -76,6 +77,7 @@ export const allHandlers = {
     'character-delete': deleteCharacterHandler,
     'character-edit': editCharacterHandler,
     'character-sync-wowaudit': syncCharacterWowAudit,
+    'character-sync-raiderio': syncCharacterRaiderio,
     'character-game-info': getCharLatestGameInfoHandler,
     'character-roster-summary': getRosterSummaryHandler,
     'characters-by-itemid': getCharactersWithLootsByItemIdHandler,

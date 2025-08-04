@@ -1,5 +1,6 @@
 import { bisListSchema } from '@shared/schemas/bis-list.schemas'
 import { bossSchema, bossWithItemsSchema } from '@shared/schemas/boss.schema'
+import { itemNoteSchema } from '@shared/schemas/itemNote.schema'
 import {
     gearItemSchema,
     itemSchema,
@@ -23,12 +24,14 @@ import {
     raidSessionWithSummarySchema
 } from '@shared/schemas/raid.schemas'
 import { appSettingsSchema } from '@shared/schemas/store.schemas'
+import { charWowAuditSchema } from '@shared/schemas/wowaudit.schemas'
 import { z } from 'zod'
 import {
     characterGameInfoSchema,
-    characterSchema, characterWithGears,
+    characterSchema,
+    characterWithGears,
     characterWithPlayerSchema,
-    charWowAuditSchema,
+    characterWithProgressionSchema,
     editCharacterSchema,
     editPlayerSchema,
     newCharacterSchema,
@@ -58,7 +61,6 @@ import {
     wowRolesSchema,
     wowSpecNameSchema
 } from '../schemas/wow.schemas'
-import { itemNoteSchema } from '@shared/schemas/itemNote.schema'
 
 export type WowClassName = z.infer<typeof wowClassNameSchema>
 export type WowSpecName = z.infer<typeof wowSpecNameSchema>
@@ -96,7 +98,7 @@ export type CharacterWithPlayer = z.infer<typeof characterWithPlayerSchema>
 export type NewCharacter = z.infer<typeof newCharacterSchema>
 export type EditCharacter = z.infer<typeof editCharacterSchema>
 export type CharacterWithGears = z.infer<typeof characterWithGears>
-
+export type CharacterWithProgression = z.infer<typeof characterWithProgressionSchema>
 export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
