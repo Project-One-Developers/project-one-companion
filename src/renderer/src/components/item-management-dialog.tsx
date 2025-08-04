@@ -407,6 +407,7 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                                     <div className="flex items-center gap-2 min-w-0 flex-1">
                                         <WowCharacterIcon
                                             character={character}
+                                            showMainIndicator={includeAlts}
                                             showName={false}
                                         />
                                         <span className="text-sm font-medium truncate">{character.name}</span>
