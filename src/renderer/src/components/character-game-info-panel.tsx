@@ -2,12 +2,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
+import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { LoaderCircle } from 'lucide-react'
 import DroptimizerData from './droptimizer-data'
 import { CurrentGreatVaultPanel } from './greatvault-current-panel'
 import { NextGreatVaultPanel } from './greatvault-next-panel'
+import RaiderioData from './raiderio-data'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
 import WowAuditData from './wow-audit-data'
 
@@ -32,6 +34,7 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
     const droptimizer = charGameInfoQuery.data?.droptimizer ?? null
     const currencies = charGameInfoQuery.data?.droptimizer?.currencies ?? null
     const wowauditData = charGameInfoQuery.data?.wowaudit ?? null
+    const raiderioData = charGameInfoQuery.data?.raiderio ?? null
     const nextWeekChest = wowauditData?.greatVault ?? null
 
     return (
@@ -42,7 +45,11 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
                 <NextGreatVaultPanel greatVault={nextWeekChest} />
             </div>
             <div className="flex flex-col justify-between p-6 bg-muted rounded-lg relative">
-                <GearInfo wowAudit={wowauditData} droptimizer={droptimizer} />
+                <GearInfo
+                    wowAudit={wowauditData}
+                    droptimizer={droptimizer}
+                    raiderio={raiderioData}
+                />
             </div>
         </>
     )
@@ -103,9 +110,10 @@ export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
 type GearInfoProps = {
     wowAudit: CharacterWowAudit | null
     droptimizer: Droptimizer | null
+    raiderio: CharacterRaiderio | null
 }
 
-const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
+const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
     let wowAuditNewer = wowAudit != null
     if (droptimizer && wowAudit) {
         if (droptimizer.simInfo.date > wowAudit.wowauditLastModifiedUnixTs) {
@@ -150,14 +158,34 @@ const GearInfo = ({ wowAudit, droptimizer }: GearInfoProps) => {
                                 : 'No droptimizer imported'}
                         </span>
                     </TabsTrigger>
+                    <TabsTrigger
+                        value="raiderio"
+                        className="flex flex-col items-start gap-1 px-4 py-2 hover:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                    >
+                        <div className="flex items-center gap-2">
+                            <img
+                                src="https://assets.rpglogs.com/img/warcraft/raidbots-icon.png"
+                                className="w-6 h-6 rounded-full"
+                            />
+                            <span>RaiderIO</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">
+                            {raiderio
+                                ? formatUnixTimestampForDisplay(raiderio.p1SyncAt)
+                                : 'No raiderio imported'}
+                        </span>
+                    </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="wowaudit">
-                    {wowAudit && <WowAuditData wowAudit={wowAudit} />}
+                    {wowAudit && <WowAuditData data={wowAudit} />}
                 </TabsContent>
 
                 <TabsContent value="droptimizer">
-                    {droptimizer && <DroptimizerData droptimizer={droptimizer} />}
+                    {droptimizer && <DroptimizerData data={droptimizer} />}
+                </TabsContent>
+                <TabsContent value="raiderio">
+                    {raiderio && <RaiderioData data={raiderio} />}
                 </TabsContent>
             </Tabs>
         </div>

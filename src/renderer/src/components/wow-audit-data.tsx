@@ -3,7 +3,7 @@ import { CharacterWowAudit } from '@shared/types/types'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowGearIcon } from './ui/wowgear-icon'
 
-export default function WowAuditData({ wowAudit }: { wowAudit: CharacterWowAudit }) {
+export default function WowAuditData({ data: wowAudit }: { data: CharacterWowAudit }) {
     return (
         <div className="w-full flex flex-col gap-y-4">
             <p className="mt-6 font-bold">Equipped gear</p>

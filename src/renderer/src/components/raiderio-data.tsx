@@ -1,9 +1,9 @@
 import { formatWowEquippedSlotKey } from '@shared/libs/items/item-slot-utils'
-import { Droptimizer } from '@shared/types/types'
+import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { WowGearIcon } from './ui/wowgear-icon'
 
-export default function DroptimizerData({ data: droptimizer }: { data: Droptimizer }) {
+export default function RaiderioData({ data }: { data: CharacterRaiderio }) {
     return (
         <div className="w-full flex flex-col gap-y-4">
             <p className="mt-6 font-bold">Equipped gear</p>
@@ -11,7 +11,7 @@ export default function DroptimizerData({ data: droptimizer }: { data: Droptimiz
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {droptimizer.itemsEquipped.map(gearItem => {
+                            {data.itemsEquipped.map(gearItem => {
                                 return (
                                     <TableHead key={gearItem.item.id}>
                                         {formatWowEquippedSlotKey(gearItem.equippedInSlot!)}
@@ -22,15 +22,12 @@ export default function DroptimizerData({ data: droptimizer }: { data: Droptimiz
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            {droptimizer.itemsEquipped.map(gearItem => {
-                                const tiesetInSlot = droptimizer.tiersetInfo.some(
-                                    t => t.item.slotKey === gearItem.item.slotKey
-                                )
+                            {data.itemsEquipped.map(gearItem => {
                                 return (
                                     <TableCell key={gearItem.item.id}>
                                         <WowGearIcon
                                             gearItem={gearItem}
-                                            showTierBanner={tiesetInSlot}
+                                            showTierBanner={true}
                                             iconClassName="rounded-lg h-10 w-10 border border-background"
                                         />
                                     </TableCell>
