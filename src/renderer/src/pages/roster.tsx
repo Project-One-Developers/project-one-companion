@@ -204,17 +204,16 @@ export default function RosterPage(): JSX.Element {
                 ))}
             </div>
 
-            {/* Bottom Right Add Player Icon */}
-            <div className="fixed bottom-6 right-6">
-                <div
-                    className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
-                    onClick={() => setIsAddDialogOpen(true)}
-                >
-                    <PlusIcon
-                        className={clsx('w-5 h-5 hover:rotate-45 ease-linear transition-transform')}
-                    />
-                </div>
-            </div>
+            {/* Floating Add Player Button */}
+            <button
+                onClick={() => setIsAddDialogOpen(true)}
+                className="fixed bottom-5 right-6 w-14 h-14 rounded-full bg-primary text-background hover:bg-primary/80 shadow-lg transition-all duration-200 flex items-center justify-center z-50"
+                title="Add Player"
+            >
+                <PlusIcon
+                    className={clsx('w-6 h-6 hover:rotate-45 ease-linear transition-transform')}
+                />
+            </button>
 
             {/* Page Dialogs */}
             {selectedPlayer && (
