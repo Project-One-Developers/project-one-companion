@@ -1,12 +1,19 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/react-collapsible'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
 import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle } from 'lucide-react'
+import {
+    LoaderCircle,
+    PanelLeftClose,
+    PanelLeftOpen,
+    ChevronDown,
+    ChevronRight
+} from 'lucide-react'
+import { useState, useMemo } from 'react'
 import DroptimizerData from './droptimizer-data'
 import { CurrentGreatVaultPanel } from './greatvault-current-panel'
 import { NextGreatVaultPanel } from './greatvault-next-panel'
@@ -24,6 +31,29 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
         queryFn: () => getCharacterGameInfo(character.name, character.realm)
     })
 
+    const droptimizer = charGameInfoQuery.data?.droptimizer ?? null
+    const currencies = charGameInfoQuery.data?.droptimizer?.currencies ?? null
+    const wowauditData = charGameInfoQuery.data?.wowaudit ?? null
+    const raiderioData = charGameInfoQuery.data?.raiderio ?? null
+    const nextWeekChest = wowauditData?.greatVault ?? null
+
+    // Memoize sidebar data check to prevent unnecessary re-renders
+    const hasSidebarData = useMemo(() => {
+        const hasCurrencies = Boolean(currencies && currencies.length > 0)
+        const hasCurrentVault = Boolean(
+            droptimizer?.weeklyChest && droptimizer.weeklyChest.length > 0
+        )
+
+        // Check if nextWeekChest has any non-null values
+        const hasNextVault = Boolean(
+            nextWeekChest && Object.values(nextWeekChest).some(slot => slot !== null)
+        )
+
+        return hasCurrencies || hasCurrentVault || hasNextVault
+    }, [currencies, droptimizer?.weeklyChest, nextWeekChest])
+
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(hasSidebarData)
+
     if (charGameInfoQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
@@ -32,23 +62,33 @@ export const CharGameInfoPanel = ({ character }: CharGameInfoPanelProps) => {
         )
     }
 
-    const droptimizer = charGameInfoQuery.data?.droptimizer ?? null
-    const currencies = charGameInfoQuery.data?.droptimizer?.currencies ?? null
-    const wowauditData = charGameInfoQuery.data?.wowaudit ?? null
-    const raiderioData = charGameInfoQuery.data?.raiderio ?? null
-    const nextWeekChest = wowauditData?.greatVault ?? null
-
     return (
-        <div className="grid grid-cols-12 gap-6">
-            {/* Left Sidebar - Secondary Info */}
-            <div className="col-span-3 space-y-4">
-                <CurrenciesPanel currencies={currencies} />
-                <CurrentGreatVaultPanel droptimizer={droptimizer} />
-                <NextGreatVaultPanel greatVault={nextWeekChest} />
-            </div>
+        <div className="flex gap-6">
+            {/* Collapsible Left Sidebar */}
+            <Collapsible open={sidebarOpen} onOpenChange={setSidebarOpen}>
+                <div className="flex items-start gap-2">
+                    {/* Sidebar Toggle Button */}
+                    <CollapsibleTrigger className="sticky top-4 z-10 p-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors">
+                        {sidebarOpen ? (
+                            <PanelLeftClose className="h-4 w-4" />
+                        ) : (
+                            <PanelLeftOpen className="h-4 w-4" />
+                        )}
+                    </CollapsibleTrigger>
+
+                    {/* Sidebar Content */}
+                    <CollapsibleContent className="data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left data-[state=open]:animate-in data-[state=open]:slide-in-from-left">
+                        <div className="w-80 space-y-4">
+                            <CurrenciesPanel currencies={currencies} />
+                            <CurrentGreatVaultPanel droptimizer={droptimizer} />
+                            <NextGreatVaultPanel greatVault={nextWeekChest} />
+                        </div>
+                    </CollapsibleContent>
+                </div>
+            </Collapsible>
 
             {/* Main Content - Character Gear */}
-            <div className="col-span-9">
+            <div className="flex-1 min-w-0">
                 <div className="bg-muted rounded-lg relative">
                     <GearInfo
                         wowAudit={wowauditData}
@@ -70,29 +110,47 @@ type CurrenciesPanelProps = {
 }
 
 export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
+    const hasData = Boolean(currencies && currencies.length > 0)
+    const [isOpen, setIsOpen] = useState<boolean>(hasData)
+
     return (
-        <div className="flex flex-col p-4 bg-muted rounded-lg relative">
-            <div className="flex justify-between items-center mb-3">
-                <p className="text-sm font-semibold">Currencies</p>
-            </div>
-            <div className="space-y-3">
-                {!currencies ? (
-                    <div className="text-xs text-muted-foreground">No currency info found</div>
-                ) : (
-                    currencies
-                        .sort((a, b) => a.id - b.id)
-                        .map(currency => (
-                            <div key={currency.id} className="flex items-center gap-2">
-                                <WowCurrencyIcon
-                                    currency={currency}
-                                    iconClassName="object-cover object-top rounded-lg h-6 w-6 border border-background"
-                                />
-                                <span className="text-sm font-medium">{currency.amount.toLocaleString()}</span>
+        <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+            <div className="flex flex-col p-6 bg-muted rounded-lg relative">
+                <CollapsibleTrigger className="flex justify-between items-center mb-4 w-full text-left hover:opacity-70 transition-opacity">
+                    <p className="text-lg font-semibold">Currencies</p>
+                    {hasData &&
+                        (isOpen ? (
+                            <ChevronDown className="h-4 w-4" />
+                        ) : (
+                            <ChevronRight className="h-4 w-4" />
+                        ))}
+                </CollapsibleTrigger>
+
+                <CollapsibleContent>
+                    <div className="space-y-3">
+                        {!hasData ? (
+                            <div className="text-sm text-muted-foreground">
+                                No currency info found
                             </div>
-                        ))
-                )}
+                        ) : (
+                            currencies!
+                                .sort((a, b) => a.id - b.id)
+                                .map(currency => (
+                                    <div key={currency.id} className="flex items-center gap-2">
+                                        <WowCurrencyIcon
+                                            currency={currency}
+                                            iconClassName="object-cover object-top rounded-lg h-6 w-6 border border-background"
+                                        />
+                                        <span className="text-sm font-medium">
+                                            {currency.amount.toLocaleString()}
+                                        </span>
+                                    </div>
+                                ))
+                        )}
+                    </div>
+                </CollapsibleContent>
             </div>
-        </div>
+        </Collapsible>
     )
 }
 
@@ -198,7 +256,6 @@ const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
                         <WowAuditData data={wowAudit} />
                     </TabsContent>
                 )}
-
             </Tabs>
         </div>
     )
