@@ -129,15 +129,46 @@ export default function RosterPage(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            {/* Search Bar */}
-            <div className="w-full mb-4">
+            {/* Search Bar with External Icons */}
+            <div className="w-full mb-4 flex items-center gap-4">
                 <Input
                     type="text"
                     placeholder="Search players or characters..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md"
+                    className="flex-1 p-3 border border-gray-300 rounded-md"
                 />
+
+                {/* External Site Icons */}
+                <div className="flex items-center gap-2">
+                    {/* Raider.io */}
+                    <a
+                        href="https://raider.io/guilds/eu/pozzo-delleternit%C3%A0/Project%20One"
+                        rel="noreferrer"
+                        target="_blank"
+                        className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
+                    >
+                        <img
+                            src="https://cdn.raiderio.net/images/mstile-150x150.png"
+                            title="ProjectOne Raider.io"
+                            className="hover:scale-125 ease-linear transition-transform"
+                        />
+                    </a>
+
+                    {/* WoW Audit */}
+                    <a
+                        href="https://wowaudit.com/eu/pozzo-delleternit%C3%A0/project-one/main/roster"
+                        rel="noreferrer"
+                        target="_blank"
+                        className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
+                    >
+                        <img
+                            src="https://data.wowaudit.com/img/new-logo-icon.svg"
+                            title="WoW Audit Guild Page"
+                            className="hover:scale-125 ease-linear transition-transform"
+                        />
+                    </a>
+                </div>
             </div>
 
             <div className="flex flex-wrap gap-x-4 gap-y-4">
@@ -173,34 +204,8 @@ export default function RosterPage(): JSX.Element {
                 ))}
             </div>
 
-            {/* Bottom Right Icons */}
-            <div className="fixed bottom-6 right-6 space-y-2">
-                {/* Raider Io */}
-                <a
-                    href="https://raider.io/guilds/eu/pozzo-delleternit%C3%A0/Project%20One"
-                    rel="noreferrer"
-                    target="_blank"
-                    className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
-                >
-                    <img
-                        src="https://cdn.raiderio.net/images/mstile-150x150.png"
-                        title="ProjectOne Raider.io"
-                        className=" hover:scale-125 ease-linear transition-transform "
-                    ></img>
-                </a>
-                {/* Raider Io */}
-                <a
-                    href="https://wowaudit.com/eu/pozzo-delleternit%C3%A0/project-one/main/roster"
-                    rel="noreferrer"
-                    target="_blank"
-                    className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
-                >
-                    <img
-                        src="https://data.wowaudit.com/img/new-logo-icon.svg"
-                        title="WoW Audit Guild Page"
-                        className=" hover:scale-125 ease-linear transition-transform "
-                    ></img>
-                </a>
+            {/* Bottom Right Add Player Icon */}
+            <div className="fixed bottom-6 right-6">
                 <div
                     className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
                     onClick={() => setIsAddDialogOpen(true)}
