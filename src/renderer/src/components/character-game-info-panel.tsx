@@ -183,7 +183,7 @@ const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
     }
 
     return (
-        <div className="p-6 rounded-lg w-full relative bg-background shadow-lg">
+        <div className="rounded-lg w-full relative bg-background shadow-lg">
             <Tabs defaultValue={getDefaultTab()} className="w-full">
                 <TabsList className="flex justify-start space-x-4 border-b pb-2 mb-6">
                     {hasRaiderioData && (

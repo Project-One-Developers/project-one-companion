@@ -38,30 +38,35 @@ export const CharacterPage = () => {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 p-8 relative">
-            {/* Back to Roster */}
-            <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4 hover:bg-gray-800">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back
-            </Button>
-
-            {/* Page Header */}
+            {/* Page Header with integrated back button */}
             <div className="bg-muted rounded-lg p-6 mb-2 shadow-lg flex justify-between items-center">
-                <div>
-                    <div className="flex flex-row space-x-4 ">
-                        <WowClassIcon
-                            wowClassName={character.class}
-                            charname={character.name}
-                            className="h-10 w-10 border-2 border-background rounded-lg"
-                        />
-                        <h1 className="text-3xl font-bold mb-2">{character.name}</h1>
-                    </div>
-                    <div className="flex flex-row mt-2 gap-1">
-                        <WowCharacterLink character={character} site="warcraftlogs" />
-                        <WowCharacterLink character={character} site="raiderio" />
-                        <WowCharacterLink character={character} site="armory" />
+                <div className="flex items-center gap-4">
+                    {/* Back button integrated into header */}
+                    <Button
+                        variant="ghost"
+                        onClick={() => navigate(-1)}
+                        className="hover:bg-gray-800 p-2"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                    <div>
+                        <div className="flex flex-row space-x-4">
+                            <WowClassIcon
+                                wowClassName={character.class}
+                                charname={character.name}
+                                className="h-10 w-10 border-2 border-background rounded-lg"
+                            />
+                            <h1 className="text-3xl font-bold mb-2">{character.name}</h1>
+                        </div>
+                        <div className="flex flex-row mt-2 gap-1">
+                            <WowCharacterLink character={character} site="warcraftlogs" />
+                            <WowCharacterLink character={character} site="raiderio" />
+                            <WowCharacterLink character={character} site="armory" />
+                        </div>
                     </div>
                 </div>
                 <div className="flex space-x-2">
-                    {/* Edit Session */}
+                    {/* Edit and Delete buttons remain the same */}
                     <Button
                         variant="secondary"
                         className="hover:bg-blue-700"
@@ -78,7 +83,6 @@ export const CharacterPage = () => {
                         player={character.player}
                         existingCharacter={character}
                     />
-                    {/* Delete Character */}
                     <Button
                         variant="destructive"
                         className="hover:bg-red-700"
@@ -96,11 +100,7 @@ export const CharacterPage = () => {
                 </div>
             </div>
 
-            {/*  Body */}
-            {/* todo: sostituire con link alla page droptimizer, magari automaticamente filtrata su sto pg */}
-            {/* <LastCharDroptimizers character={character} /> */}
-
-            {/* In game info */}
+            {/* Body content */}
             <CharGameInfoPanel character={character} />
         </div>
     )
