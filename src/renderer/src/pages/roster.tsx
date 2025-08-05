@@ -19,6 +19,12 @@ type PlayerWithCharactersSummary = {
     charsSummary: CharacterSummary[]
 }
 
+type ItemLevelStats = {
+    mean: number
+    standardDeviation: number
+    threshold: number
+}
+
 export default function RosterPage(): JSX.Element {
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -55,6 +61,39 @@ export default function RosterPage(): JSX.Element {
             }, [] as PlayerWithCharactersSummary[]) ?? []
         )
     }, [characterQuery.data])
+
+    // Calculate item level statistics for all characters
+    const itemLevelStats: ItemLevelStats = useMemo(() => {
+        const allCharacters = players.flatMap(player => player.charsSummary)
+        const validItemLevels = allCharacters
+            .map(char => parseInt(char.itemLevel))
+            .filter(level => !isNaN(level) && level > 0)
+
+        if (validItemLevels.length === 0) {
+            return { mean: 0, standardDeviation: 0, threshold: 0 }
+        }
+
+        // Calculate mean
+        const mean = validItemLevels.reduce((sum, level) => sum + level, 0) / validItemLevels.length
+
+        // Calculate standard deviation
+        const variance =
+            validItemLevels.reduce((sum, level) => sum + Math.pow(level - mean, 2), 0) /
+            validItemLevels.length
+        const standardDeviation = Math.sqrt(variance)
+
+        // Define threshold: characters more than 1 standard deviation below mean are considered "low"
+        // You can adjust this multiplier (1.0) to be more or less strict
+        const threshold = mean - 1.0 * standardDeviation
+
+        return { mean, standardDeviation, threshold }
+    }, [players])
+
+    // Function to determine if a character has low item level
+    const isLowItemLevel = (itemLevel: string): boolean => {
+        const level = parseInt(itemLevel)
+        return !isNaN(level) && level < itemLevelStats.threshold
+    }
 
     if (characterQuery.isLoading) {
         return (
@@ -121,7 +160,10 @@ export default function RosterPage(): JSX.Element {
                         <h2 className="font-black text-2xl mb-2">{player.name}</h2>
                         <div className="flex flex-row items-center">
                             {player.charsSummary && (
-                                <CharacterOverviewIcon charsWithSummary={player.charsSummary} />
+                                <CharacterOverviewIcon
+                                    charsWithSummary={player.charsSummary}
+                                    isLowItemLevel={isLowItemLevel}
+                                />
                             )}
                             <div className="ml-5" onClick={() => handleNewCharClick(player)}>
                                 <PlusIcon className="w-5 h-5 cursor-pointer" />
