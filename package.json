@@ -1,6 +1,6 @@
 {
     "name": "project-one-companion",
-    "version": "3.2.1",
+    "version": "3.2.2",
     "description": "Project One guild companion app",
     "main": "./out/main/index.js",
     "author": "Project One Devs",
