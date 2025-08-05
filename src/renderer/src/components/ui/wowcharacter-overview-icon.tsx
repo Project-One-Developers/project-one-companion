@@ -17,24 +17,24 @@ const CharacterTooltip = ({ item }: { item: CharacterSummary }) => (
 )
 
 export const CharacterOverviewIcon = ({
-    items,
+    charsWithSummary,
     className
 }: {
-    items: CharacterSummary[]
+    charsWithSummary: CharacterSummary[]
     className?: string
 }): JSX.Element => {
     const navigate = useNavigate()
 
     return (
         <div className={cn('flex items-center gap-2', className)}>
-            {items
+            {charsWithSummary
                 .sort((a, b) => (b.character.main ? 1 : 0) - (a.character.main ? 1 : 0)) // main char first
                 .map(item => (
                     <div className="-mr-4 relative group" key={item.character.id}>
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div
-                                    className="cursor-pointer"
+                                    className="cursor-pointer flex flex-col items-center"
                                     onClick={() => navigate(`/roster/${item.character.id}`)}
                                 >
                                     <img
@@ -49,6 +49,9 @@ export const CharacterOverviewIcon = ({
                                                 : 'border-background'
                                         )}
                                     />
+                                    <div className="text-xs text-center mt-1 font-medium">
+                                        {Math.round(parseInt(item.itemLevel))}
+                                    </div>
                                 </div>
                             </TooltipTrigger>
                             <TooltipContent className="TooltipContent" sideOffset={5}>

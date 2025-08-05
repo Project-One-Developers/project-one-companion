@@ -118,10 +118,10 @@ export default function RosterPage(): JSX.Element {
                             <X className="h-4 w-4" />
                         </Button>
 
-                        <h2 className="font-black text-2xl">{player.name}</h2>
+                        <h2 className="font-black text-2xl mb-2">{player.name}</h2>
                         <div className="flex flex-row items-center">
                             {player.charsSummary && (
-                                <CharacterOverviewIcon items={player.charsSummary} />
+                                <CharacterOverviewIcon charsWithSummary={player.charsSummary} />
                             )}
                             <div className="ml-5" onClick={() => handleNewCharClick(player)}>
                                 <PlusIcon className="w-5 h-5 cursor-pointer" />
