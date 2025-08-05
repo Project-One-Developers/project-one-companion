@@ -16,8 +16,9 @@ const CharacterTooltip = ({
     isLowItemLevel: boolean
 }) => (
     <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
-        <div className="font-medium text-white">{summary.character.name}</div>
-        <div className="text-gray-300">{summary.character.main ? 'Main' : 'Alt'}</div>
+        <div className="font-medium text-white">
+            {summary.character.name} ({summary.character.main ? 'Main' : 'Alt'})
+        </div>
         <div className="text-gray-400">{summary.character.realm.replaceAll('-', ' ')}</div>
         <div className={cn('font-medium', isLowItemLevel ? 'text-red-400' : 'text-blue-400')}>
             Item Level: {summary.itemLevel}
