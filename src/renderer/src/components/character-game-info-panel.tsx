@@ -117,9 +117,9 @@ const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
 
     // Determine default tab - prioritize the newest data
     const getDefaultTab = () => {
+        if (hasRaiderioData) return 'raiderio'
         if (hasWowAuditData && wowAuditNewer) return 'wowaudit'
         if (hasDroptimizerData) return 'droptimizer'
-        if (hasRaiderioData) return 'raiderio'
         if (hasWowAuditData) return 'wowaudit'
         return 'raiderio' // fallback
     }
