@@ -106,7 +106,7 @@ export default function RosterPage(): JSX.Element {
                     // Player Card
                     <div
                         key={player.id}
-                        className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[300px] rounded-lg relative"
+                        className="flex flex-col justify-between p-6 bg-muted h-[150px] w-[250px] rounded-lg relative"
                     >
                         {/* Top Right Menu */}
                         <Button
