@@ -56,14 +56,14 @@ export const lootWithAssignedSchema = lootSchema.extend({
 
 export const newLootsFromManualInputSchema = z
     .object({
-        raidSessionId: z.string().uuid(),
+        raidSessionId: z.uuid(),
         loots: z.array(newLootManualSchema).min(1)
     })
     .strict()
 
 export const newLootsFromRcSchema = z
     .object({
-        raidSessionId: z.string().uuid(),
+        raidSessionId: z.uuid(),
         csv: z
             .string()
             .min(1)

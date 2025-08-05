@@ -6,12 +6,12 @@ import { wowClassNameSchema, wowRolesSchema } from './wow.schemas'
 import { charWowAuditSchema } from './wowaudit.schemas'
 
 export const playerSchema = z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     name: z.string().min(1)
 })
 
 export const characterSchema = z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     name: z.string().min(1),
     realm: z.string().min(1),
     class: wowClassNameSchema,
