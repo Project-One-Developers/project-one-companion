@@ -1,4 +1,5 @@
 import TiersetInfo from '@renderer/components/tierset-info'
+import { FiltersPanel } from '@renderer/components/filter-panel'
 import { Input } from '@renderer/components/ui/input'
 import {
     Table,
@@ -8,20 +9,36 @@ import {
     TableHeader,
     TableRow
 } from '@renderer/components/ui/table'
-import { WowCharacterLink } from '@renderer/components/ui/wowcharacter-links'
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowCurrencyIcon } from '@renderer/components/ui/wowcurrency-icon'
 import { WowGearIcon } from '@renderer/components/ui/wowgear-icon'
+import { LootFilter } from '@renderer/lib/filters'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterSummary } from '@renderer/lib/tanstack-query/players'
 import { DroptimizerWarn, WowAuditWarn } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { LoaderCircle } from 'lucide-react'
+import { Filter, LoaderCircle, X } from 'lucide-react'
 
 import { useMemo, useState, type JSX } from 'react'
 import { useNavigate } from 'react-router'
+import clsx from 'clsx'
 
 export default function SummaryPage(): JSX.Element {
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
+
+    // Filter state
+    const [filter, setFilter] = useState<LootFilter>({
+        selectedRaidDiff: 'Mythic',
+        onlyUpgrades: false,
+        minUpgrade: 0,
+        showMains: true,
+        showAlts: false,
+        hideIfNoUpgrade: false,
+        selectedSlots: [],
+        selectedArmorTypes: [],
+        selectedWowClassName: []
+    })
+
     const [searchQuery, setSearchQuery] = useState('')
     const navigate = useNavigate()
 
@@ -30,7 +47,16 @@ export default function SummaryPage(): JSX.Element {
         queryFn: fetchRosterSummary
     })
 
-    // Filter players based on the search query
+    const updateFilter = (key: keyof LootFilter, value: any): void => {
+        setFilter(prev => ({ ...prev, [key]: value }))
+    }
+
+    // Computed values
+    const hasActiveFilters = useMemo(() => {
+        return !filter.showMains
+    }, [filter])
+
+    // Filter players based on the search query and main/alt filter
     const filteredPlayers = useMemo(() => {
         if (!characterQuery.data) return []
         return characterQuery.data
@@ -40,10 +66,14 @@ export default function SummaryPage(): JSX.Element {
                     .toLowerCase()
                     .includes(searchQuery.toLowerCase())
 
-                return isMain && playerMatches
+                // Apply main/alt filter
+                const passesMainAltFilter =
+                    (filter.showMains && isMain) || (filter.showAlts && !isMain)
+
+                return playerMatches && passesMainAltFilter
             })
             .sort((a, b) => parseFloat(b.itemLevel) - parseFloat(a.itemLevel)) // sort player by item level
-    }, [characterQuery.data, searchQuery])
+    }, [characterQuery.data, searchQuery, filter.showMains, filter.showAlts])
 
     if (characterQuery.isLoading) {
         return (
@@ -83,20 +113,6 @@ export default function SummaryPage(): JSX.Element {
                             <TableRow key={summary.character.id} className={` hover:bg-gray-700 `}>
                                 <TableCell className="p-1 rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
                                     <div className="flex space-x-10">
-                                        <div className="flex flex-col space-y-2">
-                                            <WowCharacterLink
-                                                character={summary.character}
-                                                site="raiderio"
-                                            />
-                                            <WowCharacterLink
-                                                character={summary.character}
-                                                site="warcraftlogs"
-                                            />
-                                            <WowCharacterLink
-                                                character={summary.character}
-                                                site="armory"
-                                            />
-                                        </div>
                                         <div
                                             className="flex items-center space-x-3 cursor-pointer"
                                             onClick={() =>
@@ -199,6 +215,45 @@ export default function SummaryPage(): JSX.Element {
                     })}
                 </TableBody>
             </Table>
+
+            {/* Floating Filter Button */}
+            <button
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className={clsx(
+                    'fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center z-50',
+                    hasActiveFilters
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+                )}
+                title="Change Difficulty"
+            >
+                {isFilterOpen ? <X size={24} /> : <Filter size={24} />}
+                {hasActiveFilters && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+                )}
+            </button>
+
+            {/* Filter Panel Overlay */}
+            {isFilterOpen && (
+                <>
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                        onClick={() => setIsFilterOpen(false)}
+                    />
+                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-100">
+                        <FiltersPanel
+                            filter={filter}
+                            updateFilter={updateFilter}
+                            showRaidDifficulty={false}
+                            showDroptimizerFilters={false}
+                            showClassFilter={false}
+                            showSlotFilter={false}
+                            showArmorTypeFilter={false}
+                            className="shadow-2xl"
+                        />
+                    </div>
+                </>
+            )}
         </div>
     )
 }
