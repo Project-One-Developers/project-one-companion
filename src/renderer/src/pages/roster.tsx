@@ -1,7 +1,7 @@
 import CharacterDialog from '@renderer/components/character-dialog'
 import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
 import PlayerDialog from '@renderer/components/player-dialog'
-import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
+import { CharacterOverviewIcon } from '@renderer/components/ui/wowcharacter-overview-icon'
 import { Button } from '@renderer/components/ui/button'
 import { Input } from '@renderer/components/ui/input'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -121,9 +121,7 @@ export default function RosterPage(): JSX.Element {
                         <h2 className="font-black text-2xl">{player.name}</h2>
                         <div className="flex flex-row items-center">
                             {player.charsSummary && (
-                                <AnimatedTooltip
-                                    items={[...player.charsSummary.map(cs => cs.character)]}
-                                />
+                                <CharacterOverviewIcon items={player.charsSummary} />
                             )}
                             <div className="ml-5" onClick={() => handleNewCharClick(player)}>
                                 <PlusIcon className="w-5 h-5 cursor-pointer" />
