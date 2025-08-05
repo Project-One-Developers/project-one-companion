@@ -72,25 +72,32 @@ export const RaidSessionPage = () => {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-5 p-8 relative">
-            {/* Back to Raid Sessions */}
-            <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4 hover:bg-gray-800">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back
-            </Button>
-
-            {/* Page Header */}
+            {/* Page Header with integrated back button */}
             <div className="bg-muted rounded-lg p-6 shadow-lg flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-bold mb-2 text-blue-400">{raidSession.name}</h1>
-                    <div className="flex items-center text-gray-400">
-                        <Calendar className="mr-2 h-4 w-4" />
-                        <span>{formaUnixTimestampToItalianDate(raidSession.raidDate)}</span>
-                    </div>
-                    <div className="flex items-center text-gray-400">
-                        <Users className="w-4 h-4 mr-2" />
-                        <span>
-                            {raidSession.roster.length} ({tanks.length}/{healers.length}/
-                            {dps.length})
-                        </span>
+                <div className="flex items-center gap-4">
+                    {/* Back button integrated into header */}
+                    <Button
+                        variant="ghost"
+                        onClick={() => navigate(-1)}
+                        className="hover:bg-gray-800 p-2"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                    <div>
+                        <h1 className="text-3xl font-bold mb-2 text-blue-400">
+                            {raidSession.name}
+                        </h1>
+                        <div className="flex items-center text-gray-400">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            <span>{formaUnixTimestampToItalianDate(raidSession.raidDate)}</span>
+                        </div>
+                        <div className="flex items-center text-gray-400">
+                            <Users className="w-4 h-4 mr-2" />
+                            <span>
+                                {raidSession.roster.length} ({tanks.length}/{healers.length}/
+                                {dps.length})
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className="flex space-x-2">
