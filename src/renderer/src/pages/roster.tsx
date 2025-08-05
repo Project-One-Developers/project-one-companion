@@ -155,6 +155,20 @@ export default function RosterPage(): JSX.Element {
                         />
                     </a>
 
+                    {/* WarcraftLogs */}
+                    <a
+                        href="https://www.warcraftlogs.com/guild/reports-list/633223"
+                        rel="noreferrer"
+                        target="_blank"
+                        className="rounded-full bg-primary text-background hover:bg-primary/80 w-10 h-10 flex items-center justify-center cursor-pointer"
+                    >
+                        <img
+                            src="https://assets.rpglogs.com/img/warcraft/favicon.png?v=4"
+                            title="WoW Progress Guild Page"
+                            className="hover:scale-125 ease-linear transition-transform"
+                        />
+                    </a>
+
                     {/* WoW Audit */}
                     <a
                         href="https://wowaudit.com/eu/pozzo-delleternit%C3%A0/project-one/main/roster"
