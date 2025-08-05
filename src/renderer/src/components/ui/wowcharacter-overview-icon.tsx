@@ -6,21 +6,27 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip
 import { type JSX } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { CharacterSummary } from 'shared/types/types'
+import { WowCharacterLink } from './wowcharacter-links'
 
 const CharacterTooltip = ({
-    item,
+    summary,
     isLowItemLevel
 }: {
-    item: CharacterSummary
+    summary: CharacterSummary
     isLowItemLevel: boolean
 }) => (
     <div className="flex flex-col gap-1 p-2 bg-gray-800 rounded text-xs">
-        <div className="font-medium text-white">{item.character.name}</div>
-        <div className="text-gray-300">{item.character.main ? 'Main' : 'Alt'}</div>
-        <div className="text-gray-400">{item.character.realm.replaceAll('-', ' ')}</div>
+        <div className="font-medium text-white">{summary.character.name}</div>
+        <div className="text-gray-300">{summary.character.main ? 'Main' : 'Alt'}</div>
+        <div className="text-gray-400">{summary.character.realm.replaceAll('-', ' ')}</div>
         <div className={cn('font-medium', isLowItemLevel ? 'text-red-400' : 'text-blue-400')}>
-            Item Level: {item.itemLevel}
+            Item Level: {summary.itemLevel}
             {isLowItemLevel && ' (Below Average)'}
+        </div>
+        <div className="flex flex-row gap-2">
+            <WowCharacterLink character={summary.character} site="raiderio" />
+            <WowCharacterLink character={summary.character} site="warcraftlogs" />
+            <WowCharacterLink character={summary.character} site="armory" />
         </div>
     </div>
 )
@@ -93,7 +99,7 @@ export const CharacterOverviewIcon = ({
                                     </div>
                                 </TooltipTrigger>
                                 <TooltipContent className="TooltipContent" sideOffset={5}>
-                                    <CharacterTooltip item={item} isLowItemLevel={isLow} />
+                                    <CharacterTooltip summary={item} isLowItemLevel={isLow} />
                                 </TooltipContent>
                             </Tooltip>
                         </div>
