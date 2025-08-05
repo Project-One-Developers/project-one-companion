@@ -5,13 +5,19 @@ import { AnimatedTooltip } from '@renderer/components/ui/animated-tooltip'
 import { Button } from '@renderer/components/ui/button'
 import { Input } from '@renderer/components/ui/input'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
-import { Player } from '@shared/types/types'
+import { CharacterSummary, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { LoaderCircle, PlusIcon, X } from 'lucide-react'
 
-import { useState, type JSX } from 'react'
+import { useState, type JSX, useMemo } from 'react'
+import { fetchRosterSummary } from '../lib/tanstack-query/players'
+
+type PlayerWithCharactersSummary = {
+    id: string
+    name: string
+    charsSummary: CharacterSummary[]
+}
 
 export default function RosterPage(): JSX.Element {
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
@@ -21,9 +27,34 @@ export default function RosterPage(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('')
 
     const characterQuery = useQuery({
-        queryKey: [queryKeys.players],
-        queryFn: fetchPlayers
+        queryKey: [queryKeys.charactersSummary],
+        queryFn: fetchRosterSummary
     })
+
+    // Memoize the players construction
+    const players: PlayerWithCharactersSummary[] = useMemo(() => {
+        return (
+            characterQuery.data?.reduce((acc, charSummary) => {
+                const player = charSummary.character.player
+
+                // Find existing player in accumulator
+                const existingPlayer = acc.find(p => p.id === player.id)
+
+                if (existingPlayer) {
+                    // Add character summary to existing player
+                    existingPlayer.charsSummary.push(charSummary)
+                } else {
+                    // Create new player with this character summary
+                    acc.push({
+                        ...player,
+                        charsSummary: [charSummary]
+                    })
+                }
+
+                return acc
+            }, [] as PlayerWithCharactersSummary[]) ?? []
+        )
+    }, [characterQuery.data])
 
     if (characterQuery.isLoading) {
         return (
@@ -33,17 +64,17 @@ export default function RosterPage(): JSX.Element {
         )
     }
 
-    const players = characterQuery.data ?? []
-
     // Filter players based on the search query
     const filteredPlayers = players
         .sort((a, b) => a.name.localeCompare(b.name)) // sort player by name
         .filter(player => {
             const playerMatches =
                 player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                player.characters?.some(character =>
-                    character.name.toLowerCase().includes(searchQuery.toLowerCase())
-                )
+                player.charsSummary
+                    ?.map(cs => cs.character)
+                    .some(character =>
+                        character.name.toLowerCase().includes(searchQuery.toLowerCase())
+                    )
             return playerMatches
         })
 
@@ -89,8 +120,10 @@ export default function RosterPage(): JSX.Element {
 
                         <h2 className="font-black text-2xl">{player.name}</h2>
                         <div className="flex flex-row items-center">
-                            {player.characters && (
-                                <AnimatedTooltip items={[...player.characters]} />
+                            {player.charsSummary && (
+                                <AnimatedTooltip
+                                    items={[...player.charsSummary.map(cs => cs.character)]}
+                                />
                             )}
                             <div className="ml-5" onClick={() => handleNewCharClick(player)}>
                                 <PlusIcon className="w-5 h-5 cursor-pointer" />

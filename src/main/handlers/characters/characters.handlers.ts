@@ -29,7 +29,6 @@ import {
     addCharacter,
     deleteCharacter,
     editCharacter,
-    getCharactersList,
     getCharactersWithPlayerList,
     getCharacterWithPlayerById
 } from '@storage/players/characters.storage'
@@ -118,7 +117,7 @@ export const getCharLatestGameInfoHandler = async (
 export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => {
     const [roster, latestDroptimizer, allAssignedLoots, wowAuditData, raiderioData] =
         await Promise.all([
-            getCharactersList(),
+            getCharactersWithPlayerList(),
             getDroptimizerLatestList(),
             getLootAssigned(),
             getAllCharacterWowAudit(),

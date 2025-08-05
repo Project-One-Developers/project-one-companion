@@ -89,6 +89,7 @@ export type WowTiersetSlot = z.infer<typeof wowItemSlotKeyTiersetSchema>
 
 export type Player = z.infer<typeof playerSchema>
 export type PlayerWithCharacters = z.infer<typeof playerWithCharacterSchema>
+export type PlayerWithCharactersSummary = z.infer<typeof playerWithCharacterSchema>
 export type NewPlayer = z.infer<typeof newPlayerSchema>
 export type EditPlayer = z.infer<typeof editPlayerSchema>
 
@@ -164,7 +165,7 @@ export enum RaiderioWarn {
 }
 
 export type CharacterSummary = {
-    character: Character
+    character: CharacterWithPlayer
     itemLevel: string
     weeklyChest: GearItem[]
     tierset: GearItem[]
