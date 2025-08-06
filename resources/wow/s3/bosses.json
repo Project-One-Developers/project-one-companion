@@ -90,6 +90,16 @@
         "raiderioEncounterSlug":null
     },
     {
+        "id":-82,
+        "name":"Catalyst - Season 3",
+        "order":1,
+        "instanceId":-82,
+        "instanceName":"Catalyst - Season 3",
+        "instanceType":"catalyst",
+        "raiderioRaidSlug":null,
+        "raiderioEncounterSlug":null
+    },
+    {
         "id":-43,
         "name":"Alchemy",
         "order":1,
