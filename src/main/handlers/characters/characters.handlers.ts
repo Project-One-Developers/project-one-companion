@@ -49,12 +49,18 @@ import {
     parseTiersetInfo,
     parseWowAuditWarn
 } from '../loots/loot.utils'
+import { syncCharacterRaiderio } from './characters-raiderio.handlers'
 
 // Characters
 
 export const addCharacterHandler = async (character: NewCharacter): Promise<Character | null> => {
     const id = await addCharacter(character)
-    return await getCharacterWithPlayerById(id)
+    const res = await getCharacterWithPlayerById(id)
+    // trigger raiderio sync
+    if (res) {
+        await syncCharacterRaiderio(res.name, res.realm)
+    }
+    return res
 }
 
 export const getCharacterHandler = async (id: string): Promise<CharacterWithPlayer | null> => {

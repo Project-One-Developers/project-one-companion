@@ -2,15 +2,16 @@ import { formaUnixTimestampToItalianDate, getUnixTimestamp } from '@shared/libs/
 import {
     addCharacterRaiderio,
     deleteAllCharacterRaiderio,
-    getLastTimeSyncedRaiderio
+    getLastTimeSyncedRaiderio,
+    upsertCharacterRaiderio
 } from '@storage/players/characters-raiderio.storage'
 
 import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { getCharactersList } from '@storage/players/characters.storage'
 import { fetchCharacterRaidProgress, parseRaiderioData } from './characters-raiderio.utils'
 
-export const syncCharacterRaiderio = async (): Promise<void> => {
-    console.log('[Raiderio] Start Sync')
+export const syncAllCharactersRaiderio = async (): Promise<void> => {
+    console.log('[Raiderio] Start Full Sync')
 
     const roster = await getCharactersList()
 
@@ -28,7 +29,25 @@ export const syncCharacterRaiderio = async (): Promise<void> => {
     await deleteAllCharacterRaiderio()
     await addCharacterRaiderio(results)
 
-    console.log('[Raiderio] End Sync')
+    console.log('[Raiderio] Full Sync Completed')
+}
+
+export const syncCharacterRaiderio = async (
+    characterName: string,
+    characterRealm: string
+): Promise<void> => {
+    console.log(`[Raiderio] Start Single Character Sync: ${characterName} - ${characterRealm}`)
+
+    const raiderioData = await fetchCharacterRaidProgress(characterName, characterRealm)
+    const result: CharacterRaiderio = await parseRaiderioData(
+        characterName,
+        characterRealm,
+        raiderioData
+    )
+
+    await upsertCharacterRaiderio([result])
+
+    console.log(`[Raiderio] Single Character Sync Completed: ${characterName} - ${characterRealm}`)
 }
 
 export const checkRaiderioUpdates = async (): Promise<void> => {
@@ -42,7 +61,7 @@ export const checkRaiderioUpdates = async (): Promise<void> => {
                 (lastSync != null ? formaUnixTimestampToItalianDate(lastSync) : '') +
                 ') - syncing now'
         )
-        await syncCharacterRaiderio()
+        await syncAllCharactersRaiderio()
     } else {
         console.log(
             'checkRaiderioUpdates: raiderio is up to date (' +
