@@ -1,4 +1,5 @@
 import { saveAs } from 'file-saver'
+import { ReactNode } from 'react'
 
 interface DataItem {
     [key: string]: string | number | boolean | object | null | undefined
@@ -20,7 +21,7 @@ const downloadCSV = (data: DataItem[], filename: string = 'data.csv'): void => {
 }
 
 interface DownloadCSVProps {
-    title: string
+    title: ReactNode
     filename?: string
     data: DataItem[]
 }

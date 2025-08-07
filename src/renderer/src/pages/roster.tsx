@@ -1,6 +1,7 @@
 import CharacterDialog from '@renderer/components/character-dialog'
 import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
 import PlayerDialog from '@renderer/components/player-dialog'
+import DownloadCSV from '@renderer/components/shared/download-as-csv'
 import { CharacterOverviewIcon } from '@renderer/components/ui/wowcharacter-overview-icon'
 import { Button } from '@renderer/components/ui/button'
 import { Input } from '@renderer/components/ui/input'
@@ -8,7 +9,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { CharacterSummary, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { LoaderCircle, PlusIcon, X } from 'lucide-react'
+import { Download, LoaderCircle, PlusIcon, X } from 'lucide-react'
 
 import { useState, type JSX, useMemo } from 'react'
 import { fetchRosterSummary } from '../lib/tanstack-query/players'
@@ -94,6 +95,19 @@ export default function RosterPage(): JSX.Element {
         const level = parseInt(itemLevel)
         return !isNaN(level) && level < itemLevelStats.threshold
     }
+
+    // Prepare CSV data
+    const csvData = useMemo(() => {
+        return players.flatMap(player =>
+            player.charsSummary.map(charSummary => ({
+                'Player Name': player.name,
+                'Character Name': charSummary.character.name,
+                'Character Realm': charSummary.character.realm,
+                'Character Item Level': charSummary.itemLevel,
+                'Raider.io URL': `https://raider.io/characters/eu/${charSummary.character.realm}/${charSummary.character.name}`
+            }))
+        )
+    }, [players])
 
     if (characterQuery.isLoading) {
         return (
@@ -218,16 +232,33 @@ export default function RosterPage(): JSX.Element {
                 ))}
             </div>
 
-            {/* Floating Add Player Button */}
-            <button
-                onClick={() => setIsAddDialogOpen(true)}
-                className="fixed bottom-5 right-6 w-14 h-14 rounded-full bg-primary text-background hover:bg-primary/80 shadow-lg transition-all duration-200 flex items-center justify-center z-50"
-                title="Add Player"
-            >
-                <PlusIcon
-                    className={clsx('w-6 h-6 hover:rotate-45 ease-linear transition-transform')}
+            {/* Floating Buttons */}
+            <div className="fixed bottom-5 right-6 flex flex-col gap-3 z-50">
+                {/* Export CSV Button */}
+                <DownloadCSV
+                    title={
+                        <button
+                            className="w-14 h-14 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-lg transition-all duration-200 flex items-center justify-center"
+                            title="Export Roster as CSV"
+                        >
+                            <Download className="w-6 h-6 hover:scale-110 ease-linear transition-transform" />
+                        </button>
+                    }
+                    data={csvData}
+                    filename="roster.csv"
                 />
-            </button>
+
+                {/* Add Player Button */}
+                <button
+                    onClick={() => setIsAddDialogOpen(true)}
+                    className="w-14 h-14 rounded-full bg-primary text-background hover:bg-primary/80 shadow-lg transition-all duration-200 flex items-center justify-center"
+                    title="Add Player"
+                >
+                    <PlusIcon
+                        className={clsx('w-6 h-6 hover:rotate-45 ease-linear transition-transform')}
+                    />
+                </button>
+            </div>
 
             {/* Page Dialogs */}
             {selectedPlayer && (
