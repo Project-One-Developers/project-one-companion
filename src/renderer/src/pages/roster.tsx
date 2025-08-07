@@ -9,7 +9,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { CharacterSummary, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Download, LoaderCircle, PlusIcon, X } from 'lucide-react'
+import { Download, LoaderCircle, PlusIcon, UserRoundPlus, X } from 'lucide-react'
 
 import { useState, type JSX, useMemo } from 'react'
 import { fetchRosterSummary } from '../lib/tanstack-query/players'
@@ -254,7 +254,7 @@ export default function RosterPage(): JSX.Element {
                     className="w-14 h-14 rounded-full bg-primary text-background hover:bg-primary/80 shadow-lg transition-all duration-200 flex items-center justify-center"
                     title="Add Player"
                 >
-                    <PlusIcon
+                    <UserRoundPlus
                         className={clsx('w-6 h-6 hover:rotate-45 ease-linear transition-transform')}
                     />
                 </button>
