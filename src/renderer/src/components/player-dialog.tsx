@@ -33,7 +33,7 @@ export default function PlayerDialog({
     const addMutation = useMutation({
         mutationFn: addPlayer,
         onSuccess: (_, arg) => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
             form.reset()
             setOpen(false)
             toast({

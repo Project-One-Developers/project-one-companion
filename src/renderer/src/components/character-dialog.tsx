@@ -52,7 +52,7 @@ export default function CharacterDialog({
     const addMutation = useMutation({
         mutationFn: addCharacter,
         onSuccess: (_, arg) => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.players] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
             form.reset()
             setOpen(false)
             toast({
@@ -74,6 +74,7 @@ export default function CharacterDialog({
             queryClient.invalidateQueries({
                 queryKey: [queryKeys.character, arg.id]
             })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
             setOpen(false)
             toast({
                 title: 'Character edited',
