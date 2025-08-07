@@ -19,6 +19,7 @@ import { WowClassIcon } from './ui/wowclass-icon'
 import { WowGearIcon } from './ui/wowgear-icon'
 import { WowSpecIcon } from './ui/wowspec-icon'
 import { Checkbox } from './ui/checkbox'
+import { WowItemIcon } from './ui/wowitem-icon'
 
 type ItemWithBisSpecs = {
     item: Item
@@ -32,10 +33,10 @@ type ItemManagementDiaogProps = {
 }
 
 export default function ItemManagementDialog({
-                                                 isOpen,
-                                                 setOpen,
-                                                 itemAndSpecs
-                                             }: ItemManagementDiaogProps): JSX.Element {
+    isOpen,
+    setOpen,
+    itemAndSpecs
+}: ItemManagementDiaogProps): JSX.Element {
     const [selectedSpecs, setSelectedSpecs] = useState<number[]>([])
     const [itemNote, setItemNote] = useState<string>('')
     const [activeTab, setActiveTab] = useState<string>('bis-specs')
@@ -123,12 +124,6 @@ export default function ItemManagementDialog({
         })
     }
 
-    const openWowheadLink = () => {
-        if (!itemAndSpecs) return
-        const wowheadUrl = `https://www.wowhead.com/item=${itemAndSpecs.item.id}`
-        window.open(wowheadUrl, '_blank')
-    }
-
     if (!itemAndSpecs) return <p>No Item selected</p>
 
     return (
@@ -137,20 +132,15 @@ export default function ItemManagementDialog({
                 <DialogHeader>
                     <div className="flex items-center justify-between">
                         <div>
-                            <DialogTitle>Item Management - {itemAndSpecs.item.name}</DialogTitle>
+                            <DialogTitle className="flex items-center gap-2">
+                                <WowItemIcon item={itemAndSpecs.item} iconOnly={true} />
+                                {itemAndSpecs.item.name}
+                            </DialogTitle>
                             <DialogDescription>
-                                Manage BiS specs, view character inventory, and add notes for this item
+                                Manage BiS specs, view character inventory, and add notes for this
+                                item
                             </DialogDescription>
                         </div>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={openWowheadLink}
-                            className="flex items-center gap-2"
-                        >
-                            <ExternalLink size={16} />
-                            Wowhead
-                        </Button>
                     </div>
                 </DialogHeader>
 
@@ -187,8 +177,8 @@ export default function ItemManagementDialog({
                                     itemAndSpecs.item.specIds &&
                                     itemAndSpecs.item.specIds.length > 0
                                         ? classWithSpecs.specs.filter(spec =>
-                                            itemAndSpecs.item.specIds!.includes(spec.id)
-                                        )
+                                              itemAndSpecs.item.specIds!.includes(spec.id)
+                                          )
                                         : classWithSpecs.specs
 
                                 // Only render the class if it has specs to show
@@ -369,7 +359,7 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                         <Checkbox
                             id="include-alts"
                             checked={includeAlts}
-                            onCheckedChange={(checked) => {
+                            onCheckedChange={checked => {
                                 setIncludeAlts(checked === true)
                             }}
                         />
@@ -390,7 +380,9 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                 </h3>
                 {filteredCharacters.withItem.length === 0 ? (
                     <p className="text-muted-foreground">
-                        {searchFilter || !includeAlts ? 'No matching characters have this item.' : 'No characters currently have this item.'}
+                        {searchFilter || !includeAlts
+                            ? 'No matching characters have this item.'
+                            : 'No characters currently have this item.'}
                     </p>
                 ) : (
                     <div className="grid grid-cols-2 gap-2">
@@ -410,7 +402,9 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                                             showMainIndicator={includeAlts}
                                             showName={false}
                                         />
-                                        <span className="text-sm font-medium truncate">{character.name}</span>
+                                        <span className="text-sm font-medium truncate">
+                                            {character.name}
+                                        </span>
                                     </div>
                                     <div className="flex gap-1 flex-shrink-0">
                                         {matchingGears.map((gear, index) => (
