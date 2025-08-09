@@ -40,7 +40,7 @@ import {
     playerWithCharacterSchema
 } from '../schemas/characters.schemas'
 import {
-    droptimizerCurrenciesSchema,
+    droptimizerCurrencySchema,
     droptimizerSchema,
     droptimizerUpgradeSchema,
     newDroptimizerSchema,
@@ -104,7 +104,7 @@ export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
-export type DroptimizerCurrencies = z.infer<typeof droptimizerCurrenciesSchema>
+export type DroptimizerCurrency = z.infer<typeof droptimizerCurrencySchema>
 
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
@@ -169,7 +169,7 @@ export type CharacterSummary = {
     itemLevel: string
     weeklyChest: GearItem[]
     tierset: GearItem[]
-    currencies: DroptimizerCurrencies[]
+    currencies: DroptimizerCurrency[]
     warnDroptimizer: DroptimizerWarn
     warnWowAudit: WowAuditWarn
     warnRaiderio: RaiderioWarn
@@ -187,6 +187,7 @@ export type CharAssignmentInfo = {
     }[]
     weeklyChest: GearItem[]
     tierset: GearItem[]
+    catalystCharge: number
     bestItemsInSlot: GearItem[]
     bisForSpec: WowSpec[]
     alreadyGotIt: boolean

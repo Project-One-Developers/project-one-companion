@@ -7,6 +7,7 @@ import {
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import { wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import type {
+    DroptimizerCurrency,
     GearItem,
     Item,
     ItemTrack,
@@ -28,6 +29,7 @@ import {
     RaidbotJson,
     raidbotJsonSchema
 } from './droptimizer.schemas'
+import { CURRENT_CATALYST_CHARGE_ID } from '@shared/consts/wow.consts'
 
 export const getDroptimizerFromURL = async (url: string): Promise<NewDroptimizer> => {
     const raidbotsURL = raidbotsURLSchema.parse(url)
@@ -139,6 +141,7 @@ const parseTiersets = async (equipped: GearItem[], bags: GearItem[]): Promise<Ge
     return allItems.filter(item => tiersetItemIds.has(item.item.id))
 }
 
+
 export const convertJsonToDroptimizer = async (
     url: string,
     data: RaidbotJson
@@ -179,6 +182,11 @@ export const convertJsonToDroptimizer = async (
         throw new Error('No items found in bags: ' + url)
     }
 
+    // Merge currencies from rawFormData and parseCatalystFromSimc
+    const upgradeCurrencies = data.simbot.meta.rawFormData.character.upgradeCurrencies ?? []
+    const catalystCurrencies = await parseCatalystFromSimc(data.simbot.meta.rawFormData.text)
+    const mergedCurrencies = [...upgradeCurrencies, ...catalystCurrencies]
+
     return {
         ak: `${raidId},${raidDiff},${charInfo.name},${charInfo.server},${charInfo.spec},${charInfo.class}`,
         url,
@@ -196,7 +204,7 @@ export const convertJsonToDroptimizer = async (
         },
         dateImported: getUnixTimestamp(),
         upgrades: await parseUpgrades(upgrades),
-        currencies: data.simbot.meta.rawFormData.character.upgradeCurrencies ?? [],
+        currencies: mergedCurrencies,
         weeklyChest: await parseGreatVaultFromSimc(data.simbot.meta.rawFormData.text),
         itemsAverageItemLevel:
             data.simbot.meta.rawFormData.character.items.averageItemLevelEquipped ?? null,
@@ -208,7 +216,42 @@ export const convertJsonToDroptimizer = async (
     }
 }
 
-export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]> => {
+const parseCatalystFromSimc = async (simc: string): Promise<DroptimizerCurrency[]> => {
+    const catalystRegex = /# catalyst_currencies=([^\n]+)/
+    const match = simc.match(catalystRegex)
+
+    if (!match) {
+        return []
+    }
+
+    const catalystData = match[1]
+    const currencies: DroptimizerCurrency[] = []
+
+    // Split by '/' to get individual currency entries
+    const currencyEntries = catalystData.split('/')
+
+    for (const entry of currencyEntries) {
+        // Split by ':' to get id and amount
+        const [idStr, amountStr] = entry.split(':')
+
+        if (idStr && amountStr) {
+            const id = parseInt(idStr, 10)
+            const amount = parseInt(amountStr, 10)
+
+            if (!isNaN(id) && !isNaN(amount) && CURRENT_CATALYST_CHARGE_ID === id && amount > 0) { // track only catalyst from active season
+                currencies.push({
+                    type: 'currency', // used to compose wowhead href
+                    id: id,
+                    amount: amount
+                })
+            }
+        }
+    }
+
+    return currencies
+}
+
+const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]> => {
     const rewardSectionRegex =
         /### Weekly Reward Choices\n([\s\S]*?)\n### End of Weekly Reward Choices/
     const match = simc.match(rewardSectionRegex)

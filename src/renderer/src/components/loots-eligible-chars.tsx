@@ -223,7 +223,10 @@ export default function LootsEligibleChars({
                             Other Assignment
                         </TableHead>
                         {showTiersetInfo && (
-                            <TableHead className="text-gray-300 font-semibold">Tierset</TableHead>
+                            <>
+                                <TableHead className="text-gray-300 font-semibold">Tierset</TableHead>
+                                <TableHead className="text-gray-300 font-semibold">Catalyst</TableHead>
+                            </>
                         )}
                         <TableHead className="text-gray-300 font-semibold">Vault</TableHead>
                     </TableRow>
@@ -420,9 +423,14 @@ export default function LootsEligibleChars({
                                 </TableCell>
 
                                 {showTiersetInfo && (
-                                    <TableCell>
-                                        <TiersetInfo tierset={charInfo.tierset} />
-                                    </TableCell>
+                                    <>
+                                        <TableCell>
+                                            <TiersetInfo tierset={charInfo.tierset} />
+                                        </TableCell>
+                                        <TableCell>
+                                            {charInfo.catalystCharge}
+                                        </TableCell>
+                                    </>
                                 )}
                                 <TableCell className="rounded-r-md">
                                     <div className="flex space-x-1">

@@ -23,7 +23,7 @@ export const newDroptimizerUpgradeSchema = droptimizerUpgradeSchema
         itemId: z.number()
     })
 
-export const droptimizerCurrenciesSchema = z.object({
+export const droptimizerCurrencySchema = z.object({
     id: z.number(),
     type: z.string(),
     amount: z.number()
@@ -55,7 +55,7 @@ export const droptimizerSchema = z.object({
     }),
     upgrades: z.array(droptimizerUpgradeSchema),
     weeklyChest: z.array(gearItemSchema),
-    currencies: z.array(droptimizerCurrenciesSchema),
+    currencies: z.array(droptimizerCurrencySchema),
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
     itemsInBag: z.array(gearItemSchema),

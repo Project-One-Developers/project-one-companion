@@ -1,9 +1,9 @@
 import { currencyIcon } from '@renderer/lib/wow-icon'
-import { DroptimizerCurrencies } from '@shared/types/types'
+import { DroptimizerCurrency } from '@shared/types/types'
 import { isCurrencyBlacklisted } from '@shared/libs/currency/currency-utils'
 
 type WowItemIconProps = {
-    currency: DroptimizerCurrencies
+    currency: DroptimizerCurrency
     iconClassName: string
 }
 

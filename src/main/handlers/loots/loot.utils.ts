@@ -1,4 +1,8 @@
-import { CURRENT_SEASON, PROFESSION_TYPES } from '@shared/consts/wow.consts'
+import {
+    CURRENT_CATALYST_CHARGE_ID,
+    CURRENT_SEASON,
+    PROFESSION_TYPES
+} from '@shared/consts/wow.consts'
 import { getUnixTimestamp } from '@shared/libs/date/date-utils'
 import {
     applyAvoidance,
@@ -26,7 +30,7 @@ import {
     CharAssignmentHighlights,
     CharAssignmentInfo,
     Droptimizer,
-    DroptimizerCurrencies,
+    DroptimizerCurrency,
     DroptimizerUpgrade,
     DroptimizerWarn,
     GearItem,
@@ -882,6 +886,19 @@ export const parseTiersetInfo = (
     ]
 }
 
+export const parseCatalystCharge = (charDroptimizers: Droptimizer[]): number => {
+    const lastDroptWithTierInfo = charDroptimizers
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0)
+    if (lastDroptWithTierInfo) {
+        const catalyst = lastDroptWithTierInfo.currencies.find(
+            c => c.id === CURRENT_CATALYST_CHARGE_ID
+        )
+        return catalyst?.amount ?? 0
+    }
+    return 0
+}
+
 export const parseDroptimizersInfo = (
     lootItem: Item,
     raidDiff: WowRaidDifficulty,
@@ -952,7 +969,7 @@ export const parseGreatVault = (droptimizers: Droptimizer[]): GearItem[] =>
         //.filter((c) => c.weeklyChest.length > 0 && isInCurrentWowWeek(c.simInfo.date)) // keep vault of this wow reset
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.weeklyChest ?? []
 
-export const parseCurrencies = (droptimizers: Droptimizer[]): DroptimizerCurrencies[] =>
+export const parseCurrencies = (droptimizers: Droptimizer[]): DroptimizerCurrency[] =>
     droptimizers
         //.filter((c) => c.currencies.length > 0)
         .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.currencies ?? []

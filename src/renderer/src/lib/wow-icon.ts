@@ -140,6 +140,13 @@ export const raidDiffIcon = new Map<WowRaidDifficulty, string>([
 export const currencyIcon = new Map<number, { url: string; name: string }>([
     // TWW SEASON 1
     [
+        3116,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_alchemy_90_reagent_green.jpg',
+            name: 'Essence of Kajamite' // Catalyst Charge
+        }
+    ],
+    [
         2914,
         {
             url: 'https://www.raidbots.com/static/images/icons/56/inv_crestupgrade_xalatath_weathered.png',
@@ -182,6 +189,13 @@ export const currencyIcon = new Map<number, { url: string; name: string }>([
         }
     ],
     // TWW SEASON 2
+    [
+        2813,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_ability_web_beam.jpg',
+            name: 'Harmonized Silk' // Catalyst Charge
+        }
+    ],
     [
         3107,
         {
@@ -232,6 +246,13 @@ export const currencyIcon = new Map<number, { url: string; name: string }>([
         }
     ],
     // TWW SEASON 3
+    [
+        3269,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/trade_enchanting_smalletherealshard.jpg',
+            name: 'Ethereal Voidsplinter' // Catalyst Charge
+        }
+    ],
     [
         231756,
         {

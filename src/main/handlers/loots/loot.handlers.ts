@@ -35,7 +35,7 @@ import {
     evalHighlightsAndScore,
     getAllLootsByItemId,
     getLatestSyncDate,
-    parseBestItemInSlot,
+    parseBestItemInSlot, parseCatalystCharge,
     parseDroptimizersInfo,
     parseDroptimizerWarn,
     parseGreatVault,
@@ -204,6 +204,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                     charWowAudit,
                     charRaiderio
                 ),
+                catalystCharge: parseCatalystCharge(charDroptimizers),
                 bestItemsInSlot: parseBestItemInSlot(
                     loot.item.slotKey,
                     charDroptimizers,

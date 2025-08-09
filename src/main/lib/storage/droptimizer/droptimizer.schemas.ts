@@ -1,6 +1,6 @@
 import { gearItemSchema } from '@shared/schemas/items.schema'
 import {
-    droptimizerCurrenciesSchema,
+    droptimizerCurrencySchema,
     droptimizerUpgradeSchema
 } from '@shared/schemas/simulations.schemas'
 import { wowClassNameSchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
@@ -27,7 +27,7 @@ export const droptimizerStorageSchema = z.object({
     characterTalents: z.string(),
     upgrades: z.array(droptimizerUpgradeSchema),
     weeklyChest: z.array(gearItemSchema),
-    currencies: z.array(droptimizerCurrenciesSchema),
+    currencies: z.array(droptimizerCurrencySchema),
     itemsAverageItemLevel: z.number().nullable(),
     itemsAverageItemLevelEquipped: z.number().nullable(),
     itemsInBag: z.array(gearItemSchema),

@@ -12,6 +12,19 @@ export const CURRENT_RAID_ID = (() => {
     }
 })()
 
+export const CURRENT_CATALYST_CHARGE_ID = (() => {
+    switch (CURRENT_SEASON) {
+        case 1:
+            return 3116 // https://www.wowhead.com/currency=3116/essence-of-kajamite
+        case 2:
+            return 2813 // https://www.wowhead.com/currency=2813/harmonized-silk
+        case 3:
+            return 3269 // https://www.wowhead.com/currency=3269/ethereal-voidsplinter
+        default:
+            return 3269 // fallback to S3
+    }
+})()
+
 export const CLASSES_NAME = [
     'Death Knight',
     'Demon Hunter',
