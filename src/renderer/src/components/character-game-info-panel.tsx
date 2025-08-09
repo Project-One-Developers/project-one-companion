@@ -14,6 +14,7 @@ import { NextGreatVaultPanel } from './greatvault-next-panel'
 import RaiderioData from './raiderio-data'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
 import WowAuditData from './wow-audit-data'
+import { isCurrencyBlacklisted } from '@shared/libs/currency/currency-utils'
 
 type CharGameInfoPanelProps = {
     character: Character
@@ -104,14 +105,16 @@ type CurrenciesPanelProps = {
 }
 
 export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
-    const hasData = Boolean(currencies && currencies.length > 0)
+    // Filter out blacklisted currencies at the data level
+    const filteredCurrencies = currencies?.filter(currency => !isCurrencyBlacklisted(currency.id)) ?? null
+    const hasData = Boolean(filteredCurrencies && filteredCurrencies.length > 0)
 
     return (
-        <div className="flex p-6 bg-muted rounded-lg relative">
+        <div className="flex gap-4 p-6 bg-muted rounded-lg relative">
             {!hasData ? (
                 <div className="text-sm text-muted-foreground">No currency info found</div>
             ) : (
-                currencies!
+                filteredCurrencies!
                     .sort((a, b) => a.id - b.id)
                     .map(currency => (
                         <div key={currency.id} className="flex items-center gap-2">
