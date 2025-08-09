@@ -1,19 +1,13 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/react-collapsible'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
 import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
 import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import {
-    LoaderCircle,
-    PanelLeftClose,
-    PanelLeftOpen,
-    ChevronDown,
-    ChevronRight
-} from 'lucide-react'
-import { useState, useMemo } from 'react'
+import { LoaderCircle, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import DroptimizerData from './droptimizer-data'
 import { CurrentGreatVaultPanel } from './greatvault-current-panel'
 import { NextGreatVaultPanel } from './greatvault-next-panel'
@@ -111,46 +105,24 @@ type CurrenciesPanelProps = {
 
 export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     const hasData = Boolean(currencies && currencies.length > 0)
-    const [isOpen, setIsOpen] = useState<boolean>(hasData)
 
     return (
-        <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-            <div className="flex flex-col p-6 bg-muted rounded-lg relative">
-                <CollapsibleTrigger className="flex justify-between items-center mb-4 w-full text-left hover:opacity-70 transition-opacity">
-                    <p className="text-lg font-semibold">Currencies</p>
-                    {hasData &&
-                        (isOpen ? (
-                            <ChevronDown className="h-4 w-4" />
-                        ) : (
-                            <ChevronRight className="h-4 w-4" />
-                        ))}
-                </CollapsibleTrigger>
-
-                <CollapsibleContent>
-                    <div className="space-y-3">
-                        {!hasData ? (
-                            <div className="text-sm text-muted-foreground">
-                                No currency info found
-                            </div>
-                        ) : (
-                            currencies!
-                                .sort((a, b) => a.id - b.id)
-                                .map(currency => (
-                                    <div key={currency.id} className="flex items-center gap-2">
-                                        <WowCurrencyIcon
-                                            currency={currency}
-                                            iconClassName="object-cover object-top rounded-lg h-6 w-6 border border-background"
-                                        />
-                                        <span className="text-sm font-medium">
-                                            {currency.amount.toLocaleString()}
-                                        </span>
-                                    </div>
-                                ))
-                        )}
-                    </div>
-                </CollapsibleContent>
-            </div>
-        </Collapsible>
+        <div className="flex p-6 bg-muted rounded-lg relative">
+            {!hasData ? (
+                <div className="text-sm text-muted-foreground">No currency info found</div>
+            ) : (
+                currencies!
+                    .sort((a, b) => a.id - b.id)
+                    .map(currency => (
+                        <div key={currency.id} className="flex items-center gap-2">
+                            <WowCurrencyIcon
+                                currency={currency}
+                                iconClassName="object-cover object-top rounded-lg h-6 w-6 border border-background"
+                            />
+                        </div>
+                    ))
+            )}
+        </div>
     )
 }
 

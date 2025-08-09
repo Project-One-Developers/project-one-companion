@@ -138,6 +138,7 @@ export const raidDiffIcon = new Map<WowRaidDifficulty, string>([
 ])
 
 export const currencyIcon = new Map<number, { url: string; name: string }>([
+    // TWW SEASON 1
     [
         2914,
         {
@@ -228,6 +229,28 @@ export const currencyIcon = new Map<number, { url: string; name: string }>([
         {
             url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_xalatath_gilded_enchanted-.jpg',
             name: 'Enchanted Gilded Undermine Crest'
+        }
+    ],
+    // TWW SEASON 3
+    [
+        231756,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_spark_whole_green.jpg',
+            name: 'Spark of Starlight'
+        }
+    ],
+    [
+        3284,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_ethereal_weathered.jpg',
+            name: 'Weathered Ethereal Crest'
+        }
+    ],
+    [
+        3286,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_ethereal_carved.jpg',
+            name: 'Carved Ethereal Crest'
         }
     ]
 ])

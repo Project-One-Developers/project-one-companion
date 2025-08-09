@@ -28,7 +28,17 @@ const blackListed: number[] = [
     224073, // TWW Season 1 Enchanted Gilded Harbinger Crest
     1792, // PVP honor
     210233, // PVP Forged Gladiator's Heraldry
-    210232 // PVP Forged Aspirant's Heraldry
+    210232, // PVP Forged Aspirant's Heraldry
+    230936, // TWW Season 2 Enchanted Runed Undermine Crest
+    230905, // TWW Season 2 Fractured Spark of Fortunes
+    230906, // TWW Season 2 Spark of Fortunes
+    3107, // TWW Season 2 Weathered Undermine Crest
+    3108, // TWW Season 2 Carved Undermine Crest
+    3109, // TWW Season 2 Runed Undermine Crest
+    3110, // TWW Season 2 Gilded Undermine Crest
+    230906, // TWW Season 2 Spark of Fortunes
+    230936, // TWW Season 2 Enchanted Runed Undermine Crest
+    230935 // TWW Season 2 Enchanted Gilded Undermine Crest
 ]
 
 export const WowCurrencyIcon = ({ currency, iconClassName }: WowItemIconProps) => {
