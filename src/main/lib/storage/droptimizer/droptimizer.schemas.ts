@@ -8,7 +8,7 @@ import { Droptimizer } from '@shared/types/types'
 import { z } from 'zod'
 
 export const droptimizerStorageSchema = z.object({
-    url: z.string().url(),
+    url: z.url(),
     ak: z.string(),
     dateImported: z.number(),
     simDate: z.number(),

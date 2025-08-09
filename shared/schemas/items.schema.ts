@@ -33,9 +33,9 @@ export const itemSchema = z.object({
     stats: z.string().nullable(),
     mainStats: z.string().nullable(),
     secondaryStats: z.string().nullable(),
-    wowheadUrl: z.string().url(),
+    wowheadUrl: z.url(),
     iconName: z.string(),
-    iconUrl: z.string().url(),
+    iconUrl: z.url(),
     bossName: z.string(),
     bossId: z.number(),
     sourceId: z.number(), // instance id (eg: raid id, profession id, mplus name)

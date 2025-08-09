@@ -30,7 +30,7 @@ export const droptimizerCurrenciesSchema = z.object({
 })
 
 export const droptimizerSchema = z.object({
-    url: z.string().url(),
+    url: z.url(),
     ak: z.string(),
     dateImported: z.number(),
     simInfo: z.object({
@@ -68,7 +68,6 @@ export const newDroptimizerSchema = droptimizerSchema.omit({ upgrades: true }).e
 })
 
 export const raidbotsURLSchema = z
-    .string()
     .url()
     .refine(url => url.includes('raidbots.com/simbot/report'), {
         message: 'URL must be a raidbots.com report URL'
