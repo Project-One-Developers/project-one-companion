@@ -28,7 +28,7 @@ const TiersetInfo = ({ tierset, className }: TiersetInfoProps) => {
                                         <div className="relative text-yellow-500">
                                             <WowGearIcon
                                                 gearItem={tiersetItem}
-                                                showTierBanner={false}
+                                                showTiersetLine={false}
                                             />
                                             {/* Badge for Items in Bag */}
                                             <div className="absolute -top-1 -right-1 bg-yellow-500 rounded-full w-4 h-4 flex items-center justify-center">
@@ -53,7 +53,7 @@ const TiersetInfo = ({ tierset, className }: TiersetInfoProps) => {
                                     </TooltipContent>
                                 </Tooltip>
                             ) : (
-                                <WowGearIcon gearItem={tiersetItem} showTierBanner={false} />
+                                <WowGearIcon gearItem={tiersetItem} showTiersetLine={false} />
                             )
                         ) : (
                             <div className="w-8 h-8 bg-gray-700 border border-cyan-400/50 rounded-md"></div> // Dummy icon
@@ -74,7 +74,7 @@ const TiersetInfo = ({ tierset, className }: TiersetInfoProps) => {
                                         <div className="relative">
                                             <WowGearIcon
                                                 gearItem={omniItem}
-                                                showTierBanner={false}
+                                                showTiersetLine={false}
                                             />
                                             {/* Badge for Items in Bag */}
                                             <div className="absolute -top-1 -right-1 bg-yellow-500 rounded-full w-4 h-4 flex items-center justify-center">
@@ -99,7 +99,7 @@ const TiersetInfo = ({ tierset, className }: TiersetInfoProps) => {
                                     </TooltipContent>
                                 </Tooltip>
                             ) : (
-                                <WowGearIcon gearItem={omniItem} showTierBanner={false} />
+                                <WowGearIcon gearItem={omniItem} showTiersetLine={false} />
                             )}
                         </div>
                     ))}

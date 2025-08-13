@@ -1,4 +1,3 @@
-
 import { cn } from '@renderer/lib/utils'
 import {
     gearhasSocket,
@@ -12,7 +11,8 @@ import { GearItem } from '@shared/types/types'
 
 type WowGearIconProps = {
     gearItem: GearItem
-    showTierBanner?: boolean
+    showTiersetLine?: boolean
+    showTiersetRibbon?: boolean
     showItemTrackDiff?: boolean
     showExtendedInfo?: boolean
     flipExtendedInfo?: boolean
@@ -26,7 +26,8 @@ type WowGearIconProps = {
 
 export const WowGearIcon = ({
                                 gearItem,
-                                showTierBanner = false,
+                                showTiersetLine = false,
+                                showTiersetRibbon = false,
                                 showItemTrackDiff = true,
                                 showExtendedInfo = false,
                                 flipExtendedInfo = false,
@@ -108,8 +109,15 @@ export const WowGearIcon = ({
                                 iconClassName
                             )}
                         />
-                        {showTierBanner && (tierset || token) && (
+                        {showTiersetLine && (tierset || token) && (
                             <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-red-600"></div>
+                        )}
+                        {showTiersetRibbon && tierset && (
+                            <div className="absolute -top-1 left-0 right-0 h-2 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-400 flex items-center justify-center">
+                                <span className="text-white text-[6px] font-bold tracking-wide drop-shadow-sm">
+                                    TIER
+                                </span>
+                            </div>
                         )}
                         {hasSocket && (
                             <div className="absolute bottom-0 right-0">

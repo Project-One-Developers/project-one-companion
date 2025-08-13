@@ -39,7 +39,7 @@ export default function BaseGearSlot({
                 {equippedItem ? (
                     <WowGearIcon
                         gearItem={equippedItem}
-                        showTierBanner={showTierBanner}
+                        showTiersetLine={showTierBanner}
                         showExtendedInfo={showExtendedInfo}
                         flipExtendedInfo={flipExtendedInfo}
                         iconClassName={iconClassName}

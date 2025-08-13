@@ -35,7 +35,7 @@ export default function DroptimizerData({ data }: { data: Droptimizer }) {
                             <div key={tierItem.item.id} className="flex flex-col items-center gap-2">
                                 <WowGearIcon
                                     gearItem={tierItem}
-                                    showTierBanner={false}
+                                    showTiersetLine={false}
                                     iconClassName="rounded-lg h-12 w-12 border border-orange-500/50 shadow-md"
                                 />
                             </div>

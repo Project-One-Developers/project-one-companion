@@ -101,7 +101,7 @@ export default function LootsTradeHelperDialog({
                                         >
                                             <WowGearIcon
                                                 gearItem={loot.gearItem}
-                                                showTierBanner={true}
+                                                showTiersetLine={true}
                                                 showExtendedInfo={true}
                                                 iconClassName="rounded-lg h-10 w-10 border border-background"
                                             />

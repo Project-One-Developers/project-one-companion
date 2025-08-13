@@ -143,7 +143,7 @@ export default function SummaryPage(): JSX.Element {
                                 <TableCell className="rounded-r-md">
                                     <div className="flex space-x-1">
                                         {summary.weeklyChest.map(gear => (
-                                            <WowGearIcon key={gear.item.id} gearItem={gear} />
+                                            <WowGearIcon key={gear.item.id} gearItem={gear} showTiersetLine={false} showTiersetRibbon={true} />
                                         ))}
                                     </div>
                                 </TableCell>

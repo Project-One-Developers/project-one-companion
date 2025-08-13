@@ -178,7 +178,7 @@ export default function LootsEligibleChars({
                 <WowGearIcon
                     gearItem={selectedLoot.gearItem}
                     showSlot={true}
-                    showTierBanner={true}
+                    showTiersetLine={true}
                     showExtendedInfo={true}
                     showArmorType={true}
                     showRoleIcons={true}
@@ -404,7 +404,7 @@ export default function LootsEligibleChars({
                                                 <WowGearIcon
                                                     key={bestInSlot.item.id}
                                                     gearItem={bestInSlot}
-                                                    showTierBanner={true}
+                                                    showTiersetLine={true}
                                                 />
                                             ))}
                                         </div>

@@ -110,7 +110,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                             <WowGearIcon
                                 gearItem={loot.gearItem}
                                 showSlot={selectedSlot === 'tokens'}
-                                showTierBanner
+                                showTiersetLine
                                 showExtendedInfo
                                 convertItemTrackToRaidDiff={true}
                                 showRoleIcons={true}

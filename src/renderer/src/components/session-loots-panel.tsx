@@ -113,7 +113,7 @@ export const SessionLootsPanel = ({ raidSessionId }: SessionLootsPanelProps) => 
                                                     <div key={loot.id} className="relative group">
                                                         <WowGearIcon
                                                             gearItem={loot.gearItem}
-                                                            showTierBanner={true}
+                                                            showTiersetLine={true}
                                                             showItemTrackDiff={false}
                                                             showRoleIcons={true}
                                                         />

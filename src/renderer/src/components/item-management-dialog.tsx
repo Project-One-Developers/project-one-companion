@@ -415,7 +415,7 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                                             >
                                                 <WowGearIcon
                                                     gearItem={gear}
-                                                    showTierBanner={true}
+                                                    showTiersetLine={true}
                                                     showItemTrackDiff={true}
                                                 />
                                             </div>
