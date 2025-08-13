@@ -176,6 +176,7 @@ export function evalRealSeason(item: Item, ilvl: number) {
         // crafted item
         if (ilvl <= 636) return 1
         if (ilvl > 636 && ilvl <= 681) return 2
+        if (ilvl > 681 && ilvl <= 720) return 3
         throw new Error(
             'evalRealSeason: impossible to detect real season for crafted item - ' +
                 JSON.stringify(item)
