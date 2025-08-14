@@ -121,11 +121,12 @@ export const parseMrtLoots = async (
                 )
                 continue
             }
-            // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic
+            // Skip items if WuE loot
             if (
-                parsedItem.instanceDifficultyId === 68 ||
-                parsedItem.instanceDifficultyId === 69 ||
-                parsedItem.instanceDifficultyId === 70
+                parsedItem.instanceDifficultyId === 68 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
+                parsedItem.instanceDifficultyId === 69 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
+                parsedItem.instanceDifficultyId === 70 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
+                parsedItem.instanceDifficultyId === 150 // WuE Veteran S3
             ) {
                 console.log('parseMrtLoots: skipping WuE loot ' + JSON.stringify(record))
                 continue
@@ -275,11 +276,12 @@ export const parseRcLoots = async (
                 )
                 continue
             }
-            // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic
+            // Skip items if WuE loot
             if (
-                parsedItem.instanceDifficultyId === 68 ||
-                parsedItem.instanceDifficultyId === 69 ||
-                parsedItem.instanceDifficultyId === 70
+                parsedItem.instanceDifficultyId === 68 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
+                parsedItem.instanceDifficultyId === 69 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
+                parsedItem.instanceDifficultyId === 70 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
+                parsedItem.instanceDifficultyId === 150 // WuE Veteran S3
             ) {
                 console.log('parseMrtLoots: skipping WuE loot ' + JSON.stringify(record))
                 continue
