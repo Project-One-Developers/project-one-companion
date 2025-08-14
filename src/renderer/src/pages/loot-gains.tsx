@@ -147,6 +147,7 @@ const BossPanel = ({
                                     iconOnly={false}
                                     raidDiff={diff}
                                     tierBanner={true}
+                                    showRoleIcons={true}
                                 />
                                 <div className="flex flex-row items-center gap-x-2">
                                     <DroptimizersForItem item={item} droptimizers={droptimizers} />

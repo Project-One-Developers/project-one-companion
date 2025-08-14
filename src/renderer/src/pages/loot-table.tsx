@@ -126,7 +126,6 @@ const BossPanel = ({ boss, bisLists, itemNotes, onEdit, filter }: BossPanelProps
                                     tierBanner={true}
                                     showIlvl={false}
                                     showRoleIcons={true}
-                                    iconClassName=""
                                 />
 
                                 <div className="flex flex-col items-center">
