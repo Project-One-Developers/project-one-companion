@@ -273,5 +273,19 @@ export const currencyIcon = new Map<number, { url: string; name: string }>([
             url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_ethereal_carved.jpg',
             name: 'Carved Ethereal Crest'
         }
+    ],
+    [
+        3288,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_ethereal_runed.jpg',
+            name: 'Runed Ethereal Crest'
+        }
+    ],
+    [
+        3290,
+        {
+            url: 'https://wow.zamimg.com/images/wow/icons/large/inv_crestupgrade_ethereal_gilded.jpg',
+            name: 'Gilded Ethereal Crest'
+        }
     ]
 ])
