@@ -1,8 +1,10 @@
+
 import LootsEligibleChars from '@renderer/components/loots-eligible-chars'
 import LootsTabs from '@renderer/components/loots-tab'
 import LootsTradeHelperDialog from '@renderer/components/loots-trade-helper'
 import SessionCard from '@renderer/components/session-card'
 import DownloadCSV from '@renderer/components/shared/download-as-csv'
+import { Button } from '@renderer/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -17,9 +19,9 @@ import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
 import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { LootWithAssigned } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { BarChart, DownloadIcon, Eye, LoaderCircle, MoreVertical, ZapIcon } from 'lucide-react'
+import { ArrowLeft, BarChart, DownloadIcon, Eye, LoaderCircle, MoreVertical, ZapIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 export default function LootAssign() {
     const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set())
@@ -27,6 +29,7 @@ export default function LootAssign() {
     const [showAllSessions, setShowAllSessions] = useState(false)
 
     const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
     const defaultSessionId = searchParams.get('sessionId')
 
     const raidLootTable = useQuery({
@@ -100,16 +103,29 @@ export default function LootAssign() {
 
     return (
         <div className="w-dvw h-dvh flex flex-col gap-y-8 p-8 relative">
-            {/* Page Header */}
-            <div className="flex flex-wrap bg-muted rounded-lg p-6 mb-2 shadow-lg items-center relative">
-                {visibleSessions.map(session => (
-                    <div key={session.id} onClick={() => toggleSession(session.id)}>
-                        <SessionCard
-                            session={session}
-                            className={` ${selectedSessions.has(session.id) ? 'border border-primary' : ''}`}
-                        />
-                    </div>
-                ))}
+            {/* Page Header with integrated back button */}
+            <div className="flex bg-muted rounded-lg p-6 mb-2 shadow-lg items-center relative">
+                {/* Back button */}
+                <Button
+                    variant="ghost"
+                    onClick={() => navigate(-1)}
+                    className="hover:bg-gray-800 p-2 mr-4"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                </Button>
+
+                {/* Session cards */}
+                <div className="flex flex-wrap flex-1">
+                    {visibleSessions.map(session => (
+                        <div key={session.id} onClick={() => toggleSession(session.id)}>
+                            <SessionCard
+                                session={session}
+                                className={` ${selectedSessions.has(session.id) ? 'border border-primary' : ''}`}
+                            />
+                        </div>
+                    ))}
+                </div>
+
                 <div className="absolute top-4 right-6">
                     <DropdownMenu>
                         <DropdownMenuTrigger
