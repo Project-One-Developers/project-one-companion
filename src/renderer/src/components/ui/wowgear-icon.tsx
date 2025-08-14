@@ -52,12 +52,8 @@ export const WowGearIcon = ({
         (gemIds?.length ? `&gems=${gemIds.join(':')}` : '')
 
     // role badges
-    let healerItem: boolean | undefined
-    let tankItem: boolean | undefined
-    if (showRoleIcons) {
-        healerItem = isHealerSpecs(specIds)
-        tankItem = isTankSpecs(specIds)
-    }
+    const healerItem = showRoleIcons ? isHealerSpecs(specIds) : undefined
+    const tankItem = showRoleIcons ? isTankSpecs(specIds) : undefined
 
     const getItemTrackAbbr = () => {
         if (!showItemTrackDiff) return ''
@@ -78,27 +74,58 @@ export const WowGearIcon = ({
         return ''
     }
 
+    const itemTrackAbbr = getItemTrackAbbr()
+
+    // Extended info component
+    const ExtendedInfo = () => (
+        <div
+            id="item-info"
+            className={cn(
+                "flex flex-col space-y-1",
+                flipExtendedInfo ? "mr-3" : "ml-3"
+            )}
+        >
+            <p className={cn(
+                "font-semibold text-sm text-gray-100 leading-tight",
+                flipExtendedInfo && "text-right"
+            )}>
+                {name}
+            </p>
+            <div className={cn(
+                "flex items-center space-x-2",
+                flipExtendedInfo && "justify-end"
+            )}>
+                {/* Item level and track - most important stats, medium emphasis */}
+                <div className="flex items-center space-x-1">
+                    <span className="font-medium text-sm text-blue-300">{itemLevel}</span>
+                    {itemTrackAbbr && (
+                        <span className="text-xs text-blue-400 bg-blue-900/30 px-1.5 py-0.5 rounded">
+                            {itemTrackAbbr}
+                        </span>
+                    )}
+                </div>
+                {/* Secondary information - lower emphasis */}
+                <div className="flex items-center text-xs text-gray-400 space-x-1">
+                    {showSlot && (
+                        <span className="bg-gray-700/50 px-1.5 py-0.5 rounded">
+                            {formatWowSlotKey(slotKey)}
+                        </span>
+                    )}
+                    {showArmorType && (armorType || token) && (
+                        <span className="bg-gray-700/50 px-1.5 py-0.5 rounded">
+                            {token ? 'Token' : armorType}
+                        </span>
+                    )}
+                </div>
+            </div>
+        </div>
+    )
+
     return (
         <a href={hrefString} rel="noreferrer" target="_blank">
             <div className={cn('flex flex-row items-center', className)}>
-                {showExtendedInfo && flipExtendedInfo && (
-                    <div id="item-info" className="flex flex-col mr-3">
-                        <p className="font-black text-xs text-right">{name}</p>
-                        <div className="flex justify-end">
-                            <p className="flex text-bold text-[11px]">
-                                {itemLevel} {getItemTrackAbbr()}
-                            </p>
-                            {showArmorType && (armorType || token) && (
-                                <p className="text-xs ml-1">
-                                    {' • '} {token ? 'Token' : armorType}
-                                </p>
-                            )}
-                            {showSlot && (
-                                <p className="text-xs ml-1">{formatWowSlotKey(slotKey)}</p>
-                            )}
-                        </div>
-                    </div>
-                )}
+                {showExtendedInfo && flipExtendedInfo && <ExtendedInfo />}
+
                 <div className="flex flex-col items-center">
                     <div className="relative inline-block">
                         <img
@@ -159,30 +186,18 @@ export const WowGearIcon = ({
                         )}
                     </div>
                     {!showExtendedInfo && (
-                        <p className="flex text-bold text-[11px]">
-                            {itemLevel}
-                            {getItemTrackAbbr().charAt(0)}
-                        </p>
+                        <div className="flex items-center mt-1">
+                            <span className="font-medium text-xs text-blue-300">{itemLevel}</span>
+                            {itemTrackAbbr && (
+                                <span className="font-medium text-xs text-blue-300">
+                                    {itemTrackAbbr.charAt(0)}
+                                </span>
+                            )}
+                        </div>
                     )}
                 </div>
-                {showExtendedInfo && !flipExtendedInfo && (
-                    <div id="item-info" className="flex flex-col ml-3">
-                        <p className="font-black text-xs">{name}</p>
-                        <div className="flex">
-                            {showSlot && (
-                                <p className="text-xs mr-1">{formatWowSlotKey(slotKey)}</p>
-                            )}
-                            {showArmorType && (armorType || token) && (
-                                <p className="text-xs mr-1">
-                                    {token ? 'Token' : armorType} {' • '}
-                                </p>
-                            )}
-                            <p className="flex text-bold text-[11px]">
-                                {itemLevel} {getItemTrackAbbr()}
-                            </p>
-                        </div>
-                    </div>
-                )}
+
+                {showExtendedInfo && !flipExtendedInfo && <ExtendedInfo />}
             </div>
         </a>
     )

@@ -35,7 +35,7 @@ export const DroptimizerUpgradeForItemEquipped = ({
                 className="flex flex-col items-center relative"
                 onClick={() => window.open(droptimizer.url, '_blank', 'noreferrer')}
             >
-                <div className="h-8 w-8 flex items-center justify-center overflow-hidden">
+                <div className="h-10 w-10 flex items-center justify-center overflow-hidden">
                     <WowSpecIcon
                         specId={droptimizer.charInfo.specId}
                         className="object-contain h-full w-full border-2 border-background rounded-lg"
@@ -69,7 +69,7 @@ export const DroptimizerUpgradeForItemEquipped = ({
                         </TooltipContent>
                     </Tooltip>
                 )}
-                <p className="text-bold text-[11px] text-gray-300 ">
+                <p className="font-medium text-xs text-blue-300 ">
                     {upgrade ? getDpsHumanReadable(upgrade.dps) : '0'}
                 </p>
             </div>
