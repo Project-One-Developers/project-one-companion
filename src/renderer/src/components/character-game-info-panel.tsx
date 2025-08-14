@@ -2,6 +2,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/r
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
+import { isCurrencyBlacklisted } from '@shared/libs/currency/currency-utils'
 import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
 import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
@@ -14,7 +15,6 @@ import { NextGreatVaultPanel } from './greatvault-next-panel'
 import RaiderioData from './raiderio-data'
 import { WowCurrencyIcon } from './ui/wowcurrency-icon'
 import WowAuditData from './wow-audit-data'
-import { isCurrencyBlacklisted } from '@shared/libs/currency/currency-utils'
 
 type CharGameInfoPanelProps = {
     character: Character
@@ -106,7 +106,8 @@ type CurrenciesPanelProps = {
 
 export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
     // Filter out blacklisted currencies at the data level
-    const filteredCurrencies = currencies?.filter(currency => !isCurrencyBlacklisted(currency.id)) ?? null
+    const filteredCurrencies =
+        currencies?.filter(currency => !isCurrencyBlacklisted(currency.id)) ?? null
     const hasData = Boolean(filteredCurrencies && filteredCurrencies.length > 0)
 
     return (
@@ -174,7 +175,7 @@ const GearInfo = ({ wowAudit, droptimizer, raiderio }: GearInfoProps) => {
                                 <span>RaiderIO</span>
                             </div>
                             <span className="text-xs text-muted-foreground">
-                                {formatUnixTimestampForDisplay(raiderio.p1SyncAt)}
+                                {formatUnixTimestampForDisplay(raiderio.itemUpdateAt)}
                             </span>
                         </TabsTrigger>
                     )}
