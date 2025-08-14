@@ -53,11 +53,11 @@ export const syncCharacterRaiderio = async (
 export const checkRaiderioUpdates = async (): Promise<void> => {
     console.log('checkRaiderioUpdates: checking..')
     const lastSync = await getLastTimeSyncedRaiderio()
-    const oneHourUnixTs = 1 * 60 * 60
+    const frequencyTS = 1 * 60 * 60 // 1 hours in seconds
 
-    if (lastSync === null || getUnixTimestamp() - lastSync > oneHourUnixTs) {
+    if (lastSync === null || getUnixTimestamp() - lastSync > frequencyTS) {
         console.log(
-            'checkRaiderioUpdates: raiderio older than 1 hours (' +
+            'checkRaiderioUpdates: raiderio needs to be updated (' +
                 (lastSync != null ? formaUnixTimestampToItalianDate(lastSync) : '') +
                 ') - syncing now'
         )
