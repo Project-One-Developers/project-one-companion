@@ -2,16 +2,16 @@ import CharacterDialog from '@renderer/components/character-dialog'
 import PlayerDeleteDialog from '@renderer/components/player-delete-dialog'
 import PlayerDialog from '@renderer/components/player-dialog'
 import DownloadCSV from '@renderer/components/shared/download-as-csv'
-import { CharacterOverviewIcon } from '@renderer/components/ui/wowcharacter-overview-icon'
 import { Button } from '@renderer/components/ui/button'
 import { Input } from '@renderer/components/ui/input'
+import { CharacterOverviewIcon } from '@renderer/components/ui/wowcharacter-overview-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { CharacterSummary, Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Download, LoaderCircle, PlusIcon, UserRoundPlus, X } from 'lucide-react'
 
-import { useState, type JSX, useMemo } from 'react'
+import { useMemo, useState, type JSX } from 'react'
 import { fetchRosterSummary } from '../lib/tanstack-query/players'
 
 type PlayerWithCharactersSummary = {
@@ -104,6 +104,7 @@ export default function RosterPage(): JSX.Element {
                 'Character Name': charSummary.character.name,
                 'Character Realm': charSummary.character.realm,
                 'Character Item Level': charSummary.itemLevel,
+                'Tierset Set': charSummary.tierset.length,
                 'Raider.io URL': `https://raider.io/characters/eu/${charSummary.character.realm}/${charSummary.character.name}`
             }))
         )
