@@ -1,6 +1,7 @@
 import TiersetInfo from '@renderer/components/tierset-info'
 import { FiltersPanel } from '@renderer/components/filter-panel'
 import { Input } from '@renderer/components/ui/input'
+import { Checkbox } from '@renderer/components/ui/checkbox'
 import {
     Table,
     TableBody,
@@ -15,7 +16,7 @@ import { WowGearIcon } from '@renderer/components/ui/wowgear-icon'
 import { LootFilter } from '@renderer/lib/filters'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterSummary } from '@renderer/lib/tanstack-query/players'
-import { DroptimizerWarn, WowAuditWarn } from '@shared/types/types'
+import { DroptimizerWarn, WowAuditWarn, TierSetCompletion } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { Filter, LoaderCircle, X } from 'lucide-react'
 
@@ -39,6 +40,20 @@ export default function SummaryPage(): JSX.Element {
         selectedWowClassName: []
     })
 
+    // New filter states
+    const [tierCompletionFilter, setTierCompletionFilter] = useState<{
+        [key in TierSetCompletion]: boolean
+    }>({
+        [TierSetCompletion.None]: true,
+        [TierSetCompletion.OnePiece]: true,
+        [TierSetCompletion.TwoPiece]: true,
+        [TierSetCompletion.ThreePiece]: true,
+        [TierSetCompletion.FourPiece]: true,
+        [TierSetCompletion.FivePiece]: true
+    })
+
+    const [showOnlyWithVaultTier, setShowOnlyWithVaultTier] = useState(false)
+
     const [searchQuery, setSearchQuery] = useState('')
     const navigate = useNavigate()
 
@@ -51,12 +66,23 @@ export default function SummaryPage(): JSX.Element {
         setFilter(prev => ({ ...prev, [key]: value }))
     }
 
+    // Helper function to check if character has tier pieces in vault
+    const hasVaultTierPieces = (weeklyChest: any[]): boolean => {
+        return weeklyChest.some(gear => gear.item.tierset)
+    }
+
+    // Helper function to format tier completion display
+    const formatTierCompletion = (completion: TierSetCompletion): string => {
+        return `${completion}/5 pieces`
+    }
+
     // Computed values
     const hasActiveFilters = useMemo(() => {
-        return !filter.showMains
-    }, [filter])
+        const hasTierFilter = !Object.values(tierCompletionFilter).every(v => v)
+        return !filter.showMains || hasTierFilter || showOnlyWithVaultTier
+    }, [filter, tierCompletionFilter, showOnlyWithVaultTier])
 
-    // Filter players based on the search query and main/alt filter
+    // Filter players based on the search query and filters
     const filteredPlayers = useMemo(() => {
         if (!characterQuery.data) return []
         return characterQuery.data
@@ -70,10 +96,24 @@ export default function SummaryPage(): JSX.Element {
                 const passesMainAltFilter =
                     (filter.showMains && isMain) || (filter.showAlts && !isMain)
 
-                return playerMatches && passesMainAltFilter
+                // Apply tier completion filter
+                const tierCompletion = summary.tierset.length
+                const passesTierFilter = tierCompletionFilter[tierCompletion]
+
+                // Apply vault tier filter
+                const passesVaultFilter = !showOnlyWithVaultTier || hasVaultTierPieces(summary.weeklyChest)
+
+                return playerMatches && passesMainAltFilter && passesTierFilter && passesVaultFilter
             })
             .sort((a, b) => parseFloat(b.itemLevel) - parseFloat(a.itemLevel)) // sort player by item level
-    }, [characterQuery.data, searchQuery, filter.showMains, filter.showAlts])
+    }, [characterQuery.data, searchQuery, filter.showMains, filter.showAlts, tierCompletionFilter, showOnlyWithVaultTier])
+
+    const toggleTierCompletion = (completion: TierSetCompletion) => {
+        setTierCompletionFilter(prev => ({
+            ...prev,
+            [completion]: !prev[completion]
+        }))
+    }
 
     if (characterQuery.isLoading) {
         return (
@@ -85,8 +125,8 @@ export default function SummaryPage(): JSX.Element {
 
     return (
         <div className="w-dvw h-dvh overflow-y-auto flex flex-col gap-y-8 items-center p-8 relative">
-            {/* Search Bar */}
-            <div className="w-full mb-4">
+            {/* Search Bar and Filters */}
+            <div className="w-full mb-4 space-y-4">
                 <Input
                     type="text"
                     placeholder="Search players or characters..."
@@ -94,6 +134,33 @@ export default function SummaryPage(): JSX.Element {
                     onChange={e => setSearchQuery(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md"
                 />
+
+
+                {/* Tier-related Filters */}
+                <div className="flex flex-wrap gap-4 items-center">
+
+                    {/* Tier Completion Filter */}
+                    <div className="flex flex-wrap gap-2 items-center">
+                        {Object.values(TierSetCompletion).filter(v => typeof v === 'number').map((completion) => (
+                            <label key={completion} className="flex items-center space-x-1 cursor-pointer">
+                                <Checkbox
+                                    checked={tierCompletionFilter[completion as TierSetCompletion]}
+                                    onCheckedChange={() => toggleTierCompletion(completion as TierSetCompletion)}
+                                />
+                                <span className="text-sm text-gray-300">{completion}p</span>
+                            </label>
+                        ))}
+                    </div>
+
+                    {/* Vault Filter */}
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            checked={showOnlyWithVaultTier}
+                            onCheckedChange={(checked) => setShowOnlyWithVaultTier(checked === true)}
+                        />
+                        <span className="text-sm text-gray-300">Show only with vault tier</span>
+                    </div>
+                </div>
             </div>
 
             <Table className="w-full">
@@ -101,6 +168,7 @@ export default function SummaryPage(): JSX.Element {
                     <TableRow className="hover:bg-gray-800">
                         <TableHead className="text-gray-300 font-semibold">Name</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Tierset</TableHead>
+                        <TableHead className="text-gray-300 font-semibold">Completion</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Vault</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Currency</TableHead>
                         <TableHead className="text-gray-300 font-semibold">Droptimizer</TableHead>
@@ -109,6 +177,8 @@ export default function SummaryPage(): JSX.Element {
                 </TableHeader>
                 <TableBody className="">
                     {filteredPlayers.map(summary => {
+                        const tierCompletion = summary.tierset.length
+
                         return (
                             <TableRow key={summary.character.id} className={` hover:bg-gray-700 `}>
                                 <TableCell className="p-1 rounded-l-md group-hover:border-l group-hover:border-t group-hover:border-b group-hover:border-white relative">
@@ -140,8 +210,20 @@ export default function SummaryPage(): JSX.Element {
                                 <TableCell className="p-1">
                                     <TiersetInfo tierset={summary.tierset} />
                                 </TableCell>
+                                <TableCell className="p-1">
+                                    <div className="text-sm">
+                                        <span className={clsx(
+                                            "px-2 py-1 rounded-full text-xs font-bold",
+                                            tierCompletion >= TierSetCompletion.FourPiece ? "bg-green-900/50 text-green-400" :
+                                                tierCompletion >= TierSetCompletion.TwoPiece ? "bg-yellow-900/50 text-yellow-400" :
+                                                    "bg-red-900/50 text-red-400"
+                                        )}>
+                                            {formatTierCompletion(tierCompletion)}
+                                        </span>
+                                    </div>
+                                </TableCell>
                                 <TableCell className="rounded-r-md">
-                                    <div className="flex space-x-1">
+                                    <div className="flex space-x-1 relative">
                                         {summary.weeklyChest.map(gear => (
                                             <WowGearIcon key={gear.item.id} gearItem={gear} showTiersetLine={false} showTiersetRibbon={true} />
                                         ))}
