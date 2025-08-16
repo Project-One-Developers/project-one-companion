@@ -121,14 +121,14 @@ export const parseMrtLoots = async (
                 )
                 continue
             }
-            // Skip items if WuE loot
-            if (
-                parsedItem.instanceDifficultyId === 68 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
-                parsedItem.instanceDifficultyId === 69 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
-                parsedItem.instanceDifficultyId === 70 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
-                parsedItem.instanceDifficultyId === 150 // WuE Veteran S3
-            ) {
-                console.log('parseMrtLoots: skipping WuE loot ' + JSON.stringify(record))
+            // Skip items if WuE loot or something else (check Enum.ItemCreationContext)
+            if (parsedItem.instanceDifficultyId < 3 && parsedItem.instanceDifficultyId > 6) {
+                console.log(
+                    'parseMrtLoots: skipping loot with unwanted instanceDifficultyId # ' +
+                        parsedItem.instanceDifficultyId +
+                        ': ' +
+                        JSON.stringify(record)
+                )
                 continue
             }
             if (quantity > 1) {
@@ -276,14 +276,14 @@ export const parseRcLoots = async (
                 )
                 continue
             }
-            // Skip items if WuE loot
-            if (
-                parsedItem.instanceDifficultyId === 68 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
-                parsedItem.instanceDifficultyId === 69 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
-                parsedItem.instanceDifficultyId === 70 || // 68 WuE Normal, 69 WuE Heroic, 70 WuE Mythic (S2?)
-                parsedItem.instanceDifficultyId === 150 // WuE Veteran S3
-            ) {
-                console.log('parseMrtLoots: skipping WuE loot ' + JSON.stringify(record))
+            // Skip items if WuE loot or something else (check Enum.ItemCreationContext)
+            if (parsedItem.instanceDifficultyId < 3 && parsedItem.instanceDifficultyId > 6) {
+                console.log(
+                    'parseMrtLoots: skipping loot with unwanted instanceDifficultyId # ' +
+                        parsedItem.instanceDifficultyId +
+                        ': ' +
+                        JSON.stringify(record)
+                )
                 continue
             }
 
