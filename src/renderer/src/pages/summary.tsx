@@ -16,11 +16,11 @@ import { WowGearIcon } from '@renderer/components/ui/wowgear-icon'
 import { LootFilter } from '@renderer/lib/filters'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterSummary } from '@renderer/lib/tanstack-query/players'
-import { DroptimizerWarn, WowAuditWarn, TierSetCompletion } from '@shared/types/types'
+import { DroptimizerWarn, WowAuditWarn, TierSetCompletion, CharacterSummary } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { Filter, LoaderCircle, X } from 'lucide-react'
+import { Filter, LoaderCircle, X, AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
 import { useMemo, useState, type JSX } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, NavigateFunction } from 'react-router'
 import clsx from 'clsx'
 
 // Constants
@@ -66,7 +66,7 @@ const getTierCompletionStyle = (tierCompletion: TierSetCompletion): string => {
     )
 }
 
-const sortPlayersByItemLevel = (a: any, b: any) => parseFloat(b.itemLevel) - parseFloat(a.itemLevel)
+const sortPlayersByItemLevel = (a: CharacterSummary, b: CharacterSummary) => parseFloat(b.itemLevel) - parseFloat(a.itemLevel)
 
 // Components
 const LoadingSpinner = () => (
@@ -75,22 +75,90 @@ const LoadingSpinner = () => (
     </div>
 )
 
-const WarningIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-        <path
-            fillRule="evenodd"
-            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-            clipRule="evenodd"
-        />
-    </svg>
-)
+const StatusIndicator = ({
+                             status,
+                             label,
+                         }: {
+    status: 'success' | 'warning' | 'error' | 'none'
+    label?: string
+}) => {
+    const getStatusConfig = () => {
+        switch (status) {
+            case 'success':
+                return {
+                    icon: CheckCircle,
+                    className: "bg-green-900/30 text-green-400 border-green-500/30",
+                    label: label || "OK"
+                }
+            case 'warning':
+                return {
+                    icon: AlertTriangle,
+                    className: "bg-yellow-900/30 text-yellow-400 border-yellow-500/30",
+                    label: label || "Warning"
+                }
+            case 'error':
+                return {
+                    icon: XCircle,
+                    className: "bg-red-900/30 text-red-400 border-red-500/30",
+                    label: label || "Error"
+                }
+            case 'none':
+            default:
+                return {
+                    icon: null,
+                    className: "bg-gray-800/50 text-gray-500 border-gray-600/30",
+                    label: "—"
+                }
+        }
+    }
 
-const WarningBadge = ({ label }: { label: string }) => (
-    <span className="px-2 py-1 text-xs font-bold bg-yellow-500/20 text-yellow-400 rounded-full flex items-center space-x-1 border border-yellow-400/50">
-        <WarningIcon />
-        <span>{label}</span>
-    </span>
-)
+    const config = getStatusConfig()
+    const Icon = config.icon
+
+    return (
+        <div className={clsx(
+            "inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium border",
+            config.className
+        )}>
+            {Icon && <Icon size={12} />}
+            <span>{config.label}</span>
+        </div>
+    )
+}
+
+const DroptimizerStatus = ({ warn }: { warn: DroptimizerWarn }) => {
+    const getDroptimizerStatus = (warn: DroptimizerWarn) => {
+        switch (warn) {
+            case DroptimizerWarn.None:
+                return { status: 'success' as const, label: 'Synced' }
+            case DroptimizerWarn.NotImported:
+                return { status: 'warning' as const, label: 'Not Imported' }
+            case DroptimizerWarn.Outdated:
+                return { status: 'warning' as const, label: 'Out of Date' }
+            default:
+                return { status: 'error' as const, label: 'Unknown' }
+        }
+    }
+
+    const { status, label } = getDroptimizerStatus(warn)
+    return <StatusIndicator status={status} label={label} />
+}
+
+const WowAuditStatus = ({ warn }: { warn: WowAuditWarn }) => {
+    const getWowAuditStatus = (warn: WowAuditWarn) => {
+        switch (warn) {
+            case WowAuditWarn.None:
+                return { status: 'success' as const, label: 'Tracked' }
+            case WowAuditWarn.NotTracked:
+                return { status: 'error' as const, label: 'Missing' }
+            default:
+                return { status: 'error' as const, label: 'Unknown' }
+        }
+    }
+
+    const { status, label } = getWowAuditStatus(warn)
+    return <StatusIndicator status={status} label={label} />
+}
 
 const TierCompletionCheckbox = ({
                                     completion,
@@ -150,17 +218,17 @@ const FilterControls = ({
                 checked={showOnlyWithVaultTier}
                 onCheckedChange={(checked) => onVaultFilterChange(checked === true)}
             />
-            <span className="text-sm text-gray-300">Show only with vault tier</span>
+            <span className="text-sm text-gray-300">Tierset in vault</span>
         </div>
     </div>
 )
 
-const PlayerRow = ({ summary, navigate }: { summary: any, navigate: any }) => {
+const PlayerRow = ({ summary, navigate }: { summary: CharacterSummary, navigate: NavigateFunction }) => {
     const tierCompletion = summary.tierset.length
 
     return (
         <TableRow className="hover:bg-gray-700">
-            <TableCell className="p-1 rounded-l-md">
+            <TableCell className="p-3">
                 <div className="flex space-x-10">
                     <div
                         className="flex items-center space-x-3 cursor-pointer"
@@ -179,53 +247,57 @@ const PlayerRow = ({ summary, navigate }: { summary: any, navigate: any }) => {
                 </div>
             </TableCell>
 
-            <TableCell className="p-1">
+            <TableCell className="p-3">
                 <TiersetInfo tierset={summary.tierset} />
             </TableCell>
 
-            <TableCell className="p-1">
+            <TableCell className="p-3">
                 <span className={getTierCompletionStyle(tierCompletion)}>
                     {formatTierCompletion(tierCompletion)}
                 </span>
             </TableCell>
 
-            <TableCell className="rounded-r-md">
+            <TableCell className="p-3">
                 <div className="flex space-x-1 relative">
-                    {summary.weeklyChest.map(gear => (
-                        <WowGearIcon
-                            key={gear.item.id}
-                            gearItem={gear}
-                            showTiersetLine={false}
-                            showTiersetRibbon={true}
-                        />
-                    ))}
-                </div>
-            </TableCell>
-
-            <TableCell className="p-1">
-                <div className="flex space-x-1">
-                    {summary.currencies
-                        .sort((a, b) => a.id - b.id)
-                        .map(currency => (
-                            <WowCurrencyIcon
-                                key={currency.id}
-                                currency={currency}
-                                iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                    {summary.weeklyChest.length > 0 ? (
+                        summary.weeklyChest.map(gear => (
+                            <WowGearIcon
+                                key={gear.item.id}
+                                gearItem={gear}
+                                showTiersetLine={false}
+                                showTiersetRibbon={true}
                             />
-                        ))}
+                        ))
+                    ) : (
+                        <span className="text-xs text-gray-500 italic">No vault items</span>
+                    )}
                 </div>
             </TableCell>
 
-            <TableCell className="p-1">
-                {summary.warnDroptimizer !== DroptimizerWarn.None && (
-                    <WarningBadge label={summary.warnDroptimizer.toUpperCase()} />
-                )}
+            <TableCell className="p-3">
+                <div className="flex space-x-1">
+                    {summary.currencies.length > 0 ? (
+                        summary.currencies
+                            .sort((a, b) => a.id - b.id)
+                            .map(currency => (
+                                <WowCurrencyIcon
+                                    key={currency.id}
+                                    currency={currency}
+                                    iconClassName="object-cover object-top rounded-lg h-8 w-8 border border-background"
+                                />
+                            ))
+                    ) : (
+                        <span className="text-xs text-gray-500 italic">No currencies</span>
+                    )}
+                </div>
             </TableCell>
 
-            <TableCell className="p-1 rounded-r-md">
-                {summary.warnWowAudit === WowAuditWarn.NotTracked && (
-                    <WarningBadge label="MISSING" />
-                )}
+            <TableCell className="p-3">
+                <DroptimizerStatus warn={summary.warnDroptimizer} />
+            </TableCell>
+
+            <TableCell className="p-3">
+                <WowAuditStatus warn={summary.warnWowAudit} />
             </TableCell>
         </TableRow>
     )
