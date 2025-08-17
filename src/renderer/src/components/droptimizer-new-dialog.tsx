@@ -38,7 +38,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
     // State
     const [open, setOpen] = useState(false)
 
-    const [hoursValue, setHoursValue] = useState(24)
+    const [hoursValue, setHoursValue] = useState(12)
 
     // Form setup
     const form = useForm<FormValues>({
