@@ -101,7 +101,7 @@ export default function SessionLootNewDialog({
                         Add new loots manually or import from RCLoot
                     </DialogDescription>
                 </DialogHeader>
-                <Tabs.Root defaultValue="manual" className="w-full">
+                <Tabs.Root defaultValue="mrt" className="w-full">
                     <Tabs.List className="flex border-b mb-4">
                         <Tabs.Trigger
                             value="manual"
