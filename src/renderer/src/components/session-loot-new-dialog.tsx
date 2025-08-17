@@ -18,10 +18,10 @@ import { Textarea } from './ui/text-area'
 import { WowItemIcon } from './ui/wowitem-icon'
 
 export default function SessionLootNewDialog({
-    isOpen,
-    setOpen,
-    raidSession
-}: {
+                                                 isOpen,
+                                                 setOpen,
+                                                 raidSession
+                                             }: {
     isOpen: boolean
     setOpen: (open: boolean) => void
     raidSession: RaidSessionWithRoster
@@ -102,27 +102,27 @@ export default function SessionLootNewDialog({
                     </DialogDescription>
                 </DialogHeader>
                 <Tabs.Root defaultValue="mrt" className="w-full">
-                    <Tabs.List className="flex border-b mb-4">
+                    <Tabs.List className="flex border-border rounded-t-lg mb-4 p-1">
                         <Tabs.Trigger
                             value="manual"
-                            className="px-4 py-2 flex-1 text-center hover:bg-muted"
+                            className="px-4 py-2 flex-1 text-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-border font-medium"
                         >
                             Manual Entry
                         </Tabs.Trigger>
                         <Tabs.Trigger
                             value="rcloot"
-                            className="px-4 py-2 flex-1 text-center hover:bg-muted"
+                            className="px-4 py-2 flex-1 text-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-border font-medium"
                         >
                             RCLoot CSV
                         </Tabs.Trigger>
                         <Tabs.Trigger
                             value="mrt"
-                            className="px-4 py-2 flex-1 text-center hover:bg-muted"
+                            className="px-4 py-2 flex-1 text-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-border font-medium"
                         >
                             MRT
                         </Tabs.Trigger>
                     </Tabs.List>
-                    <Tabs.Content value="manual" className="p-4">
+                    <Tabs.Content value="manual" className="p-1">
                         <Input
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
@@ -264,7 +264,7 @@ export default function SessionLootNewDialog({
                             Add Loots
                         </Button>
                     </Tabs.Content>
-                    <Tabs.Content value="rcloot" className="p-4">
+                    <Tabs.Content value="rcloot" className="p-1">
                         <Textarea
                             value={rcCsvData}
                             onChange={e => setRcInputData(e.target.value)}
@@ -283,7 +283,7 @@ export default function SessionLootNewDialog({
                             Import Loots
                         </Button>
                     </Tabs.Content>
-                    <Tabs.Content value="mrt" className="p-4">
+                    <Tabs.Content value="mrt" className="p-1">
                         <Textarea
                             value={mrtData}
                             onChange={e => setMrtData(e.target.value)}
