@@ -73,3 +73,15 @@ export const raidbotsURLSchema = z
         message: 'URL must be a raidbots.com report URL'
     })
     .brand('RaidbotsURL')
+
+export const simcSchema = z.object({
+    hash: z.string(),
+    dateGenerated: z.number(),
+    charName: z.string(),
+    charRealm: z.string(),
+    weeklyChest: z.array(gearItemSchema),
+    currencies: z.array(droptimizerCurrencySchema),
+    itemsInBag: z.array(gearItemSchema),
+    itemsEquipped: z.array(gearItemSchema),
+    tiersetInfo: z.array(gearItemSchema)
+})

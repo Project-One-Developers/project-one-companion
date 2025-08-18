@@ -45,7 +45,8 @@ import {
     droptimizerUpgradeSchema,
     newDroptimizerSchema,
     newDroptimizerUpgradeSchema,
-    raidbotsURLSchema
+    raidbotsURLSchema,
+    simcSchema
 } from '../schemas/simulations.schemas'
 import {
     tierSetBonusSchema,
@@ -105,6 +106,7 @@ export type CharacterWowAudit = z.infer<typeof charWowAuditSchema>
 export type Droptimizer = z.infer<typeof droptimizerSchema>
 export type DroptimizerUpgrade = z.infer<typeof droptimizerUpgradeSchema>
 export type DroptimizerCurrency = z.infer<typeof droptimizerCurrencySchema>
+export type SimC = z.infer<typeof simcSchema>
 
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
