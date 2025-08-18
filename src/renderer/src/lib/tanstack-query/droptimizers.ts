@@ -14,6 +14,10 @@ export const addDroptimizer = async (url: string): Promise<Droptimizer> => {
     return await window.api.addDroptimizer(url)
 }
 
+export const addSimc = async (simc: string): Promise<Droptimizer> => {
+    return await window.api.addSimc(simc)
+}
+
 export const deleteDroptimizer = async (url: string): Promise<void> => {
     return await window.api.deleteDroptimizer(url)
 }

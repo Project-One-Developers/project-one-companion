@@ -62,8 +62,10 @@ import {
     setAppSettingsHandler,
     upsertJsonDataHandler
 } from './settings/settings.handlers'
+import { addSimcHandler } from './droptimizer/simc.handlers'
 
 export const allHandlers = {
+    'simc-add': addSimcHandler,
     'droptimizer-add': addDroptimizerHandler,
     'droptimizer-list': getDroptimizerListHandler,
     'droptimizer-latest-list': getDroptimizerLatestListHandler,

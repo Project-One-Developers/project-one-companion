@@ -78,6 +78,9 @@ export const api = {
     addDroptimizer(url: string): Promise<Droptimizer> {
         return ipcRenderer.invoke('droptimizer-add', url)
     },
+    addSimc(simc: string): Promise<Droptimizer> {
+        return ipcRenderer.invoke('simc-add', simc)
+    },
     getDroptimizerList(): Promise<Droptimizer[]> {
         return ipcRenderer.invoke('droptimizer-list')
     },
