@@ -482,13 +482,10 @@ export const parseManualLoots = async (loots: NewLootManual[]): Promise<NewLoot[
 
 const parseDateTime = (dateStr: string, timeStr: string): number => {
     // Split date components
-    const [day, month, shortYear] = dateStr.split('/')
-
-    // Convert 2-digit year to 4-digit (assuming 20xx for years 00-99)
-    const fullYear = `20${shortYear}`
+    const [year, month, day] = dateStr.split('/')
 
     // Create ISO format date string (yyyy-mm-ddTHH:mm:ss)
-    const isoDateTime = `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timeStr}`
+    const isoDateTime = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timeStr}`
 
     const dateTime = new Date(isoDateTime)
 
