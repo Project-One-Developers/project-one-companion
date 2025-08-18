@@ -4,17 +4,21 @@ import {
     parseItemLevelFromBonusIds,
     parseItemTrack
 } from '@shared/libs/items/item-bonus-utils'
+import { wowItemEquippedSlotKeySchema } from '@shared/schemas/wow.schemas'
 import type { DroptimizerCurrency, GearItem, Item, SimC } from '@shared/types/types'
 import { getItems, getTiersetAndTokenList } from '@storage/items/items.storage'
-import { wowItemEquippedSlotKeySchema } from '@shared/schemas/wow.schemas'
 
 export const parseSimC = async (simc: string): Promise<SimC> => {
     const itemsInBag = await parseBagGearsFromSimc(simc)
     const itemsEquipped = await parseEquippedGearFromSimc(simc)
     const weeklyChest = await parseGreatVaultFromSimc(simc)
-    const currencies = await parseCatalystFromSimc(simc)
 
     const { charName, dateGenerated, charRealm, hash } = parseCharacterInfo(simc)
+
+    // Merge currencies from rawFormData and parseCatalystFromSimc
+    const upgradeCurrencies = await parseCurrenciesFromSimc(simc)
+    const catalystCurrencies = await parseCatalystFromSimc(simc)
+    const mergedCurrencies = [...upgradeCurrencies, ...catalystCurrencies]
 
     return {
         hash: hash,
@@ -24,12 +28,14 @@ export const parseSimC = async (simc: string): Promise<SimC> => {
         itemsInBag: itemsInBag,
         itemsEquipped: itemsEquipped,
         weeklyChest: weeklyChest,
-        currencies: currencies,
+        currencies: mergedCurrencies,
         tiersetInfo: await parseTiersets(itemsEquipped, itemsInBag)
     }
 }
 
-const parseCharacterInfo = (simc: string): { charName: string; dateGenerated: number; charRealm: string; hash: string } => {
+const parseCharacterInfo = (
+    simc: string
+): { charName: string; dateGenerated: number; charRealm: string; hash: string } => {
     const lines = simc.split('\n')
     const firstLine = lines[0]
 
@@ -53,7 +59,7 @@ const parseCharacterInfo = (simc: string): { charName: string; dateGenerated: nu
         throw new Error('Unable to parse server/realm from SimC data')
     }
 
-    const charRealm = serverMatch[1].replace('_','-')
+    const charRealm = serverMatch[1].replace('_', '-')
 
     // Parse checksum: # Checksum: 77a3aabe
     const checksumRegex = /^# Checksum: (.+)$/m
@@ -83,7 +89,6 @@ const parseCharacterInfo = (simc: string): { charName: string; dateGenerated: nu
  */
 export const parseSimcDateToUnixTimestamp = (dateString: string): number => {
     const [datePart, timePart] = dateString.split(' ')
-
 
     // Handle YYYY-MM-DD format
     const [year, month, day] = datePart.split('-').map(Number)
@@ -124,6 +129,42 @@ export const parseCatalystFromSimc = async (simc: string): Promise<DroptimizerCu
                 // track only catalyst from active season
                 currencies.push({
                     type: 'currency', // used to compose wowhead href
+                    id: id,
+                    amount: amount
+                })
+            }
+        }
+    }
+
+    return currencies
+}
+
+export const parseCurrenciesFromSimc = async (simc: string): Promise<DroptimizerCurrency[]> => {
+    const currenciesRegex = /# upgrade_currencies=([^\n]+)/
+    const match = simc.match(currenciesRegex)
+
+    if (!match) {
+        return []
+    }
+
+    const catalystData = match[1]
+    const currencies: DroptimizerCurrency[] = []
+
+    // Split by '/' to get individual currency entries
+    const currencyEntries = catalystData.split('/')
+
+    for (const entry of currencyEntries) {
+        // Split by ':' to get id and amount
+        const [type, idStr, amountStr] = entry.split(':')
+
+        if (type && idStr && amountStr) {
+            const id = parseInt(idStr, 10)
+            const amount = parseInt(amountStr, 10)
+
+            if (!isNaN(id) && !isNaN(amount)) {
+                // track only catalyst from active season
+                currencies.push({
+                    type: type === 'c' ? 'currency' : 'item', // used to compose wowhead href
                     id: id,
                     amount: amount
                 })
@@ -200,7 +241,6 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
     return items
 }
 
-
 const parseTiersets = async (equipped: GearItem[], bags: GearItem[]): Promise<GearItem[]> => {
     const tiersetItems = await getTiersetAndTokenList()
 
@@ -242,9 +282,9 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
             if (wowItem == null) {
                 console.log(
                     'parseBagGearsFromSimc: skipping bag item not in db: ' +
-                    itemId +
-                    ' https://www.wowhead.com/item=' +
-                    itemId
+                        itemId +
+                        ' https://www.wowhead.com/item=' +
+                        itemId
                 )
                 continue
             }
@@ -261,11 +301,11 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
             if (itemLevel == null) {
                 console.log(
                     'parseBagGearsFromSimc: skipping bag item without ilvl: ' +
-                    itemId +
-                    ' - https://www.wowhead.com/item=' +
-                    itemId +
-                    '?bonus=' +
-                    bonusIds.join(':')
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds.join(':')
                 )
                 continue
             }
@@ -304,20 +344,22 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
 async function parseEquippedGearFromSimc(simc: string): Promise<GearItem[]> {
     // Find the section between character info and "### Gear from Bags"
     // This includes all the equipped gear lines
-    const gearSectionMatch = simc.match(/^(head=[\s\S]*?)(?=\n### Gear from Bags|\n### Weekly Reward Choices|\n### Additional Character Info|$)/m)
+    const gearSectionMatch = simc.match(
+        /^(head=[\s\S]*?)(?=\n### Gear from Bags|\n### Weekly Reward Choices|\n### Additional Character Info|$)/m
+    )
 
     if (!gearSectionMatch) {
-        console.log("Unable to find equipped gear section.")
+        console.log('Unable to find equipped gear section.')
         return []
     }
 
     const gearSection = gearSectionMatch[1]
-    const itemLines = gearSection.split('\n').filter(line =>
-        line.trim() &&
-        !line.startsWith('#') &&
-        line.includes('=') &&
-        line.includes('id=')
-    )
+    const itemLines = gearSection
+        .split('\n')
+        .filter(
+            line =>
+                line.trim() && !line.startsWith('#') && line.includes('=') && line.includes('id=')
+        )
 
     const itemsInDb: Item[] = await getItems()
     const items: GearItem[] = []
@@ -340,9 +382,9 @@ async function parseEquippedGearFromSimc(simc: string): Promise<GearItem[]> {
             if (wowItem == null) {
                 console.log(
                     'parseEquippedGearFromSimc: skipping equipped item not in db: ' +
-                    itemId +
-                    ' https://www.wowhead.com/item=' +
-                    itemId
+                        itemId +
+                        ' https://www.wowhead.com/item=' +
+                        itemId
                 )
                 continue
             }
@@ -359,11 +401,11 @@ async function parseEquippedGearFromSimc(simc: string): Promise<GearItem[]> {
             if (itemLevel == null) {
                 console.log(
                     'parseEquippedGearFromSimc: skipping equipped item without ilvl: ' +
-                    itemId +
-                    ' - https://www.wowhead.com/item=' +
-                    itemId +
-                    '?bonus=' +
-                    bonusIds.join(':')
+                        itemId +
+                        ' - https://www.wowhead.com/item=' +
+                        itemId +
+                        '?bonus=' +
+                        bonusIds.join(':')
                 )
                 continue
             }
