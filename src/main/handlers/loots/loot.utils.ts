@@ -49,6 +49,7 @@ import {
     WowSpec
 } from '@shared/types/types'
 import { getItems, getItemToTiersetMapping } from '@storage/items/items.storage'
+import { getCharactersList } from '@storage/players/characters.storage'
 import { parse } from 'papaparse'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
@@ -240,7 +241,8 @@ export const parseMrtLoots = async (
 export const parseRcLoots = async (
     csv: string,
     dateLowerBound: number,
-    dateUpperBound: number
+    dateUpperBound: number,
+    importAssignedCharacter: boolean
 ): Promise<NewLoot[]> => {
     const parsedData = parse(csv, {
         header: true,
@@ -259,8 +261,11 @@ export const parseRcLoots = async (
             !record.response.toLowerCase().includes('personal loot')
     )
 
-    const rawRecords = z.array(rawRCLootRecordSchema).parse(filteredData)
+    // fetch from db
+    const allCharacters = importAssignedCharacter ? await getCharactersList() : []
     const allItemsInDb = await getItems()
+
+    const rawRecords = z.array(rawRCLootRecordSchema).parse(filteredData)
     const res: NewLoot[] = []
     const recordMap = new Map<string, number>()
 
@@ -272,7 +277,8 @@ export const parseRcLoots = async (
             const lootUnixTs = parseDateTime(date, time)
             if (lootUnixTs < dateLowerBound || lootUnixTs > dateUpperBound) {
                 console.log(
-                    'parseRcLoots: skipping loot item outside raid session date time ' + record
+                    'parseRcLoots: skipping loot item outside raid session date time ' +
+                        JSON.stringify(record)
                 )
                 continue
             }
@@ -365,10 +371,45 @@ export const parseRcLoots = async (
                 enchantIds: null
             }
 
+            let charAssignment: Character | null = null
+
+            if (importAssignedCharacter) {
+                if (!record.player) {
+                    console.log(
+                        'parseRcLoots: importAssignedCharacter is true but item not assigned to any character: ' +
+                            itemId +
+                            ' - https://www.wowhead.com/item=' +
+                            itemId +
+                            '?bonus=' +
+                            bonusIds
+                    )
+                } else {
+                    const charnameRealm = record.player.toLowerCase().replace("'", '').split('-')
+                    charAssignment =
+                        allCharacters.find(
+                            c =>
+                                c.name.toLowerCase() === charnameRealm[0] &&
+                                c.realm.toLowerCase().replace("'", '').replace('-', '') ===
+                                    charnameRealm[1]
+                        ) || null
+                    if (!charAssignment) {
+                        console.log(
+                            'parseRcLoots: importAssignedCharacter is true but assigned character is not in the roster: ' +
+                                record.player +
+                                ' - https://www.wowhead.com/item=' +
+                                itemId +
+                                '?bonus=' +
+                                bonusIds
+                        )
+                    }
+                }
+            }
+
             const loot: NewLoot = {
                 gearItem: gearItem,
                 dropDate: lootUnixTs,
                 itemString: itemString,
+                assignedTo: charAssignment?.id,
                 raidDifficulty: raidDiff,
                 addonId: id
             }

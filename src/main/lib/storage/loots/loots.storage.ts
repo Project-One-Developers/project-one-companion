@@ -93,7 +93,8 @@ export const addLoots = async (
         gearItem: loot.gearItem,
         raidDifficulty: loot.raidDifficulty,
         itemString: loot.itemString,
-        tradedToAssigned: false
+        tradedToAssigned: false,
+        assignedCharacterId: loot.assignedTo // rc could import assigned character (without highlights / reason), mrt does not
     }))
 
     await db().insert(lootTable).values(lootValues).onConflictDoNothing({ target: lootTable.id })

@@ -8,6 +8,7 @@ export const newLootSchema = z.object({
     gearItem: gearItemSchema,
     dropDate: z.number(),
     raidDifficulty: wowRaidDiffSchema,
+    assignedTo: characterSchema.shape.id.optional(),
     itemString: z.string().nullable(), // only in rc csv import
     addonId: z.string().nullable() // only in rc csv/mrt import
 })

@@ -11,8 +11,10 @@ import { LoaderCircle, X } from 'lucide-react'
 import { useState, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
+import { Checkbox } from './ui/checkbox'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 import { Input } from './ui/input'
+import { Label } from './ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Textarea } from './ui/text-area'
 import { WowItemIcon } from './ui/wowitem-icon'
@@ -30,6 +32,7 @@ export default function SessionLootNewDialog({
     const [selectedItems, setSelectedItems] = useState<NewLootManual[]>([])
     const [rcCsvData, setRcInputData] = useState('')
     const [mrtData, setMrtData] = useState('')
+    const [importAssignedCharacter, setImportAssignedCharacter] = useState(false)
 
     const { data: items, isLoading } = useQuery({
         queryKey: [queryKeys.itemSearch, searchTerm],
@@ -52,11 +55,12 @@ export default function SessionLootNewDialog({
     })
 
     const addRcLootsMutation = useMutation({
-        mutationFn: ({ raidSessionId, csv }: { raidSessionId: string; csv: string }) =>
-            addLootsFromRc(raidSessionId, csv),
+        mutationFn: ({ raidSessionId, csv, importAssignedCharacter }: { raidSessionId: string; csv: string; importAssignedCharacter: boolean }) =>
+            addLootsFromRc(raidSessionId, csv, importAssignedCharacter),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
             setRcInputData('')
+            setImportAssignedCharacter(false)
             setOpen(false)
             toast({ title: 'RCLoot CSV imported', description: 'Loots successfully imported.' })
         },
@@ -271,12 +275,26 @@ export default function SessionLootNewDialog({
                             placeholder="Paste RCLoot CSV data here..."
                             rows={10}
                         />
+                        <div className="flex items-center space-x-2 mt-4">
+                            <Checkbox
+                                id="importAssignedCharacter"
+                                checked={importAssignedCharacter}
+                                onCheckedChange={(checked) => setImportAssignedCharacter(checked === true)}
+                            />
+                            <Label
+                                htmlFor="importAssignedCharacter"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                Also import assigned characters along with loots
+                            </Label>
+                        </div>
                         <Button
                             className="w-full mt-4"
                             onClick={() =>
                                 addRcLootsMutation.mutate({
                                     raidSessionId: raidSession.id,
-                                    csv: rcCsvData
+                                    csv: rcCsvData,
+                                    importAssignedCharacter: importAssignedCharacter
                                 })
                             }
                         >
