@@ -41,6 +41,7 @@ import {
     NewLoot,
     NewLootManual,
     RaiderioWarn,
+    SimC,
     TierSetBonus,
     WowAuditWarn,
     WowClass,
@@ -843,18 +844,21 @@ export const parseItemLevel = (
 export const getLatestSyncDate = (
     charDroptimizers: Droptimizer[],
     charWowAudit: CharacterWowAudit | null,
-    charRaiderio: CharacterRaiderio | null
+    charRaiderio: CharacterRaiderio | null,
+    simc: SimC | null
 ): number | null => {
     const droptimizerLastUpdate =
         charDroptimizers.length > 0 ? Math.max(...charDroptimizers.map(c => c.simInfo.date)) : null
 
     const wowAuditLastUpdate = charWowAudit?.blizzardLastModifiedUnixTs ?? null
     const raiderioLastUpdate = charRaiderio?.itemUpdateAt ?? null // Raider.io real item update timestamp
+    const simcLastUpdate = simc?.dateGenerated ?? null
 
     const latestSyncDate = Math.max(
         droptimizerLastUpdate ?? -1,
         wowAuditLastUpdate ?? -1,
-        raiderioLastUpdate ?? -1
+        raiderioLastUpdate ?? -1,
+        simcLastUpdate ?? -1
     )
 
     return latestSyncDate === -1 ? null : latestSyncDate
@@ -864,12 +868,16 @@ export const parseTiersetInfo = (
     charDroptimizers: Droptimizer[],
     charAssignedLoots: Loot[],
     charWowAudit: CharacterWowAudit | null,
-    charRaiderio: CharacterRaiderio | null
+    charRaiderio: CharacterRaiderio | null,
+    simc: SimC | null
 ): GearItem[] => {
     const lastDroptWithTierInfo = charDroptimizers
         .filter(c => c.tiersetInfo.length > 0)
         .sort((a, b) => b.simInfo.date - a.simInfo.date)
         .at(0)
+
+    const lastDroptimizerDate = lastDroptWithTierInfo?.simInfo.date ?? -1
+    const simcDate = simc?.dateGenerated ?? -1
 
     const tiersetsInfo: GearItem[] = []
     const tiersetsInBag: GearItem[] = []
@@ -877,7 +885,7 @@ export const parseTiersetInfo = (
         .map(l => l.gearItem)
         .filter(gi => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)) // tierset / token assigned in this session
 
-    if (lastDroptWithTierInfo) {
+    if (lastDroptWithTierInfo && lastDroptimizerDate >= simcDate) {
         tiersetsInfo.push(
             ...lastDroptWithTierInfo.tiersetInfo.filter(gi => gi.item.season === CURRENT_SEASON)
         )
@@ -897,6 +905,17 @@ export const parseTiersetInfo = (
         tiersetsInfo.push(
             ...charRaiderio.itemsEquipped.filter(
                 gi => gi.item.tierset && gi.item.season === CURRENT_SEASON
+            )
+        )
+    }
+    if (simc && simcDate >= lastDroptimizerDate) {
+        tiersetsInfo.push(
+            ...simc.itemsEquipped.filter(gi => gi.item.tierset && gi.item.season === CURRENT_SEASON)
+        )
+        tiersetsInBag.push(
+            // tierset / token in bag
+            ...simc.itemsInBag.filter(
+                gi => gi.item.season === CURRENT_SEASON && (gi.item.tierset || gi.item.token)
             )
         )
     }
@@ -996,23 +1015,39 @@ export const parseDroptimizersInfo = (
 /**
  * Parses the Great Vault loot from the provided Droptimizers array.
  *
- * This function filters the Droptimizers to include only those with a non-empty weekly chest
- * and whose simulation information date is within the current World of Warcraft week.
- * It then sorts the filtered Droptimizers by their simulation information date in descending order
- * and returns the weekly chest of the most recent Droptimizer.
+ * This function compares the most recent Droptimizer with SimC data and returns
+ * the weeklyChest from whichever source has the more recent date.
  *
  * @param {Droptimizer[]} droptimizers - An array of Droptimizer objects to parse.
+ * @param {SimC | null} simc - SimC data containing dateGenerated timestamp.
  * @returns {GearItem[]} An array of GearItem objects representing the loot from the Great Vault.
  */
-export const parseGreatVault = (droptimizers: Droptimizer[]): GearItem[] =>
-    droptimizers
-        //.filter((c) => c.weeklyChest.length > 0 && isInCurrentWowWeek(c.simInfo.date)) // keep vault of this wow reset
-        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.weeklyChest ?? []
+export const parseGreatVault = (droptimizers: Droptimizer[], simc: SimC | null): GearItem[] => {
+    const lastDroptimizer = droptimizers.sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+    const lastSimcDate = simc?.dateGenerated ?? -1
 
-export const parseCurrencies = (droptimizers: Droptimizer[]): DroptimizerCurrency[] =>
-    droptimizers
-        //.filter((c) => c.currencies.length > 0)
-        .sort((a, b) => b.simInfo.date - a.simInfo.date)[0]?.currencies ?? []
+    // Return from the more recent source, preferring droptimizer if dates are equal
+    if (simc && lastSimcDate > (lastDroptimizer?.simInfo.date ?? -1)) {
+        return simc.weeklyChest ?? []
+    }
+
+    return lastDroptimizer?.weeklyChest ?? []
+}
+
+export const parseCurrencies = (
+    droptimizers: Droptimizer[],
+    simc: SimC | null
+): DroptimizerCurrency[] => {
+    const lastDroptimizer = droptimizers.sort((a, b) => b.simInfo.date - a.simInfo.date)[0]
+    const lastSimcDate = simc?.dateGenerated ?? -1
+
+    // Return from the more recent source, preferring droptimizer if dates are equal
+    if (simc && lastSimcDate > (lastDroptimizer?.simInfo.date ?? -1)) {
+        return simc.currencies ?? []
+    }
+
+    return lastDroptimizer?.currencies ?? []
+}
 
 const calculateTiersetCompletion = (
     loot: LootWithItem,

@@ -10,12 +10,14 @@ import type {
     NewCharacter,
     NewPlayer,
     Player,
-    PlayerWithCharacters
+    PlayerWithCharacters,
+    SimC
 } from '@shared/types/types'
 import {
     getDroptimizerLastByChar,
     getDroptimizerLatestList
 } from '@storage/droptimizer/droptimizer.storage'
+import { getAllSimC } from '@storage/droptimizer/simc.storage'
 import { getLootAssigned } from '@storage/loots/loots.storage'
 import {
     getAllCharacterRaiderio,
@@ -121,13 +123,14 @@ export const getCharLatestGameInfoHandler = async (
 }
 
 export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => {
-    const [roster, latestDroptimizer, allAssignedLoots, wowAuditData, raiderioData] =
+    const [roster, latestDroptimizer, allAssignedLoots, wowAuditData, raiderioData, simcData] =
         await Promise.all([
             getCharactersWithPlayerList(),
             getDroptimizerLatestList(),
             getLootAssigned(),
             getAllCharacterWowAudit(),
-            getAllCharacterRaiderio()
+            getAllCharacterRaiderio(),
+            getAllSimC()
         ])
 
     const res: CharacterSummary[] = roster.map(char => {
@@ -146,8 +149,12 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
                 raiderio => raiderio.name === char.name && raiderio.realm === char.realm
             ) ?? null
 
+        const charSimc: SimC | null =
+            simcData.find(simc => simc.charName === char.name && simc.charRealm === char.realm) ??
+            null
+
         // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
-        const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit, charRaiderio)
+        const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit, charRaiderio, charSimc)
 
         // loot assigned to a given char
         const charAssignedLoots = !lowerBound
@@ -159,14 +166,15 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
         return {
             character: char,
             itemLevel: parseItemLevel(charDroptimizers, charWowAudit, charRaiderio),
-            weeklyChest: parseGreatVault(charDroptimizers),
+            weeklyChest: parseGreatVault(charDroptimizers, charSimc),
             tierset: parseTiersetInfo(
                 charDroptimizers,
                 charAssignedLoots,
                 charWowAudit,
-                charRaiderio
+                charRaiderio,
+                charSimc
             ),
-            currencies: parseCurrencies(charDroptimizers),
+            currencies: parseCurrencies(charDroptimizers, charSimc),
             warnDroptimizer: parseDroptimizerWarn(charDroptimizers, charAssignedLoots),
             warnWowAudit: parseWowAuditWarn(charWowAudit),
             warnRaiderio: parseRaiderioWarn(charRaiderio)

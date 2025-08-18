@@ -189,16 +189,16 @@ export const droptimizerTable = pgTable('droptimizers', {
 
 // SimC Table for import char info without droptimizer
 export const simcTable = pgTable('simc', {
-    hash: text('hash').primaryKey(),
-    dateGenerated: integer('date_generated').notNull(), // imported unix timestamp in this app
     charName: varchar('character_name', { length: 24 }).notNull(),
     charRealm: varchar('character_server').notNull(),
+    hash: text('hash').notNull(),
+    dateGenerated: integer('date_generated').notNull(), // imported unix timestamp in this app
     weeklyChest: jsonb('weekly_chest').$type<GearItem[]>(),
     currencies: jsonb('currencies').$type<{ id: number; type: string; amount: number }[]>(),
     itemsEquipped: jsonb('items_equipped').$type<GearItem[]>().notNull(),
     itemsInBag: jsonb('items_in_bags').$type<GearItem[]>(),
     tiersetInfo: jsonb('tierset_info').$type<GearItem[]>()
-})
+},t => [primaryKey({ columns: [t.charName, t.charRealm] })])
 
 //////////////////////////////////////////////////////////
 //                   RAID SESSION                       //
