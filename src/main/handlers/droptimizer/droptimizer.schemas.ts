@@ -72,6 +72,7 @@ export const raidbotJsonSchema = z.object({
             z.object({
                 name: z.string(),
                 talents: z.string(),
+                specialization: z.string(), //eg: 'Augmentation Evoker'
                 collected_data: z.object({
                     dps: z.object({
                         mean: z.number()
@@ -88,6 +89,11 @@ export const raidbotJsonSchema = z.object({
                     mean: z.number()
                 })
             )
+        }),
+        statistics: z.object({
+            raid_dps: z.object({
+                mean: z.number() // for evokers, this is the dps of the whole raid
+            })
         })
     }),
     simbot: z.object({

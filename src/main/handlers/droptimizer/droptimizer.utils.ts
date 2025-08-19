@@ -145,7 +145,12 @@ export const convertJsonToDroptimizer = async (
     const raidDiff = wowRaidDiffSchema.parse(
         data.simbot.publicTitle.split('•')[2].replaceAll(' ', '')
     )
-    const dpsMean = data.sim.players[0].collected_data.dps.mean
+
+    const dpsMean =
+        data.sim.players[0].specialization.toLowerCase() !== 'augmentation evoker'
+            ? data.sim.players[0].collected_data.dps.mean
+            : data.sim.statistics.raid_dps.mean // augmentation evoker dps mean is the whole raid dps, not just the player
+
     const upgrades = data.sim.profilesets.results.map(item => ({
         dps: Math.round(item.mean - dpsMean),
         encounterId: Number(item.name.split('/')[1]),
