@@ -19,12 +19,13 @@ import {
 import {
     addDroptimizerHandler,
     deleteDroptimizerHandler,
-    deleteDroptimizerOlderThanHoursHandler,
+    deleteSimulationsOlderThanHoursHandler,
     getDroptimizerLastByCharAndDiffHandler,
     getDroptimizerLatestListHandler,
     getDroptimizerListHandler,
     syncDroptimizersFromDiscord
 } from './droptimizer/droptimizer.handlers'
+import { addSimcHandler } from './droptimizer/simc.handlers'
 import { getItemByIdHandler, getItemsHandler, searchItemsHandler } from './items/items.handlers'
 import {
     deleteItemNoteHandler,
@@ -62,7 +63,6 @@ import {
     setAppSettingsHandler,
     upsertJsonDataHandler
 } from './settings/settings.handlers'
-import { addSimcHandler } from './droptimizer/simc.handlers'
 
 export const allHandlers = {
     'simc-add': addSimcHandler,
@@ -70,7 +70,7 @@ export const allHandlers = {
     'droptimizer-list': getDroptimizerListHandler,
     'droptimizer-latest-list': getDroptimizerLatestListHandler,
     'droptimizer-delete': deleteDroptimizerHandler,
-    'droptimizer-cleanup': deleteDroptimizerOlderThanHoursHandler,
+    'droptimizer-cleanup': deleteSimulationsOlderThanHoursHandler,
     'droptimizer-discord-sync': syncDroptimizersFromDiscord,
     'droptimizer-last-char-diff': getDroptimizerLastByCharAndDiffHandler,
     'character-add': addCharacterHandler,

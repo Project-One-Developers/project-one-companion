@@ -8,6 +8,7 @@ import {
     getDroptimizerLatestList,
     getDroptimizerList
 } from '@storage/droptimizer/droptimizer.storage'
+import { deleteSimcOlderThanDate } from '@storage/droptimizer/simc.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
 import { getDroptimizerFromURL } from './droptimizer.utils'
@@ -91,8 +92,11 @@ export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> 
     console.log('All droptimizers imported successfully')
 }
 
-export const deleteDroptimizerOlderThanHoursHandler = async (hours: number): Promise<void> => {
+export const deleteSimulationsOlderThanHoursHandler = async (hours: number): Promise<void> => {
     const currentTimeStamp = getUnixTimestamp()
     const upperBound = currentTimeStamp - hours * 60 * 60
-    await deleteDroptimizerOlderThanDate(upperBound)
+    await Promise.all([
+        deleteDroptimizerOlderThanDate(upperBound),
+        deleteSimcOlderThanDate(upperBound)
+    ])
 }
