@@ -124,7 +124,7 @@ export const parseMrtLoots = async (
                 continue
             }
             // Skip items if WuE loot or something else (check Enum.ItemCreationContext)
-            if (parsedItem.instanceDifficultyId < 3 && parsedItem.instanceDifficultyId > 6) {
+            if (parsedItem.instanceDifficultyId < 3 || parsedItem.instanceDifficultyId > 6) {
                 console.log(
                     'parseMrtLoots: skipping loot with unwanted instanceDifficultyId # ' +
                         parsedItem.instanceDifficultyId +
@@ -284,7 +284,7 @@ export const parseRcLoots = async (
                 continue
             }
             // Skip items if WuE loot or something else (check Enum.ItemCreationContext)
-            if (parsedItem.instanceDifficultyId < 3 && parsedItem.instanceDifficultyId > 6) {
+            if (parsedItem.instanceDifficultyId < 3 || parsedItem.instanceDifficultyId > 6) {
                 console.log(
                     'parseMrtLoots: skipping loot with unwanted instanceDifficultyId # ' +
                         parsedItem.instanceDifficultyId +
