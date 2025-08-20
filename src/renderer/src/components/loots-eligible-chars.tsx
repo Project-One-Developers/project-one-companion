@@ -302,6 +302,13 @@ export default function LootsEligibleChars({
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex flex-wrap gap-2">
+                                        {charInfo.highlights.dpsGain > 0 && (
+                                            <span className="px-2 py-1 text-xs font-bold bg-blue-900/50 text-blue-400 rounded-full">
+                                                +
+                                                {getDpsHumanReadable(charInfo.highlights.dpsGain)}
+                                            </span>
+                                        )}
+
                                         {charInfo.highlights.gearIsBis ? (
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
@@ -341,12 +348,6 @@ export default function LootsEligibleChars({
                                             tierSetBonusSchema.enum['4p'] && (
                                             <span className="px-2 py-1 text-xs font-bold bg-purple-900/50 text-purple-400 rounded-full">
                                                 4P
-                                            </span>
-                                        )}
-                                        {charInfo.highlights.dpsGain > 0 && (
-                                            <span className="px-2 py-1 text-xs font-bold bg-blue-900/50 text-blue-400 rounded-full">
-                                                DPS +
-                                                {getDpsHumanReadable(charInfo.highlights.dpsGain)}
                                             </span>
                                         )}
                                         {(charInfo.highlights.ilvlDiff > 0 ||
