@@ -1121,8 +1121,8 @@ export const evalScore = (
     if (alreadyGotIt) return 0
 
     const normalizedDps = dpsGain > 0 ? dpsGain / maxDdpsGain : 0.01
-    const bonusBisScore = gearIsBis ? 1 : 0
-
+    //const bonusBisScore = gearIsBis ? 1 : 0 // remove bis from score calculation
+    const bonusBisScore = gearIsBis ? 0 : 0 // keep bis only as a label for now
     const tierSetMultiplier = match(lootEnableTiersetBonus)
         .with(tierSetBonusSchema.enum['4p'], () => 4)
         .with(tierSetBonusSchema.enum['2p'], () => 2)
