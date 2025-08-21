@@ -158,6 +158,19 @@ export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): numb
         }
     }
 
+    // craft items ilvl (12050 = Starlight Crafted)
+    // TWW season 3
+    if (bonusIds.includes(12050)) {
+        // tww season 2 crafted item
+        if (bonusIds.includes(12053)) {
+            // tww season 3 mythic crest
+            return 720
+        } else if (bonusIds.includes(12052)) {
+            // tww season 3 hc crest
+            return 710
+        }
+    }
+
     // edge case items (not worth mapping all possible states with bonus id, assume player has maxed them)
     if (item.id === 228411 || item.sourceType === 'special-tww-s1-finger') {
         // tww season 1 -  Cyrce's Circlet (Siren Isles)
@@ -165,7 +178,11 @@ export function parseItemLevelFromBonusIds(item: Item, bonusIds: number[]): numb
     }
     if (item.sourceType === 'special-tww-s2-belt') {
         // tww season 2 -  Durable Information Securing Container
-        return 691
+        return 701
+    }
+    if (item.sourceType === 'special-tww-s3-back') {
+        // tww season 3 -  Reshii Wraps
+        return 730
     }
 
     return null
