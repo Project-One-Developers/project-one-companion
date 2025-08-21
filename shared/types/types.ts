@@ -45,6 +45,7 @@ import {
     droptimizerUpgradeSchema,
     newDroptimizerSchema,
     newDroptimizerUpgradeSchema,
+    qeLiveURLSchema,
     raidbotsURLSchema,
     simcSchema
 } from '../schemas/simulations.schemas'
@@ -111,6 +112,7 @@ export type SimC = z.infer<typeof simcSchema>
 export type NewDroptimizer = z.infer<typeof newDroptimizerSchema>
 export type NewDroptimizerUpgrade = z.infer<typeof newDroptimizerUpgradeSchema>
 export type RaidbotsURL = z.infer<typeof raidbotsURLSchema>
+export type QELiveURL = z.infer<typeof qeLiveURLSchema>
 
 export type Item = z.infer<typeof itemSchema>
 export type ItemNote = z.infer<typeof itemNoteSchema>

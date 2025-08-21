@@ -10,7 +10,7 @@ export const fetchLatestDroptimizers = async (): Promise<Droptimizer[]> => {
     return droptimizers
 }
 
-export const addDroptimizer = async (url: string): Promise<Droptimizer> => {
+export const addDroptimizer = async (url: string): Promise<void> => {
     return await window.api.addDroptimizer(url)
 }
 

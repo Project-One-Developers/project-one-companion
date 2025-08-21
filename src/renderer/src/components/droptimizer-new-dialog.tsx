@@ -1,4 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod'
+
 import * as Tabs from '@radix-ui/react-tabs'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import {
@@ -8,13 +8,10 @@ import {
     addSimc
 } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import { useMutation } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Loader2, PlusIcon, Recycle, RefreshCw, Upload } from 'lucide-react'
-import { useState, type JSX } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React, { useState, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import {
@@ -25,53 +22,26 @@ import {
     DialogTitle,
     DialogTrigger
 } from './ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
+import { Label } from './ui/label'
 import { Textarea } from './ui/text-area'
 
-// Types and schemas
-const formSchema = z.object({
-    url: raidbotsURLSchema
-})
-
-const simcFormSchema = z.object({
-    simcData: z.string().min(1, 'SimC data is required')
-})
-
-type FormValues = z.infer<typeof formSchema>
-type SimCFormValues = z.infer<typeof simcFormSchema>
-
-// Component
 export default function DroptimizerNewDialog(): JSX.Element {
     // State
     const [open, setOpen] = useState(false)
     const [hoursValue, setHoursValue] = useState(12)
-
-    // Form setup
-    const form = useForm<FormValues>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            url: ''
-        }
-    })
-
-    const simcForm = useForm<SimCFormValues>({
-        resolver: zodResolver(simcFormSchema),
-        defaultValues: {
-            simcData: ''
-        }
-    })
+    const [url, setUrl] = useState('')
+    const [simcData, setSimcData] = useState('')
 
     // Mutation handling
     const manualMutation = useMutation({
         mutationFn: addDroptimizer,
-        onSuccess: response => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.droptimizers] })
-            form.reset()
-            //setOpen(false)
+            setUrl('')
             toast({
                 title: 'Droptimizer added',
-                description: `The droptimizer for character ${response.charInfo.name} has been successfully added.`
+                description: `The droptimizer has been successfully added.`
             })
         },
         onError: (error: Error) => {
@@ -121,7 +91,7 @@ export default function DroptimizerNewDialog(): JSX.Element {
     const simcImportMutation = useMutation({
         mutationFn: addSimc,
         onSuccess: () => {
-            simcForm.reset()
+            setSimcData('')
             toast({
                 title: 'SimC Import Successful',
                 description: `Successfully imported SimC data.`
@@ -144,73 +114,17 @@ export default function DroptimizerNewDialog(): JSX.Element {
         cleanupMutation.mutate(hoursValue)
     }
 
-    function onSubmit(values: FormValues): void {
-        manualMutation.mutate(values.url)
+    const handleManualSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!url.trim()) return
+        manualMutation.mutate(url)
     }
 
-    function onSimcSubmit(values: SimCFormValues): void {
-        simcImportMutation.mutate(values.simcData)
+    const handleSimcSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!simcData.trim()) return
+        simcImportMutation.mutate(simcData)
     }
-
-    const FormContent = (): JSX.Element => (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-                <FormField
-                    control={form.control}
-                    name="url"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Droptimizer URL</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button disabled={manualMutation.isPending} type="submit">
-                    {manualMutation.isPending ? <Loader2 className="animate-spin" /> : 'Add'}
-                </Button>
-            </form>
-        </Form>
-    )
-
-    const SimCFormContent = (): JSX.Element => (
-        <Form {...simcForm}>
-            <form onSubmit={simcForm.handleSubmit(onSimcSubmit)} className="flex flex-col gap-y-4">
-                <FormField
-                    control={simcForm.control}
-                    name="simcData"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>SimC Data</FormLabel>
-                            <FormControl>
-                                <Textarea
-                                    {...field}
-                                    placeholder="Paste your SimC character data here..."
-                                    className="min-h-[200px] resize-vertical"
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button disabled={simcImportMutation.isPending} type="submit">
-                    {simcImportMutation.isPending ? (
-                        <>
-                            <Loader2 className="animate-spin mr-2" />
-                            Importing...
-                        </>
-                    ) : (
-                        <>
-                            <Upload className="mr-2 h-4 w-4" />
-                            Import
-                        </>
-                    )}
-                </Button>
-            </form>
-        </Form>
-    )
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -303,10 +217,47 @@ export default function DroptimizerNewDialog(): JSX.Element {
                         </div>
                     </Tabs.Content>
                     <Tabs.Content value="manual" className="p-4">
-                        <FormContent />
+                        <form onSubmit={handleManualSubmit} className="flex flex-col gap-y-4">
+                            <div>
+                                <Label htmlFor="url-input">Droptimizer URL</Label>
+                                <Input
+                                    id="url-input"
+                                    value={url}
+                                    onChange={e => setUrl(e.target.value)}
+                                    placeholder="Enter droptimizer URL..."
+                                />
+                            </div>
+                            <Button disabled={manualMutation.isPending} type="submit">
+                                {manualMutation.isPending ? <Loader2 className="animate-spin" /> : 'Add'}
+                            </Button>
+                        </form>
                     </Tabs.Content>
                     <Tabs.Content value="simc" className="p-4">
-                        <SimCFormContent />
+                        <form onSubmit={handleSimcSubmit} className="flex flex-col gap-y-4">
+                            <div>
+                                <Label htmlFor="simc-input">SimC Data</Label>
+                                <Textarea
+                                    id="simc-input"
+                                    value={simcData}
+                                    onChange={e => setSimcData(e.target.value)}
+                                    placeholder="Paste your SimC character data here..."
+                                    className="min-h-[200px] resize-vertical"
+                                />
+                            </div>
+                            <Button disabled={simcImportMutation.isPending} type="submit">
+                                {simcImportMutation.isPending ? (
+                                    <>
+                                        <Loader2 className="animate-spin mr-2" />
+                                        Importing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Upload className="mr-2 h-4 w-4" />
+                                        Import
+                                    </>
+                                )}
+                            </Button>
+                        </form>
                     </Tabs.Content>
                     <Tabs.Content value="cleanup" className="p-4">
                         <div className="flex items-center gap-x-4">

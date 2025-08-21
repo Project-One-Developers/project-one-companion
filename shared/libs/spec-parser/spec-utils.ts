@@ -1,4 +1,4 @@
-import { Item, WowClass, WowClassName, WoWRole, WowSpec } from '@shared/types/types'
+import { Item, WowClass, WowClassName, WoWRole, WowSpec, WowSpecName } from '@shared/types/types'
 import { WOW_CLASS_WITH_SPECS } from './spec-utils.schemas'
 
 const tankSpecIds = [66, 73, 104, 250, 268, 581]
@@ -15,6 +15,27 @@ export const getWowClassFromIdOrName = (wowClass: number | WowClassName): WowCla
 
     return matchingClass
 }
+
+/**
+ * Get spec ID from class name and spec name
+ * @param className - The class name (e.g., 'Warrior', 'Paladin', etc.)
+ * @param specName - The spec name (e.g., 'Arms', 'Holy', etc.)
+ * @returns The spec ID or null if not found
+ */
+export const getWowSpecByClassNameAndSpecName = (className: WowClassName, specName: WowSpecName): WowSpec | null => {
+    const wowClass = WOW_CLASS_WITH_SPECS.find(
+        cls => cls.name.toLowerCase() === className.toLowerCase()
+    )
+
+    if (!wowClass) return null
+
+    const spec = wowClass.specs.find(
+        spec => spec.name.toLowerCase() === specName.toLowerCase()
+    )
+
+    return spec ? spec : null
+}
+
 
 export const getClassSpecs = (wowClass: number | WowClassName): WowSpec[] => {
     return getWowClassFromIdOrName(wowClass).specs

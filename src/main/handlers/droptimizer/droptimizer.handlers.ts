@@ -1,5 +1,5 @@
 import { getUnixTimestamp } from '@shared/libs/date/date-utils'
-import type { Droptimizer, WowRaidDifficulty } from '@shared/types/types'
+import type { Droptimizer, NewDroptimizer, WowRaidDifficulty } from '@shared/types/types'
 import {
     addDroptimizer,
     deleteDroptimizer,
@@ -11,18 +11,25 @@ import {
 import { deleteSimcOlderThanDate } from '@storage/droptimizer/simc.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
-import { getDroptimizerFromURL } from './droptimizer.utils'
+import { getDroptimizerFromURL as fetchDroptimizerFromURL } from './droptimizer.utils'
+import { fetchDroptimizerFromQELiveURL } from './qelive.utils'
 
-export const addDroptimizerHandler = async (url: string): Promise<Droptimizer> => {
-    console.log('Adding droptimizer from url', url)
+export const addSimulationHandler = async (url: string): Promise<void> => {
+    console.log('Adding simulation from url', url)
 
-    const droptimizer = await getDroptimizerFromURL(url)
-
-    const addedDropt = await addDroptimizer(droptimizer)
-
-    console.log('====')
-
-    return addedDropt
+    if (url.startsWith('https://questionablyepic.com/live/upgradereport/')) {
+        // QE Live report: healers
+        const droptimizers: NewDroptimizer[] = await fetchDroptimizerFromQELiveURL(url)
+        await Promise.all(droptimizers.map(addDroptimizer))
+        console.log('====')
+    } else if (url.startsWith('https://www.raidbots.com/simbot/')) {
+        // If the URL is a Raidbots simbot, fetch it
+        const droptimizer: NewDroptimizer = await fetchDroptimizerFromURL(url)
+        await addDroptimizer(droptimizer)
+        console.log('====')
+    } else {
+        throw new Error('Invalid URL format for droptimizer')
+    }
 }
 
 export const getDroptimizerListHandler = async (): Promise<Droptimizer[]> => {
@@ -79,7 +86,7 @@ export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> 
         Array.from(uniqueUrls).map(url =>
             limit(async () => {
                 try {
-                    const droptimizer = await getDroptimizerFromURL(url)
+                    const droptimizer = await fetchDroptimizerFromURL(url)
                     // TODO: manage batch insertion instead of doing it one by one
                     await addDroptimizer(droptimizer)
                 } catch (error) {

@@ -74,6 +74,13 @@ export const raidbotsURLSchema = z
     })
     .brand('RaidbotsURL')
 
+export const qeLiveURLSchema = z
+    .url()
+    .refine(url => url.includes('questionablyepic.com/live/upgradereport'), {
+        message: 'URL must be a questionablyepic.com report URL'
+    })
+    .brand('QuestionableEpicURL')
+
 export const simcSchema = z.object({
     hash: z.string(),
     dateGenerated: z.number(),

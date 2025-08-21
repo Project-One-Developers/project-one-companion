@@ -1,8 +1,18 @@
-import { wowItemSlotKeySchema } from '@shared/schemas/wow.schemas'
+import { wowItemEquippedSlotKeySchema, wowItemSlotKeySchema } from '@shared/schemas/wow.schemas'
 import { WowItemEquippedSlotKey, WowItemSlotKey } from '@shared/types/types'
 
 export const equippedSlotToSlot = (equipped: WowItemEquippedSlotKey): WowItemSlotKey => {
     return wowItemSlotKeySchema.parse(equipped.replaceAll('1', '').replaceAll('2', ''))
+}
+
+export const slotToEquippedSlot = (slotKey: WowItemSlotKey): WowItemEquippedSlotKey => {
+    if (slotKey === 'finger') {
+        return wowItemEquippedSlotKeySchema.parse('finger1')
+    }
+    if (slotKey === 'trinket') {
+        return wowItemEquippedSlotKeySchema.parse('trinket1')
+    }
+    return wowItemEquippedSlotKeySchema.parse(slotKey)
 }
 
 export function formatWowSlotKey(slot: WowItemSlotKey): string {

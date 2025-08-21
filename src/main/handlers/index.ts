@@ -17,7 +17,7 @@ import {
     getRosterSummaryHandler
 } from './characters/characters.handlers'
 import {
-    addDroptimizerHandler,
+    addSimulationHandler,
     deleteDroptimizerHandler,
     deleteSimulationsOlderThanHoursHandler,
     getDroptimizerLastByCharAndDiffHandler,
@@ -66,7 +66,7 @@ import {
 
 export const allHandlers = {
     'simc-add': addSimcHandler,
-    'droptimizer-add': addDroptimizerHandler,
+    'droptimizer-add': addSimulationHandler,
     'droptimizer-list': getDroptimizerListHandler,
     'droptimizer-latest-list': getDroptimizerLatestListHandler,
     'droptimizer-delete': deleteDroptimizerHandler,

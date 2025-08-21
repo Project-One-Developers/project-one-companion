@@ -75,7 +75,7 @@ export const api = {
         return ipcRenderer.invoke('player-delete', id)
     },
     // Droptimizers
-    addDroptimizer(url: string): Promise<Droptimizer> {
+    addDroptimizer(url: string): Promise<void> {
         return ipcRenderer.invoke('droptimizer-add', url)
     },
     addSimc(simc: string): Promise<Droptimizer> {
