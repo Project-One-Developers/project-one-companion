@@ -342,102 +342,114 @@ export async function parseBagGearsFromSimc(simc: string): Promise<GearItem[]> {
 }
 
 async function parseEquippedGearFromSimc(simc: string): Promise<GearItem[]> {
-    // Find the section between character info and "### Gear from Bags"
-    // This includes all the equipped gear lines
-    const gearSectionMatch = simc.match(
-        /^(head=[\s\S]*?)(?=\n### Gear from Bags|\n### Weekly Reward Choices|\n### Additional Character Info|$)/m
-    )
+    // Define valid equipment slots
+    const equippedSlots = [
+        'head',
+        'neck',
+        'shoulder',
+        'back',
+        'chest',
+        'wrist',
+        'hands',
+        'waist',
+        'legs',
+        'feet',
+        'finger1',
+        'finger2',
+        'trinket1',
+        'trinket2',
+        'main_hand',
+        'off_hand'
+    ]
 
-    if (!gearSectionMatch) {
-        console.log('Unable to find equipped gear section.')
-        return []
-    }
-
-    const gearSection = gearSectionMatch[1]
-    const itemLines = gearSection
-        .split('\n')
-        .filter(
-            line =>
-                line.trim() && !line.startsWith('#') && line.includes('=') && line.includes('id=')
-        )
+    // Create a regex pattern that matches any equipped slot followed by gear data
+    // This will match lines like: head=,id=123456,bonus_id=1/2/3...
+    const equippedSlotPattern = `(${equippedSlots.join('|')})`
+    const equipmentRegex = new RegExp(`^${equippedSlotPattern}=.*?,id=(\\d+).*$`, 'gm')
 
     const itemsInDb: Item[] = await getItems()
     const items: GearItem[] = []
+    let match: RegExpExecArray | null
 
-    for (const line of itemLines) {
-        const slotMatch = line.match(/^([a-zA-Z_]+\d?)=/)
-        const itemIdMatch = line.match(/,id=(\d+)/)
-        const enchantIdMatch = line.match(/enchant_id=([\d/]+)/)
-        const gemIdMatch = line.match(/gem_id=([\d/]+)/)
-        const bonusIdMatch = line.match(/bonus_id=([\d/]+)/)
-        const craftedStatsMatch = line.match(/crafted_stats=([\d/]+)/)
-        const craftingQualityMatch = line.match(/crafting_quality=([\d/]+)/)
+    while ((match = equipmentRegex.exec(simc)) !== null) {
+        const fullLine = match[0]
+        const slotKey = match[1]
+        const itemId = parseInt(match[2], 10)
+        const bonusIdsString = fullLine.match(/bonus_id=([\d/]+)/)
 
-        if (slotMatch && itemIdMatch && bonusIdMatch) {
-            const slotKey = slotMatch[1]
-            const itemId = parseInt(itemIdMatch[1], 10)
-            const bonusIds = bonusIdMatch[1].split('/').map(Number)
-            const wowItem = itemsInDb.find(i => i.id === itemId)
-
-            if (wowItem == null) {
-                console.log(
-                    'parseEquippedGearFromSimc: skipping equipped item not in db: ' +
-                        itemId +
-                        ' https://www.wowhead.com/item=' +
-                        itemId
-                )
-                continue
-            }
-
-            const itemTrack = parseItemTrack(bonusIds)
-
-            let itemLevel: number | null = null
-            if (itemTrack != null) {
-                itemLevel = itemTrack.itemLevel
-            } else {
-                itemLevel = parseItemLevelFromBonusIds(wowItem, bonusIds)
-            }
-
-            if (itemLevel == null) {
-                console.log(
-                    'parseEquippedGearFromSimc: skipping equipped item without ilvl: ' +
-                        itemId +
-                        ' - https://www.wowhead.com/item=' +
-                        itemId +
-                        '?bonus=' +
-                        bonusIds.join(':')
-                )
-                continue
-            }
-
-            const item: GearItem = {
-                item: {
-                    id: wowItem.id,
-                    name: wowItem.name,
-                    armorType: wowItem.armorType,
-                    slotKey: wowItem.slotKey,
-                    token: wowItem.token,
-                    tierset: wowItem.tierset,
-                    boe: wowItem.boe,
-                    veryRare: wowItem.veryRare,
-                    iconName: wowItem.iconName,
-                    season: evalRealSeason(wowItem, itemLevel),
-                    specIds: wowItem.specIds
-                },
-                source: 'equipped',
-                equippedInSlot: wowItemEquippedSlotKeySchema.parse(slotKey),
-                itemLevel: itemLevel,
-                bonusIds: bonusIds,
-                itemTrack: itemTrack,
-                gemIds: gemIdMatch ? gemIdMatch[1].split('/').map(Number) : null,
-                enchantIds: enchantIdMatch ? enchantIdMatch[1].split('/').map(Number) : null
-            }
-
-            if (craftedStatsMatch) item.craftedStats = craftedStatsMatch[1]
-            if (craftingQualityMatch) item.craftingQuality = craftingQualityMatch[1]
-
-            items.push(item)
+        // Skip if no bonus_id (required for processing)
+        if (!bonusIdsString) {
+            continue
         }
+
+        const bonusIds = bonusIdsString[1].split('/').map(Number)
+
+        // Extract other properties from the full line
+        const enchantIdMatch = fullLine.match(/enchant_id=([\d/]+)/)
+        const gemIdMatch = fullLine.match(/gem_id=([\d/]+)/)
+        const craftedStatsMatch = fullLine.match(/crafted_stats=([\d/]+)/)
+        const craftingQualityMatch = fullLine.match(/crafting_quality=([\d/]+)/)
+
+        const wowItem = itemsInDb.find(i => i.id === itemId)
+
+        if (wowItem == null) {
+            console.log(
+                'parseEquippedGearFromSimc: skipping equipped item not in db: ' +
+                    itemId +
+                    ' https://www.wowhead.com/item=' +
+                    itemId
+            )
+            continue
+        }
+
+        const itemTrack = parseItemTrack(bonusIds)
+
+        let itemLevel: number | null = null
+        if (itemTrack != null) {
+            itemLevel = itemTrack.itemLevel
+        } else {
+            itemLevel = parseItemLevelFromBonusIds(wowItem, bonusIds)
+        }
+
+        if (itemLevel == null) {
+            console.log(
+                'parseEquippedGearFromSimc: skipping equipped item without ilvl: ' +
+                    itemId +
+                    ' - https://www.wowhead.com/item=' +
+                    itemId +
+                    '?bonus=' +
+                    bonusIds.join(':')
+            )
+            continue
+        }
+
+        const item: GearItem = {
+            item: {
+                id: wowItem.id,
+                name: wowItem.name,
+                armorType: wowItem.armorType,
+                slotKey: wowItem.slotKey,
+                token: wowItem.token,
+                tierset: wowItem.tierset,
+                boe: wowItem.boe,
+                veryRare: wowItem.veryRare,
+                iconName: wowItem.iconName,
+                season: evalRealSeason(wowItem, itemLevel),
+                specIds: wowItem.specIds
+            },
+            source: 'equipped',
+            equippedInSlot: wowItemEquippedSlotKeySchema.parse(slotKey),
+            itemLevel: itemLevel,
+            bonusIds: bonusIds,
+            itemTrack: itemTrack,
+            gemIds: gemIdMatch ? gemIdMatch[1].split('/').map(Number) : null,
+            enchantIds: enchantIdMatch ? enchantIdMatch[1].split('/').map(Number) : null
+        }
+
+        if (craftedStatsMatch) item.craftedStats = craftedStatsMatch[1]
+        if (craftingQualityMatch) item.craftingQuality = craftingQualityMatch[1]
+
+        items.push(item)
     }
 
     return items
