@@ -201,12 +201,7 @@ export const getLootAssignmentInfoHandler = async (lootId: string): Promise<Loot
                 ) ?? null
 
             // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
-            const lowerBound = getLatestSyncDate(
-                charDroptimizers,
-                charWowAudit,
-                charRaiderio,
-                charSimc
-            )
+            const lowerBound = getLatestSyncDate(charDroptimizers, null, null, charSimc)
 
             // loot assigned to a given char
             const charAssignedLoots = !lowerBound
@@ -320,12 +315,7 @@ export const getCharactersWithLootsByItemIdHandler = async (
                 ) ?? null
 
             // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
-            const lowerBound = getLatestSyncDate(
-                charDroptimizers,
-                charWowAudit,
-                charRaiderio,
-                charSimc
-            )
+            const lowerBound = getLatestSyncDate(charDroptimizers, null, null, charSimc)
 
             // loot assigned to a given char
             const charAssignedLoots = !lowerBound

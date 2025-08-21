@@ -154,7 +154,9 @@ export const getRosterSummaryHandler = async (): Promise<CharacterSummary[]> => 
             null
 
         // we consider all the loots assigned from last known simc / wow audit sync. we take all assignedif no char info
-        const lowerBound = getLatestSyncDate(charDroptimizers, charWowAudit, charRaiderio, charSimc)
+        const lowerBound = getLatestSyncDate(charDroptimizers, null, null, charSimc)
+
+        // todo: hide curio if we think the player have converted (compare last droptimizer tierset with raiderio))
 
         // loot assigned to a given char
         const charAssignedLoots = !lowerBound
