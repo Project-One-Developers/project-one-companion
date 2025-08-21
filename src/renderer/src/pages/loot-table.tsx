@@ -1,4 +1,3 @@
-import { FiltersPanel } from '@renderer/components/filter-panel'
 import ItemManagementDialog from '@renderer/components/item-management-dialog'
 import { Input } from '@renderer/components/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
@@ -15,9 +14,11 @@ import { getWowClassBySpecId } from '@shared/libs/spec-parser/spec-utils'
 import { BisList, BossWithItems, Item, ItemNote, WowClassName } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Edit, Filter, LoaderCircle, X } from 'lucide-react'
+import { Edit, LoaderCircle } from 'lucide-react'
 
 import { useEffect, useMemo, useState, type JSX } from 'react'
+import { GlobalFilterUI } from '../components/global-filter-ui'
+import { useFilterContext } from '../lib/filter-context'
 
 // Boss Card Component
 type BossPanelProps = {
@@ -164,12 +165,14 @@ const BossPanel = ({ boss, bisLists, itemNotes, onEdit, filter }: BossPanelProps
                                                         <Edit size={12} />
                                                     </div>
                                                 </TooltipTrigger>
-                                                <TooltipContent className="TooltipContent max-w-xs" sideOffset={5}>
+                                                <TooltipContent
+                                                    className="TooltipContent max-w-xs"
+                                                    sideOffset={5}
+                                                >
                                                     <div className="text-xs">{itemNote}</div>
                                                 </TooltipContent>
                                             </Tooltip>
                                         )}
-
                                     </div>
                                 </div>
 
@@ -192,24 +195,13 @@ type ItemWithBisSpecs = {
 }
 
 export default function LootTable(): JSX.Element {
+    // Get global filter context
+    const { filter } = useFilterContext()
+
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-    const [isFilterOpen, setIsFilterOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
     const [selectedItem, setSelectedItem] = useState<ItemWithBisSpecs | null>(null)
-
-    // Filter state - using LootFilter but with only the filters we need
-    const [filter, setFilter] = useState<LootFilter>({
-        selectedRaidDiff: 'Mythic',
-        onlyUpgrades: false,
-        minUpgrade: 0,
-        showMains: true,
-        showAlts: true,
-        hideIfNoUpgrade: false,
-        selectedSlots: [],
-        selectedArmorTypes: [],
-        selectedWowClassName: []
-    })
 
     const bossesWithItemRes = useQuery({
         queryKey: [queryKeys.raidLootTable, CURRENT_RAID_ID],
@@ -234,19 +226,6 @@ export default function LootTable(): JSX.Element {
 
         return () => clearTimeout(handler)
     }, [searchQuery])
-
-    const updateFilter = (key: keyof LootFilter, value: any): void => {
-        setFilter(prev => ({ ...prev, [key]: value }))
-    }
-
-    // Check if any filters are active
-    const hasActiveFilters = useMemo(() => {
-        return (
-            filter.selectedSlots.length > 0 ||
-            filter.selectedArmorTypes.length > 0 ||
-            filter.selectedWowClassName.length > 0
-        )
-    }, [filter])
 
     // Memoized filtering logic with search query
     const filteredBosses: BossWithItems[] = useMemo(() => {
@@ -315,48 +294,15 @@ export default function LootTable(): JSX.Element {
                     ))}
             </div>
 
-            {/* Floating Filter Button */}
-            <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className={clsx(
-                    'fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center z-50',
-                    hasActiveFilters
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                        : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-                )}
-                title="Toggle Filters"
-            >
-                {isFilterOpen ? <X size={24} /> : <Filter size={24} />}
-                {hasActiveFilters && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-                )}
-            </button>
-
-            {/* Filter Panel Overlay */}
-            {isFilterOpen && (
-                <>
-                    {/* Backdrop */}
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                        onClick={() => setIsFilterOpen(false)}
-                    />
-
-                    {/* Filter Panel */}
-                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-100">
-                        <FiltersPanel
-                            filter={filter}
-                            updateFilter={updateFilter}
-                            showRaidDifficulty={false}
-                            showDroptimizerFilters={false}
-                            showMainsAlts={false}
-                            showClassFilter={true}
-                            showSlotFilter={true}
-                            showArmorTypeFilter={true}
-                            className="shadow-2xl"
-                        />
-                    </div>
-                </>
-            )}
+            {/* Bottom Right Filter button */}
+            <GlobalFilterUI
+                showRaidDifficulty={false}
+                showDroptimizerFilters={false}
+                showMainsAlts={false}
+                showClassFilter={true}
+                showSlotFilter={true}
+                showArmorTypeFilter={true}
+            />
 
             {selectedItem && (
                 <ItemManagementDialog

@@ -1,9 +1,8 @@
 import { TooltipArrow } from '@radix-ui/react-tooltip'
-import { FiltersPanel } from '@renderer/components/filter-panel'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@renderer/components/ui/tooltip'
 import { WowItemIcon } from '@renderer/components/ui/wowitem-icon'
 import { WowSpecIcon } from '@renderer/components/ui/wowspec-icon'
-import { filterDroptimizer, LootFilter } from '@renderer/lib/filters'
+import { filterDroptimizer } from '@renderer/lib/filters'
 import { fetchRaidLootTable } from '@renderer/lib/tanstack-query/bosses'
 import { fetchLatestDroptimizers } from '@renderer/lib/tanstack-query/droptimizers'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
@@ -14,9 +13,11 @@ import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { formatUnixTimestampToRelativeDays } from '@shared/libs/date/date-utils'
 import { BossWithItems, Droptimizer, Item, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { Filter, LoaderCircle, X } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 
-import { useMemo, useState, type JSX } from 'react'
+import { useMemo, type JSX } from 'react'
+import { GlobalFilterUI } from '../components/global-filter-ui'
+import { useFilterContext } from '../lib/filter-context'
 
 // Custom hooks
 const useRaidData = (currentRaid: number) => {
@@ -164,20 +165,8 @@ const BossPanel = ({
 
 // Main Component
 export default function LootGains(): JSX.Element {
-    const DEFAULT_FILTER: LootFilter = {
-        selectedRaidDiff: 'Mythic',
-        onlyUpgrades: false,
-        minUpgrade: 1000,
-        showMains: true,
-        showAlts: false,
-        hideIfNoUpgrade: true,
-        selectedArmorTypes: [],
-        selectedSlots: [],
-        selectedWowClassName: []
-    }
-
-    const [filter, setFilters] = useState<LootFilter>(DEFAULT_FILTER)
-    const [isFilterOpen, setIsFilterOpen] = useState(false)
+    // Get global filter context
+    const { filter } = useFilterContext()
 
     const {
         droptimizers,
@@ -188,27 +177,10 @@ export default function LootGains(): JSX.Element {
         charIsLoading
     } = useRaidData(CURRENT_RAID_ID)
 
-    const updateFilter = (key: keyof LootFilter, value: unknown): void => {
-        setFilters(prev => ({ ...prev, [key]: value }))
-    }
-
     const filteredDroptimizers = useMemo(() => {
         if (!droptimizers) return []
         return filterDroptimizer(droptimizers, charList, filter)
     }, [droptimizers, charList, filter])
-
-    // Check if any filters are active (for visual indication)
-    const hasActiveFilters = useMemo(() => {
-        return (
-            filter.selectedArmorTypes.length > 0 ||
-            filter.selectedSlots.length > 0 ||
-            filter.selectedWowClassName.length > 0 ||
-            filter.onlyUpgrades ||
-            !filter.showMains ||
-            filter.showAlts ||
-            !filter.hideIfNoUpgrade
-        )
-    }, [filter])
 
     if (encounterListIsLoading || droptimizersIsLoading || charIsLoading) {
         return (
@@ -235,40 +207,15 @@ export default function LootGains(): JSX.Element {
                     ))}
             </div>
 
-            {/* Floating Filter Button */}
-            <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className={`fixed bottom-6 right-6 p-4 rounded-full shadow-lg transition-all duration-200 z-50 ${
-                    hasActiveFilters
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                        : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
-                }`}
-                title="Toggle Filters"
-            >
-                {isFilterOpen ? <X className="w-6 h-6" /> : <Filter className="w-6 h-6" />}
-                {hasActiveFilters && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                )}
-            </button>
-
-            {/* Filter Panel Overlay */}
-            {isFilterOpen && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                    onClick={() => setIsFilterOpen(false)}
-                >
-                    <div
-                        className="fixed bottom-20 right-6 max-w-md max-h-[80vh] overflow-y-auto"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <FiltersPanel
-                            filter={filter}
-                            updateFilter={updateFilter}
-                            className="shadow-2xl"
-                        />
-                    </div>
-                </div>
-            )}
+            {/* Bottom Right Filter button */}
+            <GlobalFilterUI
+                showRaidDifficulty={true}
+                showDroptimizerFilters={true}
+                showMainsAlts={true}
+                showClassFilter={true}
+                showSlotFilter={true}
+                showArmorTypeFilter={true}
+            />
         </div>
     )
 }

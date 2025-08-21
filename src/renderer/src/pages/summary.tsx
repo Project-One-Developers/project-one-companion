@@ -1,7 +1,7 @@
+import { GlobalFilterUI } from '@renderer/components/global-filter-ui'
 import TiersetInfo from '@renderer/components/tierset-info'
-import { FiltersPanel } from '@renderer/components/filter-panel'
-import { Input } from '@renderer/components/ui/input'
 import { Checkbox } from '@renderer/components/ui/checkbox'
+import { Input } from '@renderer/components/ui/input'
 import {
     Table,
     TableBody,
@@ -13,29 +13,22 @@ import {
 import { WowClassIcon } from '@renderer/components/ui/wowclass-icon'
 import { WowCurrencyIcon } from '@renderer/components/ui/wowcurrency-icon'
 import { WowGearIcon } from '@renderer/components/ui/wowgear-icon'
-import { LootFilter } from '@renderer/lib/filters'
+import { useFilterContext } from '@renderer/lib/filter-context'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterSummary } from '@renderer/lib/tanstack-query/players'
-import { DroptimizerWarn, WowAuditWarn, TierSetCompletion, CharacterSummary } from '@shared/types/types'
+import {
+    CharacterSummary,
+    DroptimizerWarn,
+    TierSetCompletion,
+    WowAuditWarn
+} from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { Filter, LoaderCircle, X, AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
-import { useMemo, useState, type JSX } from 'react'
-import { useNavigate, NavigateFunction } from 'react-router'
 import clsx from 'clsx'
+import { AlertTriangle, CheckCircle, LoaderCircle, XCircle } from 'lucide-react'
+import { useMemo, useState, type JSX } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router'
 
 // Constants
-const DEFAULT_FILTER: LootFilter = {
-    selectedRaidDiff: 'Mythic',
-    onlyUpgrades: false,
-    minUpgrade: 0,
-    showMains: true,
-    showAlts: false,
-    hideIfNoUpgrade: false,
-    selectedSlots: [],
-    selectedArmorTypes: [],
-    selectedWowClassName: []
-}
-
 const DEFAULT_TIER_COMPLETION_FILTER = {
     [TierSetCompletion.None]: true,
     [TierSetCompletion.OnePiece]: true,
@@ -59,14 +52,17 @@ const formatTierCompletion = (completion: TierSetCompletion): string => {
 
 const getTierCompletionStyle = (tierCompletion: TierSetCompletion): string => {
     return clsx(
-        "px-2 py-1 rounded-full text-xs font-bold",
-        tierCompletion >= TierSetCompletion.FourPiece ? "bg-green-900/50 text-green-400" :
-            tierCompletion >= TierSetCompletion.TwoPiece ? "bg-yellow-900/50 text-yellow-400" :
-                "bg-red-900/50 text-red-400"
+        'px-2 py-1 rounded-full text-xs font-bold',
+        tierCompletion >= TierSetCompletion.FourPiece
+            ? 'bg-green-900/50 text-green-400'
+            : tierCompletion >= TierSetCompletion.TwoPiece
+              ? 'bg-yellow-900/50 text-yellow-400'
+              : 'bg-red-900/50 text-red-400'
     )
 }
 
-const sortPlayersByItemLevel = (a: CharacterSummary, b: CharacterSummary) => parseFloat(b.itemLevel) - parseFloat(a.itemLevel)
+const sortPlayersByItemLevel = (a: CharacterSummary, b: CharacterSummary) =>
+    parseFloat(b.itemLevel) - parseFloat(a.itemLevel)
 
 // Components
 const LoadingSpinner = () => (
@@ -76,9 +72,9 @@ const LoadingSpinner = () => (
 )
 
 const StatusIndicator = ({
-                             status,
-                             label,
-                         }: {
+    status,
+    label
+}: {
     status: 'success' | 'warning' | 'error' | 'none'
     label?: string
 }) => {
@@ -87,27 +83,27 @@ const StatusIndicator = ({
             case 'success':
                 return {
                     icon: CheckCircle,
-                    className: "bg-green-900/30 text-green-400 border-green-500/30",
-                    label: label || "OK"
+                    className: 'bg-green-900/30 text-green-400 border-green-500/30',
+                    label: label || 'OK'
                 }
             case 'warning':
                 return {
                     icon: AlertTriangle,
-                    className: "bg-yellow-900/30 text-yellow-400 border-yellow-500/30",
-                    label: label || "Warning"
+                    className: 'bg-yellow-900/30 text-yellow-400 border-yellow-500/30',
+                    label: label || 'Warning'
                 }
             case 'error':
                 return {
                     icon: XCircle,
-                    className: "bg-red-900/30 text-red-400 border-red-500/30",
-                    label: label || "Error"
+                    className: 'bg-red-900/30 text-red-400 border-red-500/30',
+                    label: label || 'Error'
                 }
             case 'none':
             default:
                 return {
                     icon: null,
-                    className: "bg-gray-800/50 text-gray-500 border-gray-600/30",
-                    label: "—"
+                    className: 'bg-gray-800/50 text-gray-500 border-gray-600/30',
+                    label: '—'
                 }
         }
     }
@@ -116,10 +112,12 @@ const StatusIndicator = ({
     const Icon = config.icon
 
     return (
-        <div className={clsx(
-            "inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium border",
-            config.className
-        )}>
+        <div
+            className={clsx(
+                'inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium border',
+                config.className
+            )}
+        >
             {Icon && <Icon size={12} />}
             <span>{config.label}</span>
         </div>
@@ -161,10 +159,10 @@ const WowAuditStatus = ({ warn }: { warn: WowAuditWarn }) => {
 }
 
 const TierCompletionCheckbox = ({
-                                    completion,
-                                    checked,
-                                    onChange
-                                }: {
+    completion,
+    checked,
+    onChange
+}: {
     completion: TierSetCompletion
     checked: boolean
     onChange: () => void
@@ -175,7 +173,10 @@ const TierCompletionCheckbox = ({
     </label>
 )
 
-const SearchBar = ({ searchQuery, onSearchChange }: {
+const SearchBar = ({
+    searchQuery,
+    onSearchChange
+}: {
     searchQuery: string
     onSearchChange: (value: string) => void
 }) => (
@@ -189,11 +190,11 @@ const SearchBar = ({ searchQuery, onSearchChange }: {
 )
 
 const FilterControls = ({
-                            tierCompletionFilter,
-                            onTierToggle,
-                            showOnlyWithVaultTier,
-                            onVaultFilterChange
-                        }: {
+    tierCompletionFilter,
+    onTierToggle,
+    showOnlyWithVaultTier,
+    onVaultFilterChange
+}: {
     tierCompletionFilter: TierCompletionFilterType
     onTierToggle: (completion: TierSetCompletion) => void
     showOnlyWithVaultTier: boolean
@@ -203,7 +204,7 @@ const FilterControls = ({
         <div className="flex flex-wrap gap-2 items-center">
             {Object.values(TierSetCompletion)
                 .filter(v => typeof v === 'number')
-                .map((completion) => (
+                .map(completion => (
                     <TierCompletionCheckbox
                         key={completion}
                         completion={completion as TierSetCompletion}
@@ -216,14 +217,20 @@ const FilterControls = ({
         <div className="flex items-center space-x-2">
             <Checkbox
                 checked={showOnlyWithVaultTier}
-                onCheckedChange={(checked) => onVaultFilterChange(checked === true)}
+                onCheckedChange={checked => onVaultFilterChange(checked === true)}
             />
             <span className="text-sm text-gray-300">Tierset in vault</span>
         </div>
     </div>
 )
 
-const PlayerRow = ({ summary, navigate }: { summary: CharacterSummary, navigate: NavigateFunction }) => {
+const PlayerRow = ({
+    summary,
+    navigate
+}: {
+    summary: CharacterSummary
+    navigate: NavigateFunction
+}) => {
     const tierCompletion = summary.tierset.length
 
     return (
@@ -303,37 +310,12 @@ const PlayerRow = ({ summary, navigate }: { summary: CharacterSummary, navigate:
     )
 }
 
-const FloatingFilterButton = ({
-                                  isOpen,
-                                  hasActiveFilters,
-                                  onClick
-                              }: {
-    isOpen: boolean
-    hasActiveFilters: boolean
-    onClick: () => void
-}) => (
-    <button
-        onClick={onClick}
-        className={clsx(
-            'fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center z-50',
-            hasActiveFilters
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-        )}
-        title="Change Difficulty"
-    >
-        {isOpen ? <X size={24} /> : <Filter size={24} />}
-        {hasActiveFilters && (
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-        )}
-    </button>
-)
-
 // Main component
 export default function SummaryPage(): JSX.Element {
-    // State
-    const [isFilterOpen, setIsFilterOpen] = useState(false)
-    const [filter, setFilter] = useState<LootFilter>(DEFAULT_FILTER)
+    // Get global filter context
+    const { filter } = useFilterContext()
+
+    // Local state for page-specific filters
     const [tierCompletionFilter, setTierCompletionFilter] = useState<TierCompletionFilterType>(
         DEFAULT_TIER_COMPLETION_FILTER
     )
@@ -349,24 +331,12 @@ export default function SummaryPage(): JSX.Element {
     })
 
     // Handlers
-    const updateFilter = (key: keyof LootFilter, value: any): void => {
-        setFilter(prev => ({ ...prev, [key]: value }))
-    }
-
     const toggleTierCompletion = (completion: TierSetCompletion) => {
         setTierCompletionFilter(prev => ({
             ...prev,
             [completion]: !prev[completion]
         }))
     }
-
-    const toggleFilterPanel = () => setIsFilterOpen(!isFilterOpen)
-
-    // Computed values
-    const hasActiveFilters = useMemo(() => {
-        const hasTierFilter = !Object.values(tierCompletionFilter).every(v => v)
-        return !filter.showMains || hasTierFilter || showOnlyWithVaultTier
-    }, [filter, tierCompletionFilter, showOnlyWithVaultTier])
 
     const filteredPlayers = useMemo(() => {
         if (!characterQuery.data) return []
@@ -378,15 +348,24 @@ export default function SummaryPage(): JSX.Element {
                     .toLowerCase()
                     .includes(searchQuery.toLowerCase())
 
-                const passesMainAltFilter = (filter.showMains && isMain) || (filter.showAlts && !isMain)
+                const passesMainAltFilter =
+                    (filter.showMains && isMain) || (filter.showAlts && !isMain)
                 const tierCompletion = summary.tierset.length
                 const passesTierFilter = tierCompletionFilter[tierCompletion]
-                const passesVaultFilter = !showOnlyWithVaultTier || hasVaultTierPieces(summary.weeklyChest)
+                const passesVaultFilter =
+                    !showOnlyWithVaultTier || hasVaultTierPieces(summary.weeklyChest)
 
                 return playerMatches && passesMainAltFilter && passesTierFilter && passesVaultFilter
             })
             .sort(sortPlayersByItemLevel)
-    }, [characterQuery.data, searchQuery, filter.showMains, filter.showAlts, tierCompletionFilter, showOnlyWithVaultTier])
+    }, [
+        characterQuery.data,
+        searchQuery,
+        filter.showMains,
+        filter.showAlts,
+        tierCompletionFilter,
+        showOnlyWithVaultTier
+    ])
 
     if (characterQuery.isLoading) {
         return <LoadingSpinner />
@@ -429,34 +408,14 @@ export default function SummaryPage(): JSX.Element {
                 </TableBody>
             </Table>
 
-            {/* Floating Filter Button */}
-            <FloatingFilterButton
-                isOpen={isFilterOpen}
-                hasActiveFilters={hasActiveFilters}
-                onClick={toggleFilterPanel}
+            {/* Bottom Right Filter button */}
+            <GlobalFilterUI
+                showRaidDifficulty={false}
+                showDroptimizerFilters={false}
+                showClassFilter={false}
+                showSlotFilter={false}
+                showArmorTypeFilter={false}
             />
-
-            {/* Filter Panel Overlay */}
-            {isFilterOpen && (
-                <>
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                        onClick={() => setIsFilterOpen(false)}
-                    />
-                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-100">
-                        <FiltersPanel
-                            filter={filter}
-                            updateFilter={updateFilter}
-                            showRaidDifficulty={false}
-                            showDroptimizerFilters={false}
-                            showClassFilter={false}
-                            showSlotFilter={false}
-                            showArmorTypeFilter={false}
-                            className="shadow-2xl"
-                        />
-                    </div>
-                </>
-            )}
         </div>
     )
 }

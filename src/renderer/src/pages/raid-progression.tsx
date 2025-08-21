@@ -1,8 +1,8 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip'
-import { FiltersPanel } from '@renderer/components/filter-panel'
+import { GlobalFilterUI } from '@renderer/components/global-filter-ui'
 import { Input } from '@renderer/components/ui/input'
 import { WowCharacterIcon } from '@renderer/components/ui/wowcharacter-icon'
-import { LootFilter } from '@renderer/lib/filters'
+import { useFilterContext } from '@renderer/lib/filter-context'
 import { fetchBosses } from '@renderer/lib/tanstack-query/bosses'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterProgression } from '@renderer/lib/tanstack-query/raid'
@@ -11,8 +11,7 @@ import { CURRENT_RAID_ID } from '@shared/consts/wow.consts'
 import { RaiderioEncounter } from '@shared/schemas/raiderio.schemas'
 import { Boss, Character, CharacterWithProgression, WowRaidDifficulty } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import clsx from 'clsx'
-import { Filter, LoaderCircle, X } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { useEffect, useMemo, useState, type JSX } from 'react'
 
 // Constants
@@ -331,23 +330,14 @@ const BossPanel = ({
     )
 }
 
+// Main Component
 export default function RaidProgressionPage(): JSX.Element {
-    const [isFilterOpen, setIsFilterOpen] = useState(false)
+    // Get global filter context
+    const { filter } = useFilterContext()
+
+    // Local state for page-specific features
     const [searchQuery, setSearchQuery] = useState('')
     const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
-
-    // Filter state
-    const [filter, setFilter] = useState<LootFilter>({
-        selectedRaidDiff: 'Mythic',
-        onlyUpgrades: false,
-        minUpgrade: 0,
-        showMains: true,
-        showAlts: false,
-        hideIfNoUpgrade: false,
-        selectedSlots: [],
-        selectedArmorTypes: [],
-        selectedWowClassName: []
-    })
 
     // Queries
     const bossesQuery = useQuery({
@@ -379,15 +369,6 @@ export default function RaidProgressionPage(): JSX.Element {
 
         return () => clearTimeout(handler)
     }, [searchQuery])
-
-    const updateFilter = (key: keyof LootFilter, value: any): void => {
-        setFilter(prev => ({ ...prev, [key]: value }))
-    }
-
-    // Computed values
-    const hasActiveFilters = useMemo(() => {
-        return filter.selectedRaidDiff !== 'Mythic'
-    }, [filter])
 
     const filteredPlayerNames = useMemo(() => {
         if (!debouncedSearchQuery || !rosterProgressionQuery.data) return []
@@ -451,44 +432,15 @@ export default function RaidProgressionPage(): JSX.Element {
                 ))}
             </div>
 
-            {/* Floating Filter Button */}
-            <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className={clsx(
-                    'fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center z-50',
-                    hasActiveFilters
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                        : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-                )}
-                title="Change Difficulty"
-            >
-                {isFilterOpen ? <X size={24} /> : <Filter size={24} />}
-                {hasActiveFilters && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-                )}
-            </button>
-
-            {/* Filter Panel Overlay */}
-            {isFilterOpen && (
-                <>
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                        onClick={() => setIsFilterOpen(false)}
-                    />
-                    <div className="fixed bottom-24 right-6 z-50 max-w-md w-100">
-                        <FiltersPanel
-                            filter={filter}
-                            updateFilter={updateFilter}
-                            showRaidDifficulty={true}
-                            showDroptimizerFilters={false}
-                            showClassFilter={false}
-                            showSlotFilter={false}
-                            showArmorTypeFilter={false}
-                            className="shadow-2xl"
-                        />
-                    </div>
-                </>
-            )}
+            {/* Bottom Right Filter button */}
+            <GlobalFilterUI
+                showRaidDifficulty={true}
+                showDroptimizerFilters={false}
+                showMainsAlts={true}
+                showClassFilter={false}
+                showSlotFilter={false}
+                showArmorTypeFilter={false}
+            />
         </div>
     )
 }
