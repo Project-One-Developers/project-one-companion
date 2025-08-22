@@ -185,10 +185,6 @@ export default function CharacterDialog({
 
     const handleInputChange = (field: keyof FormData, value: string | boolean) => {
         setFormData(prev => ({ ...prev, [field]: value }))
-        // Clear error when user starts typing
-        if (errors[field as keyof FormErrors]) {
-            setErrors(prev => ({ ...prev, [field]: undefined }))
-        }
     }
 
     const handleRoleChange = (value: string) => {
