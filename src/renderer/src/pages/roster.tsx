@@ -9,7 +9,7 @@ import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Download, LoaderCircle, PlusIcon, UserRoundPlus, X } from 'lucide-react'
+import { Download, LoaderCircle, PlusIcon, UserRoundPlus, Users, X } from 'lucide-react'
 
 import { type JSX, useMemo, useState } from 'react'
 import { fetchPlayersSummary } from '../lib/tanstack-query/players'
@@ -187,14 +187,23 @@ export default function RosterPage(): JSX.Element {
 
                         <h2 className="font-black text-2xl mb-2">{player.name}</h2>
                         <div className="flex flex-row items-center">
-                            {player.charsSummary && (
+                            {player.charsSummary && player.charsSummary.length > 0 ? (
                                 <CharacterOverviewIcon
                                     charsWithSummary={player.charsSummary}
                                     isLowItemLevel={isLowItemLevel}
                                 />
+                            ) : (
+                                <div className="flex flex-col items-center">
+                                    <div className="flex items-center justify-center h-12 w-12 rounded-full bg-muted-foreground/20 border-2 border-dashed border-muted-foreground/40">
+                                        <Users className="w-6 h-6 text-muted-foreground/60" />
+                                    </div>
+                                    <div className="text-xs text-center mt-1 font-medium text-muted-foreground/60">
+                                        No chars
+                                    </div>
+                                </div>
                             )}
-                            <div className="ml-5" onClick={() => handleNewCharClick(player)}>
-                                <PlusIcon className="w-5 h-5 cursor-pointer" />
+                            <div className="ml-5 mb-3" onClick={() => handleNewCharClick(player)}>
+                                <PlusIcon className="w-5 h-5 cursor-pointer hover:text-primary transition-colors" />
                             </div>
                         </div>
                     </div>
