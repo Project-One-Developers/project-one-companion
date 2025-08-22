@@ -1,18 +1,15 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addPlayer, editPlayer } from '@renderer/lib/tanstack-query/players'
-import { newPlayerSchema } from '@shared/schemas/characters.schemas'
-import { NewPlayer, Player } from '@shared/types/types'
+import type { NewPlayer, Player } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import { type JSX } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState, useEffect, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
+import { Label } from './ui/label'
 
 type PlayerDialogProps = {
     isOpen: boolean
@@ -26,6 +23,21 @@ export default function PlayerDialog({
     existingPlayer
 }: PlayerDialogProps): JSX.Element {
     const isEditing = existingPlayer != null
+
+    // Form state
+    const [playerName, setPlayerName] = useState('')
+    const [nameError, setNameError] = useState('')
+
+    // Initialize form data when dialog opens or player changes
+    useEffect(() => {
+        if (isEditing && existingPlayer) {
+            setPlayerName(existingPlayer.name)
+        } else {
+            setPlayerName('')
+        }
+        setNameError('')
+    }, [isEditing, existingPlayer, isOpen])
+
     if (isEditing) {
         console.log(`Editing player with ID: ${existingPlayer.id}`)
     }
@@ -34,11 +46,11 @@ export default function PlayerDialog({
         mutationFn: addPlayer,
         onSuccess: (_, arg) => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
-            form.reset()
+            resetForm()
             setOpen(false)
             toast({
                 title: 'Player added',
-                description: `The player ${arg} has been successfully added.`
+                description: `The player ${arg.name} has been successfully added.`
             })
         },
         onError: error => {
@@ -69,58 +81,79 @@ export default function PlayerDialog({
         }
     })
 
-    const form = useForm<NewPlayer>({
-        resolver: zodResolver(newPlayerSchema),
-        defaultValues: {
-            name: ''
-        }
-    })
+    const resetForm = () => {
+        setPlayerName('')
+        setNameError('')
+    }
 
-    function onSubmit(values: NewPlayer): void {
-        if (isEditing) {
-            editMutation.mutate({ id: existingPlayer.id, ...values })
+    const validateForm = (): boolean => {
+        const trimmedName = playerName.trim()
+
+        if (!trimmedName) {
+            setNameError('Name is required')
+            return false
+        }
+
+        setNameError('')
+        return true
+    }
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!validateForm()) {
+            return
+        }
+
+        const playerData: NewPlayer = {
+            name: playerName.trim()
+        }
+
+        if (isEditing && existingPlayer) {
+            editMutation.mutate({ id: existingPlayer.id, ...playerData })
         } else {
-            addMutation.mutate(values)
+            addMutation.mutate(playerData)
         }
     }
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPlayerName(e.target.value)
+        // Clear error when user starts typing
+        if (nameError) {
+            setNameError('')
+        }
+    }
+
+    const isLoading = addMutation.isPending || editMutation.isPending
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>New player</DialogTitle>
+                    <DialogTitle>{isEditing ? 'Edit' : 'New'} player</DialogTitle>
                     <DialogDescription>
                         Enter only the player&apos;s nickname. Characters played should be added
                         later and must be named as they are in the game.
                     </DialogDescription>
                 </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Name</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            value={playerName}
+                            onChange={handleNameChange}
+                            className={nameError ? 'border-red-500' : ''}
+                            placeholder="Enter player name"
                         />
-                        <Button
-                            disabled={addMutation.isPending || editMutation.isPending}
-                            type="submit"
-                        >
-                            {addMutation.isPending || editMutation.isPending ? (
-                                <Loader2 className="animate-spin" />
-                            ) : (
-                                'Confirm'
-                            )}
-                        </Button>
-                    </form>
-                </Form>
+                        {nameError && <p className="text-sm text-red-500">{nameError}</p>}
+                    </div>
+
+                    <Button disabled={isLoading} type="submit">
+                        {isLoading ? <Loader2 className="animate-spin" /> : 'Confirm'}
+                    </Button>
+                </form>
             </DialogContent>
         </Dialog>
     )

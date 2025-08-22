@@ -60,7 +60,11 @@ export const addCharacterHandler = async (character: NewCharacter): Promise<Char
     const res = await getCharacterWithPlayerById(id)
     // trigger raiderio sync
     if (res) {
-        await syncCharacterRaiderio(res.name, res.realm)
+        try {
+            await syncCharacterRaiderio(res.name, res.realm)
+        } catch {
+            throw new Error('Char does not exists. Check again realm and name')
+        }
     }
     return res
 }

@@ -1,11 +1,9 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchPlayers } from '@renderer/lib/tanstack-query/players'
 import {
     formatUnixTimestampForDisplay,
     parseStringToUnixTimestamp
 } from '@shared/libs/date/date-utils'
-import { newRaidSessionSchema } from '@shared/schemas/raid.schemas'
 import { NewRaidSession, PlayerWithCharacters, RaidSessionWithRoster } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
@@ -19,9 +17,7 @@ import {
     Swords,
     Users
 } from 'lucide-react'
-import React from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React, { useState, useEffect } from 'react'
 import { WowClassIcon } from './ui/wowclass-icon'
 
 interface PlayerWithCharsRowProps {
@@ -121,7 +117,7 @@ const RaidOverview: React.FC<{ roster: string[]; availablePlayers: PlayerWithCha
     const immunities = calculateImmunities(roster, availablePlayers)
 
     return (
-        <div className="p-4  rounded-lg shadow-lg">
+        <div className="p-4 rounded-lg shadow-lg">
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 <Users className="w-5 h-5 text-blue-400" /> {roster.length} Players
             </h3>
@@ -162,20 +158,23 @@ const RaidOverview: React.FC<{ roster: string[]; availablePlayers: PlayerWithCha
     )
 }
 
-const updatedNewRaidSessionSchema = newRaidSessionSchema.extend({
-    raidDate: z.string().refine(val => /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(val), {
-        message: 'Invalid date format. Use DD/MM/YYYY HH:mm'
-    })
-})
+type FormData = {
+    name: string
+    raidDate: string
+    roster: string[]
+}
 
-type FormNewRaidSession = z.infer<typeof updatedNewRaidSessionSchema>
+type FormErrors = {
+    name?: string
+    raidDate?: string
+    roster?: string
+}
 
 const SessionForm: React.FC<{
     onSubmit: (data: NewRaidSession) => void
     existingSession?: RaidSessionWithRoster
 }> = ({ onSubmit, existingSession }) => {
     const defaultDate = new Date()
-    defaultDate.setHours(21, 0, 0, 0)
 
     const { data: players = [], isLoading } = useQuery({
         queryKey: [queryKeys.players],
@@ -188,33 +187,77 @@ const SessionForm: React.FC<{
         )
     )
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        reset,
-        formState: { errors }
-    } = useForm<FormNewRaidSession>({
-        resolver: zodResolver(updatedNewRaidSessionSchema),
-        defaultValues: existingSession
-            ? {
-                  name: existingSession.name,
-                  roster: existingSession.roster.map(r => r.id),
-                  raidDate: formatUnixTimestampForDisplay(existingSession.raidDate)
-              }
-            : {
-                  name: '',
-                  roster: [],
-                  raidDate: formatUnixTimestampForDisplay(Math.floor(defaultDate.getTime() / 1000))
-              }
+    // Form state
+    const [formData, setFormData] = useState<FormData>({
+        name: '',
+        raidDate: formatUnixTimestampForDisplay(Math.floor(defaultDate.getTime() / 1000)),
+        roster: []
     })
 
-    const onSubmitForm = (formData: FormNewRaidSession) => {
-        onSubmit({
-            ...formData,
-            raidDate: parseStringToUnixTimestamp(formData.raidDate)
-        })
-        if (!existingSession) reset()
+    const [errors, setErrors] = useState<FormErrors>({})
+
+    // Initialize form data when existingSession changes
+    useEffect(() => {
+        if (existingSession) {
+            setFormData({
+                name: existingSession.name,
+                raidDate: formatUnixTimestampForDisplay(existingSession.raidDate),
+                roster: existingSession.roster.map(r => r.id)
+            })
+        } else {
+            const defaultDate = new Date()
+            defaultDate.setHours(21, 0, 0, 0)
+            setFormData({
+                name: '',
+                raidDate: formatUnixTimestampForDisplay(Math.floor(defaultDate.getTime() / 1000)),
+                roster: []
+            })
+        }
+        setErrors({})
+    }, [existingSession])
+
+    const validateForm = (): boolean => {
+        const newErrors: FormErrors = {}
+
+        // Name validation
+        if (!formData.name.trim()) {
+            newErrors.name = 'Session name is required'
+        }
+
+        // Date validation
+        const dateRegex = /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/
+        if (!formData.raidDate.trim()) {
+            newErrors.raidDate = 'Raid date is required'
+        } else if (!dateRegex.test(formData.raidDate)) {
+            newErrors.raidDate = 'Invalid date format. Use DD/MM/YYYY HH:mm'
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!validateForm()) {
+            return
+        }
+
+        const raidSessionData: NewRaidSession = {
+            name: formData.name.trim(),
+            raidDate: parseStringToUnixTimestamp(formData.raidDate),
+            roster: formData.roster
+        }
+
+        onSubmit(raidSessionData)
+    }
+
+    const handleInputChange = (field: keyof FormData, value: string | string[]) => {
+        setFormData(prev => ({ ...prev, [field]: value }))
+        // Clear error when user starts typing
+        if (errors[field as keyof FormErrors]) {
+            setErrors(prev => ({ ...prev, [field]: undefined }))
+        }
     }
 
     const toggleCharacter = (
@@ -232,117 +275,93 @@ const SessionForm: React.FC<{
         return Array.from(currentRoster)
     }
 
+    const handleCharacterToggle = (player: PlayerWithCharacters, charId: string) => {
+        const currentRoster = new Set(formData.roster)
+        const newRoster = toggleCharacter(currentRoster, player, charId)
+        handleInputChange('roster', newRoster)
+    }
+
     if (isLoading) {
         return <LoaderCircle className="animate-spin text-5xl mx-auto mt-10 mb-10" />
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmitForm)} className="w-full mx-auto space-y-6">
+        <form onSubmit={handleSubmit} className="w-full mx-auto space-y-6">
             <div className="flex space-x-4">
-                {['name', 'raidDate'].map(field => (
-                    <div key={field} className="flex-1">
-                        <input
-                            {...register(field as 'name' | 'raidDate')}
-                            type="text"
-                            placeholder={field === 'name' ? 'Session Name' : 'DD/MM/YYYY HH:mm'}
-                            className="w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
-                        />
-                        {errors[field as 'name' | 'raidDate'] && (
-                            <p className="text-red-500 text-sm">
-                                {errors[field as 'name' | 'raidDate']?.message}
-                            </p>
+                <div className="flex-1">
+                    <input
+                        type="text"
+                        placeholder="Session Name"
+                        value={formData.name}
+                        onChange={e => handleInputChange('name', e.target.value)}
+                        className={clsx(
+                            'w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all',
+                            errors.name ? 'border-2 border-red-500' : ''
                         )}
-                    </div>
-                ))}
+                    />
+                    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                </div>
+                <div className="flex-1">
+                    <input
+                        type="text"
+                        placeholder="DD/MM/YYYY HH:mm"
+                        value={formData.raidDate}
+                        onChange={e => handleInputChange('raidDate', e.target.value)}
+                        className={clsx(
+                            'w-full p-3 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all',
+                            errors.raidDate ? 'border-2 border-red-500' : ''
+                        )}
+                    />
+                    {errors.raidDate && (
+                        <p className="text-red-500 text-sm mt-1">{errors.raidDate}</p>
+                    )}
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Controller
-                    name="roster"
-                    control={control}
-                    render={({ field }) => (
-                        <>
-                            <div className="space-y-2 overflow-y-auto p-1">
-                                {tankPlayers.map(player => (
-                                    <PlayerWithCharsRow
-                                        key={player.id}
-                                        player={player}
-                                        selectedCharacters={field.value}
-                                        onCharacterToggle={charId => {
-                                            const currentRoster = new Set(field.value)
-                                            field.onChange(
-                                                toggleCharacter(currentRoster, player, charId)
-                                            )
-                                        }}
-                                    />
-                                ))}
-                                <hr className="border-gray-800" />
-                                {healerPlayers
-                                    .sort((a, b) => a.name.localeCompare(b.name))
-                                    .map(player => (
-                                        <PlayerWithCharsRow
-                                            key={player.id}
-                                            player={player}
-                                            selectedCharacters={field.value}
-                                            onCharacterToggle={charId => {
-                                                const currentRoster = new Set(field.value)
-                                                field.onChange(
-                                                    toggleCharacter(currentRoster, player, charId)
-                                                )
-                                            }}
-                                        />
-                                    ))}
-                            </div>
-                            <div className="space-y-2 overflow-y-auto p-1">
-                                {dpsPlayers
-                                    .sort((a, b) => a.name.localeCompare(b.name))
-                                    .map(player => (
-                                        <PlayerWithCharsRow
-                                            key={player.id}
-                                            player={player}
-                                            selectedCharacters={field.value}
-                                            onCharacterToggle={charId => {
-                                                const currentRoster = new Set(field.value)
-                                                field.onChange(
-                                                    toggleCharacter(currentRoster, player, charId)
-                                                )
-                                            }}
-                                        />
-                                    ))}
-                            </div>
-                            {/* Raid Overview */}
-                            <RaidOverview roster={field.value} availablePlayers={players} />
-                            {/* <div className="space-y-2 overflow-y-auto p-1">
-                                <h3 className="text-white font-bold">Raid Overview</h3>
-                                <p className="text-gray-300">
-                                    Roster: {field.value.length} players
-                                </p>
-                                <p className="text-gray-300">
-                                    Attack Power: {hasClass(field.value, 'Warrior') ? 'Yes' : 'No'}
-                                </p>
-                                <p className="text-gray-300">
-                                    Stamina: {hasClass(field.value, 'Priest') ? 'Yes' : 'No'}
-                                </p>
-                                <p className="text-gray-300">
-                                    Intellect: {hasClass(field.value, 'Mage') ? 'Yes' : 'No'}
-                                </p>
-                                <p className="text-gray-300">
-                                    Chaos Brand:{' '}
-                                    {hasClass(field.value, 'Demon Hunter') ? 'Yes' : 'No'}
-                                </p>
-                                <p className="text-gray-300">
-                                    Mystic Touch: {hasClass(field.value, 'Monk') ? 'Yes' : 'No'}
-                                </p>
-                                <p className="text-gray-300">
-                                    Immunities: {calculateImmunities(field.value)}
-                                </p>
-                            </div> */}
-                        </>
-                    )}
-                />
+                {/* Tank Players */}
+                <div className="space-y-2 overflow-y-auto p-1">
+                    {tankPlayers.map(player => (
+                        <PlayerWithCharsRow
+                            key={player.id}
+                            player={player}
+                            selectedCharacters={formData.roster}
+                            onCharacterToggle={charId => handleCharacterToggle(player, charId)}
+                        />
+                    ))}
+                    <hr className="border-gray-800" />
+                    {/* Healer Players */}
+                    {healerPlayers
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map(player => (
+                            <PlayerWithCharsRow
+                                key={player.id}
+                                player={player}
+                                selectedCharacters={formData.roster}
+                                onCharacterToggle={charId => handleCharacterToggle(player, charId)}
+                            />
+                        ))}
+                </div>
+
+                {/* DPS Players */}
+                <div className="space-y-2 overflow-y-auto p-1">
+                    {dpsPlayers
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map(player => (
+                            <PlayerWithCharsRow
+                                key={player.id}
+                                player={player}
+                                selectedCharacters={formData.roster}
+                                onCharacterToggle={charId => handleCharacterToggle(player, charId)}
+                            />
+                        ))}
+                </div>
+
+                {/* Raid Overview */}
+                <RaidOverview roster={formData.roster} availablePlayers={players} />
             </div>
 
-            {errors.roster && <p className="text-red-500 text-sm">{errors.roster.message}</p>}
+            {errors.roster && <p className="text-red-500 text-sm">{errors.roster}</p>}
 
             <button
                 type="submit"

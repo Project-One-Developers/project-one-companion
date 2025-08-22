@@ -1,30 +1,19 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addCharacter, editCharacter } from '@renderer/lib/tanstack-query/players'
 import { REALMS, ROLES } from '@shared/consts/wow.consts'
-import { newCharacterSchema } from '@shared/schemas/characters.schemas'
 import { ROLES_CLASSES_MAP } from '@shared/schemas/wow.schemas'
-import type { Character, NewCharacter, Player } from '@shared/types/types'
+import type { Character, NewCharacter, Player, WowClassName, WoWRole } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import { type JSX } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useState, useEffect, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
-} from './ui/form'
 import { Input } from './ui/input'
+import { Label } from './ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 type CharacterDialogProps = {
@@ -33,6 +22,21 @@ type CharacterDialogProps = {
     mode: 'add' | 'edit'
     player?: Player
     existingCharacter?: Character
+}
+
+type FormData = {
+    name: string
+    realm: string
+    class: WowClassName
+    role: WoWRole
+    main: boolean
+}
+
+type FormErrors = {
+    name?: string
+    realm?: string
+    class?: string
+    role?: string
 }
 
 export default function CharacterDialog({
@@ -49,11 +53,44 @@ export default function CharacterDialog({
         throw new Error('Cannot add a character without a player')
     }
 
+    // Form state
+    const [formData, setFormData] = useState<FormData>({
+        name: '',
+        realm: 'pozzo-delleternità',
+        class: 'Death Knight',
+        role: 'DPS',
+        main: false
+    })
+
+    const [errors, setErrors] = useState<FormErrors>({})
+
+    // Initialize form data when dialog opens or mode/character changes
+    useEffect(() => {
+        if (mode === 'edit' && existingCharacter) {
+            setFormData({
+                name: existingCharacter.name,
+                realm: existingCharacter.realm,
+                class: existingCharacter.class,
+                role: existingCharacter.role,
+                main: existingCharacter.main
+            })
+        } else {
+            setFormData({
+                name: '',
+                realm: 'pozzo-delleternità',
+                class: 'Death Knight',
+                role: 'DPS',
+                main: false
+            })
+        }
+        setErrors({})
+    }, [mode, existingCharacter, isOpen])
+
     const addMutation = useMutation({
         mutationFn: addCharacter,
         onSuccess: (_, arg) => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
-            form.reset()
+            resetForm()
             setOpen(false)
             toast({
                 title: 'Character Added',
@@ -89,31 +126,81 @@ export default function CharacterDialog({
         }
     })
 
-    const form = useForm<NewCharacter>({
-        resolver: zodResolver(newCharacterSchema),
-        defaultValues: {
-            name: mode === 'edit' ? existingCharacter?.name : '',
-            realm: mode === 'edit' ? existingCharacter?.realm : 'pozzo-delleternità',
-            class: mode === 'edit' ? existingCharacter?.class : 'Death Knight',
-            role: mode === 'edit' ? existingCharacter?.role : 'DPS',
-            main: mode === 'edit' ? existingCharacter?.main : false,
-            playerId: player?.id
+    const resetForm = () => {
+        setFormData({
+            name: '',
+            realm: 'pozzo-delleternità',
+            class: 'Death Knight',
+            role: 'DPS',
+            main: false
+        })
+        setErrors({})
+    }
+
+    const validateForm = (): boolean => {
+        const newErrors: FormErrors = {}
+
+        if (!formData.name.trim()) {
+            newErrors.name = 'Name is required'
         }
-    })
 
-    const selectedRole = form.watch('role')
-    const filteredClasses = ROLES_CLASSES_MAP[selectedRole] || []
+        if (!formData.realm.trim()) {
+            newErrors.realm = 'Realm is required'
+        }
 
-    function onSubmit(values: NewCharacter): void {
+        if (!formData.class.trim()) {
+            newErrors.class = 'Class is required'
+        }
+
+        if (!formData.role.trim()) {
+            newErrors.role = 'Role is required'
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!validateForm()) {
+            return
+        }
+
+        const characterData: NewCharacter = {
+            ...formData,
+            playerId: player?.id || existingCharacter?.playerId || ''
+        }
+
         if (mode === 'edit' && existingCharacter) {
-            editMutation.mutate({ id: existingCharacter.id, ...values })
+            editMutation.mutate({ id: existingCharacter.id, ...characterData })
         } else {
             if (!player) {
-                throw Error('Unable to add char without selecting a player')
+                throw Error('Unable to add character without selecting a player')
             }
-            addMutation.mutate({ ...values, playerId: player.id })
+            addMutation.mutate({ ...characterData, playerId: player.id })
         }
     }
+
+    const handleInputChange = (field: keyof FormData, value: string | boolean) => {
+        setFormData(prev => ({ ...prev, [field]: value }))
+        // Clear error when user starts typing
+        if (errors[field as keyof FormErrors]) {
+            setErrors(prev => ({ ...prev, [field]: undefined }))
+        }
+    }
+
+    const handleRoleChange = (value: string) => {
+        handleInputChange('role', value)
+        // Reset class to first available option when role changes
+        const availableClasses = ROLES_CLASSES_MAP[value] || []
+        if (availableClasses.length > 0) {
+            handleInputChange('class', availableClasses[0])
+        }
+    }
+
+    const filteredClasses = ROLES_CLASSES_MAP[formData.role] || []
+    const isLoading = addMutation.isPending || editMutation.isPending
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -126,142 +213,100 @@ export default function CharacterDialog({
                         Enter the correct character name as it appears in-game
                     </DialogDescription>
                 </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Name</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
+                    {/* Name Field */}
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            value={formData.name}
+                            onChange={e => handleInputChange('name', e.target.value)}
+                            className={errors.name ? 'border-red-500' : ''}
                         />
-                        <FormField
-                            control={form.control}
-                            name="realm"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Realm</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a server" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {REALMS.EU.map(r => (
-                                                    <SelectItem key={r.slug} value={r.slug}>
-                                                        {r.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="role"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Role</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a role" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {ROLES.map(r => (
-                                                    <SelectItem key={r} value={r}>
-                                                        {r}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="class"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Class</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            value={field.value}
-                                            defaultValue={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a class" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {filteredClasses.map(c => (
-                                                    <SelectItem key={c} value={c}>
-                                                        {c}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="main"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value as CheckedState}
-                                            onCheckedChange={field.onChange}
-                                            className="h-5 w-5"
-                                        />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                        <FormLabel>Main Character</FormLabel>
-                                        <FormDescription>
-                                            Check this if this is the player&apos;s main character.
-                                        </FormDescription>
-                                    </div>
-                                </FormItem>
-                            )}
-                        />
-                        <Button
-                            disabled={addMutation.isPending || editMutation.isPending}
-                            type="submit"
+                        {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+                    </div>
+
+                    {/* Realm Field */}
+                    <div className="space-y-2">
+                        <Label htmlFor="realm">Realm</Label>
+                        <Select
+                            value={formData.realm}
+                            onValueChange={value => handleInputChange('realm', value)}
                         >
-                            {addMutation.isPending || editMutation.isPending ? (
-                                <Loader2 className="animate-spin" />
-                            ) : (
-                                'Confirm'
-                            )}
-                        </Button>
-                    </form>
-                </Form>
+                            <SelectTrigger className={errors.realm ? 'border-red-500' : ''}>
+                                <SelectValue placeholder="Select a server" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {REALMS.EU.map(r => (
+                                    <SelectItem key={r.slug} value={r.slug}>
+                                        {r.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {errors.realm && <p className="text-sm text-red-500">{errors.realm}</p>}
+                    </div>
+
+                    {/* Role Field */}
+                    <div className="space-y-2">
+                        <Label htmlFor="role">Role</Label>
+                        <Select value={formData.role} onValueChange={handleRoleChange}>
+                            <SelectTrigger className={errors.role ? 'border-red-500' : ''}>
+                                <SelectValue placeholder="Select a role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {ROLES.map(r => (
+                                    <SelectItem key={r} value={r}>
+                                        {r}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {errors.role && <p className="text-sm text-red-500">{errors.role}</p>}
+                    </div>
+
+                    {/* Class Field */}
+                    <div className="space-y-2">
+                        <Label htmlFor="class">Class</Label>
+                        <Select
+                            value={formData.class}
+                            onValueChange={value => handleInputChange('class', value)}
+                        >
+                            <SelectTrigger className={errors.class ? 'border-red-500' : ''}>
+                                <SelectValue placeholder="Select a class" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {filteredClasses.map(c => (
+                                    <SelectItem key={c} value={c}>
+                                        {c}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {errors.class && <p className="text-sm text-red-500">{errors.class}</p>}
+                    </div>
+
+                    {/* Main Character Checkbox */}
+                    <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <Checkbox
+                            id="main"
+                            checked={formData.main as CheckedState}
+                            onCheckedChange={checked => handleInputChange('main', checked === true)}
+                            className="h-5 w-5"
+                        />
+                        <div className="space-y-1 leading-none">
+                            <Label htmlFor="main">Main Character</Label>
+                            <p className="text-sm text-muted-foreground">
+                                Check this if this is the player&apos;s main character.
+                            </p>
+                        </div>
+                    </div>
+
+                    <Button disabled={isLoading} type="submit">
+                        {isLoading ? <Loader2 className="animate-spin" /> : 'Confirm'}
+                    </Button>
+                </form>
             </DialogContent>
         </Dialog>
     )
