@@ -89,7 +89,7 @@ export default function CharacterDialog({
     const addMutation = useMutation({
         mutationFn: addCharacter,
         onSuccess: (_, arg) => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.playersSummary] })
             resetForm()
             setOpen(false)
             toast({
@@ -98,6 +98,7 @@ export default function CharacterDialog({
             })
         },
         onError: error => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.playersSummary] })
             toast({
                 title: 'Error',
                 description: `Unable to add the character. Error: ${error.message}`
@@ -111,7 +112,7 @@ export default function CharacterDialog({
             queryClient.invalidateQueries({
                 queryKey: [queryKeys.character, arg.id]
             })
-            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.playersSummary] })
             setOpen(false)
             toast({
                 title: 'Character edited',

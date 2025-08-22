@@ -28,7 +28,7 @@ export default function RosterPage(): JSX.Element {
     const [searchQuery, setSearchQuery] = useState('')
 
     const playersQuery = useQuery({
-        queryKey: [queryKeys.charactersSummary],
+        queryKey: [queryKeys.playersSummary],
         queryFn: fetchPlayersSummary
     })
 

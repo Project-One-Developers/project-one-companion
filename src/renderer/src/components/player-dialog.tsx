@@ -45,7 +45,7 @@ export default function PlayerDialog({
     const addMutation = useMutation({
         mutationFn: addPlayer,
         onSuccess: (_, arg) => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.playersSummary] })
             resetForm()
             setOpen(false)
             toast({
@@ -65,7 +65,7 @@ export default function PlayerDialog({
         mutationFn: editPlayer,
         onSuccess: (_, arg) => {
             queryClient.invalidateQueries({
-                queryKey: [queryKeys.raidSession, arg.id]
+                queryKey: [queryKeys.playersSummary]
             })
             setOpen(false)
             toast({

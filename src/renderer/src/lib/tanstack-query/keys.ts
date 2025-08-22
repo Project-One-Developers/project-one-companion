@@ -11,6 +11,7 @@ export const queryKeys = {
     characterGameInfo: 'character-game-info',
     characters: 'character-list',
     charactersSummary: 'character-summary-list',
+    playersSummary: 'players-summary-list',
     characterInventory: 'characters-by-itemid',
     itemSearch: 'item-search',
     appSettings: 'app-settings',

@@ -23,7 +23,7 @@ export default function PlayerDeleteDialog({
     const { mutate, isPending } = useMutation({
         mutationFn: async () => deletePlayer(player.id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.playersSummary] })
             setOpen(false)
             toast({
                 title: 'Player Deletion',

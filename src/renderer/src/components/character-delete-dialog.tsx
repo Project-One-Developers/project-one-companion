@@ -33,7 +33,7 @@ export default function CharacterDeleteDialog({
     const deleteMutation = useMutation({
         mutationFn: deleteCharacter,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.charactersSummary] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.playersSummary] })
             navigate(`/roster`) // go to roster page
         },
         onError: error => {
