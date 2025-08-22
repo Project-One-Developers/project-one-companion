@@ -13,6 +13,7 @@ import {
     getCharacterHandler,
     getCharLatestGameInfoHandler,
     getChracterListHandler,
+    getPlayersWithoutCharactersHandler,
     getPlayerWithCharactersListHandler,
     getRosterSummaryHandler
 } from './characters/characters.handlers'
@@ -87,6 +88,7 @@ export const allHandlers = {
     'player-delete': deletePlayerHandler,
     'player-edit': editPlayerHandler,
     'player-list': getPlayerWithCharactersListHandler,
+    'player-without-chars-list': getPlayersWithoutCharactersHandler,
     'upsert-json-data': upsertJsonDataHandler,
     'item-get': getItemByIdHandler,
     'items-list': getItemsHandler,

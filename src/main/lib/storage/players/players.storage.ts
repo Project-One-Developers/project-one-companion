@@ -3,7 +3,8 @@ import type { EditPlayer, NewPlayer, Player, PlayerWithCharacters } from '@share
 import { db } from '@storage/storage.config'
 import { charTable, playerTable } from '@storage/storage.schema'
 import { takeFirstResult } from '@storage/storage.utils'
-import { eq } from 'drizzle-orm'
+import { eq, isNull } from 'drizzle-orm'
+import z from 'zod'
 import { newUUID } from '../../utils'
 import { playersListStorageSchema } from './players.schemas'
 
@@ -14,6 +15,15 @@ export const getPlayerWithCharactersList = async (): Promise<PlayerWithCharacter
         }
     })
     return playersListStorageSchema.parse(result)
+}
+
+export const getPlayersWithoutCharactersList = async (): Promise<Player[]> => {
+    const result = await db()
+        .select()
+        .from(playerTable)
+        .leftJoin(charTable, eq(playerTable.id, charTable.playerId))
+        .where(isNull(charTable.playerId))
+    return z.array(playerSchema).parse(result.map(row => row.players))
 }
 
 export const getPlayerById = async (id: string): Promise<Player | null> => {

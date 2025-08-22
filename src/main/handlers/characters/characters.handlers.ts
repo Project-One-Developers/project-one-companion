@@ -41,6 +41,7 @@ import {
     getPlayerById,
     getPlayerWithCharactersList
 } from '@storage/players/players.storage'
+import { getPlayersWithoutCharactersList } from '../../lib/storage/players/players.storage'
 import {
     getLatestSyncDate,
     parseCurrencies,
@@ -105,8 +106,11 @@ export const editPlayerHandler = async (edited: EditPlayer): Promise<Player | nu
 }
 
 export const getPlayerWithCharactersListHandler = async (): Promise<PlayerWithCharacters[]> => {
-    const players = await getPlayerWithCharactersList()
-    return players
+    return await getPlayerWithCharactersList()
+}
+
+export const getPlayersWithoutCharactersHandler = async (): Promise<Player[]> => {
+    return await getPlayersWithoutCharactersList()
 }
 
 export const getCharLatestGameInfoHandler = async (

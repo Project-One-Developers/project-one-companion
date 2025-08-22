@@ -46,21 +46,66 @@ export const getCharacterGameInfo = async (
     return await window.api.getCharacterGameInfo(charName, charRealm)
 }
 
-// players
+// Type definition for the enriched player
+export type PlayerWithCharactersSummary = {
+    id: string
+    name: string
+    charsSummary: CharacterSummary[]
+}
 
 export const fetchPlayers = async (): Promise<PlayerWithCharacters[]> => {
-    const response = await window.api.getPlayerWithCharList()
-    return response
+    return await window.api.getPlayerWithCharList()
+}
+
+export const fetchPlayersWithoutCharacters = async (): Promise<Player[]> => {
+    return await window.api.getPlayerWithoutCharsList()
+}
+
+// Utility func to show player with chars cards
+export const fetchPlayersSummary = async (): Promise<PlayerWithCharactersSummary[]> => {
+    const [rosterSummary, playersWithoutChars] = await Promise.all([
+        fetchRosterSummary(),
+        fetchPlayersWithoutCharacters()
+    ])
+
+    // Transform roster summary to players with characters
+    const playersWithCharacters: PlayerWithCharactersSummary[] =
+        rosterSummary?.reduce((acc, charSummary) => {
+            const player = charSummary.character.player
+
+            // Find existing player in accumulator
+            const existingPlayer = acc.find(p => p.id === player.id)
+
+            if (existingPlayer) {
+                // Add character summary to existing player
+                existingPlayer.charsSummary.push(charSummary)
+            } else {
+                // Create new player with this character summary
+                acc.push({
+                    ...player,
+                    charsSummary: [charSummary]
+                })
+            }
+
+            return acc
+        }, [] as PlayerWithCharactersSummary[]) ?? []
+
+    // Transform players without characters to match the unified format
+    const playersWithoutCharsFormatted = playersWithoutChars.map(player => ({
+        ...player,
+        charsSummary: [] as CharacterSummary[]
+    }))
+
+    // Combine both arrays, with players with characters first
+    return [...playersWithCharacters, ...playersWithoutCharsFormatted]
 }
 
 export const addPlayer = async (player: NewPlayer): Promise<Player> => {
-    const response = await window.api.addPlayer(player)
-    return response
+    return await window.api.addPlayer(player)
 }
 
 export const deletePlayer = async (id: string): Promise<void> => {
-    const response = await window.api.deletePlayer(id)
-    return response
+    return await window.api.deletePlayer(id)
 }
 
 export const editPlayer = async (edited: EditPlayer): Promise<Player> => {

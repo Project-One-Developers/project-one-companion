@@ -6,19 +6,13 @@ import { Button } from '@renderer/components/ui/button'
 import { Input } from '@renderer/components/ui/input'
 import { CharacterOverviewIcon } from '@renderer/components/ui/wowcharacter-overview-icon'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
-import { CharacterSummary, Player } from '@shared/types/types'
+import { Player } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Download, LoaderCircle, PlusIcon, UserRoundPlus, X } from 'lucide-react'
 
-import { useMemo, useState, type JSX } from 'react'
-import { fetchRosterSummary } from '../lib/tanstack-query/players'
-
-type PlayerWithCharactersSummary = {
-    id: string
-    name: string
-    charsSummary: CharacterSummary[]
-}
+import { type JSX, useMemo, useState } from 'react'
+import { fetchPlayersSummary } from '../lib/tanstack-query/players'
 
 type ItemLevelStats = {
     mean: number
@@ -33,39 +27,17 @@ export default function RosterPage(): JSX.Element {
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
     const [searchQuery, setSearchQuery] = useState('')
 
-    const characterQuery = useQuery({
+    const playersQuery = useQuery({
         queryKey: [queryKeys.charactersSummary],
-        queryFn: fetchRosterSummary
+        queryFn: fetchPlayersSummary
     })
 
-    // Memoize the players construction
-    const players: PlayerWithCharactersSummary[] = useMemo(() => {
-        return (
-            characterQuery.data?.reduce((acc, charSummary) => {
-                const player = charSummary.character.player
+    const players = useMemo(() => playersQuery.data ?? [], [playersQuery.data])
 
-                // Find existing player in accumulator
-                const existingPlayer = acc.find(p => p.id === player.id)
-
-                if (existingPlayer) {
-                    // Add character summary to existing player
-                    existingPlayer.charsSummary.push(charSummary)
-                } else {
-                    // Create new player with this character summary
-                    acc.push({
-                        ...player,
-                        charsSummary: [charSummary]
-                    })
-                }
-
-                return acc
-            }, [] as PlayerWithCharactersSummary[]) ?? []
-        )
-    }, [characterQuery.data])
-
-    // Calculate item level statistics for all characters
+    // Calculate item level statistics only for players with characters
     const itemLevelStats: ItemLevelStats = useMemo(() => {
-        const allCharacters = players.flatMap(player => player.charsSummary)
+        const playersWithChars = players.filter(p => p.charsSummary.length > 0)
+        const allCharacters = playersWithChars.flatMap(player => player.charsSummary)
         const validItemLevels = allCharacters
             .map(char => parseInt(char.itemLevel))
             .filter(level => !isNaN(level) && level > 0)
@@ -74,17 +46,11 @@ export default function RosterPage(): JSX.Element {
             return { mean: 0, standardDeviation: 0, threshold: 0 }
         }
 
-        // Calculate mean
         const mean = validItemLevels.reduce((sum, level) => sum + level, 0) / validItemLevels.length
-
-        // Calculate standard deviation
         const variance =
             validItemLevels.reduce((sum, level) => sum + Math.pow(level - mean, 2), 0) /
             validItemLevels.length
         const standardDeviation = Math.sqrt(variance)
-
-        // Define threshold: characters more than 1 standard deviation below mean are considered "low"
-        // You can adjust this multiplier (1.0) to be more or less strict
         const threshold = mean - 1.0 * standardDeviation
 
         return { mean, standardDeviation, threshold }
@@ -98,19 +64,21 @@ export default function RosterPage(): JSX.Element {
 
     // Prepare CSV data
     const csvData = useMemo(() => {
-        return players.flatMap(player =>
-            player.charsSummary.map(charSummary => ({
-                'Player Name': player.name,
-                'Character Name': charSummary.character.name,
-                'Character Realm': charSummary.character.realm,
-                'Character Item Level': charSummary.itemLevel,
-                'Tierset Set': charSummary.tierset.length,
-                'Raider.io URL': `https://raider.io/characters/eu/${charSummary.character.realm}/${charSummary.character.name}`
-            }))
-        )
+        return players
+            .filter(p => p.charsSummary.length > 0)
+            .flatMap(player =>
+                player.charsSummary.map(charSummary => ({
+                    'Player Name': player.name,
+                    'Character Name': charSummary.character.name,
+                    'Character Realm': charSummary.character.realm,
+                    'Character Item Level': charSummary.itemLevel,
+                    'Tierset Set': charSummary.tierset.length,
+                    'Raider.io URL': `https://raider.io/characters/eu/${charSummary.character.realm}/${charSummary.character.name}`
+                }))
+            )
     }, [players])
 
-    if (characterQuery.isLoading) {
+    if (playersQuery.isLoading) {
         return (
             <div className="flex flex-col items-center w-full justify-center mt-10 mb-10">
                 <LoaderCircle className="animate-spin text-5xl" />
@@ -122,14 +90,14 @@ export default function RosterPage(): JSX.Element {
     const filteredPlayers = players
         .sort((a, b) => a.name.localeCompare(b.name)) // sort player by name
         .filter(player => {
-            const playerMatches =
+            return (
                 player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 player.charsSummary
                     ?.map(cs => cs.character)
                     .some(character =>
                         character.name.toLowerCase().includes(searchQuery.toLowerCase())
                     )
-            return playerMatches
+            )
         })
 
     const handleDeleteClick = (player: Player) => {
@@ -255,9 +223,7 @@ export default function RosterPage(): JSX.Element {
                     className="w-14 h-14 rounded-full bg-primary text-background hover:bg-primary/80 shadow-lg transition-all duration-200 flex items-center justify-center"
                     title="Add Player"
                 >
-                    <UserRoundPlus
-                        className={clsx('w-6 h-6 hover:rotate-45 ease-linear transition-transform')}
-                    />
+                    <UserRoundPlus className={clsx('w-6 h-6')} />
                 </button>
             </div>
 

@@ -65,6 +65,9 @@ export const api = {
     getPlayerWithCharList(): Promise<PlayerWithCharacters[]> {
         return ipcRenderer.invoke('player-list')
     },
+    getPlayerWithoutCharsList(): Promise<Player[]> {
+        return ipcRenderer.invoke('player-without-chars-list')
+    },
     addPlayer(player: NewPlayer): Promise<Player> {
         return ipcRenderer.invoke('player-add', player)
     },
@@ -141,7 +144,11 @@ export const api = {
     addLootsManual(raidSessionId: string, loots: NewLootManual[]): Promise<void> {
         return ipcRenderer.invoke('loots-add-manual', raidSessionId, loots)
     },
-    addLootsFromRc(raidSessionId: string, csv: string, importAssignedCharacter: boolean): Promise<void> {
+    addLootsFromRc(
+        raidSessionId: string,
+        csv: string,
+        importAssignedCharacter: boolean
+    ): Promise<void> {
         return ipcRenderer.invoke('loots-add-rcloot', raidSessionId, csv, importAssignedCharacter)
     },
     addLootsFromMrt(raidSessionId: string, text: string): Promise<void> {
