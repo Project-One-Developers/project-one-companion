@@ -22,7 +22,7 @@ jobs:
       VITE_APPID: ${{ secrets.VITE_APPID }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: pnpm/action-setup@v4
 
