@@ -245,7 +245,7 @@ function createGearPiece(
     const wowItem = itemsInDb.find(i => i.id === itemId)
     if (wowItem == null) {
         console.log(
-            'raiderio.createGearPiece: skipping equipped item not in db: ' +
+            `raiderio.createGearPiece: skipping equipped item in ${equippedInSlot} not in db: ` +
                 itemId +
                 ' https://www.wowhead.com/item=' +
                 itemId
