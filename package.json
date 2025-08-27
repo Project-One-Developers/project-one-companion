@@ -52,7 +52,7 @@
         "electron-updater": "6.6.2",
         "esbuild": "0.25.9",
         "file-saver": "2.0.5",
-        "lucide-react": "0.541.0",
+        "lucide-react": "0.542.0",
         "p-limit": "6.2.0",
         "papaparse": "5.5.3",
         "postgres": "3.4.7",
