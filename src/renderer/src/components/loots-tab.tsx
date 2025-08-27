@@ -15,8 +15,16 @@ type LootsTabsProps = {
 
 const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => {
     const [selectedSlot, setSelectedSlot] = useState<WowItemSlotKey | 'tokens'>(ITEM_SLOTS_KEY[0])
+    const [searchQuery, setSearchQuery] = useState('')
 
-    const lootCounts = loots.reduce(
+    // Filter loots by search query
+    const searchFilteredLoots = searchQuery.trim()
+        ? loots.filter(loot =>
+              loot.gearItem.item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : loots
+
+    const lootCounts = searchFilteredLoots.reduce(
         (acc, loot) => {
             const slot = loot.gearItem.item.slotKey
             acc[slot] = acc[slot] || { total: 0, assigned: 0 }
@@ -27,7 +35,9 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
         {} as Record<WowItemSlotKey, { total: number; assigned: number }>
     )
 
-    const tokensLoots = loots.filter(loot => loot.gearItem.item.tierset || loot.gearItem.item.token)
+    const tokensLoots = searchFilteredLoots.filter(
+        loot => loot.gearItem.item.tierset || loot.gearItem.item.token
+    )
     const tokensCount = tokensLoots.reduce(
         (acc, loot) => {
             acc.total++
@@ -44,7 +54,7 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                       a.gearItem.item.name.localeCompare(b.gearItem.item.name) ||
                       b.gearItem.itemLevel - a.gearItem.itemLevel
               )
-            : loots
+            : searchFilteredLoots
                   .filter(loot => loot.gearItem.item.slotKey === selectedSlot)
                   .sort(
                       (a, b) =>
@@ -85,6 +95,17 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
 
     return (
         <div>
+            {/* Search Bar */}
+            <div className="mb-4">
+                <input
+                    type="text"
+                    placeholder="Search loots by name..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+            </div>
+
             <div className="flex flex-wrap gap-2 pb-2">
                 {wowItemSlotKeySchema.options.map(
                     slot =>
@@ -96,7 +117,11 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
             </div>
             <div className="bg-muted p-4 rounded-lg shadow-md mt-2">
                 {filteredLoots.length === 0 ? (
-                    <p className="text-gray-400">No loot in this category</p>
+                    <p className="text-gray-400">
+                        {searchQuery.trim()
+                            ? 'No loots match your search'
+                            : 'No loot in this category'}
+                    </p>
                 ) : (
                     filteredLoots.map(loot => (
                         <div
