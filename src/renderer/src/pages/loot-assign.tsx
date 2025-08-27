@@ -147,7 +147,7 @@ export default function LootAssign() {
 
                     {/* Icons */}
                     {/* TODO: fix downlad button inside tooltips */}
-                    <div className="absolute top-8 right-3 flex flex-col gap-2">
+                    <div className="absolute top-12 right-3 flex flex-col gap-2">
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <Button
