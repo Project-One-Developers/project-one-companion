@@ -11,7 +11,7 @@ import {
 import { deleteSimcOlderThanDate } from '@storage/droptimizer/simc.storage'
 import { getConfig } from '@storage/settings/settings.storage'
 import { readAllMessagesInDiscord } from '../../lib/discord/discord'
-import { getDroptimizerFromURL as fetchDroptimizerFromURL } from './droptimizer.utils'
+import { fetchDroptimizerFromURL } from './droptimizer.utils'
 import { fetchDroptimizerFromQELiveURL } from './qelive.utils'
 
 export const addSimulationHandler = async (url: string): Promise<void> => {
@@ -21,12 +21,10 @@ export const addSimulationHandler = async (url: string): Promise<void> => {
         // QE Live report: healers
         const droptimizers: NewDroptimizer[] = await fetchDroptimizerFromQELiveURL(url)
         await Promise.all(droptimizers.map(addDroptimizer))
-        console.log('====')
     } else if (url.startsWith('https://www.raidbots.com/simbot/')) {
         // If the URL is a Raidbots simbot, fetch it
         const droptimizer: NewDroptimizer = await fetchDroptimizerFromURL(url)
         await addDroptimizer(droptimizer)
-        console.log('====')
     } else {
         throw new Error('Invalid URL format for droptimizer')
     }
@@ -52,6 +50,24 @@ export const getDroptimizerLastByCharAndDiffHandler = async (
     return await getDroptimizerLastByCharAndDiff(charName, charRealm, raidDiff)
 }
 
+const extractUrlsFromMessages = (
+    messages: Array<{ content: string; createdAt: Date }>,
+    lowerBoundDate: Date
+): Set<string> => {
+    const raidbotsUrlRegex = /https:\/\/www\.raidbots\.com\/simbot\/report\/([a-zA-Z0-9]+)/g
+    const qeLiveUrlRegex = /https:\/\/questionablyepic\.com\/live\/upgradereport\/([a-zA-Z0-9-_]+)/g
+
+    return new Set(
+        messages
+            .filter(msg => msg.createdAt >= lowerBoundDate)
+            .flatMap(message => {
+                const raidbotsMatches = message.content.match(raidbotsUrlRegex) || []
+                const qeLiveMatches = message.content.match(qeLiveUrlRegex) || []
+                return [...raidbotsMatches, ...qeLiveMatches]
+            })
+    )
+}
+
 export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> => {
     const botKey = await getConfig('DISCORD_BOT_TOKEN')
     const channelId = '1283383693695778878' // #droptimizers-drop
@@ -61,36 +77,23 @@ export const syncDroptimizersFromDiscord = async (hours: number): Promise<void> 
     }
 
     const messages = await readAllMessagesInDiscord(botKey, channelId)
-    const raidbotsUrlRegex = /https:\/\/www\.raidbots\.com\/simbot\/report\/([a-zA-Z0-9]+)/g
-
     const upperBound = getUnixTimestamp() - hours * 60 * 60
     const lowerBoundDate = new Date(upperBound * 1000)
 
-    const uniqueUrls = new Set(
-        messages
-            .filter(msg => msg.createdAt >= lowerBoundDate) // filter out messages older than lowerBoundDate
-            .flatMap(message => {
-                const matches = message.content.match(raidbotsUrlRegex)
-                return matches ? matches : []
-            })
-    )
+    const uniqueUrls = extractUrlsFromMessages(messages, lowerBoundDate)
 
-    console.log(`Found ${uniqueUrls.size} unique valid Raidbots URLs since ${lowerBoundDate}`)
+    console.log(`Found ${uniqueUrls.size} unique valid URLs since ${lowerBoundDate}`)
 
-    // TODO: dynamically importing p-limit is not the best practice probably
     const { default: pLimit } = await import('p-limit')
-
-    const limit = pLimit(5) // TODO: probably increase this
+    const limit = pLimit(5)
 
     await Promise.all(
         Array.from(uniqueUrls).map(url =>
             limit(async () => {
                 try {
-                    const droptimizer = await fetchDroptimizerFromURL(url)
-                    // TODO: manage batch insertion instead of doing it one by one
-                    await addDroptimizer(droptimizer)
+                    await addSimulationHandler(url)
                 } catch (error) {
-                    console.error(`Failed to add droptimizer for URL: ${url}`, error)
+                    console.error(`Failed to add simulation for URL: ${url}`, error)
                 }
             })
         )

@@ -26,7 +26,7 @@ import {
 } from './droptimizer.schemas'
 import { parseBagGearsFromSimc, parseCatalystFromSimc, parseGreatVaultFromSimc } from './simc.utils'
 
-export const getDroptimizerFromURL = async (url: string): Promise<NewDroptimizer> => {
+export const fetchDroptimizerFromURL = async (url: string): Promise<NewDroptimizer> => {
     const raidbotsURL = raidbotsURLSchema.parse(url)
     const jsonData = await fetchRaidbotsData(raidbotsURL)
     const parsedJson = parseRaidbotsData(jsonData)

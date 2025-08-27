@@ -121,16 +121,6 @@ const parseUpgrades = async (
     return Array.from(upgradesMap.values())
 }
 
-// const parseTiersets = async (equipped: GearItem[], bags: GearItem[]): Promise<GearItem[]> => {
-//     const tiersetItems = await getTiersetAndTokenList()
-//
-//     const tiersetItemIds = new Set(tiersetItems.map(item => item.id))
-//
-//     const allItems = [...equipped, ...bags]
-//
-//     return allItems.filter(item => tiersetItemIds.has(item.item.id))
-// }
-
 /**
  * Parse raid difficulty ID to WowRaidDifficulty enum value
  * @param id - The raid difficulty ID (3=LFR, 4=Normal, 5=Heroic, 6=Mythic)
@@ -138,18 +128,16 @@ const parseUpgrades = async (
  */
 export function parseRaidDiff(id: number): WowRaidDifficulty {
     switch (id) {
-        case 3:
-            return 'LFR'
         case 4:
-            return 'Normal'
-        case 5:
             return 'Heroic'
+        case 5:
+            return 'Heroic' // Heroic (max)
         case 6:
             return 'Mythic'
+        case 7:
+            return 'Mythic' // Mythic (max)
         default:
-            throw new Error(
-                `Invalid raid difficulty ID: ${id}. Expected 3 (LFR), 4 (Normal), 5 (Heroic), or 6 (Mythic)`
-            )
+            throw new Error(`Invalid raid difficulty ID: ${id}. 4-5 (Heroic), or 6-7 (Mythic)`)
     }
 }
 
@@ -162,8 +150,14 @@ export function parseQELiveSlotToEquippedSlot(slot: string): WowItemEquippedSlot
         return wowItemEquippedSlotKeySchema.parse('finger1')
     } else if (slot === 'Trinket') {
         return wowItemEquippedSlotKeySchema.parse('trinket1')
+    } else if (slot === 'Offhand') {
+        return wowItemEquippedSlotKeySchema.parse('off_hand')
     }
-    return wowItemEquippedSlotKeySchema.parse(slot.toLowerCase().replace(' ', '_'))
+    try {
+        return wowItemEquippedSlotKeySchema.parse(slot.toLowerCase().replace(' ', '_'))
+    } catch {
+        throw new Error(`Invalid slot name from QE Live: ${slot}`)
+    }
 }
 
 /**
@@ -177,7 +171,7 @@ const parseDateToUnixTimestamp = (dateString: string): number => {
     const [year, month, day] = cleanDateString.split('-').map(Number)
 
     // Create date object (month is 0-indexed in JavaScript)
-    const date = new Date(year, month - 1, day)
+    const date = new Date(year, month - 1, day, 8) // set to 8 AM to avoid timezone issues
 
     // Validate the parsed date
     if (isNaN(date.getTime())) {
@@ -215,7 +209,7 @@ const convertJsonToDroptimizer = async (
 
     const itemsInDb: Item[] = await getItems()
 
-    const itemsEquipped = await parseEquippedGear(itemsInDb, data.equippedItems)
+    const itemsEquipped = await parseEquippedGear(itemsInDb, data.equippedItems, url)
 
     // Filter results with 0 score and raid only
     const raidResults = data.results.filter(r => r.rawDiff > 0 && r.dropLoc === 'Raid')
@@ -246,7 +240,9 @@ const convertJsonToDroptimizer = async (
                     '[error] convertJsonToDroptimizer: item not found in db: ' +
                         result.item +
                         ' - https://www.wowhead.com/item=' +
-                        result.item
+                        result.item +
+                        ' - URL: ' +
+                        url
                 )
             }
             return {
@@ -260,7 +256,7 @@ const convertJsonToDroptimizer = async (
 
         const droptimizer: NewDroptimizer = {
             ak: `${raidId},${raidDiff},${charInfo.name},${charInfo.server},${charInfo.spec},${charInfo.class}`,
-            url,
+            url: url + '&diff=' + raidDiff, // in QE there are multiple report for the same url
             charInfo,
             raidInfo: {
                 id: raidId,
@@ -292,7 +288,8 @@ const convertJsonToDroptimizer = async (
 
 export const parseEquippedGear = async (
     itemsInDb: Item[],
-    equipped: z.infer<typeof qeliveEquippedItemSchema>[]
+    equipped: z.infer<typeof qeliveEquippedItemSchema>[],
+    url: string
 ): Promise<GearItem[]> => {
     const res: GearItem[] = []
 
@@ -302,7 +299,9 @@ export const parseEquippedGear = async (
                 '[error] parseEquippedGear: found equipped item without bonusIDS ' +
                     equippedItem.id +
                     ' - https://www.wowhead.com/item=' +
-                    equippedItem.id
+                    equippedItem.id +
+                    ' - URL: ' +
+                    url
             )
         }
         const bonusIds = equippedItem.bonusIDS.split(':').map(Number)
@@ -314,7 +313,9 @@ export const parseEquippedGear = async (
                     ' - https://www.wowhead.com/item=' +
                     equippedItem.id +
                     '?bonus=' +
-                    bonusIds.join(':')
+                    bonusIds.join(':') +
+                    ' - URL: ' +
+                    url
             )
             continue
         }
@@ -332,7 +333,9 @@ export const parseEquippedGear = async (
                         ' - https://www.wowhead.com/item=' +
                         equippedItem.id +
                         '?bonus=' +
-                        bonusIds.join(':')
+                        bonusIds.join(':') +
+                        ' - URL: ' +
+                        url
                 )
             }
         }
