@@ -385,7 +385,7 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                             : 'No characters currently have this item.'}
                     </p>
                 ) : (
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-4 gap-2">
                         {filteredCharacters.withItem.map(character => {
                             // Get all gears that match the item ID
                             const matchingGears =
@@ -417,6 +417,7 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                                                     gearItem={gear}
                                                     showTiersetLine={true}
                                                     showItemTrackDiff={true}
+                                                    showSource={true}
                                                 />
                                             </div>
                                         ))}
@@ -439,7 +440,10 @@ function CharacterInventoryContent({ itemId }: { itemId: number }) {
                 <div className="flex flex-wrap gap-3">
                     {filteredCharacters.withoutItem.map(character => (
                         <div key={character.id} className="flex-shrink-0">
-                            <WowCharacterIcon character={character} />
+                            <WowCharacterIcon
+                                character={character}
+                                showMainIndicator={includeAlts}
+                            />
                         </div>
                     ))}
                 </div>

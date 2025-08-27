@@ -3,7 +3,7 @@ import {
     CURRENT_SEASON,
     PROFESSION_TYPES
 } from '@shared/consts/wow.consts'
-import { getUnixTimestamp } from '@shared/libs/date/date-utils'
+import { getUnixTimestamp, isInCurrentWowWeek } from '@shared/libs/date/date-utils'
 import {
     applyAvoidance,
     applyDiffBonusId,
@@ -779,9 +779,17 @@ export const getAllLootsByItemId = async (
         .sort((a, b) => b.simInfo.date - a.simInfo.date)
         .at(0) // Can be undefined
 
+    const lastDroptWithWeeklyChestInfo = charDroptimizers
+        .filter(
+            c => isInCurrentWowWeek(c.simInfo.date) && c.weeklyChest && c.weeklyChest.length > 0
+        )
+        .sort((a, b) => b.simInfo.date - a.simInfo.date)
+        .at(0) // Can be undefined
+
     const availableGear: GearItem[] = [
         ...(lastDroptWithTierInfo?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id),
         ...(lastDroptWithTierInfo?.itemsInBag ?? []).filter(gi => gi.item.id === item.id),
+        ...(lastDroptWithWeeklyChestInfo?.weeklyChest ?? []).filter(gi => gi.item.id === item.id),
         ...charAssignedLoots.flatMap(l => (l.gearItem.item.id === item.id ? [l.gearItem] : [])),
         ...(charAuditData?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id),
         ...(charRaiderio?.itemsEquipped ?? []).filter(gi => gi.item.id === item.id)
