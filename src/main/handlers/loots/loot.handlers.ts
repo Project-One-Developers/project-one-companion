@@ -73,6 +73,25 @@ export const addRaidLootsByRCLootCsvHandler = async (
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
+export const addRaidLootAssignementsByRCLootCsvHandler = async (
+    raidSessionId: string,
+    csv: string
+): Promise<void> => {
+    const session = await getRaidSession(raidSessionId)
+    //const [parsedData, elegibleCharacters] = await Promise.all([
+    await Promise.all([
+        parseRcLoots(
+            csv,
+            session.raidDate,
+            session.raidDate + RAID_SESSION_UPPER_BOUND_DELTA,
+            true
+        ),
+        getRaidSessionRoster(raidSessionId)
+    ])
+    // todo: do actual logic
+    //await addLoots(raidSessionId, parsedData, elegibleCharacters)
+}
+
 export const addRaidLootsByMrtHandler = async (
     raidSessionId: string,
     csv: string

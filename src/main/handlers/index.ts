@@ -35,6 +35,7 @@ import {
     setItemNoteHandler
 } from './items/itemsNote.handlers'
 import {
+    addRaidLootAssignementsByRCLootCsvHandler,
     addRaidLootsByManualInputHandler,
     addRaidLootsByMrtHandler,
     addRaidLootsByRCLootCsvHandler,
@@ -108,6 +109,7 @@ export const allHandlers = {
     'raid-session-roster-import': importRosterInRaidSessionHandler,
     'raid-progression-get': fetchRosterProgressionHandler,
     'loots-add-rcloot': addRaidLootsByRCLootCsvHandler,
+    'loots-add-rcloot-assignements': addRaidLootAssignementsByRCLootCsvHandler,
     'loots-add-mrt': addRaidLootsByMrtHandler,
     'loots-add-manual': addRaidLootsByManualInputHandler,
     'loots-get-by-session': getLootsBySessionIdHandler,

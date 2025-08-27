@@ -151,6 +151,9 @@ export const api = {
     ): Promise<void> {
         return ipcRenderer.invoke('loots-add-rcloot', raidSessionId, csv, importAssignedCharacter)
     },
+    addLootAssignementsFromRc(raidSessionId: string, csv: string): Promise<void> {
+        return ipcRenderer.invoke('loots-add-rcloot-assignements', raidSessionId, csv)
+    },
     addLootsFromMrt(raidSessionId: string, text: string): Promise<void> {
         return ipcRenderer.invoke('loots-add-mrt', raidSessionId, text)
     },
