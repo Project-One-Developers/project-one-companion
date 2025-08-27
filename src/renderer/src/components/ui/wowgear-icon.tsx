@@ -25,6 +25,13 @@ type WowGearIconProps = {
     showSource?: boolean
 }
 
+const TOKEN_CLASS_MAP = {
+    Venerated: 'Pal/Pri/Sha',
+    Dreadful: 'Lock/Dh/Dk',
+    Mystic: 'Hun/Mag/Dru',
+    Zenith: 'W/R/M/E'
+} as const
+
 export const WowGearIcon = ({
     gearItem,
     showTiersetLine = false,
@@ -114,6 +121,17 @@ export const WowGearIcon = ({
                             {token ? 'Token' : armorType}
                         </span>
                     )}
+                    {token &&
+                        (() => {
+                            const tokenType = Object.keys(TOKEN_CLASS_MAP).find(type =>
+                                name.startsWith(type)
+                            )
+                            return tokenType ? (
+                                <span className="bg-gray-700/50 px-1.5 py-0.5 rounded">
+                                    {TOKEN_CLASS_MAP[tokenType]}
+                                </span>
+                            ) : null
+                        })()}
                 </div>
             </div>
         </div>
