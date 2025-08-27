@@ -184,36 +184,36 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
 
     const items: GearItem[] = []
     const itemsInDb: Item[] = await getItems()
-    const itemRegex = /# .*?\((\d+)\)\n#.*?id=(\d+),bonus_id=([\d/]+)/g
-    let itemMatch: string[] | null
 
-    while ((itemMatch = itemRegex.exec(match[1])) !== null) {
-        const bonusIds = itemMatch[3].split('/').map(Number)
-        const itemId = parseInt(itemMatch[2], 10)
+    // Create a Map for O(1) lookups instead of O(n) array.find()
+    const itemsMap = new Map(itemsInDb.map(item => [item.id, item]))
 
-        // we dont have enough infos, we are forced to check on our db
-        const wowItem = itemsInDb.find(i => i.id === itemId)
+    // Simple regex to match gear lines only
+    const gearRegex = /^#.*?id=(\d+),bonus_id=([\d/]+)/gm
+    let gearMatch: RegExpExecArray | null
 
-        if (wowItem == null) {
+    while ((gearMatch = gearRegex.exec(match[1])) !== null) {
+        const itemId = parseInt(gearMatch[1], 10)
+        const bonusIds = gearMatch[2].split('/').map(Number)
+
+        const wowItem = itemsMap.get(itemId)
+
+        if (!wowItem) {
             console.log(
-                '[warn] parseGreatVaultFromSimc: Skipping weekly reward for item ' +
-                    itemId +
-                    ' - https://www.wowhead.com/item=' +
-                    itemId +
-                    '?bonus=' +
-                    bonusIds.join(':')
+                `[warn] parseGreatVaultFromSimc: Skipping weekly reward for item ${itemId} - https://www.wowhead.com/item=${itemId}?bonus=${bonusIds.join(':')}`
             )
             continue
         }
 
         const itemTrack = parseItemTrack(bonusIds)
-        if (itemTrack == null) {
+        if (!itemTrack) {
             throw new Error(
                 `parseGreatVaultFromSimc: Detected Vault item without item track... check import ${itemId} - https://www.wowhead.com/item=${itemId}?bonus=${bonusIds.join(':')}`
             )
         }
 
-        const itemLevel = parseInt(itemMatch[1], 10)
+        // Use item level from item track
+        const itemLevel = itemTrack.itemLevel
 
         items.push({
             item: {
@@ -230,11 +230,11 @@ export const parseGreatVaultFromSimc = async (simc: string): Promise<GearItem[]>
                 specIds: wowItem.specIds
             },
             source: 'great-vault',
-            itemLevel: itemLevel,
-            bonusIds: bonusIds,
+            itemLevel,
+            bonusIds,
             enchantIds: null,
             gemIds: null,
-            itemTrack: itemTrack
+            itemTrack
         })
     }
 
