@@ -173,7 +173,7 @@ export const RaidSessionPage = () => {
                 <SessionRosterImportDialog
                     isOpen={isImportRosterDialogOpen}
                     setOpen={setIsImportRosterDialogOpen}
-                    raidSession={raidSession}
+                    raidSessionId={raidSession.id}
                 />
             </div>
 
@@ -210,7 +210,7 @@ export const RaidSessionPage = () => {
             <SessionLootNewDialog
                 isOpen={isAddLootDialogOpen}
                 setOpen={setIsAddLootDialogOpen}
-                raidSession={raidSession}
+                raidSessionId={raidSession.id}
             />
         </div>
     )

@@ -1,7 +1,6 @@
 import { queryClient } from '@renderer/lib/tanstack-query/client'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { importRosterInRaidSession } from '@renderer/lib/tanstack-query/raid'
-import { RaidSessionWithRoster } from '@shared/types/types'
 import { useMutation } from '@tanstack/react-query'
 import { useState, type JSX } from 'react'
 import { toast } from './hooks/use-toast'
@@ -12,19 +11,20 @@ import { Textarea } from './ui/text-area'
 export default function SessionRosterImportDialog({
     isOpen,
     setOpen,
-    raidSession
+    raidSessionId
 }: {
     isOpen: boolean
     setOpen: (open: boolean) => void
-    raidSession: RaidSessionWithRoster
+    raidSessionId: string
 }): JSX.Element {
     const [rosterData, setRosterData] = useState('')
 
-    const addMrtLootsMutation = useMutation({
+    const importRosterMutation = useMutation({
         mutationFn: ({ raidSessionId, text }: { raidSessionId: string; text: string }) =>
             importRosterInRaidSession(raidSessionId, text),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSession, raidSession.id] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSession, raidSessionId] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessionsWithLoots] })
             setRosterData('')
             setOpen(false)
             toast({ title: 'Roster imported', description: 'Roster successfully imported.' })
@@ -54,8 +54,8 @@ export default function SessionRosterImportDialog({
                 <Button
                     className="w-full mt-4"
                     onClick={() =>
-                        addMrtLootsMutation.mutate({
-                            raidSessionId: raidSession.id,
+                        importRosterMutation.mutate({
+                            raidSessionId: raidSessionId,
                             text: rosterData
                         })
                     }

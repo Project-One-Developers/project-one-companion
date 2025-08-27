@@ -5,7 +5,7 @@ import { searchItems } from '@renderer/lib/tanstack-query/items'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { addLootsFromMrt, addLootsFromRc, addLootsManual } from '@renderer/lib/tanstack-query/loots'
 import { RAID_DIFF } from '@shared/consts/wow.consts'
-import { Item, NewLootManual, RaidSessionWithRoster, WowRaidDifficulty } from '@shared/types/types'
+import { Item, NewLootManual, WowRaidDifficulty } from '@shared/types/types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LoaderCircle, X } from 'lucide-react'
 import { useState, type JSX } from 'react'
@@ -20,13 +20,13 @@ import { Textarea } from './ui/text-area'
 import { WowItemIcon } from './ui/wowitem-icon'
 
 export default function SessionLootNewDialog({
-                                                 isOpen,
-                                                 setOpen,
-                                                 raidSession
-                                             }: {
+    isOpen,
+    setOpen,
+    raidSessionId
+}: {
     isOpen: boolean
     setOpen: (open: boolean) => void
-    raidSession: RaidSessionWithRoster
+    raidSessionId: string
 }): JSX.Element {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedItems, setSelectedItems] = useState<NewLootManual[]>([])
@@ -44,7 +44,8 @@ export default function SessionLootNewDialog({
         mutationFn: ({ raidSessionId, loots }: { raidSessionId: string; loots: NewLootManual[] }) =>
             addLootsManual(raidSessionId, loots),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessionsWithLoots] })
             setSelectedItems([])
             setOpen(false)
             toast({ title: 'Loots added', description: 'Loots successfully added.' })
@@ -55,10 +56,18 @@ export default function SessionLootNewDialog({
     })
 
     const addRcLootsMutation = useMutation({
-        mutationFn: ({ raidSessionId, csv, importAssignedCharacter }: { raidSessionId: string; csv: string; importAssignedCharacter: boolean }) =>
-            addLootsFromRc(raidSessionId, csv, importAssignedCharacter),
+        mutationFn: ({
+            raidSessionId,
+            csv,
+            importAssignedCharacter
+        }: {
+            raidSessionId: string
+            csv: string
+            importAssignedCharacter: boolean
+        }) => addLootsFromRc(raidSessionId, csv, importAssignedCharacter),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessionsWithLoots] })
             setRcInputData('')
             setImportAssignedCharacter(false)
             setOpen(false)
@@ -73,7 +82,8 @@ export default function SessionLootNewDialog({
         mutationFn: ({ raidSessionId, text }: { raidSessionId: string; text: string }) =>
             addLootsFromMrt(raidSessionId, text),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession, raidSession.id] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.lootsBySession] })
+            queryClient.invalidateQueries({ queryKey: [queryKeys.raidSessionsWithLoots] })
             setMrtData('')
             setOpen(false)
             toast({ title: 'MRT loots imported', description: 'Loots successfully imported.' })
@@ -260,7 +270,7 @@ export default function SessionLootNewDialog({
                             className="w-full mt-4"
                             onClick={() =>
                                 addManualLootsMutation.mutate({
-                                    raidSessionId: raidSession.id,
+                                    raidSessionId: raidSessionId,
                                     loots: selectedItems
                                 })
                             }
@@ -279,7 +289,9 @@ export default function SessionLootNewDialog({
                             <Checkbox
                                 id="importAssignedCharacter"
                                 checked={importAssignedCharacter}
-                                onCheckedChange={(checked) => setImportAssignedCharacter(checked === true)}
+                                onCheckedChange={checked =>
+                                    setImportAssignedCharacter(checked === true)
+                                }
                             />
                             <Label
                                 htmlFor="importAssignedCharacter"
@@ -292,7 +304,7 @@ export default function SessionLootNewDialog({
                             className="w-full mt-4"
                             onClick={() =>
                                 addRcLootsMutation.mutate({
-                                    raidSessionId: raidSession.id,
+                                    raidSessionId: raidSessionId,
                                     csv: rcCsvData,
                                     importAssignedCharacter: importAssignedCharacter
                                 })
@@ -312,7 +324,7 @@ export default function SessionLootNewDialog({
                             className="w-full mt-4"
                             onClick={() =>
                                 addMrtLootsMutation.mutate({
-                                    raidSessionId: raidSession.id,
+                                    raidSessionId: raidSessionId,
                                     text: mrtData
                                 })
                             }
