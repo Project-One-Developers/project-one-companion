@@ -81,8 +81,8 @@ importers:
         specifier: 0.542.0
         version: 0.542.0(react@19.1.1)
       p-limit:
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.1.1
+        version: 7.1.1
       papaparse:
         specifier: 5.5.3
         version: 5.5.3
@@ -3450,6 +3450,10 @@ packages:
     resolution: {integrity: sha512-YKBKVkKhty7s8rxddb40oOkuP0NbaeXrQvLin6QMHL7Ypiy2RW9LwOVrVgZRyOrhQlayMd9t+D8yDy8MKFTSDQ==}
     engines: {node: '>= 18.0.0'}
 
+  isbinaryfile@5.0.5:
+    resolution: {integrity: sha512-vh9MWXjhhblwrHlt/yutrubDuBD01kKFscyVndE2/VEeEU5aAizrzuWAsEaCjo997k+IluhN6C4jgxfS69SCIw==}
+    engines: {node: '>= 18.0.0'}
+
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
@@ -4055,8 +4059,8 @@ packages:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
     engines: {node: '>=10'}
 
-  p-limit@7.1.0:
-    resolution: {integrity: sha512-7LbrpOjbzBWFHFgRtVrIAwBwW1bB7c7n914Q2+CXr1TvOfbTrVHAEH1Ya9PwDwAoKLeiRrczymYWPwaHNOQ0vA==}
+  p-limit@7.1.1:
+    resolution: {integrity: sha512-i8PyM2JnsNChVSYWLr2BAjNoLi0BAYC+wecOnZnVV+YSNJkzP7cWmvI34dk0WArWfH9KwBHNoZI3P3MppImlIA==}
     engines: {node: '>=20'}
 
   p-locate@4.1.0:
@@ -7107,7 +7111,7 @@ snapshots:
       fs-extra: 10.1.0
       hosted-git-info: 4.1.0
       is-ci: 3.0.1
-      isbinaryfile: 5.0.4
+      isbinaryfile: 5.0.5
       js-yaml: 4.1.0
       json5: 2.2.3
       lazy-val: 1.0.5
@@ -8883,6 +8887,8 @@ snapshots:
 
   isbinaryfile@5.0.4: {}
 
+  isbinaryfile@5.0.5: {}
+
   isexe@2.0.0: {}
 
   isexe@3.1.1:
@@ -9688,7 +9694,7 @@ snapshots:
     dependencies:
       yocto-queue: 0.1.0
 
-  p-limit@7.1.0:
+  p-limit@7.1.1:
     dependencies:
       yocto-queue: 1.2.1
 
