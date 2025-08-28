@@ -13,7 +13,7 @@ export async function fetchCharacterRaidProgress(
     characterName: string,
     realm: string
 ): Promise<RaiderioResponse> {
-    const url = `https://raider.io/api/characters/eu/${realm}/${characterName}?season=season-tww-2&tier=33`
+    const url = `https://raider.io/api/characters/eu/${realm}/${characterName}?season=season-tww-3&tier=34`
 
     const response = await fetch(url)
 
