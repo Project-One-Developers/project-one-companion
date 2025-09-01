@@ -103,7 +103,7 @@ export const addLoots = async (
 export const assignLoot = async (
     charId: string,
     lootId: string,
-    highlights: CharAssignmentHighlights
+    highlights: CharAssignmentHighlights | null
 ): Promise<void> => {
     await db()
         .update(lootTable)

@@ -1,5 +1,5 @@
-import RaidSessionDialog from '@renderer/components/session-dialog'
 import SessionCard from '@renderer/components/session-card'
+import RaidSessionDialog from '@renderer/components/session-dialog'
 import { Input } from '@renderer/components/ui/input'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
@@ -126,7 +126,7 @@ export default function RaidSessionListPage(): JSX.Element {
                 {/* No results message */}
                 {weekNumbers.length === 0 && searchQuery.trim() && (
                     <div className="text-center text-gray-400 mt-8">
-                        No sessions found matching "{searchQuery}"
+                        No sessions found matching &quot;{searchQuery}&quot;
                     </div>
                 )}
 

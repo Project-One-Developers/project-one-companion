@@ -73,23 +73,85 @@ export const addRaidLootsByRCLootCsvHandler = async (
     await addLoots(raidSessionId, parsedData, elegibleCharacters)
 }
 
+// Helper function to compare bonus ID arrays
+const bonusIdsMatch = (lootBonusIds: number[] | null, targetBonusIds: number[]): boolean => {
+    if (!lootBonusIds && targetBonusIds.length === 0) return true
+    if (!lootBonusIds || lootBonusIds.length !== targetBonusIds.length) return false
+
+    // Sort both arrays and compare element by element
+    const sortedLootBonusIds = [...lootBonusIds].sort((a, b) => a - b)
+    const sortedTargetBonusIds = [...targetBonusIds].sort((a, b) => a - b)
+
+    return sortedLootBonusIds.every((id, index) => id === sortedTargetBonusIds[index])
+}
+
 export const addRaidLootAssignementsByRCLootCsvHandler = async (
     raidSessionId: string,
     csv: string
 ): Promise<void> => {
     const session = await getRaidSession(raidSessionId)
-    //const [parsedData, elegibleCharacters] = await Promise.all([
-    await Promise.all([
+    const [rcLootData, sessionLoots] = await Promise.all([
         parseRcLoots(
             csv,
             session.raidDate,
             session.raidDate + RAID_SESSION_UPPER_BOUND_DELTA,
             true
         ),
-        getRaidSessionRoster(raidSessionId)
+        getLootsBySessionIdHandler(raidSessionId)
     ])
-    // todo: do actual logic
-    //await addLoots(raidSessionId, parsedData, elegibleCharacters)
+
+    // Build assignment map: charId:itemString -> count
+    const assignmentMap = new Map<string, number>()
+    for (const rcLoot of rcLootData) {
+        if (rcLoot.assignedTo) {
+            const assignmentKey = `${rcLoot.assignedTo}#${rcLoot.gearItem.item.id}#${rcLoot.gearItem.bonusIds?.join(',') ?? ''}`
+            assignmentMap.set(assignmentKey, (assignmentMap.get(assignmentKey) || 0) + 1)
+        }
+    }
+
+    // Process each assignment
+    for (const [assignmentKey, requiredAmount] of assignmentMap.entries()) {
+        const [charId, itemIdString, bonusIdsString] = assignmentKey.split('#')
+
+        // Parse itemId as number and bonusIds as array
+        const itemId = parseInt(itemIdString, 10)
+        const bonusIds = bonusIdsString ? bonusIdsString.split(',').map(id => parseInt(id, 10)) : []
+
+        // Find eligible loots for this character and item with matching bonus IDs
+        const eligibleLoots = sessionLoots.filter(
+            loot =>
+                loot.itemId === itemId &&
+                bonusIdsMatch(loot.gearItem.bonusIds, bonusIds) &&
+                loot.charsEligibility.includes(charId)
+        )
+
+        const alreadyAssignedCount = eligibleLoots.filter(
+            loot => loot.assignedCharacterId === charId
+        ).length
+
+        const unassignedLoots = eligibleLoots.filter(loot => !loot.assignedCharacterId)
+        const availableCount = unassignedLoots.length
+        const remainingNeeded = Math.max(0, requiredAmount - alreadyAssignedCount)
+        const actualAssignCount = Math.min(remainingNeeded, availableCount)
+
+        // Warn if we can't fulfill the full request
+        if (remainingNeeded > availableCount) {
+            console.warn(
+                `[addRaidLootAssignementsByRCLootCsvHandler] Insufficient unassigned loots for charId ${charId} and itemId ${itemId}. ` +
+                    `Required: ${remainingNeeded}, Available: ${availableCount}. Assigning ${actualAssignCount} loots.`
+            )
+        }
+
+        // Assign available loots
+        for (let i = 0; i < actualAssignCount; i++) {
+            await assignLoot(charId, unassignedLoots[i].id, null)
+            // Update the loot in sessionLoots to reflect the assignment ( so next filters are up to date)
+            const lootIndex = sessionLoots.findIndex(loot => loot.id === unassignedLoots[i].id)
+            if (lootIndex !== -1) {
+                sessionLoots[lootIndex].assignedCharacterId = charId
+            }
+        }
+    }
 }
 
 export const addRaidLootsByMrtHandler = async (
@@ -106,6 +168,9 @@ export const addRaidLootsByMrtHandler = async (
     ])
     if (parsedData.length > 0) {
         await addLoots(raidSessionId, parsedData, elegibleCharacters)
+        console.info(`[addRaidLootsByMrtHandler] ${parsedData.length} loots added from MRT data`)
+    } else {
+        console.warn('[addRaidLootsByMrtHandler] No valid loots parsed from MRT data')
     }
 }
 
