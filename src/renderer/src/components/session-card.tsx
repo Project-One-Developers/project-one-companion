@@ -1,10 +1,10 @@
-import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
+import { formatUnixTimestampForDisplay, unixTimestampToWowWeek } from '@shared/libs/date/date-utils'
 import { RaidSessionWithSummary } from '@shared/types/types'
 import { Calendar, ExternalLink, Gem, Package, Users } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from './ui/button'
 import { cn } from '../lib/utils'
+import { Button } from './ui/button'
 
 type SessionCardProps = {
     session: RaidSessionWithSummary
@@ -49,17 +49,20 @@ const SessionCard = ({
     return (
         <div
             className={cn(
-                `bg-muted rounded-lg border border-gray-900 cursor-pointer hover:bg-gray-700 transition-colors min-w-72 relative flex flex-col`,
+                `bg-muted rounded-lg border border-gray-900 cursor-pointer hover:bg-gray-700 transition-colors min-w-64 relative flex flex-col`,
                 className
             )}
             onClick={handleCardClick}
         >
             {/* Main content area */}
             <div className="p-4 flex-1">
-                <h3 className="text-xl font-bold mb-2">{session.name}</h3>
+                <h3 className="text-xl font-bold truncate max-w-[220px] mb-2">{session.name}</h3>
                 <div className="flex items-center text-gray-400 mb-1">
                     <Calendar className="w-4 h-4 mr-2" />
-                    <span>{formatUnixTimestampForDisplay(session.raidDate)}</span>
+                    <span>
+                        {formatUnixTimestampForDisplay(session.raidDate)} -{' '}
+                        {unixTimestampToWowWeek(session.raidDate)}
+                    </span>
                 </div>
                 <div className="flex items-center text-gray-400 mb-1">
                     <Users className="w-4 h-4 mr-2" />

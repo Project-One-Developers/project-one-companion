@@ -1,37 +1,12 @@
 import RaidSessionDialog from '@renderer/components/session-dialog'
+import SessionCard from '@renderer/components/session-card'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRaidSessionsWithSummary } from '@renderer/lib/tanstack-query/raid'
-import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
-import { RaidSessionWithSummary } from '@shared/types/types'
 import { useQuery } from '@tanstack/react-query'
-import { Calendar, Gem, LoaderCircle, PlusIcon, Users } from 'lucide-react'
+import { LoaderCircle, PlusIcon } from 'lucide-react'
 import type { JSX } from 'react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-const SessionCard: React.FC<{ session: RaidSessionWithSummary; onClick: () => void }> = ({
-    session,
-    onClick
-}) => (
-    <div
-        className="bg-muted p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition-colors"
-        onClick={onClick}
-    >
-        <h3 className="text-xl font-bold mb-2">{session.name}</h3>
-        <div className="flex items-center text-gray-400 mb-1">
-            <Calendar className="w-4 h-4 mr-2" />
-            <span>{formatUnixTimestampForDisplay(session.raidDate)}</span>
-        </div>
-        <div className="flex items-center text-gray-400">
-            <Users className="w-4 h-4 mr-2" />
-            <span>{session.rosterCount} participants</span>
-        </div>
-        <div className="flex items-center text-gray-400">
-            <Gem className="w-4 h-4 mr-2" />
-            <span>{session.lootCount} loots</span>
-        </div>
-    </div>
-)
 
 export default function RaidSessionListPage(): JSX.Element {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
