@@ -213,18 +213,14 @@ export default function RosterPage(): JSX.Element {
             {/* Floating Buttons */}
             <div className="fixed bottom-5 right-6 flex flex-col gap-3 z-50">
                 {/* Export CSV Button */}
-                <DownloadCSV
-                    title={
-                        <button
-                            className="w-14 h-14 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-lg transition-all duration-200 flex items-center justify-center"
-                            title="Export Roster as CSV"
-                        >
-                            <Download className="w-6 h-6 hover:scale-110 ease-linear transition-transform" />
-                        </button>
-                    }
-                    data={csvData}
-                    filename="roster.csv"
-                />
+                <DownloadCSV data={csvData} filename="roster.csv">
+                    <button
+                        className="w-14 h-14 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-lg transition-all duration-200 flex items-center justify-center"
+                        title="Export Roster as CSV"
+                    >
+                        <Download className="w-6 h-6 hover:scale-110 ease-linear transition-transform" />
+                    </button>
+                </DownloadCSV>
 
                 {/* Add Player Button */}
                 <button

@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver'
-import { ReactNode } from 'react'
+import { HTMLAttributes, ReactNode } from 'react'
 
 interface DataItem {
     [key: string]: string | number | boolean | object | null | undefined
@@ -20,12 +20,16 @@ const downloadCSV = (data: DataItem[], filename: string = 'data.csv'): void => {
     saveAs(blob, filename)
 }
 
-interface DownloadCSVProps {
-    title: ReactNode
+interface DownloadCSVProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
     filename?: string
     data: DataItem[]
+    children?: ReactNode
 }
 
-export default function DownloadCSV({ title, data, filename }: DownloadCSVProps) {
-    return <div onClick={() => downloadCSV(data, filename)}>{title}</div>
+export default function DownloadCSV({ children, data, filename, ...divProps }: DownloadCSVProps) {
+    return (
+        <div {...divProps} onClick={() => downloadCSV(data, filename)}>
+            {children}
+        </div>
+    )
 }
