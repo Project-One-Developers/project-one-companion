@@ -54,6 +54,7 @@ export const CharacterPage = () => {
                             <WowClassIcon
                                 wowClassName={character.class}
                                 charname={character.name}
+                                showTooltip={false}
                                 className="h-10 w-10 border-2 border-background rounded-lg"
                             />
                             <h1 className="text-3xl font-bold mb-2">{character.name}</h1>

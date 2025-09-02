@@ -244,6 +244,7 @@ const PlayerRow = ({
                         <WowClassIcon
                             wowClassName={summary.character.class}
                             charname={summary.character.name}
+                            showTooltip={false}
                             className="h-8 w-8 border-2 border-background rounded-lg"
                         />
                         <div>

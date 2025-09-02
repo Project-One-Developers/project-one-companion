@@ -1,6 +1,7 @@
 import { Character } from '@shared/types/types'
 import React from 'react'
 import { WowClassIcon } from './wowclass-icon'
+import { useNavigate } from 'react-router'
 
 export interface WowCharacterIconProps {
     character: Character
@@ -11,6 +12,7 @@ export interface WowCharacterIconProps {
     truncateAfter?: number
     size?: 'sm' | 'md' | 'lg'
     showRoleBadges?: boolean
+    onClick?: () => void
 }
 
 export const WowCharacterIcon: React.FC<WowCharacterIconProps> = ({
@@ -21,8 +23,19 @@ export const WowCharacterIcon: React.FC<WowCharacterIconProps> = ({
     showName = true,
     truncateAfter = 4,
     size = 'md',
-    showRoleBadges = false
+    showRoleBadges = false,
+    onClick
 }) => {
+    const navigate = useNavigate()
+
+    const handleClick = () => {
+        if (onClick) {
+            onClick()
+        } else {
+            navigate(`/roster/${character.id}`)
+        }
+    }
+
     const sizeClasses = {
         sm: 'h-6 w-6',
         md: 'h-8 w-8',
@@ -60,6 +73,7 @@ export const WowCharacterIcon: React.FC<WowCharacterIconProps> = ({
     return (
         <div
             className={`flex flex-col items-center rounded-lg cursor-pointer transition-transform hover:scale-110 ${className}`}
+            onClick={handleClick}
         >
             {showName && (
                 <div>
@@ -71,7 +85,8 @@ export const WowCharacterIcon: React.FC<WowCharacterIconProps> = ({
             <div className="relative inline-block">
                 <WowClassIcon
                     wowClassName={character.class}
-                    charname={showTooltip ? character.name : undefined}
+                    charname={character.name}
+                    showTooltip={showTooltip}
                     className={`${sizeClasses[size]} border-2 border-background rounded-lg`}
                 />
                 {showHealerBadge && (

@@ -146,7 +146,6 @@ const LootsList = ({ loots, selectedLoot, setSelectedLoot }: LootsTabsProps) => 
                                     <p className="text-sm -mr-2">{loot.assignedCharacter.name}</p>
                                     <WowClassIcon
                                         wowClassName={loot.assignedCharacter.class}
-                                        charname={loot.assignedCharacter.name}
                                         className="h-8 w-8 border-2 border-background rounded-lg"
                                     />
                                 </div>

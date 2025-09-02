@@ -224,8 +224,12 @@ export default function LootsEligibleChars({
                         </TableHead>
                         {showTiersetInfo && (
                             <>
-                                <TableHead className="text-gray-300 font-semibold">Tierset</TableHead>
-                                <TableHead className="text-gray-300 font-semibold">Catalyst</TableHead>
+                                <TableHead className="text-gray-300 font-semibold">
+                                    Tierset
+                                </TableHead>
+                                <TableHead className="text-gray-300 font-semibold">
+                                    Catalyst
+                                </TableHead>
                             </>
                         )}
                         <TableHead className="text-gray-300 font-semibold">Vault</TableHead>
@@ -267,7 +271,6 @@ export default function LootsEligibleChars({
                                             <div className="h-8 w-8 flex items-center justify-center overflow-hidden">
                                                 <WowClassIcon
                                                     wowClassName={charInfo.character.class}
-                                                    charname={charInfo.character.name}
                                                     className="object-contain h-full w-full border-2 border-background rounded-lg"
                                                 />
                                             </div>
@@ -304,8 +307,7 @@ export default function LootsEligibleChars({
                                     <div className="flex flex-wrap gap-2">
                                         {charInfo.highlights.dpsGain > 0 && (
                                             <span className="px-2 py-1 text-xs font-bold bg-blue-900/50 text-blue-400 rounded-full">
-                                                +
-                                                {getDpsHumanReadable(charInfo.highlights.dpsGain)}
+                                                +{getDpsHumanReadable(charInfo.highlights.dpsGain)}
                                             </span>
                                         )}
 
@@ -428,9 +430,7 @@ export default function LootsEligibleChars({
                                         <TableCell>
                                             <TiersetInfo tierset={charInfo.tierset} />
                                         </TableCell>
-                                        <TableCell>
-                                            {charInfo.catalystCharge}
-                                        </TableCell>
+                                        <TableCell>{charInfo.catalystCharge}</TableCell>
                                     </>
                                 )}
                                 <TableCell className="rounded-r-md">

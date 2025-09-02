@@ -43,6 +43,7 @@ const PlayerWithCharsRow: React.FC<PlayerWithCharsRowProps> = ({
                         <WowClassIcon
                             wowClassName={char.class}
                             //charname={char.name}
+                            showTooltip={false}
                             className={clsx(
                                 'object-cover object-top rounded-md h-5 w-5 border border-background cursor-pointer transition-all duration-200',
                                 selectedCharacters.includes(char.id)

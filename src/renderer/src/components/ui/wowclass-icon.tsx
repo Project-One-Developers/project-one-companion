@@ -6,12 +6,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
 
 interface WowClassIconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     wowClassName: WowClassName
+    showTooltip?: boolean
     charname?: string
 }
 
-export const WowClassIcon: React.FC<WowClassIconProps> = ({ wowClassName, charname, ...props }) => {
-    const showTooltip = charname && charname.length > 0
-
+export const WowClassIcon: React.FC<WowClassIconProps> = ({
+    wowClassName,
+    showTooltip,
+    charname,
+    ...props
+}) => {
     if (!showTooltip) {
         return <img src={classIcon.get(wowClassName)} alt={`Class ${wowClassName}`} {...props} />
     } else {
