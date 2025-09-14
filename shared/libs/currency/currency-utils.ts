@@ -1,3 +1,4 @@
+import { CURRENT_SEASON } from '@shared/consts/wow.consts'
 
 /**
  * List of currency IDs that should not be displayed in the UI
@@ -41,4 +42,22 @@ export const CURRENCY_BLACKLIST: number[] = [
  */
 export const isCurrencyBlacklisted = (currencyId: number): boolean => {
     return CURRENCY_BLACKLIST.includes(currencyId)
+}
+
+/**
+ * Checks if a currency ID is relevant in this season
+ */
+export const isRelevantCurrency = (currencyId: number): boolean => {
+    if (CURRENT_SEASON === 3) {
+        if (
+            currencyId === 3008 || // valorstone
+            currencyId === 3269 || // catalyst
+            currencyId === 3288 || // runed
+            currencyId === 3290 // gilded
+        ) {
+            return true
+        }
+    }
+
+    return false
 }

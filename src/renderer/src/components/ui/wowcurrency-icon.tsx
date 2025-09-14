@@ -1,6 +1,5 @@
 import { currencyIcon } from '@renderer/lib/wow-icon'
 import { DroptimizerCurrency } from '@shared/types/types'
-import { isCurrencyBlacklisted } from '@shared/libs/currency/currency-utils'
 
 type WowItemIconProps = {
     currency: DroptimizerCurrency
@@ -11,9 +10,9 @@ export const WowCurrencyIcon = ({ currency, iconClassName }: WowItemIconProps) =
     const currencyHref = `https://www.wowhead.com/${currency.type}=${currency.id}`
     const currencyInfo = currencyIcon.get(currency.id)
 
-    if (isCurrencyBlacklisted(currency.id)) {
-        return null
-    }
+    // if (isCurrencyBlacklisted(currency.id)) {
+    //     return null
+    // }
 
     if (!currencyInfo) {
         console.log("Skipping currency icon because it doesn't exist: " + currencyHref)

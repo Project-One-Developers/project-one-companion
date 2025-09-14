@@ -2,7 +2,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/r
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { getCharacterGameInfo } from '@renderer/lib/tanstack-query/players'
-import { isCurrencyBlacklisted } from '@shared/libs/currency/currency-utils'
+import { isCurrencyBlacklisted, isRelevantCurrency } from '@shared/libs/currency/currency-utils'
 import { formatUnixTimestampForDisplay } from '@shared/libs/date/date-utils'
 import { CharacterRaiderio } from '@shared/schemas/raiderio.schemas'
 import { Character, CharacterWowAudit, Droptimizer } from '@shared/types/types'
@@ -116,6 +116,7 @@ export const CurrenciesPanel = ({ currencies }: CurrenciesPanelProps) => {
                 <div className="text-sm text-muted-foreground">No currency info found</div>
             ) : (
                 filteredCurrencies!
+                    .filter(c => isRelevantCurrency(c.id))
                     .sort((a, b) => a.id - b.id)
                     .map(currency => (
                         <div key={currency.id} className="flex items-center gap-2">

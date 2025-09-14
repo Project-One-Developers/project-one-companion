@@ -16,6 +16,7 @@ import { WowGearIcon } from '@renderer/components/ui/wowgear-icon'
 import { useFilterContext } from '@renderer/lib/filter-context'
 import { queryKeys } from '@renderer/lib/tanstack-query/keys'
 import { fetchRosterSummary } from '@renderer/lib/tanstack-query/players'
+import { isRelevantCurrency } from '@shared/libs/currency/currency-utils'
 import {
     CharacterSummary,
     DroptimizerWarn,
@@ -286,6 +287,7 @@ const PlayerRow = ({
                 <div className="flex space-x-1">
                     {summary.currencies.length > 0 ? (
                         summary.currencies
+                            .filter(c => isRelevantCurrency(c.id))
                             .sort((a, b) => a.id - b.id)
                             .map(currency => (
                                 <WowCurrencyIcon
