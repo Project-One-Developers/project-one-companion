@@ -279,15 +279,15 @@ export function applyItemTrackByIlvlAndDelta(
     delta: number
 ): ItemTrack | null {
     const res = queryByItemLevelAndDelta(ilvl, delta)
-    if (res != null) {
-        input.push(Number(res.key))
-
-        // apply diff bonus id
-        applyDiffBonusId(input, trackNameToWowDiff(res.track.name))
-
-        return res.track
+    if (res == null) {
+        return null
     }
-    return null
+    input.push(Number(res.key))
+
+    // apply diff bonus id
+    applyDiffBonusId(input, trackNameToWowDiff(res.track.name))
+
+    return res.track
 }
 
 /**

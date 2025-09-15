@@ -1,5 +1,12 @@
+import { CURRENT_SEASON } from '@shared/consts/wow.consts'
 import { getUnixTimestamp } from '@shared/libs/date/date-utils'
-import { evalRealSeason, parseItemTrack } from '@shared/libs/items/item-bonus-utils'
+import {
+    applyItemTrackByIlvlAndDiff,
+    evalRealSeason,
+    gearAreTheSame,
+    parseItemTrack
+} from '@shared/libs/items/item-bonus-utils'
+import { equippedSlotToSlot } from '@shared/libs/items/item-slot-utils'
 import { raidbotsURLSchema } from '@shared/schemas/simulations.schemas'
 import { wowItemEquippedSlotKeySchema, wowRaidDiffSchema } from '@shared/schemas/wow.schemas'
 import type {
@@ -10,7 +17,8 @@ import type {
     NewDroptimizerUpgrade,
     RaidbotsURL,
     WowClassName,
-    WowItemEquippedSlotKey
+    WowItemEquippedSlotKey,
+    WowRaidDifficulty
 } from '@shared/types/types'
 import {
     getItems,
@@ -56,13 +64,16 @@ export const parseRaidbotsData = (jsonData: any): RaidbotJson => {
 }
 
 const parseUpgrades = async (
+    raidDiff: WowRaidDifficulty,
     upgrades: {
         dps: number
         encounterId: number
         itemId: number
         ilvl: number
         slot: WowItemEquippedSlotKey
-    }[]
+    }[],
+    itemsInBag: GearItem[],
+    itemsEquipped: GearItem[]
 ): Promise<NewDroptimizerUpgrade[]> => {
     const itemToTiersetMapping = await getItemToTiersetMapping()
     const itemToCatalystMapping = await getItemToCatalystMapping()
@@ -76,9 +87,38 @@ const parseUpgrades = async (
         upgrades.push(newUprade)
     }
 
+    const charItems = [...itemsInBag, ...itemsEquipped]
+
     const upgradesMap = upgrades
         // filter out item without dps gain
         .filter(item => item.dps > 0)
+        // filter out item already in bags or equipped
+        .filter(item => {
+            const bonusIds: number[] = []
+            const itemTrack = applyItemTrackByIlvlAndDiff(bonusIds, item.ilvl, raidDiff)
+            const upgradeGear: GearItem = {
+                item: {
+                    id: item.itemId,
+                    slotKey: equippedSlotToSlot(item.slot),
+                    season: CURRENT_SEASON,
+                    name: '', // not needed for comparison
+                    armorType: null, // not needed for comparison
+                    token: false, // not needed for comparison
+                    tierset: false, // not needed for comparison
+                    boe: false, // not needed for comparison,
+                    veryRare: false, // not needed for comparison
+                    iconName: '', // not needed for comparison
+                    specIds: null // not needed for comparison
+                },
+                source: 'bag',
+                itemLevel: item.ilvl,
+                bonusIds: bonusIds,
+                itemTrack: itemTrack,
+                gemIds: null,
+                enchantIds: null
+            }
+            return charItems.every(bagGear => !gearAreTheSame(bagGear, upgradeGear))
+        })
         // remap itemid to tierset & catalyst
         .map(up => {
             // ci serve questo mapping perchè in data.csv è presente l'upgrade per l'itemid del pezzo del tierset finale (es: guanti warlock)
@@ -142,7 +182,7 @@ export const convertJsonToDroptimizer = async (
 ): Promise<NewDroptimizer> => {
     // transform
     const raidId = Number(data.sim.profilesets.results[0].name.split('/')[0])
-    const raidDiff = wowRaidDiffSchema.parse(
+    const raidDiff: WowRaidDifficulty = wowRaidDiffSchema.parse(
         data.simbot.publicTitle.split('•')[2].replaceAll(' ', '')
     )
 
@@ -202,7 +242,7 @@ export const convertJsonToDroptimizer = async (
             upgradeEquipped: data.simbot.meta.rawFormData.droptimizer.upgradeEquipped
         },
         dateImported: getUnixTimestamp(),
-        upgrades: await parseUpgrades(upgrades),
+        upgrades: await parseUpgrades(raidDiff, upgrades, itemsInBag, itemsEquipped),
         currencies: mergedCurrencies,
         weeklyChest: await parseGreatVaultFromSimc(data.simbot.meta.rawFormData.text),
         itemsAverageItemLevel:
