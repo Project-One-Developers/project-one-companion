@@ -61,7 +61,7 @@
         "ts-pattern": "5.8.0",
         "uuid": "13.0.0",
         "winston": "3.17.0",
-        "zod": "4.1.9"
+        "zod": "4.1.11"
     },
     "devDependencies": {
         "@types/node": "24.5.2",
