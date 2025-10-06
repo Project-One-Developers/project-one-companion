@@ -139,8 +139,8 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       electron-store:
-        specifier: 11.0.0
-        version: 11.0.0
+        specifier: 11.0.2
+        version: 11.0.2
       electron-vite:
         specifier: 4.0.1
         version: 4.0.1(vite@7.1.7(@types/node@24.5.2)(jiti@1.21.7)(yaml@2.8.0))
@@ -2406,8 +2406,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  conf@15.0.0:
-    resolution: {integrity: sha512-w9BzJHS5swhxUq3+nF5hbI0XbfCNH5nfP/IL4HpkmdLtejSPen20hvRkcnk8Xht7YyLoHjvxDm99bqsa1l9qlw==}
+  conf@15.0.2:
+    resolution: {integrity: sha512-JBSrutapCafTrddF9dH3lc7+T2tBycGF4uPkI4Js+g4vLLEhG6RZcFi3aJd5zntdf5tQxAejJt8dihkoQ/eSJw==}
     engines: {node: '>=20'}
 
   config-file-ts@0.2.8-rc1:
@@ -2523,8 +2523,8 @@ packages:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
 
-  detect-libc@2.1.1:
-    resolution: {integrity: sha512-ecqj/sy1jcK1uWrwpR67UhYrIFQ+5WlGxth34WquCbamhFA6hkkwiu37o6J5xCHdo1oixJRfVRw+ywV+Hq/0Aw==}
+  detect-libc@2.1.2:
+    resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
   detect-newline@3.1.0:
@@ -2566,8 +2566,8 @@ packages:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
 
-  dot-prop@10.0.0:
-    resolution: {integrity: sha512-s7RhKKTxc+GiZkfewpLsuWpPeCPe0patP9G/qRJ2VN/BWA+Ydq65K2Pfse234zjGszTVJCzPLze54vD8eyE8NQ==}
+  dot-prop@10.1.0:
+    resolution: {integrity: sha512-MVUtAugQMOff5RnBy2d9N31iG0lNwg1qAoAOn7pOK5wf94WIaE3My2p3uwTQuvS2AcqchkcR3bHByjaM0mmi7Q==}
     engines: {node: '>=20'}
 
   dotenv-cli@10.0.0:
@@ -2712,8 +2712,8 @@ packages:
   electron-publish@26.0.11:
     resolution: {integrity: sha512-a8QRH0rAPIWH9WyyS5LbNvW9Ark6qe63/LqDB7vu2JXYpi0Gma5Q60Dh4tmTqhOBQt0xsrzD8qE7C+D7j+B24A==}
 
-  electron-store@11.0.0:
-    resolution: {integrity: sha512-msCXEmzIGdnIq/u3od5mh/Hk5mZAGKa+3gGGTQcqPPkHcD/otlLyIZuRd1WAOhhg0gKo17BK5Avsl7OHkxir7w==}
+  electron-store@11.0.2:
+    resolution: {integrity: sha512-4VkNRdN+BImL2KcCi41WvAYbh6zLX5AUTi4so68yPqiItjbgTjqpEnGAqasgnG+lB6GuAyUltKwVopp6Uv+gwQ==}
     engines: {node: '>=20'}
 
   electron-to-chromium@1.5.191:
@@ -3933,8 +3933,8 @@ packages:
     resolution: {integrity: sha512-OhYaY5sDsIka7H7AtijtI9jwGYLyl29eQn/W623DiN/MIv5sUqc4g7BIDThX+gb7di9f6xK02nkp8sdfFWZLTg==}
     engines: {node: '>=10'}
 
-  node-abi@3.77.0:
-    resolution: {integrity: sha512-DSmt0OEcLoK4i3NuscSbGjOf3bqiDEutejqENSplMSFA/gmB8mkED9G4pKWnPl7MDU4rSHebKPHeitpDfyH0cQ==}
+  node-abi@3.78.0:
+    resolution: {integrity: sha512-E2wEyrgX/CqvicaQYU3Ze1PFGjc4QYPGsjUrlYkqAE0WjHEZwgOsGMPMzkMse4LjJbDmaEuDX3CM036j5K2DSQ==}
     engines: {node: '>=10'}
 
   node-addon-api@1.7.2:
@@ -5502,10 +5502,10 @@ snapshots:
       '@malept/cross-spawn-promise': 2.0.0
       chalk: 4.1.2
       debug: 4.4.3
-      detect-libc: 2.1.1
+      detect-libc: 2.1.2
       fs-extra: 10.1.0
       got: 11.8.6
-      node-abi: 3.77.0
+      node-abi: 3.78.0
       node-api-version: 0.2.1
       node-gyp: 9.4.1
       ora: 5.4.1
@@ -7623,13 +7623,13 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  conf@15.0.0:
+  conf@15.0.2:
     dependencies:
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
       atomically: 2.0.3
       debounce-fn: 6.0.0
-      dot-prop: 10.0.0
+      dot-prop: 10.1.0
       env-paths: 3.0.0
       json-schema-typed: 8.0.1
       semver: 7.7.2
@@ -7733,7 +7733,7 @@ snapshots:
 
   detect-libc@2.0.4: {}
 
-  detect-libc@2.1.1: {}
+  detect-libc@2.1.2: {}
 
   detect-newline@3.1.0: {}
 
@@ -7803,7 +7803,7 @@ snapshots:
     dependencies:
       esutils: 2.0.3
 
-  dot-prop@10.0.0:
+  dot-prop@10.1.0:
     dependencies:
       type-fest: 5.0.1
 
@@ -7904,9 +7904,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron-store@11.0.0:
+  electron-store@11.0.2:
     dependencies:
-      conf: 15.0.0
+      conf: 15.0.2
       type-fest: 5.0.1
 
   electron-to-chromium@1.5.191: {}
@@ -9503,7 +9503,7 @@ snapshots:
     dependencies:
       semver: 7.7.2
 
-  node-abi@3.77.0:
+  node-abi@3.78.0:
     dependencies:
       semver: 7.7.2
 
