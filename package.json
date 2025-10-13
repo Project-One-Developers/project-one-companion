@@ -60,7 +60,7 @@
         "react-router-dom": "7.9.3",
         "ts-pattern": "5.8.0",
         "uuid": "13.0.0",
-        "winston": "3.17.0",
+        "winston": "3.18.3",
         "zod": "4.1.11"
     },
     "devDependencies": {
