@@ -50,7 +50,7 @@ jobs:
         id: package_version
         run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         name: Upload Installer
         with:
           name: ProjectOne-Companion-CI-${{ env.APP_VERSION }}-Installer
