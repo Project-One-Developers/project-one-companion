@@ -48,7 +48,7 @@
         "cmdk": "1.1.1",
         "discord.js": "14.23.2",
         "drizzle-kit": "0.31.5",
-        "drizzle-orm": "0.44.6",
+        "drizzle-orm": "0.44.7",
         "electron-updater": "6.6.2",
         "esbuild": "0.25.11",
         "file-saver": "2.0.5",
