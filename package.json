@@ -50,7 +50,7 @@
         "drizzle-kit": "0.31.6",
         "drizzle-orm": "0.44.7",
         "electron-updater": "6.6.2",
-        "esbuild": "0.25.12",
+        "esbuild": "0.27.0",
         "file-saver": "2.0.5",
         "lucide-react": "0.548.0",
         "p-limit": "7.2.0",
