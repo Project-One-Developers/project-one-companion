@@ -57,7 +57,7 @@
         "papaparse": "5.5.3",
         "postgres": "3.4.7",
         "react-router": "7.9.5",
-        "react-router-dom": "7.9.5",
+        "react-router-dom": "7.9.6",
         "ts-pattern": "5.9.0",
         "uuid": "13.0.0",
         "winston": "3.18.3",
