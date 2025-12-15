@@ -66,8 +66,8 @@ importers:
         specifier: 0.31.8
         version: 0.31.8
       drizzle-orm:
-        specifier: 0.44.7
-        version: 0.44.7(gel@2.0.1)(pg@8.13.1)(postgres@3.4.7)
+        specifier: 0.45.1
+        version: 0.45.1(gel@2.0.1)(pg@8.13.1)(postgres@3.4.7)
       electron-updater:
         specifier: 6.6.2
         version: 6.6.2
@@ -2787,8 +2787,8 @@ packages:
     resolution: {integrity: sha512-O9EC/miwdnRDY10qRxM8P3Pg8hXe3LyU4ZipReKOgTwn4OqANmftj8XJz1UPUAS6NMHf0E2htjsbQujUTkncCg==}
     hasBin: true
 
-  drizzle-orm@0.44.7:
-    resolution: {integrity: sha512-quIpnYznjU9lHshEOAYLoZ9s3jweleHlZIAWR/jX9gAWNg/JhQ1wj0KGRf7/Zm+obRrYd9GjPVJg790QY9N5AQ==}
+  drizzle-orm@0.45.1:
+    resolution: {integrity: sha512-Te0FOdKIistGNPMq2jscdqngBRfBpC8uMFVwqjf6gtTVJHIQ/dosgV/CLBU2N4ZJBsXL5savCba9b0YJskKdcA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -8187,7 +8187,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.7(gel@2.0.1)(pg@8.13.1)(postgres@3.4.7):
+  drizzle-orm@0.45.1(gel@2.0.1)(pg@8.13.1)(postgres@3.4.7):
     optionalDependencies:
       gel: 2.0.1
       pg: 8.13.1
